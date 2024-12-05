@@ -126,7 +126,7 @@ $numb = 0;
 //---
 $done = [];
 //---
-foreach ($qq as $Key => $table) {
+foreach ($qq1 as $Key => $table) {
 	$id 	= $table['id'] ?? "";
 	$title 	= $table['title'] ?? "";
 	$qid 	= $table['qid'] ?? "";
