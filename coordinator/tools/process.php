@@ -96,7 +96,7 @@ $sato = <<<HTML
 HTML;
 //---
 $noo = 0;
-foreach ($dd as $tat => $tabe) {
+foreach ($dd1 as $tat => $tabe) {
     //---
     $noo = $noo + 1;
     $sato .= make_td($tabe, $noo);
