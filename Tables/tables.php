@@ -28,7 +28,7 @@ $tables = array(
 );
 //---
 foreach ($tables as $key => &$value) {
-	$file = file_get_contents(__DIR__ . "/../../Translation_Dashboard/Tables/jsons/{$key}.json");
+	$file = file_get_contents(__DIR__ . "/../../td/Tables/jsons/{$key}.json");
 	$value = json_decode($file, true);
 }
 //---
