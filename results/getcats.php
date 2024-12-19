@@ -98,7 +98,7 @@ function get_cat_from_cache($cat)
     $empty_list = array();
 
     // Construct the file path
-    $file_path = __DIR__ . "/../../Translation_Dashboard/Tables/cats_cash/$cat.json";
+    $file_path = __DIR__ . "/../../td/Tables/cats_cash/$cat.json";
 
     $new_list = open_json_file($file_path);
 
