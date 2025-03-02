@@ -30,6 +30,7 @@ function create_side($filename) {
             ['id' => 'last_users', 'admin' => 0, 'href' => 'last_users', 'title' => 'Recent in User space'],
             ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process'],
             ['id' => 'Pending', 'admin' => 0, 'href' => 'Pending', 'title' => 'In Process (Total)'],
+            ['id' => 'publish_reports', 'admin' => 0, 'href' => '/publish_reports', 'title' => 'Publish Reports', 'target' => '_blank'],
         ],
         'Pages' => [
             ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type'],
@@ -53,7 +54,7 @@ function create_side($filename) {
         ],
         'Tools' => [
             ['id' => 'wikirefs_options', 'admin' => 1, 'href' => 'wikirefs_options', 'title' => 'Fixwikirefs (Options)'],
-            ['id' => 'fixwikirefs', 'admin' => 0, 'href' => '../fixwikirefs.php', 'title' => 'Fixwikirefs', 'target' => '_blank'],
+            ['id' => 'fixwikirefs', 'admin' => 0, 'href' => '/fixwikirefs.php', 'title' => 'Fixwikirefs', 'target' => '_blank'],
         ],
     ];
 
