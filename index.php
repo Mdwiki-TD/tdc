@@ -6,6 +6,19 @@ if (isset($_REQUEST['test'])) {
 	error_reporting(E_ALL);
 };
 //---
+$tables_dir = __DIR__ . '/../../td/Tables';
+//---
+if (!getenv('tables_dir')) {
+	if (substr($tables_dir, 0, 2) == 'I:') {
+		$tables_dir = 'I:/mdwiki/mdwiki/public_html/td/Tables';
+	}
+
+	// set env
+	putenv('tables_dir=' . $tables_dir);
+}
+// ---
+$GLOBALS['tables_dir'] = $tables_dir;
+// ---
 include_once __DIR__ . '/header.php';
 //---
 use function Actions\Functions\test_print;

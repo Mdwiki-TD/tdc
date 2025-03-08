@@ -27,8 +27,10 @@ $tables = array(
 	'assessments' => &$Assessments_table
 );
 //---
+$tables_dir = isset($GLOBALS['tables_dir']) ? $GLOBALS['tables_dir'] : __DIR__ . '/../../td/Tables';
+//---
 foreach ($tables as $key => &$value) {
-	$file = file_get_contents(__DIR__ . "/../../td/Tables/jsons/{$key}.json");
+	$file = file_get_contents($tables_dir . "/jsons/{$key}.json");
 	$value = json_decode($file, true);
 }
 //---
