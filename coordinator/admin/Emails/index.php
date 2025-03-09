@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 //---
 require __DIR__ . '/tables.php';
+require __DIR__ . '/sugust.php';
 //---
 function make_edit_icon($id, $user, $email, $wiki2, $project)
 {

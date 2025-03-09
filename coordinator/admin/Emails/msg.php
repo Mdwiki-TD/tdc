@@ -5,19 +5,21 @@ if (user_in_coord == false) {
     exit;
 };
 //---
+echo "__DIR__" . __DIR__;
+//---
 // require 'header.php';
 include_once 'Tables/tables.php';
 include_once 'actions/functions.php';
 include_once 'results/get_results.php';
 include_once 'results/getcats.php';
 include_once 'infos/td_config.php';
+include_once 'coordinator/admin/Emails/sugust.php';
 //---
 use function Actions\MdwikiSql\fetch_query;
 use function Actions\WikiApi\get_views;
 use function Actions\Html\make_mdwiki_title;
-use function Results\GetCats\get_in_process;
-use function Results\GetResults\get_cat_exists_and_missing;
 use function Actions\Html\make_target_url;
+use function Emails\Sugust\get_sugust;
 //---
 echo "</div>";
 //---
@@ -51,38 +53,8 @@ $target = $_REQUEST['target'] ?? '';
 //---
 $views  = get_views($target, $lang, $date);
 //---
-$sugust = '';
-//---
-if (!empty($title)) {
-    $items = get_cat_exists_and_missing('RTT', '', '1', $lang, $use_cache = true);
-    //---
-    $items_missing = $items['missing'] ?? array();
-    //---
-    $in_process = get_in_process($items_missing, $lang);
-    //---
-    // delete $in_process keys from $missing
-    if (!empty($in_process)) {
-        $items_missing = array_diff($items_missing, array_keys($in_process));
-    };
-    //---
-    $dd = array();
-    //---
-    foreach ($items_missing as $t) {
-        $t = str_replace('_', ' ', $t);
-        $kry = $enwiki_pageviews_table[$t] ?? 0;
-        $dd[$t] = $kry;
-    };
-    //---
-    arsort($dd);
-    //---
-    // $sugust = array_rand($items_missing);
-    foreach ($dd as $v => $gt) {
-        if ($v != $title) {
-            $sugust = $v;
-            break;
-        };
-    };
-};
+$sugust_tab = get_sugust($title, $lang);
+$sugust = $sugust_tab['sugust'] ?? '';
 //---
 $here_params = array(
     // 'username' => rawurlencode($user),

@@ -29,8 +29,11 @@ $tables = array(
 //---
 $tables_dir = isset($GLOBALS['tables_dir']) ? $GLOBALS['tables_dir'] : __DIR__ . '/../../td/Tables';
 //---
+if (substr($tables_dir, 0, 2) == 'I:') {
+	$tables_dir = 'I:/mdwiki/mdwiki/public_html/td/Tables';
+}
+//---
 foreach ($tables as $key => &$value) {
 	$file = file_get_contents($tables_dir . "/jsons/{$key}.json");
 	$value = json_decode($file, true);
 }
-//---
