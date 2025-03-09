@@ -19,7 +19,7 @@ use function Actions\MdwikiSql\fetch_query;
 use function Actions\TDApi\compare_it;
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require __DIR__ . '/post.php';
+    include_once __DIR__ . '/post.php';
 }
 //---
 $tabes = get_configs('fixwikirefs.json');

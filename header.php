@@ -1,5 +1,7 @@
 <?php
 //---
+$time_start = microtime(true);
+//---
 if (isset($_REQUEST['test'])) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
@@ -68,8 +70,8 @@ $li_user = <<<HTML
 HTML;
 //---
 if (defined('global_username') && global_username != '') {
-$u_name = global_username;
-$li_user = <<<HTML
+	$u_name = global_username;
+	$li_user = <<<HTML
 	</li>
 	<li class="nav-item col-4 col-lg-auto" id="">
 		<a href="/Translation_Dashboard/leaderboard.php?user=$username" class="nav-link py-2 px-0 px-lg-2">
@@ -90,8 +92,8 @@ echo <<<HTML
 		<nav id="mainnav" class="navbar navbar-expand-lg shadow">
 			<div class="container-fluid" id="navbardiv">
 				<a class="navbar-brand mb-0 h1" href="/Translation_Dashboard/index.php" style="color:#0d6efd;">
-					<span class='d-none d-sm-inline'>WikiProjectMed Translation Dashboard</span>
-					<span class='d-inline d-sm-none'>WikiProjectMed TD</span>
+					<span class='d-none d-sm-inline tool_title'>WikiProjectMed Translation Dashboard</span>
+					<span class='d-inline d-sm-none tool_title'>WikiProjectMed TD</span>
 				</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar"
 					aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,6 +122,9 @@ echo <<<HTML
 							<a class="nav-link py-2 px-0 px-lg-2" href="https://github.com/MrIbrahem/Translation-Dashboard" target="_blank">
 								<span class="navtitles">Github</span>
 							</a>
+						</li>
+						<li class="nav-item col-4 col-lg-auto">
+							<span class="nav-link py-2 px-0 px-lg-2" id="load_time"></span>
 						</li>
 					</ul>
 					<hr class="d-lg-none text-black-50">

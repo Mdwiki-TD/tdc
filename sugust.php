@@ -8,7 +8,7 @@ if (isset($_REQUEST['test'])) {
     error_reporting(E_ALL);
 };
 //---
-include_once '/coordinator/admin/Emails/sugust.php';
+include_once 'coordinator/admin/Emails/sugust.php';
 //---
 use function Emails\Sugust\get_sugust;
 //---

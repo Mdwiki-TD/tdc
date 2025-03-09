@@ -20,7 +20,7 @@ use function Actions\MdwikiSql\fetch_query;
 // $conf = get_configs('conf.json');
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require __DIR__ . '/post.php';
+    include_once __DIR__ . '/post.php';
 }
 //---
 echo <<<HTML

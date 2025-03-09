@@ -7,7 +7,7 @@ if (user_in_coord == false) {
 //---
 echo "__DIR__" . __DIR__;
 //---
-// require 'header.php';
+// include_once 'header.php';
 include_once 'Tables/tables.php';
 include_once 'actions/functions.php';
 include_once 'results/get_results.php';

@@ -37,6 +37,10 @@ function get_sugust($title, $lang)
             $items_missing = array_diff($items_missing, array_keys($in_process));
         };
         //---
+        if (empty($items_missing)) {
+            return json_encode(array('sugust' => '', 'time' => 0, 'error' => 'No suggestions available'));
+        }
+        //---
         $dd = array();
         //---
         foreach ($items_missing as $t) {
@@ -63,10 +67,3 @@ function get_sugust($title, $lang)
     //---
     return $tab;
 }
-
-$title  = $_REQUEST['title'] ?? '';
-$lang  = $_REQUEST['lang'] ?? '';
-//---
-$tab = get_sugust($title, $lang);
-//---
-echo json_encode($tab);

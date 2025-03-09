@@ -75,17 +75,17 @@ $tools_folders = array_map(fn ($file) => basename($file, '.php'), glob('coordina
 test_print("corrd_folders" . json_encode($corrd_folders));
 test_print("tools_folders" . json_encode($tools_folders));
 //---
-$adminfile = "coordinator/admin/$ty.php";
-// if
+$adminfile = __DIR__ . "/coordinator/admin/$ty.php";
+
 if (in_array($ty, $tools_folders)) {
-	require "coordinator/tools/$ty.php";
+	include_once __DIR__ . "/coordinator/tools/$ty.php";
 } elseif (in_array($ty, $corrd_folders) && user_in_coord) {
-	require "coordinator/admin/$ty/index.php";
+	include_once __DIR__ . "/coordinator/admin/$ty/index.php";
 } elseif (is_file($adminfile) && user_in_coord) {
-	require $adminfile;
+	include_once $adminfile;
 } else {
 	test_print("can't find $adminfile");
-	require 'coordinator/404.php';
+	include_once __DIR__ . "/coordinator/404.php";
 };
 //---
 function echo_card_end($ty)
@@ -112,5 +112,5 @@ echo_card_end($ty);
 //---
 echo "<script src='/Translation_Dashboard/js/autocomplate.js'></script>";
 //---
-include_once __DIR__ . '/foter.php';
+include_once __DIR__ . '/footer.php';
 //---
