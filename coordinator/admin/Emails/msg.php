@@ -5,8 +5,6 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-echo "__DIR__" . __DIR__;
-//---
 // include_once 'header.php';
 include_once 'Tables/tables.php';
 include_once 'actions/functions.php';
