@@ -18,8 +18,8 @@ use function Results\GetResults\get_cat_exists_and_missing;
 function get_sugust($title, $lang)
 {
 
-    $title  = $_REQUEST['title'] ?? '';
-    $lang  = $_REQUEST['lang'] ?? '';
+    $title  = $title ?? '';
+    $lang  = $lang ?? '';
     //---
     $time_start = microtime(true);
     //---
