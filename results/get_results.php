@@ -23,7 +23,10 @@ function get_cat_exists_and_missing($cat, $camp, $depth, $code, $use_cache = tru
         $members[] = $mr;
     };
     test_print("members size:" . count($members));
-    $json_file = __DIR__ . "/../../td/Tables/cash_exists/$code.json";
+    // ---
+    $tables_dir = isset($GLOBALS['tables_dir']) ? $GLOBALS['tables_dir'] : __DIR__ . '/../../td/Tables';
+    // ---
+    $json_file = $tables_dir . "/cash_exists/$code.json";
 
     $exists = open_json_file($json_file);
 

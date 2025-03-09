@@ -99,10 +99,10 @@ foreach (range(1, 1) as $numb) {
 			<input class="form-control lang_input" size='2' name='lang[]$numb' required/>
 		</td>
 		<td data-content='Target'>
-			<input class="form-control" size='20' name='target[]$numb' required/>
+			<input class="form-control" size='20' name='target[]$numb'/>
 		</td>
 		<td data-content='Publication date'>
-			<input class="form-control" size='10' name='pupdate[]$numb' placeholder='YYYY-MM-DD' required/>
+			<input class="form-control" size='10' name='pupdate[]$numb' placeholder='YYYY-MM-DD'/>
 		</td>
 	</tr>
 	HTML;
@@ -146,16 +146,4 @@ echo $table;
 	};
 </script>
 
-<!--
-<script>
-$( function() {
-	var ur = 'Tables/cats_cash/RTT.json';
-    $( ".mdtitles" ).autocomplete({
-	source: function (request, response){
-		$.ajax({url: ur ,dataType: "json",data:{term: request.term,},success: function (data) {response(data.list);}});
-	}
-    });
-});
-</script>
--->
 </div>

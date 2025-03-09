@@ -1,7 +1,7 @@
 <?PHP
 //---
-// require('header.php');
-require('tables.php');
+// include_once('header.php');
+include_once('tables.php');
 include_once('functions.php');
 include_once('getcats.php');
 //---

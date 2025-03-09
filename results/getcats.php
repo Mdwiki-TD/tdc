@@ -30,7 +30,7 @@ use function Actions\Functions\test_print;
 use function Actions\MdwikiSql\fetch_query;
 use function Actions\MdwikiApi\get_mdwiki_url_with_params;
 // use function Actions\TDApi\get_td_api;
-//---
+
 function start_with($haystack, $needle)
 {
     return strpos($haystack, $needle) === 0;
@@ -94,11 +94,12 @@ function open_json_file($file_path)
 
 function get_cat_from_cache($cat)
 {
+    $tables_dir = isset($GLOBALS['tables_dir']) ? $GLOBALS['tables_dir'] : __DIR__ . '/../../td/Tables';
     // Initialize an empty array for the list
     $empty_list = array();
 
     // Construct the file path
-    $file_path = __DIR__ . "/../../td/Tables/cats_cash/$cat.json";
+    $file_path = $tables_dir . "/cats_cash/$cat.json";
 
     $new_list = open_json_file($file_path);
 

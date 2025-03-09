@@ -12,4 +12,4 @@ if (isset($_REQUEST['test'])) {
 };
 require __DIR__ . '/../auth/vendor/autoload.php'; // TD
 
-// require(__DIR__ . '/../../vendor/autoload.php');
+// include_once(__DIR__ . '/../../vendor/autoload.php');
