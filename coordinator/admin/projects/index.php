@@ -15,7 +15,7 @@ use function Actions\MdwikiSql\fetch_query;
 // use function Actions\TDApi\get_td_api;
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	include_once __DIR__ . '/post.php';
+	require __DIR__ . '/post.php';
 }
 //---
 echo <<<HTML
