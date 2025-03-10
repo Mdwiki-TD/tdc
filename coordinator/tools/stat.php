@@ -109,6 +109,7 @@ foreach ($titles as $title) {
 	//---
 	if ($refs == 0) $no_ref += 1;
 	if ($all_refs == 0) $no_allref += 1;
+	//---
 	$asse = $Assessments_table[$title] ?? '';
 	if (!isset($Assessments_table[$title])) $no_Importance += 1;
 	//---
