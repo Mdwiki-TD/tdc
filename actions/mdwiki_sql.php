@@ -159,7 +159,7 @@ function sql_add_user($user_name, $email, $wiki, $project, $ido)
     // Create a new database object
     // Use a prepared statement for INSERT
     $qua = <<<SQL
-        INSERT INTO users (username, email, wiki, user_group, reg_date) SELECT ?, ?, ?, ?, now()
+        INSERT INTO users (username, email, wiki, user_group) SELECT ?, ?, ?, ?
         WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = ?)
     SQL;
     $params = [$user_name, $email, $wiki, $project, $user_name];

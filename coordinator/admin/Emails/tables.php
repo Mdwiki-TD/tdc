@@ -74,7 +74,7 @@ $der = fetch_query("select DISTINCT user from pages WHERE NOT EXISTS (SELECT 1 F
 //---
 $der2 = [];
 //---
-foreach ($der1 as $Key => $gg) {
+foreach ($der as $Key => $gg) {
 	if (!isset($users_done[$gg['user']])) {
 		$der2[] = $gg;
 	}
