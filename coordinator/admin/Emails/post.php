@@ -3,7 +3,7 @@
 use function Actions\MdwikiSql\sql_add_user;
 use function Actions\MdwikiSql\execute_query;
 //---
-$new_q = "INSERT INTO users (username, email, wiki, user_group, reg_date) SELECT DISTINCT user, '', '', '', now() from pages
+$new_q = "INSERT INTO users (username, email, wiki, user_group) SELECT DISTINCT user, '', '', '' from pages
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = user)";
 //---
 if (isset($_POST['del'])) {
@@ -42,4 +42,3 @@ if (isset($_POST['username'])) {
 	};
 };
 //---
-?>
