@@ -70,9 +70,7 @@ function send_user($id, $user, $project, $wiki, $email)
 function echo_form($user, $wiki, $project, $email, $id)
 {
     //---
-    global $projects_title_to_id;
-    //---
-    $project_line = make_project_to_user($projects_title_to_id, $project);
+    $project_line = make_project_to_user($project);
     //---
     echo <<<HTML
         <form action='index.php?ty=Emails/edit_user&nonav=120' method='POST'>

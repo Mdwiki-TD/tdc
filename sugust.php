@@ -6,9 +6,11 @@ if (isset($_REQUEST['test'])) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-};
+}
 //---
-include_once 'coordinator/admin/Emails/sugust.php';
+include_once __DIR__ . '/actions/functions.php';
+include_once __DIR__ . '/api_or_sql/index.php';
+include_once __DIR__ . '/coordinator/admin/Emails/sugust.php';
 //---
 use function Emails\Sugust\get_sugust;
 //---

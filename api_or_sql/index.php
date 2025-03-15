@@ -112,7 +112,7 @@ function get_users_by_last_pupdate()
         $data = get_td_api(array('get' => 'users_by_last_pupdate'));
     } else {
         $query_old = <<<SQL
-            select DISTINCT p1.target, p1.title, p1.cat, p1.user, p1.pupdate, p1.lang
+            select DISTINCT p1.target, p1.title, p1.user, p1.pupdate, p1.lang
             from pages p1
             where target != ''
             and p1.pupdate = (select p2.pupdate from pages p2 where p2.user = p1.user ORDER BY p2.pupdate DESC limit 1)
@@ -127,11 +127,12 @@ function get_users_by_last_pupdate()
                     p1.user,
                     p1.pupdate,
                     p1.lang,
+                    p1.title,
                     ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
                 FROM pages p1
                 WHERE p1.target != ''
             )
-            SELECT target, user, pupdate, lang
+            SELECT target, user, pupdate, lang, title
             FROM RankedPages
             WHERE rn = 1
             ORDER BY pupdate DESC;
@@ -140,16 +141,11 @@ function get_users_by_last_pupdate()
         $data = fetch_query($query);
     }
     // ---
-    $last_user_to_tab = array();
-    //---
-    foreach ($data as $Key => $gg) {
-        if (!in_array($gg['user'], $last_user_to_tab)) {
-            $last_user_to_tab[$gg['user']] = $gg;
-        }
-    };
-    $last_user_to_tab = $data;
+    foreach ($data as $key => $gg) {
+        $last_user_to_tab[$gg['user']] = $gg;
+    }
     // ---
-    return $data;
+    return $last_user_to_tab;
 }
 
 function get_td_or_sql_count_pages_not_empty()
@@ -288,7 +284,7 @@ function get_td_or_sql_qids($dis)
             SQL
         ];
         //---
-        $query = (in_array($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
+        $query = (array_key_exists($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
         //---
         $data = fetch_query($query);
     }
@@ -328,7 +324,7 @@ function get_td_or_sql_qids_others($dis)
             SQL
         ];
         //---
-        $query = (in_array($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
+        $query = (array_key_exists($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
         //---
         $data = fetch_query($query);
     }
@@ -446,14 +442,14 @@ function get_lang_in_process($lang)
     }
     // ---
     if ($use_td_api) {
-        $tab = get_td_api(['get' => 'pages', 'lang' => $lang, 'target' => 'empty']);
-        $data_index[$lang] = array_column($tab, 'count', 'user');
+        $tab = get_td_api(['get' => 'pages', 'lang' => $lang, 'target' => 'empty', 'select' => "title"]);
     } else {
         // select * from pages where target = '' and lang = '$code'
         $sql_t = 'select * from pages where target = "" and lang = ?';
         $tab = fetch_query($sql_t, [$lang]);
-        $data_index[$lang] = array_column($tab, 'count', 'user');
     }
+    //---
+    $data_index[$lang] = array_column($tab, 'title');
     //---
     return $data_index[$lang];
 }

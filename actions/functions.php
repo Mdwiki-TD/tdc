@@ -30,14 +30,15 @@ include_once __DIR__ . '/../api_or_sql/index.php';
 
 function test_print($s)
 {
-    if (print_te && gettype($s) == 'string') {
+    $print_t = (isset($_REQUEST['test'])) ? true : false;
+
+    if ($print_t && gettype($s) == 'string') {
         echo "\n<br>\n$s";
-    } elseif (print_te) {
+    } elseif ($print_t) {
         echo "\n<br>\n";
         print_r($s);
     }
 }
-
 function open_json_file($file_path)
 {
     $new_list = array();

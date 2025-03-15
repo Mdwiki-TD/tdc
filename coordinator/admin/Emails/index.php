@@ -7,8 +7,10 @@ if (user_in_coord == false) {
 //---
 use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_project_to_user;
+use function Actions\MdwikiSql\fetch_query;
 use function SQLorAPI\Get\get_users_by_last_pupdate;
 use function SQLorAPI\Get\get_td_or_sql_count_pages_not_empty;
+use function SQLorAPI\Get\get_td_or_sql_page_user_not_in_users;
 //---
 if (isset($_REQUEST['test'])) {
 	ini_set('display_errors', 1);
@@ -20,8 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 //---
-include_once __DIR__ . '/tables.php';
 include_once __DIR__ . '/sugust.php';
+//---
+
 //---
 function make_edit_icon($id, $user, $email, $wiki2, $project)
 {
@@ -42,6 +45,39 @@ function make_edit_icon($id, $user, $email, $wiki2, $project)
 	return <<<HTML
     	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
     HTML;
+}
+
+function get_sorted_array()
+{
+	$users_done = array();
+	//---
+	$live_pages = get_td_or_sql_count_pages_not_empty();
+	//---
+	$ddi = fetch_query("select user_id, username, email, wiki, user_group from users;");
+	//---
+	foreach ($ddi as $Key => $gk) {
+		$users_done[$gk['username']] = $gk;
+	};
+	//---
+	$der = get_td_or_sql_page_user_not_in_users();
+	//---
+	foreach ($der as $d => $tat) if (!in_array($tat, $users_done)) {
+		$users_done[$tat] = array('user_id' => 0, 'username' => $tat, 'email' => '', 'wiki' => '', 'user_group' => '');
+	}
+	//---
+	$sorted_array = array();
+	//---
+	foreach ($users_done as $u => $tab) {
+		$tab['live'] = $live_pages[$u] ?? 0;
+		$sorted_array[$u] = $tab;
+	};
+	//---
+	// sort $sorted_array by live
+	uasort($sorted_array, function ($a, $b) {
+		return $b['live'] <=> $a['live']; // للترتيب تنازليًا، عكسها ($a['live'] <=> $b['live']) للترتيب تصاعديًا
+	});
+	//---
+	return $sorted_array;
 }
 //---
 echo <<<HTML
@@ -72,32 +108,33 @@ echo <<<HTML
 $numb = 0;
 //---
 $last_user_to_tab = get_users_by_last_pupdate();
-$live_pages = get_td_or_sql_count_pages_not_empty();
 //---
-foreach ($sorted_array as $user_name => $d) {
+$users_done = get_sorted_array();
+//---
+foreach ($users_done as $user_name => $table) {
 	//---
 	$numb += 1;
 	//---
 	$table = $users_done[$user_name];
 	//---
-	$live		= $live_pages[$user_name] ?? 0;
-	//---
-	// print_r(json_encode($table));
+	$live		= $table['live'] ?? "";
 	//---
 	$id			= $table['user_id'] ?? "";
 	$email 		= $table['email'] ?? "";
 	$wiki		= $table['wiki'] ?? "";
-	$wiki2		= $wiki . "wiki";
 	$project	= $table['user_group'] ?? "";
-	//---
-	$project_line = make_project_to_user($projects_title_to_id, $project);
-	//---
 	$user 		= $table['username'] ?? "";
+	//---
+	$wiki2		= $wiki . "wiki";
+	//---
+	$project_line = make_project_to_user($project);
+	//---
+	//---
 	$mail_icon = '';
-	if (in_array($user_name, array_keys($last_user_to_tab))) {
+	//---
+	if (array_key_exists($user_name, $last_user_to_tab)) {
 		$mail_icon = make_mail_icon($last_user_to_tab[$user_name]);
-	} else {
-	};
+	}
 	//---
 	$edit_icon = make_edit_icon($id, $user, $email, $wiki, $project);
 	//---

@@ -18,7 +18,7 @@ use function SQLorAPI\Get\get_lang_in_process;
 //---
 function get_sugust($title, $lang)
 {
-
+    //---
     $title  = $title ?? '';
     $lang  = $lang ?? '';
     //---
@@ -33,39 +33,35 @@ function get_sugust($title, $lang)
         //---
         $res = get_lang_in_process($lang);
         //---
-        $inprocess = array();
-        //---
-        foreach ($res as $t) {
-            if (in_array($t['title'], $items_missing)) $titles[$t['title']] = $t;
-        }
+        $inprocess = array_intersect($res, $items_missing);
         //---
         // delete $in_process keys from $missing
         if (!empty($inprocess)) {
-            $items_missing = array_diff($items_missing, array_keys($inprocess));
-        };
+            $items_missing = array_diff($items_missing, $inprocess);
+        }
         //---
         if (empty($items_missing)) {
             return json_encode(array('sugust' => '', 'time' => 0, 'error' => 'No suggestions available'));
         }
         //---
-        $dd = array();
-        //---
+        $dd = [];
         foreach ($items_missing as $t) {
-            $t = str_replace('_', ' ', $t);
-            $kry = $enwiki_pageviews_table[$t] ?? 0;
-            $dd[$t] = $kry;
-        };
+            $key = str_replace('_', ' ', $t);
+            $dd[$key] = $enwiki_pageviews_table[$key] ?? 0;
+        }
         //---
         arsort($dd);
         //---
         // $sugust = array_rand($items_missing);
+        //---
         foreach ($dd as $v => $gt) {
             if ($v != $title) {
                 $sugust = $v;
                 break;
-            };
-        };
-    };
+            }
+        }
+        //---
+    }
     //---
     $time_end = microtime(true);
     $time_diff = $time_end - $time_start;

@@ -48,8 +48,6 @@ foreach ($categories_tab as $k => $tab) {
     };
 };
 //---
-$projects_title_to_id = array();
-//---
 $projects_tab = get_td_or_sql_projects();
 //---
-foreach ($projects_tab as $Key => $table) $projects_title_to_id[$table['g_title']] = $table['g_id'];
+$projects_title_to_id = array_column($projects_tab, 'g_id', 'g_title');
