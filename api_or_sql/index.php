@@ -24,6 +24,7 @@ use function SQLorAPI\Get\get_recent_sql;
 use function SQLorAPI\Get\td_or_sql_titles_infos;
 use function SQLorAPI\Get\get_recent_pages_users;
 use function SQLorAPI\Get\get_recent_translated;
+use function SQLorAPI\Get\get_lang_in_process;
 */
 
 include_once __DIR__ . '/../actions/mdwiki_sql.php';
@@ -433,6 +434,28 @@ function get_users_process()
     }
     //---
     return $users_process;
+}
+
+function get_lang_in_process($lang)
+{
+    // ---
+    global $use_td_api, $data_index;
+    // ---
+    if (!empty($data_index[$lang] ?? [])) {
+        return $data_index[$lang];
+    }
+    // ---
+    if ($use_td_api) {
+        $tab = get_td_api(['get' => 'pages', 'lang' => $lang, 'target' => 'empty']);
+        $data_index[$lang] = array_column($tab, 'count', 'user');
+    } else {
+        // select * from pages where target = '' and lang = '$code'
+        $sql_t = 'select * from pages where target = "" and lang = ?';
+        $tab = fetch_query($sql_t, [$lang]);
+        $data_index[$lang] = array_column($tab, 'count', 'user');
+    }
+    //---
+    return $data_index[$lang];
 }
 
 function get_pages_langs()

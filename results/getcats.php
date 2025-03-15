@@ -6,8 +6,6 @@ namespace Results\GetCats;
 Usage:
 
 use function Results\GetCats\start_with;
-use function Results\GetCats\get_in_process;
-use function Results\GetCats\open_json_file;
 use function Results\GetCats\get_cat_from_cache;
 use function Results\GetCats\get_categorymembers;
 use function Results\GetCats\get_mmbrs;
@@ -27,69 +25,9 @@ include_once __DIR__ . '/../Tables/langcode.php';
 include_once __DIR__ . '/../actions/functions.php';
 //---
 use function Actions\Functions\test_print;
-use function Actions\MdwikiSql\fetch_query;
 use function Actions\MdwikiApi\get_mdwiki_url_with_params;
-
-function start_with($haystack, $needle)
-{
-    return strpos($haystack, $needle) === 0;
-};
-
-function get_in_process($missing, $code)
-{
-    $qua = "select * from pages where target = '' and lang = '$code';";
-    //---
-    $res = fetch_query($qua);
-    //---
-    // echo "<br>";
-    // var_export(json_encode($res));
-    //--
-    $titles = array();
-    //---
-    foreach ($res as $t) {
-        if (in_array($t['title'], $missing)) $titles[$t['title']] = $t;
-    }
-    //---
-    // var_export(json_encode($titles));
-    //--
-    return $titles;
-    //---
-}
-
-function open_json_file($file_path)
-{
-    $new_list = array();
-    // Check if the file exists
-    if (!is_file($file_path)) {
-        // Handle the case when the file does not exist
-        test_print("$file_path does not exist");
-        return $new_list; // Return an empty list
-    }
-
-    // Attempt to read the file contents
-    $text = file_get_contents($file_path);
-
-    // Check if file_get_contents was successful
-    if ($text === false) {
-        // Handle the case when file_get_contents fails
-        test_print("Failed to read file contents from $file_path");
-        return $new_list; // Return an empty list
-    }
-
-    // Attempt to decode JSON
-    $data = json_decode($text, true);
-
-    // Check if json_decode was successful
-    if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
-        // Handle the case when json_decode fails
-        test_print("Failed to decode JSON from $file_path");
-        return $new_list; // Return an empty list
-    }
-
-    // Return the decoded data
-    // test_print("Successfully decoded JSON from $file_path. " . count($data) . " ");
-    return $data;
-}
+use function Actions\Functions\open_json_file;
+use function Actions\Functions\start_with;
 
 function get_cat_from_cache($cat)
 {

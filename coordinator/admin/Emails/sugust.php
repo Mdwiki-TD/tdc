@@ -14,6 +14,7 @@ include_once 'infos/td_config.php';
 //---
 use function Results\GetCats\get_in_process;
 use function Results\GetResults\get_cat_exists_and_missing;
+use function SQLorAPI\Get\get_lang_in_process;
 //---
 function get_sugust($title, $lang)
 {
@@ -30,7 +31,13 @@ function get_sugust($title, $lang)
         //---
         $items_missing = $items['missing'] ?? array();
         //---
-        $inprocess = get_in_process($items_missing, $lang);
+        $res = get_lang_in_process($lang);
+        //---
+        $inprocess = array();
+        //---
+        foreach ($res as $t) {
+            if (in_array($t['title'], $items_missing)) $titles[$t['title']] = $t;
+        }
         //---
         // delete $in_process keys from $missing
         if (!empty($inprocess)) {

@@ -11,7 +11,7 @@ use function Results\GetResults\get_cat_exists_and_missing;
 */
 
 use function Results\GetCats\get_mdwiki_cat_members;
-use function Results\GetCats\open_json_file;
+use function Actions\Functions\open_json_file;
 use function Actions\Functions\test_print;
 
 function get_cat_exists_and_missing($cat, $camp, $depth, $code, $use_cache = true)
