@@ -5,32 +5,18 @@ include_once 'Tables/langcode.php';
 
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
-use function Actions\MdwikiSql\fetch_query;
 use function Actions\Html\make_cat_url;
 use function Actions\Html\make_mdwiki_title;
-// use function Actions\TDApi\get_td_api;
-//---
-$lang = $_GET['lang'] ?? 'All';
-//---
-if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
-    $lang = 'All';
-};
+use function SQLorAPI\Get\get_recent_pages_users;
+use function SQLorAPI\Get\get_pages_users_langs;
 
 function filter_recent($lang)
 {
     global $code_to_lang;
     //---
-    $result = fetch_query("select DISTINCT lang from pages_users;");
-    //---
-    // http://localhost:9001/api.php?get=pages_users&distinct=1&select=lang
-    //---
-    // $result = get_td_api (array('get' => 'pages_users', 'distinct' => 1, 'select' => 'lang'));
-    //---
-    $tabes = array_map('current', $result);
+    $tabes = get_pages_users_langs();
     //---
     ksort($tabes);
-    //---
-    // var_dump(json_encode($tabes, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     //---
     $lang_list = "<option data-tokens='All' value='All'>All</option>";
     //---
@@ -68,24 +54,6 @@ function filter_recent($lang)
     return $uuu;
 }
 
-$mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
-
-$recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>User</th>
-                <th>Title</th>
-                <th>Translated</th>
-                <th>Publication date</th>
-                <th>Fixref</th>
-                <th>add_date</th>
-            </tr>
-        </thead>
-        <tbody>
-HTML;
-//---
 function make_td($tabg, $nnnn)
 {
     //---
@@ -161,52 +129,33 @@ function make_td($tabg, $nnnn)
     HTML;
     //---
     return $laly;
+}
+
+$lang = $_GET['lang'] ?? 'All';
+
+if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
+    $lang = 'All';
 };
 
-function get_recent_sql($lang)
-{
-    // pages_users (title, lang, user, pupdate, target, add_date)
-    //---
-    $lang_line = '';
-    //---
-    $params0 = [
-        'get' => 'pages_users',
-        'target' => 'not_empty',
-        'order' => 'pupdate',
-        'title_not_in_pages' => '0',
-        'limit' => '100'
-    ];
-    //---
-    if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and lang = '$lang'";
-        $params0['lang'] = $lang;
-    };
-    //---
-    $qua = <<<SQL
-        select * #id, date, user, lang, title, cat, word, target, pupdate, add_date
-        from pages_users
-        where
-            target != ''
-        -- and title not in ( select p.title from pages p where p.lang = lang and p.target != '' )
-        $lang_line
-        ORDER BY pupdate DESC
-        limit 100
-        ;
-    SQL;
-    //---
-    // $tab = get_td_api ($params0);
-    //---
-    $tab = fetch_query($qua);
-    //---
-    // sort the table by add_date
-    usort($tab, function ($a, $b) {
-        return strtotime($b['pupdate']) - strtotime($a['pupdate']);
-    });
-    //---
-    return $tab;
-}
+$mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
+
+$recent_table = <<<HTML
+	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Title</th>
+                <th>Translated</th>
+                <th>Publication date</th>
+                <th>Fixref</th>
+                <th>add_date</th>
+            </tr>
+        </thead>
+        <tbody>
+HTML;
 //---
-$qsl_results = get_recent_sql($lang);
+$qsl_results = get_recent_pages_users($lang);
 //---
 $noo = 0;
 foreach ($qsl_results as $tat => $tabe) {

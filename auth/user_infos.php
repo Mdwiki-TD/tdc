@@ -8,7 +8,6 @@ require_once __DIR__ . '/../actions/html.php';
 //---
 use function OAuth\Helps\get_from_cookie;
 use function Actions\Html\banner_alert;
-// use function Actions\TDApi\get_td_api;
 //---
 $secure = ($_SERVER['SERVER_NAME'] == "localhost") ? false : true;
 if ($_SERVER['SERVER_NAME'] != 'localhost') {

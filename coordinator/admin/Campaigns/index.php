@@ -5,8 +5,7 @@ if (user_in_coord == false) {
 	exit;
 };
 //---
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\get_td_or_sql_categories;
 //---
 if (isset($_REQUEST['test'])) {
 	ini_set('display_errors', 1);
@@ -15,7 +14,7 @@ if (isset($_REQUEST['test'])) {
 };
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require __DIR__ . '/post.php';
+	require __DIR__ . '/post.php';
 }
 //---
 echo <<<HTML
@@ -43,22 +42,20 @@ HTML;
 //---
 $uuux = '';
 //---
-$qq = fetch_query('select id, category, category2, campaign, depth, def from categories;');
-//---
-// $qq = get_td_api (array('get' => 'categories'));
+$qq = get_td_or_sql_categories();
 //---
 $numb = 0;
 //---
-foreach ( $qq AS $Key => $table ) {
+foreach ($qq as $Key => $table) {
 	$numb += 1;
 	$id 		= $table['id'] ?? "";
 	$category1 	= $table['category'] ?? "";
 	$category2 	= $table['category2'] ?? "";
 	$campaign 	= $table['campaign'] ?? "";
 	$depth		= $table['depth'] ?? "";
-    //---
+	//---
 	$checked    = ($table['def'] == 1) ? 'checked' : '';
-    //---
+	//---
 	echo <<<HTML
 	<tr>
 		<div class='form-group'>
@@ -93,26 +90,27 @@ foreach ( $qq AS $Key => $table ) {
 
 </tbody>
 </table>
-  <button type="submit" class="btn btn-outline-primary">Save</button>
+<button type="submit" class="btn btn-outline-primary">Save</button>
 </form>
 <span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
 </div>
 <script type="text/javascript">
-var i = 1;
-function add_row() {
-	var ii = $('#tab_logic >tr').length + 1;
-	var e = "<tr>";
-	e = e + "<td>" + ii + "</td>";
-	e = e + "<td><input class='form-control' name='camp[]" + ii + "' placeholder='Campaign' value=''/></td>";
-	e = e + "<td><input class='form-control' name='cats[]" + ii + "' placeholder='Category1' value=''/></td>";
-	e = e + "<td><input class='form-control' name='cat2[]" + ii + "' placeholder='Category2' value=''/></td>";
-	e = e + "<td><input class='form-control w-auto' type='number' name='dep[]" + ii + "' value='0' min='0' max='10'/></td>";
-	e = e + "<td></td>";
-	e = e + "<td></td>";
-	e = e + "</tr>";
+	var i = 1;
 
-	$('#tab_logic').append(e);
-	i++;
-};
+	function add_row() {
+		var ii = $('#tab_logic >tr').length + 1;
+		var e = "<tr>";
+		e = e + "<td>" + ii + "</td>";
+		e = e + "<td><input class='form-control' name='camp[]" + ii + "' placeholder='Campaign' value=''/></td>";
+		e = e + "<td><input class='form-control' name='cats[]" + ii + "' placeholder='Category1' value=''/></td>";
+		e = e + "<td><input class='form-control' name='cat2[]" + ii + "' placeholder='Category2' value=''/></td>";
+		e = e + "<td><input class='form-control w-auto' type='number' name='dep[]" + ii + "' value='0' min='0' max='10'/></td>";
+		e = e + "<td></td>";
+		e = e + "<td></td>";
+		e = e + "</tr>";
+
+		$('#tab_logic').append(e);
+		i++;
+	};
 </script>
 </div>

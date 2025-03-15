@@ -30,11 +30,11 @@ function get_sugust($title, $lang)
         //---
         $items_missing = $items['missing'] ?? array();
         //---
-        $in_process = get_in_process($items_missing, $lang);
+        $inprocess = get_in_process($items_missing, $lang);
         //---
         // delete $in_process keys from $missing
-        if (!empty($in_process)) {
-            $items_missing = array_diff($items_missing, array_keys($in_process));
+        if (!empty($inprocess)) {
+            $items_missing = array_diff($items_missing, array_keys($inprocess));
         };
         //---
         if (empty($items_missing)) {

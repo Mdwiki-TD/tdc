@@ -12,8 +12,8 @@ include_once 'actions/functions.php';
 
 use function Actions\Html\makeDropdown;
 use function Results\GetCats\get_mdwiki_cat_members;
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\get_td_or_sql_categories;
+use function SQLorAPI\Get\get_td_or_sql_qids;
 //---
 $cat = $_REQUEST['cat'] ?? 'RTT';
 //---
@@ -21,8 +21,7 @@ function filter_stat($cat)
 {
 	$cats_titles = array();
 	//---
-	$categories = fetch_query('select category from categories;');
-	// $categories = get_td_api (array('get' => 'categories'));
+	$categories = get_td_or_sql_categories();
 	//---
 	foreach ($categories as $k => $tab) $cats_titles[] = $tab['category'] ?? "";
 	//---
@@ -87,6 +86,10 @@ $no_allref = 0;
 $no_Importance = 0;
 $no_pv = 0;
 $i = 0;
+//---
+$qids_t = get_td_or_sql_qids('all');
+//---
+$sql_qids = array_column($qids_t, 'qid', 'title');
 //---
 foreach ($titles as $title) {
 	$i = $i + 1;

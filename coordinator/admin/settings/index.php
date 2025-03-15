@@ -1,21 +1,20 @@
 <?php
 //---
 if (user_in_coord == false) {
-	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
-	exit;
+    echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+    exit;
 };
 //---
 if (isset($_REQUEST['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 };
 //---
 include_once 'actions/functions.php';
 //---
 use function Infos\TdConfig\get_configs;
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\get_td_or_sql_settings;
 //---
 // $conf = get_configs('conf.json');
 //---
@@ -33,7 +32,8 @@ echo <<<HTML
                 <input name='ty' value='settings' hidden/>
     HTML;
 //---
-function make_settings_tab($tabe) {
+function make_settings_tab($tabe)
+{
     //---
     global $nn;
     //---
@@ -53,10 +53,10 @@ function make_settings_tab($tabe) {
         $nn += 1;
         $id       = $v['id'] ?? "";
         $title    = $v['title'] ?? "";
-        $displayed= $v['displayed'] ?? "";
+        $displayed = $v['displayed'] ?? "";
         $value    = $v['value'] ?? "";
         //---
-        $type     = $v['type'] ?? "";
+        $type     = $v['type'] ?? $v['Type'] ?? "";
         //---
         $value_line = <<<HTML
             <input class='form-control' size='4' name='value_$nn' value='$value'/>
@@ -106,10 +106,7 @@ function make_settings_tab($tabe) {
     //---
 };
 //---
-$qq = fetch_query('select id, title, displayed, type, value from settings;');
-// $qq = get_td_api (array('get' => 'settings'));
-//---
-// var_export($qq);
+$qq = get_td_or_sql_settings();
 //---
 $text = make_settings_tab($qq);
 //---
@@ -122,4 +119,3 @@ echo <<<HTML
 </div>
 HTML;
 //---
-?>

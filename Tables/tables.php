@@ -6,45 +6,8 @@ if (isset($_REQUEST['test'])) {
 	error_reporting(E_ALL);
 };
 
-use function Actions\MdwikiSql\fetch_query;
-use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\td_or_sql_titles_infos;
 
-function td_or_sql_titles_infos()
-{
-	// ---
-	$from_api = false;
-	// ---
-	if ($from_api) {
-		$data = get_td_api(['get' => 'titles']);
-	} else {
-		$qua_old = <<<SQL
-            SELECT
-                ase.title,
-                ase.importance,
-                rc.r_lead_refs,
-                rc.r_all_refs,
-                ep.en_views,
-                w.w_lead_words,
-                w.w_all_words,
-                q.qid
-            FROM assessments ase
-            LEFT JOIN enwiki_pageviews ep ON ase.title = ep.title
-            LEFT JOIN  qids q ON q.title = ase.title
-            LEFT JOIN  refs_counts rc ON rc.r_title = ase.title
-            LEFT JOIN  words w ON w.w_title = ase.title
-        SQL;
-		// ---
-        $qua = <<<SQL
-            SELECT *
-            FROM titles_infos
-        SQL;
-        // ---
-		$data = fetch_query($qua);
-	}
-	// ---
-	return $data;
-}
-//---
 $Assessments_fff = array(
 	'Top' => 1,
 	'High' => 2,

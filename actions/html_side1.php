@@ -29,7 +29,7 @@ function create_side($filename) {
             ['id' => 'last', 'admin' => 0, 'href' => 'last', 'title' => 'Recent'],
             ['id' => 'last_users', 'admin' => 0, 'href' => 'last_users', 'title' => 'Recent in User space'],
             ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process'],
-            ['id' => 'Pending', 'admin' => 0, 'href' => 'Pending', 'title' => 'In Process (Total)'],
+            ['id' => 'process_total', 'admin' => 0, 'href' => 'process_total', 'title' => 'In Process (Total)'],
             ['id' => 'publish_reports', 'admin' => 0, 'href' => '/publish_reports', 'title' => 'Publish Reports', 'target' => '_blank'],
         ],
         'Pages' => [

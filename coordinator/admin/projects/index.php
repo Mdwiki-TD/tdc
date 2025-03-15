@@ -11,8 +11,7 @@ if (isset($_REQUEST['test'])) {
 	error_reporting(E_ALL);
 };
 //---
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\get_td_or_sql_projects;
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
@@ -39,8 +38,7 @@ HTML;
 //---
 $numb = 0;
 //---
-$projs = fetch_query('select g_id, g_title from projects;');
-// $projs = get_td_api (array('get' => 'projects'));
+$projs = get_td_or_sql_projects();
 //---
 foreach ($projs as $g_title => $tab) {
 	$numb += 1;
