@@ -7,7 +7,17 @@ if (user_in_coord == false) {
 //---
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Get\get_td_or_sql_qids_others;
-//---
+/**
+ * Generates an HTML edit button for a Qid entry.
+ *
+ * Constructs an anchor element styled as a Bootstrap button that opens a popup window for editing
+ * a Qid entry. The URL for the popup is built using the provided record ID, title, and Wikidata identifier.
+ *
+ * @param int|string $id The unique identifier for the Qid record.
+ * @param string $title The title associated with the Qid entry.
+ * @param string $qid The Wikidata identifier for the Qid entry.
+ * @return string HTML markup for the edit button.
+ */
 function make_edit_icon($id, $title, $qid)
 {
 	//---
@@ -70,6 +80,18 @@ HTML;
 //---
 $qq1 = get_td_or_sql_qids_others($dis);
 
+/**
+ * Generates an HTML table row for a Qid entry.
+ *
+ * This function constructs a table row that displays key details of a Qid entry, including its display order,
+ * identifier, a MediaWiki-formatted title, a hyperlink to its corresponding Wikidata page, and an edit icon.
+ *
+ * @param mixed  $id    The unique identifier of the Qid entry.
+ * @param string $title The title of the Qid entry.
+ * @param string $qid   The Wikidata identifier.
+ * @param int    $numb  The sequential display number used for sorting.
+ * @return string The HTML markup for the table row.
+ */
 function make_row($id, $title, $qid, $numb)
 {
 	$edit_icon = make_edit_icon($id, $title, $qid);

@@ -16,7 +16,16 @@ $lang = $_GET['lang'] ?? 'All';
 if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
     $lang = 'All';
 };
-//---
+/**
+ * Creates an HTML dropdown for filtering recent translations by language.
+ *
+ * Retrieves available language codes, sorts them, and builds a select element with an "All" option
+ * followed by options for each specific language. The option matching the provided $lang value is marked
+ * as selected.
+ *
+ * @param string $lang The language code to be pre-selected in the dropdown.
+ * @return string HTML markup for the language filter dropdown wrapped in a div.
+ */
 function filter_recent($lang)
 {
     global $code_to_lang;
@@ -83,7 +92,19 @@ $recent_table = <<<HTML
         </thead>
         <tbody>
 HTML;
-//---
+/**
+ * Constructs an HTML table row for a translation record.
+ *
+ * This function formats the provided translation data into a table row, incorporating details such as the user name 
+ * (truncated if overly long), title, campaign, language with target URL, publication date, views count, and a fix reference link.
+ * It conditionally includes an email icon for coordinators and a talk link for the user.
+ *
+ * @param array $tabg An associative array containing translation record details with keys such as 'id', 'date', 'user',
+ *                    'lang', 'title', 'cat', 'word', 'target', 'pupdate', and 'add_date'.
+ * @param mixed $nnnn The row number to display in the first cell of the table row.
+ *
+ * @return string The generated HTML string for the table row.
+ */
 function make_td($tabg, $nnnn)
 {
     //---

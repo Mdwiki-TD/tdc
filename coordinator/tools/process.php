@@ -11,6 +11,17 @@ echo <<<HTML
     <div class='card-body'>
 HTML;
 
+/**
+ * Generates an HTML table row displaying translation details.
+ *
+ * Constructs a table row (<tr>) with columns for the row number, user (with links to the user's dashboard and talk page),
+ * language (linked to its leaderboard), formatted title, campaign, and date. It utilizes global mappings to convert
+ * language codes to full names and categories to campaign names, and formats the title via a markdown utility.
+ *
+ * @param array $tabg Associative array containing translation details with keys 'id', 'date', 'user', 'lang', 'title', and 'cat'.
+ * @param int $nnnn The row number for the first table cell.
+ * @return string The HTML string representing the constructed table row.
+ */
 function make_td($tabg, $nnnn)
 {
     //---

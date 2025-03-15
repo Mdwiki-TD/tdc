@@ -41,11 +41,28 @@ $use_in_process_table  = (($settings_tabe['use_td_api'] ?? "") == "1") ? true : 
 
 $data_index = [];
 
+/**
+ * Checks whether the provided value is a valid string.
+ *
+ * A string is considered valid if it is not empty and does not exactly equal "All" or "all".
+ *
+ * @param mixed $str The value to validate.
+ * @return bool True if the string is valid, false otherwise.
+ */
 function isvalid($str)
 {
     return !empty($str) && $str != 'All' && $str != 'all';
 }
 
+/**
+ * Retrieves categories from either the TD API or a SQL database.
+ *
+ * This function checks a global configuration to determine the source for the categories data.
+ * It caches the retrieved data in a static variable on the first call and returns the cached
+ * result on subsequent calls.
+ *
+ * @return array The categories data, which may include fields such as id, category, category2, campaign, depth, and def.
+ */
 function get_td_or_sql_categories()
 {
     // ---
@@ -70,6 +87,14 @@ function get_td_or_sql_categories()
     return $data;
 }
 
+/**
+ * Retrieves coordinator data from the configured data source.
+ *
+ * This function fetches coordinator details using either the TD API or a SQL query, depending on the global configuration.
+ * The result is cached to optimize subsequent calls.
+ *
+ * @return array The coordinator data, including coordinator IDs and corresponding user information.
+ */
 function get_coordinator()
 {
     // ---
@@ -94,6 +119,16 @@ function get_coordinator()
     return $data;
 }
 
+/**
+ * Retrieves the most recent page update for each user.
+ *
+ * This function fetches user records representing the latest page update for every user,
+ * using either the TD API or a SQL query based on the configuration flag. The results,
+ * which typically include details such as the user identifier, target page, update timestamp,
+ * and language, are cached to avoid repeated data retrievals within the same request.
+ *
+ * @return array Array of user records with the latest page update information.
+ */
 function get_users_by_last_pupdate()
 {
     // ---
@@ -151,6 +186,15 @@ function get_users_by_last_pupdate()
     return $data;
 }
 
+/**
+ * Retrieves the count of non-empty pages per user.
+ *
+ * Depending on the global configuration, this function fetches data from the TD API or executes a SQL query to count pages
+ * where the target field is not empty. It returns an associative array mapping each user to their count of non-empty pages,
+ * sorted in descending order. The results are cached to avoid redundant data retrieval.
+ *
+ * @return array Associative array of user counts keyed by user identifier.
+ */
 function get_td_or_sql_count_pages_not_empty()
 {
     // ---
@@ -183,6 +227,14 @@ function get_td_or_sql_count_pages_not_empty()
     return $data;
 }
 
+/**
+ * Retrieves distinct page users that are not present in the users table.
+ *
+ * Depending on the configuration, this function fetches unique user identifiers from page records using either the TD API or a SQL query.
+ * The results are cached during the request for efficiency.
+ *
+ * @return array List of unique user identifiers.
+ */
 function get_td_or_sql_page_user_not_in_users()
 {
     // ---
@@ -211,6 +263,15 @@ function get_td_or_sql_page_user_not_in_users()
     return $data;
 }
 
+/**
+ * Retrieves full translator data from either the TD API or a SQL database.
+ *
+ * This function checks the global configuration to determine whether to use the TD API or execute a SQL query to
+ * fetch translator records. The retrieved data is cached in a static variable to prevent redundant queries during
+ * the same request.
+ *
+ * @return array Array containing full translator data.
+ */
 function get_td_or_sql_full_translators()
 {
     // ---
@@ -233,6 +294,15 @@ function get_td_or_sql_full_translators()
     return $data;
 }
 
+/**
+ * Retrieves project data from either the TD API or a SQL database.
+ *
+ * Depending on the global configuration ($use_td_api), this function fetches projects by
+ * either calling the TD API with the 'projects' parameter or executing a SQL query. The
+ * result, consisting of project IDs and titles, is cached statically to avoid redundant queries.
+ *
+ * @return array The list of projects with their IDs and titles.
+ */
 function get_td_or_sql_projects()
 {
     // ---
@@ -257,6 +327,17 @@ function get_td_or_sql_projects()
     return $data;
 }
 
+/**
+ * Retrieves QID records based on the specified discriminator from either the TD API or the SQL database.
+ *
+ * If available, cached results for the given discriminator are returned immediately. When the global API
+ * flag is enabled, the function calls the TD API using the provided discriminator. Otherwise, it selects
+ * a SQL query based on the discriminator (typically one of 'empty', 'all', or 'duplicate') and executes it.
+ * The results are then cached for future calls.
+ *
+ * @param string $dis A discriminator that determines which subset of QIDs to retrieve.
+ * @return array The QID data retrieved from the designated data source.
+ */
 function get_td_or_sql_qids($dis)
 {
     // ---
@@ -297,6 +378,17 @@ function get_td_or_sql_qids($dis)
     return $sql_td_qids[$dis];
 }
 
+/**
+ * Retrieves QIDs data from the "qids_others" resource based on a given discriminator.
+ *
+ * Depending on configuration, the function either calls the TD API or executes a SQL query
+ * to obtain QIDs data. It supports fetching records with empty QIDs, all records, or duplicate QIDs
+ * (where duplicate entries have differing titles). Results are cached per discriminator to avoid
+ * redundant data retrieval.
+ *
+ * @param mixed $dis A discriminator indicating the subset of QIDs data to retrieve (e.g., 'empty', 'all', 'duplicate').
+ * @return mixed The retrieved QIDs data from the API or database.
+ */
 function get_td_or_sql_qids_others($dis)
 {
     // ---
@@ -337,6 +429,15 @@ function get_td_or_sql_qids_others($dis)
     return $qids_result[$dis];
 }
 
+/**
+ * Retrieves settings data from either the TD API or a SQL database.
+ *
+ * This function caches the settings in a static variable to prevent multiple queries. It
+ * determines the data source based on the global flag $use_td_api: if true, it fetches the
+ * settings via the TD API; otherwise, it executes a SQL query to retrieve the settings.
+ *
+ * @return array The settings data including id, title, displayed, value, and type.
+ */
 function get_td_or_sql_settings()
 {
     // ---
@@ -359,6 +460,15 @@ function get_td_or_sql_settings()
     return $setting_d;
 }
 
+/**
+ * Retrieves all process pages with an empty target field.
+ *
+ * Fetches up to 100 page entries sorted by date in descending order where the page's target is empty.
+ * Depending on the configuration, data is obtained using the TD API or a SQL query.
+ * Results are cached to optimize subsequent calls.
+ *
+ * @return array The collection of process page entries.
+ */
 function get_process_all()
 {
     // ---
@@ -380,6 +490,16 @@ function get_process_all()
     return $process_all;
 }
 
+/**
+ * Retrieves the count of in-process entries grouped by user.
+ *
+ * Depending on the configuration, the function fetches the data either from the TD API
+ * or a SQL database. It returns an associative array where each key is a user identifier
+ * and its value is the number of process entries for that user. Results are cached to avoid
+ * redundant data retrieval within the same execution.
+ *
+ * @return array Associative array mapping user identifiers to their process count.
+ */
 function get_users_process_new()
 {
     // ---
@@ -412,6 +532,15 @@ function get_users_process_new()
     return $process_new;
 }
 
+/**
+ * Retrieves the number of pages in process for each user.
+ *
+ * This function returns an associative array mapping users to the count of pages that have an empty 'target' field,
+ * indicating that they are currently in process. It selects the data source (TD API or SQL database) based on configuration
+ * and caches the results to prevent redundant queries.
+ *
+ * @return array Associative array with user identifiers as keys and the count of in-process pages as values.
+ */
 function get_users_process()
 {
     // ---
@@ -435,6 +564,14 @@ function get_users_process()
     return $users_process;
 }
 
+/**
+ * Retrieves an array of distinct language codes from pages.
+ *
+ * Depending on the configuration, this function sources the language data via the TD API
+ * or a direct SQL query. The result is cached to optimize subsequent calls.
+ *
+ * @return array List of unique language codes.
+ */
 function get_pages_langs()
 {
     // ---
@@ -460,6 +597,14 @@ function get_pages_langs()
     return $data;
 }
 
+/**
+ * Retrieves distinct language codes from the pages_users dataset.
+ *
+ * Depending on the global configuration, this function fetches the data via the TD API or a SQL query.
+ * The result is cached to avoid redundant lookups during the request lifecycle.
+ *
+ * @return array List of unique language codes.
+ */
 function get_pages_users_langs()
 {
     // ---
@@ -485,6 +630,15 @@ function get_pages_users_langs()
     return $data;
 }
 
+/**
+ * Retrieves a merged list of recent non-empty pages filtered by language.
+ *
+ * This function fetches two sets of page records from either the TD API or a SQL database—one ordered by the page update timestamp and another by the addition date. It then combines these results, removes any duplicates, and sorts the final list in descending order by the 'pupdate' field.
+ *
+ * @param string $lang The language code to filter pages by. Use an empty string or "All" for no language filtering.
+ *
+ * @return array An array of pages sorted by the most recent update time.
+ */
 function get_recent_sql($lang)
 {
     // ---
@@ -524,6 +678,15 @@ function get_recent_sql($lang)
     return $tab;
 }
 
+/**
+ * Retrieves title information from either the TD API or SQL database.
+ *
+ * Depending on the global configuration defined by $use_td_api, this function
+ * fetches titles information by either calling the TD API with a 'titles' request
+ * or executing a SQL query on the titles_infos table. It returns the retrieved data.
+ *
+ * @return mixed The retrieved titles information.
+ */
 function td_or_sql_titles_infos()
 {
     // ---
@@ -560,6 +723,17 @@ function td_or_sql_titles_infos()
     return $data;
 }
 
+/**
+ * Retrieves recent page user records, optionally filtered by language.
+ *
+ * This function fetches up to 100 entries from the pages_users source using either the TD API or 
+ * a SQL query based on configuration settings. If a specific language (other than "All") is provided, 
+ * the results are filtered to include only records matching that language. The returned records are 
+ * sorted in descending order by the 'pupdate' field.
+ *
+ * @param string $lang The language code to filter records by, or "All" to include all languages.
+ * @return array An array of page user records sorted by update date.
+ */
 function get_recent_pages_users($lang)
 {
     // ---
@@ -606,6 +780,18 @@ function get_recent_pages_users($lang)
     return $tab;
 }
 
+/**
+ * Retrieves recent translated records from the specified table.
+ *
+ * Fetches translation entries from either an API or a SQL database depending on configuration. If a language filter is provided 
+ * (i.e., not empty and not "All"), only entries matching that language are retrieved. The resulting records are then sorted in 
+ * descending order by their 'add_date' to emphasize the most recent translations.
+ *
+ * @param string $lang Language filter for the translation records; when empty or "All", no filtering is applied.
+ * @param string $table The name of the table from which the translation records are fetched.
+ *
+ * @return array Sorted list of translation records.
+ */
 function get_recent_translated($lang, $table)
 {
     global $use_td_api;

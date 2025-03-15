@@ -7,7 +7,20 @@ if (user_in_coord == false) {
 //---
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Get\get_td_or_sql_qids;
-//---
+/**
+ * Generates an HTML "Edit" button that opens a popup window for editing an item.
+ *
+ * This function constructs an edit URL by appending the provided identifier, title,
+ * and QID as query parameters to the base URL "index.php?ty=qids/edit_qid". It then
+ * returns an HTML anchor element styled as a button, which, when clicked, triggers a
+ * JavaScript popup via the "pupwindow1" function.
+ *
+ * @param mixed $id The unique identifier of the item.
+ * @param mixed $title The title of the item.
+ * @param mixed $qid The Wikidata identifier associated with the item.
+ *
+ * @return string The HTML markup for the edit button.
+ */
 function make_edit_icon($id, $title, $qid)
 {
 	//---
@@ -26,7 +39,22 @@ function make_edit_icon($id, $title, $qid)
     	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
     HTML;
 }
-//---
+/**
+ * Generates an HTML table row for displaying a QID entry.
+ *
+ * This function constructs a table row (<tr>) that includes:
+ * - A cell showing the row's sequential number.
+ * - A cell displaying the unique identifier.
+ * - A cell with the title formatted via a markdown-like transformation.
+ * - A cell containing a clickable link to the corresponding Wikidata page based on the QID.
+ * - A cell with an edit button that opens a popup for editing the entry.
+ *
+ * @param mixed $id The unique identifier for the QID entry.
+ * @param mixed $title The title to display for the entry.
+ * @param mixed $qid The Wikidata identifier.
+ * @param mixed $numb The sequential number indicating the row's order.
+ * @return string The HTML string representing the table row.
+ */
 function make_row($id, $title, $qid, $numb)
 {
 	$edit_icon = make_edit_icon($id, $title, $qid);

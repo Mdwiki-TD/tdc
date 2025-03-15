@@ -57,7 +57,23 @@ foreach ($_POST as $key => $values) {
 };
 $ul .= "</ul>";
 echo $ul;*/
-//---
+/**
+ * Generates an HTML table row with controls for configuring wiki reference options for a language.
+ *
+ * This function creates an HTML table row (<tr>) that displays a language identifier and a set of toggle switches
+ * for language-specific settings. It converts the language identifier to lowercase and uses the provided configuration
+ * array to determine if the checkbox controls for "Move dots", "Expend infobox", and "Add |language=en" should be checked.
+ * Additionally, the row contains a hidden input for the language and a checkbox for deletion.
+ *
+ * @param string $lang The language identifier.
+ * @param array $tabg Associative array of configuration flags with keys:
+ *                    - 'expend' (int): Enables the "Expend infobox" option when set to 1.
+ *                    - 'move_dots' (int): Enables the "Move dots" option when set to 1.
+ *                    - 'add_en_lng' (int): Enables the "Add |language=en" option when set to 1.
+ * @param int $numb The row number used to uniquely name the input fields.
+ *
+ * @return string The generated HTML markup for the configuration table row.
+ */
 function make_td($lang, $tabg, $numb)
 {
     //---
