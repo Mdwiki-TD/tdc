@@ -25,8 +25,6 @@ use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_translation_url;
 */
-
-include_once __DIR__ . '/html_side1.php';
 //---
 function add_quotes($str)
 {

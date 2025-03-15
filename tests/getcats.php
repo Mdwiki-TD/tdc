@@ -8,9 +8,7 @@ if (isset($_REQUEST['test'])) {
     error_reporting(E_ALL);
 }
 //---
-include_once __DIR__ . '/../actions/functions.php';
-include_once __DIR__ . '/../api_or_sql/index.php';
-include_once __DIR__ . '/../results/getcats.php';
+include_once __DIR__ . '/../include.php';
 //---
 use function Results\GetCats\get_mdwiki_cat_members;
 //---

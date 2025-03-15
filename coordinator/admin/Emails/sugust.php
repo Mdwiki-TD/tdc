@@ -6,15 +6,11 @@ Usage:
 use function Emails\Sugust\get_sugust;
 */
 
-include_once 'Tables/tables.php';
-include_once 'actions/functions.php';
-include_once 'results/get_results.php';
-include_once 'results/getcats.php';
-include_once 'infos/td_config.php';
+// include_once 'infos/td_config.php';
 //---
-use function Results\GetCats\get_in_process;
+// use function Results\GetCats\get_in_process;
 use function Results\GetResults\get_cat_exists_and_missing;
-use function SQLorAPI\Get\get_lang_in_process;
+use function SQLorAPI\Process\get_lang_in_process;
 //---
 function get_sugust($title, $lang)
 {

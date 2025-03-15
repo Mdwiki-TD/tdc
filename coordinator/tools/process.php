@@ -1,7 +1,7 @@
 <?PHP
 
 use function Actions\Html\make_mdwiki_title;
-use function SQLorAPI\Get\get_process_all;
+use function SQLorAPI\Process\get_process_all;
 // use function Actions\Html\make_cat_url;
 
 echo <<<HTML

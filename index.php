@@ -28,9 +28,6 @@ echo <<<HTML
 	<!-- <div id="maindiv" class="container-fluid"> -->
 HTML;
 //---
-include_once __DIR__ . '/actions/functions.php';
-include_once __DIR__ . '/Tables/sql_tables.php';
-//---
 $filename = $_SERVER['SCRIPT_NAME'];
 //---
 function echo_card_start($filename)

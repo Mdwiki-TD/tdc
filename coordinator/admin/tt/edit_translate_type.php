@@ -5,7 +5,7 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-include_once 'actions/functions.php';
+// include_once 'actions/functions.php';
 
 use function Actions\MdwikiSql\insert_to_translate_type;
 use function Actions\Html\add_quotes;

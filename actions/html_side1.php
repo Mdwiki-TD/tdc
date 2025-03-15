@@ -97,5 +97,3 @@ function create_side($filename) {
     $sidebar .= "</ul>";
     return $sidebar;
 }
-
-?>

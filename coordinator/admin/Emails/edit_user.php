@@ -5,8 +5,6 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-include_once 'actions/functions.php';
-
 use function Actions\MdwikiSql\sql_add_user;
 use function Actions\Html\make_project_to_user;
 //---

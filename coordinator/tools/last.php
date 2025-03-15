@@ -1,7 +1,5 @@
 <?PHP
 //---
-include_once 'Tables/langcode.php';
-//---
 use function Actions\WikiApi\make_view_by_number;
 use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_talk_url;
@@ -9,7 +7,7 @@ use function Actions\Html\make_target_url;
 // use function Actions\Html\make_cat_url;
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Get\get_pages_langs;
-use function SQLorAPI\Get\get_recent_sql;
+use function SQLorAPI\Recent\get_recent_sql;
 //---
 $lang = $_GET['lang'] ?? 'All';
 //---

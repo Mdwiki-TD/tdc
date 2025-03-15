@@ -19,18 +19,17 @@ if (isset($_REQUEST['test'])) {
 
 define('print_te', $print_t);
 
-include_once __DIR__ . '/html.php';
-include_once __DIR__ . '/wiki_api.php';
-include_once __DIR__ . '/mdwiki_api.php';
-include_once __DIR__ . '/mdwiki_sql.php';
-include_once __DIR__ . '/td_api.php';
-include_once __DIR__ . '/../api_or_sql/index.php';
+// include_once __DIR__ . '/wiki_api.php';
+// include_once __DIR__ . '/mdwiki_api.php';
+// include_once __DIR__ . '/mdwiki_sql.php';
+// include_once __DIR__ . '/td_api.php';
+// include_once __DIR__ . '/../api_or_sql/include.php';
 
 // use function Actions\TDApi\get_td_api;
 
 function test_print($s)
 {
-    $print_t = (isset($_REQUEST['test'])) ? true : false;
+    $print_t = (isset($_REQUEST['test']) || isset($_COOKIE['test'])) ? true : false;
 
     if ($print_t && gettype($s) == 'string') {
         echo "\n<br>\n$s";

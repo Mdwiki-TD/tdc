@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . '/../vendor_load.php';
+include_once __DIR__ . '/vendor_load.php';
 
 $configFile = __DIR__ . '/config.php';
 

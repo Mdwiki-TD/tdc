@@ -11,9 +11,9 @@ if (isset($_REQUEST['test'])) {
     error_reporting(E_ALL);
 };
 //---
-include_once 'actions/functions.php';
+// include_once 'actions/functions.php';
 //---
-use function Infos\TdConfig\get_configs;
+// use function Infos\TdConfig\get_configs;
 use function SQLorAPI\Get\get_td_or_sql_settings;
 //---
 // $conf = get_configs('conf.json');
