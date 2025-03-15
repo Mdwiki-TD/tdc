@@ -10,6 +10,16 @@ use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Get\get_recent_pages_users;
 use function SQLorAPI\Get\get_pages_users_langs;
 
+/**
+ * Generates the HTML for a language filter dropdown.
+ *
+ * This function fetches a list of available language codes via get_pages_users_langs(), sorts them,
+ * and builds a dropdown <select> element with an "All" option as the default. The option that matches
+ * the provided language code is marked as selected.
+ *
+ * @param string $lang The language code to pre-select in the dropdown.
+ * @return string The HTML markup for the language filter dropdown wrapped in a container div.
+ */
 function filter_recent($lang)
 {
     global $code_to_lang;
@@ -54,6 +64,20 @@ function filter_recent($lang)
     return $uuu;
 }
 
+/**
+ * Generates an HTML table row for a translation record.
+ *
+ * This function formats the provided translation record data into an HTML table row (<tr>).
+ * It extracts key fields such as user, language, title, target URL, publication date, and the addition date,
+ * and creates corresponding table cells with appropriate links and formatting. If the user name exceeds 15 characters,
+ * it is truncated to the first word.
+ *
+ * @param array $tabg Associative array containing translation record details. Expected keys include:
+ *                    'id', 'date', 'user', 'lang', 'title', 'cat', 'word', 'target', 'pupdate', and 'add_date'.
+ * @param mixed $nnnn A display counter or sequence number for the row.
+ *
+ * @return string The HTML string representing the formatted table row.
+ */
 function make_td($tabg, $nnnn)
 {
     //---

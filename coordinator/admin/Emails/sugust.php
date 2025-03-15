@@ -14,7 +14,21 @@ include_once 'infos/td_config.php';
 //---
 use function Results\GetCats\get_in_process;
 use function Results\GetResults\get_cat_exists_and_missing;
-//---
+/**
+ * Generates a suggestion based on the provided title and language.
+ *
+ * This function retrieves missing category items, filters out those that are already in process,
+ * and selects the most popular suggestion (based on pageview statistics) that differs from the given title.
+ * It also measures the execution time for generating the suggestion.
+ *
+ * If no valid suggestion can be determined, the function returns a JSON-encoded error response with a time of 0.
+ *
+ * @param string $title The title used for comparison to avoid suggesting the same value.
+ * @param string $lang  The language code to filter and localize the suggestion.
+ *
+ * @return array|string Associative array with keys "sugust" (the suggested value) and "time" (execution duration),
+ *                      or a JSON-encoded error message if no suggestion is available.
+ */
 function get_sugust($title, $lang)
 {
 

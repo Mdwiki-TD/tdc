@@ -30,6 +30,16 @@ use function Actions\Functions\test_print;
 use function Actions\MdwikiSql\fetch_query;
 use function Actions\MdwikiApi\get_mdwiki_url_with_params;
 
+/**
+ * Checks if the given string begins with a specified substring.
+ *
+ * This function returns true if the string in $haystack starts with the substring $needle;
+ * otherwise, it returns false.
+ *
+ * @param string $haystack The string to inspect.
+ * @param string $needle The substring to check at the beginning of $haystack.
+ * @return bool True if $haystack starts with $needle, false otherwise.
+ */
 function start_with($haystack, $needle)
 {
     return strpos($haystack, $needle) === 0;

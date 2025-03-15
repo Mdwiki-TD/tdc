@@ -31,7 +31,17 @@ echo <<<HTML
             <form action='index.php' method='POST'>
                 <input name='ty' value='settings' hidden/>
     HTML;
-//---
+/**
+ * Builds an HTML table for user settings.
+ *
+ * Iterates through an array of settings and constructs a table row for each,
+ * rendering either a text input or a checkbox based on the setting's type.
+ * A global counter is incremented to ensure each form element has a unique name.
+ *
+ * @param array $tabe Array of settings, with each item optionally containing keys
+ *                    such as 'id', 'title', 'displayed', 'value', and 'type' (or 'Type').
+ * @return string The HTML markup for the settings table.
+ */
 function make_settings_tab($tabe)
 {
     //---

@@ -16,7 +16,15 @@ use function SQLorAPI\Get\get_td_or_sql_categories;
 use function SQLorAPI\Get\get_td_or_sql_qids;
 //---
 $cat = $_REQUEST['cat'] ?? 'RTT';
-//---
+/**
+ * Generates an HTML filter input group with a category dropdown.
+ *
+ * Retrieves a list of available categories, extracts their names, and uses them to build a Bootstrap-styled dropdown.
+ * The specified category is pre-selected in the dropdown for filtering statistics.
+ *
+ * @param string $cat The category to be set as selected.
+ * @return string The HTML markup for the category filter input group.
+ */
 function filter_stat($cat)
 {
 	$cats_titles = array();

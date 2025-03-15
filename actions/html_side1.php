@@ -22,6 +22,17 @@ function generateSpan($filename, $text) {
 	HTML;
 }
 
+/**
+ * Constructs an HTML sidebar menu for the Coordinator Tools interface.
+ *
+ * This function builds a sidebar with multiple categorized sections (e.g., Translations, Pages, Qids,
+ * Users, Others, Tools) by generating list items and collapsible sections. Menu items requiring admin
+ * privileges are conditionally omitted if the user is not authorized. It uses helper functions to create
+ * the home span and individual list items, and returns the complete sidebar as an HTML string.
+ *
+ * @param string $filename The current page's filename used for generating links.
+ * @return string The complete HTML structure of the sidebar.
+ */
 function create_side($filename) {
 
     $mainMenu = [

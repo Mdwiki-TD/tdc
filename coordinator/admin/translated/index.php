@@ -17,7 +17,17 @@ $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
 if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
     $lang = 'All';
 };
-//---
+/**
+ * Generates an HTML dropdown for selecting a language filter.
+ *
+ * Retrieves the available language codes via get_pages_langs(), converts them to lowercase,
+ * sorts them, and builds a <select> element with an option for "All" plus one option per language.
+ * Uses a global mapping to convert language codes into display names, marking the option matching
+ * the provided language code as selected.
+ *
+ * @param string $lang The current language code to mark as selected.
+ * @return string The HTML markup for a language selection dropdown enclosed in a div.
+ */
 function filter_recent($lang)
 {
     global $code_to_lang;
@@ -152,7 +162,22 @@ function make_edit_icon($id, $title, $target, $lang, $user, $pupdate, $table)
     	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
     HTML;
 }
-//---
+/**
+ * Generates an HTML table row for a translated page.
+ *
+ * This function constructs a table row (<tr>) containing cells for the row
+ * number, user and language links, a formatted title, a translated page link,
+ * publication date, and an edit icon. It extracts the necessary data from the
+ * provided associative array and uses helper functions to format the title and
+ * target URL.
+ *
+ * @param array $tabg  An associative array containing translation data with keys
+ *                     'id', 'user', 'lang', 'title', 'target', and 'pupdate'.
+ * @param mixed $nnnn  The row number to be displayed in the first column.
+ * @param string $table The type of table, which influences how the edit icon is generated.
+ *
+ * @return string The generated HTML table row.
+ */
 function make_td($tabg, $nnnn, $table)
 {
     //---
