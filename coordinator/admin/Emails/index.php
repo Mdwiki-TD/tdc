@@ -61,7 +61,7 @@ function get_sorted_array()
 	//---
 	$der = get_td_or_sql_page_user_not_in_users();
 	//---
-	foreach ($der as $d => $tat) if (!in_array($tat, $users_done)) {
+	foreach ($der as $d => $tat) if (!array_key_exists($tat, $users_done)) {
 		$users_done[$tat] = array('user_id' => 0, 'username' => $tat, 'email' => '', 'wiki' => '', 'user_group' => '');
 	}
 	//---
