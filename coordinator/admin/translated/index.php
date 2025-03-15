@@ -5,8 +5,8 @@ include_once 'Tables/langcode.php';
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\get_recent_translated;
+use function SQLorAPI\Get\get_pages_langs;
 //---
 $lang = $_GET['lang'] ?? 'All';
 //---
@@ -24,12 +24,10 @@ function filter_recent($lang)
     //---
     $tabes = [];
     //---
-    $llangs = fetch_query("select DISTINCT lang from pages;");
+    $llangs = get_pages_langs();
     //---
-    // $llangs = get_td_api (array('get' => 'pages', 'distinct' => 1, 'select' => 'lang'));
-    //---
-    foreach ($llangs as $tat => $tag) {
-        $lag = strtolower($tag['lang']);
+    foreach ($llangs as $tat) {
+        $lag = strtolower($tat);
         //---
         $tabes[] = $lag;
         //---
@@ -201,30 +199,7 @@ function make_td($tabg, $nnnn, $table)
     return $laly;
 };
 //---
-
-function get_recent_sql($lang, $table)
-{
-    $lang_line = '';
-    //---
-    $params = array('get' => $table, 'order' => 'pupdate');
-    //---
-    if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and lang = '$lang'";
-        $params['lang'] = $lang;
-    }
-    //---
-    $dd = fetch_query("select * from $table where target != '' $lang_line ORDER BY pupdate DESC;");
-    // $dd = get_td_api ($params);
-    //---
-    // sort the table by add_date
-    usort($dd, function ($a, $b) {
-        return strtotime($b['add_date']) - strtotime($a['add_date']);
-    });
-    //---
-    return $dd;
-}
-//---
-$qsl_results = get_recent_sql($lang, $table);
+$qsl_results = get_recent_translated($lang, $table);
 //---
 $noo = 0;
 foreach ($qsl_results as $tat => $tabe) {

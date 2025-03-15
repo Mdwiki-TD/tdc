@@ -18,7 +18,7 @@ function insert_to_pages($t)
 	//---
 	$query2 = <<<SQL
         INSERT INTO pages (title, word, translate_type, cat, lang, date, user, pupdate, target, add_date)
-            SELECT ?, ?, ?, ?, ?, now(), ?, ?, ?, now()
+            SELECT ?, ?, ?, ?, ?, DATE(NOW()), ?, ?, ?, now()
         WHERE NOT EXISTS (SELECT 1 FROM pages WHERE title = ? AND lang = ? AND user = ? );
     SQL;
 	//---

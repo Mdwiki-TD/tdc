@@ -135,13 +135,15 @@ function make_mail_icon($tab)
     HTML;
 }
 //---
-function make_project_to_user($projects, $project)
+function make_project_to_user($project)
 {
+    //---
+    global $projects_title_to_id;
     //---
     $str = "<option value='Uncategorized'>Uncategorized</option>";
     // $str = "";
     //---
-    foreach ($projects as $p_title => $p_id) {
+    foreach ($projects_title_to_id as $p_title => $p_id) {
         $cdcdc = $project == $p_title ? "selected" : "";
         $str .= <<<HTML
 			<option value='$p_title' $cdcdc>$p_title</option>

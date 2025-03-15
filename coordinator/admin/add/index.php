@@ -5,8 +5,7 @@ if (user_in_coord == false) {
 	exit;
 };
 //---
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\get_td_or_sql_categories;
 //---
 if (isset($_REQUEST['test'])) {
 	ini_set('display_errors', 1);
@@ -21,38 +20,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 include_once 'Tables/tables.php';
 //---
 echo <<<HTML
-<style>
-	.ui-menuxx {
-		height: 200px;
-	}
-</style>
-<div class='card-header'>
-	<h4>Add translations:</h4>
-</div>
-<div class='cardbody'>
-	<form action="index.php?ty=add" method="POST">
-		<input name='ty' value="add" hidden />
-		<div class="form-group">
-			<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='font-size:95%;'>
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Mdwiki Title</th>
-						<th>Campaign</th>
-						<th>Type</th>
-						<th>User</th>
-						<th>Language</th>
-						<th>Target</th>
-						<th>Publication date</th>
-					</tr>
-				</thead>
-				<tbody id='g_tab'>
+	<style>
+		.ui-menuxx {
+			height: 200px;
+		}
+	</style>
+	<div class='card-header'>
+		<h4>Add translations:</h4>
+	</div>
+	<div class='cardbody'>
+		<form action="index.php?ty=add" method="POST">
+			<input name='ty' value="add" hidden />
+			<div class="form-group">
+				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='font-size:95%;'>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Mdwiki Title</th>
+							<th>Campaign</th>
+							<th>Type</th>
+							<th>User</th>
+							<th>Language</th>
+							<th>Target</th>
+							<th>Publication date</th>
+						</tr>
+					</thead>
+					<tbody id='g_tab'>
 HTML;
 //---
 $cats = "";
 //---
-$qqq = fetch_query('select category, campaign from categories;');
-// $qqq = get_td_api (array('get' => 'categories'));
+$qqq = get_td_or_sql_categories();
 //---
 foreach ($qqq as $Key => $ta) {
 	$ca = $ta['category'] ?? "";
