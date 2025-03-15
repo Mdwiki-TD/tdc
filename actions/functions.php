@@ -1,10 +1,10 @@
 <?php
+
 namespace Actions\Functions;
 /*
 Usage:
 use function Actions\Functions\test_print;
 */
-use function Actions\MdwikiSql\fetch_query;
 
 $print_t = false;
 
@@ -22,10 +22,12 @@ include_once __DIR__ . '/wiki_api.php';
 include_once __DIR__ . '/mdwiki_api.php';
 include_once __DIR__ . '/mdwiki_sql.php';
 include_once __DIR__ . '/td_api.php';
+include_once __DIR__ . '/../api_or_sql/index.php';
 
 // use function Actions\TDApi\get_td_api;
 
-function test_print($s) {
+function test_print($s)
+{
     if (print_te && gettype($s) == 'string') {
         echo "\n<br>\n$s";
     } elseif (print_te) {
@@ -33,11 +35,3 @@ function test_print($s) {
         print_r($s);
     }
 }
-
-$coordinators = fetch_query("SELECT user FROM coordinator;");
-// $coordinators = get_td_api (array('get' => 'coordinator', 'select' => 'user'));
-
-$coordinators = array_map('current', $coordinators);
-
-// var_dump(json_encode($coordinators2, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-

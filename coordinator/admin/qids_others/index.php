@@ -6,9 +6,7 @@ if (user_in_coord == false) {
 };
 //---
 use function Actions\Html\make_mdwiki_title;
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
-// use function Actions\TDApi\compare_it;
+use function SQLorAPI\Get\get_td_or_sql_qids_others;
 //---
 function make_edit_icon($id, $title, $qid)
 {
@@ -70,31 +68,8 @@ echo <<<HTML
 			<tbody id="tab_logic">
 HTML;
 //---
-$uuux = '';
-//---
-$quaries = [
-	'empty' => "select id, title, qid from qids_others where qid = '';",
-	'all' => "select id, title, qid from qids_others;",
-	'duplicate' => <<<SQL
-		SELECT
-		A.id AS id, A.title AS title, A.qid AS qid,
-		B.id AS id2, B.title AS title2, B.qid AS qid2
-	FROM
-		qids_others A
-	JOIN
-		qids_others B ON A.qid = B.qid
-	WHERE
-		A.qid != '' AND A.title != B.title AND A.id != B.id;
-	SQL
-];
-//---
-$qua = (in_array($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
-//---
-$qq1 = fetch_query($qua);
-// $qq = get_td_api (array('get' => 'qids_others', 'dis' => $dis));
-//---
-// compare_it($qq, $qq2);
-//---
+$qq1 = get_td_or_sql_qids_others($dis);
+
 function make_row($id, $title, $qid, $numb)
 {
 	$edit_icon = make_edit_icon($id, $title, $qid);

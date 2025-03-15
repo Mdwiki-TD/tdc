@@ -1,22 +1,21 @@
 <?PHP
-//---
+
 use function Actions\Html\make_mdwiki_title;
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
-use function Actions\TDApi\compare_it;
-use function Actions\Html\make_cat_url;
-//---
+use function SQLorAPI\Get\get_process_all;
+// use function Actions\Html\make_cat_url;
+
 echo <<<HTML
     <div class='card-header'>
         <h4>Translations in process:</h4>
     </div>
     <div class='card-body'>
 HTML;
-//---
+
 function make_td($tabg, $nnnn)
 {
     //---
-    global $code_to_lang, $Words_table, $views_sql, $user_name, $cat_to_camp;
+    global $code_to_lang, $cat_to_camp;
+    // global $Words_table, $views_sql, $user_name;
     //---
     $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
@@ -27,8 +26,8 @@ function make_td($tabg, $nnnn)
     $llang    = $tabg['lang'] ?? "";
     $md_title = $tabg['title'] ?? "";
     $cat      = $tabg['cat'] ?? "";
-    $word     = $tabg['word'] ?? "";
-    $pupdate  = $tabg['date'] ?? '';
+    // $word     = $tabg['word'] ?? "";
+    // $pupdate  = $tabg['date'] ?? '';
     //---
     $talk_url = "//$llang.wikipedia.org/w/index.php?title=User_talk:$user&action=edit&section=new";
     //---
@@ -71,14 +70,7 @@ function make_td($tabg, $nnnn)
     //---
     return $laly;
 };
-//---
-$quaa = "select * from pages where target = '' ORDER BY date DESC limit 100;";
-// ---
-$dd1 = fetch_query($quaa);
-//---
-// $dd1 = get_td_api (array('get' => 'pages', 'order' => 'date', 'target' => 'empty', 'limit' => "100"));
-//---
-// compare_it($dd, $dd1);
+$dd1 = get_process_all();
 //---
 $sato = <<<HTML
 	<table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided" style="font-size:90%;">
@@ -107,7 +99,7 @@ $sato .= <<<HTML
         </tbody>
     </table>
 HTML;
-print $sato;
+echo $sato;
 //---
 ?>
 <script>

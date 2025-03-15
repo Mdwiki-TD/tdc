@@ -10,15 +10,19 @@ if (isset($_REQUEST['test'])) {
 //---
 ini_set('session.use_strict_mode', '1');
 //---
-include_once __DIR__ . '/actions/functions.php'; // $coordinators
+include_once __DIR__ . '/actions/functions.php';
 //---
 include_once __DIR__ . '/auth/user_infos.php';
 include_once __DIR__ . '/head.php';
 //---
+use function SQLorAPI\Get\get_coordinator;
+//---
 $user_in_coord = false;
 $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span>Tools</a>';
 //---
-if (in_array(global_username, $coordinators)) {
+$coords = array_column(get_coordinator(), 'user');
+//---
+if (in_array(global_username, $coords)) {
 	$coord_tools = '<a href="index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span>Coordinator Tools</a>';
 	$user_in_coord = true;
 };

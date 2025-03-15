@@ -5,9 +5,7 @@ if (user_in_coord == false) {
 	exit;
 };
 //---
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
-// use function Actions\TDApi\compare_it;
+use function SQLorAPI\Get\get_td_or_sql_full_translators;
 //---
 if (isset($_REQUEST['test'])) {
 	ini_set('display_errors', 1);
@@ -38,8 +36,7 @@ echo <<<HTML
 					<tbody id="full_tab">
 HTML;
 //---
-$qq = fetch_query('select id, user from full_translators;');
-// $qq = get_td_api (array('get' => 'full_translators'));
+$qq = get_td_or_sql_full_translators();
 //---
 $numb = 0;
 //---

@@ -7,6 +7,8 @@ if (user_in_coord == false) {
 //---
 use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_project_to_user;
+use function SQLorAPI\Get\get_users_by_last_pupdate;
+use function SQLorAPI\Get\get_td_or_sql_count_pages_not_empty;
 //---
 if (isset($_REQUEST['test'])) {
 	ini_set('display_errors', 1);
@@ -68,6 +70,9 @@ echo <<<HTML
 	HTML;
 //---
 $numb = 0;
+//---
+$last_user_to_tab = get_users_by_last_pupdate();
+$live_pages = get_td_or_sql_count_pages_not_empty();
 //---
 foreach ($sorted_array as $user_name => $d) {
 	//---

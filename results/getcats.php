@@ -29,7 +29,6 @@ include_once __DIR__ . '/../actions/functions.php';
 use function Actions\Functions\test_print;
 use function Actions\MdwikiSql\fetch_query;
 use function Actions\MdwikiApi\get_mdwiki_url_with_params;
-// use function Actions\TDApi\get_td_api;
 
 function start_with($haystack, $needle)
 {

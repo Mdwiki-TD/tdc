@@ -1,8 +1,8 @@
 <?PHP
 //---
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
-use function Actions\TDApi\compare_it;
+use function SQLorAPI\Get\get_users_process;
+use function SQLorAPI\Get\get_users_process_new;
+
 //---
 echo <<<HTML
     <div class='card-header'>
@@ -41,22 +41,15 @@ $text = <<<HTML
 
 HTML;
 //---
-$user_process_tab = array();
-//---
-$sql_t = 'select DISTINCT user, count(target) as count from pages where target = "" group by user order by count desc';
-//---
-$sql_result1 = fetch_query($sql_t);
-//---
-// $sql_result1 = get_td_api (array('get' => 'count_pages', 'target' => 'empty'));
-//---
-// compare_it($sql_result, $sql_result1);
+$user_process_tab = get_users_process();
+// $user_process_tab = get_users_process_new();
+// sort user_process_tab by value
+arsort($user_process_tab);
 //---
 $n = 0;
 //---
-foreach ($sql_result1 as $k => $t) {
-    $user  = $t['user'] ?? "";
-    $count = $t['count'] ?? "";
-    $user_process_tab[$user] = $count;
+foreach ($user_process_tab as $user => $count) {
+    // ---
     if ($user != 'test' && !empty($user) && $count > 0) {
         //---
         $n++;
@@ -86,4 +79,4 @@ $text .= <<<HTML
 HTML;
 //---
 echo $text;
-    //---
+//---

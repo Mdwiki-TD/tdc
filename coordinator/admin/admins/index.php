@@ -5,8 +5,7 @@ if (user_in_coord == false) {
 	exit;
 };
 //---
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\get_coordinator;
 //---
 if (isset($_REQUEST['test'])) {
 	ini_set('display_errors', 1);
@@ -15,7 +14,7 @@ if (isset($_REQUEST['test'])) {
 };
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require __DIR__ . '/post.php';
+	require __DIR__ . '/post.php';
 }
 //---
 echo <<<HTML
@@ -37,16 +36,17 @@ echo <<<HTML
 					<tbody id="coo_tab">
 HTML;
 //---
-$qq = fetch_query('select id, user from coordinator;');
-// $qq = get_td_api (array('get' => 'coordinator'));
+$qq = get_coordinator();
+//---
+sort($qq);
 //---
 $numb = 0;
 //---
-foreach ( $qq AS $Key => $table ) {
+foreach ($qq as $Key => $table) {
 	$numb += 1;
 	$ide	= $table['id'] ?? "";
 	$usere	= $table['user'] ?? "";
-    //---
+	//---
 	echo <<<HTML
 		<tr>
 			<td data-content="id">
@@ -65,15 +65,16 @@ foreach ( $qq AS $Key => $table ) {
 };
 //---
 ?>
-					</tbody>
-				</table>
-				<button type="submit" class="btn btn-outline-primary">Save</button>
-				<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
-			</form>
-		</div>
-	</div>
-	<script type="text/javascript">
+</tbody>
+</table>
+<button type="submit" class="btn btn-outline-primary">Save</button>
+<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
+</form>
+</div>
+</div>
+<script type="text/javascript">
 	var i = 1;
+
 	function add_row() {
 		var ii = $('#coo_tab >tr').length + 1;
 		var e = "<tr>";
@@ -84,5 +85,5 @@ foreach ( $qq AS $Key => $table ) {
 		$('#coo_tab').append(e);
 		i++;
 	};
-	</script>
+</script>
 </div>

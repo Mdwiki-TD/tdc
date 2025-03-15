@@ -1,22 +1,20 @@
 <?php
 //---
 if (user_in_coord == false) {
-	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
-	exit;
+    echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+    exit;
 };
 //---
 if (isset($_REQUEST['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 };
 //---
 include_once 'infos/td_config.php';
 //---
 use function Infos\TdConfig\get_configs;
-use function Actions\MdwikiSql\fetch_query;
-// use function Actions\TDApi\get_td_api;
-use function Actions\TDApi\compare_it;
+use function SQLorAPI\Get\get_pages_langs;
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/post.php';
@@ -60,7 +58,8 @@ foreach ($_POST as $key => $values) {
 $ul .= "</ul>";
 echo $ul;*/
 //---
-function make_td($lang, $tabg, $numb) {
+function make_td($lang, $tabg, $numb)
+{
     //---
     $lang = strtolower($lang);
     //---
@@ -101,11 +100,10 @@ function make_td($lang, $tabg, $numb) {
     return $laly;
 };
 //---
-$langs_d = fetch_query("select DISTINCT lang from pages;");
-// $langs_d = get_td_api (array('get' => 'pages', 'distinct' => 1, 'select' => 'lang'));
+$langs_d = get_pages_langs();
 //---
-foreach ( $langs_d AS $tat => $tag ) {
-    $lal = strtolower($tag['lang']);
+foreach ($langs_d as $tat) {
+    $lal = strtolower($tat);
     //---
     if (!isset($tabes[$lal])) {
         $tabes[$lal] = array('expend' => 0, 'move_dots' => 0, 'add_en_lng' => 0);
@@ -115,7 +113,7 @@ foreach ( $langs_d AS $tat => $tag ) {
 ksort($tabes);
 //---
 $n = -1;
-foreach ( $tabes AS $lang => $tab ) {
+foreach ($tabes as $lang => $tab) {
     //---
     $n += 1;
     $sato .= make_td($lang, $tab, $n);
@@ -130,12 +128,13 @@ $sato .= <<<HTML
 	</form>
 
 HTML;
-print $sato;
+echo $sato;
 //---
 ?>
 
 <script type="text/javascript">
     var ii = $('#refs_tab >tr').length;
+
     function add_row() {
         ii++;
         var e = "<tr>";
@@ -150,12 +149,14 @@ print $sato;
         $('#refs_tab').append(e);
     };
 
-    $(document).ready( function () {
+    $(document).ready(function() {
         $('#em2').DataTable({
-            lengthMenu: [[10, 50, 100, 150], [10, 50, 100, 150]],
+            lengthMenu: [
+                [10, 50, 100, 150],
+                [10, 50, 100, 150]
+            ],
             // paging: false,
             // searching: false
         });
-    } );
-
+    });
 </script>
