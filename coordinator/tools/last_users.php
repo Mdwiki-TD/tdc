@@ -15,7 +15,7 @@ $lang = $_GET['lang'] ?? 'All';
 if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
     $lang = 'All';
 };
-//---
+
 function filter_recent($lang)
 {
     global $code_to_lang;
@@ -67,9 +67,9 @@ function filter_recent($lang)
     //---
     return $uuu;
 }
-//---
+
 $mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
-//---
+
 $recent_table = <<<HTML
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
         <thead>
@@ -162,14 +162,20 @@ function make_td($tabg, $nnnn)
     //---
     return $laly;
 };
-//---
+
 function get_recent_sql($lang)
 {
     // pages_users (title, lang, user, pupdate, target, add_date)
     //---
     $lang_line = '';
     //---
-    $params0 = array('get' => 'pages_users', 'target' => 'not_empty', 'limit' => '10', 'order' => 'pupdate', 'title_not_in_pages' => '1');
+    $params0 = [
+        'get' => 'pages_users',
+        'target' => 'not_empty',
+        'order' => 'pupdate',
+        'title_not_in_pages' => '0',
+        'limit' => '100'
+    ];
     //---
     if (!empty($lang) && $lang != 'All') {
         $lang_line = "and lang = '$lang'";
@@ -177,18 +183,15 @@ function get_recent_sql($lang)
     };
     //---
     $qua = <<<SQL
-        select
-            *
-        from
-            pages_users
+        select * #id, date, user, lang, title, cat, word, target, pupdate, add_date
+        from pages_users
         where
             target != ''
-        and title not in (
-            select p.title from pages p where p.lang = lang and p.target != ''
-        )
+        -- and title not in ( select p.title from pages p where p.lang = lang and p.target != '' )
         $lang_line
         ORDER BY pupdate DESC
-        limit 100;
+        limit 100
+        ;
     SQL;
     //---
     // $tab = get_td_api ($params0);
@@ -197,7 +200,6 @@ function get_recent_sql($lang)
     //---
     // sort the table by add_date
     usort($tab, function ($a, $b) {
-        // return strtotime($b['add_date']) - strtotime($a['add_date']);
         return strtotime($b['pupdate']) - strtotime($a['pupdate']);
     });
     //---
