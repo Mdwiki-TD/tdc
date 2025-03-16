@@ -253,7 +253,7 @@ function get_td_or_sql_qids($dis)
         $data = get_td_api(['get' => 'qids', 'dis' => $dis]);
     } else {
         $quaries = [
-            'empty' => "select id, title, qid from qids where qid = '';",
+            'empty' => "select id, title, qid from qids where (qid = '' OR qid IS NULL);",
             'all' => "select id, title, qid from qids;",
             'duplicate' => <<<SQL
                 SELECT
@@ -293,7 +293,7 @@ function get_td_or_sql_qids_others($dis)
         $data = get_td_api(['get' => 'qids_others', 'dis' => $dis]);
     } else {
         $quaries = [
-            'empty' => "select id, title, qid from qids_others where qid = '';",
+            'empty' => "select id, title, qid from qids_others where (qid = '' OR qid IS NULL);",
             'all' => "select id, title, qid from qids_others;",
             'duplicate' => <<<SQL
                 SELECT
