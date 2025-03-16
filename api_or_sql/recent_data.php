@@ -25,33 +25,41 @@ function get_recent_sql($lang)
     //---
     $sql_params = [];
     //---
-    $params0 = array('get' => 'pages', 'target' => 'not_empty', 'limit' => '250', 'order' => 'pupdate');
-    $params1 = array('get' => 'pages', 'target' => 'not_empty', 'limit' => '250', 'order' => 'add_date');
+    $params0 = array('get' => 'pages_with_views', 'target' => 'not_empty', 'limit' => '250', 'order' => 'pupdate_or_add_date');
     //---
     if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and lang = ?";
+        $lang_line = "and p.lang = ?";
         $sql_params[] = $lang;
         // ---
         $params0['lang'] = $lang;
-        $params1['lang'] = $lang;
     }
     //---
     if ($use_td_api) {
-        $dd0 = get_td_api($params0);
-        $dd1 = get_td_api($params1);
+        $tab = get_td_api($params0);
     } else {
-        $dd0 = fetch_query("select * from pages where target != '' $lang_line ORDER BY pupdate DESC limit 250", $sql_params);
-        $dd1 = fetch_query("select * from pages where target != '' $lang_line ORDER BY add_date DESC limit 250", $sql_params);
+        $qua = <<<SQL
+            select distinct * from pages p
+
+            LEFT JOIN views_new_all v
+                ON p.target = v.target
+                AND p.lang = v.lang
+
+            where p.target != ''
+            $lang_line
+            # ORDER BY p.pupdate DESC
+            ORDER BY GREATEST(UNIX_TIMESTAMP(p.pupdate), UNIX_TIMESTAMP(p.add_date)) DESC
+            limit 250
+        SQL;
+        $tab = fetch_query($qua, $sql_params);
     }
     // ---
     // merage the two arrays without duplicates
-    $tab = array_unique(array_merge($dd0, $dd1), SORT_REGULAR);
+    // $tab = array_unique(array_merge($dd0, $dd1), SORT_REGULAR);
     //---
     // sort the table by add_date
-    usort($tab, function ($a, $b) {
-        // return strtotime($b['add_date']) - strtotime($a['add_date']);
-        return strtotime($b['pupdate']) - strtotime($a['pupdate']);
-    });
+    // usort($tab, function ($a, $b) {
+    //     return strtotime($b['pupdate']) - strtotime($a['pupdate']);
+    // });
     //---
     return $tab;
 }
