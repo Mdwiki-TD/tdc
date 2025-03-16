@@ -1,18 +1,34 @@
 <?php
+
 namespace Actions\HtmlSide;
 /*
 Usage:
 use function Actions\HtmlSide\create_side;
 */
 
-function generateListItem($id, $href, $title, $filename, $target = '') {
-	$li1 = "<li id='%s'><a class='linknave rounded' href='$filename?ty=%s'>%s</a></li>";
-    $li2 = "<li id='%s'><a target='_blank' class='linknave rounded' href='%s'>%s</a></li>";
-	$template = $target ? $li2 : $li1;
-    return sprintf($template, $id, $href, $title);
+function generateListItem($id, $href, $title, $filename, $ty, $target = '')
+{
+    // ---
+    $class = $ty == $href ? 'active' : '';
+    // ---
+    $li1 = "<a class='linknave rounded' href='$filename?ty=%s'>%s</a>";
+    $li2 = "<a target='_blank' class='linknave rounded' href='%s'>%s</a>";
+    // ---
+    $template = $target ? $li2 : $li1;
+    // ---
+    $link = sprintf($template, $href, $title);
+    // ---
+    $text = <<<HTML
+        <li id='$id' class='$class'>
+            $link
+        </li>
+    HTML;
+    // ---
+    return $text;
 }
 
-function generateSpan($filename, $text) {
+function generateSpan($filename, $text)
+{
     return <<<HTML
 		<span class='d-flex align-items-center pb-1 mb-1 text-decoration-none border-bottom'>
 			<a class='nav-link' href='$filename'>
@@ -22,7 +38,8 @@ function generateSpan($filename, $text) {
 	HTML;
 }
 
-function create_side($filename) {
+function create_side($filename, $ty)
+{
 
     $mainMenu = [
         'Translations' => [
@@ -60,30 +77,40 @@ function create_side($filename) {
 
     $homeSpan = generateSpan($filename, 'Coordinator Tools');
 
-	$sidebar = <<<HTML
+    $sidebar = <<<HTML
         <!-- $homeSpan -->
         <ul class="list-unstyled">
     HTML;
 
     foreach ($mainMenu as $key => $items) {
         $lis = '';
+        // ---
+        $is_active = false;
+        // ---
         foreach ($items as $item) {
+            $href = $item['href'] ?? '';
+            // ---
+            if ($href == $ty) {
+                $is_active = true;
+            }
+            // ---
             $target = $item['target'] ?? '';
             $admin = $item['admin'] ?? 0;
 
             if ($admin == 1 && !user_in_coord) continue;
 
-            $lis .= generateListItem($item['id'], $item['href'], $item['title'], $filename, $target);
+            $lis .= generateListItem($item['id'], $item['href'], $item['title'], $filename, $ty, $target);
         }
 
         if (!empty($lis)) {
-			$sidebar .= <<<HTML
+            $show = $is_active ? 'show' : '';
+            $sidebar .= <<<HTML
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
                         data-bs-target="#$key-collapse" aria-expanded="true">
                         $key
                     </button>
-                    <div class="collapse" id="$key-collapse" style="">
+                    <div class="collapse $show" id="$key-collapse" style="">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                             $lis
                         </ul>

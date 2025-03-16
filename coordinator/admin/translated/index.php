@@ -244,9 +244,6 @@ echo $recent_table;
 //---
 ?>
 <script>
-    $('#translated').addClass('active');
-    $("#translated").closest('.mb-1').find('.collapse').addClass('show');
-
     $(document).ready(function() {
         var t = $('#pages_table').DataTable({
             // order: [[10	, 'desc']],

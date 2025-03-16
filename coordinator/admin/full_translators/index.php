@@ -17,35 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 //---
-echo <<<HTML
-	<div class='card-header'>
-		<h4>Full article translators:</h4>
-	</div>
-	<div class='card-body'>
-		<form action="index.php?ty=full_translators" method="POST">
-			<input name='ty' value="full_translators" hidden/>
-			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>User</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody id="full_tab">
-HTML;
-//---
 $qq = get_td_or_sql_full_translators();
 //---
 $numb = 0;
+//---
+$form_text = '';
 //---
 foreach ($qq as $Key => $table) {
 	$numb += 1;
 	$ide	= $table['id'] ?? "";
 	$usere	= $table['user'] ?? "";
 	//---
-	echo <<<HTML
+	$form_text .= <<<HTML
 		<tr>
 			<td data-content="id">
 				<span><b>$numb</b></span>
@@ -64,41 +47,61 @@ foreach ($qq as $Key => $table) {
 //---
 $numb += 1;
 //---
+$form_text_plus = <<<HTML
+	<tr>
+		<td data-content="id">
+			<span><b>Add:</b></span>
+		</td>
+		<td data-content="user">
+			<input class='form-control td_user_input' name='user[]$numb' />
+		</td>
+		<td data-content="delete">
+			-
+		</td>
+	</tr>
+HTML;
+//---
 echo <<<HTML
-<tr>
-	<td data-content="id">
-		<span><b>Add:</b></span>
-	</td>
-	<td data-content="user">
-		<input class='form-control td_user_input' name='user[]$numb'/>
-	</td>
-	<td data-content="delete">
-		-
-	</td>
-</tr>
+	<div class='card-header'>
+		<h4>Full article translators:</h4>
+	</div>
+	<div class='card-body'>
+		<form action="index.php?ty=full_translators" method="POST">
+			<input name='ty' value="full_translators" hidden />
+			<div class="form-group">
+				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>User</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody id="full_tab">
+						$form_text
+						$form_text_plus
+					</tbody>
+				</table>
+				<button type="submit" class="btn btn-outline-primary">Save</button>
+				<!-- <span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row_v()'>New row</span> -->
+		</form>
+	</div>
 HTML;
 ?>
-</tbody>
-</table>
-<button type="submit" class="btn btn-outline-primary">Save</button>
-<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row_v()'>New row</span>
-</form>
-</div>
-</div>
 <script type="text/javascript">
-	$(document).ready(function() {
-		var i = 1;
+	// $(document).ready(function() {
+	var i = 1;
 
-		function add_row_v() {
-			var ii = $('#full_tab >tr').length + 1;
-			var e = "<tr>";
-			e = e + "<td><b>" + ii + "</b></td>";
-			e = e + "<td><input class='form-control td_user_input' name='user[]" + ii + "'/></td>";
-			e = e + "<td>-</td>";
-			e = e + "</tr>";
-			$('#full_tab').append(e);
-			i++;
-		};
-	});
+	function add_row_v() {
+		var ii = $('#full_tab >tr').length + 1;
+		var e = "<tr>";
+		e = e + "<td><b>" + ii + "</b></td>";
+		e = e + "<td><input class='form-control td_user_input' name='user[]" + ii + "'/></td>";
+		e = e + "<td>-</td>";
+		e = e + "</tr>";
+		$('#full_tab').append(e);
+		i++;
+	};
+	// });
 </script>
 </div>

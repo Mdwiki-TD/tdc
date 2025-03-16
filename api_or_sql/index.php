@@ -241,11 +241,11 @@ function get_td_or_sql_projects()
 function get_td_or_sql_qids($dis)
 {
     // ---
-    global $use_td_api;
+    global $use_td_api, $data_index;
     // ---
-    static $sql_td_qids = [];
+    $key = "get_td_or_sql_qids_" . $dis;
     // ---
-    if (!empty($sql_td_qids[$dis] ?? [])) return $sql_td_qids[$dis];
+    if (!empty($data_index[$key] ?? [])) return $data_index[$key];
     // ---
     $data = [];
     // ---
@@ -268,24 +268,24 @@ function get_td_or_sql_qids($dis)
             SQL
         ];
         //---
-        $query = (array_key_exists($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
+        $query = (array_key_exists($dis, $quaries)) ? $quaries[$dis] : $quaries['all'];
         //---
         $data = fetch_query($query);
     }
     // ---
-    $sql_td_qids[$dis] = $data;
+    $data_index[$key] = $data;
     // ---
-    return $sql_td_qids[$dis];
+    return $data;
 }
 
 function get_td_or_sql_qids_others($dis)
 {
     // ---
-    global $use_td_api;
+    global $use_td_api, $data_index;
     // ---
-    static $qids_result = [];
+    $key = "sql_qids_others" . $dis;
     // ---
-    if (!empty($qids_result[$dis] ?? [])) return $qids_result[$dis];
+    if (!empty($data_index[$key] ?? [])) return $data_index[$key];
     // ---
     $data = [];
     // ---
@@ -308,14 +308,14 @@ function get_td_or_sql_qids_others($dis)
             SQL
         ];
         //---
-        $query = (array_key_exists($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
+        $query = (array_key_exists($dis, $quaries)) ? $quaries[$dis] : $quaries['all'];
         //---
         $data = fetch_query($query);
     }
     // ---
-    $qids_result[$dis] = $data;
+    $data_index[$key] = $data;
     // ---
-    return $qids_result[$dis];
+    return $data;
 }
 
 function get_td_or_sql_settings()
@@ -325,9 +325,7 @@ function get_td_or_sql_settings()
     // ---
     static $setting_d = [];
     // ---
-    if (!empty($setting_d)) {
-        return $setting_d;
-    }
+    if (!empty($setting_d)) return $setting_d;
     // ---
     if ($use_td_api) {
         $setting_d = get_td_api(['get' => 'settings']);

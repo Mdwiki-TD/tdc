@@ -9,12 +9,6 @@ use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Get\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
 //---
-$lang = $_GET['lang'] ?? 'All';
-//---
-if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
-    $lang = 'All';
-};
-//---
 function filter_recent($lang)
 {
     global $code_to_lang;
@@ -59,35 +53,12 @@ function filter_recent($lang)
     return $uuu;
 }
 //---
-$mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
-//---
-$recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>User</th>
-                $mail_th
-                <!-- <th>Lang</th> -->
-                <th>Title</th>
-                <th>Campaign</th>
-                <!-- <th>Words</th> -->
-                <th>Translated</th>
-                <th>Publication date</th>
-                <th>Views</th>
-                <th>Fixref</th>
-                <th>add_date</th>
-            </tr>
-        </thead>
-        <tbody>
-HTML;
-//---
 function make_td($tabg, $nnnn)
 {
     //---
     global $code_to_lang, $Words_table, $views_sql, $cat_to_camp;
     //---
-    $id       = $tabg['id'] ?? "";
+    // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
     //---
     //return $date . '<br>';
@@ -95,10 +66,10 @@ function make_td($tabg, $nnnn)
     $user     = $tabg['user'] ?? "";
     //---
     $llang    = $tabg['lang'] ?? "";
-    $md_title = trim($tabg['title']);
+    $md_title = trim($tabg['title'] ?? '');
     $cat      = $tabg['cat'] ?? "";
     $word     = $tabg['word'] ?? "";
-    $targe    = trim($tabg['target']);
+    $targe    = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
     //---
@@ -109,7 +80,11 @@ function make_td($tabg, $nnnn)
         $user_name = $user_name[0];
     }
     //---
-    $views_number = $views_sql[$targe] ?? '?';
+    $views_number = $tabg['views'] ?? '';
+    //---
+    if (empty($views_number)) {
+        $views_number = $views_sql[$targe] ?? "?";
+    }
     //---
     // $lang2 = $code_to_lang[$llang] ?? $llang;
     $lang2 = $llang;
@@ -178,6 +153,35 @@ function make_td($tabg, $nnnn)
     return $laly;
 };
 //---
+$lang = $_GET['lang'] ?? 'All';
+//---
+if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
+    $lang = 'All';
+};
+//---
+$mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
+//---
+$recent_table = <<<HTML
+	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                $mail_th
+                <!-- <th>Lang</th> -->
+                <th>Title</th>
+                <th>Campaign</th>
+                <!-- <th>Words</th> -->
+                <th>Translated</th>
+                <th>Publication date</th>
+                <th>Views</th>
+                <th>Fixref</th>
+                <th>add_date</th>
+            </tr>
+        </thead>
+        <tbody>
+HTML;
+//---
 $qsl_results = get_recent_sql($lang);
 //---
 $noo = 0;
@@ -225,9 +229,7 @@ echo $recent_table;
 
     $(document).ready(function() {
         var t = $('#last_tabel').DataTable({
-            order: [
-                [6, 'desc']
-            ],
+            // order: [ [6, 'desc'] ],
             paging: false,
             // lengthMenu: [[100, 150, 200], [250, 150, 200]],
             // scrollY: 800
