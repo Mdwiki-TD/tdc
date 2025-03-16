@@ -96,10 +96,6 @@ foreach ($qq1 as $Key => $table) {
 };
 //---
 echo <<<HTML
-	<script>
-		$('#qids_othersload').addClass('active');
-		$("#qids_othersload").closest('.mb-1').find('.collapse').addClass('show');
-	</script>
 	<div class='card-header'>
 		<div class='row'>
 			<div class='col-md-5'>

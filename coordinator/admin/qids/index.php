@@ -61,10 +61,6 @@ $dis = $_GET['dis'] ?? 'all';
 if (!isset($_GET['dis']) && global_username == "Mr. Ibrahem") $dis = "empty";
 //---
 echo <<<HTML
-	<script>
-		$('#qidsload').addClass('active');
-		$("#qidsload").closest('.mb-1').find('.collapse').addClass('show');
-	</script>
 	<div class='card-header'>
 		<div class='row'>
 			<div class='col-md-5'>

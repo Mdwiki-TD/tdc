@@ -241,11 +241,11 @@ function get_td_or_sql_projects()
 function get_td_or_sql_qids($dis)
 {
     // ---
-    global $use_td_api;
+    global $use_td_api, $data_index;
     // ---
-    static $sql_td_qids = [];
+    $key = "get_td_or_sql_qids_" . $dis;
     // ---
-    if (!empty($sql_td_qids[$dis] ?? [])) return $sql_td_qids[$dis];
+    if (!empty($data_index[$key] ?? [])) return $data_index[$key];
     // ---
     $data = [];
     // ---
@@ -273,9 +273,9 @@ function get_td_or_sql_qids($dis)
         $data = fetch_query($query);
     }
     // ---
-    $sql_td_qids[$dis] = $data;
+    $data_index[$key] = $data;
     // ---
-    return $sql_td_qids[$dis];
+    return $data;
 }
 
 function get_td_or_sql_qids_others($dis)
@@ -285,9 +285,7 @@ function get_td_or_sql_qids_others($dis)
     // ---
     $key = "sql_qids_others" . $dis;
     // ---
-    if (!empty($data_index[$key] ?? [])) {
-        return $data_index[$key];
-    }
+    if (!empty($data_index[$key] ?? [])) return $data_index[$key];
     // ---
     $data = [];
     // ---
@@ -327,9 +325,7 @@ function get_td_or_sql_settings()
     // ---
     static $setting_d = [];
     // ---
-    if (!empty($setting_d)) {
-        return $setting_d;
-    }
+    if (!empty($setting_d)) return $setting_d;
     // ---
     if ($use_td_api) {
         $setting_d = get_td_api(['get' => 'settings']);

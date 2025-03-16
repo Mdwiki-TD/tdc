@@ -105,8 +105,7 @@ function get_lang_in_process($lang)
     if ($use_td_api) {
         $tab = get_td_api(['get' => 'pages', 'lang' => $lang, 'target' => 'empty', 'select' => "title"]);
     } else {
-        // select * from pages where (target = '' OR target IS NULL) and lang = '$code'
-        $sql_t = 'select * from pages where (target = "" OR target IS NULL) and lang = ?';
+        $sql_t = 'select * from pages where lang = ? and (target = "" OR target IS NULL) ';
         $tab = fetch_query($sql_t, [$lang]);
     }
     //---
