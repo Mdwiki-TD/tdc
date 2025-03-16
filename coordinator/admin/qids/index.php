@@ -58,6 +58,8 @@ $testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidd
 //---
 $dis = $_GET['dis'] ?? 'all';
 //---
+if (!isset($_GET['dis']) && global_username == "Mr. Ibrahem") $dis = "empty";
+//---
 echo <<<HTML
 	<script>
 		$('#qidsload').addClass('active');

@@ -268,7 +268,7 @@ function get_td_or_sql_qids($dis)
             SQL
         ];
         //---
-        $query = (array_key_exists($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
+        $query = (array_key_exists($dis, $quaries)) ? $quaries[$dis] : $quaries['all'];
         //---
         $data = fetch_query($query);
     }
@@ -281,11 +281,13 @@ function get_td_or_sql_qids($dis)
 function get_td_or_sql_qids_others($dis)
 {
     // ---
-    global $use_td_api;
+    global $use_td_api, $data_index;
     // ---
-    static $qids_result = [];
+    $key = "sql_qids_others" . $dis;
     // ---
-    if (!empty($qids_result[$dis] ?? [])) return $qids_result[$dis];
+    if (!empty($data_index[$key] ?? [])) {
+        return $data_index[$key];
+    }
     // ---
     $data = [];
     // ---
@@ -308,14 +310,14 @@ function get_td_or_sql_qids_others($dis)
             SQL
         ];
         //---
-        $query = (array_key_exists($dis, $quaries)) ? $quaries['all'] : $quaries[$dis];
+        $query = (array_key_exists($dis, $quaries)) ? $quaries[$dis] : $quaries['all'];
         //---
         $data = fetch_query($query);
     }
     // ---
-    $qids_result[$dis] = $data;
+    $data_index[$key] = $data;
     // ---
-    return $qids_result[$dis];
+    return $data;
 }
 
 function get_td_or_sql_settings()
