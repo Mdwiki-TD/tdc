@@ -65,10 +65,6 @@ if ($cat == 'All') {
 }
 //---
 echo <<<HTML
-	<script>
-		$('#tt_load').addClass('active');
-		$("#tt_load").closest('.mb-1').find('.collapse').addClass('show');
-	</script>
 	<div class='card-header'>
 		<form action="index.php?ty=tt" method="GET">
 			$testin
