@@ -31,7 +31,7 @@ function get_process_all()
     if ($use_td_api) {
         $process_all = get_td_api(['get' => 'pages', 'order' => 'date', 'target' => 'empty', 'limit' => "100"]);
     } else {
-        $sql_t = "select * from pages where target = '' ORDER BY date DESC limit 100";
+        $sql_t = "select * from pages where (target = '' OR target IS NULL) ORDER BY date DESC limit 100";
         $process_all = fetch_query($sql_t);
     }
     //---
@@ -85,7 +85,7 @@ function get_users_process()
         $tab = get_td_api(['get' => 'count_pages', 'distinct' => 1, 'target' => 'empty']);
         $users_process = array_column($tab, 'count', 'user');
     } else {
-        $sql_t = 'select DISTINCT user, count(target) as count from pages where target = "" group by user order by count desc';
+        $sql_t = 'select DISTINCT user, count(target) as count from pages where (target = "" OR target IS NULL) group by user order by count desc';
         $tab = fetch_query($sql_t);
         $users_process = array_column($tab, 'count', 'user');
     }
@@ -105,8 +105,8 @@ function get_lang_in_process($lang)
     if ($use_td_api) {
         $tab = get_td_api(['get' => 'pages', 'lang' => $lang, 'target' => 'empty', 'select' => "title"]);
     } else {
-        // select * from pages where target = '' and lang = '$code'
-        $sql_t = 'select * from pages where target = "" and lang = ?';
+        // select * from pages where (target = '' OR target IS NULL) and lang = '$code'
+        $sql_t = 'select * from pages where (target = "" OR target IS NULL) and lang = ?';
         $tab = fetch_query($sql_t, [$lang]);
     }
     //---
