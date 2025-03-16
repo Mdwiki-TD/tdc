@@ -1,11 +1,11 @@
 <?PHP
 
-include_once 'Tables/langcode.php';
+// include_once 'Tables/langcode.php';
 
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
-use function SQLorAPI\Get\get_recent_translated;
+use function SQLorAPI\Recent\get_recent_translated;
 use function SQLorAPI\Get\get_pages_langs;
 //---
 $lang = $_GET['lang'] ?? 'All';

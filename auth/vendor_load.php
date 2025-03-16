@@ -10,6 +10,6 @@ if (isset($_REQUEST['test'])) {
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 };
-require __DIR__ . '/../auth/vendor/autoload.php'; // TD
+require __DIR__ . '/../../auth/vendor/autoload.php'; // TD
 
 // include_once(__DIR__ . '/../../vendor/autoload.php');

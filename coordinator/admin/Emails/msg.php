@@ -1,16 +1,10 @@
 <?php
 //---
 if (user_in_coord == false) {
-    echo "<meta http-equiv='refresh' content='0; url=index.php'>";
-    exit;
+  echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+  exit;
 };
 //---
-// include_once 'header.php';
-include_once 'Tables/tables.php';
-include_once 'actions/functions.php';
-include_once 'results/get_results.php';
-include_once 'results/getcats.php';
-include_once 'infos/td_config.php';
 include_once 'coordinator/admin/Emails/sugust.php';
 //---
 use function Actions\MdwikiSql\fetch_query;
@@ -22,9 +16,9 @@ use function Emails\Sugust\get_sugust;
 echo "</div>";
 //---
 if (isset($_REQUEST['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
 };
 //---
 $hoste = 'https://tools-static.wmflabs.org/cdnjs';
@@ -55,11 +49,11 @@ $sugust_tab = get_sugust($title, $lang);
 $sugust = $sugust_tab['sugust'] ?? '';
 //---
 $here_params = array(
-    // 'username' => rawurlencode($user),
-    'code' => $lang,
-    'cat' => 'RTT',
-    'type' => 'lead',
-    'title' => $sugust
+  // 'username' => rawurlencode($user),
+  'code' => $lang,
+  'cat' => 'RTT',
+  'type' => 'lead',
+  'title' => $sugust
 );
 //---
 $here_url = "https://mdwiki.toolforge.org/Translation_Dashboard/translate/medwiki.php?" . http_build_query($here_params);
@@ -72,7 +66,7 @@ $Emails_array = array();
 
 foreach (fetch_query("select username, email from users;") as $Key => $ta) {
 
-    $Emails_array[$ta['username']] = $ta['email'];
+  $Emails_array[$ta['username']] = $ta['email'];
 };
 //---
 $email_to = $Emails_array[$user] ?? '';
@@ -83,19 +77,19 @@ $sugust2 = make_mdwiki_title($sugust);
 
 //---
 $url_views_2 = 'https://'
-    . 'pageviews.wmcloud.org/?project=' . $lang . '.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&range=all-time&pages=' . rawurlEncode($target);
+  . 'pageviews.wmcloud.org/?project=' . $lang . '.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&range=all-time&pages=' . rawurlEncode($target);
 //---
 $start = !empty($date) ? $date : '2019-01-01';
 $end = date("Y-m-d", strtotime("yesterday"));
 //---
 $url_views_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
-    'project' => "$lang.wikipedia.org",
-    'platform' => 'all-access',
-    'agent' => 'all-agents',
-    'start' => $start,
-    'end' => $end,
-    'redirects' => '0',
-    'pages' => $target,
+  'project' => "$lang.wikipedia.org",
+  'platform' => 'all-access',
+  'agent' => 'all-agents',
+  'start' => $start,
+  'end' => $end,
+  'redirects' => '0',
+  'pages' => $target,
 ));
 //---
 // $views2 = "<font color='#0000ff'>$views people</font>";
@@ -250,10 +244,10 @@ HTML;
 //---
 ?>
 <script>
-    $('#msg').summernote({
-        placeholder: 'Hello Bootstrap 4',
-        tabsize: 6,
-        // width: 370,
-        height: 350
-    });
+  $('#msg').summernote({
+    placeholder: 'Hello Bootstrap 4',
+    tabsize: 6,
+    // width: 370,
+    height: 350
+  });
 </script>

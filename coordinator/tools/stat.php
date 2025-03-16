@@ -6,9 +6,6 @@ if (isset($_REQUEST['test'])) {
 	error_reporting(E_ALL);
 };
 //---
-include_once 'Tables/tables.php';
-include_once 'results/getcats.php';
-include_once 'actions/functions.php';
 
 use function Actions\Html\makeDropdown;
 use function Results\GetCats\get_mdwiki_cat_members;

@@ -11,7 +11,7 @@ if (isset($_REQUEST['test'])) {
     error_reporting(E_ALL);
 };
 //---
-include_once 'infos/td_config.php';
+// include_once 'infos/td_config.php';
 //---
 use function Infos\TdConfig\get_configs;
 use function SQLorAPI\Get\get_pages_langs;

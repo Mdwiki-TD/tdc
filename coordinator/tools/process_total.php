@@ -1,7 +1,7 @@
 <?PHP
 //---
-use function SQLorAPI\Get\get_users_process;
-use function SQLorAPI\Get\get_users_process_new;
+use function SQLorAPI\Process\get_users_process;
+use function SQLorAPI\Process\get_users_process_new;
 
 //---
 echo <<<HTML

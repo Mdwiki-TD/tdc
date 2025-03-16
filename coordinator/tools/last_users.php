@@ -1,13 +1,10 @@
 <?PHP
-//---
-include_once 'Tables/langcode.php';
-//---
 
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_cat_url;
 use function Actions\Html\make_mdwiki_title;
-use function SQLorAPI\Get\get_recent_pages_users;
+use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Get\get_pages_users_langs;
 
 function filter_recent($lang)

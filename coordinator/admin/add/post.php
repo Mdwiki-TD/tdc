@@ -9,7 +9,7 @@ function insert_to_pages($t)
 	$query1 = <<<SQL
         UPDATE pages
             SET target = ?, pupdate = ?, word = ?
-        WHERE user = ? AND title = ? AND lang = ? and target = '';
+        WHERE user = ? AND title = ? AND lang = ? and (target = '' OR target IS NULL);
     SQL;
 	//---
 	$params1 = [$t['target'], $t['pupdate'], $t['word'], $t['user'], $t['title'], $t['lang']];

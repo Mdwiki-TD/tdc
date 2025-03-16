@@ -8,7 +8,7 @@ use function OAuth\Helps\decode_value;
 use function OAuth\Helps\encode_value;
 */
 
-include_once __DIR__ . '/../vendor_load.php';
+include_once __DIR__ . '/vendor_load.php';
 include_once __DIR__ . '/config.php';
 
 use Defuse\Crypto\Crypto;
