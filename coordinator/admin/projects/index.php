@@ -11,17 +11,34 @@ if (isset($_REQUEST['test'])) {
 	error_reporting(E_ALL);
 };
 //---
+use function SQLorAPI\Get\get_td_or_sql_projects;
+//---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 //---
-use function SQLorAPI\Get\get_td_or_sql_projects;
+echo <<<HTML
+	<div class='card-header'>
+		<h4>Projects:</h4>
+	</div>
+	<div class='card-body'>
+	<form action="index.php?ty=projects" method="POST">
+		<input name='ty' value="projects" hidden/>
+		<div class="form-group">
+			<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Project</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody id="g_tab">
+HTML;
 //---
 $numb = 0;
 //---
 $projs = get_td_or_sql_projects();
-//---
-$form_text = '';
 //---
 foreach ($projs as $g_title => $tab) {
 	$numb += 1;
@@ -29,7 +46,7 @@ foreach ($projs as $g_title => $tab) {
 	$g_id = $tab['g_id'] ?? "";
 	$g_title = $tab['g_title'] ?? "";
 	//---
-	$form_text .= <<<HTML
+	echo <<<HTML
 	<tr>
 		<td data-content='id'>
 			<span><b>$numb</b></span>
@@ -45,49 +62,13 @@ foreach ($projs as $g_title => $tab) {
 	HTML;
 };
 //---
-$form_text_plus = <<<HTML
-	<tr>
-		<td data-content="id">
-			<span><b>Add:</b></span>
-		</td>
-		<td data-content="user">
-			<input class='form-control td_user_input' name='g_title[]$numb' />
-		</td>
-		<td data-content="delete">
-
-		</td>
-	</tr>
-HTML;
-//---
-echo <<<HTML
-	<div class='card-header'>
-		<h4>Projects:</h4>
-	</div>
-	<div class='card-body'>
-		<form action="index.php?ty=projects" method="POST">
-			<input name='ty' value="projects" hidden />
-			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
-					<thead>
-						<tr>
-							<th>Id</th>
-							<th>Project</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody id="g_tab">
-						$form_text
-						$form_text_plus
-					</tbody>
-				</table>
-				<button type="submit" class="btn btn-outline-primary">Save</button>
-		</form>
-		<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;"
-			onclick='add_row()'>New row</span>
-	</div>
-
-HTML;
 ?>
+</tbody>
+</table>
+<button type="submit" class="btn btn-outline-primary">Save</button>
+</form>
+<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
+</div>
 <script type="text/javascript">
 	var i = 1;
 

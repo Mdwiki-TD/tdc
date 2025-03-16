@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //---
 include_once __DIR__ . '/sugust.php';
 //---
+
+//---
 function make_edit_icon($id, $user, $email, $wiki2, $project)
 {
 	//---
@@ -78,13 +80,36 @@ function get_sorted_array()
 	return $sorted_array;
 }
 //---
+echo <<<HTML
+	<div class='card-header'>
+	<h4>Emails:</h4>
+	</div>
+	<div class='card-body'>
+	<form action="index.php?ty=Emails" method="POST">
+		<input name='ty' value="Emails" hidden/>
+		<div class="form-group">
+			<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Username</th>
+						<th>Email</th>
+						<th></th>
+						<th>Project</th>
+						<th>Wiki</th>
+						<th>Live</th>
+						<th>Edit</th>
+						<!-- <th>Delete</th> -->
+					</tr>
+				</thead>
+				<tbody id="tab_ma">
+	HTML;
+//---
 $numb = 0;
 //---
 $last_user_to_tab = get_users_by_last_pupdate();
 //---
 $users_done = get_sorted_array();
-//---
-$form_rows = '';
 //---
 foreach ($users_done as $user_name => $table) {
 	//---
@@ -113,7 +138,7 @@ foreach ($users_done as $user_name => $table) {
 	//---
 	$edit_icon = make_edit_icon($id, $user, $email, $wiki, $project);
 	//---
-	$form_rows .= <<<HTML
+	echo <<<HTML
 	<tr>
 		<td data-order='$numb' data-content='#'>
 			$numb
@@ -148,41 +173,15 @@ foreach ($users_done as $user_name => $table) {
 	HTML;
 };
 //---
-echo <<<HTML
-	<div class='card-header'>
-		<h4>Emails:</h4>
-	</div>
-	<div class='card-body'>
-		<form action="index.php?ty=Emails" method="POST">
-			<input name='ty' value="Emails" hidden />
-			<div class="form-group">
-				<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Username</th>
-							<th>Email</th>
-							<th></th>
-							<th>Project</th>
-							<th>Wiki</th>
-							<th>Live</th>
-							<th>Edit</th>
-							<!-- <th>Delete</th> -->
-						</tr>
-					</thead>
-					<tbody id="tab_ma">
-						$form_rows
-
-					</tbody>
-				</table>
-				<button type="submit" class="btn btn-outline-primary">Save</button>
-				<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;"
-					onclick='add_row()'>New row</span>
-			</div>
-		</form>
-	</div>
-HTML;
 ?>
+
+</tbody>
+</table>
+<button type="submit" class="btn btn-outline-primary">Save</button>
+<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
+</div>
+</form>
+
 <script type="text/javascript">
 	function pupwindow(url) {
 		window.open(url, 'popupWindow', 'width=850,height=550,scrollbars=yes');

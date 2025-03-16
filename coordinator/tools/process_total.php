@@ -18,14 +18,14 @@ HTML;
 SELECT A.id as id1, A.title as title1, A.user as user1, A.target as target1,
 B.id as id2, B.title as title2, B.user as user2, B.target as target2
  from pages A, pages B
-where (A.target = '' OR A.target IS NULL)
+where A.target = ''
 and A.lang = B.lang
 and A.title = B.title
 and B.target != ''
 ;
 
 للحذف:
-SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and A.lang = B.lang and A.title = B.title and B.target != '';
+SELECT A.id from pages A, pages B where A.target = '' and A.lang = B.lang and A.title = B.title and B.target != '';
 */
 //---
 $text = <<<HTML

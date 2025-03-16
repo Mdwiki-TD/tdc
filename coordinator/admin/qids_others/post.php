@@ -22,6 +22,6 @@ echo <<<HTML
 	<div class='alert alert-success' role='alert'>Qid Saved...<br>
 		return to qids_others page in 2 seconds
 	</div>
-	<meta http-equiv='refresh' content='0; url=index.php?ty=qids_others'>
+	<meta http-equiv='refresh' content='2; url=index.php?ty=qids_others'>
 HTML;
 //---

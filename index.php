@@ -28,9 +28,11 @@ echo <<<HTML
 	<!-- <div id="maindiv" class="container-fluid"> -->
 HTML;
 //---
-function echo_card_start($filename, $ty)
+$filename = $_SERVER['SCRIPT_NAME'];
+//---
+function echo_card_start($filename)
 {
-	$sidebar = create_side($filename, $ty);
+	$sidebar = create_side($filename);
 	echo <<<HTML
 	<style>
 		@media (min-width: 768px) {
@@ -54,15 +56,13 @@ function echo_card_start($filename, $ty)
 	HTML;
 }
 //---
+if (!isset($_REQUEST['nonav'])) {
+	echo_card_start($filename);
+};
+//---
 $ty = $_REQUEST['ty'] ?? 'last';
 //---
 if ($ty == 'translate_type') $ty = 'tt';
-//---
-$filename = $_SERVER['SCRIPT_NAME'];
-//---
-if (!isset($_REQUEST['nonav'])) {
-	echo_card_start($filename, $ty);
-};
 //---
 // list of folders in coordinator
 $corrd_folders = array_map('basename', glob('coordinator/admin/*', GLOB_ONLYDIR));
@@ -85,13 +85,29 @@ if (in_array($ty, $tools_folders)) {
 	include_once __DIR__ . "/coordinator/404.php";
 };
 //---
-echo <<<HTML
+function echo_card_end($ty)
+{
+	//---
+	if (isset($ty)) {
+		echo <<<HTML
+			<script>
+				$('#$ty').addClass('active');
+				$("#$ty").closest('.mb-1').find('.collapse').addClass('show');
+			</script>
+		HTML;
+	};
+	//---
+	echo <<<HTML
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-HTML;
+	HTML;
+}
+//---
+echo_card_end($ty);
 //---
 echo "<script src='/Translation_Dashboard/js/autocomplate.js'></script>";
 //---
 include_once __DIR__ . '/footer.php';
+//---

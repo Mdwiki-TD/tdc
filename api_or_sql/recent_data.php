@@ -23,15 +23,14 @@ function get_recent_sql($lang)
     // ---
     $lang_line = '';
     //---
-    $sql_params = [];
+    if (!empty($lang) && $lang != 'All') {
+        $lang_line = "and lang = '$lang'";
+    }
     //---
     $params0 = array('get' => 'pages', 'target' => 'not_empty', 'limit' => '250', 'order' => 'pupdate');
     $params1 = array('get' => 'pages', 'target' => 'not_empty', 'limit' => '250', 'order' => 'add_date');
     //---
     if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and lang = ?";
-        $sql_params[] = $lang;
-        // ---
         $params0['lang'] = $lang;
         $params1['lang'] = $lang;
     }
@@ -40,8 +39,8 @@ function get_recent_sql($lang)
         $dd0 = get_td_api($params0);
         $dd1 = get_td_api($params1);
     } else {
-        $dd0 = fetch_query("select * from pages where target != '' $lang_line ORDER BY pupdate DESC limit 250", $sql_params);
-        $dd1 = fetch_query("select * from pages where target != '' $lang_line ORDER BY add_date DESC limit 250", $sql_params);
+        $dd0 = fetch_query("select * from pages where target != '' $lang_line ORDER BY pupdate DESC limit 250");
+        $dd1 = fetch_query("select * from pages where target != '' $lang_line ORDER BY add_date DESC limit 250");
     }
     // ---
     // merage the two arrays without duplicates
@@ -63,7 +62,6 @@ function get_recent_pages_users($lang)
     // ---
     $lang_line = '';
     //---
-    $sql_params = [];
     $params0 = [
         'get' => 'pages_users',
         'target' => 'not_empty',
@@ -73,8 +71,7 @@ function get_recent_pages_users($lang)
     ];
     //---
     if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and lang = ?";
-        $sql_params[] = $lang;
+        $lang_line = "and lang = '$lang'";
         $params0['lang'] = $lang;
     };
     //---
@@ -93,7 +90,7 @@ function get_recent_pages_users($lang)
     if ($use_td_api) {
         $tab = get_td_api($params0);
     } else {
-        $tab = fetch_query($qua, $sql_params);
+        $tab = fetch_query($qua);
     }
     //---
     // sort the table by add_date
@@ -110,19 +107,17 @@ function get_recent_translated($lang, $table)
     // ---
     $lang_line = '';
     //---
-    $sql_params = [];
     $params = array('get' => $table, 'order' => 'pupdate');
     //---
     if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and lang = ?";
-        $sql_params[] = $lang;
+        $lang_line = "and lang = '$lang'";
         $params['lang'] = $lang;
     }
     //---
     if ($use_td_api) {
         $dd = get_td_api($params);
     } else {
-        $dd = fetch_query("select * from $table where target != '' $lang_line ORDER BY pupdate DESC;", $sql_params);
+        $dd = fetch_query("select * from $table where target != '' $lang_line ORDER BY pupdate DESC;");
     }
     //---
     // sort the table by add_date

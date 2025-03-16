@@ -31,7 +31,42 @@ $testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidd
 //---
 $dis = $_GET['dis'] ?? 'all';
 //---
-if (!isset($_GET['dis']) && global_username == "Mr. Ibrahem") $dis = "empty";
+echo <<<HTML
+	<script>
+		$('#qids_othersload').addClass('active');
+		$("#qids_othersload").closest('.mb-1').find('.collapse').addClass('show');
+	</script>
+	<div class='card-header'>
+		<div class='row'>
+			<div class='col-md-5'>
+				<h4>Other Qids: ($dis:<span id="qidscount"></span>)</h4>
+			</div>
+			<div class='col-md-3'>
+				<!-- only display empty qids_others -->
+				<a class='btn btn-outline-secondary' href="index.php?ty=qids_others&dis=empty">Only Empty</a>
+			</div>
+			<div class='col-md-2'>
+				<a class='btn btn-outline-secondary' href="index.php?ty=qids_others&dis=all">All</a>
+			</div>
+			<div class='col-md-2'>
+				<!-- only display empty qids_others -->
+				<a class='btn btn-outline-secondary' href="index.php?ty=qids_others&dis=duplicate">Duplicate</a>
+			</div>
+		</div>
+	</div>
+	<div class='card-body'>
+		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2' style='width: 90%;'>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>id</th>
+					<th>Title</th>
+					<th>Qid</th>
+					<th>Edit</th>
+				</tr>
+			</thead>
+			<tbody id="tab_logic">
+HTML;
 //---
 $qq1 = get_td_or_sql_qids_others($dis);
 
@@ -66,8 +101,6 @@ $numb = 0;
 //---
 $done = [];
 //---
-$form_rows = "";
-//---
 foreach ($qq1 as $Key => $table) {
 	$id 	= $table['id'] ?? "";
 	$title 	= $table['title'] ?? "";
@@ -77,7 +110,7 @@ foreach ($qq1 as $Key => $table) {
 		$done[] = $id;
 		//---
 		$numb += 1;
-		$form_rows .= make_row($id, $title, $qid, $numb);
+		echo make_row($id, $title, $qid, $numb);
 	}
 	//---
 	if ($dis == 'duplicate') {
@@ -89,72 +122,37 @@ foreach ($qq1 as $Key => $table) {
 			$done[] = $id2;
 			//---
 			$numb += 1;
-			$form_rows .= make_row($id2, $title2, $qid2, $numb);
+			echo make_row($id2, $title2, $qid2, $numb);
 		}
 	};
 	//---
 };
 //---
 echo <<<HTML
-	<div class='card-header'>
-		<div class='row'>
-			<div class='col-md-5'>
-				<h4>Other Qids: ($dis:<span>$numb</span>)</h4>
-			</div>
-			<div class='col-md-3'>
-				<!-- only display empty qids_others -->
-				<a class='btn btn-outline-secondary' href="index.php?ty=qids_others&dis=empty">Only Empty</a>
-			</div>
-			<div class='col-md-2'>
-				<a class='btn btn-outline-secondary' href="index.php?ty=qids_others&dis=all">All</a>
-			</div>
-			<div class='col-md-2'>
-				<!-- only display empty qids_others -->
-				<a class='btn btn-outline-secondary' href="index.php?ty=qids_others&dis=duplicate">Duplicate</a>
-			</div>
-		</div>
-	</div>
-	<div class='card-body'>
-		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2' style='width: 90%;'>
+	</tbody>
+	</table>
+<script>$("#qidscount").text("{$numb}");</script>
+
+<form action="index.php?ty=qids_others/post" method="POST">
+	$testin
+	<input name='ty' value="qids_others/post" hidden/>
+	<div id='qidstab' style='display: none;'>
+		<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>id</th>
 					<th>Title</th>
 					<th>Qid</th>
-					<th>Edit</th>
 				</tr>
 			</thead>
-			<tbody id="tab_logic">
-			$form_rows
+			<tbody id="tab_new">
+
 			</tbody>
 		</table>
 	</div>
-
-HTML;
-echo <<<HTML
-	<div class='card-body'>
-		<form action="index.php?ty=qids_others/post" method="POST">
-			$testin
-			<input name='ty' value="qids_others/post" hidden/>
-			<div id='qidstab' style='display: none;'>
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Title</th>
-							<th>Qid</th>
-						</tr>
-					</thead>
-					<tbody id="tab_new">
-
-					</tbody>
-				</table>
-			</div>
-			<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
-			<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
-		</form>
-	</div>
+	<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
+	<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
+</form>
 HTML;
 ?>
 <script type="text/javascript">
