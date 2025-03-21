@@ -38,15 +38,13 @@ function get_recent_sql($lang)
         $tab = get_td_api($params0);
     } else {
         $qua = <<<SQL
-            select distinct * from pages p
-
-            LEFT JOIN views_new_all v
-                ON p.target = v.target
-                AND p.lang = v.lang
-
+            select distinct
+                p.id, p.title, p.word, p.translate_type, p.cat,
+                p.lang, p.user, p.target, p.date, p.pupdate, p.add_date, p.deleted, p.target, p.lang,
+                (select v.views from views_new_all v where p.target = v.target AND p.lang = v.lang LIMIT 1) as views
+            from pages p
             where p.target != ''
             $lang_line
-            # ORDER BY p.pupdate DESC
             ORDER BY GREATEST(UNIX_TIMESTAMP(p.pupdate), UNIX_TIMESTAMP(p.add_date)) DESC
             limit 250
         SQL;
