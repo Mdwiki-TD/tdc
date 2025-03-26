@@ -3,25 +3,49 @@ let UrlDone = [];
 function add_data(ix, value, code) {
     $(`input[name="${code}[]${ix}"]`).val(value);
 }
+function delete_row($row_id) {
+    $(`#row_${$row_id}`).remove();
+}
+
 async function add_new_row() {
     const options = $('.catsoptions').html();
     const ii = $('#tab_data > tr').length + 1;
 
     const row = `
-        <tr>
-            <td data-content="#">${ii}</td>
-            <td data-content="mdwiki title"><input class="form-control mdtitles" size="15" name="mdtitle[]${ii}" required /></td>
-            <td data-content="Campaign"><select class="form-select" name="cat[]${ii}">${options}</select></td>
+        <tr id="row_${ii}">
+            <td data-order='${ii}' data-content='#'>${ii}</td>
+            <td data-content="mdwiki title">
+                <input class="form-control mdtitles" size="15" name="mdtitle[]${ii}" required />
+            </td>
+            <td data-content="Campaign">
+                <select class="form-select" name="cat[]${ii}">${options}</select>
+            </td>
             <td data-content="Type">
                 <select name="type[]${ii}" class="form-select">
                     <option value="lead">Lead</option>
                     <option value="all">All</option>
                 </select>
             </td>
-            <td data-content="User"><input class="form-control td_user_input" size="10" name="user[]${ii}" required /></td>
-            <td data-content="Language"><input class="form-control lang_input" size="2" name="lang[]${ii}" required /></td>
-            <td data-content="Wiki title"><input class="form-control" size="20" name="target[]${ii}" required /></td>
-            <td data-content="Date"><input class="form-control" size="10" name="pupdate[]${ii}" required /></td>
+            <td data-content="User">
+                <input class="form-control td_user_input" size="10" name="user[]${ii}" required />
+            </td>
+            <td data-content="Language">
+                <input class="form-control lang_input" size="2" name="lang[]${ii}" required />
+            </td>
+            <td data-content="Wiki title">
+                <input class="form-control" size="20" name="target[]${ii}" required />
+            </td>
+            <td data-content="Publication date">
+                <input class="form-control" size="10" name="pupdate[]${ii}" placeholder='YYYY-MM-DD' required />
+            </td>
+            <td data-content="Delete">
+                <div id="delete_${ii}">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="delete_row(${ii})">Delete</button>
+                </div>
+                <div id="load_${ii}" style="display: none;">
+                    <i class="bi spinner-border spinner-border-sm"></i>
+                </div>
+            </td>
         </tr>
     `;
 
@@ -111,6 +135,9 @@ async function workinurl(url) {
 
         const row_numb = await add_new_row();
 
+        $(`#load_${row_numb}`).show();
+        $(`#delete_${row_numb}`).hide();
+        // ---
         add_data(row_numb, articleTitle, "target");
         add_data(row_numb, language, "lang");
         // ---
@@ -119,9 +146,11 @@ async function workinurl(url) {
         add_data(row_numb, info.user, "user");
         add_data(row_numb, info.pupdate, "pupdate");
         add_data(row_numb, info.mdtitle, "mdtitle");
-
         // ---
         UrlDone.push(url);
+        // ---
+        $(`#load_${row_numb}`).hide();
+        $(`#delete_${row_numb}`).show();
         // ---
 
     } catch (error) {

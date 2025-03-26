@@ -28,7 +28,7 @@ foreach ($qqq as $Key => $ta) {
 };
 //---
 $typies = <<<HTML
-	<select name='type[]%s' id='type[]%s' class='form-select'>
+	<select name='type[]%s' id='type[]%s' class='form-select w-100' data-bs-theme="auto">
 		<option value='lead'>Lead</option><option value='all'>All</option>
 	</select>
 	HTML;
@@ -46,7 +46,7 @@ foreach (range(1, 1) as $numb) {
 	$type_line = sprintf($typies, $numb, $numb);
 	//---
 	$table .= <<<HTML
-	<tr>
+	<tr id="row_$numb">
 		<td data-order='$numb' data-content='#'>
 			$numb
 		</td>
@@ -71,6 +71,11 @@ foreach (range(1, 1) as $numb) {
 		<td data-content='Publication date'>
 			<input class="form-control" size='10' name='pupdate[]$numb' placeholder='YYYY-MM-DD'/>
 		</td>
+		<td data-content="Delete">
+			<div class="">
+				<button type="button" class="btn btn-danger btn-sm" onclick="delete_row($numb)">Delete</button>
+			</div>
+		</td>
 	</tr>
 	HTML;
 };
@@ -78,11 +83,7 @@ foreach (range(1, 1) as $numb) {
 $testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
 //---
 echo <<<HTML
-	<style>
-		.ui-menuxx {
-			height: 200px;
-		}
-	</style>
+	<select class='catsoptions' data-bs-theme="auto" hidden>$cats</select>
 	<div class='card-header'>
 		<h4>Add translations:</h4>
 	</div>
@@ -104,7 +105,7 @@ echo <<<HTML
 							<th>Publication date</th>
 						</tr>
 					</thead>
-					<tbody id='g_tab'>
+					<tbody id='tab_data'>
 						$table
 					</tbody>
 				</table>
@@ -118,33 +119,20 @@ echo <<<HTML
 HTML;
 //---
 ?>
+<div class='cardbody p-3'>
+
+	<div class='container'>
+		<div id='alert' class="alert alert-warning" role="alert" style="display:none;">
+			<i class="bi bi-exclamation-triangle"></i> <span id='alert_text'></span>
+		</div>
+	</div>
+	<div class="input-group">
+		<span class="input-group-text">URL</span>
+		<input class="form-control mdtitles url" size='15' id='url' name='url' value='https://ar.wikipedia.org/wiki/أتولتيفيماب/مافتيفيماب/أوديسيفيماب' />
+		<button class="btn btn-outline-primary mb-10" onclick="start_one_url(this)">Search</button>
+	</div>
 </div>
 
-<script type="text/javascript">
-	function add_new_row() {
-		const options = $('.catsoptions').html();
-		const ii = $('#g_tab > tr').length + 1;
-
-		const row = `
-			<tr>
-				<td data-content="#">${ii}</td>
-				<td data-content="mdwiki title"><input class="form-control mdtitles" size="15" name="mdtitle[]${ii}" required /></td>
-				<td data-content="Campaign"><select class="form-select" name="cat[]${ii}">${options}</select></td>
-				<td data-content="Type">
-					<select name="type[]${ii}" class="form-select">
-						<option value="lead">Lead</option>
-						<option value="all">All</option>
-					</select>
-				</td>
-				<td data-content="User"><input class="form-control td_user_input" size="10" name="user[]${ii}" required /></td>
-				<td data-content="Language"><input class="form-control lang_input" size="2" name="lang[]${ii}" required /></td>
-				<td data-content="Wiki title"><input class="form-control" size="20" name="target[]${ii}" required /></td>
-				<td data-content="Date"><input class="form-control" size="10" name="pupdate[]${ii}" required /></td>
-			</tr>
-		`;
-
-		$('#g_tab').append(row);
-	}
-</script>
+<script src='coordinator/add_by_url.js'></script>
 
 </div>

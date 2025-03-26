@@ -53,7 +53,6 @@ function create_side($filename, $ty)
             ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type'],
             ['id' => 'translated', 'admin' => 1, 'href' => 'translated', 'title' => 'Translated Pages'],
             ['id' => 'add', 'admin' => 1, 'href' => 'add', 'title' => 'Add'],
-            ['id' => 'addnew', 'admin' => 1, 'href' => 'addnew', 'title' => 'AddNew'],
         ],
         'Qids' => [
             ['id' => 'qidsload', 'admin' => 1, 'href' => 'qids', 'title' => 'Qids'],
