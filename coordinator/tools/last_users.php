@@ -181,7 +181,7 @@ echo <<<HTML
                 $uuu
             </div>
             <div class='aligncenter col-md-2'>
-                <input class='btn btn-outline-primary' type='submit' name='start' value='Filter' />
+                <input class='btn btn-outline-primary' type='submit' value='Filter' />
             </div>
         </div>
     </form>

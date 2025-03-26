@@ -17,6 +17,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 //---
+$qq = get_coordinator();
+//---
+sort($qq);
+//---
+$numb = 0;
+//---
+$table_rows = "";
+//---
+foreach ($qq as $Key => $table) {
+	$numb += 1;
+	$ide	= $table['id'] ?? "";
+	$usere	= $table['user'] ?? "";
+	//---
+	$table_rows .= <<<HTML
+		<tr>
+			<td data-content="id">
+				<span><b>$ide</b></span>
+				<input name='id[]$numb' value='$ide' hidden/>
+			</td>
+			<td data-content="user">
+				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
+				<input name='user[]$numb' value='$usere' hidden/>
+			</td>
+			<td data-content="delete">
+				<input type='checkbox' name='del[]$numb' value='$ide'/> <label> delete</label>
+			</td>
+		</tr>
+	HTML;
+};
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<h4>Coordinators:</h4>
@@ -34,56 +64,35 @@ echo <<<HTML
 						</tr>
 					</thead>
 					<tbody id="coo_tab">
+						$table_rows
+					</tbody>
+				</table>
+			</div>
+			<div class="form-group d-flex justify-content-between">
+				<button type="submit" class="btn btn-outline-primary">Save</button>
+				<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
+				<span> </span>
+			</div>
+		</form>
+	</div>
 HTML;
 //---
-$qq = get_coordinator();
-//---
-sort($qq);
-//---
-$numb = 0;
-//---
-foreach ($qq as $Key => $table) {
-	$numb += 1;
-	$ide	= $table['id'] ?? "";
-	$usere	= $table['user'] ?? "";
-	//---
-	echo <<<HTML
-		<tr>
-			<td data-content="id">
-				<span><b>$ide</b></span>
-				<input name='id[]$numb' value='$ide' hidden/>
-			</td>
-			<td data-content="user">
-				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
-				<input name='user[]$numb' value='$usere' hidden/>
-			</td>
-			<td data-content="delete">
-				<input type='checkbox' name='del[]$numb' value='$ide'/> <label> delete</label>
-			</td>
-		</tr>
-	HTML;
-};
-//---
 ?>
-</tbody>
-</table>
-<button type="submit" class="btn btn-outline-primary">Save</button>
-<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
-</form>
-</div>
-</div>
+
 <script type="text/javascript">
-	var i = 1;
 
 	function add_row() {
 		var ii = $('#coo_tab >tr').length + 1;
-		var e = "<tr>";
-		e = e + "<td>" + ii + "</td>";
-		e = e + "<td><input class='form-control td_user_input' name='user[]" + ii + "'/></td>";
-		e = e + "<td>-</td>";
-		e = e + "</tr>";
+		// ---
+		var e = `
+			<tr>
+				<td>${ii}</td>
+				<td><input class='form-control td_user_input' name='user[]${ii}'/></td>
+				<td>-</td>
+			</tr>
+		`;
+		// ---
 		$('#coo_tab').append(e);
-		i++;
 	};
 </script>
 </div>

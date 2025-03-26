@@ -82,25 +82,30 @@ echo <<<HTML
 						$form_text_plus
 					</tbody>
 				</table>
+			</div>
+			<div class="form-group d-flex justify-content-between">
 				<button type="submit" class="btn btn-outline-primary">Save</button>
-				<!-- <span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row_v()'>New row</span> -->
+				<!-- <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row_v()'>New row</span> -->
+			</div>
 		</form>
 	</div>
 HTML;
 ?>
 <script type="text/javascript">
 	// $(document).ready(function() {
-	var i = 1;
 
 	function add_row_v() {
 		var ii = $('#full_tab >tr').length + 1;
-		var e = "<tr>";
-		e = e + "<td><b>" + ii + "</b></td>";
-		e = e + "<td><input class='form-control td_user_input' name='user[]" + ii + "'/></td>";
-		e = e + "<td>-</td>";
-		e = e + "</tr>";
+		// ---
+		var e = `
+			<tr>
+				<td><b>${ii}</b></td>
+				<td><input class='form-control td_user_input' name='user[]${ii}'/></td>
+				<td>-</td>
+			</tr>
+		`;
+		// ---
 		$('#full_tab').append(e);
-		i++;
 	};
 	// });
 </script>
