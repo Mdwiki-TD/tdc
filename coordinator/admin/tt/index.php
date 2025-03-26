@@ -209,7 +209,6 @@ echo <<<HTML
 HTML;
 ?>
 <script type="text/javascript">
-	var i = 1;
 
 	function add_row() {
 		$('#submit_bt').show();
@@ -232,7 +231,6 @@ HTML;
 		`;
 
 		$('#tab_new').append(e);
-		i++;
 	};
 
 	$(document).ready(function() {

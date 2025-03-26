@@ -80,7 +80,6 @@ HTML;
 ?>
 
 <script type="text/javascript">
-	var i = 1;
 
 	function add_row() {
 		var ii = $('#coo_tab >tr').length + 1;
@@ -94,7 +93,6 @@ HTML;
 		`;
 		// ---
 		$('#coo_tab').append(e);
-		i++;
 	};
 </script>
 </div>
