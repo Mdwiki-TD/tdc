@@ -60,11 +60,47 @@ $dis = $_GET['dis'] ?? 'all';
 //---
 if (!isset($_GET['dis']) && global_username == "Mr. Ibrahem") $dis = "empty";
 //---
+
+$qq = get_td_or_sql_qids($dis);
+
+$numb = 0;
+//---
+$done = [];
+//---
+$form_rows = "";
+//---
+foreach ($qq as $Key => $table) {
+	$id 	= $table['id'] ?? "";
+	$title 	= $table['title'] ?? "";
+	$qid 	= $table['qid'] ?? "";
+	//---
+	if (!in_array($id, $done)) {
+		$done[] = $id;
+		//---
+		$numb += 1;
+		$form_rows .= make_row($id, $title, $qid, $numb);
+	}
+	//---
+	if ($dis == 'duplicate') {
+		$id2 	= $table['id2'] ?? "";
+		$title2 = $table['title2'] ?? "";
+		$qid2 	= $table['qid2'] ?? "";
+		//---
+		if (!in_array($id2, $done)) {
+			$done[] = $id2;
+			//---
+			$numb += 1;
+			$form_rows .= make_row($id2, $title2, $qid2, $numb);
+		}
+	};
+	//---
+};
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<div class='row'>
 			<div class='col-md-5'>
-				<h4>Qids: ($dis:<span id="qidscount"></span>)</h4>
+				<h4>Qids: ($dis:<span>$numb</span>)</h4>
 			</div>
 			<div class='col-md-3'>
 				<!-- only display empty qids -->
@@ -91,84 +127,58 @@ echo <<<HTML
 				</tr>
 			</thead>
 			<tbody id="tab_logic">
-HTML;
-//---
-$uuux = '';
-
-$qq = get_td_or_sql_qids($dis);
-
-$numb = 0;
-//---
-$done = [];
-//---
-foreach ($qq as $Key => $table) {
-	$id 	= $table['id'] ?? "";
-	$title 	= $table['title'] ?? "";
-	$qid 	= $table['qid'] ?? "";
-	//---
-	if (!in_array($id, $done)) {
-		$done[] = $id;
-		//---
-		$numb += 1;
-		echo make_row($id, $title, $qid, $numb);
-	}
-	//---
-	if ($dis == 'duplicate') {
-		$id2 	= $table['id2'] ?? "";
-		$title2 = $table['title2'] ?? "";
-		$qid2 	= $table['qid2'] ?? "";
-		//---
-		if (!in_array($id2, $done)) {
-			$done[] = $id2;
-			//---
-			$numb += 1;
-			echo make_row($id2, $title2, $qid2, $numb);
-		}
-	};
-	//---
-};
-//---
-echo <<<HTML
-	</tbody>
-	</table>
-<script>$("#qidscount").text("{$numb}");</script>
-
-<form action="index.php?ty=qids/post" method="POST">
-	$testin
-	<input name='ty' value="qids/post" hidden/>
-	<div id='qidstab' style='display: none;'>
-		<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Title</th>
-					<th>Qid</th>
-				</tr>
-			</thead>
-			<tbody id="tab_new">
-
+				$form_rows
 			</tbody>
 		</table>
 	</div>
-	<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
-	<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
-</form>
+	</div>
 HTML;
+// ---
+echo <<<HTML
+	<div class='card'>
+		<div class='card-body'>
+			<form action="index.php?ty=qids/post" method="POST">
+				$testin
+				<input name='ty' value="qids/post" hidden/>
+				<div id='qidstab' style='display: none;'>
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th>Qid</th>
+							</tr>
+						</thead>
+						<tbody id="tab_new">
+						</tbody>
+					</table>
+				</div>
+				<div class="form-group d-flex justify-content-between">
+					<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
+					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
+					<span> </span>
+				</div>
+			</form>
+		</div>
+	</div>
+HTML;
+
 ?>
 <script type="text/javascript">
-	var i = 1;
-
 	function add_row() {
 		$('#submit_bt').show();
 		$('#qidstab').show();
 		var ii = $('#tab_new >tr').length + 1;
-		var e = "<tr>";
-		e = e + "<td>" + ii + "</td>";
-		e = e + "<td><input class='form-control' name='add_qids[]" + ii + "' placeholder='title" + ii + "'/></td>";
-		e = e + "<td><input class='form-control' name='qid[]" + ii + "' placeholder='qid" + ii + "'/></td>";
-		e = e + "</tr>";
+		// ---
+		var e = `
+			<tr>
+				<td>${ii}</td>
+				<td><input class='form-control' name='add_qids[]${ii}' placeholder='title${ii}'/></td>
+				<td><input class='form-control' name='qid[]${ii}' placeholder='qid${ii}'/></td>
+			</tr>
+		`;
+		// ---
 		$('#tab_new').append(e);
-		i++;
 	};
 </script>
 </div>

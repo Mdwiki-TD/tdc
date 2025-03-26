@@ -17,34 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 //---
-echo <<<HTML
-<div class='card-header'>
-	<h4>Campaigns:</h4>
-</div>
-<div class='card-body'>
-<form action="index.php?ty=Campaigns" method="POST">
-	<input name='ty' value="Campaigns" hidden/>
-		<div class="form-group">
-			<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Campaign</th>
-						<th>Category1</th>
-						<th>Category2</th>
-						<th>Depth</th>
-						<th>Default</th>
-						<th>Delete</th>
-					</tr>
-				</thead>
-				<tbody id="tab_logic">
-HTML;
-//---
 $uuux = '';
 //---
 $qq = get_td_or_sql_categories();
 //---
 $numb = 0;
+//---
+$table_rows = "";
 //---
 foreach ($qq as $Key => $table) {
 	$numb += 1;
@@ -56,7 +35,7 @@ foreach ($qq as $Key => $table) {
 	//---
 	$checked    = ($table['def'] == 1) ? 'checked' : '';
 	//---
-	echo <<<HTML
+	$table_rows .= <<<HTML
 	<tr>
 		<div class='form-group'>
 			<th data-content="#" style="width: 4%;">
@@ -86,31 +65,59 @@ foreach ($qq as $Key => $table) {
 	HTML;
 };
 //---
+echo <<<HTML
+	<div class='card-header'>
+		<h4>Campaigns:</h4>
+	</div>
+	<div class='card-body'>
+		<form action="index.php?ty=Campaigns" method="POST">
+			<input name='ty' value="Campaigns" hidden/>
+			<div class="form-group">
+				<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Campaign</th>
+							<th>Category1</th>
+							<th>Category2</th>
+							<th>Depth</th>
+							<th>Default</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody id="tab_logic">
+						$table_rows
+					</tbody>
+				</table>
+			</div>
+			<div class="form-group d-flex justify-content-between">
+				<button type="submit" class="btn btn-outline-primary">Save</button>
+				<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
+			</div>
+		</form>
+	</div>
+HTML;
+//---
 ?>
-
-</tbody>
-</table>
-<button type="submit" class="btn btn-outline-primary">Save</button>
-</form>
-<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
 </div>
 <script type="text/javascript">
-	var i = 1;
-
 	function add_row() {
 		var ii = $('#tab_logic >tr').length + 1;
-		var e = "<tr>";
-		e = e + "<td>" + ii + "</td>";
-		e = e + "<td><input class='form-control' name='camp[]" + ii + "' placeholder='Campaign' value=''/></td>";
-		e = e + "<td><input class='form-control' name='cats[]" + ii + "' placeholder='Category1' value=''/></td>";
-		e = e + "<td><input class='form-control' name='cat2[]" + ii + "' placeholder='Category2' value=''/></td>";
-		e = e + "<td><input class='form-control w-auto' type='number' name='dep[]" + ii + "' value='0' min='0' max='10'/></td>";
-		e = e + "<td></td>";
-		e = e + "<td></td>";
-		e = e + "</tr>";
-
+		// ---
+		var e = `
+			<tr>
+				<td>${ii}</td>
+				<td><input class='form-control' name='camp[]${ii}' placeholder='Campaign' value=''/></td>
+				<td><input class='form-control' name='cats[]${ii}' placeholder='Category1' value=''/></td>
+				<td><input class='form-control' name='cat2[]${ii}' placeholder='Category2' value=''/></td>
+				<td><input class='form-control w-auto' type='number' name='dep[]${ii}' value='0' min='0' max='10'/></td>
+				<td></td>
+				<td></td>
+			</tr>
+		`;
+		// ---
 		$('#tab_logic').append(e);
-		i++;
+		// ---
 	};
 </script>
 </div>

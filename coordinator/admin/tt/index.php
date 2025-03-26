@@ -64,37 +64,6 @@ if ($cat == 'All') {
 	$cat_titles = get_mdwiki_cat_members($cat, $use_cache = true, $depth = 1);
 }
 //---
-echo <<<HTML
-	<div class='card-header'>
-		<form action="index.php?ty=tt" method="GET">
-			$testin
-			<input name='ty' value="tt" hidden/>
-			<div class='row'>
-				<div class='col-md-3'>
-					<h4>Translate Type:</h4>
-				</div>
-				<div class='col-md-3'>
-					$uuu
-				</div>
-				<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' name='start' value='Filter' /></div>
-			</div>
-		</form>
-	</div>
-	<div class='card-body'>
-	<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>id</th>
-				<th>Title</th>
-				<th>Lead</th>
-				<th>Full</th>
-				<th>Edit</th>
-			</tr>
-		</thead>
-		<tbody id="tab_ma">
-	HTML;
-//---
 function make_edit_icon($id, $title, $full, $lead)
 {
 	//---
@@ -154,6 +123,8 @@ function make_row($id, $title, $lead, $full, $numb)
 //---
 $numb = 0;
 //---
+$table_rows = "";
+//---
 foreach ($cat_titles as $title) {
 	//---
 	if (in_array($title, $new_titles)) continue;
@@ -166,35 +137,75 @@ foreach ($cat_titles as $title) {
 	$lead 		= $table['lead'] ?? 1;
 	$full		= $table['full'] ?? 0;
 	//---
-	echo make_row($id, $title, $lead, $full, $numb);
+	$table_rows .= make_row($id, $title, $lead, $full, $numb);
 	//---
 };
 //---
 echo <<<HTML
-		</tbody>
-	</table>
-
-	<form action="index.php?ty=tt/post" method="POST">
-	$testin
-	<input name='ty' value="tt/post" hidden/>
-	<div id='tt_table' class="form-group" style='display: none;'>
-		<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
+	<div class='card-header'>
+		<form action="index.php?ty=tt" method="GET">
+			$testin
+			<input name='ty' value="tt" hidden/>
+			<div class='row'>
+				<div class='col-md-3'>
+					<h4>Translate Type:</h4>
+				</div>
+				<div class='col-md-3'>
+					$uuu
+				</div>
+				<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
+			</div>
+		</form>
+	</div>
+	<div class='card-body'>
+		<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
 			<thead>
 				<tr>
 					<th>#</th>
+					<th>id</th>
 					<th>Title</th>
 					<th>Lead</th>
 					<th>Full</th>
+					<th>Edit</th>
 				</tr>
 			</thead>
-			<tbody id="tab_new">
-
+			<tbody id="tab_ma">
+				$table_rows
 			</tbody>
 		</table>
 	</div>
-	<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
-	<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
-</form>
+	</div>
+HTML;
+//---
+echo <<<HTML
+	<div class='card'>
+		<div class='card-body'>
+			<form action="index.php?ty=tt/post" method="POST">
+				$testin
+				<input name='ty' value="tt/post" hidden/>
+				<div id='tt_table' class="form-group" style='display: none;'>
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th>Lead</th>
+								<th>Full</th>
+							</tr>
+						</thead>
+						<tbody id="tab_new">
+
+						</tbody>
+					</table>
+				</div>
+				<div class="form-group d-flex justify-content-between">
+					<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
+					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
+					<span> </span>
+				</div>
+			</form>
+		</div>
+	</div>
 HTML;
 ?>
 <script type="text/javascript">
@@ -204,22 +215,22 @@ HTML;
 		$('#submit_bt').show();
 		$('#tt_table').show();
 		var ii = $('#tab_new >tr').length + 1;
-		var e = "<tr>";
-		e = e + "<td>" + ii + "</td>";
-		e = e + "<input type='hidden' name='add[]" + ii + "'/>";
-		e = e + "<td><input class='form-control' name='title[]" + ii + "'/></td>";
+		var e = `
+			<tr>
+				<td>${ii}</td>
+				<input type='hidden' name='add[]${ii}'/>
+				<td><input class='form-control' name='title[]${ii}'/></td>
 
-		e = e + "<td data-content='Lead'><div class='form-check form-switch'>";
-		e = e + "<input class='form-control' type='text' name='lead[]" + ii + "' value='0'/>";
-		// e = e + "<input size='2' class='form-check-input' type='checkbox' name='lead[]" + ii + "' value='1'>";
-		e = e + "</div></td>";
+				<td data-content='Lead'><div class='form-check form-switch'>
+				<input class='form-control' type='text' name='lead[]${ii}' value='0'/>
+				</div></td>
 
-		e = e + "<td data-content='Full'><div class='form-check form-switch'>";
-		e = e + "<input class='form-control' type='text' name='full[]" + ii + "' value='0'/>";
-		// e = e + "<input size='2' class='form-check-input' type='checkbox' name='full[]" + ii + "' value='1'>";
-		e = e + "</div></td>";
+				<td data-content='Full'><div class='form-check form-switch'>
+				<input class='form-control' type='text' name='full[]${ii}' value='0'/>
+				</div></td>
+			</tr>
+		`;
 
-		e = e + "</tr>";
 		$('#tab_new').append(e);
 		i++;
 	};

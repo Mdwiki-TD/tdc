@@ -27,14 +27,6 @@ function make_edit_icon($id, $title, $qid)
     HTML;
 }
 //---
-$testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
-//---
-$dis = $_GET['dis'] ?? 'all';
-//---
-if (!isset($_GET['dis']) && global_username == "Mr. Ibrahem") $dis = "empty";
-//---
-$qq1 = get_td_or_sql_qids_others($dis);
-
 function make_row($id, $title, $qid, $numb)
 {
 	$edit_icon = make_edit_icon($id, $title, $qid);
@@ -61,7 +53,16 @@ function make_row($id, $title, $qid, $numb)
 	</tr>
 	HTML;
 }
+
+$testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
 //---
+$dis = $_GET['dis'] ?? 'all';
+//---
+if (!isset($_GET['dis']) && global_username == "Mr. Ibrahem") $dis = "empty";
+//---
+
+$qq1 = get_td_or_sql_qids_others($dis);
+
 $numb = 0;
 //---
 $done = [];
@@ -126,51 +127,59 @@ echo <<<HTML
 				</tr>
 			</thead>
 			<tbody id="tab_logic">
-			$form_rows
+				$form_rows
 			</tbody>
 		</table>
 	</div>
-
-HTML;
-echo <<<HTML
-	<div class='card-body'>
-		<form action="index.php?ty=qids_others/post" method="POST">
-			$testin
-			<input name='ty' value="qids_others/post" hidden/>
-			<div id='qidstab' style='display: none;'>
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Title</th>
-							<th>Qid</th>
-						</tr>
-					</thead>
-					<tbody id="tab_new">
-
-					</tbody>
-				</table>
-			</div>
-			<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick='add_row()'>New row</span>
-			<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
-		</form>
 	</div>
 HTML;
+// ---
+echo <<<HTML
+	<div class='card'>
+		<div class='card-body'>
+			<form action="index.php?ty=qids_others/post" method="POST">
+				$testin
+				<input name='ty' value="qids_others/post" hidden/>
+				<div id='qidstab' style='display: none;'>
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th>Qid</th>
+							</tr>
+						</thead>
+						<tbody id="tab_new">
+						</tbody>
+					</table>
+				</div>
+				<div class="form-group d-flex justify-content-between">
+					<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
+					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
+					<span> </span>
+				</div>
+			</form>
+		</div>
+	</div>
+HTML;
+
 ?>
 <script type="text/javascript">
-	var i = 1;
-
 	function add_row() {
 		$('#submit_bt').show();
 		$('#qidstab').show();
+		// ---
 		var ii = $('#tab_new >tr').length + 1;
-		var e = "<tr>";
-		e = e + "<td>" + ii + "</td>";
-		e = e + "<td><input class='form-control' name='add_qids[]" + ii + "' placeholder='title" + ii + "'/></td>";
-		e = e + "<td><input class='form-control' name='qid[]" + ii + "' placeholder='qid" + ii + "'/></td>";
-		e = e + "</tr>";
+
+		var e = `
+			<tr>
+				<td>${ii}</td>
+				<td><input class='form-control' name='add_qids[]${ii}' placeholder='title${ii}'/></td>
+				<td><input class='form-control' name='qid[]${ii}' placeholder='qid${ii}'/></td>
+			</tr>
+		`;
+
 		$('#tab_new').append(e);
-		i++;
 	};
 </script>
 </div>

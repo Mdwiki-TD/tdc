@@ -22,32 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //---
 $tabes = get_configs('fixwikirefs.json');
 //---
-echo <<<HTML
-	<div class='card-header'>
-		<h4>Fix wikirefs options:</h4>
-	</div>
-	<div class='card-body'>
-HTML;
-//---
 $testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
-//---
-$sato = <<<HTML
-<form action="index.php?ty=wikirefs_options" method="POST">
-	$testin
-    <input name="ty" value="wikirefs_options" hidden/>
-    <table id="em2" class="table table-sm table-striped table-mobile-responsive table-mobile-sided" style="font-size:90%;">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Lang.</th>
-                <th>Move dots</th>
-                <th>Expand infobox</th>
-                <th>add |language=en</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody id="refs_tab">
-HTML;
 //---
 /*
 $ul = '<ul>';
@@ -113,6 +88,9 @@ foreach ($langs_d as $tat) {
 ksort($tabes);
 //---
 $n = -1;
+// ---
+$sato = "";
+// ---
 foreach ($tabes as $lang => $tab) {
     //---
     $n += 1;
@@ -120,32 +98,53 @@ foreach ($tabes as $lang => $tab) {
     //---
 };
 //---
-$sato .= <<<HTML
-			</tbody>
-		</table>
-		<button type="submit" class="btn btn-outline-primary">Save</button>
-		<span role="button" id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;" onclick="add_row()">New row</span>
-	</form>
-
+echo <<<HTML
+    <div class='card-header'>
+        <h4>Fix wikirefs options:</h4>
+    </div>
+    <div class='card-body'>
+        <form action="index.php?ty=wikirefs_options" method="POST">
+            $testin
+            <input name="ty" value="wikirefs_options" hidden/>
+			<div class="form-group">
+                <table id="em2" class="table table-sm table-striped table-mobile-responsive table-mobile-sided" style="font-size:90%;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Lang.</th>
+                            <th>Move dots</th>
+                            <th>Expand infobox</th>
+                            <th>add |language=en</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="refs_tab">
+                        $sato
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group d-flex justify-content-between">
+                <button type="submit" class="btn btn-outline-primary">Save</button>
+                <span role="button" id="add_row" class="btn btn-outline-primary" onclick="add_row()">New row</span>
+            </div>
+        </form>
+    </div>
 HTML;
-echo $sato;
 //---
 ?>
-
 <script type="text/javascript">
-    var ii = $('#refs_tab >tr').length;
-
     function add_row() {
-        ii++;
-        var e = "<tr>";
-        e = e + "<td>" + ii + "</td>";
-        e = e + "<td><input class='form-control' name='newlang[]" + ii + "' placeholder='lang code.'/></td>";
-        e = e + "<td><input class='form-control' type='text' name='move_dotsx[]" + ii + "' value='0' disabled/></td>";
-        e = e + "<td><input class='form-control' type='text' name='expendx[]" + ii + "' value='0' disabled/></td>";
-        e = e + "<td><input class='form-control' type='text' name='add_en_lngx[]" + ii + "' value='0' disabled/></td>";
-        e = e + "<td>-</td>";
-        e = e + "</tr>";
-
+        var ii = $('#refs_tab >tr').length + 1;
+        var e = `
+            <tr>
+                <td>${ii}</td>
+                <td><input class='form-control' name='newlang[]${ii}' placeholder='lang code.'/></td>
+                <td><input class='form-control' type='text' name='move_dotsx[]${ii}' value='0' disabled/></td>
+                <td><input class='form-control' type='text' name='expendx[]${ii}' value='0' disabled/></td>
+                <td><input class='form-control' type='text' name='add_en_lngx[]${ii}' value='0' disabled/></td>
+                <td>-</td>
+            </tr>
+        `;
         $('#refs_tab').append(e);
     };
 

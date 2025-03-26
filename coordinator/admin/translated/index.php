@@ -18,7 +18,7 @@ if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
     $lang = 'All';
 };
 //---
-function filter_recent($lang)
+function filter_by_language($lang)
 {
     global $code_to_lang;
     //---
@@ -41,32 +41,36 @@ function filter_recent($lang)
         $langeee = $code_to_lang[$codr] ?? '';
         $selected = ($codr == $lang) ? 'selected' : '';
         $lang_list .= <<<HTML
-            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
-            HTML;
+			<option data-tokens='$codr' value='$codr' $selected>$langeee</option>
+			HTML;
     };
     //---
     $langse = <<<HTML
-        <select aria-label="Language code"
-            class="selectpicker"
-            id='lang'
-            name='lang'
-            placeholder='two letter code'
-            data-live-search="true"
-            data-container="body"
-            data-live-search-style="begins"
-            data-bs-theme="auto"
-            data-style='btn active'
-            data-width="90%"
-            >
-            $lang_list
-        </select>
-    HTML;
+		<div class="input-group">
+			<span class="input-group-text">Language:</span>
+			<select aria-label="Language code"
+				dir="ltr"
+				class="selectpicker"
+				id='lang'
+				name='lang'
+				placeholder='two letter code'
+				data-live-search="true"
+				data-container="body"
+				data-live-search-style="begins"
+				data-bs-theme="auto"
+				data-style='btn active'
+				data-width="70%"
+				>
+				$lang_list
+			</select>
+		</div>
+	HTML;
     //---
     $uuu = <<<HTML
-        <div class="input-group">
-            $langse
-        </div>
-    HTML;
+		<div class="input-group">
+			$langse
+		</div>
+	HTML;
     //---
     return $uuu;
 }
@@ -84,45 +88,47 @@ function filter_table($table)
     foreach ($tabes as $table_name => $selected) {
         $label = ($table_name == "pages") ? "In main space" : "In user space";
         $l_list .= <<<HTML
-            <option data-tokens='$table_name' value='$table_name' $selected>$label</option>
-            HTML;
+			<option data-tokens='$table_name' value='$table_name' $selected>$label</option>
+			HTML;
     };
     //---
     $uuu = <<<HTML
-        <div class="input-group">
-            <select aria-label="Language code"
-                class="selectpicker"
-                id='table'
-                name='table'
-                placeholder=''
-                data-live-search="true"
-                data-container="body"
-                data-live-search-style="begins"
-                data-bs-theme="auto"
-                data-style='btn active'
-                data-width="90%">
-                $l_list
-            </select>
-        </div>
-    HTML;
+		<div class="input-group">
+			<span class="input-group-text">Table:</span>
+			<select aria-label="Language code"
+				dir="ltr"
+				class="form-select"
+				id='table'
+				name='table'
+				placeholder=''
+				data-live-search="true"
+				data-container="body"
+				data-live-search-style="begins"
+				data-bs-theme="auto"
+				data-style='btn active'
+				data-width="90%">
+				$l_list
+			</select>
+		</div>
+	HTML;
     //---
     return $uuu;
 }
 //---
 $recent_table = <<<HTML
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="pages_table" style="font-size:90%;">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>User</th>
-                <th>Lang.</th>
-                <th>Title</th>
-                <th>Translated</th>
-                <th>Publication date</th>
-                <th>Edit</th>
-            </tr>
-        </thead>
-        <tbody>
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>User</th>
+				<th>Lang.</th>
+				<th>Title</th>
+				<th>Translated</th>
+				<th>Publication date</th>
+				<th>Edit</th>
+			</tr>
+		</thead>
+		<tbody>
 HTML;
 //---
 function make_edit_icon($id, $title, $target, $lang, $user, $pupdate, $table)
@@ -130,10 +136,10 @@ function make_edit_icon($id, $title, $target, $lang, $user, $pupdate, $table)
     //---
     $edit_params = array(
         'id'   => $id,
-        'title'  => $title,
+        'title'     => $title,
         'target'  => $target,
-        'lang'  => $lang,
-        'user'  => $user,
+        'lang'    => $lang,
+        'user'    => $user,
         'pupdate' => $pupdate,
         'table' => $table,
         'nonav' => 1
@@ -149,19 +155,19 @@ function make_edit_icon($id, $title, $target, $lang, $user, $pupdate, $table)
     $onclick = 'pupwindow1("' . $edit_url . '")';
     //---
     return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
-    HTML;
+		<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
+	HTML;
 }
 //---
 function make_td($tabg, $nnnn, $table)
 {
     //---
-    $id       = $tabg['id'] ?? "";
+    $id          = $tabg['id'] ?? "";
     //---
-    $user     = $tabg['user'] ?? "";
-    $lang     = $tabg['lang'] ?? "";
+    $user      = $tabg['user'] ?? "";
+    $lang      = $tabg['lang'] ?? "";
     $md_title = trim($tabg['title']);
-    $target   = trim($tabg['target']);
+    $target      = trim($tabg['target']);
     $pupdate  = $tabg['pupdate'] ?? '';
     //---
     $mdwiki_title = make_mdwiki_title($md_title);
@@ -171,30 +177,30 @@ function make_td($tabg, $nnnn, $table)
     $edit_icon = make_edit_icon($id, $md_title, $target, $lang, $user, $pupdate, $table);
     //---
     $laly = <<<HTML
-        <tr>
-            <td data-content='#'>
-                $nnnn
-            </td>
-            <td data-content='User'>
-                <a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
-            </td>
-            <td data-content='Lang.'>
-                <a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
-            </td>
-            <td style='max-width:150px;' data-content='Title'>
-                $mdwiki_title
-            </td>
-            <td style='max-width:150px;' data-content='Translated'>
-                $targe33
-            </td>
-            <td data-content='Publication date'>
-                $pupdate
-            </td>
-            <td data-content='Edit'>
-                $edit_icon
-            </td>
-        </tr>
-    HTML;
+		<tr>
+			<td data-content='#'>
+				$nnnn
+			</td>
+			<td data-content='User'>
+				<a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
+			</td>
+			<td data-content='Lang.'>
+				<a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
+			</td>
+			<td style='max-width:150px;' data-content='Title'>
+				$mdwiki_title
+			</td>
+			<td style='max-width:150px;' data-content='Translated'>
+				$targe33
+			</td>
+			<td data-content='Publication date'>
+				$pupdate
+			</td>
+			<td data-content='Edit'>
+				$edit_icon
+			</td>
+		</tr>
+	HTML;
     //---
     return $laly;
 };
@@ -210,32 +216,32 @@ foreach ($qsl_results as $tat => $tabe) {
 };
 //---
 $recent_table .= <<<HTML
-        </tbody>
-    </table>
+		</tbody>
+	</table>
 HTML;
 //---
-$filter_la = filter_recent($lang);
+$filter_la = filter_by_language($lang);
 $filter_ta = filter_table($table);
 //---
 echo <<<HTML
 <div class='card-header'>
-    <form method='get' action='index.php'>
-        <input name='ty' value='translated' hidden/>
-        <div class='row'>
-            <div class='col-md-3'>
-                <h4>Translated Pages:</h4>
-            </div>
-            <div class='col-md-3'>
-                $filter_la
-            </div>
-            <div class='col-md-3'>
-                $filter_ta
-            </div>
-            <div class='aligncenter col-md-2'>
-                <input class='btn btn-outline-primary' type='submit' name='start' value='Filter' />
-            </div>
-        </div>
-    </form>
+	<form method='get' action='index.php'>
+		<input name='ty' value='translated' hidden/>
+		<div class='row'>
+			<div class='col-md-3'>
+				<h4>Translated Pages:</h4>
+			</div>
+			<div class='col-md-4'>
+				$filter_la
+			</div>
+			<div class='col-md-3'>
+				$filter_ta
+			</div>
+			<div class='aligncenter col-md-2'>
+				<input class='btn btn-outline-primary' type='submit' value='Filter' />
+			</div>
+		</div>
+	</form>
 </div>
 <div class='card-body'>
 HTML;

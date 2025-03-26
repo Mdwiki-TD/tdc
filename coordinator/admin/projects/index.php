@@ -80,12 +80,14 @@ echo <<<HTML
 						$form_text_plus
 					</tbody>
 				</table>
+			</div>
+			<div class="form-group d-flex justify-content-between">
 				<button type="submit" class="btn btn-outline-primary">Save</button>
+				<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
+				<span> </span>
+			</div>
 		</form>
-		<span role='button' id="add_row" class="btn btn-outline-primary" style="position: absolute; right: 130px;"
-			onclick='add_row()'>New row</span>
 	</div>
-
 HTML;
 ?>
 <script type="text/javascript">
@@ -93,11 +95,15 @@ HTML;
 
 	function add_row() {
 		var ii = $('#g_tab >tr').length + 1;
-		var e = "<tr>";
-		e = e + "<td><b>" + ii + "</b><input name='g_id[]' value='0' hidden/></td>";
-		e = e + "<td><input class='form-control' name='g_title[]" + ii + "' value=''/></td>";
-		e = e + "<td>-</td>";
-		e = e + "</tr>";
+		// ---
+		var e = `
+			<tr>
+				<td><b>${ii}</b><input name='g_id[]' value='0' hidden/></td>
+				<td><input class='form-control' name='g_title[]${ii}' value=''/></td>
+				<td>-</td>
+			</tr>
+		`;
+		// ---
 		$('#g_tab').append(e);
 		i++;
 	};
