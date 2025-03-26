@@ -127,20 +127,19 @@ HTML;
 
 		const row = `
 			<tr>
-				<td>${ii}</td>
-				<td><input class="form-control mdtitles" size="15" name="mdtitle[]${ii}" required /></td>
-				<td><select class="form-select catsoptions" name="cat[]${ii}">${options}</select></td>
-				<td>
+				<td data-content="#">${ii}</td>
+				<td data-content="mdwiki title"><input class="form-control mdtitles" size="15" name="mdtitle[]${ii}" required /></td>
+				<td data-content="Campaign"><select class="form-select" name="cat[]${ii}">${options}</select></td>
+				<td data-content="Type">
 					<select name="type[]${ii}" class="form-select">
 						<option value="lead">Lead</option>
 						<option value="all">All</option>
 					</select>
 				</td>
-				<td><input class="form-control td_user_input" size="10" name="user[]${ii}" required /></td>
-				<td><input class="form-control lang_input" size="2" name="lang[]${ii}" required /></td>
-				<td><input class="form-control" size="20" name="target[]${ii}" required /></td>
-				<td><input class="form-control" size="10" name="pupdate[]${ii}" required /></td>
-				<td></td>
+				<td data-content="User"><input class="form-control td_user_input" size="10" name="user[]${ii}" required /></td>
+				<td data-content="Language"><input class="form-control lang_input" size="2" name="lang[]${ii}" required /></td>
+				<td data-content="Wiki title"><input class="form-control" size="20" name="target[]${ii}" required /></td>
+				<td data-content="Date"><input class="form-control" size="10" name="pupdate[]${ii}" required /></td>
 			</tr>
 		`;
 
