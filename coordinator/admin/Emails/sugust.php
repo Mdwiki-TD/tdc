@@ -10,6 +10,7 @@ use function Emails\Sugust\get_sugust;
 //---
 // use function Results\GetCats\get_in_process;
 use function Results\GetResults\get_cat_exists_and_missing;
+use function SQLorAPI\Process\get_lang_in_process_new;
 use function SQLorAPI\Process\get_lang_in_process;
 //---
 function get_sugust($title, $lang)
@@ -27,7 +28,8 @@ function get_sugust($title, $lang)
         //---
         $items_missing = $items['missing'] ?? array();
         //---
-        $res = get_lang_in_process($lang);
+        // $res = get_lang_in_process($lang);
+        $res = get_lang_in_process_new($lang);
         //---
         $inprocess = array_intersect($res, $items_missing);
         //---

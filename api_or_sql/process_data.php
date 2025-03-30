@@ -6,6 +6,7 @@ namespace SQLorAPI\Process;
 
 Usage:
 
+use function SQLorAPI\Process\get_process_all_new;
 use function SQLorAPI\Process\get_process_all;
 use function SQLorAPI\Process\get_users_process;
 use function SQLorAPI\Process\get_users_process_new;
@@ -16,6 +17,27 @@ use function Actions\MdwikiSql\fetch_query;
 use function Actions\TDApi\get_td_api;
 
 $data_index = [];
+
+function get_process_all_new()
+{
+    // ---
+    global $use_td_api;
+    // ---
+    static $process_all = [];
+    // ---
+    if (!empty($process_all)) {
+        return $process_all;
+    }
+    // ---
+    if ($use_td_api) {
+        $process_all = get_td_api(['get' => 'in_process', 'limit' => "100", 'order' => 'add_date']);
+    } else {
+        $sql_t = "select * from in_process ORDER BY add_date DESC limit 100";
+        $process_all = fetch_query($sql_t);
+    }
+    //---
+    return $process_all;
+}
 
 function get_process_all()
 {
@@ -106,6 +128,27 @@ function get_lang_in_process($lang)
         $tab = get_td_api(['get' => 'pages', 'lang' => $lang, 'target' => 'empty', 'select' => "title"]);
     } else {
         $sql_t = 'select * from pages where lang = ? and (target = "" OR target IS NULL) ';
+        $tab = fetch_query($sql_t, [$lang]);
+    }
+    //---
+    $data_index[$lang] = array_column($tab, 'title');
+    //---
+    return $data_index[$lang];
+}
+
+function get_lang_in_process_new($lang)
+{
+    // ---
+    global $use_td_api, $data_index;
+    // ---
+    if (!empty($data_index[$lang] ?? [])) {
+        return $data_index[$lang];
+    }
+    // ---
+    if ($use_td_api) {
+        $tab = get_td_api(['get' => 'in_process', 'lang' => $lang]);
+    } else {
+        $sql_t = 'select * from in_process where lang = ?';
         $tab = fetch_query($sql_t, [$lang]);
     }
     //---

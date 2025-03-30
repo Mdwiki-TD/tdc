@@ -2,6 +2,7 @@
 
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Process\get_process_all;
+use function SQLorAPI\Process\get_process_all_new;
 // use function Actions\Html\make_cat_url;
 
 echo <<<HTML
@@ -18,7 +19,12 @@ function make_td($tabg, $nnnn)
     // global $Words_table, $views_sql, $user_name;
     //---
     $id       = $tabg['id'] ?? "";
-    $date     = $tabg['date'] ?? "";
+    $date     = $tabg['date'] ?? $tabg['add_date'] ?? "";
+    //---
+    // if $_date_ has : then split before first space
+    if (strpos($date, ':') !== false) {
+        $date = explode(' ', $date)[0];
+    };
     //---
     //return $date . '<br>';
     //---
@@ -70,8 +76,6 @@ function make_td($tabg, $nnnn)
     //---
     return $laly;
 };
-$dd1 = get_process_all();
-//---
 $sato = <<<HTML
 	<table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided" style="font-size:90%;">
         <thead>
@@ -86,6 +90,8 @@ $sato = <<<HTML
         </thead>
         <tbody>
 HTML;
+//---
+$dd1 = get_process_all_new();
 //---
 $noo = 0;
 foreach ($dd1 as $tat => $tabe) {
