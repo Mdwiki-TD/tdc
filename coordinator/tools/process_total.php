@@ -41,8 +41,8 @@ $text = <<<HTML
 
 HTML;
 //---
-$user_process_tab = get_users_process();
-// $user_process_tab = get_users_process_new();
+// $user_process_tab = get_users_process();
+$user_process_tab = get_users_process_new();
 // sort user_process_tab by value
 arsort($user_process_tab);
 //---
