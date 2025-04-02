@@ -187,10 +187,10 @@ function make_td($tabg, $nnnn, $table)
 			<td data-content='Lang.'>
 				<a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
 			</td>
-			<td style='max-width:150px;' data-content='Title'>
+			<td data-content='Title'>
 				$mdwiki_title
 			</td>
-			<td style='max-width:150px;' data-content='Translated'>
+			<td data-content='Translated'>
 				$targe33
 			</td>
 			<td data-content='Publication date'>
