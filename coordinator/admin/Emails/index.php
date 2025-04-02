@@ -231,7 +231,7 @@ echo <<<HTML
 	</div>
 	<div class='card-body'>
 		<div class="form-group">
-			<table id='em' class='table table-striped compact table-mobile-responsive'>
+			<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
 				<thead>
 					<tr>
 						<th>#</th>
@@ -260,7 +260,7 @@ echo <<<HTML
 			<form action="index.php?ty=Emails" method="POST">
 				<input name='ty' value="Emails" hidden />
 				<div class="form-group" id='new_tab_add' style='display: none;'>
-					<table class='table table-striped compact table-mobile-responsive'>
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
 						<thead>
 							<tr>
 								<th>#</th>

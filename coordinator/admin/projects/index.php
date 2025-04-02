@@ -67,7 +67,7 @@ echo <<<HTML
 		<form action="index.php?ty=projects" method="POST">
 			<input name='ty' value="projects" hidden />
 			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive' style="width:50%;">
+				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
 					<thead>
 						<tr>
 							<th>Id</th>

@@ -69,7 +69,7 @@ echo <<<HTML
 		<form action="index.php?ty=full_translators" method="POST">
 			<input name='ty' value="full_translators" hidden />
 			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive' style="width:50%;">
+				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
 					<thead>
 						<tr>
 							<th>#</th>

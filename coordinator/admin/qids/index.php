@@ -141,7 +141,7 @@ echo <<<HTML
 				$testin
 				<input name='ty' value="qids/post" hidden/>
 				<div id='qidstab' style='display: none;'>
-					<table class='table table-striped compact table-mobile-responsive' style='width: 90%;'>
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
 						<thead>
 							<tr>
 								<th>#</th>
