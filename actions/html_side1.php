@@ -78,8 +78,7 @@ function create_side($filename, $ty)
     $homeSpan = generateSpan($filename, 'Coordinator Tools');
 
     $sidebar = <<<HTML
-        <div class="Dropdown_menu_toggle px-3">☰ Open list</div>
-        <div class="div_menu">
+        <!-- $homeSpan -->
         <ul class="list-unstyled">
     HTML;
 
@@ -122,6 +121,6 @@ function create_side($filename, $ty)
         }
     }
 
-    $sidebar .= "</ul></div>";
+    $sidebar .= "</ul>";
     return $sidebar;
 }
