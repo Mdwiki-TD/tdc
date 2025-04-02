@@ -73,7 +73,7 @@ echo <<<HTML
 		<form action="index.php?ty=Campaigns" method="POST">
 			<input name='ty' value="Campaigns" hidden/>
 			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+				<table class='table table-striped compact table-mobile-responsive'>
 					<thead>
 						<tr>
 							<th>#</th>

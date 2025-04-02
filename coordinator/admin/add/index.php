@@ -92,7 +92,7 @@ echo <<<HTML
 			$testin
 			<input name='ty' value="add" hidden />
 			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='font-size:95%;'>
+				<table class='table table-striped compact table-mobile-responsive' style='font-size:95%;'>
 					<thead>
 						<tr>
 							<th>#</th>
