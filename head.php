@@ -21,7 +21,7 @@ $stylesheets = [
     "$hoste/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css",
 
     "$hoste/ajax/libs/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css",
-    "$hoste/ajax/libs/datatables.net-responsive-bs5/3.0.4/responsive.bootstrap5.min.css",
+    // "$hoste/ajax/libs/datatables.net-responsive-bs5/3.0.4/responsive.bootstrap5.min.css",
 
     "/tdc/css/Responsive_Table.css",
 ];
@@ -35,7 +35,7 @@ $scripts = [
 
     "$hoste/ajax/libs/datatables.net/2.2.2/dataTables.js",
     "$hoste/ajax/libs/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js",
-    "$hoste/ajax/libs/datatables-responsive/3.0.4/dataTables.responsive.js",
+    // "$hoste/ajax/libs/datatables-responsive/3.0.4/dataTables.responsive.js",
 
     "/Translation_Dashboard/js/to.js",
     "/Translation_Dashboard/js/login.js",
