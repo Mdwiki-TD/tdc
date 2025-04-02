@@ -124,7 +124,7 @@ function make_td($tabg, $nnnn)
             <!-- <td data-content='Lang'>
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a>
             </td> -->
-            <td style='max-width:150px;' data-content='Title'>
+            <td data-content='Title'>
                 $nana
             </td>
             <!-- <td>$date</td> -->
@@ -132,7 +132,7 @@ function make_td($tabg, $nnnn)
                 $ccat
             </td>
             <!-- <td>$worde</td> -->
-            <td style='max-width:150px;' data-content='Translated'>
+            <td data-content='Translated'>
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $targe33
             </td>
             <td data-content='Publication date'>

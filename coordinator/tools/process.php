@@ -62,7 +62,7 @@ function make_td($tabg, $nnnn)
             <td data-content="Lang.">
                 <a target='' href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a>
             </td>
-            <td style='max-width:150px;' data-content="Title">
+            <td data-content="Title">
                 $nana
             </td>
             <td data-content="Campaign">

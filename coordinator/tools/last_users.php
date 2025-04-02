@@ -107,10 +107,10 @@ function make_td($tabg, $nnnn)
             <td data-content='User'>
                 <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">$user_name</a> ($talk)
             </td>
-            <td style='max-width:150px;' data-content='Title'>
+            <td data-content='Title'>
                 $nana
             </td>
-            <td style='max-width:150px;' data-content='Translated'>
+            <td data-content='Translated'>
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $targe33
             </td>
             <td data-content='Publication date'>
