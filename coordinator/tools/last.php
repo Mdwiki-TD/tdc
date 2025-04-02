@@ -162,7 +162,7 @@ if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
 $mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
 //---
 $recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive" id="last_tabel" style="font-size:90%;">
+	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
         <thead>
             <tr>
                 <th>#</th>

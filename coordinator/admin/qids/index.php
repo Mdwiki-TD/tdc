@@ -116,7 +116,7 @@ echo <<<HTML
 		</div>
 	</div>
 	<div class='card-body'>
-		<table class='table table-striped compact table-mobile-responsive sortable2' style='width: 90%;'>
+		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2' style='width: 90%;'>
 			<thead>
 				<tr>
 					<th>#</th>

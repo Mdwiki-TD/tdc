@@ -29,7 +29,7 @@ SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and 
 */
 //---
 $text = <<<HTML
-<table class='table table-striped compact soro table-mobile-responsive'>
+<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided'>
     <thead>
         <tr>
             <th>#</th>

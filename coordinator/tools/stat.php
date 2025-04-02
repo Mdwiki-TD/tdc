@@ -56,7 +56,7 @@ $fa = <<<HTML
 HTML;
 //---
 $table = <<<HTML
-	<table class='table table-striped compact soro table-mobile-responsive'>
+	<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided'>
 		<thead>
 			<tr>
 				<th>#</th>
