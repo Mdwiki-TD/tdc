@@ -12,13 +12,6 @@
 /*-- ==============================================================
  Screen smaller than 760px and iPads.
  ============================================================== */
-<<<<<<< Updated upstream
-
-@media only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px) {
-
-    /* .table-mobile-responsive { */
-=======
 .hide_on_mobile {
     display: inline !important;
 }
@@ -39,16 +32,10 @@
 
 @media only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
->>>>>>> Stashed changes
     [data-content]:before {
         content: attr(data-content);
     }
 
-<<<<<<< Updated upstream
-    /* } */
-
-=======
->>>>>>> Stashed changes
     /* Force table to not be like tables anymore */
     .table-mobile-responsive,
     .table-mobile-responsive thead,
@@ -110,17 +97,6 @@
     }
 
     /* Sided layout */
-<<<<<<< Updated upstream
-    .table-mobile-responsive> :not(:first-child) {
-        border-top: none;
-    }
-
-    .table-mobile-responsive>:not(caption)>*>* {
-        border-color: var(--bs-table-border-color);
-    }
-
-    .table-mobile-responsive td {
-=======
     .table-mobile-responsive.table-mobile-sided> :not(:first-child) {
         border-top: none;
     }
@@ -130,7 +106,6 @@
     }
 
     .table-mobile-responsive.table-mobile-sided td {
->>>>>>> Stashed changes
         /* Behave  like a "row" */
         border: none;
         border-bottom: 1px solid var(--tmr-white);
@@ -141,11 +116,7 @@
         /* justify-content: flex-end; */
     }
 
-<<<<<<< Updated upstream
-    .table-mobile-responsive td:before {
-=======
     .table-mobile-responsive.table-mobile-sided td:before {
->>>>>>> Stashed changes
         /* Now like a table header */
         position: absolute;
         /* Top/left values mimic padding */
@@ -168,8 +139,6 @@
         background-color: var(--tmr-stripped-row-background-color) !important;
     }
 
-<<<<<<< Updated upstream
-=======
 
     .hide_on_mobile,
     .hide_on_mobile_bl,
@@ -188,5 +157,4 @@
     .only_on_mobile_cell {
         display: table-cell !important;
     }
->>>>>>> Stashed changes
 }
