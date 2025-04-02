@@ -158,7 +158,7 @@ echo <<<HTML
 		</form>
 	</div>
 	<div class='card-body'>
-		<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+		<table id='em' class='table table-striped compact table-mobile-responsive'>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -184,7 +184,7 @@ echo <<<HTML
 				$testin
 				<input name='ty' value="tt/post" hidden/>
 				<div id='tt_table' class="form-group" style='display: none;'>
-					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
+					<table class='table table-striped compact table-mobile-responsive' style='width: 90%;'>
 						<thead>
 							<tr>
 								<th>#</th>

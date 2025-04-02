@@ -13,7 +13,7 @@ async function add_new_row() {
 
     const row = `
         <tr id="row_${ii}">
-            <td data-order='${ii}' data-content='#'>${ii}</td>
+            <!-- <td data-order='${ii}' data-content='#'>${ii}</td> -->
             <td data-content="mdwiki title">
                 <input class="form-control mdtitles" size="15" name="mdtitle[]${ii}" required />
             </td>
@@ -50,6 +50,7 @@ async function add_new_row() {
     `;
 
     $('#tab_data').append(row);
+
     return ii;
 }
 

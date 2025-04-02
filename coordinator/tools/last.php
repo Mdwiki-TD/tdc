@@ -73,6 +73,11 @@ function make_td($tabg, $nnnn)
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
     //---
+    // if $add_date has : then split before first space
+    if (strpos($add_date, ':') !== false) {
+        $add_date = explode(' ', $add_date)[0];
+    };
+    //---
     $user_name = $user;
     // $user_name is the first word of the user if length > 15
     if (strlen($user) > 15) {
@@ -162,7 +167,7 @@ if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
 $mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
 //---
 $recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
+	<table class="table table-sm table-striped table-mobile-responsive" id="last_tabel" style="font-size:90%;">
         <thead>
             <tr>
                 <th>#</th>
@@ -231,6 +236,13 @@ echo $recent_table;
         var t = $('#last_tabel').DataTable({
             // order: [ [6, 'desc'] ],
             paging: false,
+            info: false,
+            searching: false,
+            // responsive: {
+            //     details: {
+            //         display: DataTable.Responsive.display.childRowImmediate,
+            //     }
+            // }
             // lengthMenu: [[100, 150, 200], [250, 150, 200]],
             // scrollY: 800
         });

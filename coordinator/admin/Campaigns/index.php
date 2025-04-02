@@ -73,16 +73,16 @@ echo <<<HTML
 		<form action="index.php?ty=Campaigns" method="POST">
 			<input name='ty' value="Campaigns" hidden/>
 			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+				<table class='table table-striped compact table-mobile-responsive'>
 					<thead>
 						<tr>
-							<th>#</th>
-							<th>Campaign</th>
-							<th>Category1</th>
-							<th>Category2</th>
-							<th>Depth</th>
-							<th>Default</th>
-							<th>Delete</th>
+							<th class="all">#</th>
+							<th class="all" data-priority="1">Campaign</th>
+							<th class="all" data-priority="2">Category1</th>
+							<th class="not-mobile">Category2</th>
+							<th class="not-mobile">Depth</th>
+							<th class="not-mobile">Default</th>
+							<th class="not-mobile">Delete</th>
 						</tr>
 					</thead>
 					<tbody id="tab_logic">

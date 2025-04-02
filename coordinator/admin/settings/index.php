@@ -38,7 +38,7 @@ function make_settings_tab($tabe)
     global $nn;
     //---
     $tab = <<<HTML
-            <table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='font-size:95%;width:100%;'>
+            <table class='table table-striped compact table-mobile-responsive' style='font-size:95%;width:100%;'>
                 <thead>
                     <tr>
                         <th>#</th>

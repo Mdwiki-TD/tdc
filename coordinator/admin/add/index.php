@@ -47,9 +47,7 @@ foreach (range(1, 1) as $numb) {
 	//---
 	$table .= <<<HTML
 	<tr id="row_$numb">
-		<td data-order='$numb' data-content='#'>
-			$numb
-		</td>
+		<!-- <td data-order='$numb' data-content='#'> $numb </td> -->
 		<td data-content='Mdwiki Title'>
 			<input class="form-control mdtitles" size='15' name='mdtitle[]$numb' required/>
 		</td>
@@ -92,10 +90,10 @@ echo <<<HTML
 			$testin
 			<input name='ty' value="add" hidden />
 			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='font-size:95%;'>
+				<table class='table table-striped compact table-mobile-responsive' style='font-size:95%;'>
 					<thead>
 						<tr>
-							<th>#</th>
+							<!-- <th>#</th> -->
 							<th>Mdwiki Title</th>
 							<th>Campaign</th>
 							<th>Type</th>
@@ -103,6 +101,7 @@ echo <<<HTML
 							<th>Lang.</th>
 							<th>Target</th>
 							<th>Publication date</th>
+							<th>Delete</th>
 						</tr>
 					</thead>
 					<tbody id='tab_data'>
