@@ -73,6 +73,11 @@ function make_td($tabg, $nnnn)
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
     //---
+    // if $add_date has : then split before first space
+    if (strpos($add_date, ':') !== false) {
+        $add_date = explode(' ', $add_date)[0];
+    };
+    //---
     $user_name = $user;
     // $user_name is the first word of the user if length > 15
     if (strlen($user) > 15) {

@@ -84,6 +84,7 @@ function head()
     <style>
         a {
             text-decoration: none;
+            word-break: break-all !important;
         }
 
         .Dropdown_menu_toggle {
