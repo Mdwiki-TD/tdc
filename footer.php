@@ -52,6 +52,19 @@ if (isset($GLOBALS['time_start'])) {
 
 		// $('.card').CardWidget('toggle')
 
+		$('.table_responsive').DataTable({
+			paging: false,
+			info: false,
+			searching: false,
+			responsive: {
+				// breakpoints: [{ name: 'mobile', width: 768 }],
+				details: {
+					display: DataTable.Responsive.display.childRowImmediate,
+				},
+				// details: $.fn.dataTable.Responsive.display.childRow
+				// display: $.fn.dataTable.Responsive.display.modal()
+			}
+		});
 		setTimeout(function() {
 			$('.soro').DataTable({
 				lengthMenu: [
@@ -59,7 +72,7 @@ if (isset($GLOBALS['time_start'])) {
 					[25, 50, 100, 200]
 				],
 			});
-		}, 3000);
+		}, 1500);
 	});
 </script>
 </body>
