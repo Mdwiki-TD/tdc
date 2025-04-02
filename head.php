@@ -30,7 +30,7 @@
 
     <!-- <link href='/Translation_Dashboard/css/theme.css' rel='stylesheet' type='text/css'> -->
     <link href='/Translation_Dashboard/css/styles.css' rel='stylesheet' type='text/css'>
-    <link href='/Translation_Dashboard/css/Responsive_Table.css' rel='stylesheet' type='text/css'>
+    <link href='/tdc/css/Responsive_Table.css' rel='stylesheet' type='text/css'>
     <link href='/Translation_Dashboard/css/dashboard_new1.css' rel='stylesheet' type='text/css'>
     <link href='/Translation_Dashboard/css/sidebars.css' rel='stylesheet' type='text/css'>
     <link href='$hoste/ajax/libs/font-awesome/5.15.3/css/all.min.css' rel='stylesheet' type='text/css'>
