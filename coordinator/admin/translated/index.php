@@ -146,7 +146,7 @@ function make_edit_icon($id, $title, $target, $lang, $user, $pupdate, $table)
 
     );
     //---
-    if (isset($_REQUEST['test'])) {
+    if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
         $edit_params['test'] = 1;
     }
     //---

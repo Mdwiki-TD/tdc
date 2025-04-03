@@ -9,19 +9,19 @@ include_once __DIR__ . '/Tables/sql_tables.php';
 use function SQLorAPI\Get\get_td_or_sql_projects;
 use function SQLorAPI\Get\get_td_or_sql_categories;
 
-$cat_titles = array();
-$cat_to_camp = array();
-$camp_to_cat = array();
+$cat_titles = [];
+$cat_to_camp = [];
+$camp_to_cat = [];
 //---
 $main_cat = ''; # RTT
 $main_camp = ''; # Main
 //---
-$camps_cat2 = array();
-$camp_input_depth = array();
-// $catinput_depth = array();
+$camps_cat2 = [];
+$camp_input_depth = [];
+// $catinput_depth = [];
 //---
-$campaign_input_list = array();
-$catinput_list = array();
+$campaign_input_list = [];
+$catinput_list = [];
 //---
 $categories_tab = get_td_or_sql_categories();
 //---

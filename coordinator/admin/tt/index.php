@@ -39,8 +39,8 @@ function filter_stat($cat)
 //---
 $uuu = filter_stat($cat);
 //---
-$new_titles = array();
-$full_translates_tab = array();
+$new_titles = [];
+$full_translates_tab = [];
 //---
 $translate_type_sql = <<<SQL
     SELECT tt_id, tt_title, tt_lead, tt_full
@@ -51,7 +51,7 @@ foreach (execute_query($translate_type_sql) as $k => $tab) {
 	$full_translates_tab[$tab['tt_title']] = ['id' => $tab['tt_id'], 'lead' => $tab['tt_lead'], 'full' => $tab['tt_full']];
 }
 //---
-$cat_titles = array();
+$cat_titles = [];
 //---
 if ($cat == 'All') {
 	foreach (execute_query('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)') as $Key => $gg) {

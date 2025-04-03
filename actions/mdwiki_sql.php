@@ -12,13 +12,12 @@ use function Actions\MdwikiSql\insert_to_projects;
 use function Actions\MdwikiSql\display_tables;
 */
 
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 };
 //---
-// use function Actions\Functions\test_print;
 use PDO;
 use PDOException;
 //---
@@ -75,11 +74,11 @@ class Database
                 return $result;
             } else {
                 // Otherwise, return null
-                return array();
+                return [];
             }
         } catch (PDOException $e) {
             echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
-            return array();
+            return [];
         }
     }
 
@@ -99,7 +98,7 @@ class Database
 
         } catch (PDOException $e) {
             echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
-            return array();
+            return [];
         }
     }
 

@@ -12,7 +12,7 @@ use function SQLorAPI\Get\get_users_by_last_pupdate;
 use function SQLorAPI\Get\get_td_or_sql_count_pages_not_empty;
 use function SQLorAPI\Get\get_td_or_sql_page_user_not_in_users;
 //---
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
@@ -47,7 +47,7 @@ function make_edit_icon($id, $user, $email, $wiki2, $proj)
 
 function get_sorted_array()
 {
-	$users_done = array();
+	$users_done = [];
 	//---
 	$live_pages = get_td_or_sql_count_pages_not_empty();
 	//---
@@ -63,7 +63,7 @@ function get_sorted_array()
 		$users_done[$tat] = array('user_id' => 0, 'username' => $tat, 'email' => '', 'wiki' => '', 'user_group' => '');
 	}
 	//---
-	$sorted_array = array();
+	$sorted_array = [];
 	//---
 	foreach ($users_done as $u => $tab) {
 		$tab['live'] = $live_pages[$u] ?? 0;

@@ -13,7 +13,7 @@ use function Infos\TdConfig\set_configs_all_file;
 
 
 //---
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);

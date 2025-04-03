@@ -26,7 +26,7 @@ function get_sugust($title, $lang)
     if (!empty($title)) {
         $items = get_cat_exists_and_missing('RTT', '', '1', $lang, $use_cache = true);
         //---
-        $items_missing = $items['missing'] ?? array();
+        $items_missing = $items['missing'] ?? [];
         //---
         // $res = get_lang_in_process($lang);
         $res = get_lang_in_process_new($lang);

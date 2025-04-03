@@ -18,7 +18,7 @@ function get_cat_exists_and_missing($cat, $camp, $depth, $code, $use_cache = tru
 {
     $members_to = get_mdwiki_cat_members($cat, $use_cache = $use_cache, $depth = $depth, $camp = $camp);
     // z("<br>members_to size:" . count($members_to));
-    $members = array();
+    $members = [];
     foreach ($members_to as $mr) {
         $members[] = $mr;
     };
@@ -34,7 +34,7 @@ function get_cat_exists_and_missing($cat, $camp, $depth, $code, $use_cache = tru
 
     // Find missing elements
     // $missing = array_diff($members, $exists);
-    $missing = array();
+    $missing = [];
     foreach ($members as $mem) {
         if (!in_array($mem, $exists)) $missing[] = $mem;
     };
