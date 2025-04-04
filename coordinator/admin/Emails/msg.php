@@ -15,7 +15,7 @@ use function Emails\Sugust\get_sugust;
 //---
 echo "</div>";
 //---
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
@@ -34,7 +34,7 @@ echo <<<HTML
 <div id='yeye' class='container-fluid'>
 HTML;
 //---
-$tabs = array();
+$tabs = [];
 //---
 $title  = $_REQUEST['title'] ?? '';
 $test   = $_REQUEST['test'] ?? '';
@@ -61,7 +61,7 @@ $here_url = "https://mdwiki.toolforge.org/Translation_Dashboard/translate/medwik
 $HERE = "<a target='_blank' href='$here_url'><b>HERE</b></a>";
 //---
 
-$Emails_array = array();
+$Emails_array = [];
 //---
 
 foreach (fetch_query("select username, email from users;") as $Key => $ta) {

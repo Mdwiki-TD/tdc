@@ -16,13 +16,13 @@ echo '</div><script>
 </script>
 <div class="container-fluid">';
 //---
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 };
 //---
-$tabs = array();
+$tabs = [];
 //---
 $title  = (isset($_REQUEST['title'])) ? rawurldecode($_REQUEST['title']) : "";
 $lead    = $_REQUEST['lead'] ?? '';

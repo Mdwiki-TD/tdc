@@ -48,7 +48,7 @@ if (isset($_POST['cats'])) {
 			$params = [$camp, $cat1, $cat2, $dep, $def, $ido];
 		};
 		//---
-		if (isset($_REQUEST['test'])) {
+		if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 			echo "<br>$qua<br>";
 		};
 		//---

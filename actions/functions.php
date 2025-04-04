@@ -10,7 +10,7 @@ use function Actions\Functions\start_with;
 
 $print_t = false;
 
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     $print_t = true;
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -40,7 +40,7 @@ function test_print($s)
 }
 function open_json_file($file_path)
 {
-    $new_list = array();
+    $new_list = [];
     // Check if the file exists
     if (!is_file($file_path)) {
         // Handle the case when the file does not exist

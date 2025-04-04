@@ -1,23 +1,20 @@
 <?PHP
 //---
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 };
 
 use function SQLorAPI\Get\td_or_sql_titles_infos;
-
-$Assessments_fff = array(
-	'Top' => 1,
-	'High' => 2,
-	'Mid' => 3,
-	'Low' => 4,
-	'Unknown' => 5,
-	'' => 5
-);
 //---
-$tables = array(
+$tables_dir = isset($GLOBALS['tables_dir']) ? $GLOBALS['tables_dir'] : __DIR__ . '/../../td/Tables';
+//---
+if (substr($tables_dir, 0, 2) == 'I:') {
+	$tables_dir = 'I:/mdwiki/mdwiki/public_html/td/Tables';
+}
+//---
+$tables_d = array(
 	// 'enwiki_pageviews' => &$enwiki_pageviews_table,
 	// 'words' => &$Words_table,
 	// 'allwords' => &$All_Words_table,
@@ -27,13 +24,7 @@ $tables = array(
 	'langs_tables' => &$Langs_table,
 );
 //---
-$tables_dir = isset($GLOBALS['tables_dir']) ? $GLOBALS['tables_dir'] : __DIR__ . '/../../td/Tables';
-//---
-if (substr($tables_dir, 0, 2) == 'I:') {
-	$tables_dir = 'I:/mdwiki/mdwiki/public_html/td/Tables';
-}
-//---
-foreach ($tables as $key => &$value) {
+foreach ($tables_d as $key => &$value) {
 	$file = file_get_contents($tables_dir . "/jsons/{$key}.json");
 	$value = json_decode($file, true);
 }

@@ -17,9 +17,9 @@ if (isset($GLOBALS['time_start'])) {
 	echo "\n<script>\n\t $script</script>";
 }
 ?>
+
 </div>
 </main>
-
 <script src="/Translation_Dashboard/js/c.js"></script>
 <script>
 	function pupwindow(url) {
@@ -59,7 +59,7 @@ if (isset($GLOBALS['time_start'])) {
 					[25, 50, 100, 200]
 				],
 			});
-		}, 3000);
+		}, 1500);
 	});
 </script>
 </body>

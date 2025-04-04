@@ -76,7 +76,7 @@ function get_views($target, $lang, $pupdate)
     $result = json_decode($output, true);
     //---
     if (!is_array($result)) {
-        $result = array();
+        $result = [];
     }
     //---
     // $view = 0;

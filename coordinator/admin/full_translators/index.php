@@ -7,7 +7,7 @@ if (user_in_coord == false) {
 //---
 use function SQLorAPI\Get\get_td_or_sql_full_translators;
 //---
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);

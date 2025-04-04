@@ -9,11 +9,23 @@ use function Actions\TDApi\compare_it;
 
 */
 
-use function Actions\Functions\test_print;
+function test_print_o($s)
+{
+    if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
+        return;
+    }
+    $print_t = (isset($_REQUEST['test']) || isset($_COOKIE['test'])) ? true : false;
 
+    if ($print_t && gettype($s) == 'string') {
+        echo "\n<br>\n$s";
+    } elseif ($print_t) {
+        echo "\n<br>\n";
+        print_r($s);
+    }
+}
 function compare_it($t1, $t2)
 {
-    echo "<br>fetch_query:<br>";
+    echo "<br>fetch _query:<br>";
     // //---
     var_dump(json_encode($t1, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     // //---
@@ -49,19 +61,18 @@ function post_url(string $endPoint, array $params = []): string
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     //---
     if ($http_code !== 200) {
-        test_print('Error: API request failed with status code ' . $http_code);
+        test_print_o('post_url: Error: API request failed with status code ' . $http_code);
     }
     //---
-    test_print("post_url_params_result:(http_code: $http_code) $url2");
+    test_print_o("post_url: (http_code: $http_code) $url2");
     // ---
     if ($output === FALSE) {
-        test_print("cURL Error: " . curl_error($ch));
+        test_print_o("post_url: cURL Error: " . curl_error($ch));
     }
 
     if (curl_errno($ch)) {
-        test_print('Error:' . curl_error($ch));
+        test_print_o('post_url: Error:' . curl_error($ch));
     }
-
 
     curl_close($ch);
     return $output;
@@ -83,7 +94,7 @@ function get_td_api(array $params): array
     $result = $results['results'] ?? [];
     //---
     if (isset($result['error'])) {
-        test_print('Error:' . json_encode($result['error'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        test_print_o('Error:' . json_encode($result['error'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         $result = [];
     }
     //---
