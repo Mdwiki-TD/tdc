@@ -5,6 +5,7 @@ if (user_in_coord == false) {
 	exit;
 };
 //---
+use Tables\SqlTables\TablesSql;
 use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_project_to_user;
 use function Actions\MdwikiSql\fetch_query;
@@ -81,15 +82,13 @@ function get_sorted_array()
 function filter_table($project_name)
 {
 	//---
-	global $projects_title_to_id;
-	//---
-	$projects_title_to_id["empty"] = "empty";
+	TablesSql::$s_projects_title_to_id["empty"] = "empty";
 	//---
 	$l_list = <<<HTML
 		<option value='Uncategorized'>Uncategorized</option>
 	HTML;
 	//---
-	foreach ($projects_title_to_id as $p_title => $p_id) {
+	foreach (TablesSql::$s_projects_title_to_id as $p_title => $p_id) {
 		$cdcdc = $project_name == $p_title ? "selected" : "";
 		$l_list .= <<<HTML
 			<option data-tokens='$p_title' value='$p_title' $cdcdc>$p_title</option>

@@ -1,6 +1,6 @@
 <?php
 //---
-
+use Tables\Main\MainTables;
 use function Actions\MdwikiSql\execute_query;
 
 function insert_to_pages($t)
@@ -34,10 +34,8 @@ function insert_to_pages($t)
 function add_to_db($title, $type, $cat, $lang, $user, $target, $pupdate)
 {
 	//---
-	global $Words_table, $All_Words_table;
-	//---
-	$word = $Words_table[$title] ?? 0;
-	if ($type == 'all') $word = $All_Words_table[$title] ?? 0;
+	$word = MainTables::$x_Words_table[$title] ?? 0;
+	if ($type == 'all') $word = MainTables::$x_All_Words_table[$title] ?? 0;
 	//---
 	// add them all to array
 	$t = [

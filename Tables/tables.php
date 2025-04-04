@@ -1,13 +1,37 @@
 <?PHP
+
+namespace Tables\Main;
+
 //---
+/*
+(\$)(enwiki_pageviews_table|Words_table|All_Words_table|All_Refs_table|Lead_Refs_table|Assessments_table|Langs_table)\b
+
+MainTables::$1x_$2
+
+use Tables\Main\MainTables;
+
+*/
+
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 };
-
+//---
+use Tables\Langs\LangsTables;
 use function SQLorAPI\Get\td_or_sql_titles_infos;
 //---
+class MainTables
+{
+	public static $x_enwiki_pageviews_table = [];
+	public static $x_Words_table = [];
+	public static $x_All_Words_table = [];
+	public static $x_All_Refs_table = [];
+	public static $x_Lead_Refs_table = [];
+	public static $x_Assessments_table = [];
+	public static $x_Langs_table = [];
+}
+// ---
 $tables_dir = isset($GLOBALS['tables_dir']) ? $GLOBALS['tables_dir'] : __DIR__ . '/../../td/Tables';
 //---
 if (substr($tables_dir, 0, 2) == 'I:') {
@@ -15,26 +39,19 @@ if (substr($tables_dir, 0, 2) == 'I:') {
 }
 //---
 $tables_d = array(
-	// 'enwiki_pageviews' => &$enwiki_pageviews_table,
-	// 'words' => &$Words_table,
-	// 'allwords' => &$All_Words_table,
-	// 'all_refcount' => &$All_Refs_table,
-	// 'lead_refcount' => &$Lead_Refs_table,
-	// 'assessments' => &$Assessments_table,
-	'langs_tables' => &$Langs_table,
+	// 'enwiki_pageviews' => &MainTables::$x_enwiki_pageviews_table,
+	// 'words' => &MainTables::$x_Words_table,
+	// 'allwords' => &MainTables::$x_All_Words_table,
+	// 'all_refcount' => &MainTables::$x_All_Refs_table,
+	// 'lead_refcount' => &MainTables::$x_Lead_Refs_table,
+	// 'assessments' => &MainTables::$x_Assessments_table,
+	'langs_tables' => &MainTables::$x_Langs_table,
 );
 //---
 foreach ($tables_d as $key => &$value) {
 	$file = file_get_contents($tables_dir . "/jsons/{$key}.json");
 	$value = json_decode($file, true);
 }
-//---
-$enwiki_pageviews_table = [];
-$Words_table = [];
-$All_Words_table = [];
-$All_Refs_table = [];
-$Lead_Refs_table = [];
-$Assessments_table = [];
 //---
 $titles_infos = td_or_sql_titles_infos();
 
@@ -44,13 +61,13 @@ $titles_infos = td_or_sql_titles_infos();
 foreach ($titles_infos as $k => $tab) {
 	$title = $tab['title'];
 	// ---
-	$enwiki_pageviews_table[$title] = $tab['en_views'];
+	MainTables::$x_enwiki_pageviews_table[$title] = $tab['en_views'];
 	// ---
-	$Words_table[$title] = $tab['w_lead_words'];
-	$All_Words_table[$title] = $tab['w_all_words'];
+	MainTables::$x_Words_table[$title] = $tab['w_lead_words'];
+	MainTables::$x_All_Words_table[$title] = $tab['w_all_words'];
 	// ---
-	$All_Refs_table[$title] = $tab['r_all_refs'];
-	$Lead_Refs_table[$title] = $tab['r_lead_refs'];
+	MainTables::$x_All_Refs_table[$title] = $tab['r_all_refs'];
+	MainTables::$x_Lead_Refs_table[$title] = $tab['r_lead_refs'];
 	// ---
-	$Assessments_table[$title] = $tab['importance'];
+	MainTables::$x_Assessments_table[$title] = $tab['importance'];
 };

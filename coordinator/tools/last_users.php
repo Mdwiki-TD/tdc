@@ -1,62 +1,27 @@
 <?PHP
 
+require_once __DIR__ . '/recent_helps.php';
+
+
+use Tables\SqlTables\TablesSql;
+use Tables\Main\MainTables;
+use Tables\Langs\LangsTables;
+
+use function Tools\RecentHelps\filter_recent;
+use function Tools\RecentHelps\do_add_date;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
-use function Actions\Html\make_cat_url;
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Get\get_pages_users_langs;
+// use function Actions\Html\make_cat_url;
 
-function filter_recent($lang)
-{
-    global $code_to_lang;
-    //---
-    $tabes = get_pages_users_langs();
-    //---
-    ksort($tabes);
-    //---
-    $lang_list = "<option data-tokens='All' value='All'>All</option>";
-    //---
-    foreach ($tabes as $codr) {
-        $langeee = $code_to_lang[$codr] ?? '';
-        $selected = ($codr == $lang) ? 'selected' : '';
-        $lang_list .= <<<HTML
-            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
-            HTML;
-    };
-    //---
-    $langse = <<<HTML
-        <select aria-label="Language code"
-            class="selectpicker"
-            id='lang'
-            name='lang'
-            placeholder='two letter code'
-            data-live-search="true"
-            data-container="body"
-            data-live-search-style="begins"
-            data-bs-theme="auto"
-            data-style='btn active'
-            data-width="90%"
-            >
-            $lang_list
-        </select>
-    HTML;
-    //---
-    $uuu = <<<HTML
-        <div class="input-group">
-            $langse
-        </div>
-    HTML;
-    //---
-    return $uuu;
-}
-
-function make_td($tabg, $nnnn)
+function make_td($tabg, $nnnn, $add_add)
 {
     //---
-    global $code_to_lang, $Words_table, $views_sql, $cat_to_camp;
+    global $views_sql;
     //---
-    $id       = $tabg['id'] ?? "";
+    // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
     //---
     //return $date . '<br>';
@@ -64,10 +29,10 @@ function make_td($tabg, $nnnn)
     $user     = $tabg['user'] ?? "";
     //---
     $llang    = $tabg['lang'] ?? "";
-    $md_title = trim($tabg['title']);
+    $md_title = trim($tabg['title'] ?? '');
     $cat      = $tabg['cat'] ?? "";
     $word     = $tabg['word'] ?? "";
-    $targe    = trim($tabg['target']);
+    $targe    = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
     //---
@@ -83,13 +48,13 @@ function make_td($tabg, $nnnn)
         $user_name = $user_name[0];
     }
     //---
-    // $lang2 = $code_to_lang[$llang] ?? $llang;
+    // $lang2 = LangsTables::$L_code_to_lang[$llang] ?? $llang;
     $lang2 = $llang;
     //---
     // $ccat = make_cat_url( $cat );
-    // $ccat = $cat_to_camp[$cat] ?? $cat;
+    // $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
     //---
-    // $worde = $word ?? $Words_table[$md_title];
+    // $worde = $word ?? MainTables::$x_Words_table[$md_title];
     //---
     $nana = make_mdwiki_title($md_title);
     //---
@@ -104,6 +69,8 @@ function make_td($tabg, $nnnn)
     //---
     $talk = make_talk_url($llang, $user);
     //---
+    $add_add_row = ($add_add) ? "<td data-content='add_date'>$add_date</td>" : '';
+    // ---
     $laly = <<<HTML
         <tr>
             <td data-content='#'>
@@ -115,7 +82,7 @@ function make_td($tabg, $nnnn)
             <td data-content='Title'>
                 $nana
             </td>
-            <td data-content='Translated'>
+            <td data-content='Translated' class="link_container">
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $targe33
             </td>
             <td data-content='Publication date'>
@@ -124,25 +91,37 @@ function make_td($tabg, $nnnn)
             <td data-content='Fixref'>
                 <a target='_blank' href="../fixwikirefs.php?save=1&title=$targe2&lang=$llang">Fix</a>
             </td>
-            <td data-content='add_date'>
-                $add_date
-            </td>
+            $add_add_row
         </tr>
     HTML;
-    //---
+    // ---
     return $laly;
 }
 
 $lang = $_GET['lang'] ?? 'All';
 
-if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
+if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
 
 $mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
-
+//---
+$qsl_results = get_recent_pages_users($lang);
+//---
+$add_add = do_add_date($qsl_results);
+$th_add = $add_add ? "<th>add_date</th>" : '';
+//---
+$recent_rows = "";
+// ---
+$noo = 0;
+// ---
+foreach ($qsl_results as $tat => $tabe) {
+    $noo = $noo + 1;
+    $recent_rows .= make_td($tabe, $noo, $add_add);
+};
+//---
 $recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
+    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
         <thead>
             <tr>
                 <th>#</th>
@@ -151,28 +130,18 @@ $recent_table = <<<HTML
                 <th>Translated</th>
                 <th>Publication date</th>
                 <th>Fixref</th>
-                <th>add_date</th>
+                $th_add
             </tr>
         </thead>
         <tbody>
-HTML;
-//---
-$qsl_results = get_recent_pages_users($lang);
-//---
-$noo = 0;
-foreach ($qsl_results as $tat => $tabe) {
-    //---
-    $noo = $noo + 1;
-    $recent_table .= make_td($tabe, $noo);
-    //---
-};
-//---
-$recent_table .= <<<HTML
+            $recent_rows
         </tbody>
     </table>
 HTML;
 //---
-$uuu = filter_recent($lang);
+$result = get_pages_users_langs();
+
+$uuu = filter_recent($lang, $result);
 //---
 echo <<<HTML
 <div class='card-header'>
@@ -180,7 +149,7 @@ echo <<<HTML
         <input name='ty' value='last_users' hidden/>
         <div class='row'>
             <div class='col-md-5'>
-            <h4>Recent translations in user space:</h4>
+                <h4>Recent translations in user space:</h4>
             </div>
             <div class='col-md-3'>
                 $uuu

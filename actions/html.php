@@ -26,6 +26,8 @@ use function Actions\Html\make_target_url;
 use function Actions\Html\make_translation_url;
 */
 //---
+use Tables\SqlTables\TablesSql;
+
 function add_quotes($str)
 {
     $quote = preg_match("/[']+/u", $str) ? '"' : "'";
@@ -120,12 +122,10 @@ function make_mail_icon($tab)
 function make_project_to_user($project)
 {
     //---
-    global $projects_title_to_id;
-    //---
     $str = "<option value='Uncategorized'>Uncategorized</option>";
     // $str = "";
     //---
-    foreach ($projects_title_to_id as $p_title => $p_id) {
+    foreach (TablesSql::$s_projects_title_to_id as $p_title => $p_id) {
         $cdcdc = $project == $p_title ? "selected" : "";
         $str .= <<<HTML
 			<option value='$p_title' $cdcdc>$p_title</option>
