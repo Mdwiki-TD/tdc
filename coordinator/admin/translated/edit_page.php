@@ -78,7 +78,7 @@ function edit_page($id, $title, $target, $lang, $user, $pupdate, $table)
     //---
     if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
         echo "<pre>$qua</pre>";
-        echo "<pre>$params</pre>";
+        // echo "<pre>$params</pre>";
     }
     //---
     // green text success

@@ -7,6 +7,7 @@ if (user_in_coord == false) {
 //---
 include_once 'coordinator/admin/Emails/sugust.php';
 //---
+use Tables\Main\MainTables;
 use function Actions\MdwikiSql\fetch_query;
 use function Actions\WikiApi\get_views;
 use function Actions\Html\make_mdwiki_title;
@@ -95,7 +96,7 @@ $url_views_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
 // $views2 = "<font color='#0000ff'>$views people</font>";
 $views2 = "<a target='_blank' href='$url_views_3'><font color='#0000ff'>$views people</font></a>";
 //---
-$lang2 = $Langs_table[$lang]['name'] ?? $lang;
+$lang2 = MainTables::$x_Langs_table[$lang]['name'] ?? $lang;
 $lang2 = make_target_url($target, $lang, $name = $lang2);
 //---
 // print tabs values
