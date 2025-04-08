@@ -222,13 +222,12 @@ HTML;
 
 				<td data-content='Lead'>
 					<div class='form-check form-switch'>
-						<input class='form-control' type='text' name='rows[${ii}][lead]' value='0'/>
+						<input class='form-check-input' type='checkbox' name='rows[${ii}][lead]' value='1'/>
 					</div>
 				</td>
-
 				<td data-content='Full'>
 					<div class='form-check form-switch'>
-						<input class='form-control' type='text' name='rows[${ii}][full]' value='0'/>
+						<input class='form-check-input' type='checkbox' name='rows[${ii}][full]' value='1'/>
 					</div>
 				</td>
 			</tr>

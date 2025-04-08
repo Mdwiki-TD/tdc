@@ -7,6 +7,7 @@ use function Actions\MdwikiSql\fetch_query;
 use function Actions\MdwikiSql\execute_query;
 use function Actions\MdwikiSql\sql_add_user;
 use function Actions\MdwikiSql\update_settings;
+use function Actions\MdwikiSql\update_settings_value;
 use function Actions\MdwikiSql\insert_to_translate_type;
 use function Actions\MdwikiSql\insert_to_projects;
 use function Actions\MdwikiSql\display_tables;
@@ -205,6 +206,24 @@ function update_settings($id, $title, $displayed, $value, $type)
         $query = "INSERT INTO settings (id, title, displayed, Type, value) SELECT ?, ?, ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM settings WHERE title = ?)";
         $params = [$id, $title, $displayed, $type, $value, $title];
     }
+
+    // Prepare and execute the SQL query with parameter binding
+    $results = execute_query($query, $params);
+
+    return $results;
+}
+
+function update_settings_value($id, $value)
+{
+    // Create a new database object
+    if ($id == 0 || $id == '0' || empty($id)) {
+        return;
+    }
+    // ---
+    $query = <<<SQL
+        UPDATE settings SET value = ? WHERE id = ?
+    SQL;
+    $params = [$value, $id];
 
     // Prepare and execute the SQL query with parameter binding
     $results = execute_query($query, $params);

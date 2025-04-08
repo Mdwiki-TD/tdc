@@ -21,6 +21,11 @@ $numb = 0;
 //---
 $projs = get_td_or_sql_projects();
 //---
+// sort $projs by g_id
+uasort($projs, function ($a, $b) {
+	return $a['g_id'] <=> $b['g_id'];
+});
+//---
 $form_text = '';
 //---
 foreach ($projs as $gtitle => $tab) {
@@ -32,18 +37,20 @@ foreach ($projs as $gtitle => $tab) {
 	$form_text .= <<<HTML
 	<tr>
 		<td data-content='id'>
-			<span><b>$numb</b></span>
-			<input name='g_id[]$numb' value='$gid' hidden/>
+			<span><b>$gid</b></span>
+			<input name='rows[$numb][g_id]' value='$gid' hidden/>
 		</td>
 	  	<td data-content='Project'>
-	  		<input class='form-control' name='g_title[]$numb' value='$gtitle'/>
+	  		<input class='form-control' name='rows[$numb][g_title]' value='$gtitle'/>
 		</td>
 	  	<td data-content='Delete'>
-	  		<input type='checkbox' name='del[]$numb' value='$gid'/> <label> delete</label>
+	  		<input type='checkbox' name='rows[$numb][del]' value='$gid'/> <label> delete</label>
 	  	</td>
 	</tr>
 	HTML;
 };
+//---
+$numb += 1;
 //---
 $form_text_plus = <<<HTML
 	<tr>
@@ -51,10 +58,9 @@ $form_text_plus = <<<HTML
 			<span><b>Add:</b></span>
 		</td>
 		<td data-content="user">
-			<input class='form-control td_user_input' name='g_title[]$numb' />
+			<input class='form-control td_user_input' name='rows[$numb][g_title]' />
 		</td>
-		<td data-content="delete">
-
+		<td data-content="delete">-
 		</td>
 	</tr>
 HTML;
@@ -91,14 +97,17 @@ echo <<<HTML
 HTML;
 ?>
 <script type="text/javascript">
-
 	function add_row() {
 		var ii = $('#g_tab >tr').length + 1;
 		// ---
 		var e = `
 			<tr>
-				<td><b>${ii}</b><input name='g_id[]' value='0' hidden/></td>
-				<td><input class='form-control' name='g_title[]${ii}' value=''/></td>
+				<td>
+					<b>${ii}</b>
+				</td>
+				<td>
+					<input class='form-control' name='rows[${ii}][g_title]' value=''/>
+				</td>
 				<td>-</td>
 			</tr>
 		`;

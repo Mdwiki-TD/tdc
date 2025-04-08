@@ -55,24 +55,20 @@ function add_to_db($title, $type, $cat, $lang, $user, $target, $pupdate)
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
-if (isset($_POST['rows'])) {
-	// { "rows": { "1": { "mdtitle": "Atoltivimab/maftivimab/odesivimab", "cat": "RTT", "type": "lead", "user": "zz", "lang": "11", "target": "123123", "pupdate": "2025-01-30" } } }
-	// ---
-	foreach ($_POST['rows'] as $key => $table) {
-		// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
+foreach ($_POST['rows'] ?? [] as $key => $table) {
+	// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
+	//---
+	$mdtitle	= $table['mdtitle'] ?? '';
+	$cat		= rawurldecode($table['cat']) ?? '';
+	$type		= $table['type'] ?? '';
+	$user		= rawurldecode($table['user']) ?? '';
+	$lang		= $table['lang'] ?? '';
+	$target		= $table['target'] ?? '';
+	$pupdate	= $table['pupdate'] ?? '';
+	//---
+	if (!empty($mdtitle) && !empty($lang) && !empty($user)) { // && !empty($target)
 		//---
-		$mdtitle	= $table['mdtitle'] ?? '';
-		$cat		= rawurldecode($table['cat']) ?? '';
-		$type		= $table['type'] ?? '';
-		$user		= rawurldecode($table['user']) ?? '';
-		$lang		= $table['lang'] ?? '';
-		$target		= $table['target'] ?? '';
-		$pupdate	= $table['pupdate'] ?? '';
+		add_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate);
 		//---
-		if (!empty($mdtitle) && !empty($lang) && !empty($user)) { // && !empty($target)
-			//---
-			add_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate);
-			//---
-		};
 	};
 };

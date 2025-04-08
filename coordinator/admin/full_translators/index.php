@@ -25,21 +25,22 @@ $form_text = '';
 //---
 foreach ($qq as $Key => $table) {
 	$numb += 1;
-	$ide	= $table['id'] ?? "";
+	//---
+	$user_id	= $table['id'] ?? "";
 	$usere	= $table['user'] ?? "";
 	//---
 	$form_text .= <<<HTML
 		<tr>
 			<td data-content="id">
-				<span><b>$numb</b></span>
-				<input name='id[]$numb' value='$ide' hidden/>
+				<input class="form-control" size="20" name="rows[$numb][id]" value="$user_id" hidden/>
+				<span><b>$user_id</b></span>
 			</td>
 			<td data-content="user">
 				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
-				<input name='user[]$numb' value='$usere' hidden/>
+				<input name='rows[$numb][user]' value='$usere' hidden/>
 			</td>
 			<td data-content="delete">
-				<input type='checkbox' name='del[]$numb' value='$ide'/> <label> delete</label>
+				<input type='checkbox' name='rows[$numb][del]' value='$user_id'/> <label> delete</label>
 			</td>
 		</tr>
 	HTML;
@@ -53,7 +54,8 @@ $form_text_plus = <<<HTML
 			<span><b>Add:</b></span>
 		</td>
 		<td data-content="user">
-			<input class='form-control td_user_input' name='user[]$numb' />
+			<input class='form-control' name='rows[$numb][is_new]' value='yes' hidden/>
+			<input class='form-control td_user_input' name='rows[$numb][user]' />
 		</td>
 		<td data-content="delete">
 			-
@@ -72,7 +74,7 @@ echo <<<HTML
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
 					<thead>
 						<tr>
-							<th>#</th>
+							<th>ID</th>
 							<th>User</th>
 							<th>Delete</th>
 						</tr>
@@ -99,8 +101,13 @@ HTML;
 		// ---
 		var e = `
 			<tr>
-				<td><b>${ii}</b></td>
-				<td><input class='form-control td_user_input' name='user[]${ii}'/></td>
+				<td>
+					<b>${ii}</b>
+				</td>
+				<td>
+					<input class='form-control' name='rows[${ii}][is_new]' value='yes' hidden/>
+					<input class='form-control td_user_input' name='rows[${ii}][user]'/>
+				</td>
 				<td>-</td>
 			</tr>
 		`;
