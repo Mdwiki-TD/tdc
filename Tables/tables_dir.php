@@ -39,14 +39,14 @@ function open_td_Tables_file($path)
     }
     $contents = file_get_contents($file_path);
 
-    if ($contents === false) {
+    if ($contents === null || $contents === false) {
         test_print("---- Failed to read file contents from $file_path");
         return [];
     }
 
     $result = json_decode($contents, true);
 
-    if ($result === false) {
+    if ($result === null || $result === false) {
         test_print("---- Failed to decode JSON from $file_path");
         $result = [];
     } else {
