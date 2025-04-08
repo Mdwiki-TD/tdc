@@ -3,42 +3,33 @@
 use function Actions\MdwikiSql\sql_add_user;
 use function Actions\MdwikiSql\execute_query;
 //---
+// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+//---
 $new_q = "INSERT INTO users (username, email, wiki, user_group) SELECT DISTINCT user, '', '', '' from pages
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = user)";
 //---
-if (isset($_POST['del'])) {
-	var_export($_POST['del']);
-	for($i = 0; $i < count($_POST['del']); $i++ ) {
-		$del	= $_POST['del'][$i];
+if (isset($_POST['emails'])) {
+	// '{ "ty": "Emails", "emails": { "1": { "username": "x", "email": "x", "project": "TWB/WikiMed (Arabic)", "wiki": "ar" } } }'
+	// ---
+	foreach ($_POST['emails'] as $key => $table) {
+		// { "username": "", "email": "3", "project": "Uncategorized", "wiki": "" }
 		//---
-		if (!empty($del)) {
-			$qu = "DELETE FROM users WHERE user_id = ?";
-			execute_query($qu, $params=[$del]);
-		};
-	};
-};
-//---
-if (isset($_POST['username'])) {
-	for($i = 0; $i < count($_POST['username']); $i++ ){
+		$user    = $table['username'] ?? '';
+		$email 	 = $table['email'] ?? '';
+		$wiki 	 = $table['wiki'] ?? '';
+		$project = $table['project'] ?? '';
 		//---
-		$user_name 	= $_POST['username'][$i];
-		$email 	= $_POST['email'][$i];
-		$ido 	= $_POST['id'][$i];
-		$ido 	= (isset($ido)) ? $ido : '';
-		$wiki 	= $_POST['wiki'][$i];
-		$project 	= $_POST['project'][$i];
-		// $project 	= '';
-		//---
-		if (!empty($user_name)) {
+		if (!empty($user)) {
 			//---
-			$user_name = trim($user_name);
+			var_export(json_encode($table, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+			//---
+			$user = trim($user);
 			$email     = trim($email);
 			$wiki      = trim($wiki);
 			$project   = trim($project);
 			//---
-			sql_add_user($user_name, $email, $wiki, $project, $ido);
+			sql_add_user($user, $email, $wiki, $project);
 			//---
 		};
 	};
 };
-//---

@@ -61,33 +61,33 @@ function make_settings_tab($tabe)
         $type     = $v['type'] ?? $v['Type'] ?? "";
         //---
         $value_line = <<<HTML
-            <input class='form-control' size='4' name='value_$nn' value='$value'/>
+            <input class='form-control' size='4' name='rows[$nn][value]' value='$value'/>
         HTML;
         //---
         if ($type == 'check') {
             $checked = ($value == 1 || $value == "1") ? 'checked' : '';
             $value_line = <<<HTML
                 <div class='form-check form-switch'>
-                    <input type='hidden' name='value_$nn' value='0'>
-                    <input class='form-check-input' type='checkbox' name='value_$nn' value='1' $checked>
+                    <input type='hidden' name='rows[$nn][value]' value='0'>
+                    <input class='form-check-input' type='checkbox' name='rows[$nn][value]' value='1' $checked>
                 </div>
             HTML;
         }
         //---
         $tr = <<<HTML
             <tr>
-                <input name='se[]' value='$nn' hidden/>
+                <input name='rows[$nn][id]' value='$id' hidden/>
                 <td data-order='$nn' data-content='#'>
-                    $nn<input name='id_$nn' value='$id' hidden/>
+                    $nn
                 </td>
                 <td data-content='Option'>
                     $displayed
-                    <input class='form-control' name='title_$nn' value="$title" hidden/>
-                    <input class='form-control' name='displayed_$nn' value='$displayed' hidden/>
+                    <!-- <input class='form-control' name='rows[$nn][title]' value="$title" hidden/>
+                    <input class='form-control' name='rows[$nn][displayed]' value='$displayed' hidden/> -->
                 </td>
                 <td data-content='Value'>
                     $value_line
-                    <input class='form-control' name='type_$nn' value='$type' hidden/>
+                    <!-- <input class='form-control' name='rows[$nn][type]' value='$type' hidden/> -->
                 </td>
             </tr>
         HTML;

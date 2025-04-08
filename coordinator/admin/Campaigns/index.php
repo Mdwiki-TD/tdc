@@ -38,27 +38,27 @@ foreach ($qq as $Key => $table) {
 	$table_rows .= <<<HTML
 	<tr>
 		<div class='form-group'>
-			<th data-content="#" style="width: 4%;">
+			<th data-content="#">
 				$numb
-				<input name='id[]$numb' value='$id' hidden/>
+				<input name='rows[$numb][id]' value='$id' data-original='$id' hidden/>
 			</th>
 			<td data-content="Campaign">
-				<input class="form-control" size='10' name='camp[]$numb' value='$campaign'/>
+				<input class="form-control" size='10' name='rows[$numb][camp]' value='$campaign' data-original='$campaign'/>
 			</td>
 			<td data-content="Category1">
-				<input class="form-control" size='25' name='cats[]$numb' value='$category1'/>
+				<input class="form-control" size='25' name='rows[$numb][cat1]' value='$category1' data-original='$category1'/>
 			</td>
 			<td data-content="Category2">
-				<input class="form-control" size='25' name='cat2[]$numb' value='$category2'/>
+				<input class="form-control" size='25' name='rows[$numb][cat2]' value='$category2' data-original='$category2'/>
 			</td>
 			<td data-content="Depth">
-				<input class="form-control w-auto" type='number' name='dep[]$numb' value='$depth' min='0' max='10'/>
+				<input class="form-control w-auto" type='number' name='rows[$numb][dep]' value='$depth' data-original='$depth' min='0' max='10'/>
 			</td>
 			<td data-content="Default Cat">
-				<input class="form-check-input" type='radio' id='default_cat' name='default_cat' value='$id' $checked>
+				<input class="form-check-input" type='radio' id='default_cat' name='default_cat' value='$id' data-original='$id' $checked>
 			</td>
 			<td data-content="Delete">
-				<input type='checkbox' name='del[]$numb' value='$id'/> <label>delete</label>
+				<input type='checkbox' name='rows[$numb][del]' value='$id'/> <label>delete</label>
 			</td>
 		</div>
 	</tr>
@@ -70,7 +70,7 @@ echo <<<HTML
 		<h4>Campaigns:</h4>
 	</div>
 	<div class='card-body'>
-		<form action="index.php?ty=Campaigns" method="POST">
+		<form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
 			<input name='ty' value="Campaigns" hidden/>
 			<div class="form-group">
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
@@ -101,16 +101,17 @@ HTML;
 ?>
 </div>
 <script type="text/javascript">
+	var ii = 0;
+
 	function add_row() {
-		var ii = $('#tab_logic >tr').length + 1;
-		// ---
+		ii += 1;
 		var e = `
 			<tr>
 				<td>${ii}</td>
-				<td><input class='form-control' name='camp[]${ii}' placeholder='Campaign' value=''/></td>
-				<td><input class='form-control' name='cats[]${ii}' placeholder='Category1' value=''/></td>
-				<td><input class='form-control' name='cat2[]${ii}' placeholder='Category2' value=''/></td>
-				<td><input class='form-control w-auto' type='number' name='dep[]${ii}' value='0' min='0' max='10'/></td>
+				<td><input class='form-control' name='new[${ii}][camp]' placeholder='Campaign' value=''/></td>
+				<td><input class='form-control' name='new[${ii}][cat1]' placeholder='Category1' value=''/></td>
+				<td><input class='form-control' name='new[${ii}][cat2]' placeholder='Category2' value=''/></td>
+				<td><input class='form-control w-auto' type='number' name='new[${ii}][dep]' value='0' min='0' max='10'/></td>
 				<td></td>
 				<td></td>
 			</tr>

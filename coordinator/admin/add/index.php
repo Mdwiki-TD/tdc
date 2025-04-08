@@ -1,5 +1,10 @@
 <?php
 //---
+/*
+name=(["'])(\w+)\[\](\$\{*\w+\}*)["']
+name=$1rows[$3][$2]$1
+*/
+//---
 if (user_in_coord == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
@@ -28,7 +33,7 @@ foreach ($qqq as $Key => $ta) {
 };
 //---
 $typies = <<<HTML
-	<select name='type[]%s' id='type[]%s' class='form-select w-100' data-bs-theme="auto">
+	<select name='rows[%s][type]' id='rows[%s][type]' class='form-select w-100' data-bs-theme="auto">
 		<option value='lead'>Lead</option><option value='all'>All</option>
 	</select>
 	HTML;
@@ -38,7 +43,7 @@ $table = "";
 foreach (range(1, 1) as $numb) {
 	//---
 	$cats_line = <<<HTML
-		<select class='form-select catsoptions' name='cat[]$numb' data-bs-theme="auto">
+		<select class='form-select catsoptions' name='rows[$numb][cat]' data-bs-theme="auto">
 			$cats
 		</select>
 	HTML;
@@ -51,7 +56,7 @@ foreach (range(1, 1) as $numb) {
 			$numb
 		</td>
 		<td data-content='Mdwiki Title'>
-			<input class="form-control mdtitles" size='15' name='mdtitle[]$numb' required/>
+			<input class="form-control mdtitles" size='15' name='rows[$numb][mdtitle]' required/>
 		</td>
 		<td data-content='Campaign'>
 			$cats_line
@@ -60,16 +65,16 @@ foreach (range(1, 1) as $numb) {
 			$type_line
 		</td>
 		<td data-content='User'>
-			<input class="form-control td_user_input" size='10' name='user[]$numb' required/>
+			<input class="form-control td_user_input" size='10' name='rows[$numb][user]' required/>
 		</td>
 		<td data-content='Lang.'>
-			<input class="form-control lang_input" size='2' name='lang[]$numb' required/>
+			<input class="form-control lang_input" size='2' name='rows[$numb][lang]' required/>
 		</td>
 		<td data-content='Target'>
-			<input class="form-control" size='20' name='target[]$numb'/>
+			<input class="form-control" size='20' name='rows[$numb][target]'/>
 		</td>
 		<td data-content='Publication date'>
-			<input class="form-control" size='10' name='pupdate[]$numb' placeholder='YYYY-MM-DD'/>
+			<input class="form-control" size='10' name='rows[$numb][pupdate]' placeholder='YYYY-MM-DD'/>
 		</td>
 		<td data-content="Delete">
 			<div class="">

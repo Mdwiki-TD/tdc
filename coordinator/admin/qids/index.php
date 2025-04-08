@@ -7,12 +7,48 @@ if (user_in_coord == false) {
 //---
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Get\get_td_or_sql_qids;
+use function SQLorAPI\Get\get_td_or_sql_qids_others;
 //---
+$qid_table = $_GET['qid_table'] ?? 'qids';
+
+function filter_table($data, $vav, $id)
+{
+	//---
+	$l_list = "";
+	//---
+	foreach ($data as $table_name => $label) {
+		$checked = ($table_name == $vav) ? "checked" : "";
+		$l_list .= <<<HTML
+			<div class="form-check form-check-inline">
+				<input class="form-check-input"
+					type="radio"
+					name="$id"
+					id="radio_$table_name"
+					value="$table_name"
+					$checked>
+				<label class="form-check-label" for="radio_$table_name">$label</label>
+			</div>
+		HTML;
+	}
+	//---
+	$uuu = <<<HTML
+		<div class="input-group">
+			<div class="form-control" style="background-color: transparent; border: none;">
+				$l_list
+			</div>
+		</div>
+	HTML;
+	//---
+	return $uuu;
+}
+
 function make_edit_icon($id, $title, $qid)
 {
+	global $qid_table;
 	//---
 	$edit_params = array(
 		'id'   => $id,
+		'qid_table'  => $qid_table,
 		'title'  => $title,
 		'nonav'  => 1,
 		'qid'  => $qid
@@ -60,16 +96,21 @@ $dis = $_GET['dis'] ?? 'all';
 //---
 if (!isset($_GET['dis']) && global_username == "Mr. Ibrahem") $dis = "empty";
 //---
-
-$qq = get_td_or_sql_qids($dis);
-
+$Qids_title = ($qid_table == "qids") ? "TD Qids" : "Qids Others";
+//---
+if ($qid_table == "qids") {
+	$qq1 = get_td_or_sql_qids($dis);
+} else {
+	$qq1 = get_td_or_sql_qids_others($dis);
+}
+// ---
 $numb = 0;
 //---
 $done = [];
 //---
 $form_rows = "";
 //---
-foreach ($qq as $Key => $table) {
+foreach ($qq1 as $Key => $table) {
 	$id 	= $table['id'] ?? "";
 	$title 	= $table['title'] ?? "";
 	$qid 	= $table['qid'] ?? "";
@@ -96,24 +137,40 @@ foreach ($qq as $Key => $table) {
 	//---
 };
 //---
+$data = [
+	"qids" => 'TD Qids',
+	"qids_others" => 'Qids Others',
+];
+//---
+$filter_ta = filter_table($data, $qid_table, 'qid_table');
+//---
+$dis_data = [
+	"empty" => 'Empty',
+	"all" => 'All',
+	"duplicate" => 'Duplicate',
+];
+//---
+$filter_dis = filter_table($dis_data, $dis, 'dis');
+//---
 echo <<<HTML
 	<div class='card-header'>
-		<div class='row'>
-			<div class='col-md-5'>
-				<h4>Qids: ($dis:<span>$numb</span>)</h4>
+		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
+			<input name='ty' value='qids' hidden/>
+			<div class='row'>
+				<div class='col-md-3'>
+					<h4>$Qids_title: ($dis:<span>$numb</span>)</h4>
+				</div>
+				<div class='col-md-2'>
+					$filter_ta
+				</div>
+				<div class='col-md-4'>
+					$filter_dis
+				</div>
+				<div class='aligncenter col-md-2'>
+					<input class='btn btn-outline-primary' type='submit' value='Filter' />
+				</div>
 			</div>
-			<div class='col-md-3'>
-				<!-- only display empty qids -->
-				<a class='btn btn-outline-secondary' href="index.php?ty=qids&dis=empty">Only Empty</a>
-			</div>
-			<div class='col-md-2'>
-				<a class='btn btn-outline-secondary' href="index.php?ty=qids&dis=all">All</a>
-			</div>
-			<div class='col-md-2'>
-				<!-- only display empty qids -->
-				<a class='btn btn-outline-secondary' href="index.php?ty=qids&dis=duplicate">Duplicate</a>
-			</div>
-		</div>
+		</form>
 	</div>
 	<div class='card-body'>
 		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2' style='width: 90%;'>
@@ -137,9 +194,10 @@ HTML;
 echo <<<HTML
 	<div class='card'>
 		<div class='card-body'>
-			<form action="index.php?ty=qids/post" method="POST">
+			<form action="index.php?ty=$qid_table/post&dis=$dis&qid_table=$qid_table" method="POST">
 				$testin
 				<input name='ty' value="qids/post" hidden/>
+				<input name='qid_table' value="$qid_table" hidden/>
 				<div id='qidstab' style='display: none;'>
 					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
 						<thead>
@@ -165,16 +223,20 @@ HTML;
 
 ?>
 <script type="text/javascript">
+	var ii = 0;
+	// ---
 	function add_row() {
+		// ---
+		ii += 1;
+		// ---
 		$('#submit_bt').show();
 		$('#qidstab').show();
-		var ii = $('#tab_new >tr').length + 1;
 		// ---
 		var e = `
 			<tr>
 				<td>${ii}</td>
-				<td><input class='form-control' name='add_qids[]${ii}' placeholder='title${ii}'/></td>
-				<td><input class='form-control' name='qid[]${ii}' placeholder='qid${ii}'/></td>
+				<td><input class='form-control' name='rows[${ii}][title]' placeholder='title${ii}'/></td>
+				<td><input class='form-control' name='rows[${ii}][qid]' placeholder='qid${ii}'/></td>
 			</tr>
 		`;
 		// ---

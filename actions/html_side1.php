@@ -56,7 +56,7 @@ function create_side($filename, $ty)
         ],
         'Qids' => [
             ['id' => 'qidsload', 'admin' => 1, 'href' => 'qids', 'title' => 'Qids'],
-            ['id' => 'qids_othersload', 'admin' => 1, 'href' => 'qids_others', 'title' => 'Qids Others'],
+            // ['id' => 'qids_othersload', 'admin' => 1, 'href' => 'qids&qid_table=qids_others', 'title' => 'Qids Others'],
         ],
         'Users' => [
             ['id' => 'Emails', 'admin' => 1, 'href' => 'Emails', 'title' => 'Emails'],

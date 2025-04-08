@@ -14,7 +14,7 @@ function insert_to_pages($t)
 	//---
 	$params1 = [$t['target'], $t['pupdate'], $t['word'], $t['user'], $t['title'], $t['lang']];
 	//---
-	$result1 = execute_query($query1, $params1);
+	$_result1 = execute_query($query1, $params1);
 	//---
 	$query2 = <<<SQL
         INSERT INTO pages (title, word, translate_type, cat, lang, date, user, pupdate, target, add_date)
@@ -53,22 +53,22 @@ function add_to_db($title, $type, $cat, $lang, $user, $target, $pupdate)
 	//---
 };
 //---
-if (isset($_POST['mdtitle'])) {
-	for ($i = 0; $i < count($_POST['mdtitle']); $i++) {
+// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+//---
+foreach ($_POST['rows'] ?? [] as $key => $table) {
+	// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
+	//---
+	$mdtitle	= $table['mdtitle'] ?? '';
+	$cat		= rawurldecode($table['cat']) ?? '';
+	$type		= $table['type'] ?? '';
+	$user		= rawurldecode($table['user']) ?? '';
+	$lang		= $table['lang'] ?? '';
+	$target		= $table['target'] ?? '';
+	$pupdate	= $table['pupdate'] ?? '';
+	//---
+	if (!empty($mdtitle) && !empty($lang) && !empty($user)) { // && !empty($target)
 		//---
-		$mdtitle	= $_REQUEST['mdtitle'][$i] ?? '';
-		$cat		= rawurldecode($_REQUEST['cat'][$i]) ?? '';
-		$type		= $_REQUEST['type'][$i] ?? '';
-		$user		= rawurldecode($_REQUEST['user'][$i]) ?? '';
-		$lang		= $_REQUEST['lang'][$i] ?? '';
-		$target		= $_REQUEST['target'][$i] ?? '';
-		$pupdate	= $_REQUEST['pupdate'][$i] ?? '';
+		add_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate);
 		//---
-		if (!empty($mdtitle) && !empty($lang) && !empty($user)) { // && !empty($target)
-			//---
-			add_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate);
-			//---
-		};
 	};
 };
-//---

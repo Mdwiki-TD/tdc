@@ -34,14 +34,14 @@ foreach ($qq as $Key => $table) {
 		<tr>
 			<td data-content="id">
 				<span><b>$ide</b></span>
-				<input name='id[]$numb' value='$ide' hidden/>
+				<input name='rows[$numb][id]' value='$ide' hidden/>
 			</td>
 			<td data-content="user">
 				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
-				<input name='user[]$numb' value='$usere' hidden/>
+				<input name='rows[$numb][user]' value='$usere' hidden/>
 			</td>
 			<td data-content="delete">
-				<input type='checkbox' name='del[]$numb' value='$ide'/> <label> delete</label>
+				<input type='checkbox' name='rows[$numb][del]' value='$ide'/> <label> delete</label>
 			</td>
 		</tr>
 	HTML;
@@ -80,14 +80,16 @@ HTML;
 ?>
 
 <script type="text/javascript">
-
 	function add_row() {
 		var ii = $('#coo_tab >tr').length + 1;
 		// ---
 		var e = `
 			<tr>
 				<td>${ii}</td>
-				<td><input class='form-control td_user_input' name='user[]${ii}'/></td>
+				<td>
+					<input class='form-control' name='rows[${ii}][is_new]' value='yes' hidden/>
+					<input class='form-control td_user_input' name='rows[${ii}][user]'/>
+				</td>
 				<td>-</td>
 			</tr>
 		`;
