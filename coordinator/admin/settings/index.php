@@ -32,6 +32,8 @@ echo <<<HTML
                 <input name='ty' value='settings' hidden/>
     HTML;
 //---
+$nn = 0;
+//---
 function make_settings_tab($tabe)
 {
     //---

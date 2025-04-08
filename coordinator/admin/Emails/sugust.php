@@ -8,6 +8,7 @@ use function Emails\Sugust\get_sugust;
 
 // include_once 'infos/td_config.php';
 //---
+use Tables\Main\MainTables;
 // use function Results\GetCats\get_in_process;
 use function Results\GetResults\get_cat_exists_and_missing;
 use function SQLorAPI\Process\get_lang_in_process_new;
@@ -45,7 +46,7 @@ function get_sugust($title, $lang)
         $dd = [];
         foreach ($items_missing as $t) {
             $key = str_replace('_', ' ', $t);
-            $dd[$key] = $enwiki_pageviews_table[$key] ?? 0;
+            $dd[$key] = MainTables::$x_enwiki_pageviews_table[$key] ?? 0;
         }
         //---
         arsort($dd);

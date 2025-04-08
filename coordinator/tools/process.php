@@ -1,5 +1,7 @@
 <?PHP
-
+use Tables\SqlTables\TablesSql;
+use Tables\Langs\LangsTables;
+use Tables\Main\MainTables;
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Process\get_process_all;
 use function SQLorAPI\Process\get_process_all_new;
@@ -15,8 +17,7 @@ HTML;
 function make_td($tabg, $nnnn)
 {
     //---
-    global $code_to_lang, $cat_to_camp;
-    // global $Words_table, $views_sql, $user_name;
+    // global $views_sql, $user_name;
     //---
     $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? $tabg['add_date'] ?? "";
@@ -37,12 +38,12 @@ function make_td($tabg, $nnnn)
     //---
     $talk_url = "//$llang.wikipedia.org/w/index.php?title=User_talk:$user&action=edit&section=new";
     //---
-    $lang2 = $code_to_lang[$llang] ?? $llang;
+    $lang2 = LangsTables::$L_code_to_lang[$llang] ?? $llang;
     //---
     // $ccat = make_cat_url( $cat );
-    $ccat = $cat_to_camp[$cat] ?? $cat;
+    $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
     //---
-    // $worde = $word ?? $Words_table[$md_title];
+    // $worde = $word ?? MainTables::$x_Words_table[$md_title];
     //---
     $nana = make_mdwiki_title($md_title);
     //---

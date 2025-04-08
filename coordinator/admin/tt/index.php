@@ -9,7 +9,7 @@ INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT DISTINCT q.title,
 //---
 // include_once 'results/getcats.php';
 // include_once 'actions/functions.php';
-
+use Tables\SqlTables\TablesSql;
 use function Actions\Html\makeDropdown;
 use function Actions\Html\make_mdwiki_title;
 use function Results\GetCats\get_mdwiki_cat_members;
@@ -20,9 +20,8 @@ $testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidd
 //---
 function filter_stat($cat)
 {
-	global $cat_to_camp;
 	// array keys
-	$cats_titles = array_keys($cat_to_camp);
+	$cats_titles = array_keys(TablesSql::$s_cat_to_camp);
 	//---
 	$d33 = <<<HTML
 		<div class="input-group">
@@ -51,7 +50,7 @@ foreach (execute_query($translate_type_sql) as $k => $tab) {
 	$full_translates_tab[$tab['tt_title']] = ['id' => $tab['tt_id'], 'lead' => $tab['tt_lead'], 'full' => $tab['tt_full']];
 }
 //---
-$cat_titles = [];
+TablesSql::$s_cat_titles = [];
 //---
 if ($cat == 'All') {
 	foreach (execute_query('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)') as $Key => $gg) {
@@ -59,9 +58,9 @@ if ($cat == 'All') {
 			$new_titles[] = $gg['title'];
 		}
 	};
-	$cat_titles = array_keys($full_translates_tab);
+	TablesSql::$s_cat_titles = array_keys($full_translates_tab);
 } else {
-	$cat_titles = get_mdwiki_cat_members($cat, $use_cache = true, $depth = 1);
+	TablesSql::$s_cat_titles = get_mdwiki_cat_members($cat, $use_cache = true, $depth = 1);
 }
 //---
 function make_edit_icon($id, $title, $full, $lead)
@@ -125,7 +124,7 @@ $numb = 0;
 //---
 $table_rows = "";
 //---
-foreach ($cat_titles as $title) {
+foreach (TablesSql::$s_cat_titles as $title) {
 	//---
 	if (in_array($title, $new_titles)) continue;
 	//---

@@ -6,7 +6,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	error_reporting(E_ALL);
 };
 //---
-
+use Tables\Main\MainTables;
 use function Actions\Html\makeDropdown;
 use function Results\GetCats\get_mdwiki_cat_members;
 use function SQLorAPI\Get\get_td_or_sql_categories;
@@ -97,24 +97,24 @@ foreach ($titles as $title) {
 	//---
 	$qidurl = (!empty($qid)) ? "<a href='https://wikidata.org/wiki/$qid'>$qid</a>" : '';
 	//---
-	$word = $Words_table[$title] ?? 0;
+	$word = MainTables::$x_Words_table[$title] ?? 0;
 	//---
-	$allword = $All_Words_table[$title] ?? 0;
+	$allword = MainTables::$x_All_Words_table[$title] ?? 0;
 	if ($word == 0) $no_word += 1;
 	if ($allword == 0) $no_allword += 1;
 	//---
-	$refs = $Lead_Refs_table[$title] ?? 0;
+	$refs = MainTables::$x_Lead_Refs_table[$title] ?? 0;
 	//---
-	$all_refs = $All_Refs_table[$title] ?? 0;
+	$all_refs = MainTables::$x_All_Refs_table[$title] ?? 0;
 	//---
 	if ($refs == 0) $no_ref += 1;
 	if ($all_refs == 0) $no_allref += 1;
 	//---
-	$asse = $Assessments_table[$title] ?? '';
-	if (!isset($Assessments_table[$title])) $no_Importance += 1;
+	$asse = MainTables::$x_Assessments_table[$title] ?? '';
+	if (!isset(MainTables::$x_Assessments_table[$title])) $no_Importance += 1;
 	//---
-	$pv = $enwiki_pageviews_table[$title] ?? 0;
-	if (!isset($enwiki_pageviews_table[$title])) $no_pv += 1;
+	$pv = MainTables::$x_enwiki_pageviews_table[$title] ?? 0;
+	if (!isset(MainTables::$x_enwiki_pageviews_table[$title])) $no_pv += 1;
 	//---
 	//---
 	$table .= <<<HTML

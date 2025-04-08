@@ -1,7 +1,7 @@
 <?PHP
 
 // include_once 'Tables/langcode.php';
-
+use Tables\Langs\LangsTables;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
@@ -14,13 +14,12 @@ $lang = $_GET['lang'] ?? 'All';
 //---
 $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
 //---
-if ($lang !== 'All' && !isset($code_to_lang[$lang])) {
+if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
 //---
 function filter_by_language($lang)
 {
-    global $code_to_lang;
     //---
     $tabes = [];
     //---
@@ -38,7 +37,7 @@ function filter_by_language($lang)
     $lang_list = "<option data-tokens='All' value='All'>All</option>";
     //---
     foreach ($tabes as $codr) {
-        $langeee = $code_to_lang[$codr] ?? '';
+        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
         $selected = ($codr == $lang) ? 'selected' : '';
         $lang_list .= <<<HTML
 			<option data-tokens='$codr' value='$codr' $selected>$langeee</option>
