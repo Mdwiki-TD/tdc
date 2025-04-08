@@ -22,21 +22,15 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 
 use function Actions\Functions\test_print;
 use function Actions\MdwikiApi\get_mdwiki_url_with_params;
-use function Actions\Functions\open_json_file;
 use function Actions\Functions\start_with;
+use function Tables\TablesDir\open_td_Tables_file;
 
 function get_category_from_cache(string $category): array
 {
-    $tables_dir = $GLOBALS['tables_dir'] ?? __DIR__ . '/../../td/Tables';
+    $file_path = "cats_cash/{$category}.json";
 
-    $file_path = "{$tables_dir}/cats_cash/{$category}.json";
+    $data = open_td_Tables_file($file_path);
 
-    if (!file_exists($file_path)) {
-        test_print("Cache file not found: $file_path");
-        return [];
-    }
-
-    $data = open_json_file($file_path);
     if (!isset($data['list']) || !is_array($data['list'])) {
         test_print("Invalid format in JSON file: $file_path");
         return [];

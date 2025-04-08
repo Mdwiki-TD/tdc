@@ -69,7 +69,7 @@ function get_coordinator()
     if ($use_td_api) {
         $data = get_td_api(['get' => 'coordinator']);
     } else {
-        $query = "SELECT id, user FROM coordinator;";
+        $query = "SELECT id, user FROM coordinator order by id";
         //---
         $data = fetch_query($query);
     }
@@ -202,16 +202,14 @@ function get_td_or_sql_full_translators()
     if (!empty($full_translators)) return $full_translators;
     // ---
     if ($use_td_api) {
-        $data = get_td_api(['get' => 'full_translators']);
+        $full_translators = get_td_api(['get' => 'full_translators']);
     } else {
-        $query = "SELECT * FROM full_translators";
+        $query = "SELECT * FROM full_translators order by id";
         //---
-        $data = fetch_query($query);
+        $full_translators = fetch_query($query);
     }
     // ---
-    $full_translators = $data;
-    // ---
-    return $data;
+    return $full_translators;
 }
 
 function get_td_or_sql_projects()
@@ -349,13 +347,15 @@ function get_pages_langs()
     }
     // ---
     if ($use_td_api) {
-        $data = get_td_api(['get' => 'pages', 'distinct' => "1", 'select' => 'lang']);
+        $data = get_td_api(['get' => 'pages', 'distinct' => "1", 'select' => 'lang', 'lang' => 'not_empty']);
     } else {
-        $query = "SELECT DISTINCT lang FROM pages";
+        $query = "SELECT DISTINCT lang FROM pages where (lang != '' and lang IS NOT NULL)";
         $data = fetch_query($query);
     }
     // ---
     $data = array_column($data, 'lang');
+    // ---
+    // var_export(json_encode($data));
     // ---
     $pages_langs = $data;
     // ---

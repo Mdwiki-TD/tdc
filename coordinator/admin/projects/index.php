@@ -23,23 +23,23 @@ $projs = get_td_or_sql_projects();
 //---
 $form_text = '';
 //---
-foreach ($projs as $g_title => $tab) {
+foreach ($projs as $gtitle => $tab) {
 	$numb += 1;
 	//---
-	$g_id = $tab['g_id'] ?? "";
-	$g_title = $tab['g_title'] ?? "";
+	$gid = $tab['g_id'] ?? "";
+	$gtitle = $tab['g_title'] ?? "";
 	//---
 	$form_text .= <<<HTML
 	<tr>
 		<td data-content='id'>
 			<span><b>$numb</b></span>
-			<input name='g_id[]$numb' value='$g_id' hidden/>
+			<input name='g_id[]$numb' value='$gid' hidden/>
 		</td>
 	  	<td data-content='Project'>
-	  		<input class='form-control' name='g_title[]$numb' value='$g_title'/>
+	  		<input class='form-control' name='g_title[]$numb' value='$gtitle'/>
 		</td>
 	  	<td data-content='Delete'>
-	  		<input type='checkbox' name='del[]$numb' value='$g_id'/> <label> delete</label>
+	  		<input type='checkbox' name='del[]$numb' value='$gid'/> <label> delete</label>
 	  	</td>
 	</tr>
 	HTML;
