@@ -179,7 +179,7 @@ HTML;
 echo <<<HTML
 	<div class='card'>
 		<div class='card-body'>
-			<form action="index.php?ty=tt/post" method="POST">
+			<form action="index.php?ty=tt/post&cat=$cat" method="POST">
 				$testin
 				<input name='ty' value="tt/post" hidden/>
 				<div id='tt_table' class="form-group" style='display: none;'>
@@ -208,7 +208,6 @@ echo <<<HTML
 HTML;
 ?>
 <script type="text/javascript">
-
 	function add_row() {
 		$('#submit_bt').show();
 		$('#tt_table').show();
@@ -216,16 +215,22 @@ HTML;
 		var e = `
 			<tr>
 				<td>${ii}</td>
-				<input type='hidden' name='add[]${ii}'/>
-				<td><input class='form-control' name='title[]${ii}'/></td>
+				<input type='hidden' name='rows[${ii}][add]'/>
+				<td>
+					<input class='form-control' name='rows[${ii}][title]'/>
+				</td>
 
-				<td data-content='Lead'><div class='form-check form-switch'>
-				<input class='form-control' type='text' name='lead[]${ii}' value='0'/>
-				</div></td>
+				<td data-content='Lead'>
+					<div class='form-check form-switch'>
+						<input class='form-control' type='text' name='rows[${ii}][lead]' value='0'/>
+					</div>
+				</td>
 
-				<td data-content='Full'><div class='form-check form-switch'>
-				<input class='form-control' type='text' name='full[]${ii}' value='0'/>
-				</div></td>
+				<td data-content='Full'>
+					<div class='form-check form-switch'>
+						<input class='form-control' type='text' name='rows[${ii}][full]' value='0'/>
+					</div>
+				</td>
 			</tr>
 		`;
 

@@ -95,7 +95,6 @@ class Database
             // Fetch the results if it's a SELECT query
             $result = $q->fetchAll(PDO::FETCH_ASSOC);
             return $result;
-
         } catch (PDOException $e) {
             echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
             return [];
@@ -153,7 +152,7 @@ function fetch_query($sql_query, $params = null)
     return $results;
 };
 
-function sql_add_user($user_name, $email, $wiki, $project, $ido)
+function sql_add_user($user_name, $email, $wiki, $project)
 {
     // Create a new database object
     // Use a prepared statement for INSERT
@@ -163,19 +162,28 @@ function sql_add_user($user_name, $email, $wiki, $project, $ido)
     SQL;
     $params = [$user_name, $email, $wiki, $project, $user_name];
 
+    // Prepare and execute the SQL query with parameter binding
+    $results = execute_query($qua, $params = $params);
+
+    return $results;
+}
+
+function sql_update_user($user_name, $email, $wiki, $project, $ido)
+{
     // Check if $ido is set and not empty
-    if (!empty($ido) && $ido != 0 && $ido != "0") {
-        // Use a prepared statement for UPDATE
-        $qua = <<<SQL
-            UPDATE users SET
-                username = ?,
-                email = ?,
-                user_group = ?,
-                wiki = ?
-            WHERE users.user_id = ?
-        SQL;
-        $params = [$user_name, $email, $project, $wiki, $ido];
+    if (empty($ido) || $ido == 0 || $ido == "0") {
+        return;
     }
+    // Use a prepared statement for UPDATE
+    $qua = <<<SQL
+        UPDATE users SET
+            username = ?,
+            email = ?,
+            user_group = ?,
+            wiki = ?
+        WHERE users.user_id = ?
+    SQL;
+    $params = [$user_name, $email, $project, $wiki, $ido];
 
     // Prepare and execute the SQL query with parameter binding
     $results = execute_query($qua, $params = $params);

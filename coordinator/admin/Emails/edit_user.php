@@ -5,7 +5,7 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-use function Actions\MdwikiSql\sql_add_user;
+use function Actions\MdwikiSql\sql_update_user;
 use function Actions\Html\make_project_to_user;
 //---
 echo '</div><script>
@@ -47,7 +47,7 @@ function send_user($id, $user, $project, $wiki, $email)
         $wiki      = trim($wiki);
         $project   = trim($project);
         //---
-        sql_add_user($user, $email, $wiki, $project, $id);
+        sql_update_user($user, $email, $wiki, $project, $id);
         //---
     };
     //---
