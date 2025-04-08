@@ -6,17 +6,6 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	error_reporting(E_ALL);
 };
 //---
-$tables_dir = __DIR__ . '/../td/Tables';
-//---
-if (substr($tables_dir, 0, 2) == 'I:') {
-	$tables_dir = 'I:/mdwiki/mdwiki/public_html/td/Tables';
-}
-//---
-if (!getenv('tables_dir')) {
-	// set env
-	putenv('tables_dir=' . $tables_dir);
-}
-// ---
 include_once __DIR__ . '/header.php';
 //---
 use function Actions\Functions\test_print;
@@ -69,8 +58,8 @@ $corrd_folders = array_map('basename', glob('coordinator/admin/*', GLOB_ONLYDIR)
 //---
 $tools_folders = array_map(fn ($file) => basename($file, '.php'), glob('coordinator/tools/*.php'));
 //---
-test_print("corrd_folders" . json_encode($corrd_folders));
-test_print("tools_folders" . json_encode($tools_folders));
+// test_print("corrd_folders" . json_encode($corrd_folders));
+// test_print("tools_folders" . json_encode($tools_folders));
 //---
 $adminfile = __DIR__ . "/coordinator/admin/$ty.php";
 

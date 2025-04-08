@@ -11,8 +11,8 @@ use function Results\GetResults\get_cat_exists_and_missing;
 */
 
 use function Results\GetCats\get_mdwiki_cat_members;
-use function Actions\Functions\open_json_file;
 use function Actions\Functions\test_print;
+use function Tables\TablesDir\open_td_Tables_file;
 
 function get_cat_exists_and_missing($cat, $camp, $depth, $code, $use_cache = true)
 {
@@ -24,11 +24,8 @@ function get_cat_exists_and_missing($cat, $camp, $depth, $code, $use_cache = tru
     };
     test_print("members size:" . count($members));
     // ---
-    $tables_dir = isset($GLOBALS['tables_dir']) ? $GLOBALS['tables_dir'] : __DIR__ . '/../../td/Tables';
-    // ---
-    $json_file = $tables_dir . "/cash_exists/$code.json";
-
-    $exists = open_json_file($json_file);
+    $json_file = "cash_exists/$code.json";
+    $exists = open_td_Tables_file($json_file);
 
     test_print("$json_file: exists size:" . count($exists));
 

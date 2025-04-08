@@ -11,6 +11,7 @@ use function Tools\RecentHelps\do_add_date;
 */
 
 use Tables\Langs\LangsTables;
+use function Actions\Functions\test_print;
 
 function filter_recent($lang, $result)
 {
@@ -71,6 +72,7 @@ function do_add_date($results)
         $add_pup = intval($pupdate);
         //---
         if ($add_add > $add_pup) {
+            test_print("add_add($add_add) > add_pup($add_pup)");
             return true;
         }
         //---
