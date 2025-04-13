@@ -1,9 +1,11 @@
 <?php
 //---
 use function Actions\MdwikiSql\execute_query;
+use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
+$errors = [];
 $texts = [];
 //---
 foreach ($_POST['rows'] ?? [] as $key => $table) {
@@ -17,7 +19,13 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 	//---
 	if (!empty($del) && !empty($u_id)) {
 		$qua2 = "DELETE FROM full_translators WHERE id = ?";
-		execute_query($qua2, $params = [$u_id]);
+		// ---
+		$result = execute_query($qua2, $params = [$u_id]);
+		// ---
+		if ($result === false) {
+			$errors[] = "Failed to delete user $user.";
+			continue;
+		}
 		// ---
 		$texts[] = "User $user deleted.";
 		// ---
@@ -33,15 +41,13 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 		//---
 		$texts[] = "User $user Added.";
 		//---
-		execute_query($qua, $params = [$user, $user]);
+		$result = execute_query($qua, $params = [$user, $user]);
+		//---
+		if ($result === false) {
+			$errors[] = "Failed to add user $user.";
+		}
 	};
-	//---
 }
 // ---
-if (!empty($texts)) {
-	echo "<div class='container mt-3'><div class='alert alert-success' role='alert'>";
-	foreach ($texts as $text) {
-		echo "$text<br>";
-	}
-	echo "</div></div>";
-}
+echo div_alert($texts, 'success');
+echo div_alert($errors, 'danger');

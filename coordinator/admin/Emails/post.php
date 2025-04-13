@@ -21,7 +21,7 @@ if (isset($_POST['emails'])) {
 		//---
 		if (!empty($user)) {
 			//---
-			var_export(json_encode($table, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+			// var_export(json_encode($table, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 			//---
 			$user = trim($user);
 			$email     = trim($email);

@@ -3,7 +3,7 @@
 // use function Actions\MdwikiSql\update_settings;
 use function Actions\MdwikiSql\update_settings_value;
 //---
-var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
 foreach ($_POST['rows'] ?? [] as $key => $table) {
     // { "id": "2", "title": "translation_button_in_progress_table", "displayed": "Display translation button in progress table?", "value": "1", "type": "check" }

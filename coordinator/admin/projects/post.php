@@ -2,6 +2,7 @@
 //---
 use function Actions\MdwikiSql\insert_to_projects;
 use function Actions\MdwikiSql\execute_query;
+use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
@@ -42,10 +43,4 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 	//---
 }
 // ---
-if (!empty($texts)) {
-	echo "<div class='container mt-3'><div class='alert alert-success' role='alert'>";
-	foreach ($texts as $text) {
-		echo "$text<br>";
-	}
-	echo "</div></div>";
-}
+echo div_alert($texts, 'success');

@@ -214,8 +214,10 @@ HTML;
 		var ii = $('#tab_new >tr').length + 1;
 		var e = `
 			<tr>
-				<td>${ii}</td>
-				<input type='hidden' name='rows[${ii}][add]'/>
+				<td>
+					${ii}
+					<input type='hidden' name='rows[${ii}][add]'/>
+				</td>
 				<td>
 					<input class='form-control' name='rows[${ii}][title]'/>
 				</td>

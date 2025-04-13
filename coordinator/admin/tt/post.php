@@ -2,7 +2,7 @@
 //---
 use function Actions\MdwikiSql\insert_to_translate_type;
 //---
-var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
 foreach ($_POST['rows'] ?? [] as $key => $table) {
 	// '{ "ty": "tt/post", "rows": { "1": { "add": "", "title": "111111111111", "lead": "100000", "full": "10000" } } }'
