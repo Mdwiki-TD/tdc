@@ -80,40 +80,31 @@ function filter_by_language($lang)
 	return $uuu;
 }
 //---
-function filter_table($table)
+function filter_table($data, $vav, $id)
 {
-	//---
-	$tabes = [
-		"pages" => ($table == "pages") ? 'selected' : '',
-		"pages_users" => ($table == "pages_users") ? 'selected' : '',
-	];
 	//---
 	$l_list = "";
 	//---
-	foreach ($tabes as $table_name => $selected) {
-		$label = ($table_name == "pages") ? "In main space" : "In user space";
+	foreach ($data as $table_name => $label) {
+		$checked = ($table_name == $vav) ? "checked" : "";
 		$l_list .= <<<HTML
-			<option data-tokens='$table_name' value='$table_name' $selected>$label</option>
-			HTML;
-	};
+			<div class="form-check form-check-inline">
+				<input class="form-check-input"
+					type="radio"
+					name="$id"
+					id="radio_$table_name"
+					value="$table_name"
+					$checked>
+				<label class="form-check-label" for="radio_$table_name">$label</label>
+			</div>
+		HTML;
+	}
 	//---
 	$uuu = <<<HTML
 		<div class="input-group">
-			<span class="input-group-text">Table:</span>
-			<select aria-label="Language code"
-				dir="ltr"
-				class="form-select"
-				id='table'
-				name='table'
-				placeholder=''
-				data-live-search="true"
-				data-container="body"
-				data-live-search-style="begins"
-				data-bs-theme="auto"
-				data-style='btn active'
-				data-width="90%">
+			<div class="form-control" style="background-color: transparent; border: none;">
 				$l_list
-			</select>
+			</div>
 		</div>
 	HTML;
 	//---
@@ -226,29 +217,35 @@ $recent_table .= <<<HTML
 HTML;
 //---
 $filter_la = filter_by_language($lang);
-$filter_ta = filter_table($table);
+//---
+$data = [
+	"pages" => 'In main space',
+	"pages_users" => 'In user space',
+];
+//---
+$filter_ta = filter_table($data, $table, 'table');
 //---
 echo <<<HTML
-<div class='card-header'>
-	<form method='get' action='index.php'>
-		<input name='ty' value='translated' hidden/>
-		<div class='row'>
-			<div class='col-md-3'>
-				<h4>Translated Pages:</h4>
+	<div class='card-header'>
+		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
+			<input name='ty' value='translated' hidden/>
+			<div class='row'>
+				<div class='col-md-3'>
+					<h4>Translated Pages:</h4>
+				</div>
+				<div class='col-md-4'>
+					$filter_la
+				</div>
+				<div class='col-md-3'>
+					$filter_ta
+				</div>
+				<div class='aligncenter col-md-2'>
+					<input class='btn btn-outline-primary' type='submit' value='Filter' />
+				</div>
 			</div>
-			<div class='col-md-4'>
-				$filter_la
-			</div>
-			<div class='col-md-3'>
-				$filter_ta
-			</div>
-			<div class='aligncenter col-md-2'>
-				<input class='btn btn-outline-primary' type='submit' value='Filter' />
-			</div>
-		</div>
-	</form>
-</div>
-<div class='card-body'>
+		</form>
+	</div>
+	<div class='card-body'>
 HTML;
 //---
 echo $recent_table;

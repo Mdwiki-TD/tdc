@@ -25,10 +25,6 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 //---
 $tabs = [];
 //---
-$title  = $_REQUEST['title'] ?? '';
-$qid    = $_REQUEST['qid'] ?? '';
-$id     = $_REQUEST['id'] ?? '';
-//---
 echo <<<HTML
 <div class='card'>
     <div class='card-header'>
@@ -36,11 +32,13 @@ echo <<<HTML
     </div>
     <div class='card-body'>
 HTML;
-//---
-function send_qid($id, $title, $qid)
+
+function send_qid($id, $title, $qid, $qid_table)
 {
     //---
-    $qua = "UPDATE qids
+    if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
+    //---
+    $qua = "UPDATE $qid_table
     SET
         title = ?,
         qid = ?
@@ -64,14 +62,17 @@ function send_qid($id, $title, $qid)
         </script>
     HTML;
 }
-//---
 
-function echo_form($id, $title, $qid)
+function echo_form($id, $title, $qid, $qid_table)
 {
+    //---
+    if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
+    //---
     $title2 = add_quotes($title);
     //---
     echo <<<HTML
         <form action='index.php?ty=qids/edit_qid&nonav=120' method='POST'>
+            <input name='qid_table' value="$qid_table" hidden/>
             <input name='edit' value="1" hidden/>
             <div class='container'>
                 <div class='row'>
@@ -109,10 +110,21 @@ function echo_form($id, $title, $qid)
     HTML;
 }
 //---
-if (isset($_REQUEST['edit'])) {
-    send_qid($id, $title, $qid);
+if (isset($_POST['edit'])) {
+    // ---
+    $title  = $_POST['title'] ?? '';
+    $qid    = $_POST['qid'] ?? '';
+    $id     = $_POST['id'] ?? '';
+    $qid_table     = $_POST['qid_table'] ?? '';
+    // ---
+    send_qid($id, $title, $qid, $qid_table);
 } else {
-    echo_form($id, $title, $qid);
+    $title  = $_GET['title'] ?? '';
+    $qid    = $_GET['qid'] ?? '';
+    $id     = $_GET['id'] ?? '';
+    $qid_table     = $_GET['qid_table'] ?? '';
+    //---
+    echo_form($id, $title, $qid, $qid_table);
 }
 //---
 echo <<<HTML

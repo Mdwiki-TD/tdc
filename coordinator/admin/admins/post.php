@@ -1,31 +1,51 @@
 <?php
 //---
 use function Actions\MdwikiSql\execute_query;
+use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
 //---
-if (isset($_POST['del'])) {
-	for($i = 0; $i < count($_POST['del']); $i++ ) {
-		$del	= $_POST['del'][$i];
-		//---
-		if (!empty($del)) {
-			$qua2 = "DELETE FROM coordinator WHERE id = ?";
-			execute_query($qua2, $params=[$del]);
-		};
+// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+//---
+$texts = [];
+$errors = [];
+//---
+foreach ($_POST['rows'] ?? [] as $key => $table) {
+	// '{ "id": "11", "user": "Ifteebd10", "del": "11" }'
+	// '{ "id": "11", "user": "Ifteebd10", "is_new": "yes" }'
+	//---
+	$u_id  	= $table['id'] ?? '';
+	$del  	= $table['del'] ?? '';
+	//---
+	if (!empty($del)) {
+		$qua2 = "DELETE FROM coordinator WHERE id = ?";
+		// ---
+		$result = execute_query($qua2, $params = [$u_id]);
+		// ---
+		if ($result === false) {
+			$errors[] = "Failed to delete admin with ID $u_id.";
+		} else {
+			$texts[] = "Admin with ID $u_id deleted successfully.";
+		}
+		// ---
+		continue;
 	};
-};
-//---
-if (isset($_POST['user'])) {
-	for($i = 0; $i < count($_POST['user']); $i++ ) {
-		$ido  	= $_POST['id'][$i] ?? '';
-		$user  	= $_POST['user'][$i] ?? '';
+	//---
+	$user  	= $table['user'] ?? '';
+	$is_new = $table['is_new'] ?? '';
+	//---
+	$user = trim($user);
+	//---
+	if (!empty($user) && empty($u_id) && $is_new == 'yes') {
+		$qua = "INSERT INTO coordinator (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM coordinator WHERE user = ?)";
 		//---
-		$user = trim($user);
+		$result = execute_query($qua, $params = [$user, $user]);
 		//---
-		if (!empty($user) && empty($ido)) {
-			$qua = "INSERT INTO coordinator (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM coordinator WHERE user = ?)";
-			//---
-			execute_query($qua, $params=[$user, $user]);
-		};
+		if ($result === false) {
+			$errors[] = "Failed to add admin user $user.";
+		} else {
+			$texts[] = "Admin user $user added successfully.";
+		}
 	};
-};
-//---
-?>
+	//---
+}
+echo div_alert($texts, 'success');
+echo div_alert($errors, 'danger');

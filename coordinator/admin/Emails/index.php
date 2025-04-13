@@ -178,21 +178,21 @@ foreach ($users_done as $user_name => $table) {
 		</td>
 		<td data-order='$user_name' data-content='User name'>
 			<span><a href='/Translation_Dashboard/leaderboard.php?user=$user_name'>$user_name</a></span>
-			<input name='username[]$numb' value='$user_name' hidden/>
-			<input name='id[]$numb' value='$id' hidden/>
+			<input name='username_$numb' value='$user_name' hidden/>
+			<input name='id_$numb' value='$id' hidden/>
 		</td>
 		<td data-order='$email' data-search='$email' data-content='Email'>
-			<input class='form-control' size='25' name='email[]$numb' value='$email' readonly/>
+			<input class='form-control' size='25' name='email_$numb' value='$email' readonly/>
 		</td>
 		<td data-content=''>
 			$mail_icon
 		</td>
 		<td data-order='$user_group' data-search='$user_group' data-content='Project'>
-			<!-- <select name='project[]$numb' class='form-select options'>$ project_line</select> -->
-			<input class='form-control' size='25' name='project[]$numb' value='$user_group' readonly/>
+			<!-- <select name='project_$numb' class='form-select options'>$ project_line</select> -->
+			<input class='form-control' size='25' name='project_$numb' value='$user_group' readonly/>
 		</td>
 		<td data-order='$wiki' data-search='$wiki2' data-content='Wiki'>
-			<input class='form-control' size='4' name='wiki[]$numb' value='$wiki' readonly/>
+			<input class='form-control' size='4' name='wiki_$numb' value='$wiki' readonly/>
 		</td>
 		<td data-order='$live' data-content='Live'>
 			<span>$live</span>
@@ -241,7 +241,6 @@ echo <<<HTML
 						<th>Wiki</th>
 						<th>Live</th>
 						<th>Edit</th>
-						<!-- <th>Delete</th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -256,7 +255,7 @@ HTML;
 echo <<<HTML
 	<div class='card'>
 		<div class='card-body'>
-			<form action="index.php?ty=Emails" method="POST">
+			<form action="index.php?ty=Emails&project=$main_project" method="POST">
 				<input name='ty' value="Emails" hidden />
 				<div class="form-group" id='new_tab_add' style='display: none;'>
 					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
@@ -300,10 +299,10 @@ HTML;
 		var e = `
 			<tr>
 				<td>${ii}</td>
-				<td><input class='form-control' name='username[]${ii}'/></td>
-				<td><input class='form-control' size='25' name='email[]${ii}'/></td>
-				<td><select name='project[]${ii}' class='form-select'>${options}</select></td>
-				<td><input class='form-control' size='4' name='wiki[]${ii}'/></td>
+				<td><input class='form-control' name='emails[${ii}][username]'/></td>
+				<td><input class='form-control' size='25' name='emails[${ii}][email]'/></td>
+				<td><select name='emails[${ii}][project]' class='form-select'>${options}</select></td>
+				<td><input class='form-control' size='4' name='emails[${ii}][wiki]'/></td>
 			</tr>
 		`;
 		// ---

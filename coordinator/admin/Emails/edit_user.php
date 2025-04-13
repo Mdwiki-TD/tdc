@@ -5,7 +5,7 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-use function Actions\MdwikiSql\sql_add_user;
+use function Actions\MdwikiSql\sql_update_user;
 use function Actions\Html\make_project_to_user;
 //---
 echo '</div><script>
@@ -44,10 +44,17 @@ function send_user($id, $user, $project, $wiki, $email)
         //---
         $user = trim($user);
         $email     = trim($email);
+        //---
+        // Validate email format if not empty
+        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Handle invalid email - either log, set to empty, or return error
+            $email = '';
+        }
+        //---
         $wiki      = trim($wiki);
         $project   = trim($project);
         //---
-        sql_add_user($user, $email, $wiki, $project, $id);
+        sql_update_user($user, $email, $wiki, $project, $id);
         //---
     };
     //---

@@ -1,22 +1,23 @@
 <?PHP
 //---
-use function Actions\MdwikiSql\update_settings;
+// use function Actions\MdwikiSql\update_settings;
+use function Actions\MdwikiSql\update_settings_value;
 //---
-if (isset($_POST['se'])) {
-    // var_dump(json_encode($_POST));
-    $se   = $_POST['se'] ?? [];
-    foreach ($se as $index => $n) {
-        //---
-        // {"id_":"1","title_":"allow_type_of_translate","displayed_":"Allow whole translate","value_":"0","type_":"check"}
-        //---
-        $id       = $_POST["id_$n"] ?? '';
-        $title    = $_POST["title_$n"] ?? '';
-        $displayed= $_POST["displayed_$n"] ?? '';
-        $type     = $_POST["type_$n"] ?? '';
-        $value    = $_POST["value_$n"] ?? '';
-        //---
-        if (empty($title) || empty($displayed) || empty($type)) continue;
-        //---
-        $re = update_settings($id, $title, $displayed, $value, $type);
-    }
+// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+//---
+foreach ($_POST['rows'] ?? [] as $key => $table) {
+    // { "id": "2", "title": "translation_button_in_progress_table", "displayed": "Display translation button in progress table?", "value": "1", "type": "check" }
+    //---
+    $id        = $table["id"] ?? '';
+    $title     = $table["title"] ?? '';
+    $displayed = $table["displayed"] ?? '';
+    $value     = $table["value"] ?? '';
+    $type      = $table["type"] ?? '';
+    //---
+    // if (empty($title) || empty($displayed) || empty($type)) continue;
+    // $re = update_settings($id, $title, $displayed, $value, $type);
+    //---
+    if (empty($id) || $value == "") continue;
+    //---
+    $re = update_settings_value($id, $value);
 }

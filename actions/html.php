@@ -24,6 +24,7 @@ use function Actions\Html\make_project_to_user;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_translation_url;
+use function Actions\Html\div_alert; //  div_alert($texts, $type)
 */
 //---
 use Tables\SqlTables\TablesSql;
@@ -344,4 +345,20 @@ function make_target_url($target, $lang, $name = '', $deleted = false)
     }
     return $target;
 }
-//---
+
+function div_alert($texts, $type)
+{
+    $div = "";
+    // ---
+    if (empty($type))  $type = "success";
+    // ---
+    if (!empty($texts)) {
+        $div .= "<div class='container mt-3'><div class='alert alert-$type' role='alert'>";
+        foreach ($texts as $text) {
+            $div .= htmlspecialchars($text) . "<br>";
+        }
+        $div .= "</div></div>";
+    }
+    // ---
+    return $div;
+}

@@ -2,44 +2,26 @@
 //---
 use function Actions\MdwikiSql\insert_to_translate_type;
 //---
-if (isset($_POST['se'])) {
-	// echo "<pre>" . var_export($_POST, true) . "</pre>";
-    $se   = $_POST['se'] ?? [];
-    foreach ($se as $index => $n) {
-        //---
-        $id       = $_POST["id_$n"] ?? '';
-        $title    = $_POST["title_$n"] ?? '';
-        $lead     = $_POST["lead_$n"] ?? '';
-        $full     = $_POST["full_$n"] ?? '';
-        //---
-        if (empty($title)) continue;
-        //---
-        $re = insert_to_translate_type($title, $lead, $full, $tt_id=$id);
-		//---
-		// echo "<br>added: title: $title, lead: $lead, full: $full";
-		//---
-    }
+// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+//---
+foreach ($_POST['rows'] ?? [] as $key => $table) {
+	// '{ "ty": "tt/post", "rows": { "1": { "add": "", "title": "111111111111", "lead": "100000", "full": "10000" } } }'
+	// ---
+	$title 	= $table['title'] ?? '';
+	$lead 	= $table['lead'] ?? 0;
+	$full 	= $table['full'] ?? 0;
+	//---
+	if (empty($title)) continue;
+	//---
+	insert_to_translate_type($title, $lead, $full);
 }
 //---
-if (isset($_POST['add'])) {
-	// var_export($_POST['add']);
-	for($i = 0; $i < count($_POST['add']); $i++ ){
-		//---
-		$title 	= $_POST['title'][$i] ?? '';
-		$lead 	= $_POST['lead'][$i] ?? 0;
-		$full 	= $_POST['full'][$i] ?? 0;
-		//---
-        if (empty($title)) continue;
-        //---
-        $re = insert_to_translate_type($title, $lead, $full);
-		//---
-	};
-};
+$cat = $_GET['cat'] ?? '';
 //---
 echo <<<HTML
 	<div class='alert alert-success' role='alert'>Translate Type Saved...<br>
 		return to Translate Type page in 2 seconds
 	</div>
-	<meta http-equiv='refresh' content='2; url=index.php?ty=tt'>
+	<meta http-equiv='refresh' content='2; url=index.php?ty=tt&cat=$cat'>
 HTML;
 //---
