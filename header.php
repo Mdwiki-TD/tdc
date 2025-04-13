@@ -91,7 +91,7 @@ HTML;
 echo <<<HTML
 <body>
 	<header class="mb-3 border-bottom">
-		<nav id="mainnav" class="navbar navbar-expand-lg shadow">
+		<nav id="mainnav" class="navbar navbar-expand-lg bg-body-tertiary shadow">
 			<div class="container-fluid" id="navbardiv">
 				<a class="navbar-brand mb-0 h1" href="/Translation_Dashboard/index.php" style="color:#0d6efd;">
 					<span class='d-none d-sm-inline tool_title'>WikiProjectMed Translation Dashboard</span>
