@@ -65,8 +65,14 @@ $adminfile = __DIR__ . "/coordinator/admin/$ty.php";
 
 if (in_array($ty, $tools_folders)) {
 	include_once __DIR__ . "/coordinator/tools/$ty.php";
+	//
+} elseif ($ty == "sidebar") {
+	$sidebar = create_side($filename, $ty);
+	echo $sidebar;
+	//
 } elseif (in_array($ty, $corrd_folders) && user_in_coord) {
 	include_once __DIR__ . "/coordinator/admin/$ty/index.php";
+	//
 } elseif (is_file($adminfile) && user_in_coord) {
 	include_once $adminfile;
 } else {
