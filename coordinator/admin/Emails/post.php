@@ -1,7 +1,6 @@
 <?php
 //---
 use function Actions\MdwikiSql\sql_add_user;
-use function Actions\MdwikiSql\execute_query;
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
@@ -25,6 +24,13 @@ if (isset($_POST['emails'])) {
 			//---
 			$user = trim($user);
 			$email     = trim($email);
+			//---
+			// Validate email format if not empty
+			if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				// Handle invalid email - either log, set to empty, or return error
+				$email = '';
+			}
+			//---
 			$wiki      = trim($wiki);
 			$project   = trim($project);
 			//---

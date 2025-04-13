@@ -44,6 +44,13 @@ function send_user($id, $user, $project, $wiki, $email)
         //---
         $user = trim($user);
         $email     = trim($email);
+        //---
+        // Validate email format if not empty
+        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Handle invalid email - either log, set to empty, or return error
+            $email = '';
+        }
+        //---
         $wiki      = trim($wiki);
         $project   = trim($project);
         //---
