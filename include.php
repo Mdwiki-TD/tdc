@@ -24,3 +24,4 @@ include_once __DIR__ . '/tablesd/langcode.php';
 
 include_once __DIR__ . '/results/get_results.php';
 include_once __DIR__ . '/results/getcats.php';
+require_once __DIR__ . '/coordinator/tools/recent_helps.php';

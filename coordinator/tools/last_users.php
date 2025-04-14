@@ -1,25 +1,32 @@
 <?PHP
 
-require_once __DIR__ . '/recent_helps.php';
-
-
 use Tables\SqlTables\TablesSql;
 use Tables\Main\MainTables;
 use Tables\Langs\LangsTables;
 
 use function Tools\RecentHelps\filter_recent;
 use function Tools\RecentHelps\do_add_date;
+use function Actions\WikiApi\make_view_by_number;
+use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Get\get_pages_users_langs;
 // use function Actions\Html\make_cat_url;
+use function SQLorAPI\Get\get_pages_langs;
+use function SQLorAPI\Recent\get_recent_sql;
+
+$last_tables = ['pages', 'pages_users'];
+// ---
+$last_table = $_GET['last_table'] ?? 'pages';
+// ---
+$last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
 function make_td($tabg, $nnnn, $add_add)
 {
     //---
-    global $views_sql;
+    global $views_sql, $last_table;
     //---
     // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
@@ -48,13 +55,42 @@ function make_td($tabg, $nnnn, $add_add)
         $user_name = $user_name[0];
     }
     //---
+    $Campaign_td = "";
+    $mail_icon_td = "";
+    $view_td = "";
+    //---
+    if ($last_table == "pages") {
+        $views_number = $tabg['views'] ?? '';
+        //---
+        if (empty($views_number)) {
+            $views_number = $views_sql[$targe] ?? "?";
+        }
+        //---
+        // $ccat = make_cat_url( $cat );
+        $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
+        //---
+        $word = $word ?? MainTables::$x_Words_table[$md_title];
+        //---
+        $view = make_view_by_number($targe, $views_number, $llang, $pupdate);
+        //---
+        $mail_icon = (user_in_coord != false) ? make_mail_icon($tabg) : '';
+        $mail_icon_td = (!empty($mail_icon)) ? "<td data-content='Email'>$mail_icon</td>" : '';
+        //---
+        $view_td = <<<HTML
+            <td data-content='Views'>
+                $view
+            </td>
+        HTML;
+        //---
+        $Campaign_td = <<<HTML
+        <td data-content='Campaign'>
+            $ccat
+        </td>
+        HTML;
+    }
+    //---
     // $lang2 = LangsTables::$L_code_to_lang[$llang] ?? $llang;
     $lang2 = $llang;
-    //---
-    // $ccat = make_cat_url( $cat );
-    // $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
-    //---
-    // $worde = $word ?? MainTables::$x_Words_table[$md_title];
     //---
     $nana = make_mdwiki_title($md_title);
     //---
@@ -79,15 +115,19 @@ function make_td($tabg, $nnnn, $add_add)
             <td data-content='User'>
                 <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">$user_name</a> ($talk)
             </td>
+            $mail_icon_td
             <td data-content='Title'>
                 $nana
             </td>
+            $Campaign_td
+            <!-- <td>$word</td> -->
             <td data-content='Translated' class="link_container">
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $targe33
             </td>
             <td data-content='Publication date'>
                 $pupdate
             </td>
+            $view_td
             <td data-content='Fixref'>
                 <a target='_blank' href="../fixwikirefs.php?save=1&title=$targe2&lang=$llang">Fix</a>
             </td>
@@ -106,7 +146,11 @@ if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
 
 $mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
 //---
-$qsl_results = get_recent_pages_users($lang);
+if ($last_table == 'pages') {
+    $qsl_results = get_recent_sql($lang);
+} else {
+    $qsl_results = get_recent_pages_users($lang);
+}
 //---
 $add_add = do_add_date($qsl_results);
 $th_add = $add_add ? "<th>add_date</th>" : '';
@@ -120,18 +164,41 @@ foreach ($qsl_results as $tat => $tabe) {
     $recent_rows .= make_td($tabe, $noo, $add_add);
 };
 //---
+$table_id = ($last_table == 'pages') ? 'last_tabel' : 'last_users_tabel';
+//---
+if ($last_table == 'pages') {
+    $thead = <<<HTML
+        <tr>
+            <th>#</th>
+            <th>User</th>
+            $mail_th
+            <th>Title</th>
+            <th>Campaign</th>
+            <th>Translated</th>
+            <th>Publication date</th>
+            <th>Views</th>
+            <th>Fixref</th>
+            $th_add
+        </tr>
+    HTML;
+} else {
+    $thead = <<<HTML
+        <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Title</th>
+            <th>Translated</th>
+            <th>Publication date</th>
+            <th>Fixref</th>
+            $th_add
+        </tr>
+    HTML;
+}
+//---
 $recent_table = <<<HTML
-    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="last_tabel" style="font-size:90%;">
+    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="$table_id" style="font-size:90%;">
         <thead>
-            <tr>
-                <th>#</th>
-                <th>User</th>
-                <th>Title</th>
-                <th>Translated</th>
-                <th>Publication date</th>
-                <th>Fixref</th>
-                $th_add
-            </tr>
+            $thead
         </thead>
         <tbody>
             $recent_rows
@@ -139,17 +206,25 @@ $recent_table = <<<HTML
     </table>
 HTML;
 //---
-$result = get_pages_users_langs();
-
+if ($last_table == 'pages') {
+    $result = get_pages_langs();
+} else {
+    $result = get_pages_users_langs();
+}
+//---
 $uuu = filter_recent($lang, $result);
+//---
+$ty_value = ($last_table == 'pages') ? 'last' : 'last_users';
+//---
+$ty_h4 = ($last_table == 'pages') ? 'Most recent translations' : 'Recent translations in user space';
 //---
 echo <<<HTML
 <div class='card-header'>
     <form method='get' action='index.php'>
-        <input name='ty' value='last_users' hidden/>
+        <input name='ty' value='$ty_value' hidden/>
         <div class='row'>
             <div class='col-md-5'>
-                <h4>Recent translations in user space:</h4>
+                <h4>$ty_h4:</h4>
             </div>
             <div class='col-md-3'>
                 $uuu
@@ -173,6 +248,12 @@ echo $recent_table;
 
     $(document).ready(function() {
         var t = $('#last_tabel').DataTable({
+            // order: [ [6, 'desc'] ],
+            paging: false,
+            // lengthMenu: [[100, 150, 200], [250, 150, 200]],
+            // scrollY: 800
+        });
+        var t = $('#last_users_tabel').DataTable({
             order: [
                 [4, 'desc']
             ],
