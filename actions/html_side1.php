@@ -109,7 +109,8 @@ function create_side($filename, $ty)
             $sidebar .= <<<HTML
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
-                        data-bs-target="#$key-collapse" aria-expanded="true">
+                        data-bs-target="#$key-collapse" aria-expanded="false">
+                        <!-- <i class="bi bi-chevron-right"></i>  -->
                         $key
                     </button>
                     <div class="collapse $show" id="$key-collapse">
