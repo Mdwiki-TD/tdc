@@ -24,10 +24,10 @@ function echo_card_start($filename, $ty)
 	<style>
 		@media (min-width: 768px) {
 			.colmd2 {
-				width: 12% !important;
+				width: 14% !important;
 			}
 			.colmd10 {
-				width: 88% !important;
+				width: 86% !important;
 			}
 		}
 

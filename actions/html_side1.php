@@ -6,16 +6,10 @@ Usage:
 use function Actions\HtmlSide\create_side;
 */
 
-function generateListItem($id, $href, $title, $filename, $ty, $icon, $target = '')
+function generateListItem($id, $href, $title, $filename, $ty, $target = '')
 {
     // ---
     $class = $ty == $href ? 'active' : '';
-    // ---
-    // $icon = (!empty($icon)) ? "<i class='bi $icon me-1'></i>" : '';
-    // ---
-    if (!empty($icon)) {
-        $title = "<i class='bi $icon me-1'></i>" . $title;
-    }
     // ---
     $li1 = "<a class='linknave rounded' href='$filename?ty=%s'>%s</a>";
     $li2 = "<a target='_blank' class='linknave rounded' href='%s'>%s</a>";
@@ -47,46 +41,37 @@ function generateSpan($filename, $text)
 function create_side($filename, $ty)
 {
 
-    $mainMenuIcons = [
-        "Translations" => "bi-translate",
-        "Pages" => "bi-file-text",
-        "Qids" => "bi-database",
-        "Users" => "bi-people",
-        "Others" => "bi-three-dots",
-        "Tools" => "bi-tools",
-    ];
-    // ---
     $mainMenu = [
         'Translations' => [
-            ['id' => 'last', 'admin' => 0, 'href' => 'last', 'title' => 'Recent', 'icon' => ''],
-            ['id' => 'last_users', 'admin' => 0, 'href' => 'last_users', 'title' => 'Recent in User space', 'icon' => ''],
-            ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process', 'icon' => ''],
-            ['id' => 'process_total', 'admin' => 0, 'href' => 'process_total', 'title' => 'In Process (Total)', 'icon' => ''],
-            ['id' => 'publish_reports', 'admin' => 0, 'href' => '/publish_reports', 'title' => 'Publish Reports', 'target' => '_blank', 'icon' => ''],
+            ['id' => 'last', 'admin' => 0, 'href' => 'last', 'title' => 'Recent'],
+            ['id' => 'last_users', 'admin' => 0, 'href' => 'last_users', 'title' => 'Recent in User space'],
+            ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process'],
+            ['id' => 'process_total', 'admin' => 0, 'href' => 'process_total', 'title' => 'In Process (Total)'],
+            ['id' => 'publish_reports', 'admin' => 0, 'href' => '/publish_reports', 'title' => 'Publish Reports', 'target' => '_blank'],
         ],
         'Pages' => [
-            ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type', 'icon' => 'bi-translate'],
-            ['id' => 'translated', 'admin' => 1, 'href' => 'translated', 'title' => 'Translated Pages', 'icon' => 'bi-check2-square'],
-            ['id' => 'add', 'admin' => 1, 'href' => 'add', 'title' => 'Add', 'icon' => 'bi-plus-square'],
+            ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type'],
+            ['id' => 'translated', 'admin' => 1, 'href' => 'translated', 'title' => 'Translated Pages'],
+            ['id' => 'add', 'admin' => 1, 'href' => 'add', 'title' => 'Add'],
         ],
         'Qids' => [
-            ['id' => 'qidsload', 'admin' => 1, 'href' => 'qids', 'title' => 'Qids', "icon" => "bi-list-ul"],
-            // ['id' => 'qids_othersload', 'admin' => 1, 'href' => 'qids&qid_table=qids_others', 'title' => 'Qids Others', 'icon' => ''],
+            ['id' => 'qidsload', 'admin' => 1, 'href' => 'qids', 'title' => 'Qids'],
+            // ['id' => 'qids_othersload', 'admin' => 1, 'href' => 'qids&qid_table=qids_others', 'title' => 'Qids Others'],
         ],
         'Users' => [
-            ['id' => 'Emails', 'admin' => 1, 'href' => 'Emails', 'title' => 'Emails', 'icon' => ''],
-            ['id' => 'projects', 'admin' => 1, 'href' => 'projects', 'title' => 'Projects', 'icon' => ''],
-            ['id' => 'full_translators', 'admin' => 1, 'href' => 'full_translators', 'title' => 'Full translators', 'icon' => ''],
+            ['id' => 'Emails', 'admin' => 1, 'href' => 'Emails', 'title' => 'Emails'],
+            ['id' => 'projects', 'admin' => 1, 'href' => 'projects', 'title' => 'Projects'],
+            ['id' => 'full_translators', 'admin' => 1, 'href' => 'full_translators', 'title' => 'Full translators'],
         ],
         'Others' => [
-            ['id' => 'admins', 'admin' => 1, 'href' => 'admins', 'title' => 'Coordinators', 'icon' => ''],
-            ['id' => 'Campaigns', 'admin' => 1, 'href' => 'Campaigns', 'title' => 'Campaigns', 'icon' => ''],
-            ['id' => 'stat', 'admin' => 0, 'href' => 'stat', 'title' => 'Status', 'icon' => ''],
-            ['id' => 'settings', 'admin' => 1, 'href' => 'settings', 'title' => 'Settings', 'icon' => ''],
+            ['id' => 'admins', 'admin' => 1, 'href' => 'admins', 'title' => 'Coordinators'],
+            ['id' => 'Campaigns', 'admin' => 1, 'href' => 'Campaigns', 'title' => 'Campaigns'],
+            ['id' => 'stat', 'admin' => 0, 'href' => 'stat', 'title' => 'Status'],
+            ['id' => 'settings', 'admin' => 1, 'href' => 'settings', 'title' => 'Settings'],
         ],
         'Tools' => [
-            ['id' => 'wikirefs_options', 'admin' => 1, 'href' => 'wikirefs_options', 'title' => 'Fixwikirefs (Options)', 'icon' => ''],
-            ['id' => 'fixwikirefs', 'admin' => 0, 'href' => '/fixwikirefs.php', 'title' => 'Fixwikirefs', 'target' => '_blank', 'icon' => ''],
+            ['id' => 'wikirefs_options', 'admin' => 1, 'href' => 'wikirefs_options', 'title' => 'Fixwikirefs (Options)'],
+            ['id' => 'fixwikirefs', 'admin' => 0, 'href' => '/fixwikirefs.php', 'title' => 'Fixwikirefs', 'target' => '_blank'],
         ],
     ];
 
@@ -111,29 +96,22 @@ function create_side($filename, $ty)
                 $is_active = true;
             }
             // ---
-            $icon_1 = $item['icon'] ?? '';
-            // ---
             $target = $item['target'] ?? '';
             $admin = $item['admin'] ?? 0;
 
             if ($admin == 1 && !user_in_coord) continue;
 
-            $lis .= generateListItem($item['id'], $item['href'], $item['title'], $filename, $ty, $icon_1, $target);
+            $lis .= generateListItem($item['id'], $item['href'], $item['title'], $filename, $ty, $target);
         }
 
         if (!empty($lis)) {
             $show = $is_active ? 'show' : '';
             $expanded = $is_active ? 'true' : 'false';
-            // ---
-            $icon = $mainMenuIcons[$key] ?? '';
-            $icon = (!empty($icon)) ? "<i class='bi $icon me-1'></i>" : '';
-            // ---
             $sidebar .= <<<HTML
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
                         data-bs-target="#$key-collapse" aria-expanded="$expanded">
                         <!-- <i class="bi bi-chevron-right"></i>  -->
-                        $icon
                         $key
                     </button>
                     <div class="collapse $show" id="$key-collapse">
