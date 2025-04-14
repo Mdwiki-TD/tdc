@@ -15,42 +15,42 @@ $lang = $_GET['lang'] ?? 'All';
 $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
 //---
 if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
-	$lang = 'All';
+    $lang = 'All';
 };
 //---
 function filter_by_language($lang)
 {
-	//---
-	$tabes = [];
-	//---
-	$llangs = get_pages_langs();
-	//---
-	foreach ($llangs as $tat) {
-		//---
-		if (gettype($tat) !== 'string') {
-			echo "<br>tat: $tat";
-			continue;
-		}
-		//---
-		$lag = strtolower($tat);
-		//---
-		$tabes[] = $lag;
-		//---
-	};
-	//---
-	ksort($tabes);
-	//---
-	$lang_list = "<option data-tokens='All' value='All'>All</option>";
-	//---
-	foreach ($tabes as $codr) {
-		$langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
-		$selected = ($codr == $lang) ? 'selected' : '';
-		$lang_list .= <<<HTML
+    //---
+    $tabes = [];
+    //---
+    $llangs = get_pages_langs();
+    //---
+    foreach ($llangs as $tat) {
+        //---
+        if (gettype($tat) !== 'string') {
+            echo "<br>tat: $tat";
+            continue;
+        }
+        //---
+        $lag = strtolower($tat);
+        //---
+        $tabes[] = $lag;
+        //---
+    };
+    //---
+    ksort($tabes);
+    //---
+    $lang_list = "<option data-tokens='All' value='All'>All</option>";
+    //---
+    foreach ($tabes as $codr) {
+        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
+        $selected = ($codr == $lang) ? 'selected' : '';
+        $lang_list .= <<<HTML
 			<option data-tokens='$codr' value='$codr' $selected>$langeee</option>
 			HTML;
-	};
-	//---
-	$langse = <<<HTML
+    };
+    //---
+    $langse = <<<HTML
 		<div class="input-group">
 			<!-- <span class="input-group-text">Language:</span> -->
 			<select aria-label="Language code"
@@ -70,24 +70,24 @@ function filter_by_language($lang)
 			</select>
 		</div>
 	HTML;
-	//---
-	$uuu = <<<HTML
+    //---
+    $uuu = <<<HTML
 		<div class="input-group">
 			$langse
 		</div>
 	HTML;
-	//---
-	return $uuu;
+    //---
+    return $uuu;
 }
 //---
 function filter_table($data, $vav, $id)
 {
-	//---
-	$l_list = "";
-	//---
-	foreach ($data as $table_name => $label) {
-		$checked = ($table_name == $vav) ? "checked" : "";
-		$l_list .= <<<HTML
+    //---
+    $l_list = "";
+    //---
+    foreach ($data as $table_name => $label) {
+        $checked = ($table_name == $vav) ? "checked" : "";
+        $l_list .= <<<HTML
 			<div class="form-check form-check-inline">
 				<input class="form-check-input"
 					type="radio"
@@ -98,9 +98,9 @@ function filter_table($data, $vav, $id)
 				<label class="form-check-label" for="radio_$table_name">$label</label>
 			</div>
 		HTML;
-	}
-	//---
-	$uuu = <<<HTML
+    }
+    //---
+    $uuu = <<<HTML
 		<div class="input-group">
 			<span class="input-group-text">Namespace:</span>
 			<div class="form-control">
@@ -108,8 +108,8 @@ function filter_table($data, $vav, $id)
 			</div>
 		</div>
 	HTML;
-	//---
-	return $uuu;
+    //---
+    return $uuu;
 }
 //---
 $recent_table = <<<HTML
@@ -130,50 +130,50 @@ HTML;
 //---
 function make_edit_icon($id, $title, $target, $lang, $user, $pupdate, $table)
 {
-	//---
-	$edit_params = array(
-		'id'   => $id,
-		'title'     => $title,
-		'target'  => $target,
-		'lang'    => $lang,
-		'user'    => $user,
-		'pupdate' => $pupdate,
-		'table' => $table,
-		'nonav' => 1
+    //---
+    $edit_params = array(
+        'id'   => $id,
+        'title'     => $title,
+        'target'  => $target,
+        'lang'    => $lang,
+        'user'    => $user,
+        'pupdate' => $pupdate,
+        'table' => $table,
+        'nonav' => 1
 
-	);
-	//---
-	if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-		$edit_params['test'] = 1;
-	}
-	//---
-	$edit_url = "index.php?ty=translated/edit_page&" . http_build_query($edit_params);
-	//---
-	$onclick = 'pupwindow1("' . $edit_url . '")';
-	//---
-	return <<<HTML
+    );
+    //---
+    if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
+        $edit_params['test'] = 1;
+    }
+    //---
+    $edit_url = "index.php?ty=translated/edit_page&" . http_build_query($edit_params);
+    //---
+    $onclick = 'pupwindow1("' . $edit_url . '")';
+    //---
+    return <<<HTML
 		<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
 	HTML;
 }
 //---
 function make_td($tabg, $nnnn, $table)
 {
-	//---
-	$id          = $tabg['id'] ?? "";
-	//---
-	$user      = $tabg['user'] ?? "";
-	$lang      = $tabg['lang'] ?? "";
-	$md_title = trim($tabg['title'] ?? '');
-	$target      = trim($tabg['target'] ?? '');
-	$pupdate  = $tabg['pupdate'] ?? '';
-	//---
-	$mdwiki_title = make_mdwiki_title($md_title);
-	//---
-	$targe33 = make_target_url($target, $lang);
-	//---
-	$edit_icon = make_edit_icon($id, $md_title, $target, $lang, $user, $pupdate, $table);
-	//---
-	$laly = <<<HTML
+    //---
+    $id          = $tabg['id'] ?? "";
+    //---
+    $user      = $tabg['user'] ?? "";
+    $lang      = $tabg['lang'] ?? "";
+    $md_title = trim($tabg['title'] ?? '');
+    $target      = trim($tabg['target'] ?? '');
+    $pupdate  = $tabg['pupdate'] ?? '';
+    //---
+    $mdwiki_title = make_mdwiki_title($md_title);
+    //---
+    $targe33 = make_target_url($target, $lang);
+    //---
+    $edit_icon = make_edit_icon($id, $md_title, $target, $lang, $user, $pupdate, $table);
+    //---
+    $laly = <<<HTML
 		<tr>
 			<td data-content='#'>
 				$nnnn
@@ -198,18 +198,18 @@ function make_td($tabg, $nnnn, $table)
 			</td>
 		</tr>
 	HTML;
-	//---
-	return $laly;
+    //---
+    return $laly;
 };
 //---
 $qsl_results = get_recent_translated($lang, $table);
 //---
 $noo = 0;
 foreach ($qsl_results as $tat => $tabe) {
-	//---
-	$noo = $noo + 1;
-	$recent_table .= make_td($tabe, $noo, $table);
-	//---
+    //---
+    $noo = $noo + 1;
+    $recent_table .= make_td($tabe, $noo, $table);
+    //---
 };
 //---
 $recent_table .= <<<HTML
@@ -220,8 +220,8 @@ HTML;
 $filter_la = filter_by_language($lang);
 //---
 $data = [
-	"pages" => 'Main',
-	"pages_users" => 'User',
+    "pages" => 'Main',
+    "pages_users" => 'User',
 ];
 //---
 $filter_ta = filter_table($data, $table, 'table');
@@ -253,15 +253,15 @@ echo $recent_table;
 //---
 ?>
 <script>
-	$(document).ready(function() {
-		var t = $('#pages_table').DataTable({
-			// order: [[10	, 'desc']],
-			// paging: false,
-			lengthMenu: [
-				[50, 100, 150],
-				[50, 100, 150]
-			],
-			// scrollY: 800
-		});
-	});
+    $(document).ready(function() {
+        var t = $('#pages_table').DataTable({
+            // order: [[10	, 'desc']],
+            // paging: false,
+            lengthMenu: [
+                [50, 100, 150],
+                [50, 100, 150]
+            ],
+            // scrollY: 800
+        });
+    });
 </script>
