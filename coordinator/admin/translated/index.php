@@ -52,10 +52,10 @@ function filter_by_language($lang)
 	//---
 	$langse = <<<HTML
 		<div class="input-group">
-			<span class="input-group-text">Language:</span>
+			<!-- <span class="input-group-text">Language:</span> -->
 			<select aria-label="Language code"
 				dir="ltr"
-				class="selectpicker"
+				class="selectpicker bg-white"
 				id='lang'
 				name='lang'
 				placeholder='two letter code'
@@ -234,10 +234,10 @@ echo <<<HTML
 					<h4>Translated Pages:</h4>
 				</div>
 				<div class='col-md-4'>
-					$filter_la
+					$filter_ta
 				</div>
 				<div class='col-md-3'>
-					$filter_ta
+					$filter_la
 				</div>
 				<div class='aligncenter col-md-2'>
 					<input class='btn btn-outline-primary' type='submit' value='Filter' />

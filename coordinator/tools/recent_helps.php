@@ -28,30 +28,27 @@ function filter_recent($lang, $result)
             HTML;
     };
     //---
-    $langse = <<<HTML
-        <select aria-label="Language code"
-            class="selectpicker"
-            id='lang'
-            name='lang'
-            placeholder='two letter code'
-            data-live-search="true"
-            data-container="body"
-            data-live-search-style="begins"
-            data-bs-theme="auto"
-            data-style='btn active'
-            data-width="90%"
-            >
-            $lang_list
-        </select>
-    HTML;
-    //---
-    $uuu = <<<HTML
+    $result = <<<HTML
         <div class="input-group">
-            $langse
+            <!-- <span class="input-group-text">Lang:</span> -->
+            <select aria-label="Language code"
+                class="selectpicker bg-white"
+                id='lang'
+                name='lang'
+                placeholder='two letter code'
+                data-live-search="true"
+                data-container="body"
+                data-live-search-style="begins"
+                data-bs-theme="auto"
+                data-style='btn active'
+                data-width="90%"
+                >
+                $lang_list
+            </select>
         </div>
     HTML;
     //---
-    return $uuu;
+    return $result;
 }
 
 function do_add_date($results)
