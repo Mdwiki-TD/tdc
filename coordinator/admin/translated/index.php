@@ -1,6 +1,6 @@
 <?PHP
 
-// include_once 'Tables/langcode.php';
+// include_once 'tablesd/langcode.php';
 use Tables\Langs\LangsTables;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_talk_url;
