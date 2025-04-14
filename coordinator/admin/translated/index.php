@@ -7,6 +7,8 @@ use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function SQLorAPI\Recent\get_recent_translated;
 use function SQLorAPI\Get\get_pages_langs;
+use function Tools\RecentHelps\filter_table;
+use function Tools\RecentHelps\filter_recent;
 //---
 $lang = $_GET['lang'] ?? 'All';
 //---
@@ -18,7 +20,7 @@ if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
 //---
-function filter_by_language($lang)
+function get_languages()
 {
     //---
     $tabes = [];
@@ -40,76 +42,7 @@ function filter_by_language($lang)
     //---
     ksort($tabes);
     //---
-    $lang_list = "<option data-tokens='All' value='All'>All</option>";
-    //---
-    foreach ($tabes as $codr) {
-        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
-        $selected = ($codr == $lang) ? 'selected' : '';
-        $lang_list .= <<<HTML
-			<option data-tokens='$codr' value='$codr' $selected>$langeee</option>
-			HTML;
-    };
-    //---
-    $langse = <<<HTML
-		<div class="input-group">
-			<!-- <span class="input-group-text">Language:</span> -->
-			<select aria-label="Language code"
-				dir="ltr"
-				class="selectpicker bg-white"
-				id='lang'
-				name='lang'
-				placeholder='two letter code'
-				data-live-search="true"
-				data-container="body"
-				data-live-search-style="begins"
-				data-bs-theme="auto"
-				data-style='btn active'
-				data-width="70%"
-				>
-				$lang_list
-			</select>
-		</div>
-	HTML;
-    //---
-    $uuu = <<<HTML
-		<div class="input-group">
-			$langse
-		</div>
-	HTML;
-    //---
-    return $uuu;
-}
-//---
-function filter_table($data, $vav, $id)
-{
-    //---
-    $l_list = "";
-    //---
-    foreach ($data as $table_name => $label) {
-        $checked = ($table_name == $vav) ? "checked" : "";
-        $l_list .= <<<HTML
-			<div class="form-check form-check-inline">
-				<input class="form-check-input"
-					type="radio"
-					name="$id"
-					id="radio_$table_name"
-					value="$table_name"
-					$checked>
-				<label class="form-check-label" for="radio_$table_name">$label</label>
-			</div>
-		HTML;
-    }
-    //---
-    $uuu = <<<HTML
-		<div class="input-group">
-			<span class="input-group-text">Namespace:</span>
-			<div class="form-control">
-				$l_list
-			</div>
-		</div>
-	HTML;
-    //---
-    return $uuu;
+    return $tabes;
 }
 //---
 $recent_table = <<<HTML
@@ -217,7 +150,8 @@ $recent_table .= <<<HTML
 	</table>
 HTML;
 //---
-$filter_la = filter_by_language($lang);
+$lang_table = get_languages();
+$filter_la = filter_recent($lang, $lang_table);
 //---
 $data = [
     "pages" => 'Main',

@@ -1,6 +1,4 @@
 <?PHP
-require_once __DIR__ . '/recent_helps.php';
-
 
 use Tables\SqlTables\TablesSql;
 use Tables\Main\MainTables;
@@ -18,6 +16,7 @@ use function SQLorAPI\Get\get_pages_users_langs;
 // use function Actions\Html\make_cat_url;
 use function SQLorAPI\Get\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
+use function Tools\RecentHelps\filter_table;
 
 $last_tables = ['pages', 'pages_users'];
 // ---
@@ -25,37 +24,6 @@ $last_table = $_GET['last_table'] ?? 'pages';
 // ---
 $last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
-function filter_table($data, $vav, $id)
-{
-    //---
-    $l_list = "";
-    //---
-    foreach ($data as $table_name => $label) {
-        $checked = ($table_name == $vav) ? "checked" : "";
-        $l_list .= <<<HTML
-			<div class="form-check form-check-inline">
-				<input class="form-check-input"
-					type="radio"
-					name="$id"
-					id="radio_$table_name"
-					value="$table_name"
-					$checked>
-				<label class="form-check-label" for="radio_$table_name">$label</label>
-			</div>
-		HTML;
-    }
-    //---
-    $uuu = <<<HTML
-		<div class="input-group">
-			<span class="input-group-text">Namespace:</span>
-			<div class="form-control">
-				$l_list
-			</div>
-		</div>
-	HTML;
-    //---
-    return $uuu;
-}
 function make_td($tabg, $nnnn, $add_add)
 {
     //---

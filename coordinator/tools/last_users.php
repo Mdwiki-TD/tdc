@@ -1,6 +1,4 @@
 <?PHP
-require_once __DIR__ . '/recent_helps.php';
-
 
 use Tables\SqlTables\TablesSql;
 use Tables\Main\MainTables;

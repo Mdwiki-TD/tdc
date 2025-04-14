@@ -7,6 +7,7 @@ require_once __DIR__ . '/recent_helps.php';
 
 use function Tools\RecentHelps\filter_recent;
 use function Tools\RecentHelps\do_add_date;
+use function Tools\RecentHelps\filter_table;
 
 */
 
@@ -76,4 +77,36 @@ function do_add_date($results)
     };
     //---
     return false;
+}
+
+function filter_table($data, $vav, $id)
+{
+    //---
+    $l_list = "";
+    //---
+    foreach ($data as $table_name => $label) {
+        $checked = ($table_name == $vav) ? "checked" : "";
+        $l_list .= <<<HTML
+			<div class="form-check form-check-inline">
+				<input class="form-check-input"
+					type="radio"
+					name="$id"
+					id="radio_$table_name"
+					value="$table_name"
+					$checked>
+				<label class="form-check-label" for="radio_$table_name">$label</label>
+			</div>
+		HTML;
+    }
+    //---
+    $uuu = <<<HTML
+		<div class="input-group">
+			<span class="input-group-text">Namespace:</span>
+			<div class="form-control">
+				$l_list
+			</div>
+		</div>
+	HTML;
+    //---
+    return $uuu;
 }
