@@ -32,6 +32,8 @@ if (isset($GLOBALS['time_start'])) {
 
 	$(".Dropdown_menu_toggle").on("click", function() {
 		$(".div_menu").toggleClass("mactive");
+		// ---
+		$(".Dropdown_menu_toggle").text($(".div_menu").hasClass("mactive") ? "✖ Close list" : "☰ Open list");
 	});
 
 	$('.sortable').DataTable({
