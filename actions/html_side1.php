@@ -115,7 +115,9 @@ function create_side($filename, $ty)
                         $key
                     </button>
                     <div class="collapse $show" id="$key-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <ul class="
+                        navbar-nav flex-row flex-wrap
+                        btn-toggle-nav list-unstyled fw-normal pb-1 small">
                             $lis
                         </ul>
                     </div>
