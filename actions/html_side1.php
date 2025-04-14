@@ -59,7 +59,7 @@ function create_side($filename, $ty)
     $mainMenu = [
         'Translations' => [
             ['id' => 'last', 'admin' => 0, 'href' => 'last', 'title' => 'Recent', 'icon' => 'bi-clock-history'],
-            ['id' => 'last_users', 'admin' => 0, 'href' => 'last_users', 'title' => 'Recent in User space', 'icon' => 'bi-person-workspace'],
+            // ['id' => 'last_users', 'admin' => 0, 'href' => 'last_users', 'title' => 'Recent in User space', 'icon' => 'bi-person-workspace'],
             ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process', 'icon' => 'bi-hourglass'],
             ['id' => 'process_total', 'admin' => 0, 'href' => 'process_total', 'title' => 'In Process (Total)', 'icon' => 'bi-hourglass-split'],
             ['id' => 'publish_reports', 'admin' => 0, 'href' => '/publish_reports', 'title' => 'Publish Reports', 'target' => '_blank', 'icon' => 'bi-file-earmark-text'],

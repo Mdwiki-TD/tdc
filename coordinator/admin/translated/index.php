@@ -102,7 +102,8 @@ function filter_table($data, $vav, $id)
 	//---
 	$uuu = <<<HTML
 		<div class="input-group">
-			<div class="form-control" style="background-color: transparent; border: none;">
+			<span class="input-group-text">Namespace:</span>
+			<div class="form-control">
 				$l_list
 			</div>
 		</div>
@@ -219,8 +220,8 @@ HTML;
 $filter_la = filter_by_language($lang);
 //---
 $data = [
-	"pages" => 'In main space',
-	"pages_users" => 'In user space',
+	"pages" => 'Main',
+	"pages_users" => 'User',
 ];
 //---
 $filter_ta = filter_table($data, $table, 'table');
