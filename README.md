@@ -42,7 +42,7 @@ TDC includes a variety of tools categorized into different sections:
 flowchart TD
     %% Presentation Layer
     subgraph "Presentation Layer"
-        F1["Frontend: Dashboard & Login"] 
+        F1["Frontend: Dashboard & Login"]
     end
 
     %% Business Logic Layer
@@ -50,7 +50,7 @@ flowchart TD
         AL["Actions: mdwiki_sql.php - Handles wiki translation operations (SQL SELECT/WRITE)"]
         API["API/SQL Module: Endpoints (index, recent_data[SELECT], process_data[WRITE], include)"]
         AUTH["Auth Module: Manages authentication (SQL SELECT/WRITE)"]
-        
+
         subgraph "Coordinator Admin Modules"
             CAM["Campaigns Module: Lists campaigns and updates records (SELECT/WRITE)"]
             EMA["Emails Module: Retrieves and updates email data (SELECT/WRITE)"]
@@ -101,7 +101,7 @@ flowchart TD
     TOOLS -->|"SQL SELECT/WRITE"| DB
 
     %% Click Events for Component Mapping
-    click DB "https://github.com/mdwiki-td/tdc/blob/main/Tables/tables.php"
+    click DB "https://github.com/mdwiki-td/tdc/blob/main/tablesd/tables.php"
     click AL "https://github.com/mdwiki-td/tdc/blob/main/actions/mdwiki_sql.php"
     click API "https://github.com/mdwiki-td/tdc/blob/main/api_or_sql/index.php"
     click AUTH "https://github.com/mdwiki-td/tdc/blob/main/auth/index.php"
