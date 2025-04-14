@@ -24,10 +24,10 @@ function echo_card_start($filename, $ty)
 	<style>
 		@media (min-width: 768px) {
 			.colmd2 {
-				width: 12% !important;
+				width: 14% !important;
 			}
 			.colmd10 {
-				width: 88% !important;
+				width: 86% !important;
 			}
 		}
 
@@ -65,8 +65,14 @@ $adminfile = __DIR__ . "/coordinator/admin/$ty.php";
 
 if (in_array($ty, $tools_folders)) {
 	include_once __DIR__ . "/coordinator/tools/$ty.php";
+	//
+} elseif ($ty == "sidebar") {
+	$sidebar = create_side($filename, $ty);
+	echo $sidebar;
+	//
 } elseif (in_array($ty, $corrd_folders) && user_in_coord) {
 	include_once __DIR__ . "/coordinator/admin/$ty/index.php";
+	//
 } elseif (is_file($adminfile) && user_in_coord) {
 	include_once $adminfile;
 } else {

@@ -80,7 +80,7 @@ function create_side($filename, $ty)
     $sidebar = <<<HTML
         <!-- $homeSpan -->
         <div class="Dropdown_menu_toggle px-3">☰ Open list</div>
-        <div class="div_menu">
+        <div class="div_menu navbar-collapse">
         <ul class="list-unstyled">
     HTML;
 
@@ -106,14 +106,18 @@ function create_side($filename, $ty)
 
         if (!empty($lis)) {
             $show = $is_active ? 'show' : '';
+            $expanded = $is_active ? 'true' : 'false';
             $sidebar .= <<<HTML
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
-                        data-bs-target="#$key-collapse" aria-expanded="true">
+                        data-bs-target="#$key-collapse" aria-expanded="$expanded">
+                        <!-- <i class="bi bi-chevron-right"></i>  -->
                         $key
                     </button>
-                    <div class="collapse $show" id="$key-collapse" style="">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <div class="collapse $show" id="$key-collapse">
+                        <ul class="
+                        navbar-nav flex-row flex-wrap
+                        btn-toggle-nav list-unstyled fw-normal pb-1 small">
                             $lis
                         </ul>
                     </div>
