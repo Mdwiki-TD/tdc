@@ -31,9 +31,9 @@ function filter_recent($lang, $result)
     //---
     $result = <<<HTML
         <div class="input-group">
-            <!-- <span class="input-group-text">Lang:</span> -->
+            <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-white -->
             <select aria-label="Language code"
-                class="selectpicker bg-white"
+                class="selectpicker"
                 id='lang'
                 name='lang'
                 placeholder='two letter code'
