@@ -15,12 +15,15 @@ function verify_csrf_token()
 	// ---
 	// بدء الجلسة إذا لم تكن مفتوحة بالفعل
 	if (session_status() === PHP_SESSION_NONE) {
+		session_name("mdwikitoolforgeoauth");
 		session_start();
 	}
 
 	// التحقق مما إذا كان هناك CSRF Tokens في الجلسة
 	if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
 		$_SESSION['csrf_tokens'] = [];
+		echo "No csrf tokens in session!";
+		return true;
 	}
 
 	// التحقق من وجود Token في الطلب
@@ -66,6 +69,7 @@ function verify_csrf_token()
 function generate_csrf_token()
 {
 	if (session_status() === PHP_SESSION_NONE) {
+		session_name("mdwikitoolforgeoauth");
 		session_start();
 	}
 

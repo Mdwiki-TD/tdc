@@ -18,6 +18,7 @@ if ($_SERVER['SERVER_NAME'] != 'localhost') {
 $username = get_from_cookie('username');
 //---
 if ($_SERVER['SERVER_NAME'] == 'localhost') {
+	session_name("mdwikitoolforgeoauth");
 	session_start();
 	$username = $_SESSION['username'] ?? '';
 } elseif (!empty($username)) {

@@ -126,6 +126,7 @@ function echo_form($title, $lead, $full, $id)
 }
 //---
 if (isset($_POST['edit'])) {
+    //---
     if (verify_csrf_token()) {
         send_qid($id, $title, $lead, $full);
     }
