@@ -2,7 +2,9 @@
 //---
 use Tables\Main\MainTables;
 use function Actions\MdwikiSql\execute_query;
+use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
 use function TDWIKI\csrf\verify_csrf_token;
+
 function insert_to_pages($t)
 {
 	//---
@@ -56,6 +58,9 @@ function add_to_db($title, $type, $cat, $lang, $user, $target, $pupdate)
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
 if (verify_csrf_token()) {
+	$texts = [];
+	$errors = [];
+	//---
 	foreach ($_POST['rows'] ?? [] as $key => $table) {
 		// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
 		//---
@@ -69,8 +74,19 @@ if (verify_csrf_token()) {
 		//---
 		if (!empty($mdtitle) && !empty($lang) && !empty($user)) { // && !empty($target)
 			//---
-			add_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate);
+			$result = add_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate);
 			//---
-		};
+			if ($result === false) {
+				$errors[] = "Failed to add translations.";
+			} else {
+				$texts[] = "Translations added successfully.";
+			}
+			// ---
+		} else {
+			$errors[] = "Failed to add translations. Missing required fields.";
+		}
 	}
+	// ---
+	echo div_alert($texts, 'success');
+	echo div_alert($errors, 'danger');
 }
