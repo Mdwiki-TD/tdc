@@ -9,16 +9,15 @@ use function TDWIKI\csrf\generate_csrf_token;
 use function TDWIKI\csrf\verify_csrf_token; // if (verify_csrf_token())  {
 */
 
+if (session_status() === PHP_SESSION_NONE) {
+	// 	session_name("mdwikitoolforgeoauth");
+	session_start();
+}
+
 function verify_csrf_token()
 {
 	// return true;
 	// ---
-	// بدء الجلسة إذا لم تكن مفتوحة بالفعل
-	// if (session_status() === PHP_SESSION_NONE) {
-	// 	session_name("mdwikitoolforgeoauth");
-	// 	session_start();
-	// }
-
 	// التحقق مما إذا كان هناك CSRF Tokens في الجلسة
 	if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
 		$_SESSION['csrf_tokens'] = [];
@@ -68,11 +67,6 @@ function verify_csrf_token()
 
 function generate_csrf_token()
 {
-	// if (session_status() === PHP_SESSION_NONE) {
-	// 	session_name("mdwikitoolforgeoauth");
-	// 	session_start();
-	// }
-
 	$token = bin2hex(random_bytes(32));
 	if (!isset($_SESSION['csrf_tokens'])) {
 		$_SESSION['csrf_tokens'] = [];
@@ -80,4 +74,3 @@ function generate_csrf_token()
 	$_SESSION['csrf_tokens'][] = $token; // إضافة Token جديد إلى القائمة
 	return $token;
 }
-//---
