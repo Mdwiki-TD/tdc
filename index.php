@@ -8,10 +8,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 //---
 include_once __DIR__ . '/header.php';
 //---
-if (session_status() === PHP_SESSION_NONE) {
-	session_name("mdwikitoolforgeoauth");
-	session_start();
-}
+// if (session_status() === PHP_SESSION_NONE) session_start();
 //---
 use function Actions\Functions\test_print;
 use function Actions\HtmlSide\create_side;
