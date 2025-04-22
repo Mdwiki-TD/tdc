@@ -52,11 +52,19 @@ function make_settings_tab($tabe)
     HTML;
     //---
     foreach ($tabe as $key => $v) {
-        $nn += 1;
+        // ---
+        $ignored = $v['ignored'] ?? 0;
+        // ---
+        if ($ignored == 1 || $ignored == "1") {
+            continue;
+        }
+        // ---
         $id       = $v['id'] ?? "";
         $title    = $v['title'] ?? "";
         $displayed = $v['displayed'] ?? "";
         $value    = $v['value'] ?? "";
+        //---
+        $nn += 1;
         //---
         $type     = $v['type'] ?? $v['Type'] ?? "";
         //---

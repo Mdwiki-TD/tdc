@@ -348,7 +348,7 @@ function get_td_or_sql_settings()
     if ($use_td_api) {
         $setting_d = get_td_api(['get' => 'settings']);
     } else {
-        $query = "select id, title, displayed, value, Type from settings";
+        $query = "select id, title, displayed, value, Type, ignored from settings";
         //---
         $setting_d = fetch_query($query);
     }
