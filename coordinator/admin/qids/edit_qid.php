@@ -9,6 +9,8 @@ if (user_in_coord == false) {
 //---
 use function Actions\MdwikiSql\execute_query;
 use function Actions\Html\add_quotes;
+use function TDWIKI\csrf\generate_csrf_token;
+use function TDWIKI\csrf\verify_csrf_token;
 //---
 echo '</div><script>
     $("#mainnav").hide();
@@ -70,8 +72,11 @@ function echo_form($id, $title, $qid, $qid_table)
     //---
     $title2 = add_quotes($title);
     //---
+    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+    //---
     echo <<<HTML
-        <form action='index.php?ty=qids/edit_qid&nonav=120' method='POST'>
+        <form action='index.php?ty=qids/edit_qid&nonav=120' method="POST">
+            <input name='csrf_token' value="$csrf_token" hidden />
             <input name='qid_table' value="$qid_table" hidden/>
             <input name='edit' value="1" hidden/>
             <div class='container'>
@@ -110,7 +115,7 @@ function echo_form($id, $title, $qid, $qid_table)
     HTML;
 }
 //---
-if (isset($_POST['edit'])) {
+if (isset($_POST['edit']) && verify_csrf_token()) {
     // ---
     $title  = $_POST['title'] ?? '';
     $qid    = $_POST['qid'] ?? '';

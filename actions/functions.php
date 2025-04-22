@@ -18,12 +18,6 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 
 define('print_te', $print_t);
 
-// include_once __DIR__ . '/wiki_api.php';
-// include_once __DIR__ . '/mdwiki_api.php';
-// include_once __DIR__ . '/mdwiki_sql.php';
-// include_once __DIR__ . '/td_api.php';
-// include_once __DIR__ . '/../api_or_sql/include.php';
-
 // use function Actions\TDApi\get_td_api;
 
 function test_print($s)

@@ -15,6 +15,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 //---
 // use function Infos\TdConfig\get_configs;
 use function SQLorAPI\Get\get_td_or_sql_settings;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 // $conf = get_configs('conf.json');
 //---
@@ -22,13 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/post.php';
 }
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
     <div class='card-header'>
         <h4>Settings:</h4>
     </div>
     <div class='card-body'>
         <div class='row'>
-            <form action='index.php' method='POST'>
+            <form action='index.php' method="POST">
+                <input name='csrf_token' value="$csrf_token" hidden />
                 <input name='ty' value='settings' hidden/>
     HTML;
 //---

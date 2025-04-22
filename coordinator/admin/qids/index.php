@@ -8,6 +8,7 @@ if (user_in_coord == false) {
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Get\get_td_or_sql_qids;
 use function SQLorAPI\Get\get_td_or_sql_qids_others;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 $qid_table = $_GET['qid_table'] ?? 'qids';
 
@@ -191,10 +192,13 @@ echo <<<HTML
 	</div>
 HTML;
 // ---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
 	<div class='card'>
 		<div class='card-body'>
 			<form action="index.php?ty=$qid_table/post&dis=$dis&qid_table=$qid_table" method="POST">
+				<input name='csrf_token' value="$csrf_token" hidden />
 				$testin
 				<input name='ty' value="qids/post" hidden/>
 				<input name='qid_table' value="$qid_table" hidden/>

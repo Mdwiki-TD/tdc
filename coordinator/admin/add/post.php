@@ -2,7 +2,7 @@
 //---
 use Tables\Main\MainTables;
 use function Actions\MdwikiSql\execute_query;
-
+use function TDWIKI\csrf\verify_csrf_token;
 function insert_to_pages($t)
 {
 	//---
@@ -55,20 +55,22 @@ function add_to_db($title, $type, $cat, $lang, $user, $target, $pupdate)
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
-foreach ($_POST['rows'] ?? [] as $key => $table) {
-	// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
-	//---
-	$mdtitle	= $table['mdtitle'] ?? '';
-	$cat		= rawurldecode($table['cat']) ?? '';
-	$type		= $table['type'] ?? '';
-	$user		= rawurldecode($table['user']) ?? '';
-	$lang		= $table['lang'] ?? '';
-	$target		= $table['target'] ?? '';
-	$pupdate	= $table['pupdate'] ?? '';
-	//---
-	if (!empty($mdtitle) && !empty($lang) && !empty($user)) { // && !empty($target)
+if (verify_csrf_token()) {
+	foreach ($_POST['rows'] ?? [] as $key => $table) {
+		// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
 		//---
-		add_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate);
+		$mdtitle	= $table['mdtitle'] ?? '';
+		$cat		= rawurldecode($table['cat']) ?? '';
+		$type		= $table['type'] ?? '';
+		$user		= rawurldecode($table['user']) ?? '';
+		$lang		= $table['lang'] ?? '';
+		$target		= $table['target'] ?? '';
+		$pupdate	= $table['pupdate'] ?? '';
 		//---
-	};
-};
+		if (!empty($mdtitle) && !empty($lang) && !empty($user)) { // && !empty($target)
+			//---
+			add_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate);
+			//---
+		};
+	}
+}

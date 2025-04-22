@@ -9,6 +9,8 @@ if (user_in_coord == false) {
 //---
 use function Actions\MdwikiSql\execute_query;
 use function Actions\Html\add_quotes;
+use function TDWIKI\csrf\generate_csrf_token;
+use function TDWIKI\csrf\verify_csrf_token;
 //---
 echo '</div><script>
     $("#mainnav").hide();
@@ -103,8 +105,11 @@ function echo_form($id, $title, $target, $lang, $user, $pupdate, $table)
     $title2 = add_quotes($title);
     $target2 = add_quotes($target);
     //---
+    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+    //---
     echo <<<HTML
-        <form action='index.php?ty=translated/edit_page&nonav=120' method='POST'>
+        <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
+            <input name='csrf_token' value="$csrf_token" hidden />
             <input type='text' id='id' name='id' value='$id' hidden/>
             <input name='edit' value="1" hidden/>
             <input name='table' value="$table" hidden/>
@@ -165,10 +170,12 @@ function echo_form($id, $title, $target, $lang, $user, $pupdate, $table)
     HTML;
 }
 //---
-if (isset($_REQUEST['delete'])) {
-    delete_page($_REQUEST['delete'], $table);
-} elseif (isset($_REQUEST['edit'])) {
-    edit_page($id, $title, $target, $lang, $user, $pupdate, $table);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token()) {
+    if (isset($_POST['delete'])) {
+        delete_page($_POST['delete'], $table);
+    } elseif (isset($_POST['edit'])) {
+        edit_page($id, $title, $target, $lang, $user, $pupdate, $table);
+    }
 } else {
     echo_form($id, $title, $target, $lang, $user, $pupdate, $table);
 }

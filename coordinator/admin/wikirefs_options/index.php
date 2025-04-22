@@ -15,6 +15,8 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 //---
 use function Infos\TdConfig\get_configs;
 use function SQLorAPI\Get\get_pages_langs;
+use function TDWIKI\csrf\generate_csrf_token;
+
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/post.php';
@@ -23,15 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $tabes = get_configs('fixwikirefs.json');
 //---
 $testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
-//---
-/*
-$ul = '<ul>';
-foreach ($_POST as $key => $values) {
-    $vv = var_export($values, $return = true);
-    $ul .= "<li>$key:$vv</li>";
-};
-$ul .= "</ul>";
-echo $ul;*/
 //---
 function make_td($lang, $tabg, $numb)
 {
@@ -98,12 +91,15 @@ foreach ($tabes as $lang => $tab) {
     //---
 };
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
     <div class='card-header'>
         <h4>Fix wikirefs options:</h4>
     </div>
     <div class='card-body'>
         <form action="index.php?ty=wikirefs_options" method="POST">
+            <input name='csrf_token' value="$csrf_token" hidden />
             $testin
             <input name="ty" value="wikirefs_options" hidden/>
 			<div class="form-group">

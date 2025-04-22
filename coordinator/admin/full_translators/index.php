@@ -6,6 +6,7 @@ if (user_in_coord == false) {
 };
 //---
 use function SQLorAPI\Get\get_td_or_sql_full_translators;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
@@ -63,12 +64,15 @@ $form_text_plus = <<<HTML
 	</tr>
 HTML;
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<h4>Full article translators:</h4>
 	</div>
 	<div class='card-body'>
 		<form action="index.php?ty=full_translators" method="POST">
+			<input name='csrf_token' value="$csrf_token" hidden />
 			<input name='ty' value="full_translators" hidden />
 			<div class="form-group">
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">

@@ -1,8 +1,8 @@
 <?php
 //---
 if (user_in_coord == false) {
-  echo "<meta http-equiv='refresh' content='0; url=index.php'>";
-  exit;
+	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+	exit;
 };
 //---
 include_once 'coordinator/admin/Emails/sugust.php';
@@ -13,13 +13,14 @@ use function Actions\WikiApi\get_views;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_target_url;
 use function Emails\Sugust\get_sugust;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 echo "</div>";
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
 };
 //---
 $hoste = 'https://tools-static.wmflabs.org/cdnjs';
@@ -50,11 +51,11 @@ $sugust_tab = get_sugust($title, $lang);
 $sugust = $sugust_tab['sugust'] ?? '';
 //---
 $here_params = array(
-  // 'username' => rawurlencode($user),
-  'code' => $lang,
-  'cat' => 'RTT',
-  'type' => 'lead',
-  'title' => $sugust
+	// 'username' => rawurlencode($user),
+	'code' => $lang,
+	'cat' => 'RTT',
+	'type' => 'lead',
+	'title' => $sugust
 );
 //---
 $here_url = "https://mdwiki.toolforge.org/Translation_Dashboard/translate/medwiki.php?" . http_build_query($here_params);
@@ -67,7 +68,7 @@ $Emails_array = [];
 
 foreach (fetch_query("select username, email from users;") as $Key => $ta) {
 
-  $Emails_array[$ta['username']] = $ta['email'];
+	$Emails_array[$ta['username']] = $ta['email'];
 };
 //---
 $email_to = $Emails_array[$user] ?? '';
@@ -78,19 +79,19 @@ $sugust2 = make_mdwiki_title($sugust);
 
 //---
 $url_views_2 = 'https://'
-  . 'pageviews.wmcloud.org/?project=' . $lang . '.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&range=all-time&pages=' . rawurlEncode($target);
+	. 'pageviews.wmcloud.org/?project=' . $lang . '.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&range=all-time&pages=' . rawurlEncode($target);
 //---
 $start = !empty($date) ? $date : '2019-01-01';
 $end = date("Y-m-d", strtotime("yesterday"));
 //---
 $url_views_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
-  'project' => "$lang.wikipedia.org",
-  'platform' => 'all-access',
-  'agent' => 'all-agents',
-  'start' => $start,
-  'end' => $end,
-  'redirects' => '0',
-  'pages' => $target,
+	'project' => "$lang.wikipedia.org",
+	'platform' => 'all-access',
+	'agent' => 'all-agents',
+	'start' => $start,
+	'end' => $end,
+	'redirects' => '0',
+	'pages' => $target,
 ));
 //---
 // $views2 = "<font color='#0000ff'>$views people</font>";
@@ -193,9 +194,12 @@ $mag = <<<HTML
 //---
 $post_php = "/gmail1/index.php";
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
     <div class1='container-fluid'>
-        <form action='$post_php' method='POST'>
+        <form action='$post_php' method="POST">
+          <input name='csrf_token' value="$csrf_token" hidden />
             <input type='hidden' name='test' value='$test'/>
             <input type='hidden' name='lang' value='$lang'/>
             <input type='hidden' name='nonav' value='1'/>
@@ -245,10 +249,10 @@ HTML;
 //---
 ?>
 <script>
-  $('#msg').summernote({
-    placeholder: 'Hello Bootstrap 4',
-    tabsize: 6,
-    // width: 370,
-    height: 350
-  });
+	$('#msg').summernote({
+		placeholder: 'Hello Bootstrap 4',
+		tabsize: 6,
+		// width: 370,
+		height: 350
+	});
 </script>

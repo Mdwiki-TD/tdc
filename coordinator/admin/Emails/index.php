@@ -12,6 +12,7 @@ use function Actions\MdwikiSql\fetch_query;
 use function SQLorAPI\Get\get_users_by_last_pupdate;
 use function SQLorAPI\Get\get_td_or_sql_count_pages_not_empty;
 use function SQLorAPI\Get\get_td_or_sql_page_user_not_in_users;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
@@ -252,10 +253,13 @@ echo <<<HTML
 	</div>
 HTML;
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
 	<div class='card'>
 		<div class='card-body'>
 			<form action="index.php?ty=Emails&project=$main_project" method="POST">
+				<input name='csrf_token' value="$csrf_token" hidden />
 				<input name='ty' value="Emails" hidden />
 				<div class="form-group" id='new_tab_add' style='display: none;'>
 					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>

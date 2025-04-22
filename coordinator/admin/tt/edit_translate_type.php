@@ -9,6 +9,8 @@ if (user_in_coord == false) {
 
 use function Actions\MdwikiSql\insert_to_translate_type;
 use function Actions\Html\add_quotes;
+use function TDWIKI\csrf\generate_csrf_token;
+use function TDWIKI\csrf\verify_csrf_token;
 //---
 echo '</div><script>
     $("#mainnav").hide();
@@ -63,8 +65,11 @@ function echo_form($title, $lead, $full, $id)
     //---
     $title2 = add_quotes($title);
     //---
+    $csrf_token = generate_csrf_token();
+    //---
     echo <<<HTML
-        <form action='index.php?ty=tt/edit_translate_type&nonav=120' method='POST'>
+        <form action='index.php?ty=tt/edit_translate_type&nonav=120' method="POST">
+            <input name='csrf_token' value="$csrf_token" hidden />
             <input name='edit' value="1" hidden/>
             <div class='container'>
                 <div class='row'>
@@ -120,7 +125,7 @@ function echo_form($title, $lead, $full, $id)
     HTML;
 }
 //---
-if (isset($_REQUEST['edit'])) {
+if (isset($_POST['edit']) && verify_csrf_token()) {
     send_qid($id, $title, $lead, $full);
     //---
 } else {

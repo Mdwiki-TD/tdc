@@ -8,6 +8,10 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 //---
 include_once __DIR__ . '/header.php';
 //---
+if (session_status() === PHP_SESSION_NONE) {
+	session_start();
+}
+//---
 use function Actions\Functions\test_print;
 use function Actions\HtmlSide\create_side;
 
@@ -17,9 +21,9 @@ echo <<<HTML
 	<!-- <div id="maindiv" class="container-fluid"> -->
 HTML;
 //---
-function echo_card_start($filename, $ty)
+function echo_card_start($file_name, $ty)
 {
-	$sidebar = create_side($filename, $ty);
+	$sidebar = create_side($file_name, $ty);
 	echo <<<HTML
 	<style>
 		@media (min-width: 768px) {
@@ -43,13 +47,13 @@ function echo_card_start($filename, $ty)
 	HTML;
 }
 //---
-$ty = $_REQUEST['ty'] ?? 'last';
+$ty = $_GET['ty'] ?? $_POST['ty'] ?? 'last';
 //---
 if ($ty == 'translate_type') $ty = 'tt';
 //---
 $filename = $_SERVER['SCRIPT_NAME'];
 //---
-if (!isset($_REQUEST['nonav'])) {
+if (!isset($_GET['nonav'])) {
 	echo_card_start($filename, $ty);
 };
 //---
