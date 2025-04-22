@@ -2,6 +2,7 @@
 //---
 include_once __DIR__ . '/vendor_load.php';
 //---
+use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
 //---
 // get the root path from __FILE__ , split before public_html
@@ -36,5 +37,15 @@ if (
 
 $domain = $_SERVER['SERVER_NAME'] ?? 'localhost';
 
-$cookie_key     = $ini['cookie_key'] ?? '';
+$cookie_key = $ini['cookie_key'] ?? '';
 $cookie_key = Key::loadFromAsciiSafeString($cookie_key);
+// ---
+$csrf_token_orginal = $ini['csrf_token'] ?? '';
+// ---
+try {
+    $csrf_token = Crypto::decrypt($csrf_token_orginal, $cookie_key);
+} catch (\Exception $e) {
+    $csrf_token = "!!error!!";
+}
+// ---
+echo "CSRF Token: $csrf_token<br>";
