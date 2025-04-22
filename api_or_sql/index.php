@@ -192,6 +192,26 @@ function get_td_or_sql_page_user_not_in_users()
     return $data;
 }
 
+function get_td_or_sql_users_no_inprocess()
+{
+    // ---
+    global $use_td_api;
+    // ---
+    static $users = [];
+    // ---
+    if (!empty($users)) return $users;
+    // ---
+    if ($use_td_api) {
+        $users = get_td_api(['get' => 'users_no_inprocess']);
+    } else {
+        $query = "SELECT * FROM users_no_inprocess order by id";
+        //---
+        $users = fetch_query($query);
+    }
+    // ---
+    return $users;
+}
+
 function get_td_or_sql_full_translators()
 {
     // ---
@@ -328,7 +348,7 @@ function get_td_or_sql_settings()
     if ($use_td_api) {
         $setting_d = get_td_api(['get' => 'settings']);
     } else {
-        $query = "select id, title, displayed, value, Type from settings";
+        $query = "select id, title, displayed, value, Type, ignored from settings";
         //---
         $setting_d = fetch_query($query);
     }
