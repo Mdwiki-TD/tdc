@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 //---
 use function SQLorAPI\Get\get_td_or_sql_projects;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 $numb = 0;
 //---
@@ -65,12 +66,15 @@ $form_text_plus = <<<HTML
 	</tr>
 HTML;
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<h4>Projects:</h4>
 	</div>
 	<div class='card-body'>
 		<form action="index.php?ty=projects" method="POST">
+			<input name='csrf_token' value="$csrf_token" hidden />
 			<input name='ty' value="projects" hidden />
 			<div class="form-group">
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">

@@ -1,5 +1,6 @@
 <?PHP
 // has no include inside
+include_once __DIR__ . '/csrf.php';
 include_once __DIR__ . '/infos/td_config.php';
 
 include_once __DIR__ . '/actions/html.php';

@@ -1,27 +1,30 @@
 <?php
 //---
 use function Actions\MdwikiSql\insert_to_translate_type;
+use function TDWIKI\csrf\verify_csrf_token;
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
-foreach ($_POST['rows'] ?? [] as $key => $table) {
-	// '{ "ty": "tt/post", "rows": { "1": { "add": "", "title": "111111111111", "lead": "100000", "full": "10000" } } }'
-	// ---
-	$title 	= $table['title'] ?? '';
-	$lead 	= $table['lead'] ?? 0;
-	$full 	= $table['full'] ?? 0;
+if (verify_csrf_token()) {
+	foreach ($_POST['rows'] ?? [] as $key => $table) {
+		// '{ "ty": "tt/post", "rows": { "1": { "add": "", "title": "111111111111", "lead": "100000", "full": "10000" } } }'
+		// ---
+		$title 	= $table['title'] ?? '';
+		$lead 	= $table['lead'] ?? 0;
+		$full 	= $table['full'] ?? 0;
+		//---
+		if (empty($title)) continue;
+		//---
+		insert_to_translate_type($title, $lead, $full);
+	}
 	//---
-	if (empty($title)) continue;
+	$cat = $_GET['cat'] ?? '';
 	//---
-	insert_to_translate_type($title, $lead, $full);
+	echo <<<HTML
+		<div class='alert alert-success' role='alert'>Translate Type Saved...<br>
+			return to Translate Type page in 2 seconds
+		</div>
+		<meta http-equiv='refresh' content='2; url=index.php?ty=tt&cat=$cat'>
+	HTML;
+	//---
 }
-//---
-$cat = $_GET['cat'] ?? '';
-//---
-echo <<<HTML
-	<div class='alert alert-success' role='alert'>Translate Type Saved...<br>
-		return to Translate Type page in 2 seconds
-	</div>
-	<meta http-equiv='refresh' content='2; url=index.php?ty=tt&cat=$cat'>
-HTML;
-//---

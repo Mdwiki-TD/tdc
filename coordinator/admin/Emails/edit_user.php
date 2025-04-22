@@ -7,6 +7,8 @@ if (user_in_coord == false) {
 //---
 use function Actions\MdwikiSql\sql_update_user;
 use function Actions\Html\make_project_to_user;
+use function TDWIKI\csrf\generate_csrf_token;
+use function TDWIKI\csrf\verify_csrf_token;
 //---
 echo '</div><script>
     $("#mainnav").hide();
@@ -77,8 +79,11 @@ function echo_form($user, $wiki, $project, $email, $id)
     //---
     $project_line = make_project_to_user($project);
     //---
+    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+    //---
     echo <<<HTML
-        <form action='index.php?ty=Emails/edit_user&nonav=120' method='POST'>
+        <form action='index.php?ty=Emails/edit_user&nonav=120' method="POST">
+            <input name='csrf_token' value="$csrf_token" hidden />
             <input name='edit' value="1" hidden/>
             <div class='container'>
                 <div class='row'>
@@ -132,7 +137,7 @@ function echo_form($user, $wiki, $project, $email, $id)
     HTML;
 }
 //---
-if (isset($_REQUEST['edit'])) {
+if (isset($_POST['edit']) && verify_csrf_token()) {
     send_user($id, $user, $project, $wiki, $email);
     //---
 } else {

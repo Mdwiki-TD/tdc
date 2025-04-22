@@ -6,6 +6,7 @@ if (user_in_coord == false) {
 };
 //---
 use function SQLorAPI\Get\get_td_or_sql_categories;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
@@ -65,12 +66,15 @@ foreach ($qq as $Key => $table) {
 	HTML;
 };
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<h4>Campaigns:</h4>
 	</div>
 	<div class='card-body'>
 		<form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
+			<input name='csrf_token' value="$csrf_token" hidden />
 			<input name='ty' value="Campaigns" hidden/>
 			<div class="form-group">
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>

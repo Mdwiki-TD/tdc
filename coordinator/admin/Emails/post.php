@@ -1,41 +1,44 @@
 <?php
 //---
 use function Actions\MdwikiSql\sql_add_user;
+use function TDWIKI\csrf\verify_csrf_token;
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
-$new_q = "INSERT INTO users (username, email, wiki, user_group) SELECT DISTINCT user, '', '', '' from pages
-WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = user)";
-//---
-if (isset($_POST['emails'])) {
-	// '{ "ty": "Emails", "emails": { "1": { "username": "x", "email": "x", "project": "TWB/WikiMed (Arabic)", "wiki": "ar" } } }'
-	// ---
-	foreach ($_POST['emails'] as $key => $table) {
-		// { "username": "", "email": "3", "project": "Uncategorized", "wiki": "" }
-		//---
-		$user    = $table['username'] ?? '';
-		$email 	 = $table['email'] ?? '';
-		$wiki 	 = $table['wiki'] ?? '';
-		$project = $table['project'] ?? '';
-		//---
-		if (!empty($user)) {
+if (verify_csrf_token()) {
+	$new_q = "INSERT INTO users (username, email, wiki, user_group) SELECT DISTINCT user, '', '', '' from pages
+		WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = user)";
+	//---
+	if (isset($_POST['emails'])) {
+		// '{ "ty": "Emails", "emails": { "1": { "username": "x", "email": "x", "project": "TWB/WikiMed (Arabic)", "wiki": "ar" } } }'
+		// ---
+		foreach ($_POST['emails'] as $key => $table) {
+			// { "username": "", "email": "3", "project": "Uncategorized", "wiki": "" }
 			//---
-			// var_export(json_encode($table, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+			$user    = $table['username'] ?? '';
+			$email 	 = $table['email'] ?? '';
+			$wiki 	 = $table['wiki'] ?? '';
+			$project = $table['project'] ?? '';
 			//---
-			$user = trim($user);
-			$email     = trim($email);
-			//---
-			// Validate email format if not empty
-			if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				// Handle invalid email - either log, set to empty, or return error
-				$email = '';
-			}
-			//---
-			$wiki      = trim($wiki);
-			$project   = trim($project);
-			//---
-			sql_add_user($user, $email, $wiki, $project);
-			//---
+			if (!empty($user)) {
+				//---
+				// var_export(json_encode($table, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+				//---
+				$user = trim($user);
+				$email     = trim($email);
+				//---
+				// Validate email format if not empty
+				if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+					// Handle invalid email - either log, set to empty, or return error
+					$email = '';
+				}
+				//---
+				$wiki      = trim($wiki);
+				$project   = trim($project);
+				//---
+				sql_add_user($user, $email, $wiki, $project);
+				//---
+			};
 		};
-	};
-};
+	}
+}

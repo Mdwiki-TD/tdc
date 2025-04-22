@@ -11,6 +11,7 @@ if (user_in_coord == false) {
 };
 //---
 use function SQLorAPI\Get\get_td_or_sql_categories;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
@@ -87,6 +88,8 @@ foreach (range(1, 1) as $numb) {
 //---
 $testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
 	<select class='catsoptions' data-bs-theme="auto" hidden>$cats</select>
 	<div class='card-header'>
@@ -94,6 +97,7 @@ echo <<<HTML
 	</div>
 	<div class='cardbody p-2'>
 		<form action="index.php?ty=add" method="POST">
+			<input name='csrf_token' value="$csrf_token" hidden />
 			$testin
 			<input name='ty' value="add" hidden />
 			<div class="form-group">

@@ -14,6 +14,7 @@ use function Actions\Html\makeDropdown;
 use function Actions\Html\make_mdwiki_title;
 use function Results\GetCats\get_mdwiki_cat_members;
 use function Actions\MdwikiSql\execute_query;
+use function TDWIKI\csrf\generate_csrf_token;
 //---
 $cat = $_REQUEST['cat'] ?? 'All';
 $testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
@@ -176,10 +177,13 @@ echo <<<HTML
 	</div>
 HTML;
 //---
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+//---
 echo <<<HTML
 	<div class='card'>
 		<div class='card-body'>
 			<form action="index.php?ty=tt/post&cat=$cat" method="POST">
+				<input name='csrf_token' value="$csrf_token" hidden />
 				$testin
 				<input name='ty' value="tt/post" hidden/>
 				<div id='tt_table' class="form-group" style='display: none;'>
