@@ -59,7 +59,7 @@ if (verify_csrf_token()) {
     $languagesToAdd = array_filter(array_merge($_POST['newlang'] ?? [], $_POST['lang'] ?? []));
     $tabes = initializeLanguageKeys($tabes, $languagesToAdd, $keysToAdd);
     $tabes = addKeysFromPost($tabes, $keysToAdd);
-    $tabes = deleteKeys($tabes, $keysToAdd);
+    $tabes = deleteKeys($tabes);
 
     // Save configuration
     set_configs_all_file('fixwikirefs.json', $tabes);
