@@ -125,8 +125,10 @@ function echo_form($title, $lead, $full, $id)
     HTML;
 }
 //---
-if (isset($_POST['edit']) && verify_csrf_token()) {
-    send_qid($id, $title, $lead, $full);
+if (isset($_POST['edit'])) {
+    if (verify_csrf_token()) {
+        send_qid($id, $title, $lead, $full);
+    }
     //---
 } else {
     echo_form($title, $lead, $full, $id);

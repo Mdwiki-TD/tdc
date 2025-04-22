@@ -11,6 +11,8 @@ use function TDWIKI\csrf\verify_csrf_token; // if (verify_csrf_token())  {
 
 function verify_csrf_token()
 {
+	// return true;
+	// ---
 	// بدء الجلسة إذا لم تكن مفتوحة بالفعل
 	if (session_status() === PHP_SESSION_NONE) {
 		session_start();
