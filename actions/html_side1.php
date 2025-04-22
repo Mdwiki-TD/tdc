@@ -67,24 +67,25 @@ function create_side($filename, $ty)
         'Pages' => [
             ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type', 'icon' => 'bi-translate'],
             ['id' => 'translated', 'admin' => 1, 'href' => 'translated', 'title' => 'Translated Pages', 'icon' => 'bi-check2-square'],
-            ['id' => 'add', 'admin' => 1, 'href' => 'add', 'title' => 'Add', 'icon' => 'bi-plus-square'],
+            ['id' => 'add', 'admin' => 1, 'href' => 'add', 'title' => 'Add translations', 'icon' => 'bi-plus-square'],
+            ['id' => 'qidsload', 'admin' => 1, 'href' => 'qids', 'title' => 'Qids', "icon" => "bi-list-ul"],
         ],
         'Qids' => [
-            ['id' => 'qidsload', 'admin' => 1, 'href' => 'qids', 'title' => 'Qids', "icon" => "bi-list-ul"],
             // ['id' => 'qids_othersload', 'admin' => 1, 'href' => 'qids&qid_table=qids_others', 'title' => 'Qids Others', 'icon' => ''],
         ],
         'Users' => [
+            ['id' => 'admins', 'admin' => 1, 'href' => 'admins', 'title' => 'Coordinators', 'icon' => 'bi-person-gear'],
             ['id' => 'Emails', 'admin' => 1, 'href' => 'Emails', 'title' => 'Emails', 'icon' => 'bi-envelope'],
-            ['id' => 'projects', 'admin' => 1, 'href' => 'projects', 'title' => 'Projects', 'icon' => 'bi-kanban'],
-            ['id' => 'full_translators', 'admin' => 1, 'href' => 'full_translators', 'title' => 'Full translators', 'icon' => 'bi-person-check'],
+            ['id' => 'full_tr', 'admin' => 1, 'href' => 'full_translators', 'title' => 'Full translators', 'icon' => 'bi-person-check'],
+            ['id' => 'user_inp', 'admin' => 1, 'href' => 'users_no_inprocess', 'title' => 'Not in process', 'icon' => 'bi-hourglass'],
         ],
         'Others' => [
-            ['id' => 'admins', 'admin' => 1, 'href' => 'admins', 'title' => 'Coordinators', 'icon' => 'bi-person-gear'],
+            ['id' => 'projects', 'admin' => 1, 'href' => 'projects', 'title' => 'Projects', 'icon' => 'bi-kanban'],
             ['id' => 'Campaigns', 'admin' => 1, 'href' => 'Campaigns', 'title' => 'Campaigns', 'icon' => 'bi-megaphone'],
-            ['id' => 'stat', 'admin' => 0, 'href' => 'stat', 'title' => 'Status', 'icon' => 'bi-graph-up'],
             ['id' => 'settings', 'admin' => 1, 'href' => 'settings', 'title' => 'Settings', 'icon' => 'bi-gear'],
         ],
         'Tools' => [
+            ['id' => 'stat', 'admin' => 0, 'href' => 'stat', 'title' => 'Status', 'icon' => 'bi-graph-up'],
             ['id' => 'wikirefs_options', 'admin' => 1, 'href' => 'wikirefs_options', 'title' => 'Fixwikirefs (Options)', 'icon' => 'bi-wrench-adjustable'],
             ['id' => 'fixwikirefs', 'admin' => 0, 'href' => '/fixwikirefs.php', 'title' => 'Fixwikirefs', 'target' => '_blank', 'icon' => 'bi-wrench'],
         ],
