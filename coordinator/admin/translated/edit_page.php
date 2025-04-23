@@ -8,6 +8,7 @@ if (user_in_coord == false) {
 // include_once 'actions/functions.php';
 //---
 use function Actions\MdwikiSql\execute_query;
+use function Actions\MdwikiSql\fetch_query;
 use function Actions\Html\add_quotes;
 use function TDWIKI\csrf\generate_csrf_token;
 use function TDWIKI\csrf\verify_csrf_token;
@@ -24,13 +25,16 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-$id         = $_REQUEST['id'] ?? '';
-$title      = $_REQUEST['title'] ?? '';
-$target     = $_REQUEST['target'] ?? '';
-$lang       = $_REQUEST['lang'] ?? '';
-$user       = $_REQUEST['user'] ?? '';
-$pupdate    = $_REQUEST['pupdate'] ?? '';
-$table      = $_REQUEST['table'] ?? 'pages';
+$id         = $_GET['id'] ?? $_POST['id'] ?? '';
+$table      = $_GET['table'] ?? $_POST['table'] ?? 'pages';
+//---
+$page_data = fetch_query("SELECT * FROM $table WHERE id = ?", [$id]);
+//---
+$title      = $page_data[0]['title'] ?? '';
+$target     = $page_data[0]['target'] ?? '';
+$lang       = $page_data[0]['lang'] ?? '';
+$user       = $page_data[0]['user'] ?? '';
+$pupdate    = $page_data[0]['pupdate'] ?? '';
 //---
 echo <<<HTML
 <div class='card'>
@@ -61,6 +65,7 @@ function delete_page($id, $table)
         </script>
     HTML;
 }
+
 function edit_page($id, $title, $target, $lang, $user, $pupdate, $table)
 {
     //---
@@ -156,13 +161,20 @@ function echo_form($id, $title, $target, $lang, $user, $pupdate, $table)
                             <input class='form-control' type='text' id='pupdate' name='pupdate' value='$pupdate' placeholder='YYYY-MM-DD' required/>
                         </div>
                     </div>
+                    <div class='col-md-3'>
+                        <div class='input-group form-control mb-3 alert alert-warning'>
+                            <div class='input-group-prepend'>
+                                <span class='me-3'>Delete?</span>
+                            </div>
+                            <div class="form-check form-switch form-inline">
+                                <input class="form-check-input" type="checkbox" name="delete" value="$id">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class='row'>
-                    <div class='col-6'>
+                    <div class='col-12'>
                         <input class='btn btn-outline-primary' type='submit' value='send'/>
-                    </div>
-                    <div class='col-6'>
-                        <input class='btn btn-danger btn-sm' type='button' value='Delete' onclick="window.location.href='index.php?ty=translated/edit_page&table=$table&nonav=120&delete=$id&id=$id'"/>
                     </div>
                 </div>
             </div>

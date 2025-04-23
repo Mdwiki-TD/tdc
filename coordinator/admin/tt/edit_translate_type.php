@@ -93,22 +93,22 @@ function echo_form($title, $lead, $full, $id)
                     <div class='col-md-3'>
                         <div class='row'>
                             <div class='col'>
-                                <div class='input-group mb-3'>
+                                <div class='input-group form-control mb-3'>
                                     <div class='input-group-prepend'>
-                                        <span class='input-group-text'>Lead</span>
+                                        <span class='me-3'>Lead:</span>
                                     </div>
-                                    <div class='form-check form-switch'>
+                                    <div class="form-check form-switch form-inline">
                                         <input type='hidden' name='lead' value='0'>
                                         <input class='form-check-input' type='checkbox' name='lead' value='1' $lead_checked>
                                     </div>
                                 </div>
                             </div>
                             <div class='col'>
-                                <div class='input-group mb-3'>
+                                <div class='input-group form-control mb-3'>
                                     <div class='input-group-prepend'>
-                                        <span class='input-group-text'>Full</span>
+                                        <span class='me-3'>Full:</span>
                                     </div>
-                                    <div class='form-check form-switch'>
+                                    <div class="form-check form-switch form-inline">
                                         <input type='hidden' name='full' value='0'>
                                         <input class='form-check-input' type='checkbox' name='full' value='1' $full_checked>
                                     </div>
