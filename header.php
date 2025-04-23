@@ -20,10 +20,12 @@ $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span cla
 //---
 $coords = array_column(get_coordinator(), 'user');
 //---
-if (in_array(global_username, $coords)) {
-	$coord_tools = '<a href="index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span>Coordinator Tools</a>';
-	$user_in_coord = true;
-};
+if (isset($GLOBALS['global_username']) && $GLOBALS['global_username'] != '') {
+	if (in_array($GLOBALS['global_username'], $coords)) {
+		$coord_tools = '<a href="index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span>Coordinator Tools</a>';
+		$user_in_coord = true;
+	}
+}
 //---
 define('user_in_coord', $user_in_coord);
 //---
@@ -71,8 +73,8 @@ $li_user = <<<HTML
 	</a>
 HTML;
 //---
-if (defined('global_username') && global_username != '') {
-	$u_name = global_username;
+if (isset($GLOBALS['global_username']) && $GLOBALS['global_username'] != '') {
+	$u_name = $GLOBALS['global_username'];
 	$li_user = <<<HTML
 	</li>
 	<li class="nav-item col-4 col-lg-auto" id="">
