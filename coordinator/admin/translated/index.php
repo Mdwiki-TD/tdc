@@ -66,11 +66,11 @@ function make_edit_icon($id, $title, $target, $lang, $user, $pupdate, $table)
     //---
     $edit_params = array(
         'id'   => $id,
-        'title'     => $title,
-        'target'  => $target,
-        'lang'    => $lang,
-        'user'    => $user,
-        'pupdate' => $pupdate,
+        // 'title'     => $title,
+        // 'target'  => $target,
+        // 'lang'    => $lang,
+        // 'user'    => $user,
+        // 'pupdate' => $pupdate,
         'table' => $table,
         'nonav' => 1
 
