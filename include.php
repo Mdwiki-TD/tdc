@@ -7,8 +7,7 @@ include_once __DIR__ . '/actions/html.php';
 include_once __DIR__ . '/actions/html_side1.php';
 include_once __DIR__ . '/actions/functions.php';
 
-include_once __DIR__ . '/auth/user_infos.php';
-// include_once __DIR__ . '/../auth/auth/user_infos.php';
+include_once __DIR__ . '/../auth/auth/user_infos.php';
 
 // with include inside
 include_once __DIR__ . '/actions/wiki_api.php';
