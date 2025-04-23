@@ -11,14 +11,15 @@ use function Actions\Html\banner_alert;
 //---
 $secure = ($_SERVER['SERVER_NAME'] == "localhost") ? false : true;
 if ($_SERVER['SERVER_NAME'] != 'localhost') {
-	session_name("mdwikitoolforgeoauth");
+	// session_name("mdwikitoolforgeoauth");
 	session_set_cookie_params(0, "/", $domain, $secure, $secure);
 }
 //---
 $username = get_from_cookie('username');
 //---
 if ($_SERVER['SERVER_NAME'] == 'localhost') {
-	session_start();
+	// session_name("mdwikitoolforgeoauth");
+	if (session_status() === PHP_SESSION_NONE) session_start();
 	$username = $_SESSION['username'] ?? '';
 } elseif (!empty($username)) {
 	// ---
