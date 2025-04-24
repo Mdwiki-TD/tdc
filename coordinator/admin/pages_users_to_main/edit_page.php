@@ -113,7 +113,7 @@ function echo_form($id, $title, $target, $lang, $user, $pupdate, $table)
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
     //---
     echo <<<HTML
-        <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
+        <form action='index.php?ty=pages_users_to_main/edit_page&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" hidden />
             <input type='text' id='id' name='id' value='$id' hidden/>
             <input name='edit' value="1" hidden/>

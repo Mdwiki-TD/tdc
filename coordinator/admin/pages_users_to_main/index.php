@@ -24,7 +24,7 @@ function get_languages()
     foreach ($llangs as $tat) {
         //---
         if (gettype($tat) !== 'string') {
-            echo "<br>tat: $tat";
+            // echo "<br>tat: $tat";
             continue;
         }
         //---
