@@ -67,6 +67,7 @@ function create_side($filename, $ty)
         'Pages' => [
             ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type', 'icon' => 'bi-translate'],
             ['id' => 'translated', 'admin' => 1, 'href' => 'translated', 'title' => 'Translated Pages', 'icon' => 'bi-check2-square'],
+            ['id' => 'pages_users_to_main', 'admin' => 1, 'href' => 'pages_users_to_main', 'title' => 'Pages to check', 'icon' => 'bi-check'],
             ['id' => 'add', 'admin' => 1, 'href' => 'add', 'title' => 'Add translations', 'icon' => 'bi-plus-square'],
             ['id' => 'qidsload', 'admin' => 1, 'href' => 'qids', 'title' => 'Qids', "icon" => "bi-list-ul"],
         ],
