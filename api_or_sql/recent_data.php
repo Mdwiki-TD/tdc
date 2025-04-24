@@ -9,6 +9,7 @@ Usage:
 use function SQLorAPI\Recent\get_recent_sql;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Recent\get_recent_translated;
+use function SQLorAPI\Recent\get_pages_users_to_main;
 */
 
 use function Actions\MdwikiSql\fetch_query;
@@ -109,7 +110,6 @@ function get_recent_pages_users($lang)
     //---
     return $tab;
 }
-
 function get_recent_translated($lang, $table)
 {
     global $use_td_api;
@@ -135,6 +135,30 @@ function get_recent_translated($lang, $table)
     usort($dd, function ($a, $b) {
         return strtotime($b['add_date']) - strtotime($a['add_date']);
     });
+    //---
+    return $dd;
+}
+
+function get_pages_users_to_main($lang)
+{
+    global $use_td_api;
+    // ---
+    $lang_line = '';
+    //---
+    $sql_params = [];
+    $params = array('get' => "pages_users_to_main");
+    //---
+    if (!empty($lang) && $lang != 'All') {
+        $lang_line = "AND pu.lang = ?";
+        $sql_params[] = $lang;
+        $params['lang'] = $lang;
+    }
+    //---
+    if ($use_td_api) {
+        $dd = get_td_api($params);
+    } else {
+        $dd = fetch_query("SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id $lang_line", $sql_params);
+    }
     //---
     return $dd;
 }
