@@ -41,17 +41,22 @@ function get_languages()
 }
 //---
 $recent_table = <<<HTML
+    <div>
+        Toggle column: <a class="toggle-vis" data-column="0" type="button">#</a> -
+        <a class="toggle-vis" data-column="1" type="button">Lang.</a> -
+        <a class="toggle-vis" data-column="2" type="button">Title</a>
+    </div>
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="pages_table" style="font-size:90%;">
 		<thead>
 			<tr>
 				<th>#</th>
 				<th>Lang.</th>
 				<th>Title</th>
-				<th>Qid</th>
-				<!-- <th>Publication</th> -->
+				<!-- <th>Qid</th> -->
+				<th>Publication</th>
 				<th>Old User</th>
-				<th>Old target</th>
 				<th>New User</th>
+				<th>Old target</th>
 				<th>New target</th>
 				<th>New Qid</th>
 				<th>Fix it</th>
@@ -60,11 +65,13 @@ $recent_table = <<<HTML
 		<tbody>
 HTML;
 //---
-function make_edit_icon($id)
+function make_edit_icon($id, $new_target, $new_user)
 {
     //---
     $edit_params = array(
         'id'   => $id,
+        'new_user'   => $new_user,
+        'new_target'   => $new_target,
         'nonav' => 1
 
     );
@@ -73,10 +80,10 @@ function make_edit_icon($id)
         $edit_params['test'] = 1;
     }
     //---
-    $edit_url = "index.php?ty=pages_users_to_main/edit_page&" . http_build_query($edit_params);
+    $edit_url = "index.php?ty=pages_users_to_main/fix_it&" . http_build_query($edit_params);
     //---
     $onclick = 'pupwindow1("' . $edit_url . '")';
-    $onclick = '';
+    // $onclick = '';
     //---
     return <<<HTML
 		<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Fix it</a>
@@ -102,7 +109,7 @@ function make_td($tabg, $nnnn)
     //---
     $targe44 = make_target_url($new_target, $lang);
     //---
-    $edit_icon = make_edit_icon($id);
+    $edit_icon = make_edit_icon($id, $new_target, $new_user);
     //---
     $qid          = $tabg['qid'] ?? "";
     $new_qid      = $tabg['new_qid'] ?? "";
@@ -122,7 +129,6 @@ function make_td($tabg, $nnnn)
         $new_qid_link = "<a target='_blank' href='https://wikidata.org/wiki/$new_qid'>Same</a>";
     }
     //---
-    //---
     $laly = <<<HTML
         <tr>
             <td data-content='#'>
@@ -134,18 +140,16 @@ function make_td($tabg, $nnnn)
             <td data-content='Title'>
                 $mdwiki_title
             </td>
-            <td data-content='Qid'>
-                $qid_link
-            </td>
-            <!-- <td data-content='Publication'> $pupdate </td> -->
+            <!-- <td data-content='Qid'> $qid_link </td> -->
+            <td data-content='Publication'> $pupdate </td>
             <td data-content='Old User'>
                 <a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
             </td>
-            <td data-content='Old target'>
-                $targe33
-            </td>
             <td data-content='New User'>
                 <a href='/Translation_Dashboard/leaderboard.php?user=$new_user'>$new_user</a>
+            </td>
+            <td data-content='Old target'>
+                $targe33
             </td>
             <td data-content='New target'>
                 $targe44
@@ -166,9 +170,14 @@ $sql_results = get_pages_users_to_main($lang);
 //---
 $titles = array_column($sql_results, "title");
 //---
-$infos = td_or_sql_titles_infos($titles);
+// Only attempt to fetch QIDs if we have titles
+$titles_qids = [];
 //---
-$titles_qids = array_column($infos, "qid", "title");
+if (!empty($titles)) {
+    $infos = td_or_sql_titles_infos($titles);
+    //---
+    $titles_qids = array_column($infos, "qid", "title");
+}
 //---
 $noo = 0;
 foreach ($sql_results as $tat => $tabe) {
@@ -188,13 +197,15 @@ HTML;
 $lang_table = get_languages();
 $filter_la = filter_recent($lang, $lang_table);
 //---
+$count_result = count($sql_results);
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
 			<input name='ty' value='pages_users_to_main' hidden/>
 			<div class='row'>
 				<div class='col-md-6'>
-					<h4>Translated Pages in user namespace to move to main namespace:</h4>
+					<h4>Translated Pages in user namespace to move to main namespace ($count_result):</h4>
 				</div>
 				<div class='col-md-3'>
 					$filter_la
@@ -213,7 +224,7 @@ echo $recent_table;
 ?>
 <script>
     $(document).ready(function() {
-        var t = $('#pages_table').DataTable({
+        var table = $('#pages_table').DataTable({
             // order: [[10	, 'desc']],
             // paging: false,
             lengthMenu: [
@@ -221,6 +232,18 @@ echo $recent_table;
                 [50, 100, 150]
             ],
             // scrollY: 800
+        });
+
+        document.querySelectorAll('a.toggle-vis').forEach((el) => {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                let columnIdx = e.target.getAttribute('data-column');
+                let column = table.column(columnIdx);
+
+                // Toggle the visibility
+                column.visible(!column.visible());
+            });
         });
     });
 </script>

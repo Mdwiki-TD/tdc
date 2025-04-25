@@ -412,8 +412,19 @@ function td_or_sql_titles_infos($titles = [])
     // ---
     global $use_td_api;
     // ---
+    // Ensure $titles is an array
+    if (!is_array($titles)) {
+        $titles = [];
+    }
+    // ---
     if ($use_td_api) {
-        $data = get_td_api(['get' => 'titles']);
+        $params = ['get' => 'titles'];
+        // ---
+        if (!empty($titles)) {
+            $params['titles'] = $titles;
+        }
+        // ---
+        $data = get_td_api($params);
     } else {
         // ---
         $qua = <<<SQL

@@ -28,14 +28,6 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 $id         = $_GET['id'] ?? $_POST['id'] ?? '';
 $table      = $_GET['table'] ?? $_POST['table'] ?? 'pages';
 //---
-$page_data = fetch_query("SELECT * FROM $table WHERE id = ?", [$id]);
-//---
-$title      = $page_data[0]['title'] ?? '';
-$target     = $page_data[0]['target'] ?? '';
-$lang       = $page_data[0]['lang'] ?? '';
-$user       = $page_data[0]['user'] ?? '';
-$pupdate    = $page_data[0]['pupdate'] ?? '';
-//---
 echo <<<HTML
 <div class='card'>
     <div class='card-header'>
@@ -52,21 +44,9 @@ function delete_page($id, $table)
     // ---
     execute_query($qua, $params);
     //---
-    // green text success
-    echo <<<HTML
-        <div class='alert alert-success' role='alert'>Page updated<br>
-            window will close in 3 seconds
-        </div>
-        <!-- close window after 3 seconds -->
-        <script>
-            setTimeout(function() {
-                window.close();
-            }, 3000);
-        </script>
-    HTML;
 }
 
-function edit_page($id, $title, $target, $lang, $user, $pupdate, $table)
+function edit_page($id, $table, $title, $target, $lang, $user, $pupdate)
 {
     //---
     $qua = "UPDATE $table
@@ -87,24 +67,19 @@ function edit_page($id, $title, $target, $lang, $user, $pupdate, $table)
         echo "<pre>$qua</pre>";
         // echo "<pre>$params</pre>";
     }
-    //---
-    // green text success
-    echo <<<HTML
-        <div class='alert alert-success' role='alert'>Page updated<br>
-            window will close in 3 seconds
-        </div>
-        <!-- close window after 3 seconds -->
-        <script>
-            setTimeout(function() {
-                window.close();
-            }, 3000);
-        </script>
-    HTML;
 }
-//---
 
-function echo_form($id, $title, $target, $lang, $user, $pupdate, $table)
+function echo_form($id, $table)
 {
+    //---
+    $page_data = fetch_query("SELECT * FROM $table WHERE id = ?", [$id]);
+    //---
+    $title      = $page_data[0]['title'] ?? '';
+    $target     = $page_data[0]['target'] ?? '';
+    $lang       = $page_data[0]['lang'] ?? '';
+    $user       = $page_data[0]['user'] ?? '';
+    $pupdate    = $page_data[0]['pupdate'] ?? '';
+    //---
     $test_line = (isset($_REQUEST['test'])) ? "<input name='test' value='1' hidden/>" : "";
 
     $title2 = add_quotes($title);
@@ -185,11 +160,30 @@ function echo_form($id, $title, $target, $lang, $user, $pupdate, $table)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token()) {
     if (isset($_POST['delete'])) {
         delete_page($_POST['delete'], $table);
+        // ---
     } elseif (isset($_POST['edit'])) {
-        edit_page($id, $title, $target, $lang, $user, $pupdate, $table);
+        $title      = $_POST['title'] ?? '';
+        $target     = $_POST['target'] ?? '';
+        $lang       = $_POST['lang'] ?? '';
+        $user       = $_POST['user'] ?? '';
+        $pupdate    = $_POST['pupdate'] ?? '';
+        //---
+        edit_page($id, $table, $title, $target, $lang, $user, $pupdate);
     }
+    //---
+    // green text success
+    echo <<<HTML
+        <div class='alert alert-success' role='alert'>Page updated<br>
+            window will close in 3 seconds
+        </div>
+        <script>
+            setTimeout(function() {
+                window.close();
+            }, 3000);
+        </script>
+    HTML;
 } else {
-    echo_form($id, $title, $target, $lang, $user, $pupdate, $table);
+    echo_form($id, $table);
 }
 //---
 echo <<<HTML
