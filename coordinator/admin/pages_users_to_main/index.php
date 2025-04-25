@@ -53,7 +53,7 @@ $recent_table = <<<HTML
 				<th>Lang.</th>
 				<th>Title</th>
 				<!-- <th>Qid</th> -->
-				<!-- <th>Publication</th> -->
+				<th>Publication</th>
 				<th>Old User</th>
 				<th>New User</th>
 				<th>Old target</th>
@@ -141,7 +141,7 @@ function make_td($tabg, $nnnn)
                 $mdwiki_title
             </td>
             <!-- <td data-content='Qid'> $qid_link </td> -->
-            <!-- <td data-content='Publication'> $pupdate </td> -->
+            <td data-content='Publication'> $pupdate </td>
             <td data-content='Old User'>
                 <a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
             </td>

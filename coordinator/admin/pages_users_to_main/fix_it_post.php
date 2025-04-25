@@ -19,9 +19,11 @@ function delete_user_page($id)
     execute_query("DELETE FROM pages_users_to_main WHERE id = ?", [$id]);
     execute_query("DELETE FROM pages_users WHERE id = ?", [$id]);
     //---
-    $find_it = fetch_query("SELECT * FROM pages_users WHERE id = ?", [$id]);
-    //---
+    $find_it_1 = fetch_query("SELECT 1 FROM pages_users       WHERE id = ? LIMIT 1", [$id]);
+    $find_it_2 = fetch_query("SELECT 1 FROM pages_users_to_main WHERE id = ? LIMIT 1", [$id]);
     $delete_done = (empty($find_it)) ? true : false;
+    //---
+    $delete_done = empty($find_it_1) && empty($find_it_2);
     //---
     return $delete_done;
 }
@@ -37,8 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST
     $new_user   = $_POST['new_user'] ?? '';
     $pupdate    = $_POST['pupdate'] ?? '';
     //---
-    $id         = $_POST['id'] ?? '';
-    // ---
+    $id         = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+    //---
+    if ($id <= 0) {
+        $errors[] = "Invalid id supplied.";
+    }
+    //---
     $page_data = fetch_query("SELECT * FROM pages_users WHERE id = ?", [$id]);
     //---
     if (empty($page_data)) {
