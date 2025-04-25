@@ -160,13 +160,15 @@ $data = [
 //---
 $filter_ta = filter_table($data, $table, 'table');
 //---
+$count_result = count($qsl_results);
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
 			<input name='ty' value='translated' hidden/>
 			<div class='row'>
-				<div class='col-md-3'>
-					<h4>Translated Pages:</h4>
+				<div class='col-md-4'>
+					<h4>Translated Pages ($count_result):</h4>
 				</div>
 				<div class='col-md-4'>
 					$filter_ta
@@ -174,7 +176,7 @@ echo <<<HTML
 				<div class='col-md-3'>
 					$filter_la
 				</div>
-				<div class='aligncenter col-md-2'>
+				<div class='aligncenter col-md-1'>
 					<input class='btn btn-outline-primary' type='submit' value='Filter' />
 				</div>
 			</div>
