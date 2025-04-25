@@ -166,9 +166,14 @@ $sql_results = get_pages_users_to_main($lang);
 //---
 $titles = array_column($sql_results, "title");
 //---
-$infos = td_or_sql_titles_infos($titles);
+// Only attempt to fetch QIDs if we have titles
+$titles_qids = [];
 //---
-$titles_qids = array_column($infos, "qid", "title");
+if (!empty($titles)) {
+    $infos = td_or_sql_titles_infos($titles);
+    //---
+    $titles_qids = array_column($infos, "qid", "title");
+}
 //---
 $noo = 0;
 foreach ($sql_results as $tat => $tabe) {
