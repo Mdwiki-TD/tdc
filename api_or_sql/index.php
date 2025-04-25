@@ -407,7 +407,7 @@ function get_pages_users_langs()
     return $data;
 }
 
-function td_or_sql_titles_infos()
+function td_or_sql_titles_infos($titles = [])
 {
     // ---
     global $use_td_api;
@@ -415,27 +415,16 @@ function td_or_sql_titles_infos()
     if ($use_td_api) {
         $data = get_td_api(['get' => 'titles']);
     } else {
-        $qua_old = <<<SQL
-            SELECT
-                ase.title,
-                ase.importance,
-                rc.r_lead_refs,
-                rc.r_all_refs,
-                ep.en_views,
-                w.w_lead_words,
-                w.w_all_words,
-                q.qid
-            FROM assessments ase
-            LEFT JOIN enwiki_pageviews ep ON ase.title = ep.title
-            LEFT JOIN  qids q ON q.title = ase.title
-            LEFT JOIN  refs_counts rc ON rc.r_title = ase.title
-            LEFT JOIN  words w ON w.w_title = ase.title
-        SQL;
         // ---
         $qua = <<<SQL
             SELECT *
             FROM titles_infos
         SQL;
+        // ---
+        if (!empty($titles)) {
+            $titles = implode("','", $titles);
+            $qua .= " WHERE title IN ('$titles')";
+        }
         // ---
         $data = fetch_query($qua);
     }

@@ -7,6 +7,7 @@ use function Actions\Html\make_target_url;
 use function SQLorAPI\Recent\get_pages_users_to_main;
 use function SQLorAPI\Get\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent;
+use function SQLorAPI\Get\td_or_sql_titles_infos;
 //---
 $lang = $_GET['lang'] ?? 'All';
 //---
@@ -46,11 +47,13 @@ $recent_table = <<<HTML
 				<th>#</th>
 				<th>Lang.</th>
 				<th>Title</th>
-				<th>Publication</th>
+				<th>Qid</th>
+				<!-- <th>Publication</th> -->
 				<th>Old User</th>
 				<th>Old target</th>
 				<th>New User</th>
 				<th>New target</th>
+				<th>New Qid</th>
 				<th>Fix it</th>
 			</tr>
 		</thead>
@@ -101,43 +104,76 @@ function make_td($tabg, $nnnn)
     //---
     $edit_icon = make_edit_icon($id);
     //---
+    $qid          = $tabg['qid'] ?? "";
+    $new_qid      = $tabg['new_qid'] ?? "";
+    //---
+    $qid_link = (!empty($qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$qid'>$qid</a>" : "";
+    $new_qid_link = (!empty($new_qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$new_qid'>$new_qid</a>" : "";
+    //---
+    if (!empty($qid) && empty($new_qid)) {
+        $same_qid = "bg-info-subtle";
+        $new_qid_link = "<a class='fw-bold' target='_blank' href='https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$new_target'>Link it!</a>";
+    } else {
+        $same_qid = ($qid == $new_qid) ? "bg-info-subtle" : "bg-danger-subtle";
+    }
+    //---
+    if (!empty($qid) && $new_qid == $qid) {
+        $same_qid = "";
+        $new_qid_link = "<a target='_blank' href='https://wikidata.org/wiki/$new_qid'>Same</a>";
+    }
+    //---
+    //---
     $laly = <<<HTML
-		<tr>
-			<td data-content='#'>
-				$nnnn
-			</td>
-			<td data-content='Lang'>
-				<a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
-			</td>
-			<td data-content='Title'>
-				$mdwiki_title
-			</td>
-			<td data-content='Publication'>
-				$pupdate
-			</td>
-			<td data-content='Old User'>
-				<a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
-			</td>
-			<td data-content='Old target'>
-				$targe33
-			</td>
-			<td data-content='New User'>
-				<a href='/Translation_Dashboard/leaderboard.php?user=$new_user'>$new_user</a>
-			</td>
-			<td data-content='New target'>
-				$targe44
-			</td>
-			<td data-content='Fix it'> $edit_icon </td>
-		</tr>
-	HTML;
+        <tr>
+            <td data-content='#'>
+                $nnnn
+            </td>
+            <td data-content='Lang'>
+                <a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
+            </td>
+            <td data-content='Title'>
+                $mdwiki_title
+            </td>
+            <td data-content='Qid'>
+                $qid_link
+            </td>
+            <!-- <td data-content='Publication'> $pupdate </td> -->
+            <td data-content='Old User'>
+                <a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
+            </td>
+            <td data-content='Old target'>
+                $targe33
+            </td>
+            <td data-content='New User'>
+                <a href='/Translation_Dashboard/leaderboard.php?user=$new_user'>$new_user</a>
+            </td>
+            <td data-content='New target'>
+                $targe44
+            </td>
+            <td data-content='New Qid' class="$same_qid">
+                $new_qid_link
+            </td>
+            <td data-content='Fix it'>
+                $edit_icon
+            </td>
+        </tr>
+    HTML;
     //---
     return $laly;
 };
 //---
-$qsl_results = get_pages_users_to_main($lang);
+$sql_results = get_pages_users_to_main($lang);
+//---
+$titles = array_column($sql_results, "title");
+//---
+$infos = td_or_sql_titles_infos($titles);
+//---
+$titles_qids = array_column($infos, "qid", "title");
 //---
 $noo = 0;
-foreach ($qsl_results as $tat => $tabe) {
+foreach ($sql_results as $tat => $tabe) {
+    //---
+    $tabe["qid"] = $titles_qids[$tabe["title"]] ?? "";
     //---
     $noo = $noo + 1;
     $recent_table .= make_td($tabe, $noo);
