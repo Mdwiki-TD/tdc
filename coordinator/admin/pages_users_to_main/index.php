@@ -197,13 +197,15 @@ HTML;
 $lang_table = get_languages();
 $filter_la = filter_recent($lang, $lang_table);
 //---
+$count_result = count($sql_results);
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
 			<input name='ty' value='pages_users_to_main' hidden/>
 			<div class='row'>
 				<div class='col-md-6'>
-					<h4>Translated Pages in user namespace to move to main namespace:</h4>
+					<h4>Translated Pages in user namespace to move to main namespace ($count_result):</h4>
 				</div>
 				<div class='col-md-3'>
 					$filter_la
