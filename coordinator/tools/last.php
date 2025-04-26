@@ -222,13 +222,15 @@ $data = [
 //---
 $filter_ta = filter_table($data, $last_table, 'last_table');
 //---
+$count_result = count($result);
+//---
 echo <<<HTML
 <div class='card-header'>
     <form method='get' action='index.php'>
         <input name='ty' value='last' hidden/>
         <div class='row'>
-            <div class='col-md-3'>
-                <h4>Recent translations:</h4>
+            <div class='col-md-4'>
+                <h4>Recent translations ($count_result):</h4>
             </div>
             <div class='col-md-4'>
                 $filter_ta
@@ -236,7 +238,7 @@ echo <<<HTML
             <div class='col-md-3'>
                 $filter_by_lang
             </div>
-            <div class='aligncenter col-md-2'>
+            <div class='aligncenter col-md-1'>
                 <input class='btn btn-outline-primary' type='submit' value='Filter' />
             </div>
         </div>

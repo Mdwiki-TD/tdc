@@ -42,9 +42,11 @@ function get_languages()
 //---
 $recent_table = <<<HTML
     <div>
-        Toggle column: <a class="toggle-vis" data-column="0" type="button">#</a> -
-        <a class="toggle-vis" data-column="1" type="button">Lang.</a> -
-        <a class="toggle-vis" data-column="2" type="button">Title</a>
+        Toggle column: <a class="toggle-vis" data-column="0" type="button">#</a>
+        - <a class="toggle-vis" data-column="1" type="button">Lang.</a>
+        - <a class="toggle-vis" data-column="2" type="button">Title</a>
+        - <a class="toggle-vis" data-column="3" type="button">Qid</a>
+        - <a class="toggle-vis" data-column="4" type="button">Publication</a>
     </div>
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="pages_table" style="font-size:90%;">
 		<thead>
@@ -52,7 +54,7 @@ $recent_table = <<<HTML
 				<th>#</th>
 				<th>Lang.</th>
 				<th>Title</th>
-				<!-- <th>Qid</th> -->
+				<th>Qid</th>
 				<th>Publication</th>
 				<th>Old User</th>
 				<th>New User</th>
@@ -140,7 +142,7 @@ function make_td($tabg, $nnnn)
             <td data-content='Title'>
                 $mdwiki_title
             </td>
-            <!-- <td data-content='Qid'> $qid_link </td> -->
+            <td data-content='Qid'> $qid_link </td>
             <td data-content='Publication'> $pupdate </td>
             <td data-content='Old User'>
                 <a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
