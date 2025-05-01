@@ -190,9 +190,9 @@ foreach ($users_done as $user_name => $table) {
 		<td data-content=''>
 			$mail_icon
 		</td>
-		<td data-order='$user_group' data-search='$user_group' data-content='Project'>
+		<td data-order='$user_group2' data-search='$user_group2' data-content='Project'>
 			<!-- <select name='project_$numb' class='form-select options'>$ project_line</select> -->
-			<input class='form-control' size='25' name='project_$numb' value='$user_group' readonly/>
+			<input class='form-control' size='25' name='project_$numb' value='$user_group2' readonly/>
 		</td>
 		<td data-order='$wiki' data-search='$wiki2' data-content='Wiki'>
 			<input class='form-control' size='4' name='wiki_$numb' value='$wiki' readonly/>
