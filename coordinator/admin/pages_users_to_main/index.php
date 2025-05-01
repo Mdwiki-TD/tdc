@@ -227,6 +227,7 @@ echo $recent_table;
 <script>
     $(document).ready(function() {
         var table = $('#pages_table').DataTable({
+            stateSave: true,
             // order: [[10	, 'desc']],
             // paging: false,
             lengthMenu: [
