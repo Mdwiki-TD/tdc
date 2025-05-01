@@ -83,7 +83,7 @@ function get_sorted_array()
 function filter_table($project_name)
 {
 	//---
-	// TablesSql::$s_projects_title_to_id["empty"] = "empty";
+	TablesSql::$s_projects_title_to_id["empty"] = "empty";
 	//---
 	$l_list = <<<HTML
 		<option value='Uncategorized'>Uncategorized</option>
@@ -131,9 +131,7 @@ $limit = (isset($_GET['limit'])) ? $_GET['limit'] : 0;
 //---
 $main_project = (isset($_GET['project'])) ? $_GET['project'] : 'Uncategorized';
 //---
-if ($main_project == 'empty') {
-	$main_project = 'Uncategorized';
-}
+// if ($main_project == 'empty') { $main_project = 'Uncategorized'; }
 //---
 $project_filter = filter_table($main_project);
 //---
