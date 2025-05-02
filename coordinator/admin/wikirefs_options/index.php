@@ -146,6 +146,7 @@ HTML;
 
     $(document).ready(function() {
         $('#em2').DataTable({
+            stateSave: true,
             lengthMenu: [
                 [10, 50, 100, 150],
                 [10, 50, 100, 150]

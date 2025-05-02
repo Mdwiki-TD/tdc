@@ -248,12 +248,14 @@ echo $recent_table;
 
     $(document).ready(function() {
         var t = $('#last_tabel').DataTable({
+            stateSave: true,
             // order: [ [6, 'desc'] ],
             paging: false,
             // lengthMenu: [[100, 150, 200], [250, 150, 200]],
             // scrollY: 800
         });
         var t = $('#last_users_tabel').DataTable({
+            stateSave: true,
             order: [
                 [4, 'desc']
             ],

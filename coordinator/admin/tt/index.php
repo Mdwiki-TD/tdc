@@ -244,6 +244,7 @@ HTML;
 
 	$(document).ready(function() {
 		var t = $('#em').DataTable({
+            stateSave: true,
 			// order: [[5	, 'desc']],
 			// paging: false,
 			lengthMenu: [

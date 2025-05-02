@@ -86,7 +86,7 @@ function filter_table($project_name)
 	TablesSql::$s_projects_title_to_id["empty"] = "empty";
 	//---
 	$l_list = <<<HTML
-		<option value='Uncategorized'>Uncategorized</option>
+		<option data-tokens='all' value='All'>All</option>
 	HTML;
 	//---
 	foreach (TablesSql::$s_projects_title_to_id as $p_title => $p_id) {
@@ -129,7 +129,9 @@ $form_rows = '';
 //---
 $limit = (isset($_GET['limit'])) ? $_GET['limit'] : 0;
 //---
-$main_project = (isset($_GET['project'])) ? $_GET['project'] : '';
+$main_project = (isset($_GET['project'])) ? $_GET['project'] : 'All';
+//---
+// if ($main_project == 'empty') { $main_project = 'Uncategorized'; }
 //---
 $project_filter = filter_table($main_project);
 //---
@@ -143,11 +145,9 @@ foreach ($users_done as $user_name => $table) {
 	//---
 	$user_group2 = $user_group;
 	// ---
-	if ($user_group2 == '') {
-		$user_group2 = 'empty';
-	}
+	if ($user_group2 == '') $user_group2 = 'Uncategorized';
 	//---
-	if ($main_project != "" && $user_group2 != $main_project) {
+	if ($main_project != "" && $main_project != "All" && $user_group2 != $main_project) {
 		continue;
 	}
 	//---
@@ -188,9 +188,9 @@ foreach ($users_done as $user_name => $table) {
 		<td data-content=''>
 			$mail_icon
 		</td>
-		<td data-order='$user_group' data-search='$user_group' data-content='Project'>
+		<td data-order='$user_group2' data-search='$user_group2' data-content='Project'>
 			<!-- <select name='project_$numb' class='form-select options'>$ project_line</select> -->
-			<input class='form-control' size='25' name='project_$numb' value='$user_group' readonly/>
+			<input class='form-control' size='25' name='project_$numb' value='$user_group2' readonly/>
 		</td>
 		<td data-order='$wiki' data-search='$wiki2' data-content='Wiki'>
 			<input class='form-control' size='4' name='wiki_$numb' value='$wiki' readonly/>
@@ -316,6 +316,7 @@ HTML;
 
 	$(document).ready(function() {
 		var t = $('#em').DataTable({
+			stateSave: true,
 			// order: [[5	, 'desc']],
 			// paging: false,
 			lengthMenu: [
