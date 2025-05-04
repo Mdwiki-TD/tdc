@@ -12,6 +12,13 @@ use function Actions\MdwikiSql\fetch_query;
 
 function insert_to_pages($t)
 {
+	// ---
+	// in all $t values find and replace "_" by " " if its string
+	foreach ($t as $key => $value) {
+		if (is_string($value)) {
+			$t[$key] = str_replace('_', ' ', $value);
+		}
+	}
 	//---
 	$query1 = <<<SQL
         UPDATE pages
