@@ -170,10 +170,10 @@ function sql_add_user($user_name, $email, $wiki, $project)
     return $results;
 }
 
-function sql_update_user($user_name, $email, $wiki, $project, $ido)
+function sql_update_user($user_name, $email, $wiki, $project, $user_id)
 {
-    // Check if $ido is set and not empty
-    if (empty($ido) || $ido == 0 || $ido == "0") {
+    // Check if $user_id is set and not empty
+    if (empty($user_id) || $user_id == 0 || $user_id == "0") {
         return;
     }
     // Use a prepared statement for UPDATE
@@ -183,9 +183,9 @@ function sql_update_user($user_name, $email, $wiki, $project, $ido)
             email = ?,
             user_group = ?,
             wiki = ?
-        WHERE users.user_id = ?
+        WHERE user_id = ?
     SQL;
-    $params = [$user_name, $email, $project, $wiki, $ido];
+    $params = [$user_name, $email, $project, $wiki, $user_id];
 
     // Prepare and execute the SQL query with parameter binding
     $results = execute_query($qua, $params = $params);

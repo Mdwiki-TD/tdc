@@ -183,8 +183,6 @@ echo <<<HTML
 	</div>
 HTML;
 // ---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
-//---
 $new_row = make_edit_icon_new("qids/edit_qid", ["new" => 1, "qid_table" => $qid_table], $text = "Add one!");
 //---
 echo <<<HTML

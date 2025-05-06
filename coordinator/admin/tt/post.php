@@ -6,6 +6,11 @@ use function TDWIKI\csrf\verify_csrf_token;
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 //---
+echo '</div><script>
+$("#mainnav").hide();
+$("#maindiv").hide();
+</script>';
+// ---
 $cat = $_GET['cat'] ?? '';
 //---
 if (verify_csrf_token()) {
