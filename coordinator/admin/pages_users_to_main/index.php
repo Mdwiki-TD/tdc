@@ -107,9 +107,11 @@ function make_td($tabg, $nnnn)
     $qid_link = (!empty($qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$qid'>$qid</a>" : "";
     $new_qid_link = (!empty($new_qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$new_qid'>$new_qid</a>" : "";
     //---
+    $new_target2 = htmlspecialchars($new_target, ENT_QUOTES);
+    //---
     if (!empty($qid) && empty($new_qid)) {
         $same_qid = "bg-info-subtle";
-        $new_qid_link = "<a class='fw-bold' target='_blank' href='https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$new_target' u-lang='$lang' u-qid='$qid' u-target='$new_target'>Link it!</a>";
+        $new_qid_link = "<a class='fw-bold' target='_blank' href='https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$new_target2' u-lang='$lang' u-qid='$qid' u-target='$new_target2'>Link it!</a>";
     } else {
         $same_qid = ($qid == $new_qid) ? "bg-info-subtle" : "bg-danger-subtle";
     }
