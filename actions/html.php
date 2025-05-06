@@ -31,6 +31,7 @@ use Tables\SqlTables\TablesSql;
 
 function add_quotes($str)
 {
+    // htmlspecialchars($str, ENT_QUOTES) ?
     $quote = preg_match("/[']+/u", $str) ? '"' : "'";
     return $quote . $str . $quote;
 };
@@ -346,14 +347,14 @@ function make_target_url($target, $lang, $name = '', $deleted = false)
     return $target;
 }
 
-function div_alert($texts, $type)
+function div_alert($texts, $type = "secondary")
 {
     $div = "";
     // ---
-    if (empty($type))  $type = "success";
+    if (empty($type)) $type = "secondary";
     // ---
     if (!empty($texts)) {
-        $div .= "<div class='container mt-3'><div class='alert alert-$type' role='alert'>";
+        $div .= "<div class='container m-1'><div class='alert alert-$type' role='alert'>";
         foreach ($texts as $text) {
             $div .= htmlspecialchars($text) . "<br>";
         }
@@ -362,3 +363,26 @@ function div_alert($texts, $type)
     // ---
     return $div;
 }
+
+function make_edit_icon_new($target, $edit_params, $text = "Edit")
+{
+    //---
+    if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
+        $edit_params['test'] = 1;
+    }
+    //---
+    $edit_params['nonav'] = 1;
+    //---
+    $edit_url = "index.php?ty=$target&" . http_build_query($edit_params);
+    //---
+    $onclick = 'pupwindow1("' . $edit_url . '")';
+    //---
+    if (empty($text)) $text = "Edit";
+    //---
+    $class_sm = ($text == "Edit") ? "btn-sm" : "";
+    //---
+    return <<<HTML
+		<a class='btn btn-outline-primary $class_sm' onclick='$onclick'>$text</a>
+	HTML;
+}
+//---

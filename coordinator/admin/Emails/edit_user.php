@@ -5,10 +5,8 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-use function Actions\MdwikiSql\sql_update_user;
 use function Actions\Html\make_project_to_user;
 use function TDWIKI\csrf\generate_csrf_token;
-use function TDWIKI\csrf\verify_csrf_token;
 //---
 echo '</div><script>
     $("#mainnav").hide();
@@ -23,85 +21,55 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-$tabs = [];
+$user    = $_GET['user'] ?? '';
+$wiki    = $_GET['wiki'] ?? '';
+$project = $_GET['project'] ?? '';
+$email   = $_GET['email'] ?? '';
+$user_id = $_GET['user_id'] ?? '';
 //---
-$user   = $_REQUEST['user'] ?? '';
-$wiki   = $_REQUEST['wiki'] ?? '';
-$project = $_REQUEST['project'] ?? '';
-$email  = $_REQUEST['email'] ?? '';
-$id     = $_REQUEST['id'] ?? '';
+$header_title = ($user_id != "") ? "Edit User" : "Add New User";
 //---
 echo <<<HTML
 <div class='card'>
     <div class='card-header'>
-        <h4>Edit Users</h4>
+        <h4>$header_title</h4>
     </div>
     <div class='card-body'>
 HTML;
-//---
-function send_user($id, $user, $project, $wiki, $email)
-{
-    //---
-    if (!empty($user)) {
-        //---
-        $user = trim($user);
-        $email     = trim($email);
-        //---
-        // Validate email format if not empty
-        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            // Handle invalid email - either log, set to empty, or return error
-            $email = '';
-        }
-        //---
-        $wiki      = trim($wiki);
-        $project   = trim($project);
-        //---
-        sql_update_user($user, $email, $wiki, $project, $id);
-        //---
-    };
-    //---
-    // green text success
-    echo <<<HTML
-        <div class='alert alert-success' role='alert'>User "$user" information updated<br>
-            window will close in 3 seconds
-        </div>
-        <!-- close window after 3 seconds -->
-        <script>
-            setTimeout(function() {
-                window.close();
-            }, 3000);
-        </script>
-    HTML;
-}
-//---
-function echo_form($user, $wiki, $project, $email, $id)
+
+function echo_form($user, $wiki, $project, $email, $user_id)
 {
     //---
     $project_line = make_project_to_user($project);
     //---
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
     //---
+    $id_row = <<<HTML
+        <div class='col-md-3'>
+            <div class='input-group mb-3'>
+                <div class='input-group-prepend'>
+                    <span class='input-group-text'>User id</span>
+                </div>
+                <input class='form-control' type='text' name='emails[1][user_id]' value='$user_id' readonly/>
+            </div>
+        </div>
+    HTML;
+    // ---
+    if ($user_id == "") $id_row = "";
+    // ---
     echo <<<HTML
-        <form action='index.php?ty=Emails/edit_user&nonav=120' method="POST">
+        <form action='index.php?ty=Emails/post&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" hidden />
             <input name='edit' value="1" hidden/>
             <div class='container'>
                 <div class='row'>
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>Id</span>
-                            </div>
-                            <input class='form-control' type='text' value='$id' disabled/>
-                            <input class='form-control' type='text' id='id' name='id' value='$id' hidden/>
-                        </div>
-                    </div>
+                    $id_row
                     <div class='col-md-3'>
                         <div class='input-group mb-3'>
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>User</span>
                             </div>
-                            <input class='form-control' type='text' id='user' name='user' value='$user' required/>
+                            <input class='form-control' type='text' name='emails[1][username]' value='$user' required/>
                         </div>
                     </div>
                     <div class='col-md-3'>
@@ -109,7 +77,7 @@ function echo_form($user, $wiki, $project, $email, $id)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>email</span>
                             </div>
-                            <input class='form-control' type='text' id='email' name='email' value='$email'/>
+                            <input class='form-control' type='text' name='emails[1][email]' value='$email'/>
                         </div>
                     </div>
                     <div class='col-md-3'>
@@ -117,7 +85,7 @@ function echo_form($user, $wiki, $project, $email, $id)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>wiki</span>
                             </div>
-                            <input class='form-control' type='text' id='wiki' name='wiki' value='$wiki'/>
+                            <input class='form-control' type='text' name='emails[1][wiki]' value='$wiki'/>
                         </div>
                     </div>
                     <div class='col-md-3'>
@@ -125,7 +93,7 @@ function echo_form($user, $wiki, $project, $email, $id)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>project</span>
                             </div>
-                            <select name='project' class='form-select options'>$project_line</select>
+                            <select name='emails[1][project]' class='form-select options'>$project_line</select>
                         </div>
                     </div>
                     <div class='col-md-2'>
@@ -137,12 +105,7 @@ function echo_form($user, $wiki, $project, $email, $id)
     HTML;
 }
 //---
-if (isset($_POST['edit']) && verify_csrf_token()) {
-    send_user($id, $user, $project, $wiki, $email);
-    //---
-} else {
-    echo_form($user, $wiki, $project, $email, $id);
-}
+echo_form($user, $wiki, $project, $email, $user_id);
 //---
 echo <<<HTML
     </div>

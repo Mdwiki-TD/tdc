@@ -27,7 +27,7 @@ if (isset($GLOBALS['time_start'])) {
 	};
 
 	function pupwindow1(url) {
-		window.open(url, 'popupWindow', 'width=600,height=400, left=100, top=100, location=no');
+		window.open(url, '', 'width=600,height=400, left=100, top=100, location=no');
 	};
 
 	$(".Dropdown_menu_toggle").on("click", function() {

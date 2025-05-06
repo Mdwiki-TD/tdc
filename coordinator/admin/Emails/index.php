@@ -8,6 +8,7 @@ if (user_in_coord == false) {
 use Tables\SqlTables\TablesSql;
 use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_project_to_user;
+use function Actions\Html\make_edit_icon_new;
 use function Actions\MdwikiSql\fetch_query;
 use function SQLorAPI\Get\get_users_by_last_pupdate;
 use function SQLorAPI\Get\get_td_or_sql_count_pages_not_empty;
@@ -25,27 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 //---
 include_once __DIR__ . '/sugust.php';
-//---
-function make_edit_icon($id, $user, $email, $wiki2, $proj)
-{
-	//---
-	$edit_params = array(
-		'id'   => $id,
-		'nonav'  => 1,
-		'user'  => $user,
-		'email'  => $email,
-		'wiki'  => $wiki2,
-		'project'  => $proj
-	);
-	//---
-	$edit_url = "index.php?ty=Emails/edit_user&" . http_build_query($edit_params);
-	//---
-	$onclick = 'pupwindow1("' . $edit_url . '")';
-	//---
-	return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
-    HTML;
-}
 
 function get_sorted_array()
 {
@@ -155,14 +135,10 @@ foreach ($users_done as $user_name => $table) {
 	//---
 	if ($limit > 0 && $numb > $limit) break;
 	//---
-	$id			= $table['user_id'] ?? "";
+	$user_id    = $table['user_id'] ?? "";
 	$email 		= $table['email'] ?? "";
 	$wiki		= $table['wiki'] ?? "";
 	$user 		= $table['username'] ?? "";
-	//---
-	$wiki2		= $wiki . "wiki";
-	//---
-	// $project_line = make_project_to_user($user_group);
 	//---
 	$mail_icon = '';
 	//---
@@ -170,7 +146,15 @@ foreach ($users_done as $user_name => $table) {
 		$mail_icon = make_mail_icon($last_user_to_tab[$user_name]);
 	}
 	//---
-	$edit_icon = make_edit_icon($id, $user, $email, $wiki, $user_group);
+	$edit_params = array(
+		'user_id'   => $user_id,
+		'user'  => $user,
+		'email'  => $email,
+		'wiki'  => $wiki,
+		'project'  => $user_group
+	);
+	//---
+	$edit_icon = make_edit_icon_new("Emails/edit_user", $edit_params);
 	//---
 	$form_rows .= <<<HTML
 	<tr>
@@ -179,8 +163,6 @@ foreach ($users_done as $user_name => $table) {
 		</td>
 		<td data-order='$user_name' data-content='User name'>
 			<span><a href='/Translation_Dashboard/leaderboard.php?user=$user_name'>$user_name</a></span>
-			<input name='username_$numb' value='$user_name' hidden/>
-			<input name='id_$numb' value='$id' hidden/>
 		</td>
 		<td data-order='$email' data-search='$email' data-content='Email'>
 			<input class='form-control' size='25' name='email_$numb' value='$email' readonly/>
@@ -189,10 +171,9 @@ foreach ($users_done as $user_name => $table) {
 			$mail_icon
 		</td>
 		<td data-order='$user_group2' data-search='$user_group2' data-content='Project'>
-			<!-- <select name='project_$numb' class='form-select options'>$ project_line</select> -->
 			<input class='form-control' size='25' name='project_$numb' value='$user_group2' readonly/>
 		</td>
-		<td data-order='$wiki' data-search='$wiki2' data-content='Wiki'>
+		<td data-order='$wiki' data-search='$wiki' data-content='Wiki'>
 			<input class='form-control' size='4' name='wiki_$numb' value='$wiki' readonly/>
 		</td>
 		<td data-order='$live' data-content='Live'>
@@ -253,67 +234,17 @@ echo <<<HTML
 	</div>
 HTML;
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$new_row = make_edit_icon_new("Emails/edit_user", ["new" => 1], $text = "Add one!");
 //---
 echo <<<HTML
-	<div class='card'>
+	<div class='card mt-1'>
 		<div class='card-body'>
-			<form action="index.php?ty=Emails&project=$main_project" method="POST">
-				<input name='csrf_token' value="$csrf_token" hidden />
-				<input name='ty' value="Emails" hidden />
-				<div class="form-group" id='new_tab_add' style='display: none;'>
-					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Username</th>
-								<th>Email</th>
-								<th>Project</th>
-								<th>Wiki</th>
-							</tr>
-						</thead>
-						<tbody id="tab_ma">
-						</tbody>
-					</table>
-				</div>
-				<div class="form-group d-flex justify-content-between">
-					<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
-					<span role='button' class="btn btn-outline-primary" onclick='add_row()'>New row</span>
-					<span> </span>
-				</div>
-			</form>
+			$new_row
 		</div>
 	</div>
 HTML;
 ?>
 <script type="text/javascript">
-	function pupwindow(url) {
-		window.open(url, 'popupWindow', 'width=850,height=550,scrollbars=yes');
-	};
-
-	function add_row() {
-		$('#submit_bt').show();
-		$('#new_tab_add').show();
-		var ii = $('#tab_ma >tr').length + 1;
-
-		var options = $('.options').html();
-		// find if any element has attr selected and unselect it
-		options = options.replace(/selected/g, '');
-		// ---
-		var e = `
-			<tr>
-				<td>${ii}</td>
-				<td><input class='form-control' name='emails[${ii}][username]'/></td>
-				<td><input class='form-control' size='25' name='emails[${ii}][email]'/></td>
-				<td><select name='emails[${ii}][project]' class='form-select'>${options}</select></td>
-				<td><input class='form-control' size='4' name='emails[${ii}][wiki]'/></td>
-			</tr>
-		`;
-		// ---
-		$('#tab_ma').append(e);
-		// ---
-	};
-
 	$(document).ready(function() {
 		var t = $('#em').DataTable({
 			stateSave: true,

@@ -12,6 +12,7 @@ INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT DISTINCT q.title,
 use Tables\SqlTables\TablesSql;
 use function Actions\Html\makeDropdown;
 use function Actions\Html\make_mdwiki_title;
+use function Actions\Html\make_edit_icon_new;
 use function Results\GetCats\get_mdwiki_cat_members;
 use function Actions\MdwikiSql\execute_query;
 use function TDWIKI\csrf\generate_csrf_token;
@@ -63,30 +64,18 @@ if ($cat == 'All') {
 } else {
 	TablesSql::$s_cat_titles = get_mdwiki_cat_members($cat, $use_cache = true, $depth = 1);
 }
-//---
-function make_edit_icon($id, $title, $full, $lead)
+
+function make_row($id, $title, $lead, $full, $numb)
 {
 	//---
 	$edit_params = array(
 		'id'   => $id,
 		'title'  => $title,
-		'nonav'  => 1,
 		'lead'  => $lead,
 		'full'  => $full
 	);
 	//---
-	$edit_url = "index.php?ty=tt/edit_translate_type&" . http_build_query($edit_params);
-	//---
-	$onclick = 'pupwindow1("' . $edit_url . '")';
-	//---
-	return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
-    HTML;
-}
-//---
-function make_row($id, $title, $lead, $full, $numb)
-{
-	$edit_icon = make_edit_icon($id, $title, $full, $lead);
+	$edit_icon = make_edit_icon_new("tt/edit_translate_type", $edit_params);
 	//---
 	$md_title = make_mdwiki_title($title);
 	//---
@@ -121,15 +110,17 @@ function make_row($id, $title, $lead, $full, $numb)
 	HTML;
 }
 //---
-$numb = 0;
-//---
 $table_rows = "";
+//---
+// $tt_count = count(TablesSql::$s_cat_titles);
+//---
+$tt_count = 0;
 //---
 foreach (TablesSql::$s_cat_titles as $title) {
 	//---
 	if (in_array($title, $new_titles)) continue;
 	//---
-	$numb += 1;
+	$tt_count += 1;
 	//---
 	$table = $full_translates_tab[$title] ?? [];
 	//---
@@ -137,7 +128,7 @@ foreach (TablesSql::$s_cat_titles as $title) {
 	$lead 		= $table['lead'] ?? 1;
 	$full		= $table['full'] ?? 0;
 	//---
-	$table_rows .= make_row($id, $title, $lead, $full, $numb);
+	$table_rows .= make_row($id, $title, $lead, $full, $tt_count);
 	//---
 };
 //---
@@ -147,10 +138,10 @@ echo <<<HTML
 			$testin
 			<input name='ty' value="tt" hidden/>
 			<div class='row'>
-				<div class='col-md-3'>
-					<h4>Translate Type:</h4>
+				<div class='col-md-6'>
+					<h4>Translate Type ($tt_count):</h4>
 				</div>
-				<div class='col-md-3'>
+				<div class='col-md-4'>
 					$uuu
 				</div>
 				<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
@@ -179,72 +170,20 @@ HTML;
 //---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
 //---
+$new_row = make_edit_icon_new("tt/edit_translate_type", ["new" => 1], $text = "Add one!");
+//---
 echo <<<HTML
-	<div class='card'>
+	<div class='card mt-1'>
 		<div class='card-body'>
-			<form action="index.php?ty=tt/post&cat=$cat" method="POST">
-				<input name='csrf_token' value="$csrf_token" hidden />
-				$testin
-				<input name='ty' value="tt/post" hidden/>
-				<div id='tt_table' class="form-group" style='display: none;'>
-					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Title</th>
-								<th>Lead</th>
-								<th>Full</th>
-							</tr>
-						</thead>
-						<tbody id="tab_new">
-
-						</tbody>
-					</table>
-				</div>
-				<div class="form-group d-flex justify-content-between">
-					<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
-					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
-					<span> </span>
-				</div>
-			</form>
+			$new_row
 		</div>
 	</div>
 HTML;
 ?>
 <script type="text/javascript">
-	function add_row() {
-		$('#submit_bt').show();
-		$('#tt_table').show();
-		var ii = $('#tab_new >tr').length + 1;
-		var e = `
-			<tr>
-				<td>
-					${ii}
-					<input type='hidden' name='rows[${ii}][add]'/>
-				</td>
-				<td>
-					<input class='form-control' name='rows[${ii}][title]'/>
-				</td>
-
-				<td data-content='Lead'>
-					<div class='form-check form-switch'>
-						<input class='form-check-input' type='checkbox' name='rows[${ii}][lead]' value='1'/>
-					</div>
-				</td>
-				<td data-content='Full'>
-					<div class='form-check form-switch'>
-						<input class='form-check-input' type='checkbox' name='rows[${ii}][full]' value='1'/>
-					</div>
-				</td>
-			</tr>
-		`;
-
-		$('#tab_new').append(e);
-	};
-
 	$(document).ready(function() {
 		var t = $('#em').DataTable({
-            stateSave: true,
+			stateSave: true,
 			// order: [[5	, 'desc']],
 			// paging: false,
 			lengthMenu: [

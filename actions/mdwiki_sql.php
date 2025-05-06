@@ -11,6 +11,7 @@ use function Actions\MdwikiSql\update_settings_value;
 use function Actions\MdwikiSql\insert_to_translate_type;
 use function Actions\MdwikiSql\insert_to_projects;
 use function Actions\MdwikiSql\display_tables;
+use function Actions\MdwikiSql\check_one;
 */
 
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
@@ -169,10 +170,10 @@ function sql_add_user($user_name, $email, $wiki, $project)
     return $results;
 }
 
-function sql_update_user($user_name, $email, $wiki, $project, $ido)
+function sql_update_user($user_name, $email, $wiki, $project, $user_id)
 {
-    // Check if $ido is set and not empty
-    if (empty($ido) || $ido == 0 || $ido == "0") {
+    // Check if $user_id is set and not empty
+    if (empty($user_id) || $user_id == 0 || $user_id == "0") {
         return;
     }
     // Use a prepared statement for UPDATE
@@ -182,9 +183,9 @@ function sql_update_user($user_name, $email, $wiki, $project, $ido)
             email = ?,
             user_group = ?,
             wiki = ?
-        WHERE users.user_id = ?
+        WHERE user_id = ?
     SQL;
-    $params = [$user_name, $email, $project, $wiki, $ido];
+    $params = [$user_name, $email, $project, $wiki, $user_id];
 
     // Prepare and execute the SQL query with parameter binding
     $results = execute_query($qua, $params = $params);
@@ -233,9 +234,9 @@ function update_settings_value($id, $value)
 
 function insert_to_translate_type($tt_title, $tt_lead, $tt_full, $tt_id = 0)
 {
-    $params = [$tt_lead, $tt_full, $tt_title];
     //---
-    $query = "UPDATE translate_type SET tt_lead = ?, tt_full = ? WHERE tt_title = ?";
+    $query = "UPDATE translate_type SET tt_lead = ?, tt_full = ? WHERE tt_id = ?";
+    $params = [$tt_lead, $tt_full, $tt_id];
     //---
     if ($tt_id == 0 || $tt_id == '0' || empty($tt_id)) {
         $query = "INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT ?, ?, ?";
@@ -260,4 +261,24 @@ function insert_to_projects($g_title, $g_id)
     $result = execute_query($query, $params);
     //---
     return $result;
+}
+
+function check_one($select = "*", $where = "", $value = "", $table = "")
+{
+    // ---
+    // check if it's already in table
+    $query = "SELECT $select FROM $table WHERE $where = ?";
+    // ---
+    $result = fetch_query($query, [$value]);
+    //---
+    if (count($result) > 0) {
+        foreach ($result as $key => $tab) {
+            // ---
+            // echo "<br>check_one: $where: $tab[$select]<br>";
+            // ---
+            return $tab[$select] ?? $tab;
+        }
+    }
+    //---
+    return false;
 }

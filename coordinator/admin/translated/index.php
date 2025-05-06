@@ -5,6 +5,7 @@ use Tables\Langs\LangsTables;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
+use function Actions\Html\make_edit_icon_new;
 use function SQLorAPI\Recent\get_recent_translated;
 use function SQLorAPI\Get\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
@@ -34,10 +35,7 @@ function get_languages()
             continue;
         }
         //---
-        $lag = strtolower($tat);
-        //---
-        $tabes[] = $lag;
-        //---
+        $tabes[] = strtolower($tat);
     };
     //---
     ksort($tabes);
@@ -61,50 +59,27 @@ $recent_table = <<<HTML
 		<tbody>
 HTML;
 //---
-function make_edit_icon($id, $title, $target, $lang, $user, $pupdate, $table)
-{
-    //---
-    $edit_params = array(
-        'id'   => $id,
-        // 'title'     => $title,
-        // 'target'  => $target,
-        // 'lang'    => $lang,
-        // 'user'    => $user,
-        // 'pupdate' => $pupdate,
-        'table' => $table,
-        'nonav' => 1
-
-    );
-    //---
-    if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-        $edit_params['test'] = 1;
-    }
-    //---
-    $edit_url = "index.php?ty=translated/edit_page&" . http_build_query($edit_params);
-    //---
-    $onclick = 'pupwindow1("' . $edit_url . '")';
-    //---
-    return <<<HTML
-		<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
-	HTML;
-}
-//---
 function make_td($tabg, $nnnn, $table)
 {
     //---
-    $id          = $tabg['id'] ?? "";
+    $id = $tabg['id'] ?? "";
     //---
-    $user      = $tabg['user'] ?? "";
-    $lang      = $tabg['lang'] ?? "";
+    $user = $tabg['user'] ?? "";
+    $lang = $tabg['lang'] ?? "";
     $md_title = trim($tabg['title'] ?? '');
-    $target      = trim($tabg['target'] ?? '');
+    $target = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     //---
     $mdwiki_title = make_mdwiki_title($md_title);
     //---
     $targe33 = make_target_url($target, $lang);
     //---
-    $edit_icon = make_edit_icon($id, $md_title, $target, $lang, $user, $pupdate, $table);
+    $edit_params = array(
+        'id'   => $id,
+        'table' => $table
+    );
+    //---
+    $edit_icon = make_edit_icon_new("translated/edit_page", $edit_params);
     //---
     $laly = <<<HTML
 		<tr>
@@ -151,14 +126,14 @@ $recent_table .= <<<HTML
 HTML;
 //---
 $lang_table = get_languages();
-$filter_la = filter_recent($lang, $lang_table);
+$filter_lang = filter_recent($lang, $lang_table);
 //---
 $data = [
     "pages" => 'Main',
     "pages_users" => 'User',
 ];
 //---
-$filter_ta = filter_table($data, $table, 'table');
+$filter_ns = filter_table($data, $table, 'table');
 //---
 $count_result = count($qsl_results);
 //---
@@ -171,10 +146,10 @@ echo <<<HTML
 					<h4>Translated Pages ($count_result):</h4>
 				</div>
 				<div class='col-md-4'>
-					$filter_ta
+					$filter_ns
 				</div>
 				<div class='col-md-3'>
-					$filter_la
+					$filter_lang
 				</div>
 				<div class='aligncenter col-md-1'>
 					<input class='btn btn-outline-primary' type='submit' value='Filter' />

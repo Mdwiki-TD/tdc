@@ -4,6 +4,7 @@
 use Tables\Langs\LangsTables;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_target_url;
+use function Actions\Html\make_edit_icon_new;
 use function SQLorAPI\Recent\get_pages_users_to_main;
 use function SQLorAPI\Get\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent;
@@ -40,14 +41,19 @@ function get_languages()
     return $tabes;
 }
 //---
-$recent_table = <<<HTML
+$Toggle_column = <<<HTML
     <div>
-        Toggle column: <a class="toggle-vis" data-column="0" type="button">#</a>
-        - <a class="toggle-vis" data-column="1" type="button">Lang.</a>
-        - <a class="toggle-vis" data-column="2" type="button">Title</a>
-        - <a class="toggle-vis" data-column="3" type="button">Qid</a>
-        - <a class="toggle-vis" data-column="4" type="button">Publication</a>
+        <span class="toggle-vis btn" data-column="0">Toggle columns:</span>
+        <a class="toggle-vis btn btn-outline-primary" data-column="0" type="button">#</a>
+        <a class="toggle-vis btn btn-outline-primary" data-column="1" type="button">Lang.</a>
+        <a class="toggle-vis btn btn-outline-primary" data-column="2" type="button">Title</a>
+        <a class="toggle-vis btn btn-outline-primary" data-column="3" type="button">Qid</a>
+        <a class="toggle-vis btn btn-outline-primary" data-column="4" type="button">Publication</a>
     </div>
+HTML;
+//---
+$recent_table = <<<HTML
+    $Toggle_column
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="pages_table" style="font-size:90%;">
 		<thead>
 			<tr>
@@ -66,32 +72,7 @@ $recent_table = <<<HTML
 		</thead>
 		<tbody>
 HTML;
-//---
-function make_edit_icon($id, $new_target, $new_user)
-{
-    //---
-    $edit_params = array(
-        'id'   => $id,
-        'new_user'   => $new_user,
-        'new_target'   => $new_target,
-        'nonav' => 1
 
-    );
-    //---
-    if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-        $edit_params['test'] = 1;
-    }
-    //---
-    $edit_url = "index.php?ty=pages_users_to_main/fix_it&" . http_build_query($edit_params);
-    //---
-    $onclick = 'pupwindow1("' . $edit_url . '")';
-    // $onclick = '';
-    //---
-    return <<<HTML
-		<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Fix it</a>
-	HTML;
-}
-//---
 function make_td($tabg, $nnnn)
 {
     //---
@@ -111,7 +92,14 @@ function make_td($tabg, $nnnn)
     //---
     $targe44 = make_target_url($new_target, $lang);
     //---
-    $edit_icon = make_edit_icon($id, $new_target, $new_user);
+    $edit_params = array(
+        'id'   => $id,
+        'new_user'   => $new_user,
+        'new_target'   => $new_target
+
+    );
+    //---
+    $edit_icon = make_edit_icon_new("pages_users_to_main/fix_it", $edit_params);
     //---
     $qid          = $tabg['qid'] ?? "";
     $new_qid      = $tabg['new_qid'] ?? "";
@@ -206,8 +194,8 @@ echo <<<HTML
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
 			<input name='ty' value='pages_users_to_main' hidden/>
 			<div class='row'>
-				<div class='col-md-6'>
-					<h4>Translated Pages in user namespace to move to main namespace ($count_result):</h4>
+				<div class='col-md-7'>
+					<h4>Userpages need to be moved to main pages: ($count_result)</h4>
 				</div>
 				<div class='col-md-3'>
 					$filter_la
@@ -240,6 +228,10 @@ echo $recent_table;
         document.querySelectorAll('a.toggle-vis').forEach((el) => {
             el.addEventListener('click', function(e) {
                 e.preventDefault();
+
+                // add class mb_btn_active to this
+                el.classList.toggle('btn-outline-primary');
+                el.classList.toggle('btn-outline-secondary');
 
                 let columnIdx = e.target.getAttribute('data-column');
                 let column = table.column(columnIdx);
