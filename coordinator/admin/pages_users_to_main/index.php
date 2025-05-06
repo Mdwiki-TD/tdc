@@ -109,7 +109,7 @@ function make_td($tabg, $nnnn)
     //---
     if (!empty($qid) && empty($new_qid)) {
         $same_qid = "bg-info-subtle";
-        $new_qid_link = "<a class='fw-bold' target='_blank' href='https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$new_target'>Link it!</a>";
+        $new_qid_link = "<a class='fw-bold' target='_blank' href='https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$new_target' u-lang='$lang' u-qid='$qid' u-target='$new_target'>Link it!</a>";
     } else {
         $same_qid = ($qid == $new_qid) ? "bg-info-subtle" : "bg-danger-subtle";
     }
@@ -212,6 +212,7 @@ HTML;
 echo $recent_table;
 //---
 ?>
+<script src="/tdc/js/fix_u_targets.js"></script>
 <script>
     $(document).ready(function() {
         var table = $('#pages_table').DataTable({
