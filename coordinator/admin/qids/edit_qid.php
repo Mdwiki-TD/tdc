@@ -92,7 +92,7 @@ $qid    = $_GET['qid'] ?? '';
 $id     = $_GET['id'] ?? '';
 $table  = $_GET['qid_table'] ?? '';
 // ---
-if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
+if ($table != 'qids' && $table != 'qids_others') $table = 'qids';
 // ---
 echo_form_post($id, $title, $qid, $table);
 // ---

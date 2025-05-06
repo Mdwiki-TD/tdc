@@ -185,59 +185,15 @@ HTML;
 // ---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
 //---
-$new_row = make_edit_icon_new("qids/edit_qid", ["new" => 1, "qid_table" => $qid_table], $text = "Add one");
+$new_row = make_edit_icon_new("qids/edit_qid", ["new" => 1, "qid_table" => $qid_table], $text = "Add one!");
 //---
 echo <<<HTML
 	<div class='card mt-1'>
 		<div class='card-body'>
-			<form action="index.php?ty=$qid_table/post&dis=$dis&qid_table=$qid_table" method="POST">
-				<input name='csrf_token' value="$csrf_token" hidden />
-				$testin
-				<input name='ty' value="qids/post" hidden/>
-				<input name='qid_table' value="$qid_table" hidden/>
-				<div id='qidstab' style='display: none;'>
-					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Title</th>
-								<th>Qid</th>
-							</tr>
-						</thead>
-						<tbody id="tab_new">
-						</tbody>
-					</table>
-				</div>
-				<div class="form-group d-flex justify-content-between">
-					$new_row
-					<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
-					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
-				</div>
-			</form>
+			$new_row
 		</div>
 	</div>
 HTML;
 
 ?>
-<script type="text/javascript">
-	var ii = 0;
-	// ---
-	function add_row() {
-		// ---
-		ii += 1;
-		// ---
-		$('#submit_bt').show();
-		$('#qidstab').show();
-		// ---
-		var e = `
-			<tr>
-				<td>${ii}</td>
-				<td><input class='form-control' name='rows[${ii}][title]' placeholder='title${ii}'/></td>
-				<td><input class='form-control' name='rows[${ii}][qid]' placeholder='qid${ii}'/></td>
-			</tr>
-		`;
-		// ---
-		$('#tab_new').append(e);
-	};
-</script>
 </div>

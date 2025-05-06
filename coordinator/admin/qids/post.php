@@ -7,7 +7,10 @@ use function Actions\MdwikiSql\check_one;
 use function TDWIKI\csrf\verify_csrf_token;
 
 // ---
-$dis = $_GET["dis"] ?? '';
+echo '</div><script>
+    $("#mainnav").hide();
+    $("#maindiv").hide();
+</script>';
 // ---
 $qid_table = $_GET["qid_table"] ?? '';
 // ---
@@ -43,32 +46,6 @@ function work_one_rows($qid, $id, $title, $qid_table)
 {
 	global $texts, $errors;
 	// ---
-	if ($qid && !empty($qid)) {
-		$tx_tab = check_one($select = "*", $where = "qid", $value = $qid, $table = $qid_table);
-		// ---
-		if ($tx_tab) {
-			$tx_id = $tx_tab['id'];
-			$title_of_qid = $tx_tab['title'];
-			// ---
-			if ($tx_id != $id) {
-				$errors[] = "Qid:($qid) already used in database with title:($title_of_qid).";
-				return;
-			}
-		}
-	}
-	// ---
-	$tt_tab = check_one($select = "*", $where = "title", $value = $title, $table = $qid_table);
-	// ---
-	if ($tt_tab) {
-		$qid_of_title5 = $tt_tab['qid'];
-		$tt_id = $tt_tab['id'];
-		// ---
-		if ($tt_id != $id) {
-			$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
-			return;
-		}
-	}
-	// ---
 	add_it($id, $title, $qid, $qid_table);
 	// ---
 	$qid_of_title = check_one($select = "qid", $where = "title", $value = $title, $table = $qid_table);
@@ -83,24 +60,6 @@ function work_one_rows($qid, $id, $title, $qid_table)
 function work_one_rows_add_new($qid, $title, $qid_table)
 {
 	global $texts, $errors;
-	// ---
-	if ($qid && !empty($qid)) {
-		$title_of_qid = check_one($select = "title", $where = "qid", $value = $qid, $table = $qid_table);
-		// ---
-		if (!empty($title_of_qid)) {
-			if (($title_of_qid != $title)) {
-				$errors[] = "Qid:($qid) already used in database with title:($title_of_qid).";
-				return;
-			}
-		}
-	}
-	// ---
-	$qid_of_title = check_one($select = "qid", $where = "title", $value = $title, $table = $qid_table);
-	// ---
-	if (!empty($qid_of_title) && $qid_of_title != $qid) {
-		$errors[] = "Title:($title) already used in database with qid:($qid_of_title), new qid:($qid)";
-		return;
-	}
 	// ---
 	add_it("", $title, $qid, $qid_table);
 	// ---
@@ -134,6 +93,43 @@ if (verify_csrf_token()) {
 			continue;
 		}
 		// ---
+		if ($qid && !empty($qid)) {
+			$tx_tab = check_one($select = "*", $where = "qid", $value = $qid, $table = $qid_table);
+			// ---
+			if ($tx_tab) {
+				$tx_id = $tx_tab['id'];
+				$title_of_qid = $tx_tab['title'];
+				// ---
+				if (!empty($id) && $tx_id != $id) {
+					$errors[] = "Qid:($qid) already used in database with with id:($tx_id).";
+					continue;
+				}
+				// ---
+				if (!empty($title_of_qid) && empty($id) && $title_of_qid != $title) {
+					$errors[] = "Qid:($qid) already used in database with title:($title_of_qid).";
+					continue;
+				}
+			}
+		}
+		// ---
+		$tt_tab = check_one($select = "*", $where = "title", $value = $title, $table = $qid_table);
+		// ---
+		if ($tt_tab) {
+			$qid_of_title5 = $tt_tab['qid'];
+			$tt_id = $tt_tab['id'];
+			// ---
+			if (!empty($id) && $tt_id != $id) {
+				$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
+				continue;
+			}
+			// ---
+			if (empty($id) && !empty($qid_of_title5) && $qid_of_title5 != $qid) {
+				$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
+				continue;
+			}
+			// ---
+		}
+		// ---
 		if (empty($id)) {
 			work_one_rows_add_new($qid, $title, $qid_table);
 		} else {
@@ -153,11 +149,8 @@ if (verify_csrf_token()) {
 	// echo div_alert(["return to Qids page in 1 seconds"]);
 };
 // ---
-$return_url = "index.php?ty=qids&dis=$dis&qid_table=$qid_table";
-// ---
 echo <<<HTML
-	<!-- <meta http-equiv='refresh' content='10; url=$return_url'> -->
 	<div class="aligncenter">
-		<a class="btn btn-outline-primary" href='$return_url'>return</a>
+		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
 HTML;
