@@ -148,7 +148,6 @@ foreach ($users_done as $user_name => $table) {
 	//---
 	$edit_params = array(
 		'user_id'   => $user_id,
-		'nonav'  => 1,
 		'user'  => $user,
 		'email'  => $email,
 		'wiki'  => $wiki,

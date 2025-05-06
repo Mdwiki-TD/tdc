@@ -76,8 +76,7 @@ function make_td($tabg, $nnnn, $table)
     //---
     $edit_params = array(
         'id'   => $id,
-        'table' => $table,
-        'nonav' => 1
+        'table' => $table
     );
     //---
     $edit_icon = make_edit_icon_new("translated/edit_page", $edit_params);

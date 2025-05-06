@@ -95,8 +95,7 @@ function make_td($tabg, $nnnn)
     $edit_params = array(
         'id'   => $id,
         'new_user'   => $new_user,
-        'new_target'   => $new_target,
-        'nonav' => 1
+        'new_target'   => $new_target
 
     );
     //---

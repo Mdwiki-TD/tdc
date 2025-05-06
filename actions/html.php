@@ -31,6 +31,7 @@ use Tables\SqlTables\TablesSql;
 
 function add_quotes($str)
 {
+    // htmlspecialchars($str, ENT_QUOTES) ?
     $quote = preg_match("/[']+/u", $str) ? '"' : "'";
     return $quote . $str . $quote;
 };

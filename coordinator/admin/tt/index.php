@@ -71,7 +71,6 @@ function make_row($id, $title, $lead, $full, $numb)
 	$edit_params = array(
 		'id'   => $id,
 		'title'  => $title,
-		'nonav'  => 1,
 		'lead'  => $lead,
 		'full'  => $full
 	);
@@ -111,17 +110,17 @@ function make_row($id, $title, $lead, $full, $numb)
 	HTML;
 }
 //---
-$numb = 0;
-//---
 $table_rows = "";
 //---
-$tt_count = count(TablesSql::$s_cat_titles);
+// $tt_count = count(TablesSql::$s_cat_titles);
+//---
+$tt_count = 0;
 //---
 foreach (TablesSql::$s_cat_titles as $title) {
 	//---
 	if (in_array($title, $new_titles)) continue;
 	//---
-	$numb += 1;
+	$tt_count += 1;
 	//---
 	$table = $full_translates_tab[$title] ?? [];
 	//---
@@ -129,7 +128,7 @@ foreach (TablesSql::$s_cat_titles as $title) {
 	$lead 		= $table['lead'] ?? 1;
 	$full		= $table['full'] ?? 0;
 	//---
-	$table_rows .= make_row($id, $title, $lead, $full, $numb);
+	$table_rows .= make_row($id, $title, $lead, $full, $tt_count);
 	//---
 };
 //---
