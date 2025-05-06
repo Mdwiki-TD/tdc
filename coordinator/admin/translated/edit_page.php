@@ -48,7 +48,6 @@ function delete_page($id, $table)
 
 function edit_page($id, $table, $title, $target, $lang, $user, $pupdate)
 {
-    //---
     $qua = "UPDATE $table
     SET
         title = ?,

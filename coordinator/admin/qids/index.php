@@ -6,11 +6,14 @@ if (user_in_coord == false) {
 };
 //---
 use function Actions\Html\make_mdwiki_title;
+use function Actions\Html\make_edit_icon_new;
 use function SQLorAPI\Get\get_td_or_sql_qids;
 use function SQLorAPI\Get\get_td_or_sql_qids_others;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 $qid_table = $_GET['qid_table'] ?? 'qids';
+//---
+if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
 
 function filter_table($data, $vav, $id)
 {
@@ -43,7 +46,7 @@ function filter_table($data, $vav, $id)
 	return $uuu;
 }
 
-function make_edit_icon($id, $title, $qid)
+function make_row($id, $title, $qid, $numb)
 {
 	global $qid_table;
 	//---
@@ -51,22 +54,10 @@ function make_edit_icon($id, $title, $qid)
 		'id'   => $id,
 		'qid_table'  => $qid_table,
 		'title'  => $title,
-		'nonav'  => 1,
 		'qid'  => $qid
 	);
 	//---
-	$edit_url = "index.php?ty=qids/edit_qid&" . http_build_query($edit_params);
-	//---
-	$onclick = 'pupwindow1("' . $edit_url . '")';
-	//---
-	return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
-    HTML;
-}
-//---
-function make_row($id, $title, $qid, $numb)
-{
-	$edit_icon = make_edit_icon($id, $title, $qid);
+	$edit_icon = make_edit_icon_new("qids/edit_qid", $edit_params);
 	//---
 	$md_title = make_mdwiki_title($title);
 	//---
@@ -158,7 +149,7 @@ echo <<<HTML
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
 			<input name='ty' value='qids' hidden/>
 			<div class='row'>
-				<div class='col-md-3'>
+				<div class='col-md-4'>
 					<h4>$Qids_title: ($dis:<span>$numb</span>)</h4>
 				</div>
 				<div class='col-md-2'>
@@ -174,7 +165,7 @@ echo <<<HTML
 		</form>
 	</div>
 	<div class='card-body'>
-		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2' style='width: 90%;'>
+		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2' style='width: 98%;'>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -194,8 +185,10 @@ HTML;
 // ---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
 //---
+$new_row = make_edit_icon_new("qids/edit_qid", ["new" => 1, "qid_table" => $qid_table], $text = "Add one");
+//---
 echo <<<HTML
-	<div class='card'>
+	<div class='card mt-1'>
 		<div class='card-body'>
 			<form action="index.php?ty=$qid_table/post&dis=$dis&qid_table=$qid_table" method="POST">
 				<input name='csrf_token' value="$csrf_token" hidden />
@@ -216,9 +209,9 @@ echo <<<HTML
 					</table>
 				</div>
 				<div class="form-group d-flex justify-content-between">
+					$new_row
 					<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
 					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
-					<span> </span>
 				</div>
 			</form>
 		</div>

@@ -23,7 +23,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-$tabs = [];
+
 //---
 $user   = $_REQUEST['user'] ?? '';
 $wiki   = $_REQUEST['wiki'] ?? '';
@@ -92,7 +92,7 @@ function echo_form($user, $wiki, $project, $email, $id)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>Id</span>
                             </div>
-                            <input class='form-control' type='text' value='$id' disabled/>
+                            <input class='form-control' type='text' value='$id' readonly/>
                             <input class='form-control' type='text' id='id' name='id' value='$id' hidden/>
                         </div>
                     </div>

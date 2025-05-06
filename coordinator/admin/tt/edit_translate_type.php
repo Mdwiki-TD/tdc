@@ -24,17 +24,19 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-$tabs = [];
+
 //---
 $title  = (isset($_REQUEST['title'])) ? rawurldecode($_REQUEST['title']) : "";
 $lead    = $_REQUEST['lead'] ?? '';
 $full    = $_REQUEST['full'] ?? '';
 $id     = $_REQUEST['id'] ?? '';
 //---
+$header_title = ($id != "") ? "Edit Translate type" : "Add Translate type";
+//---
 echo <<<HTML
 <div class='card'>
     <div class='card-header'>
-        <h4>Edit Translate type</h4>
+        <h4>$header_title</h4>
     </div>
     <div class='card-body'>
 HTML;
@@ -78,7 +80,7 @@ function echo_form($title, $lead, $full, $id)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>Id</span>
                             </div>
-                            <input class='form-control' type='text' value='$id' disabled/>
+                            <input class='form-control' type='text' value='$id' readonly/>
                             <input class='form-control' type='text' id='id' name='id' value='$id' hidden/>
                         </div>
                     </div>
@@ -117,7 +119,7 @@ function echo_form($title, $lead, $full, $id)
                         </div>
                     </div>
                     <div class='col-md-2'>
-                        <input class='btn btn-outline-primary' type='submit' value='send'/>
+                        <input class='btn btn-outline-primary' type='submit' value='Save'/>
                     </div>
                 </div>
             </div>

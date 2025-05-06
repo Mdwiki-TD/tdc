@@ -36,7 +36,7 @@ echo <<<HTML
 <div id='yeye' class='container-fluid'>
 HTML;
 //---
-$tabs = [];
+
 //---
 $title  = $_REQUEST['title'] ?? '';
 $test   = $_REQUEST['test'] ?? '';

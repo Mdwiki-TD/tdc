@@ -8,6 +8,7 @@ if (user_in_coord == false) {
 use Tables\SqlTables\TablesSql;
 use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_project_to_user;
+use function Actions\Html\make_edit_icon_new;
 use function Actions\MdwikiSql\fetch_query;
 use function SQLorAPI\Get\get_users_by_last_pupdate;
 use function SQLorAPI\Get\get_td_or_sql_count_pages_not_empty;
@@ -25,27 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 //---
 include_once __DIR__ . '/sugust.php';
-//---
-function make_edit_icon($id, $user, $email, $wiki2, $proj)
-{
-	//---
-	$edit_params = array(
-		'id'   => $id,
-		'nonav'  => 1,
-		'user'  => $user,
-		'email'  => $email,
-		'wiki'  => $wiki2,
-		'project'  => $proj
-	);
-	//---
-	$edit_url = "index.php?ty=Emails/edit_user&" . http_build_query($edit_params);
-	//---
-	$onclick = 'pupwindow1("' . $edit_url . '")';
-	//---
-	return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
-    HTML;
-}
 
 function get_sorted_array()
 {
@@ -170,7 +150,16 @@ foreach ($users_done as $user_name => $table) {
 		$mail_icon = make_mail_icon($last_user_to_tab[$user_name]);
 	}
 	//---
-	$edit_icon = make_edit_icon($id, $user, $email, $wiki, $user_group);
+	$edit_params = array(
+		'id'   => $id,
+		'nonav'  => 1,
+		'user'  => $user,
+		'email'  => $email,
+		'wiki'  => $wiki2,
+		'project'  => $proj
+	);
+	//---
+	$edit_icon = make_edit_icon_new("Emails/edit_user", $edit_params);
 	//---
 	$form_rows .= <<<HTML
 	<tr>

@@ -12,6 +12,7 @@ INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT DISTINCT q.title,
 use Tables\SqlTables\TablesSql;
 use function Actions\Html\makeDropdown;
 use function Actions\Html\make_mdwiki_title;
+use function Actions\Html\make_edit_icon_new;
 use function Results\GetCats\get_mdwiki_cat_members;
 use function Actions\MdwikiSql\execute_query;
 use function TDWIKI\csrf\generate_csrf_token;
@@ -63,8 +64,8 @@ if ($cat == 'All') {
 } else {
 	TablesSql::$s_cat_titles = get_mdwiki_cat_members($cat, $use_cache = true, $depth = 1);
 }
-//---
-function make_edit_icon($id, $title, $full, $lead)
+
+function make_row($id, $title, $lead, $full, $numb)
 {
 	//---
 	$edit_params = array(
@@ -75,18 +76,7 @@ function make_edit_icon($id, $title, $full, $lead)
 		'full'  => $full
 	);
 	//---
-	$edit_url = "index.php?ty=tt/edit_translate_type&" . http_build_query($edit_params);
-	//---
-	$onclick = 'pupwindow1("' . $edit_url . '")';
-	//---
-	return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Edit</a>
-    HTML;
-}
-//---
-function make_row($id, $title, $lead, $full, $numb)
-{
-	$edit_icon = make_edit_icon($id, $title, $full, $lead);
+	$edit_icon = make_edit_icon_new("tt/edit_translate_type", $edit_params);
 	//---
 	$md_title = make_mdwiki_title($title);
 	//---
@@ -125,6 +115,8 @@ $numb = 0;
 //---
 $table_rows = "";
 //---
+$tt_count = count(TablesSql::$s_cat_titles);
+//---
 foreach (TablesSql::$s_cat_titles as $title) {
 	//---
 	if (in_array($title, $new_titles)) continue;
@@ -147,10 +139,10 @@ echo <<<HTML
 			$testin
 			<input name='ty' value="tt" hidden/>
 			<div class='row'>
-				<div class='col-md-3'>
-					<h4>Translate Type:</h4>
+				<div class='col-md-6'>
+					<h4>Translate Type ($tt_count):</h4>
 				</div>
-				<div class='col-md-3'>
+				<div class='col-md-4'>
 					$uuu
 				</div>
 				<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
@@ -244,7 +236,7 @@ HTML;
 
 	$(document).ready(function() {
 		var t = $('#em').DataTable({
-            stateSave: true,
+			stateSave: true,
 			// order: [[5	, 'desc']],
 			// paging: false,
 			lengthMenu: [

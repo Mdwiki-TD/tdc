@@ -11,6 +11,7 @@ use function Actions\MdwikiSql\update_settings_value;
 use function Actions\MdwikiSql\insert_to_translate_type;
 use function Actions\MdwikiSql\insert_to_projects;
 use function Actions\MdwikiSql\display_tables;
+use function Actions\MdwikiSql\check_one;
 */
 
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
@@ -260,4 +261,24 @@ function insert_to_projects($g_title, $g_id)
     $result = execute_query($query, $params);
     //---
     return $result;
+}
+
+function check_one($select = "*", $where = "", $value = "", $table = "")
+{
+    // ---
+    // check if it's already in table
+    $query = "SELECT $select FROM $table WHERE $where = ?";
+    // ---
+    $result = fetch_query($query, [$value]);
+    //---
+    if (count($result) > 0) {
+        foreach ($result as $key => $tab) {
+            // ---
+            // echo "<br>check_one: $where: $tab[$select]<br>";
+            // ---
+            return $tab[$select] ?? $tab;
+        }
+    }
+    //---
+    return false;
 }
