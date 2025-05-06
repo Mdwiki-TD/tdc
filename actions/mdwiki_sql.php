@@ -234,9 +234,9 @@ function update_settings_value($id, $value)
 
 function insert_to_translate_type($tt_title, $tt_lead, $tt_full, $tt_id = 0)
 {
-    $params = [$tt_lead, $tt_full, $tt_title];
     //---
-    $query = "UPDATE translate_type SET tt_lead = ?, tt_full = ? WHERE tt_title = ?";
+    $query = "UPDATE translate_type SET tt_lead = ?, tt_full = ? WHERE tt_id = ?";
+    $params = [$tt_lead, $tt_full, $tt_id];
     //---
     if ($tt_id == 0 || $tt_id == '0' || empty($tt_id)) {
         $query = "INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT ?, ?, ?";

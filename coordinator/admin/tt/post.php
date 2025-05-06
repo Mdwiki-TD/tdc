@@ -18,13 +18,14 @@ if (verify_csrf_token()) {
 		$title 	= trim($table['title'] ?? '');
 		$lead 	= $table['lead'] ?? 0;
 		$full 	= $table['full'] ?? 0;
+		$id  	= $table['id'] ?? "";
 		//---
 		if (empty($title)) {
 			$errors[] = "Title is required.";
 			continue;
 		}
 		//---
-		$result = insert_to_translate_type($title, $lead, $full);
+		$result = insert_to_translate_type($title, $lead, $full, $tt_id = $id);
 		//---
 		if ($result === false) {
 			$errors[] = "Failed to add translate type, title: $title.";
@@ -35,12 +36,9 @@ if (verify_csrf_token()) {
 	//---
 	echo div_alert($texts, 'success');
 	echo div_alert($errors, 'danger');
-	//---
-	echo div_alert(["return to Translate Type page in 2 seconds"]);
 };
 echo <<<HTML
-	<meta http-equiv='refresh' content='2; url=index.php?ty=tt&cat=$cat'>
 	<div class="aligncenter">
-		<a class="btn btn-outline-primary" href='index.php?ty=tt&cat=$cat'>return</a>
+		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
 HTML;

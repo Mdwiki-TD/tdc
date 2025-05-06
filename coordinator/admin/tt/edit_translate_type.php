@@ -5,12 +5,8 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-// include_once 'actions/functions.php';
-
-use function Actions\MdwikiSql\insert_to_translate_type;
 use function Actions\Html\add_quotes;
 use function TDWIKI\csrf\generate_csrf_token;
-use function TDWIKI\csrf\verify_csrf_token;
 //---
 echo '</div><script>
     $("#mainnav").hide();
@@ -40,26 +36,6 @@ echo <<<HTML
     </div>
     <div class='card-body'>
 HTML;
-//---
-function send_qid($id, $title, $lead, $full)
-{
-    //---
-    insert_to_translate_type($title, $lead, $full, $tt_id = $id);
-    //---
-    // green text success
-    echo <<<HTML
-        <div class='alert alert-success' role='alert'>Translate type updated<br>
-            window will close in 3 seconds
-        </div>
-        <!-- close window after 3 seconds -->
-        <script>
-            setTimeout(function() {
-                window.close();
-            }, 3000);
-        </script>
-    HTML;
-}
-//---
 function echo_form($title, $lead, $full, $id)
 {
     $lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
@@ -69,27 +45,32 @@ function echo_form($title, $lead, $full, $id)
     //---
     $csrf_token = generate_csrf_token();
     //---
+    $id_row = <<<HTML
+        <div class='col-md-3'>
+            <div class='input-group mb-3'>
+                <div class='input-group-prepend'>
+                    <span class='input-group-text'>Id</span>
+                </div>
+                <input class='form-control' type='text' value='$id' name='rows[1][id]' readonly/>
+            </div>
+        </div>
+    HTML;
+    // ---
+    if ($id == "") $id_row = "";
+    // ---
     echo <<<HTML
-        <form action='index.php?ty=tt/edit_translate_type&nonav=120' method="POST">
+        <form action='index.php?ty=tt/post&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" hidden />
             <input name='edit' value="1" hidden/>
             <div class='container'>
                 <div class='row'>
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>Id</span>
-                            </div>
-                            <input class='form-control' type='text' value='$id' readonly/>
-                            <input class='form-control' type='text' id='id' name='id' value='$id' hidden/>
-                        </div>
-                    </div>
+                    $id_row
                     <div class='col-md-3'>
                         <div class='input-group mb-3'>
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>Title</span>
                             </div>
-                            <input class='form-control' type='text' id='title' name='title' value=$title2 required/>
+                            <input class='form-control' type='text' name='rows[1][title]' value=$title2 required/>
                         </div>
                     </div>
                     <div class='col-md-3'>
@@ -100,8 +81,7 @@ function echo_form($title, $lead, $full, $id)
                                         <span class='me-3'>Lead:</span>
                                     </div>
                                     <div class="form-check form-switch form-inline">
-                                        <input type='hidden' name='lead' value='0'>
-                                        <input class='form-check-input' type='checkbox' name='lead' value='1' $lead_checked>
+                                        <input class='form-check-input' type='checkbox' name='rows[1][lead]' value='1' $lead_checked>
                                     </div>
                                 </div>
                             </div>
@@ -111,8 +91,7 @@ function echo_form($title, $lead, $full, $id)
                                         <span class='me-3'>Full:</span>
                                     </div>
                                     <div class="form-check form-switch form-inline">
-                                        <input type='hidden' name='full' value='0'>
-                                        <input class='form-check-input' type='checkbox' name='full' value='1' $full_checked>
+                                        <input class='form-check-input' type='checkbox' name='rows[1][full]' value='1' $full_checked>
                                     </div>
                                 </div>
                             </div>
@@ -127,15 +106,7 @@ function echo_form($title, $lead, $full, $id)
     HTML;
 }
 //---
-if (isset($_POST['edit'])) {
-    //---
-    if (verify_csrf_token()) {
-        send_qid($id, $title, $lead, $full);
-    }
-    //---
-} else {
-    echo_form($title, $lead, $full, $id);
-}
+echo_form($title, $lead, $full, $id);
 //---
 echo <<<HTML
     </div>

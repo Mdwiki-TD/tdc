@@ -171,69 +171,17 @@ HTML;
 //---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
 //---
+$new_row = make_edit_icon_new("tt/edit_translate_type", ["new" => 1], $text = "Add one!");
+//---
 echo <<<HTML
-	<div class='card'>
+	<div class='card mt-1'>
 		<div class='card-body'>
-			<form action="index.php?ty=tt/post&cat=$cat" method="POST">
-				<input name='csrf_token' value="$csrf_token" hidden />
-				$testin
-				<input name='ty' value="tt/post" hidden/>
-				<div id='tt_table' class="form-group" style='display: none;'>
-					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='width: 90%;'>
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Title</th>
-								<th>Lead</th>
-								<th>Full</th>
-							</tr>
-						</thead>
-						<tbody id="tab_new">
-
-						</tbody>
-					</table>
-				</div>
-				<div class="form-group d-flex justify-content-between">
-					<button id="submit_bt" type="submit" class="btn btn-outline-primary" style='display: none;'>Save</button>
-					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
-					<span> </span>
-				</div>
-			</form>
+			$new_row
 		</div>
 	</div>
 HTML;
 ?>
 <script type="text/javascript">
-	function add_row() {
-		$('#submit_bt').show();
-		$('#tt_table').show();
-		var ii = $('#tab_new >tr').length + 1;
-		var e = `
-			<tr>
-				<td>
-					${ii}
-					<input type='hidden' name='rows[${ii}][add]'/>
-				</td>
-				<td>
-					<input class='form-control' name='rows[${ii}][title]'/>
-				</td>
-
-				<td data-content='Lead'>
-					<div class='form-check form-switch'>
-						<input class='form-check-input' type='checkbox' name='rows[${ii}][lead]' value='1'/>
-					</div>
-				</td>
-				<td data-content='Full'>
-					<div class='form-check form-switch'>
-						<input class='form-check-input' type='checkbox' name='rows[${ii}][full]' value='1'/>
-					</div>
-				</td>
-			</tr>
-		`;
-
-		$('#tab_new').append(e);
-	};
-
 	$(document).ready(function() {
 		var t = $('#em').DataTable({
 			stateSave: true,
