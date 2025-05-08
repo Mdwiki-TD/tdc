@@ -11,6 +11,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
+use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
 use function Actions\MdwikiSql\fetch_query;
 use function Actions\Html\add_quotes;
 use function TDWIKI\csrf\generate_csrf_token;
@@ -89,6 +90,42 @@ $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
 //---
+function page_already_exist($in_db)
+{
+    // ---
+    // var_export(json_encode($in_db, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    // '[ { "id": 7553, "title": "Baclofen toxicity", "word": 213, "translate_type": "lead", "cat": "RTT", "lang": "uk", "user": "الاء هارون", "target": "سمية الباكلوفين", "date": "2025-04-25", "pupdate": "2025-02-20", "add_date": "2025-04-25 03:00:00", "deleted": 0 } ]'
+    // ---
+    $db_target = $in_db[0]['target'] ?? '';
+    $db_user = $in_db[0]['user'] ?? '';
+    $db_pupdate = $in_db[0]['pupdate'] ?? '';
+    $lang = $in_db[0]['lang'] ?? '';
+    // ---
+    return <<<HTML
+        <div class='card mb-3'>
+            <div class='card-header alert alert-danger'>
+                <h4>Duplicate page already exists in DB:</h4>
+            </div>
+            <div class='card-body p-1'>
+                <ul class='list-group'>
+                    <li class='list-group-item'>
+                        <span class='fw-bold'>Target:</span>
+                        <a target='_blank' href='https://$lang.wikipedia.org/wiki/$db_target'>$db_target</a>
+                    </li>
+                    <li class='list-group-item'>
+                        <span class='fw-bold'>User:</span>
+                        $db_user
+                    </li>
+                    <li class='list-group-item'>
+                        <span class='fw-bold'>Publication date:</span>
+                        $db_pupdate
+                    </li>
+                </ul>
+            </div>
+        </div>
+        HTML;
+}
+//---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/fix_it_post.php';
 } else {
@@ -100,8 +137,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $page_data = fetch_query("SELECT * FROM pages_users WHERE id = ?", [$id]);
     //---
     $title      = $page_data[0]['title'] ?? '';
-    $old_target = $page_data[0]['target'] ?? '';
     $lang       = $page_data[0]['lang'] ?? '';
+    //---
+    $in_db = fetch_query("SELECT * FROM pages WHERE title = ? AND lang = ? and (target != '' AND target IS NOT NULL)", [$title, $lang]);
+    //---
+    if (!empty($in_db)) {
+        // ---
+        echo page_already_exist($in_db);
+        // ---
+    }
+    //---
+    // var_export(json_encode($in_db, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    //---
+    $old_target = $page_data[0]['target'] ?? '';
     $user       = $page_data[0]['user'] ?? '';
     $pupdate    = $page_data[0]['pupdate'] ?? '';
     //---
