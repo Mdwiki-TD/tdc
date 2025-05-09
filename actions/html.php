@@ -16,7 +16,6 @@ use function Actions\Html\make_drop;
 use function Actions\Html\make_form_check_input;
 use function Actions\Html\make_input_group;
 use function Actions\Html\make_input_group_no_col;
-use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_mail_icon_new;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_mdwiki_user_url;
@@ -122,27 +121,6 @@ function make_mail_icon_new($tab, $func_name = "")
     HTML;
 }
 
-function make_mail_icon($tab)
-{
-    //---
-    $mail_params = array(
-        'user'   => $tab['user'],
-        'lang'   => $tab['lang'],
-        'target' => $tab['target'],
-        'date'   => $tab['pupdate'],
-        'title'  => $tab['title'],
-        'nonav'  => '1'
-    );
-    //---
-    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params);
-    //---
-    $onclick = 'pupwindow("' . $mail_url . '")';
-    //---
-    return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Email</a>
-    HTML;
-}
-//---
 function make_project_to_user($project)
 {
     //---

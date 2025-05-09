@@ -7,7 +7,7 @@ use Tables\Langs\LangsTables;
 use function Tools\RecentHelps\filter_recent;
 use function Tools\RecentHelps\do_add_date;
 use function Actions\WikiApi\make_view_by_number;
-use function Actions\Html\make_mail_icon;
+use function Actions\Html\make_mail_icon_new;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_mdwiki_title;
@@ -73,7 +73,7 @@ function make_td($tabg, $nnnn, $add_add)
         //---
         $view = make_view_by_number($targe, $views_number, $llang, $pupdate);
         //---
-        $mail_icon = (user_in_coord != false) ? make_mail_icon($tabg) : '';
+        $mail_icon = (user_in_coord != false) ? make_mail_icon_new($tabg, 'pup_window_email') : '';
         $mail_icon_td = (!empty($mail_icon)) ? "<td data-content='Email'>$mail_icon</td>" : '';
         //---
         $view_td = <<<HTML

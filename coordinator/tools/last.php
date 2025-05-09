@@ -7,7 +7,6 @@ use Tables\Langs\LangsTables;
 use function Tools\RecentHelps\filter_recent;
 use function Tools\RecentHelps\do_add_date;
 use function Actions\WikiApi\make_view_by_number;
-use function Actions\Html\make_mail_icon;
 use function Actions\Html\make_mail_icon_new;
 use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
