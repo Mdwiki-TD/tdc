@@ -10,6 +10,7 @@ $settings_tabe = array_column(get_td_api(['get' => 'settings']), 'value', 'title
 //---
 $use_td_api  = (($settings_tabe['use_td_api'] ?? "") == "1") ? true : false;
 $use_td_api  = false;   // false in tdc
+$use_td_api  = (isset($_GET['use_td_api'])) ? true : false;
 // ---
 $use_in_process_table  = (($settings_tabe['use_td_api'] ?? "") == "1") ? true : false;
 

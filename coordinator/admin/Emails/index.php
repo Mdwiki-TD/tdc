@@ -6,7 +6,7 @@ if (user_in_coord == false) {
 };
 //---
 use Tables\SqlTables\TablesSql;
-use function Actions\Html\make_mail_icon;
+use function Actions\Html\make_mail_icon_new;
 use function Actions\Html\make_project_to_user;
 use function Actions\Html\make_edit_icon_new;
 use function Actions\MdwikiSql\fetch_query;
@@ -143,7 +143,7 @@ foreach ($users_done as $user_name => $table) {
 	$mail_icon = '';
 	//---
 	if (array_key_exists($user_name, $last_user_to_tab)) {
-		$mail_icon = make_mail_icon($last_user_to_tab[$user_name]);
+		$mail_icon = make_mail_icon_new($last_user_to_tab[$user_name], 'pup_window_email');
 	}
 	//---
 	$edit_params = array(

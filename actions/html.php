@@ -16,7 +16,7 @@ use function Actions\Html\make_drop;
 use function Actions\Html\make_form_check_input;
 use function Actions\Html\make_input_group;
 use function Actions\Html\make_input_group_no_col;
-use function Actions\Html\make_mail_icon;
+use function Actions\Html\make_mail_icon_new;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_mdwiki_user_url;
 use function Actions\Html\make_modal_fade;
@@ -99,9 +99,11 @@ function make_form_check_input($label, $name, $value_yes, $value_no, $checked)
         </div>
     HTML;
 }
-//---
-function make_mail_icon($tab)
+
+function make_mail_icon_new($tab, $func_name = "")
 {
+    //---
+    if (empty($func_name)) $func_name = "pup_window_new";
     //---
     $mail_params = array(
         'user'   => $tab['user'],
@@ -114,13 +116,11 @@ function make_mail_icon($tab)
     //---
     $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params);
     //---
-    $onclick = 'pupwindow("' . $mail_url . '")';
-    //---
     return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' onclick='$onclick'>Email</a>
+    	<a class='btn btn-outline-primary btn-sm' pup-target='$mail_url' onclick='$func_name(this)'>Email</a>
     HTML;
 }
-//---
+
 function make_project_to_user($project)
 {
     //---
@@ -375,14 +375,11 @@ function make_edit_icon_new($target, $edit_params, $text = "Edit")
     //---
     $edit_url = "index.php?ty=$target&" . http_build_query($edit_params);
     //---
-    $onclick = 'pupwindow1("' . $edit_url . '")';
-    //---
     if (empty($text)) $text = "Edit";
     //---
     $class_sm = ($text == "Edit") ? "btn-sm" : "";
     //---
     return <<<HTML
-		<a class='btn btn-outline-primary $class_sm' onclick='$onclick'>$text</a>
+		<a class='btn btn-outline-primary $class_sm' pup-target='$edit_url' onclick='pup_window_new(this)'>$text</a>
 	HTML;
 }
-//---

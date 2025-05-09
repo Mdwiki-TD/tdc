@@ -9,6 +9,7 @@ Usage:
 use function SQLorAPI\Recent\get_recent_sql;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Recent\get_recent_translated;
+use function SQLorAPI\Recent\get_total_translations_count;
 use function SQLorAPI\Recent\get_pages_users_to_main;
 */
 
@@ -110,25 +111,41 @@ function get_recent_pages_users($lang)
     //---
     return $tab;
 }
-function get_recent_translated($lang, $table)
+
+function get_recent_translated($lang, $table, $limit, $offset)
 {
     global $use_td_api;
     // ---
-    $lang_line = '';
-    //---
     $sql_params = [];
-    $params = array('get' => $table, 'order' => 'pupdate');
+    $params = array('get' => $table, 'order' => 'pupdate', 'limit' => $limit, 'offset' => $offset);
+    //---
+    $query = "SELECT * FROM $table WHERE target != ''";
     //---
     if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and lang = ?";
+        $query .= " AND lang = ?";
         $sql_params[] = $lang;
         $params['lang'] = $lang;
+    }
+    //---
+    $query .= " ORDER BY pupdate DESC ";
+    //---
+    // add limit and offset to $sql_line
+    if ($limit > 0) {
+        $query .= " \n LIMIT $limit ";
+        // $query .= " \n LIMIT ? ";
+        // $sql_params[] = $limit;
+    }
+    //---
+    if ($offset > 0) {
+        $query .= " OFFSET $offset ";
+        // $query .= " OFFSET ? ";
+        // $sql_params[] = $offset;
     }
     //---
     if ($use_td_api) {
         $dd = get_td_api($params);
     } else {
-        $dd = fetch_query("select * from $table where target != '' $lang_line ORDER BY pupdate DESC;", $sql_params);
+        $dd = fetch_query($query, $sql_params);
     }
     //---
     // sort the table by add_date
@@ -137,6 +154,34 @@ function get_recent_translated($lang, $table)
     });
     //---
     return $dd;
+}
+
+function get_total_translations_count($lang, $table)
+{
+    global $use_td_api;
+    // ---
+    $lang_line = '';
+    //---
+    $sql_params = [];
+    $params = ['get' => $table, 'select' => 'COUNT(*)'];
+    //---
+    if (!empty($lang) && $lang != 'All') {
+        $lang_line = "and lang = ?";
+        $sql_params[] = $lang;
+        $params['lang'] = $lang;
+    }
+    //---
+    $result = 0;
+    //---
+    if ($use_td_api) {
+        $dd = get_td_api($params);
+        $result = (int)$dd[0]['count'] ?? 0;
+    } else {
+        $dd = fetch_query("select COUNT(*) AS count from $table where target != '' $lang_line;", $sql_params);
+        $result = (int)$dd[0]['count'] ?? 0;
+    }
+    //---
+    return $result;
 }
 
 function get_pages_users_to_main($lang)

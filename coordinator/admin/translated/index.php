@@ -7,6 +7,7 @@ use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_edit_icon_new;
 use function SQLorAPI\Recent\get_recent_translated;
+use function SQLorAPI\Recent\get_total_translations_count;
 use function SQLorAPI\Get\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
 use function Tools\RecentHelps\filter_recent;
@@ -17,7 +18,7 @@ $lang = $_GET['lang'] ?? 'All';
 //---
 $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
 //---
-if (!isset($_GET['dis']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $table = "pages_users";
+if (!isset($_GET['table']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $table = "pages_users";
 //---
 if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
@@ -44,22 +45,6 @@ function get_languages()
     //---
     return $tabes;
 }
-//---
-$recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="pages_table" style="font-size:90%;">
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>User</th>
-				<th>Lang.</th>
-				<th>Title</th>
-				<th>Translated</th>
-				<th>Publication date</th>
-				<th>Edit</th>
-			</tr>
-		</thead>
-		<tbody>
-HTML;
 //---
 function make_td($tabg, $nnnn, $table)
 {
@@ -112,7 +97,72 @@ function make_td($tabg, $nnnn, $table)
     return $laly;
 };
 //---
-$qsl_results = get_recent_translated($lang, $table);
+function pagination_links($limit, $page, $table, $lang, $total_count)
+{
+    //---
+    $total_pages = ceil($total_count / $limit);
+    //---
+    $base_url = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
+
+    $links = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
+    $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . '1">&laquo;</a></li>';
+    $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . ($page - 1) . '"><</a></li>';
+
+    for ($i = max(1, $page - 3); $i <= min($total_pages, $page + 3); $i++) {
+        $active = $i == $page ? ' active' : '';
+        $links .= "<li class=\"page-item$active\"><a class=\"page-link\" href=\"$base_url$i\">$i</a></li>";
+    }
+
+    $links .= '<li class="page-item' . ($page >= $total_pages ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . ($page + 1) . '">></a></li>';
+    $links .= '<li class="page-item' . ($page >= $total_pages ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . $total_pages . '">&raquo;</a></li>';
+    $links .= '</ul></nav>';
+
+    $offset = ($page - 1) * $limit;
+    //---
+    // احسب رقم أول عنصر في الصفحة الحالية
+    $start_item = $offset + 1;
+
+    // احسب آخر عنصر في الصفحة الحالية
+    $end_item = min($offset + $limit, $total_count);
+
+    // إنشاء النص التوضيحي للصفحة
+    $summary = "<p class=\"text-center\">";
+    $summary .= "Page " . ($offset / $limit + 1) . " from $total_pages ";
+    $summary .= "($start_item - $end_item from total " . number_format($total_count) . " logs)";
+    $summary .= "</p>";
+
+    return $summary . $links;
+}
+//---
+$recent_table = <<<HTML
+	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="pages_table" style="font-size:90%;">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>User</th>
+				<th>Lang.</th>
+				<th>Title</th>
+				<th>Translated</th>
+				<th>Publication date</th>
+				<th>Edit</th>
+			</tr>
+		</thead>
+		<tbody>
+HTML;
+//---
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+// ---
+$qsl_results = get_recent_translated($lang, $table, $limit, $offset);
+//---
+$total_count = get_total_translations_count($lang, $table);
+//---
+$pagination = "";
+//---
+if ($total_count > $limit) {
+    $pagination = pagination_links($limit, $page, $table, $lang, $total_count);
+}
 //---
 $noo = 0;
 foreach ($qsl_results as $tat => $tabe) {
@@ -160,6 +210,7 @@ echo <<<HTML
 		</form>
 	</div>
 	<div class='card-body'>
+        $pagination
 HTML;
 //---
 echo $recent_table;
