@@ -17,6 +17,7 @@ use function Actions\Html\make_form_check_input;
 use function Actions\Html\make_input_group;
 use function Actions\Html\make_input_group_no_col;
 use function Actions\Html\make_mail_icon;
+use function Actions\Html\make_mail_icon_new;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_mdwiki_user_url;
 use function Actions\Html\make_modal_fade;
@@ -99,7 +100,28 @@ function make_form_check_input($label, $name, $value_yes, $value_no, $checked)
         </div>
     HTML;
 }
-//---
+
+function make_mail_icon_new($tab, $func_name = "")
+{
+    //---
+    if (empty($func_name)) $func_name = "pup_window_new";
+    //---
+    $mail_params = array(
+        'user'   => $tab['user'],
+        'lang'   => $tab['lang'],
+        'target' => $tab['target'],
+        'date'   => $tab['pupdate'],
+        'title'  => $tab['title'],
+        'nonav'  => '1'
+    );
+    //---
+    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params);
+    //---
+    return <<<HTML
+    	<a class='btn btn-outline-primary btn-sm' pup-target='$mail_url' onclick='$func_name(this)'>Email</a>
+    HTML;
+}
+
 function make_mail_icon($tab)
 {
     //---

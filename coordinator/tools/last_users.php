@@ -242,10 +242,6 @@ echo $recent_table;
 //---
 ?>
 <script>
-    function pupwindow(url) {
-        window.open(url, 'popupWindow', 'width=850,height=550,scrollbars=yes');
-    };
-
     $(document).ready(function() {
         var t = $('#last_tabel').DataTable({
             stateSave: true,
