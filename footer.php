@@ -24,11 +24,19 @@ if (isset($GLOBALS['time_start'])) {
 <script>
 	function pup_window_email(element) {
 		var target = $(element).attr("pup-target");
+		if (!target) {
+			console.error("Missing pup-target attribute");
+			return;
+		}
 		window.open(target, 'popupWindow', 'width=850,height=550,scrollbars=yes');
 	}
 
 	function pup_window_new(element) {
 		var target = $(element).attr("pup-target");
+		if (!target) {
+			console.error("Missing pup-target attribute");
+			return;
+		}
 		window.open(target, '', 'width=600,height=400, left=100, top=100, location=no');
 	}
 
