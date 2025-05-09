@@ -27,18 +27,10 @@ if (isset($GLOBALS['time_start'])) {
 		window.open(target, 'popupWindow', 'width=850,height=550,scrollbars=yes');
 	}
 
-	function pupwindow(url) {
-		window.open(url, 'popupWindow', 'width=850,height=550,left=50,top=50,scrollbars=yes');
-	};
-
 	function pup_window_new(element) {
 		var target = $(element).attr("pup-target");
 		window.open(target, '', 'width=600,height=400, left=100, top=100, location=no');
 	}
-
-	function pupwindow1(url) {
-		window.open(url, '', 'width=600,height=400, left=100, top=100, location=no');
-	};
 
 	$(".Dropdown_menu_toggle").on("click", function() {
 		$(".div_menu").toggleClass("mactive");
