@@ -102,7 +102,7 @@ function pagination_links($limit, $page, $table, $lang, $total_count)
     //---
     $total_pages = ceil($total_count / $limit);
     //---
-    $base_url = "?ty=translated&lang=$lang&table=$table&page=";
+    $base_url = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
 
     $links = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
     $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . '1">&laquo;</a></li>';
@@ -150,7 +150,7 @@ $recent_table = <<<HTML
 		<tbody>
 HTML;
 //---
-$limit = 500;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 // ---

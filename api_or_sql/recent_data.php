@@ -111,6 +111,7 @@ function get_recent_pages_users($lang)
     //---
     return $tab;
 }
+
 function get_recent_translated($lang, $table, $limit, $offset)
 {
     global $use_td_api;
@@ -131,10 +132,14 @@ function get_recent_translated($lang, $table, $limit, $offset)
     // add limit and offset to $sql_line
     if ($limit > 0) {
         $query .= " \n LIMIT $limit ";
+        // $query .= " \n LIMIT ? ";
+        // $sql_params[] = $limit;
     }
     //---
     if ($offset > 0) {
         $query .= " OFFSET $offset ";
+        // $query .= " OFFSET ? ";
+        // $sql_params[] = $offset;
     }
     //---
     if ($use_td_api) {
@@ -158,7 +163,7 @@ function get_total_translations_count($lang, $table)
     $lang_line = '';
     //---
     $sql_params = [];
-    $params = array('get' => $table);
+    $params = ['get' => $table, 'select' => 'COUNT(*)'];
     //---
     if (!empty($lang) && $lang != 'All') {
         $lang_line = "and lang = ?";
@@ -166,14 +171,15 @@ function get_total_translations_count($lang, $table)
         $params['lang'] = $lang;
     }
     //---
+    $result = 0;
+    //---
     if ($use_td_api) {
         $dd = get_td_api($params);
+        $result = (int)$dd[0]['count'] ?? 0;
     } else {
-        $dd = fetch_query("select * from $table where target != '' $lang_line;", $sql_params);
+        $dd = fetch_query("select COUNT(*) AS count from $table where target != '' $lang_line;", $sql_params);
+        $result = (int)$dd[0]['count'] ?? 0;
     }
-    //---
-    // sort the table by add_date
-    $result = count($dd);
     //---
     return $result;
 }
