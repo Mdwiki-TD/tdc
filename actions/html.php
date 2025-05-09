@@ -375,14 +375,11 @@ function make_edit_icon_new($target, $edit_params, $text = "Edit")
     //---
     $edit_url = "index.php?ty=$target&" . http_build_query($edit_params);
     //---
-    $onclick = 'pupwindow1("' . $edit_url . '")';
-    //---
     if (empty($text)) $text = "Edit";
     //---
     $class_sm = ($text == "Edit") ? "btn-sm" : "";
     //---
     return <<<HTML
-		<a class='btn btn-outline-primary $class_sm' onclick='$onclick'>$text</a>
+		<a class='btn btn-outline-primary $class_sm' pup-target='$edit_url' onclick='pup_window_new(this)'>$text</a>
 	HTML;
 }
-//---
