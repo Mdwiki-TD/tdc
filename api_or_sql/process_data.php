@@ -7,10 +7,8 @@ namespace SQLorAPI\Process;
 Usage:
 
 use function SQLorAPI\Process\get_process_all_new;
-use function SQLorAPI\Process\get_process_all;
-use function SQLorAPI\Process\get_users_process;
 use function SQLorAPI\Process\get_users_process_new;
-use function SQLorAPI\Process\get_lang_in_process;
+use function SQLorAPI\Process\get_lang_in_process_new;
 */
 
 use function Actions\MdwikiSql\fetch_query;
@@ -33,27 +31,6 @@ function get_process_all_new()
         $process_all = get_td_api(['get' => 'in_process', 'limit' => "100", 'order' => 'add_date']);
     } else {
         $sql_t = "select * from in_process ORDER BY add_date DESC limit 100";
-        $process_all = fetch_query($sql_t);
-    }
-    //---
-    return $process_all;
-}
-
-function get_process_all()
-{
-    // ---
-    global $use_td_api;
-    // ---
-    static $process_all = [];
-    // ---
-    if (!empty($process_all)) {
-        return $process_all;
-    }
-    // ---
-    if ($use_td_api) {
-        $process_all = get_td_api(['get' => 'pages', 'order' => 'date', 'target' => 'empty', 'limit' => "100"]);
-    } else {
-        $sql_t = "select * from pages where (target = '' OR target IS NULL) ORDER BY date DESC limit 100";
         $process_all = fetch_query($sql_t);
     }
     //---
@@ -90,50 +67,6 @@ function get_users_process_new()
     }
     //---
     return $process_new;
-}
-
-function get_users_process()
-{
-    // ---
-    global $use_td_api;
-    // ---
-    static $users_process = [];
-    // ---
-    if (!empty($users_process)) {
-        return $users_process;
-    }
-    // ---
-    if ($use_td_api) {
-        $tab = get_td_api(['get' => 'count_pages', 'distinct' => 1, 'target' => 'empty']);
-        $users_process = array_column($tab, 'count', 'user');
-    } else {
-        $sql_t = 'select DISTINCT user, count(target) as count from pages where (target = "" OR target IS NULL) group by user order by count desc';
-        $tab = fetch_query($sql_t);
-        $users_process = array_column($tab, 'count', 'user');
-    }
-    //---
-    return $users_process;
-}
-
-function get_lang_in_process($lang)
-{
-    // ---
-    global $use_td_api, $data_index;
-    // ---
-    if (!empty($data_index[$lang] ?? [])) {
-        return $data_index[$lang];
-    }
-    // ---
-    if ($use_td_api) {
-        $tab = get_td_api(['get' => 'pages', 'lang' => $lang, 'target' => 'empty', 'select' => "title"]);
-    } else {
-        $sql_t = 'select * from pages where lang = ? and (target = "" OR target IS NULL) ';
-        $tab = fetch_query($sql_t, [$lang]);
-    }
-    //---
-    $data_index[$lang] = array_column($tab, 'title');
-    //---
-    return $data_index[$lang];
 }
 
 function get_lang_in_process_new($lang)

@@ -1,9 +1,8 @@
 <?PHP
 use Tables\SqlTables\TablesSql;
 use Tables\Langs\LangsTables;
-use Tables\Main\MainTables;
+// use Tables\Main\MainTables;
 use function Actions\Html\make_mdwiki_title;
-use function SQLorAPI\Process\get_process_all;
 use function SQLorAPI\Process\get_process_all_new;
 // use function Actions\Html\make_cat_url;
 
