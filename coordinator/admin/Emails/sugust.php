@@ -9,10 +9,8 @@ use function Emails\Sugust\get_sugust;
 // include_once 'infos/td_config.php';
 //---
 use Tables\Main\MainTables;
-// use function Results\GetCats\get_in_process;
 use function Results\GetResults\get_cat_exists_and_missing;
 use function SQLorAPI\Process\get_lang_in_process_new;
-use function SQLorAPI\Process\get_lang_in_process;
 //---
 function get_sugust($title, $lang)
 {
@@ -29,7 +27,6 @@ function get_sugust($title, $lang)
         //---
         $items_missing = $items['missing'] ?? [];
         //---
-        // $res = get_lang_in_process($lang);
         $res = get_lang_in_process_new($lang);
         //---
         $inprocess = array_intersect($res, $items_missing);

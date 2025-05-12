@@ -1,3 +1,5 @@
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Mdwiki-TD/tdc)
+
 # Mdwiki Translation Dashboard Coordinator (TDC)
 
 The **Translation Dashboard Coordinator (TDC)** is a web-based platform designed to assist coordinators in managing and facilitating translation efforts within the WikiProject Medicine community. It provides tools for monitoring translations, managing users, overseeing projects, and administering campaigns.
