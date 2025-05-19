@@ -19,6 +19,7 @@ use function SQLorAPI\Get\get_td_or_sql_full_translators;
 use function SQLorAPI\Get\get_td_or_sql_projects;
 use function SQLorAPI\Get\get_pages_langs;
 use function SQLorAPI\Get\td_or_sql_titles_infos;
+use function SQLorAPI\Get\super_function;
 */
 
 use function Actions\MdwikiSql\fetch_query;
@@ -29,6 +30,19 @@ $data_index = [];
 function isvalid($str)
 {
     return !empty($str) && $str != 'All' && $str != 'all';
+}
+
+function super_function($api_params, $sql_params, $sql_query)
+{
+    global $from_api;
+    // ---
+    if ($from_api) {
+        $data = get_td_api($api_params);
+    } else {
+        $data = fetch_query($sql_query, $sql_params);
+    }
+    // ---
+    return $data;
 }
 
 function get_td_or_sql_categories()
