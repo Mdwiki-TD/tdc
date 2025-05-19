@@ -48,31 +48,24 @@ function super_function($api_params, $sql_params, $sql_query)
 function get_td_or_sql_categories()
 {
     // ---
-    global $use_td_api;
-    // ---
     static $categories = [];
     // ---
     if (!empty($categories ?? [])) {
         return $categories;
     }
     // ---
-    if ($use_td_api) {
-        $data = get_td_api(['get' => 'categories']);
-    } else {
-        $query = "select id, category, category2, campaign, depth, def from categories";
-        //---
-        $data = fetch_query($query);
-    }
+    $api_params = ['get' => 'categories'];
+    $query = "select id, category, category2, campaign, depth, def from categories";
+    //---
+    $data = super_function($api_params, [], $query);
     // ---
     $categories = $data;
     // ---
-    return $data;
+    return $categories;
 }
 
 function get_coordinator()
 {
-    // ---
-    global $use_td_api;
     // ---
     static $coordinator = [];
     // ---
@@ -80,13 +73,10 @@ function get_coordinator()
         return $coordinator;
     }
     // ---
-    if ($use_td_api) {
-        $data = get_td_api(['get' => 'coordinator']);
-    } else {
-        $query = "SELECT id, user FROM coordinator order by id";
-        //---
-        $data = fetch_query($query);
-    }
+    $api_params = ['get' => 'coordinator'];
+    $query = "SELECT id, user FROM coordinator order by id";
+    //---
+    $data = super_function($api_params, [], $query);
     // ---
     $coordinator = $data;
     // ---
@@ -96,8 +86,6 @@ function get_coordinator()
 function get_users_by_last_pupdate()
 {
     // ---
-    global $use_td_api;
-    // ---
     static $last_user_to_tab = [];
     // ---
     if (!empty($last_user_to_tab ?? [])) {
@@ -106,38 +94,35 @@ function get_users_by_last_pupdate()
     // ---
     $data = [];
     // ---
-    if ($use_td_api) {
-        $data = get_td_api(array('get' => 'users_by_last_pupdate'));
-    } else {
-        $query_old = <<<SQL
-            select DISTINCT p1.target, p1.title, p1.user, p1.pupdate, p1.lang
-            from pages p1
-            where target != ''
-            and p1.pupdate = (select p2.pupdate from pages p2 where p2.user = p1.user ORDER BY p2.pupdate DESC limit 1)
-            group by p1.user
-            ORDER BY p1.pupdate DESC
-        SQL;
-        //---
-        $query = <<<SQL
-            WITH RankedPages AS (
-                SELECT
-                    p1.target,
-                    p1.user,
-                    p1.pupdate,
-                    p1.lang,
-                    p1.title,
-                    ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
-                FROM pages p1
-                WHERE p1.target != ''
-            )
-            SELECT target, user, pupdate, lang, title
-            FROM RankedPages
-            WHERE rn = 1
-            ORDER BY pupdate DESC;
-        SQL;
-        //---
-        $data = fetch_query($query);
-    }
+    $api_params = array('get' => 'users_by_last_pupdate');
+    $query_old = <<<SQL
+        select DISTINCT p1.target, p1.title, p1.user, p1.pupdate, p1.lang
+        from pages p1
+        where target != ''
+        and p1.pupdate = (select p2.pupdate from pages p2 where p2.user = p1.user ORDER BY p2.pupdate DESC limit 1)
+        group by p1.user
+        ORDER BY p1.pupdate DESC
+    SQL;
+    //---
+    $query = <<<SQL
+        WITH RankedPages AS (
+            SELECT
+                p1.target,
+                p1.user,
+                p1.pupdate,
+                p1.lang,
+                p1.title,
+                ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
+            FROM pages p1
+            WHERE p1.target != ''
+        )
+        SELECT target, user, pupdate, lang, title
+        FROM RankedPages
+        WHERE rn = 1
+        ORDER BY pupdate DESC;
+    SQL;
+    //---
+    $data = super_function($api_params, [], $query);
     // ---
     foreach ($data as $key => $gg) {
         $last_user_to_tab[$gg['user']] = $gg;
@@ -149,23 +134,18 @@ function get_users_by_last_pupdate()
 function get_td_or_sql_count_pages_not_empty()
 {
     // ---
-    global $use_td_api;
-    // ---
     static $count_pages = [];
     // ---
     if (!empty($count_pages ?? [])) {
         return $count_pages;
     }
     // ---
-    if ($use_td_api) {
-        $data = get_td_api(array('get' => 'count_pages', 'target' => 'not_empty'));
-    } else {
-        $query = <<<SQL
-            select DISTINCT user, count(target) as count from pages where target != '' group by user order by count desc
-        SQL;
-        //---
-        $data = fetch_query($query);
-    }
+    $api_params = array('get' => 'count_pages', 'target' => 'not_empty');
+    $query = <<<SQL
+        select DISTINCT user, count(target) as count from pages where target != '' group by user order by count desc
+    SQL;
+    //---
+    $data = super_function($api_params, [], $query);
     // ---
     $data = array_column($data, 'count', 'user');
     // ---
@@ -180,8 +160,6 @@ function get_td_or_sql_count_pages_not_empty()
 
 function get_td_or_sql_page_user_not_in_users()
 {
-    // ---
-    global $use_td_api;
     // ---
     static $users = [];
     // ---
@@ -209,8 +187,6 @@ function get_td_or_sql_page_user_not_in_users()
 function get_td_or_sql_users_no_inprocess()
 {
     // ---
-    global $use_td_api;
-    // ---
     static $users = [];
     // ---
     if (!empty($users)) return $users;
@@ -229,8 +205,6 @@ function get_td_or_sql_users_no_inprocess()
 function get_td_or_sql_full_translators()
 {
     // ---
-    global $use_td_api;
-    // ---
     static $full_translators = [];
     // ---
     if (!empty($full_translators)) return $full_translators;
@@ -248,8 +222,6 @@ function get_td_or_sql_full_translators()
 
 function get_td_or_sql_projects()
 {
-    // ---
-    global $use_td_api;
     // ---
     static $projects = [];
     // ---
@@ -353,8 +325,6 @@ function get_td_or_sql_qids_others($dis)
 function get_td_or_sql_settings()
 {
     // ---
-    global $use_td_api;
-    // ---
     static $setting_d = [];
     // ---
     if (!empty($setting_d)) return $setting_d;
@@ -371,8 +341,6 @@ function get_td_or_sql_settings()
 }
 function get_pages_langs()
 {
-    // ---
-    global $use_td_api;
     // ---
     static $pages_langs = [];
     // ---
@@ -399,8 +367,6 @@ function get_pages_langs()
 function get_pages_users_langs()
 {
     // ---
-    global $use_td_api;
-    // ---
     static $pages_users_langs = [];
     // ---
     if (!empty($pages_users_langs ?? [])) {
@@ -423,8 +389,6 @@ function get_pages_users_langs()
 
 function td_or_sql_titles_infos($titles = [])
 {
-    // ---
-    global $use_td_api;
     // ---
     // Ensure $titles is an array
     if (!is_array($titles)) {
