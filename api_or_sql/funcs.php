@@ -23,8 +23,6 @@ use function SQLorAPI\Funcs\get_pages_users_langs;
 
 use function SQLorAPI\Get\super_function;
 
-$data_index = [];
-
 function get_td_or_sql_categories(): array
 {
     // ---
@@ -150,7 +148,7 @@ function get_td_or_sql_page_user_not_in_users(): array
     $sql_params = [];
     $api_params = array('get' => 'pages', 'distinct' => 1, 'select' => 'user');
     $query = <<<SQL
-        select DISTINCT user from pages WHERE NOT EXISTS (SELECT 1 FROM users WHERE user = username)
+        select DISTINCT p.user from pages AS p WHERE NOT EXISTS ( SELECT 1 FROM users AS u WHERE p.user = u.username )
     SQL;
     //---
     $data = super_function($api_params, $sql_params, $query);
@@ -217,11 +215,11 @@ function get_td_or_sql_projects(): array
 function get_td_or_sql_qids($dis): array
 {
     // ---
-    global $data_index;
+    static $cache = [];
     // ---
-    $key = "get_td_or_sql_qids_" . $dis;
-    // ---
-    if (!empty($data_index[$key] ?? [])) return $data_index[$key];
+    if (!empty($cache[$dis] ?? [])) {
+        return $cache[$dis];
+    }
     // ---
     $data = [];
     // ---
@@ -247,7 +245,7 @@ function get_td_or_sql_qids($dis): array
     //---
     $data = super_function($api_params, $sql_params, $query);
     // ---
-    $data_index[$key] = $data;
+    $cache[$dis] = $data;
     // ---
     return $data;
 }
@@ -255,11 +253,11 @@ function get_td_or_sql_qids($dis): array
 function get_td_or_sql_qids_others($dis): array
 {
     // ---
-    global $data_index;
+    static $cache = [];
     // ---
-    $key = "sql_qids_others" . $dis;
-    // ---
-    if (!empty($data_index[$key] ?? [])) return $data_index[$key];
+    if (!empty($cache[$dis] ?? [])) {
+        return $cache[$dis];
+    }
     // ---
     $data = [];
     // ---
@@ -285,7 +283,7 @@ function get_td_or_sql_qids_others($dis): array
     //---
     $data = super_function($api_params, $sql_params, $query);
     // ---
-    $data_index[$key] = $data;
+    $cache[$dis] = $data;
     // ---
     return $data;
 }

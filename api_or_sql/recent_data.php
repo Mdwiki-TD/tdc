@@ -15,10 +15,14 @@ use function SQLorAPI\Recent\get_pages_users_to_main;
 
 use function SQLorAPI\Get\super_function;
 
-$data_index = [];
-
 function get_recent_sql($lang): array
 {
+    // ---
+    static $cache = [];
+    // ---
+    if (!empty($cache[$lang] ?? [])) {
+        return $cache[$lang];
+    }
     // ---
     $lang_line = '';
     //---
@@ -55,11 +59,19 @@ function get_recent_sql($lang): array
     //     return strtotime($b['pupdate']) - strtotime($a['pupdate']);
     // });
     //---
+    $cache[$lang] = $tab;
+    //---
     return $tab;
 }
 
 function get_recent_pages_users($lang): array
 {
+    // ---
+    static $cache = [];
+    // ---
+    if (!empty($cache[$lang] ?? [])) {
+        return $cache[$lang];
+    }
     // ---
     $sql_params = [];
     //---
@@ -97,11 +109,14 @@ function get_recent_pages_users($lang): array
         return strtotime($b['pupdate']) - strtotime($a['pupdate']);
     });
     //---
+    $cache[$lang] = $tab;
+    //---
     return $tab;
 }
 
 function get_recent_translated($lang, $table, $limit, $offset): array
 {
+    // ---
     $sql_params = [];
     $api_params = array('get' => $table, 'order' => 'pupdate', 'limit' => $limit, 'offset' => $offset);
     //---
@@ -161,6 +176,12 @@ function get_total_translations_count($lang, $table): int
 
 function get_pages_users_to_main($lang): array
 {
+    static $cache = [];
+    // ---
+    if (!empty($cache[$lang] ?? [])) {
+        return $cache[$lang];
+    }
+    // ---
     $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
     //---
     $sql_params = [];
@@ -173,6 +194,8 @@ function get_pages_users_to_main($lang): array
     }
     //---
     $dd = super_function($api_params, $sql_params, $query);
+    // ---
+    $cache[$lang] = $dd;
     // ---
     return $dd;
 }
