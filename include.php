@@ -15,7 +15,7 @@ include_once __DIR__ . '/actions/mdwiki_api.php';
 include_once __DIR__ . '/actions/mdwiki_sql.php';
 include_once __DIR__ . '/actions/td_api.php';
 
-include_once __DIR__ . '/api_or_sql/include.php';
+include_once __DIR__ . '/api_or_sql/index.php';
 
 include_once __DIR__ . '/tablesd/tables_dir.php';
 include_once __DIR__ . '/tablesd/sql_tables.php';
