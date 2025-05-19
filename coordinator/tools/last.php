@@ -12,7 +12,7 @@ use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
-use function SQLorAPI\Get\get_pages_users_langs;
+use function SQLorAPI\Funcs\get_pages_users_langs;
 // use function Actions\Html\make_cat_url;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
@@ -106,9 +106,11 @@ function make_td($tabg, $nnnn, $add_add)
     //---
     $talk = make_talk_url($llang, $user);
     //---
+    $md_title_encoded = rawurlencode($md_title);
+    //---
     $add_add_row = <<<HTML
         <td data-content='add_date'>
-            <a href="//medwiki.toolforge.org/wiki/$llang/$md_title" target="_blank">$add_date</a>
+            <a href="//medwiki.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
         </td>
     HTML;
     // ---

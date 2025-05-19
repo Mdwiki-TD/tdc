@@ -5,7 +5,7 @@ if (user_in_coord == false) {
 	exit;
 };
 //---
-use function SQLorAPI\Get\get_td_or_sql_users_no_inprocess;
+use function SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {

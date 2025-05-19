@@ -18,6 +18,7 @@ use function SQLorAPI\Funcs\get_td_or_sql_full_translators;
 use function SQLorAPI\Funcs\get_td_or_sql_projects;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
+use function SQLorAPI\Funcs\get_pages_users_langs;
 */
 
 use function SQLorAPI\Get\super_function;
