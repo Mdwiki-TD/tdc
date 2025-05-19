@@ -170,7 +170,7 @@ if (!empty($titles)) {
     //---
     $titles_qids = array_column($infos, "qid", "title");
     // ---
-    var_export($titles_qids);
+    // var_export($titles_qids);
 }
 //---
 $noo = 0;
