@@ -357,21 +357,23 @@ function td_or_sql_titles_infos($titles = []): array
         $titles = [];
     }
     // ---
+    $api_params = ['get' => 'titles', 'titles' => $titles];
+    // ---
+    $qua = "SELECT * FROM titles_infos";
+    // ---
     $sql_params = [];
-    $api_params = ['get' => 'titles'];
     // ---
-    if (!empty($titles)) {
-        $api_params['titles'] = $titles;
-    }
-    // ---
-    $qua = <<<SQL
-        SELECT *
-        FROM titles_infos
-    SQL;
-    // ---
+    /*
     if (!empty($titles)) {
         $titles = implode("','", $titles);
         $qua .= " WHERE title IN ('$titles')";
+    }
+    */
+    // ---
+    if (!empty($titles)) {
+        $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
+        $qua .= " WHERE title IN ($placeholders)";
+        $sql_params = $titles;              // pass to super_function
     }
     // ---
     $data = super_function($api_params, $sql_params, $qua);
