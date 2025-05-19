@@ -106,7 +106,13 @@ function make_td($tabg, $nnnn, $add_add)
     //---
     $talk = make_talk_url($llang, $user);
     //---
-    $add_add_row = ($add_add) ? "<td data-content='add_date'>$add_date</td>" : '';
+    $add_add_row = <<<HTML
+        <td data-content='add_date'>
+            <a href="//medwiki.toolforge.org/wiki/$llang/$md_title" target="_blank">$add_date</a>
+        </td>
+    HTML;
+    // ---
+    $add_add_row = ($add_add) ? $add_add_row : '';
     // ---
     $laly = <<<HTML
         <tr>
@@ -153,7 +159,8 @@ if ($last_table == 'pages') {
     $qsl_results = get_recent_pages_users($lang);
 }
 //---
-$add_add = do_add_date($qsl_results);
+// $add_add = do_add_date($qsl_results);
+$add_add = true;
 $th_add = $add_add ? "<th>add_date</th>" : '';
 //---
 $recent_rows = "";
