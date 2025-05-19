@@ -74,11 +74,16 @@ class Database
         }
     }
 
+    public function disableFullGroupByMode()
+    {
+        // إزالة ONLY_FULL_GROUP_BY مرة واحدة لكل جلسة
+        $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
+    }
+
     public function execute_query($sql_query, $params = null)
     {
         try {
-            // إزالة ONLY_FULL_GROUP_BY مرة واحدة لكل جلسة
-            $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
+            $this->disableFullGroupByMode();
 
             $q = $this->db->prepare($sql_query);
             if ($params) {
@@ -108,8 +113,7 @@ class Database
         try {
             $this->test_print($sql_query);
 
-            // إزالة ONLY_FULL_GROUP_BY مرة واحدة لكل جلسة
-            $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
+            $this->disableFullGroupByMode();
 
             $q = $this->db->prepare($sql_query);
             if ($params) {
