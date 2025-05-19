@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 //---
-use function SQLorAPI\Get\get_td_or_sql_projects;
+use function SQLorAPI\Funcs\get_td_or_sql_projects;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 $numb = 0;

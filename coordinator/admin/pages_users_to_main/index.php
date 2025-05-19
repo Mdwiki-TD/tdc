@@ -8,7 +8,7 @@ use function Actions\Html\make_edit_icon_new;
 use function SQLorAPI\Recent\get_pages_users_to_main;
 use function SQLorAPI\Get\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent;
-use function SQLorAPI\Get\td_or_sql_titles_infos;
+use function SQLorAPI\Funcs\td_or_sql_titles_infos;
 //---
 $lang = $_GET['lang'] ?? 'All';
 //---

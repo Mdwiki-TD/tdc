@@ -13,7 +13,7 @@ ini_set('session.use_strict_mode', '1');
 include_once __DIR__ . '/include.php';
 include_once __DIR__ . '/head.php';
 //---
-use function SQLorAPI\Get\get_coordinator;
+use function SQLorAPI\Funcs\get_coordinator;
 //---
 $user_in_coord = false;
 $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span>Tools</a>';

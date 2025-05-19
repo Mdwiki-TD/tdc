@@ -5,7 +5,7 @@ namespace SQLorAPI\Get;
 
 /*
 Usage:
-use function SQLorAPI\Get\get_coordinator;
+use function SQLorAPI\Funcs\get_coordinator;
 use function SQLorAPI\Get\super_function;
 */
 

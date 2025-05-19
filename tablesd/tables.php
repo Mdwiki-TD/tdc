@@ -19,7 +19,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 };
 //---
 use Tables\Langs\LangsTables;
-use function SQLorAPI\Get\td_or_sql_titles_infos;
+use function SQLorAPI\Funcs\td_or_sql_titles_infos;
 use function Tables\TablesDir\open_td_Tables_file;
 //---
 class MainTables

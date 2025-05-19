@@ -14,7 +14,7 @@ use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Get\get_pages_users_langs;
 // use function Actions\Html\make_cat_url;
-use function SQLorAPI\Get\get_pages_langs;
+use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
 use function Tools\RecentHelps\filter_table;
 

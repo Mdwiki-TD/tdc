@@ -14,7 +14,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 // include_once 'infos/td_config.php';
 //---
 use function Infos\TdConfig\get_configs;
-use function SQLorAPI\Get\get_pages_langs;
+use function SQLorAPI\Funcs\get_pages_langs;
 use function TDWIKI\csrf\generate_csrf_token;
 
 //---

@@ -10,9 +10,9 @@ use function Actions\Html\make_mail_icon_new;
 use function Actions\Html\make_project_to_user;
 use function Actions\Html\make_edit_icon_new;
 use function Actions\MdwikiSql\fetch_query;
-use function SQLorAPI\Get\get_users_by_last_pupdate;
-use function SQLorAPI\Get\get_td_or_sql_count_pages_not_empty;
-use function SQLorAPI\Get\get_td_or_sql_page_user_not_in_users;
+use function SQLorAPI\Funcs\get_users_by_last_pupdate;
+use function SQLorAPI\Funcs\get_td_or_sql_count_pages_not_empty;
+use function SQLorAPI\Funcs\get_td_or_sql_page_user_not_in_users;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
