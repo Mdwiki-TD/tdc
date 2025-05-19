@@ -16,7 +16,7 @@ use function SQLorAPI\Get\super_function;
 
 $data_index = [];
 
-function get_process_all_new()
+function get_process_all_new(): array
 {
     // ---
     static $process_all = [];
@@ -33,7 +33,7 @@ function get_process_all_new()
     return $process_all;
 }
 
-function get_user_process_new($user)
+function get_user_process_new(string $user): array
 {
     // ---
     global $data_index;
@@ -55,7 +55,7 @@ function get_user_process_new($user)
     return $data;
 }
 
-function get_users_process_new()
+function get_users_process_new(): array
 {
     // ---
     static $process_new = [];
@@ -77,7 +77,7 @@ function get_users_process_new()
     return $process_new;
 }
 
-function get_lang_in_process_new($code)
+function get_lang_in_process_new($code): array
 {
     // ---
     global $data_index;

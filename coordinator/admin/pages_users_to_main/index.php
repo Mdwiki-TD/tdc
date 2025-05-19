@@ -169,6 +169,8 @@ if (!empty($titles)) {
     $infos = td_or_sql_titles_infos($titles);
     //---
     $titles_qids = array_column($infos, "qid", "title");
+    // ---
+    // var_export($titles_qids);
 }
 //---
 $noo = 0;
@@ -177,6 +179,7 @@ foreach ($sql_results as $tat => $tabe) {
     $tabe["qid"] = $titles_qids[$tabe["title"]] ?? "";
     //---
     $noo = $noo + 1;
+    //---
     $recent_table .= make_td($tabe, $noo);
     //---
 };

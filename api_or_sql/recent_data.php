@@ -17,7 +17,7 @@ use function SQLorAPI\Get\super_function;
 
 $data_index = [];
 
-function get_recent_sql($lang)
+function get_recent_sql($lang): array
 {
     // ---
     $lang_line = '';
@@ -58,7 +58,7 @@ function get_recent_sql($lang)
     return $tab;
 }
 
-function get_recent_pages_users($lang)
+function get_recent_pages_users($lang): array
 {
     // ---
     $sql_params = [];
@@ -100,7 +100,7 @@ function get_recent_pages_users($lang)
     return $tab;
 }
 
-function get_recent_translated($lang, $table, $limit, $offset)
+function get_recent_translated($lang, $table, $limit, $offset): array
 {
     $sql_params = [];
     $api_params = array('get' => $table, 'order' => 'pupdate', 'limit' => $limit, 'offset' => $offset);
@@ -138,7 +138,7 @@ function get_recent_translated($lang, $table, $limit, $offset)
     return $dd;
 }
 
-function get_total_translations_count($lang, $table)
+function get_total_translations_count($lang, $table): int
 {
     //---
     $sql_params = [];
@@ -159,7 +159,7 @@ function get_total_translations_count($lang, $table)
     return $result;
 }
 
-function get_pages_users_to_main($lang)
+function get_pages_users_to_main($lang): array
 {
     $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
     //---

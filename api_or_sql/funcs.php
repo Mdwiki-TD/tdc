@@ -25,7 +25,7 @@ use function SQLorAPI\Get\super_function;
 
 $data_index = [];
 
-function get_td_or_sql_categories()
+function get_td_or_sql_categories(): array
 {
     // ---
     static $categories = [];
@@ -44,7 +44,7 @@ function get_td_or_sql_categories()
     return $categories;
 }
 
-function get_coordinator()
+function get_coordinator(): array
 {
     // ---
     static $coordinator = [];
@@ -63,7 +63,7 @@ function get_coordinator()
     return $data;
 }
 
-function get_users_by_last_pupdate()
+function get_users_by_last_pupdate(): array
 {
     // ---
     static $last_user_to_tab = [];
@@ -111,7 +111,7 @@ function get_users_by_last_pupdate()
     return $last_user_to_tab;
 }
 
-function get_td_or_sql_count_pages_not_empty()
+function get_td_or_sql_count_pages_not_empty(): array
 {
     // ---
     static $count_pages = [];
@@ -138,7 +138,7 @@ function get_td_or_sql_count_pages_not_empty()
     return $data;
 }
 
-function get_td_or_sql_page_user_not_in_users()
+function get_td_or_sql_page_user_not_in_users(): array
 {
     // ---
     static $users = [];
@@ -162,7 +162,7 @@ function get_td_or_sql_page_user_not_in_users()
     return $data;
 }
 
-function get_td_or_sql_users_no_inprocess()
+function get_td_or_sql_users_no_inprocess(): array
 {
     // ---
     static $users = [];
@@ -178,7 +178,7 @@ function get_td_or_sql_users_no_inprocess()
     return $users;
 }
 
-function get_td_or_sql_full_translators()
+function get_td_or_sql_full_translators(): array
 {
     // ---
     static $full_translators = [];
@@ -194,7 +194,7 @@ function get_td_or_sql_full_translators()
     return $full_translators;
 }
 
-function get_td_or_sql_projects()
+function get_td_or_sql_projects(): array
 {
     // ---
     static $projects = [];
@@ -214,7 +214,7 @@ function get_td_or_sql_projects()
     return $data;
 }
 
-function get_td_or_sql_qids($dis)
+function get_td_or_sql_qids($dis): array
 {
     // ---
     global $data_index;
@@ -252,7 +252,7 @@ function get_td_or_sql_qids($dis)
     return $data;
 }
 
-function get_td_or_sql_qids_others($dis)
+function get_td_or_sql_qids_others($dis): array
 {
     // ---
     global $data_index;
@@ -290,7 +290,7 @@ function get_td_or_sql_qids_others($dis)
     return $data;
 }
 
-function get_td_or_sql_settings()
+function get_td_or_sql_settings(): array
 {
     // ---
     static $setting_d = [];
@@ -305,7 +305,7 @@ function get_td_or_sql_settings()
     // ---
     return $setting_d;
 }
-function get_pages_langs()
+function get_pages_langs(): array
 {
     // ---
     static $pages_langs = [];
@@ -328,7 +328,7 @@ function get_pages_langs()
     return $data;
 }
 
-function get_pages_users_langs()
+function get_pages_users_langs(): array
 {
     // ---
     static $pages_users_langs = [];
@@ -349,7 +349,7 @@ function get_pages_users_langs()
     return $data;
 }
 
-function td_or_sql_titles_infos($titles = [])
+function td_or_sql_titles_infos($titles = []): array
 {
     // ---
     // Ensure $titles is an array
