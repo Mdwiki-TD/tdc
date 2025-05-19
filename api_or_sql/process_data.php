@@ -7,19 +7,15 @@ namespace SQLorAPI\Process;
 Usage:
 
 use function SQLorAPI\Process\get_process_all_new;
+use function SQLorAPI\Process\get_user_process_new;
 use function SQLorAPI\Process\get_users_process_new;
 use function SQLorAPI\Process\get_lang_in_process_new;
 */
 
-use function Actions\MdwikiSql\fetch_query;
-use function Actions\TDApi\get_td_api;
+use function SQLorAPI\Get\super_function;
 
-$data_index = [];
-
-function get_process_all_new()
+function get_process_all_new(): array
 {
-    // ---
-    global $use_td_api;
     // ---
     static $process_all = [];
     // ---
@@ -27,20 +23,38 @@ function get_process_all_new()
         return $process_all;
     }
     // ---
-    if ($use_td_api) {
-        $process_all = get_td_api(['get' => 'in_process', 'limit' => "100", 'order' => 'add_date']);
-    } else {
-        $sql_t = "select * from in_process ORDER BY add_date DESC limit 100";
-        $process_all = fetch_query($sql_t);
-    }
+    $api_params = ['get' => 'in_process', 'limit' => "100", 'order' => 'add_date'];
+    $sql_t = "select * from in_process ORDER BY add_date DESC limit 100";
     //---
+    $process_all = super_function($api_params, [], $sql_t);
+    // ---
     return $process_all;
 }
 
-function get_users_process_new()
+function get_user_process_new(string $user): array
 {
     // ---
-    global $use_td_api;
+    static $cache = [];
+    // ---
+    if (!empty($cache[$user] ?? [])) {
+        return $cache[$user];
+    }
+    // ---
+    $api_params = ['get' => 'in_process', 'user' => $user];
+    // ---
+    $query = "select * from in_process where user = ?";
+    // ---
+    $params = [$user];
+    // ---
+    $data = super_function($api_params, $params, $query);
+    // ---
+    $cache[$user] = $data;
+    // ---
+    return $data;
+}
+
+function get_users_process_new(): array
+{
     // ---
     static $process_new = [];
     // ---
@@ -48,44 +62,45 @@ function get_users_process_new()
         return $process_new;
     }
     // ---
-    if ($use_td_api) {
-        $res = get_td_api(['get' => 'in_process']);
-        $result = [];
-        foreach ($res as $t) {
-            $user = $t['user'] ?? "";
-            if (isset($result[$user])) {
-                $result[$user] += 1;
-            } else {
-                $result[$user] = 1;
-            };
-        }
-        $process_new = $result;
-    } else {
-        $sql_t = 'select DISTINCT user, count(*) as count from in_process group by user order by count desc';
-        $tab = fetch_query($sql_t);
-        $process_new = array_column($tab, 'count', 'user');
-    }
+    // ttp://localhost:9002/api.php?get=in_process&distinct=true&limit=50&group=user&order=count&select=count
+    // ---
+    $api_params = ['get' => 'in_process', 'distinct' => 'true', 'group' => 'user', 'order' => 'count', 'select' => 'count'];
+    // ---
+    $sql_t = 'select DISTINCT user, count(*) as count from in_process group by user order by count desc';
+    // ---
+    $tab = super_function($api_params, [], $sql_t);
+    // ---
+    $process_new = array_column($tab, 'count', 'user');
     //---
     return $process_new;
 }
 
-function get_lang_in_process_new($lang)
+function get_lang_in_process_new($code): array
 {
     // ---
-    global $use_td_api, $data_index;
+    static $cache = [];
     // ---
-    if (!empty($data_index[$lang] ?? [])) {
-        return $data_index[$lang];
+    if (!empty($cache[$code] ?? [])) {
+        return $cache[$code];
     }
     // ---
-    if ($use_td_api) {
-        $tab = get_td_api(['get' => 'in_process', 'lang' => $lang]);
-    } else {
-        $sql_t = 'select * from in_process where lang = ?';
-        $tab = fetch_query($sql_t, [$lang]);
-    }
+    /*
+    SELECT * from in_process ip
+        WHERE NOT EXISTS (
+        SELECT p.user FROM pages p
+        where p.title = ip.title
+        and p.lang = ip.lang
+        and p.target != ""
+        )
+    */
+    // ---
+    $query = "select * from in_process where lang = ?";
+    // ---
+    $api_params = ['get' => 'in_process', 'lang' => $code];
+    // ---
+    $data = super_function($api_params, [$code], $query);
+    // ---
+    $cache[$code] = array_column($data, 'title');
     //---
-    $data_index[$lang] = array_column($tab, 'title');
-    //---
-    return $data_index[$lang];
+    return $cache[$code];
 }

@@ -6,9 +6,9 @@ use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_edit_icon_new;
 use function SQLorAPI\Recent\get_pages_users_to_main;
-use function SQLorAPI\Get\get_pages_users_langs;
+use function SQLorAPI\Funcs\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent;
-use function SQLorAPI\Get\td_or_sql_titles_infos;
+use function SQLorAPI\Funcs\td_or_sql_titles_infos;
 //---
 $lang = $_GET['lang'] ?? 'All';
 //---
@@ -169,6 +169,8 @@ if (!empty($titles)) {
     $infos = td_or_sql_titles_infos($titles);
     //---
     $titles_qids = array_column($infos, "qid", "title");
+    // ---
+    // var_export($titles_qids);
 }
 //---
 $noo = 0;
@@ -177,6 +179,7 @@ foreach ($sql_results as $tat => $tabe) {
     $tabe["qid"] = $titles_qids[$tabe["title"]] ?? "";
     //---
     $noo = $noo + 1;
+    //---
     $recent_table .= make_td($tabe, $noo);
     //---
 };

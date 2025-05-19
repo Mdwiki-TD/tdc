@@ -12,9 +12,9 @@ use function Actions\Html\make_talk_url;
 use function Actions\Html\make_target_url;
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
-use function SQLorAPI\Get\get_pages_users_langs;
+use function SQLorAPI\Funcs\get_pages_users_langs;
 // use function Actions\Html\make_cat_url;
-use function SQLorAPI\Get\get_pages_langs;
+use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
 use function Tools\RecentHelps\filter_table;
 
@@ -106,7 +106,15 @@ function make_td($tabg, $nnnn, $add_add)
     //---
     $talk = make_talk_url($llang, $user);
     //---
-    $add_add_row = ($add_add) ? "<td data-content='add_date'>$add_date</td>" : '';
+    $md_title_encoded = rawurlencode($md_title);
+    //---
+    $add_add_row = <<<HTML
+        <td data-content='add_date'>
+            <a href="//medwiki.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
+        </td>
+    HTML;
+    // ---
+    $add_add_row = ($add_add) ? $add_add_row : '';
     // ---
     $laly = <<<HTML
         <tr>
@@ -153,7 +161,8 @@ if ($last_table == 'pages') {
     $qsl_results = get_recent_pages_users($lang);
 }
 //---
-$add_add = do_add_date($qsl_results);
+// $add_add = do_add_date($qsl_results);
+$add_add = true;
 $th_add = $add_add ? "<th>add_date</th>" : '';
 //---
 $recent_rows = "";
