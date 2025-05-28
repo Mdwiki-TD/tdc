@@ -174,7 +174,7 @@ function load_results() {
                     // remove .json from res
                     const escapedRes = res.replace('.json', '');
                     const safeId = parseInt(id, 10); // Ensure ID is numeric
-                    const uclass = (res === "success.json") ? "success" : "warning";
+                    const uclass = (res === "success") ? "success" : "warning";
                     return `<span class="btn d-inline-flex mb-2 px-2 py-1 fw-semibold text-${uclass}-emphasis bg-${uclass}-subtle border border-${uclass}-subtle rounded-2" onclick="showDetails(${safeId})">${escapedRes}</span>`;
 
                 }).join('<br>');

@@ -11,52 +11,42 @@
     <h4 class="card-title mb-4">Publish Reports Viewer (<span id="count_result">0</span>):</h4>
     <form id="filterForm" class="row g-3">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-3">
+                <div class="d-flex justify-content-betweenx justify-content-center">
+
+                    <select class="form-select" name="year" id="year"></select>
+                    <select class="form-select" name="month" id="month"></select>
+                </div>
+            </div>
+            <div class="col-md-7">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="input-group">
-                            <label class="input-group-text" for="year">Year</label>
-                            <select class="form-select" name="year" id="year"></select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <label class="input-group-text" for="month">Month</label>
-                            <select class="form-select" name="month" id="month"></select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <label class="input-group-text" for="lang">Language</label>
+                            <label class="input-group-text" for="lang">Lang.</label>
                             <select class="form-select1 selectpicker w-50" name="lang" id="lang" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="user">User</label>
+                            <select class="form-select1 selectpicker w-50" name="user" id="user" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="result">Result</label>
+                            <select class="form-select1 selectpicker w-50" name="result" id="result" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="input-group">
-                    <label class="input-group-text" for="user">User</label>
-                    <select class="form-select1 selectpicker w-75" name="user" id="user" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-4">
-                <div class="input-group">
-                    <label class="input-group-text" for="result">Result</label>
-                    <select class="form-select1 selectpicker" name="result" id="result" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="w-50 mx-auto">
-                    <button type="submit" class="btn btn-outline-primary w-100">
-                        Search <i id="loadingIndicator" class="fa fa-spinner fa-spin" style="display:none;"></i>
+            <div class="col-md-2">
+                <div class="d-flex justify-content-between justify-content-center">
+                    <button type="submit" class="btn btn-outline-primary">
+                        Search
                     </button>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="w-50 mx-auto">
-                    <button type="button" class="btn btn-outline-secondary w-100" id="resetBtn">Reset</button>
+                    <div><i id="loadingIndicator" class="fa fa-spinner fa-spin" style="display:none;"></i></div>
+                    <button type="button" class="btn btn-outline-secondary" id="resetBtn">Reset</button>
                 </div>
             </div>
         </div>
