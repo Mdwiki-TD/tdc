@@ -11,7 +11,7 @@
     <h4 class="card-title mb-4">Publish Reports Viewer (<span id="count_result">0</span>):</h4>
     <form id="filterForm" class="row g-3">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="input-group">
@@ -28,21 +28,15 @@
                     <div class="col-md-4">
                         <div class="input-group">
                             <label class="input-group-text" for="lang">Language</label>
-                            <select class="form-select" name="lang" id="lang"></select>
+                            <select class="form-select1 selectpicker w-50" name="lang" id="lang" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div class="col-md-3">
-                            <div class="input-group">
-                                <label class="input-group-text" for="sourcetitle">Source Title</label>
-                                <select class="form-select" name="sourcetitle" id="sourcetitle"></select>
-                            </div>
-                        </div> -->
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="input-group">
                     <label class="input-group-text" for="user">User</label>
-                    <select class="form-select" name="user" id="user"></select>
+                    <select class="form-select1 selectpicker w-75" name="user" id="user" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
                 </div>
             </div>
         </div>
@@ -50,14 +44,20 @@
             <div class="col-md-4">
                 <div class="input-group">
                     <label class="input-group-text" for="result">Result</label>
-                    <select class="form-select" name="result" id="result"></select>
+                    <select class="form-select1 selectpicker" name="result" id="result" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
                 </div>
             </div>
             <div class="col-md-4">
-                <button type="submit" class="btn btn-outline-primary w-100">Search</button>
+                <div class="w-50 mx-auto">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        Search <i id="loadingIndicator" class="fa fa-spinner fa-spin" style="display:none;"></i>
+                    </button>
+                </div>
             </div>
             <div class="col-md-4">
-                <button type="button" class="btn btn-outline-secondary w-100" id="resetBtn">Reset</button>
+                <div class="w-50 mx-auto">
+                    <button type="button" class="btn btn-outline-secondary w-100" id="resetBtn">Reset</button>
+                </div>
             </div>
         </div>
     </form>

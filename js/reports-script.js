@@ -35,10 +35,16 @@ function populateFilterOptions(results) {
         select.innerHTML = '<option value="">All</option>' +
             values.map(value => `<option value="${value}">${value}</option>`).join('');
 
+        select.setAttribute('data-container', 'body');
+        select.setAttribute('data-live-search-style', 'begins');
+        select.setAttribute('data-bs-theme', 'auto');
+        select.setAttribute('data-style', 'btn active');
+
         select.value = defaults[id] || '';
     }
-}
 
+    $('.selectpicker').selectpicker('refresh');
+}
 
 function showDetails(id) {
     // Search in original data
@@ -184,13 +190,22 @@ function load_results() {
     // حدث إرسال الفورم
     $('#filterForm').on('submit', function (e) {
         e.preventDefault();
-        table.ajax.reload();
+
+        $('#loadingIndicator').show();
+
+        table.ajax.reload(function () {
+            $('#loadingIndicator').hide();
+            $('#count_result').text(allResults.length);
+        });
+
         $('#count_result').text(allResults.length);
     });
 
     // زر إعادة التهيئة
     $('#resetBtn').on('click', function () {
         $('#filterForm')[0].reset();
-        table.ajax.reload();
+        table.ajax.reload(function () {
+            $('#count_result').text(allResults.length);
+        });
     });
 };

@@ -142,6 +142,6 @@ HTML;
 	</div>
 </div>
 
-<script src='coordinator/add_by_url.js'></script>
+<script src='/tdc/js/add_by_url.js'></script>
 
 </div>
