@@ -63,6 +63,7 @@ function create_side($filename, $ty)
             ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process', 'icon' => 'bi-hourglass'],
             ['id' => 'process_total', 'admin' => 0, 'href' => 'process_total', 'title' => 'In Process (Total)', 'icon' => 'bi-hourglass-split'],
             ['id' => 'publish_reports', 'admin' => 0, 'href' => '/publish_reports', 'title' => 'Publish Reports', 'target' => '_blank', 'icon' => 'bi-file-earmark-text'],
+            ['id' => 'reports', 'admin' => 0, 'href' => 'reports', 'title' => 'Reports', 'icon' => 'bi-file-earmark-text'],
         ],
         'Pages' => [
             ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type', 'icon' => 'bi-translate'],
