@@ -35,18 +35,20 @@ function populateFilterOptions(results) {
         select.innerHTML = '<option value="">All</option>' +
             values.map(value => `<option value="${value}">${value}</option>`).join('');
 
-        select.setAttribute('data-container', 'body');
-        select.setAttribute('data-live-search-style', 'begins');
-        select.setAttribute('data-bs-theme', 'auto');
-        select.setAttribute('data-style', 'btn active');
-
         select.value = defaults[id] || '';
     }
-
-    $('.selectpicker').selectpicker('refresh');
 }
 
 async function load_form() {
+    // if $("#year") has options then console.warn("year has options"); and do nothing
+    if ($("#year option").length > 1) {
+        console.warn("year has options");
+
+        return;
+    }
+
+    console.log("loading publish_reports_stats");
+
     $.getJSON('/api/index.php?get=publish_reports_stats')
         .done(await function (json) {
             if (json && json.results) {
@@ -154,8 +156,10 @@ function processTableData(json) {
 }
 
 function setupEventHandlers(table) {
-    $('#filterForm').on('submit', function (e) {
-        e.preventDefault();
+    // $('#filterForm').on('submit', function (e) {
+    // e.preventDefault();
+
+    $('#searchBtn').on('click', function () {
 
         $('#loadingIndicator').show();
 
@@ -219,17 +223,3 @@ async function newDataTable() {
     });
     return table;
 }
-
-
-async function load_results() {
-    // Load filters once only
-    await load_form();
-
-    let table = await newDataTable();
-
-    $('#count_result').text(allResults.length);
-
-    // حدث إرسال الفورم
-    setupEventHandlers(table);
-
-};
