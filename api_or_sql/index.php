@@ -40,3 +40,16 @@ function super_function(array $api_params, array $sql_params, string $sql_query)
     // ---
     return $data;
 }
+
+function super_function_new(array $api_params, array $sql_params, string $sql_query, string $table_name): array
+{
+    global $use_td_api;
+    // ---
+    $data = ($use_td_api) ? get_td_api($api_params) : [];
+    // ---
+    if (empty($data)) {
+        $data = fetch_query($sql_query, $sql_params, $table_name);
+    }
+    // ---
+    return $data;
+}

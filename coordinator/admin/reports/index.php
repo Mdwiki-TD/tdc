@@ -1,3 +1,11 @@
+<?php
+//---
+if (user_in_coord == false) {
+    echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+    exit;
+};
+//---
+?>
 <style>
     pre.json-data {
         background-color: #f8f9fa;
@@ -52,6 +60,7 @@
         </div>
     </form>
 </div>
+
 <div class='card-body p-1'>
     <div id="loading" class="text-center my-0" style="display: none;">
         <div class="spinner-border text-primary" role="status">
@@ -92,7 +101,16 @@
     </div>
     <script src="/tdc/js/reports-script.js"></script>
     <script>
-        $(document).ready(function() {
-            load_results();
+        $(document).ready(async function() {
+            // Load filters once only
+            await load_form();
+
+            let table = await newDataTable();
+
+            $('#count_result').text(allResults.length);
+
+            // حدث إرسال الفورم
+            setupEventHandlers(table);
+
         });
     </script>
