@@ -3,6 +3,7 @@ let allResults = [];
 let originalResults = []; // لتخزين البيانات الأصلية قبل التجميع
 
 function populateFilterOptions(results) {
+    if (!results) return;
     const unique = (key, transform = val => val) => {
         return [...new Set(results.map(item => transform(item[key])))].filter(Boolean).sort();
     };
@@ -55,7 +56,15 @@ async function load_form() {
     // }
 
     console.log("loading publish_reports_stats");
-
+    try {
+        const response = await $.getJSON('/api/index.php?get=publish_reports_stats');
+        if (response?.results) {
+            populateFilterOptions(response.results);
+        }
+    } catch (error) {
+        console.error('Failed to load filter options:', error);
+    }
+    /*
     $.getJSON('/api/index.php?get=publish_reports_stats')
         .done(await function (json) {
             if (json && json.results) {
@@ -65,6 +74,7 @@ async function load_form() {
         .fail(function (xhr, status, error) {
             console.error('Failed to load filter options:', error);
         });
+    */
 }
 
 function getTableColumns() {

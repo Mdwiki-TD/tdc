@@ -30,6 +30,10 @@ function get_publish_reports_stats(): array
     // ---
     static $stats_data = [];
     // ---
+    if (!empty($stats_data)) {
+        return $stats_data;
+    }
+    // ---
     $query = <<<SQL
         SELECT DISTINCT YEAR(date) as year, MONTH(date) as month, lang, user, result
         FROM publish_reports
