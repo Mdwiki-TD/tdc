@@ -2,6 +2,62 @@
 let allResults = [];
 let originalResults = []; // لتخزين البيانات الأصلية قبل التجميع
 
+function populateFilterOptions(results) {
+    const unique = (key, transform = val => val) => {
+        return [...new Set(results.map(item => transform(item[key])))].filter(Boolean).sort();
+    };
+
+    // إعداد القيم الافتراضية
+    const now = new Date();
+    const defaults = {
+        year: String(now.getFullYear()),
+        month: String(now.getMonth() + 1).padStart(2, '0')
+    };
+
+    const options = {
+        year: unique('year', d => String(d)),
+        month: unique('month', d => String(d)),
+        user: unique('user'),
+        lang: unique('lang'),
+        result: unique('result')
+    };
+
+    // التأكد من وجود القيم الافتراضية ضمن الخيارات
+    for (const key of ['year', 'month']) {
+        if (!options[key].includes(defaults[key])) {
+            options[key].push(defaults[key]);
+            options[key].sort();
+        }
+    }
+
+    for (const [id, values] of Object.entries(options)) {
+        const select = document.getElementById(id);
+        select.innerHTML = '<option value="">All</option>' +
+            values.map(value => `<option value="${value}">${value}</option>`).join('');
+
+        select.setAttribute('data-container', 'body');
+        select.setAttribute('data-live-search-style', 'begins');
+        select.setAttribute('data-bs-theme', 'auto');
+        select.setAttribute('data-style', 'btn active');
+
+        select.value = defaults[id] || '';
+    }
+
+    $('.selectpicker').selectpicker('refresh');
+}
+
+async function load_form() {
+    $.getJSON('/api/index.php?get=publish_reports_stats')
+        .done(await function (json) {
+            if (json && json.results) {
+                populateFilterOptions(json.results);
+            }
+        })
+        .fail(function (xhr, status, error) {
+            console.error('Failed to load filter options:', error);
+        });
+}
+
 function getTableColumns() {
     return [{
         data: 'id',
@@ -97,50 +153,6 @@ function processTableData(json) {
     return allResults;
 }
 
-function populateFilterOptions(results) {
-    const unique = (key, transform = val => val) => {
-        return [...new Set(results.map(item => transform(item[key])))].filter(Boolean).sort();
-    };
-
-    // إعداد القيم الافتراضية
-    const now = new Date();
-    const defaults = {
-        year: String(now.getFullYear()),
-        month: String(now.getMonth() + 1).padStart(2, '0')
-    };
-
-    const options = {
-        year: unique('date', d => d.split('-')[0]),
-        month: unique('date', d => d.split('-')[1]),
-        user: unique('user'),
-        lang: unique('lang'),
-        result: unique('result')
-    };
-
-    // التأكد من وجود القيم الافتراضية ضمن الخيارات
-    for (const key of ['year', 'month']) {
-        if (!options[key].includes(defaults[key])) {
-            options[key].push(defaults[key]);
-            options[key].sort();
-        }
-    }
-
-    for (const [id, values] of Object.entries(options)) {
-        const select = document.getElementById(id);
-        select.innerHTML = '<option value="">All</option>' +
-            values.map(value => `<option value="${value}">${value}</option>`).join('');
-
-        select.setAttribute('data-container', 'body');
-        select.setAttribute('data-live-search-style', 'begins');
-        select.setAttribute('data-bs-theme', 'auto');
-        select.setAttribute('data-style', 'btn active');
-
-        select.value = defaults[id] || '';
-    }
-
-    $('.selectpicker').selectpicker('refresh');
-}
-
 function setupEventHandlers(table) {
     $('#filterForm').on('submit', function (e) {
         e.preventDefault();
@@ -182,19 +194,7 @@ function showDetails(id) {
     }
 }
 
-function load_results() {
-    // Load filters once only
-    $.getJSON('/api/index.php?get=publish_reports')
-        .done(function (json) {
-            if (json && json.results) {
-                populateFilterOptions(json.results);
-            }
-        })
-        .fail(function (xhr, status, error) {
-            console.error('Failed to load filter options:', error);
-            // Optionally show user-friendly error message
-        });
-
+async function newDataTable() {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0'); // الشهر يبدأ من 0، لذا نضيف 1
@@ -217,6 +217,16 @@ function load_results() {
             [100, 200, 500, 1000]
         ]
     });
+    return table;
+}
+
+
+async function load_results() {
+    // Load filters once only
+    await load_form();
+
+    let table = await newDataTable();
+
     $('#count_result').text(allResults.length);
 
     // حدث إرسال الفورم

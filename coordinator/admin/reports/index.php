@@ -92,7 +92,15 @@
     </div>
     <script src="/tdc/js/reports-script.js"></script>
     <script>
-        $(document).ready(function() {
-            load_results();
+        $(document).ready(async function() {
+            // Load filters once only
+            await load_form();
+
+            let table = await newDataTable();
+
+            $('#count_result').text(allResults.length);
+
+            // حدث إرسال الفورم
+            setupEventHandlers(table);
         });
     </script>
