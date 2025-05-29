@@ -10,28 +10,9 @@ use function SQLorAPI\Process\get_process_all_new;
 use function SQLorAPI\Process\get_user_process_new;
 use function SQLorAPI\Process\get_users_process_new;
 use function SQLorAPI\Process\get_lang_in_process_new;
-use function SQLorAPI\Process\get_publish_reports_stats;
 */
 
 use function SQLorAPI\Get\super_function;
-
-function get_publish_reports_stats(): array
-{
-    // ---
-    static $stats_data = [];
-    // ---
-    $query = <<<SQL
-        SELECT DISTINCT YEAR(date) as year, MONTH(date) as month, lang, user, result
-        FROM publish_reports
-        GROUP BY year, month, lang, user, result
-    SQL;
-    // ---
-    $api_params = ['get' => 'publish_reports_stats'];
-    // ---
-    $stats_data = super_function($api_params, [], $query);
-    // ---
-    return $stats_data;
-}
 
 function get_process_all_new(): array
 {

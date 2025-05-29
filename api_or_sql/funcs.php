@@ -19,9 +19,29 @@ use function SQLorAPI\Funcs\get_td_or_sql_projects;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
 use function SQLorAPI\Funcs\get_pages_users_langs;
+use function SQLorAPI\Funcs\get_publish_reports_stats;
 */
 
 use function SQLorAPI\Get\super_function;
+use function SQLorAPI\Get\super_function_new;
+
+function get_publish_reports_stats(): array
+{
+    // ---
+    static $stats_data = [];
+    // ---
+    $query = <<<SQL
+        SELECT DISTINCT YEAR(date) as year, MONTH(date) as month, lang, user, result
+        FROM publish_reports
+        GROUP BY year, month, lang, user, result
+    SQL;
+    // ---
+    $api_params = ['get' => 'publish_reports_stats'];
+    // ---
+    $stats_data = super_function_new($api_params, [], $query, 'publish_reports');
+    // ---
+    return $stats_data;
+}
 
 function get_td_or_sql_categories(): array
 {

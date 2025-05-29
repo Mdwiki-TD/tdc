@@ -1,3 +1,34 @@
+<?php
+//---
+if (user_in_coord == false) {
+    echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+    exit;
+};
+//---
+use function SQLorAPI\Funcs\get_publish_reports_stats;
+//---
+$data = get_publish_reports_stats();
+//---
+$keys = ['year', 'month', 'lang', 'user', 'result'];
+//---
+$form_options = [];
+//---
+if ($data) {
+    // ---
+    foreach ($keys as $key) {
+        // ---
+        $data_new = array_unique(array_column($data, $key));
+        // ---
+        $form_options[$key] = '';
+        // ---
+        foreach ($data_new as $value) {
+            $form_options[$key] .= "<option value='" . $value . "'>" . $value . "</option>";
+        }
+    }
+}
+//---
+?>
+
 <style>
     pre.json-data {
         background-color: #f8f9fa;
@@ -13,9 +44,12 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="d-flex justify-content-betweenx justify-content-center">
-
-                    <select class="form-select" name="year" id="year"></select>
-                    <select class="form-select" name="month" id="month"></select>
+                    <select class="form-select" name="year" id="year">
+                        <? echo $form_options['year'] ?? ""; ?>
+                    </select>
+                    <select class="form-select" name="month" id="month">
+                        <? echo $form_options['month'] ?? ""; ?>
+                    </select>
                 </div>
             </div>
             <div class="col-md-7">
@@ -23,19 +57,25 @@
                     <div class="col-md-4">
                         <div class="input-group">
                             <label class="input-group-text" for="lang">Lang.</label>
-                            <select class="form-select1 selectpicker w-50" name="lang" id="lang" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
+                            <select class="form-select1 selectpicker w-50" name="lang" id="lang" data-live-search="true" data-style='btn active' data-bs-theme="auto">
+                                <? echo $form_options['lang'] ?? ""; ?>
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="input-group">
                             <label class="input-group-text" for="user">User</label>
-                            <select class="form-select1 selectpicker w-50" name="user" id="user" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
+                            <select class="form-select1 selectpicker w-50" name="user" id="user" data-live-search="true" data-style='btn active' data-bs-theme="auto">
+                                <? echo $form_options['user'] ?? ""; ?>
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="input-group">
                             <label class="input-group-text" for="result">Result</label>
-                            <select class="form-select1 selectpicker w-50" name="result" id="result" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
+                            <select class="form-select1 selectpicker w-50" name="result" id="result" data-live-search="true" data-style='btn active' data-bs-theme="auto">
+                                <? echo $form_options['result'] ?? ""; ?>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -94,7 +134,7 @@
     <script>
         $(document).ready(async function() {
             // Load filters once only
-            await load_form();
+            // await load_form();
 
             let table = await newDataTable();
 
