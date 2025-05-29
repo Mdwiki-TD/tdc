@@ -2,6 +2,101 @@
 let allResults = [];
 let originalResults = []; // لتخزين البيانات الأصلية قبل التجميع
 
+function getTableColumns() {
+    return [{
+        data: 'id',
+        visible: false
+    },
+    {
+        data: 'date',
+        render: function (data, type) {
+            if (type === 'display' || type === 'filter') {
+                return data.split(' ')[0];
+            }
+            return data;
+        }
+    },
+    {
+        data: 'lang'
+    },
+    {
+        data: null,
+        render: function (data, type, row) {
+
+            // Validate language code (basic validation)
+            const lang = /^[a-z]{2,3}$/.test(row.lang) ? row.lang : 'en';
+            const title = encodeURIComponent(row.title || '');
+            const escapedTitle = row.title || '';
+
+            if (!title) return escapedTitle;
+
+            return `<a href="https://${lang}.wikipedia.org/wiki/${title}" target="_blank" rel="noopener noreferrer">${escapedTitle}</a>`;
+        }
+    },
+    {
+        data: 'user'
+    },
+    {
+        data: 'sourcetitle'
+    },
+    {
+        data: null,
+        render: function (data, type, row) {
+            // Display multiple buttons for grouped results
+            return row.resultsArray.map((res, index) => {
+                const id = row.idsArray[index];
+                // remove .json from res
+                const escapedRes = res.replace('.json', '');
+                const safeId = parseInt(id, 10); // Ensure ID is numeric
+                const uclass = (res == "success" || escapedRes == "success") ? "success" : "warning";
+                return `<span class="btn d-inline-flex mb-2 px-2 py-1 fw-semibold text-${uclass}-emphasis bg-${uclass}-subtle border border-${uclass}-subtle rounded-2" onclick="showDetails(${safeId})">${escapedRes}</span>`;
+
+            }).join('<br>');
+        }
+    }
+    ]
+}
+function getFormData(d) {
+    const formData = $('#filterForm').serializeArray();
+    formData.forEach(field => {
+        if (field.value.trim()) {
+            d[field.name] = field.value;
+        }
+    });
+}
+
+function processTableData(json) {
+    // تخزين البيانات الأصلية كاملة
+    originalResults = json.results;
+
+    // تجميع الصفوف حسب الحقول المطلوبة
+    const grouped = {};
+    originalResults.forEach(item => {
+        const key = [
+            item.date.split(' ')[0], // فقط جزء التاريخ بدون الوقت
+            item.lang,
+            item.title,
+            item.user,
+            item.sourcetitle
+        ].join('|');
+
+        if (!grouped[key]) {
+            grouped[key] = {
+                ...item,
+                resultsArray: [item.result],
+                idsArray: [item.id]
+            };
+        } else {
+            grouped[key].resultsArray.push(item.result);
+            grouped[key].idsArray.push(item.id);
+        }
+    });
+
+    allResults = Object.values(grouped);
+    $('#count_result').text(allResults.length);
+    return allResults;
+}
+
 function populateFilterOptions(results) {
     const unique = (key, transform = val => val) => {
         return [...new Set(results.map(item => transform(item[key])))].filter(Boolean).sort();
@@ -44,6 +139,26 @@ function populateFilterOptions(results) {
     }
 
     $('.selectpicker').selectpicker('refresh');
+}
+
+function setupEventHandlers(table) {
+    $('#filterForm').on('submit', function (e) {
+        e.preventDefault();
+
+        $('#loadingIndicator').show();
+
+        table.ajax.reload(function () {
+            $('#loadingIndicator').hide();
+            $('#count_result').text(allResults.length);
+        });
+    });
+
+    $('#resetBtn').on('click', function () {
+        $('#filterForm')[0].reset();
+        table.ajax.reload(function () {
+            $('#count_result').text(allResults.length);
+        });
+    });
 }
 
 function showDetails(id) {
@@ -89,98 +204,10 @@ function load_results() {
     let table = $('#resultsTable').DataTable({
         ajax: {
             url: end_point,
-            data: function (d) {
-                const formData = $('#filterForm').serializeArray();
-                formData.forEach(field => {
-                    if (field.value.trim()) {
-                        d[field.name] = field.value;
-                    }
-                });
-            },
-            dataSrc: function (json) {
-                // تخزين البيانات الأصلية كاملة
-                originalResults = json.results;
-
-                // تجميع الصفوف حسب الحقول المطلوبة
-                const grouped = {};
-                originalResults.forEach(item => {
-                    const key = [
-                        item.date.split(' ')[0], // فقط جزء التاريخ بدون الوقت
-                        item.lang,
-                        item.title,
-                        item.user,
-                        item.sourcetitle
-                    ].join('|');
-
-                    if (!grouped[key]) {
-                        grouped[key] = {
-                            ...item,
-                            resultsArray: [item.result],
-                            idsArray: [item.id]
-                        };
-                    } else {
-                        grouped[key].resultsArray.push(item.result);
-                        grouped[key].idsArray.push(item.id);
-                    }
-                });
-
-                allResults = Object.values(grouped);
-                $('#count_result').text(allResults.length);
-                return allResults;
-            }
+            data: getFormData,
+            dataSrc: processTableData
         },
-        columns: [{
-            data: 'id',
-            visible: false
-        },
-        {
-            data: 'date',
-            render: function (data, type) {
-                if (type === 'display' || type === 'filter') {
-                    return data.split(' ')[0];
-                }
-                return data;
-            }
-        },
-        {
-            data: 'lang'
-        },
-        {
-            data: null,
-            render: function (data, type, row) {
-
-                // Validate language code (basic validation)
-                const lang = /^[a-z]{2,3}$/.test(row.lang) ? row.lang : 'en';
-                const title = encodeURIComponent(row.title || '');
-                const escapedTitle = row.title || '';
-
-                if (!title) return escapedTitle;
-
-                return `<a href="https://${lang}.wikipedia.org/wiki/${title}" target="_blank" rel="noopener noreferrer">${escapedTitle}</a>`;
-            }
-        },
-        {
-            data: 'user'
-        },
-        {
-            data: 'sourcetitle'
-        },
-        {
-            data: null,
-            render: function (data, type, row) {
-                // Display multiple buttons for grouped results
-                return row.resultsArray.map((res, index) => {
-                    const id = row.idsArray[index];
-                    // remove .json from res
-                    const escapedRes = res.replace('.json', '');
-                    const safeId = parseInt(id, 10); // Ensure ID is numeric
-                    const uclass = (res === "success") ? "success" : "warning";
-                    return `<span class="btn d-inline-flex mb-2 px-2 py-1 fw-semibold text-${uclass}-emphasis bg-${uclass}-subtle border border-${uclass}-subtle rounded-2" onclick="showDetails(${safeId})">${escapedRes}</span>`;
-
-                }).join('<br>');
-            }
-        }
-        ],
+        columns: getTableColumns(),
         // saveState: true,
         order: [
             [1, 'desc']
@@ -193,24 +220,6 @@ function load_results() {
     $('#count_result').text(allResults.length);
 
     // حدث إرسال الفورم
-    $('#filterForm').on('submit', function (e) {
-        e.preventDefault();
+    setupEventHandlers(table);
 
-        $('#loadingIndicator').show();
-
-        table.ajax.reload(function () {
-            $('#loadingIndicator').hide();
-            $('#count_result').text(allResults.length);
-        });
-
-        $('#count_result').text(allResults.length);
-    });
-
-    // زر إعادة التهيئة
-    $('#resetBtn').on('click', function () {
-        $('#filterForm')[0].reset();
-        table.ajax.reload(function () {
-            $('#count_result').text(allResults.length);
-        });
-    });
 };
