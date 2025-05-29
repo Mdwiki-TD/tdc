@@ -181,8 +181,13 @@ function load_results() {
             }
         }
         ],
+        // saveState: true,
         order: [
             [1, 'desc']
+        ],
+        lengthMenu: [
+            [100, 200, 500, 1000],
+            [100, 200, 500, 1000]
         ]
     });
     $('#count_result').text(allResults.length);
