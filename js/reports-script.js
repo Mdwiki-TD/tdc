@@ -35,17 +35,24 @@ function populateFilterOptions(results) {
         select.innerHTML = '<option value="">All</option>' +
             values.map(value => `<option value="${value}">${value}</option>`).join('');
 
+        select.setAttribute('data-container', 'body');
+        select.setAttribute('data-live-search-style', 'begins');
+        select.setAttribute('data-bs-theme', 'auto');
+        select.setAttribute('data-style', 'btn active');
+
         select.value = defaults[id] || '';
     }
+
+    $('.selectpicker').selectpicker('refresh');
 }
 
 async function load_form() {
-    // if $("#year") has options then console.warn("year has options"); and do nothing
-    if ($("#year option").length > 1) {
-        console.warn("year has options");
+    // // if $("#year") has options then console.warn("year has options"); and do nothing
+    // if ($("#year option").length > 1) {
+    //     console.warn("year has options");
 
-        return;
-    }
+    //     return;
+    // }
 
     console.log("loading publish_reports_stats");
 
@@ -156,10 +163,10 @@ function processTableData(json) {
 }
 
 function setupEventHandlers(table) {
-    // $('#filterForm').on('submit', function (e) {
-    // e.preventDefault();
 
-    $('#searchBtn').on('click', function () {
+    // $('#searchBtn').on('click', function () {
+    $('#filterForm').on('submit', function (e) {
+        e.preventDefault();
 
         $('#loadingIndicator').show();
 
