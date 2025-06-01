@@ -35,12 +35,12 @@ $edit_params = [
 function echo_form()
 {
     //---
-    $id          = $_GET['id'] ?? '';
-    $lang_code   = $_GET['lang_code'] ?? '';
-    $expend      = $_GET['expend'] ?? '';
-    $move_dots   = $_GET['move_dots'] ?? '';
-    $add_en_lang = $_GET['add_en_lang'] ?? '';
-    //---
+    $id          = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
+    $lang_code   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');
+    $expend      = filter_var($_GET['expend'] ?? '', FILTER_VALIDATE_INT) ?: '';
+    $move_dots   = filter_var($_GET['move_dots'] ?? '', FILTER_VALIDATE_INT) ?: '';
+    $add_en_lang = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
+    // ---
     $header_title = ($id != "") ? "Edit language settings" : "Add language settings";
     //---
     echo <<<HTML
@@ -137,10 +137,10 @@ $texts = [];
 //---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token()) {
     // ---
-    $lang_code = $_POST['lang_code'] ?? '';
-    $expend    = $_POST['expend'] ?? '';
-    $move_dots = $_POST['move_dots'] ?? '';
-    $add_en_lang = $_POST['add_en_lang'] ?? '';
+    $lang_code = trim($_POST['lang_code'] ?? '');
+    $expend    = filter_var($_POST['expend'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
+    $move_dots = filter_var($_POST['move_dots'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
+    $add_en_lang = filter_var($_POST['add_en_lang'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
     // ---
     if (isset($_POST['delete'])) {
         $id = $_POST['delete'];
