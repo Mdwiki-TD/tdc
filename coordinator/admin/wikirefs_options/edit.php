@@ -5,7 +5,6 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-use function Actions\Html\add_quotes;
 use function TDWIKI\csrf\generate_csrf_token;
 use function Actions\MdwikiSql\execute_query;
 use function Actions\Html\div_alert; // echo div_alert($texts, 'success');

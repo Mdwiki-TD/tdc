@@ -139,12 +139,12 @@ function make_project_to_user($project)
 //---
 function make_input_group($label, $id, $value, $required)
 {
-    $val2 = add_quotes($value);
+	$val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class='col-md-3'>
         <div class='input-group mb-3'>
             <span class='input-group-text'>$label</span>
-            <input class='form-control' type='text' name='$id' value=$val2 $required/>
+            <input class='form-control' type='text' name='$id' value='$val2' $required/>
         </div>
     </div>
     HTML;
@@ -152,11 +152,11 @@ function make_input_group($label, $id, $value, $required)
 //---
 function make_input_group_no_col($label, $id, $value, $required)
 {
-    $val2 = add_quotes($value);
+	$val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class='input-group mb-3'>
         <span class='input-group-text'>$label</span>
-        <input class='form-control' type='text' name='$id' value=$val2 $required/>
+        <input class='form-control' type='text' name='$id' value='$val2' $required/>
     </div>
     HTML;
 };

@@ -5,7 +5,6 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-use function Actions\Html\add_quotes;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 echo '</div><script>
@@ -41,7 +40,7 @@ function echo_form($title, $lead, $full, $id)
     $lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
     $full_checked = ($full == 1 || $full == "1") ? 'checked' : '';
     //---
-    $title2 = add_quotes($title);
+	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
     //---
     $csrf_token = generate_csrf_token();
     //---
@@ -70,7 +69,7 @@ function echo_form($title, $lead, $full, $id)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>Title</span>
                             </div>
-                            <input class='form-control' type='text' name='rows[1][title]' value=$title2 required/>
+                            <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
                         </div>
                     </div>
                     <div class='col-md-3'>
