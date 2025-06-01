@@ -17,35 +17,22 @@ use function SQLorAPI\Funcs\get_td_or_sql_language_settings;
 use function Infos\TdConfig\get_configs;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function TDWIKI\csrf\generate_csrf_token;
-use function Actions\Html\make_edit_icon_new;
 
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require __DIR__ . '/post_sql.php';
+    require __DIR__ . '/post.php';
 }
 //---
 // language_settings (lang_code, move_dots, expend, add_en_lang)
 // ---
-function make_td($tabg, $numb)
+function make_td($lang, $tabg, $numb)
 {
-    //---
-    $id             = $tabg['id'] ?? 0;
-    $lang           = $tabg['lang_code'] ?? "";
-    $expend2        = ($tabg['expend'] == 1) ? 'checked' : '';
-    $move_dots      = ($tabg['move_dots'] == 1) ? 'checked' : '';
-    $add_en_lang    = ($tabg['add_en_lang'] == 1) ? 'checked' : '';
     //---
     $lang = strtolower($lang);
     //---
-    $edit_params = [
-        'id'   => $id,
-        'lang_code'  => $lang,
-        'expend'  => $tabg['expend'],
-        'move_dots'  => $tabg['move_dots'],
-        'add_en_lang'  => $tabg['add_en_lang']
-    ];
-    //---
-    $edit_icon = make_edit_icon_new("wikirefs_options/edit", $edit_params);
+    $expend2        = ($tabg['expend'] == 1) ? 'checked' : '';
+    $move_dots      = ($tabg['move_dots'] == 1) ? 'checked' : '';
+    $add_en_lang     = ($tabg['add_en_lang'] == 1) ? 'checked' : '';
     //---
     $laly = <<<HTML
         <tr>
@@ -54,24 +41,25 @@ function make_td($tabg, $numb)
             </td>
             <td data-content='#'>
                 <span>$lang</span>
+                <input name='lang[]$numb' value='$lang' hidden/>
             </td>
             <td data-content='Move dots'>
                 <div class='form-check form-switch'>
-                    <input class='form-check-input' type='checkbox' name='rows[$numb][move_dots]' value='1' $move_dots disabled/>
+                    <input class='form-check-input' type='checkbox' name='move_dots[]$numb' value='$lang' $move_dots/>
                 </div>
             </td>
             <td data-content='Expend infobox'>
                 <div class='form-check form-switch'>
-                    <input class='form-check-input' type='checkbox' name='rows[$numb][expend]' value='1' $expend2 disabled/>
+                    <input class='form-check-input' type='checkbox' name='expend[]$numb' value='$lang' $expend2/>
                 </div>
             </td>
             <td data-content='Add |language=en'>
                 <div class='form-check form-switch'>
-                    <input class='form-check-input' type='checkbox' name='rows[$numb][add_en_lang]' value='1' $add_en_lang disabled/>
+                    <input class='form-check-input' type='checkbox' name='add_en_lang[]$numb' value='$lang' $add_en_lang/>
                 </div>
             </td>
-            <td data-content="Edit">
-                $edit_icon
+            <td data-content='Delete'>
+                <input type='checkbox' name='del[]$numb' value='$lang'>
             </td>
         </tr>
         HTML;
@@ -82,8 +70,6 @@ function make_td($tabg, $numb)
 // $tabes = get_configs('fixwikirefs.json');
 $tabes = get_td_or_sql_language_settings();
 //---
-$tabes_codes = array_column($tabes, 'lang_code');
-//---
 $testin = (($_GET['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
 //---
 $langs_d = get_pages_langs();
@@ -91,7 +77,7 @@ $langs_d = get_pages_langs();
 foreach ($langs_d as $tat) {
     $lal = strtolower($tat);
     //---
-    if (!in_array($lal, $tabes_codes)) {
+    if (!isset($tabes[$lal])) {
         $tabes[$lal] = ['expend' => 0, 'move_dots' => 0, 'add_en_lang' => 0];
     }
 }
@@ -104,8 +90,9 @@ $sato = "";
 // ---
 foreach ($tabes as $tab) {
     $n += 1;
-    $sato .= make_td($tab, $n);
-}
+    $lang = $tab['lang_code'];
+    $sato .= make_td($lang, $tab, $n);
+};
 //---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
 //---
@@ -127,7 +114,7 @@ echo <<<HTML
                             <th>Move dots</th>
                             <th>Expand infobox</th>
                             <th>add |language=en</th>
-                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody id="refs_tab">
@@ -135,35 +122,25 @@ echo <<<HTML
                     </tbody>
                 </table>
             </div>
+            <div class="form-group d-flex justify-content-between">
+                <button type="submit" class="btn btn-outline-primary">Save</button>
+                <span role="button" id="add_row" class="btn btn-outline-primary" onclick="add_row()">New row</span>
+            </div>
         </form>
-        </div></div>
+    </div>
 HTML;
 //---
-$new_row = make_edit_icon_new("wikirefs_options/edit", ["new" => 1], $text = "Add one!");
-//---
-echo <<<HTML
-	<div class='card mt-2 mb-2'>
-		<div class='card-body'>
-			$new_row
-		</div>
-	</div>
-HTML;
 ?>
 <script type="text/javascript">
     function add_row() {
         var ii = $('#refs_tab >tr').length + 1;
         var e = `
             <tr>
-                <td>
-                    ${ii}
-                    <input class='form-control' name='newlang[${ii}][is_new]' value='yes' hidden'/>
-                </td>
-                <td>
-                    <input class='form-control' name='newlang[${ii}][lang_code]' placeholder='lang code.'/>
-                </td>
-                <td><input class='form-control' type='text' name='move_dotsx[${ii}]' value='0' disabled/></td>
-                <td><input class='form-control' type='text' name='expendx[${ii}]' value='0' disabled/></td>
-                <td><input class='form-control' type='text' name='add_en_langx[${ii}]' value='0' disabled/></td>
+                <td>${ii}</td>
+                <td><input class='form-control' name='newlang[]${ii}' placeholder='lang code.'/></td>
+                <td><input class='form-control' type='text' name='move_dotsx[]${ii}' value='0' disabled/></td>
+                <td><input class='form-control' type='text' name='expendx[]${ii}' value='0' disabled/></td>
+                <td><input class='form-control' type='text' name='add_en_langx[]${ii}' value='0' disabled/></td>
                 <td>-</td>
             </tr>
         `;
