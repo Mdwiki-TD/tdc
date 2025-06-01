@@ -70,7 +70,7 @@ function echo_form()
     HTML;
     // ---
     if ($id == "") {
-        $id_row = "";
+        $id_row = "<input class='form-control' type='text' value='1' name='new' hidden/>";
         $delete_row = "";
     }
     // ---
@@ -176,6 +176,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token()) {
             $errors[] = "Failed to update language $lang_code.";
         } else {
             $texts[] = "language $lang_code updated.";
+        }
+        // ---
+    } elseif (($_POST['new'] ?? '') != "") {
+        // ---
+        if ($lang_code == "") {
+            $errors[] = "Lang code is empty.";
+        } else {
+            // ---
+            $qua = "INSERT INTO language_settings (lang_code, expend, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
+            $params = [$lang_code, $expend, $move_dots, $add_en_lang];
+            // ---
+            $result = execute_query($qua, $params);
+            // ---
+            if ($result === false) {
+                $errors[] = "Failed to add language $lang_code.";
+            } else {
+                $texts[] = "language $lang_code added.";
+            }
         }
         // ---
     } else {

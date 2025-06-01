@@ -122,7 +122,7 @@ class Database
             }
         } catch (PDOException $e) {
             echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
-            return [];
+            return false;
         }
     }
 
