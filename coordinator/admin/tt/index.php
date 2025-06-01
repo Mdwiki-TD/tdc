@@ -18,7 +18,7 @@ use function Actions\MdwikiSql\execute_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 $cat = $_REQUEST['cat'] ?? 'All';
-$testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
+$testin = (($_GET['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
 //---
 function filter_stat($cat)
 {

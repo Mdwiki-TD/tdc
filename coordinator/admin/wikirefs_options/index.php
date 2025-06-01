@@ -13,6 +13,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 //---
 // include_once 'infos/td_config.php';
 //---
+use function SQLorAPI\Funcs\get_td_or_sql_language_settings;
 use function Infos\TdConfig\get_configs;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function TDWIKI\csrf\generate_csrf_token;
@@ -22,10 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/post.php';
 }
 //---
-$tabes = get_configs('fixwikirefs.json');
-//---
-$testin = (($_REQUEST['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
-//---
+// language_settings (lang_code, move_dots, expend, add_en_lang)
+// ---
 function make_td($lang, $tabg, $numb)
 {
     //---
@@ -68,15 +67,20 @@ function make_td($lang, $tabg, $numb)
     return $laly;
 };
 //---
+// $tabes = get_configs('fixwikirefs.json');
+$tabes = get_td_or_sql_language_settings();
+//---
+$testin = (($_GET['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
+//---
 $langs_d = get_pages_langs();
 //---
 foreach ($langs_d as $tat) {
     $lal = strtolower($tat);
     //---
     if (!isset($tabes[$lal])) {
-        $tabes[$lal] = array('expend' => 0, 'move_dots' => 0, 'add_en_lang' => 0);
-    };
-};
+        $tabes[$lal] = ['expend' => 0, 'move_dots' => 0, 'add_en_lang' => 0];
+    }
+}
 //---
 ksort($tabes);
 //---
@@ -85,10 +89,8 @@ $n = -1;
 $sato = "";
 // ---
 foreach ($tabes as $lang => $tab) {
-    //---
     $n += 1;
     $sato .= make_td($lang, $tab, $n);
-    //---
 };
 //---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />

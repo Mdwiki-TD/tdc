@@ -20,6 +20,7 @@ use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
 use function SQLorAPI\Funcs\get_pages_users_langs;
 use function SQLorAPI\Funcs\get_publish_reports_stats;
+use function SQLorAPI\Funcs\get_td_or_sql_language_settings;
 */
 
 use function SQLorAPI\Get\super_function;
@@ -182,6 +183,23 @@ function get_td_or_sql_page_user_not_in_users(): array
     $users = $data;
     // ---
     return $data;
+}
+
+function get_td_or_sql_language_settings(): array
+{
+    // ---
+    // language_settings (lang_code, move_dots, expend, add_en_lang)
+    static $data_langs = [];
+    // ---
+    if (!empty($data_langs)) return $data_langs;
+    // ---
+    $sql_params = [];
+    $api_params = ['get' => 'language_settings'];
+    $query = "SELECT * FROM language_settings order by lang_code";
+    //---
+    $data_langs = super_function($api_params, $sql_params, $query);
+    // ---
+    return $data_langs;
 }
 
 function get_td_or_sql_users_no_inprocess(): array
