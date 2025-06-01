@@ -13,15 +13,14 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 //---
 use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
 use function Actions\MdwikiSql\fetch_query;
-use function Actions\Html\add_quotes;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
 {
     $test_line = (isset($_REQUEST['test'])) ? "<input name='test' value='1' hidden/>" : "";
 
-    $title2 = add_quotes($title);
-    $target2 = add_quotes($new_target);
+	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+	$target2 = htmlspecialchars($new_target, ENT_QUOTES, 'UTF-8');
     //---
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
     //---
@@ -38,7 +37,7 @@ function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>Title</span>
                             </div>
-                            <input class='form-control' type='text' id='title' name='title' value=$title2 required/>
+                            <input class='form-control' type='text' id='title' name='title' value='$title2' required/>
                         </div>
                     </div>
                     <div class='col-md-3'>
@@ -54,7 +53,7 @@ function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>New target</span>
                             </div>
-                            <input class='form-control' type='text' id='new_target' name='new_target' value=$target2 required/>
+                            <input class='form-control' type='text' id='new_target' name='new_target' value='$target2' required/>
                         </div>
                     </div>
                     <div class='col-md-3'>

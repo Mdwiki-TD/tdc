@@ -9,7 +9,6 @@ if (user_in_coord == false) {
 //---
 use function Actions\MdwikiSql\execute_query;
 use function Actions\MdwikiSql\fetch_query;
-use function Actions\Html\add_quotes;
 use function TDWIKI\csrf\generate_csrf_token;
 use function TDWIKI\csrf\verify_csrf_token;
 //---
@@ -81,8 +80,8 @@ function echo_form($id, $table)
     //---
     $test_line = (isset($_REQUEST['test'])) ? "<input name='test' value='1' hidden/>" : "";
 
-    $title2 = add_quotes($title);
-    $target2 = add_quotes($target);
+	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+	$target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
     //---
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
     //---
@@ -100,7 +99,7 @@ function echo_form($id, $table)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>Title</span>
                             </div>
-                            <input class='form-control' type='text' id='title' name='title' value=$title2 required/>
+                            <input class='form-control' type='text' id='title' name='title' value='$title2' required/>
                         </div>
                     </div>
                     <div class='col-md-3'>
@@ -116,7 +115,7 @@ function echo_form($id, $table)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>target</span>
                             </div>
-                            <input class='form-control' type='text' id='target' name='target' value=$target2 required/>
+                            <input class='form-control' type='text' id='target' name='target' value='$target2' required/>
                         </div>
                     </div>
                     <div class='col-md-3'>
