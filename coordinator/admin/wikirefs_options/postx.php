@@ -12,7 +12,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 }
 
 // Load configurations from file
-$keysToAdd = ['move_dots', 'expend', 'add_en_lng'];
+$keysToAdd = ['move_dots', 'expend', 'add_en_lang'];
 $tabes = get_configs('fixwikirefs.json');
 
 if (verify_csrf_token()) {

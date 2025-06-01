@@ -33,7 +33,7 @@ function make_td($lang, $tabg, $numb)
     //---
     $expend2        = ($tabg['expend'] == 1) ? 'checked' : '';
     $move_dots      = ($tabg['move_dots'] == 1) ? 'checked' : '';
-    $add_en_lng     = ($tabg['add_en_lng'] == 1) ? 'checked' : '';
+    $add_en_lang     = ($tabg['add_en_lang'] == 1) ? 'checked' : '';
     //---
     $laly = <<<HTML
         <tr>
@@ -56,7 +56,7 @@ function make_td($lang, $tabg, $numb)
             </td>
             <td data-content='Add |language=en'>
                 <div class='form-check form-switch'>
-                    <input class='form-check-input' type='checkbox' name='add_en_lng[]$numb' value='$lang' $add_en_lng/>
+                    <input class='form-check-input' type='checkbox' name='add_en_lang[]$numb' value='$lang' $add_en_lang/>
                 </div>
             </td>
             <td data-content='Delete'>
@@ -74,7 +74,7 @@ foreach ($langs_d as $tat) {
     $lal = strtolower($tat);
     //---
     if (!isset($tabes[$lal])) {
-        $tabes[$lal] = array('expend' => 0, 'move_dots' => 0, 'add_en_lng' => 0);
+        $tabes[$lal] = array('expend' => 0, 'move_dots' => 0, 'add_en_lang' => 0);
     };
 };
 //---
@@ -137,7 +137,7 @@ HTML;
                 <td><input class='form-control' name='newlang[]${ii}' placeholder='lang code.'/></td>
                 <td><input class='form-control' type='text' name='move_dotsx[]${ii}' value='0' disabled/></td>
                 <td><input class='form-control' type='text' name='expendx[]${ii}' value='0' disabled/></td>
-                <td><input class='form-control' type='text' name='add_en_lngx[]${ii}' value='0' disabled/></td>
+                <td><input class='form-control' type='text' name='add_en_langx[]${ii}' value='0' disabled/></td>
                 <td>-</td>
             </tr>
         `;

@@ -52,7 +52,7 @@ function deleteKeys($tbes)
 
 if (verify_csrf_token()) {
     // Load configurations from file
-    $keysToAdd = ['move_dots', 'expend', 'add_en_lng'];
+    $keysToAdd = ['move_dots', 'expend', 'add_en_lang'];
     $tabes = get_configs('fixwikirefs.json');
 
     // Initialize and process languages
