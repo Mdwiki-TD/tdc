@@ -14,7 +14,7 @@ use function Actions\Html\makeDropdown;
 use function Actions\Html\make_mdwiki_title;
 use function Actions\Html\make_edit_icon_new;
 use function Results\GetCats\get_mdwiki_cat_members;
-use function Actions\MdwikiSql\execute_query;
+use function Actions\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 $cat = $_REQUEST['cat'] ?? 'All';
@@ -48,14 +48,14 @@ $translate_type_sql = <<<SQL
 	FROM translate_type
 SQL;
 //---
-foreach (execute_query($translate_type_sql) as $k => $tab) {
+foreach (fetch_query($translate_type_sql) as $k => $tab) {
 	$full_translates_tab[$tab['tt_title']] = ['id' => $tab['tt_id'], 'lead' => $tab['tt_lead'], 'full' => $tab['tt_full']];
 }
 //---
 TablesSql::$s_cat_titles = [];
 //---
 if ($cat == 'All') {
-	foreach (execute_query('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)') as $Key => $gg) {
+	foreach (fetch_query('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)') as $Key => $gg) {
 		if (!in_array($gg['title'], $full_translates_tab)) {
 			$new_titles[] = $gg['title'];
 		}

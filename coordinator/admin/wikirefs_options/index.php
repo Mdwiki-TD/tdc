@@ -80,11 +80,14 @@ foreach ($langs_d as $tat) {
     $lal = strtolower($tat);
     //---
     if (!in_array($lal, $tabes_codes)) {
-        $tabes[$lal] = ['expend' => 0, 'move_dots' => 0, 'add_en_lang' => 0];
+        $tabes[] = ['lang_code' => $lal, 'expend' => 0, 'move_dots' => 0, 'add_en_lang' => 0];
     }
 }
 //---
-ksort($tabes);
+// ksort($tabes);
+usort($tabes, function ($a, $b) {
+    return strcmp($a['lang_code'] ?? '', $b['lang_code'] ?? '');
+});
 //---
 $n = -1;
 // ---
