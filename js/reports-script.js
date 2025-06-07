@@ -41,7 +41,7 @@ function populateFilterOptions(results) {
         select.setAttribute('data-bs-theme', 'auto');
         select.setAttribute('data-style', 'btn active');
 
-        select.value = defaults[id] || '';
+        // select.value = defaults[id] || '';
     }
 
     $('.selectpicker').selectpicker('refresh');
