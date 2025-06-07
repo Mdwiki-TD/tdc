@@ -17,7 +17,7 @@ function populateFilterOptions(results) {
 
     const options = {
         year: unique('year', d => String(d)),
-        month: unique('month', d => String(d)),
+        month: unique('month', d => String(d).padStart(2, '0')),
         user: unique('user'),
         lang: unique('lang'),
         result: unique('result')
