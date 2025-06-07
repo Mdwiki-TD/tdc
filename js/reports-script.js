@@ -92,7 +92,10 @@ function getTableColumns() {
         }
     },
     {
-        data: 'lang'
+        data: 'lang',
+        render: function (data, type) {
+            return `<a href="/Translation_Dashboard/leaderboard.php?langcode=${data}" target="_blank">${data}</a>`;
+        }
     },
     {
         data: null,
@@ -109,10 +112,16 @@ function getTableColumns() {
         }
     },
     {
-        data: 'user'
+        data: 'user',
+        render: function (data, type) {
+            return `<a href="/Translation_Dashboard/leaderboard.php?user=${data}" target="_blank">${data}</a>`;
+        }
     },
     {
-        data: 'sourcetitle'
+        data: 'sourcetitle',
+        render: function (data, type) {
+            return `<a href="https://mdwiki.org/wiki/${data}" target="_blank">${data}</a>`;
+        }
     },
     {
         data: null,
