@@ -219,7 +219,8 @@ async function newDataTable() {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0'); // الشهر يبدأ من 0، لذا نضيف 1
-    const end_point = `/api/index.php?get=publish_reports&year=${year}&month=${month}`;
+    // const end_point = `/api/index.php?get=publish_reports&year=${year}&month=${month}`;
+    const end_point = `/api/index.php?get=publish_reports`;
 
     // إعداد DataTable
     let table = $('#resultsTable').DataTable({
