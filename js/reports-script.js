@@ -17,7 +17,7 @@ function populateFilterOptions(results) {
 
     const options = {
         year: unique('year', d => String(d)),
-        month: unique('month', d => String(d)),
+        month: unique('month', d => String(d).padStart(2, '0')),
         user: unique('user'),
         lang: unique('lang'),
         result: unique('result')
@@ -41,7 +41,7 @@ function populateFilterOptions(results) {
         select.setAttribute('data-bs-theme', 'auto');
         select.setAttribute('data-style', 'btn active');
 
-        select.value = defaults[id] || '';
+        // select.value = defaults[id] || '';
     }
 
     $('.selectpicker').selectpicker('refresh');
@@ -92,7 +92,10 @@ function getTableColumns() {
         }
     },
     {
-        data: 'lang'
+        data: 'lang',
+        render: function (data, type) {
+            return `<a href="/Translation_Dashboard/leaderboard.php?langcode=${data}" target="_blank">${data}</a>`;
+        }
     },
     {
         data: null,
@@ -109,10 +112,16 @@ function getTableColumns() {
         }
     },
     {
-        data: 'user'
+        data: 'user',
+        render: function (data, type) {
+            return `<a href="/Translation_Dashboard/leaderboard.php?user=${data}" target="_blank">${data}</a>`;
+        }
     },
     {
-        data: 'sourcetitle'
+        data: 'sourcetitle',
+        render: function (data, type) {
+            return `<a href="https://mdwiki.org/wiki/${data}" target="_blank">${data}</a>`;
+        }
     },
     {
         data: null,
@@ -219,7 +228,8 @@ async function newDataTable() {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0'); // الشهر يبدأ من 0، لذا نضيف 1
-    const end_point = `/api/index.php?get=publish_reports&year=${year}&month=${month}`;
+    // const end_point = `/api/index.php?get=publish_reports&year=${year}&month=${month}`;
+    const end_point = `/api/index.php?get=publish_reports`;
 
     // إعداد DataTable
     let table = $('#resultsTable').DataTable({
