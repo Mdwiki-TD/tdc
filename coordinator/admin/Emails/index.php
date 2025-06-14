@@ -197,7 +197,7 @@ echo <<<HTML
 			</div>
 			<div class='col-md-9'>
 				<form method='get' action='index.php'>
-					<input name='ty' value='Emails' hidden/>
+					<input name='ty' value='Emails' type='hidden'/>
 					<div class='row'>
 						<div class='col-md-5'>
 							$project_filter

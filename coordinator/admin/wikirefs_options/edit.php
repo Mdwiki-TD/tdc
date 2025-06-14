@@ -52,7 +52,7 @@ function echo_form()
     HTML;
     //---
     $id_row = <<<HTML
-        <input class='form-control' type='text' value='$id' name='id' hidden/>
+        <input class='form-control' type='text' value='$id' name='id' type='hidden'/>
     HTML;
     // ---
     $delete_row = <<<HTML
@@ -69,7 +69,7 @@ function echo_form()
     HTML;
     // ---
     if ($id == "") {
-        $id_row = "<input class='form-control' type='text' value='1' name='new' hidden/>";
+        $id_row = "<input class='form-control' type='text' value='1' name='new' type='hidden'/>";
         $delete_row = "";
     }
     // ---
@@ -102,8 +102,8 @@ function echo_form()
     //---
     echo <<<HTML
         <form action='index.php?ty=wikirefs_options/edit&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" hidden />
-            <input name='edit' value="1" hidden/>
+            <input name='csrf_token' value="$csrf_token" type="hidden"/>
+            <input name='edit' value="1" type="hidden"/>
             <div class='container'>
                 <div class='row'>
                     $id_row

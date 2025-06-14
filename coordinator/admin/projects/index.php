@@ -39,7 +39,7 @@ foreach ($projs as $gtitle => $tab) {
 	<tr>
 		<td data-content='id'>
 			<span><b>$gid</b></span>
-			<input name='rows[$numb][g_id]' value='$gid' hidden/>
+			<input name='rows[$numb][g_id]' value='$gid' type='hidden'/>
 		</td>
 	  	<td data-content='Project'>
 	  		<input class='form-control' name='rows[$numb][g_title]' value='$gtitle'/>
@@ -66,7 +66,7 @@ $form_text_plus = <<<HTML
 	</tr>
 HTML;
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
 	<div class='card-header'>
@@ -74,8 +74,8 @@ echo <<<HTML
 	</div>
 	<div class='card-body'>
 		<form action="index.php?ty=projects" method="POST">
-			<input name='csrf_token' value="$csrf_token" hidden />
-			<input name='ty' value="projects" hidden />
+			<input name='csrf_token' value="$csrf_token" type="hidden"/>
+			<input name='ty' value="projects" type="hidden"/>
 			<div class="form-group">
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
 					<thead>

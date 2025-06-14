@@ -147,7 +147,7 @@ $filter_dis = filter_table($dis_data, $dis, 'dis');
 echo <<<HTML
 	<div class='card-header'>
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-			<input name='ty' value='qids' hidden/>
+			<input name='ty' value='qids' type='hidden'/>
 			<div class='row'>
 				<div class='col-md-4'>
 					<h4>$Qids_title: ($dis:<span>$numb</span>)</h4>

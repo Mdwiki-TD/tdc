@@ -40,7 +40,7 @@ $uuu = filter_stat($cat);
 $fa = <<<HTML
 	<div class='card-header'>
 		<form method='get' action='index.php'>
-			<input name='ty' value='stat' hidden/>
+			<input name='ty' value='stat' type='hidden'/>
 			<div class='row'>
 				<div class='col-md-3'>
 					<h4>Status:</h4>

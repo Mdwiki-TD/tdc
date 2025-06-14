@@ -197,7 +197,7 @@ $count_result = count($sql_results);
 echo <<<HTML
 	<div class='card-header'>
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-			<input name='ty' value='pages_users_to_main' hidden/>
+			<input name='ty' value='pages_users_to_main' type='hidden'/>
 			<div class='row'>
 				<div class='col-md-7'>
 					<h4>Userpages need to be moved to main pages: ($count_result)</h4>

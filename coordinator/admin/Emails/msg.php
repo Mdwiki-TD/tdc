@@ -194,12 +194,12 @@ $mag = <<<HTML
 //---
 $post_php = "/gmail1/index.php";
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
     <div class1='container-fluid'>
         <form action='$post_php' method="POST">
-          <input name='csrf_token' value="$csrf_token" hidden />
+          <input name='csrf_token' value="$csrf_token" type="hidden"/>
             <input type='hidden' name='test' value='$test'/>
             <input type='hidden' name='lang' value='$lang'/>
             <input type='hidden' name='nonav' value='1'/>

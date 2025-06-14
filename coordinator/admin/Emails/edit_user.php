@@ -42,7 +42,7 @@ function echo_form($user, $wiki, $project, $email, $user_id)
     //---
     $project_line = make_project_to_user($project);
     //---
-    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
     //---
     $id_row = <<<HTML
         <div class='col-md-3'>
@@ -59,8 +59,8 @@ function echo_form($user, $wiki, $project, $email, $user_id)
     // ---
     echo <<<HTML
         <form action='index.php?ty=Emails/post&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" hidden />
-            <input name='edit' value="1" hidden/>
+            <input name='csrf_token' value="$csrf_token" type="hidden"/>
+            <input name='edit' value="1" type="hidden"/>
             <div class='container'>
                 <div class='row'>
                     $id_row

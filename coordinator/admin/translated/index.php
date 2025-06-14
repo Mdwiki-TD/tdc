@@ -192,7 +192,7 @@ $count_result = count($qsl_results);
 echo <<<HTML
 	<div class='card-header'>
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-			<input name='ty' value='translated' hidden/>
+			<input name='ty' value='translated' type='hidden'/>
 			<div class='row'>
 				<div class='col-md-4'>
 					<h4>Translated Pages ($count_result):</h4>

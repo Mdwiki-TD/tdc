@@ -33,12 +33,12 @@ foreach ($qq as $Key => $table) {
 	$form_text .= <<<HTML
 		<tr>
 			<td data-content="id">
-				<input class="form-control" size="20" name="rows[$numb][id]" value="$user_id" hidden/>
+				<input class="form-control" size="20" name="rows[$numb][id]" value="$user_id" type="hidden"/>
 				<span><b>$user_id</b></span>
 			</td>
 			<td data-content="user">
 				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
-				<input name='rows[$numb][user]' value='$usere' hidden/>
+				<input name='rows[$numb][user]' value='$usere' type='hidden'/>
 			</td>
 			<td data-content="delete">
 				<input type='checkbox' name='rows[$numb][del]' value='$user_id'/> <label> delete</label>
@@ -55,7 +55,7 @@ $form_text_plus = <<<HTML
 			<span><b>Add:</b></span>
 		</td>
 		<td data-content="user">
-			<input class='form-control' name='rows[$numb][is_new]' value='yes' hidden/>
+			<input class='form-control' name='rows[$numb][is_new]' value='yes' type='hidden'/>
 			<input class='form-control td_user_input' name='rows[$numb][user]' />
 		</td>
 		<td data-content="delete">
@@ -64,7 +64,7 @@ $form_text_plus = <<<HTML
 	</tr>
 HTML;
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
 	<div class='card-header'>
@@ -72,8 +72,8 @@ echo <<<HTML
 	</div>
 	<div class='card-body'>
 		<form action="index.php?ty=users_no_inprocess" method="POST">
-			<input name='csrf_token' value="$csrf_token" hidden />
-			<input name='ty' value="users_no_inprocess" hidden />
+			<input name='csrf_token' value="$csrf_token" type="hidden"/>
+			<input name='ty' value="users_no_inprocess" type="hidden"/>
 			<div class="form-group">
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
 					<thead>
@@ -109,7 +109,7 @@ HTML;
 					<b>${ii}</b>
 				</td>
 				<td>
-					<input class='form-control' name='rows[${ii}][is_new]' value='yes' hidden/>
+					<input class='form-control' name='rows[${ii}][is_new]' value='yes' type='hidden'/>
 					<input class='form-control td_user_input' name='rows[${ii}][user]'/>
 				</td>
 				<td>-</td>

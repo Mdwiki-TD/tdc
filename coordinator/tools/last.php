@@ -236,7 +236,7 @@ $count_result = count($result);
 echo <<<HTML
 <div class='card-header'>
     <form method='get' action='index.php'>
-        <input name='ty' value='last' hidden/>
+        <input name='ty' value='last' type='hidden'/>
         <div class='row'>
             <div class='col-md-4'>
                 <h4>Recent translations ($count_result):</h4>
