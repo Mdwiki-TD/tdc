@@ -41,10 +41,10 @@ foreach ($qq as $Key => $table) {
 		<div class='form-group'>
 			<th data-content="#">
 				$numb
-				<input name='rows[$numb][id]' value='$id' data-original='$id' hidden/>
+				<input name='rows[$numb][id]' value='$id' data-original='$id' type='hidden'/>
 			</th>
 			<td data-content="Campaign">
-				<input class="form-control" size='10' name='rows[$numb][camp]' value='$campaign' data-original='$campaign'/>
+				<input class="form-control" size='15' name='rows[$numb][camp]' value='$campaign' data-original='$campaign'/>
 			</td>
 			<td data-content="Category1">
 				<input class="form-control" size='25' name='rows[$numb][cat1]' value='$category1' data-original='$category1'/>
@@ -66,7 +66,7 @@ foreach ($qq as $Key => $table) {
 	HTML;
 };
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
 	<div class='card-header'>
@@ -74,8 +74,8 @@ echo <<<HTML
 	</div>
 	<div class='card-body'>
 		<form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
-			<input name='csrf_token' value="$csrf_token" hidden />
-			<input name='ty' value="Campaigns" hidden/>
+			<input name='csrf_token' value="$csrf_token" type="hidden"/>
+			<input name='ty' value="Campaigns" type="hidden"/>
 			<div class="form-group">
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
 					<thead>

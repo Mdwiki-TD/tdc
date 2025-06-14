@@ -86,9 +86,9 @@ foreach (range(1, 1) as $numb) {
 	HTML;
 };
 //---
-$testin = (($_GET['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
+$testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
 	<select class='catsoptions' data-bs-theme="auto" hidden>$cats</select>
@@ -97,9 +97,9 @@ echo <<<HTML
 	</div>
 	<div class='cardbody p-2'>
 		<form action="index.php?ty=add" method="POST">
-			<input name='csrf_token' value="$csrf_token" hidden />
+			<input name='csrf_token' value="$csrf_token" type="hidden"/>
 			$testin
-			<input name='ty' value="add" hidden />
+			<input name='ty' value="add" type="hidden"/>
 			<div class="form-group">
 				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='font-size:95%;'>
 					<thead>

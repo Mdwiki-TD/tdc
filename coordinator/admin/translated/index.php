@@ -45,7 +45,7 @@ function get_languages()
     //---
     return $tabes;
 }
-//---
+
 function make_td($tabg, $nnnn, $table)
 {
     //---
@@ -135,7 +135,7 @@ function pagination_links($limit, $page, $table, $lang, $total_count)
 }
 //---
 $recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="pages_table" style="font-size:90%;">
+	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="pages_table" style="font-size:90%;">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -192,7 +192,7 @@ $count_result = count($qsl_results);
 echo <<<HTML
 	<div class='card-header'>
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-			<input name='ty' value='translated' hidden/>
+			<input name='ty' value='translated' type='hidden'/>
 			<div class='row'>
 				<div class='col-md-4'>
 					<h4>Translated Pages ($count_result):</h4>

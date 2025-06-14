@@ -82,7 +82,7 @@ function make_row($id, $title, $qid, $numb)
 	HTML;
 }
 
-$testin = (($_GET['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
+$testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
 //---
 $dis = $_GET['dis'] ?? 'all';
 //---
@@ -147,7 +147,7 @@ $filter_dis = filter_table($dis_data, $dis, 'dis');
 echo <<<HTML
 	<div class='card-header'>
 		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-			<input name='ty' value='qids' hidden/>
+			<input name='ty' value='qids' type='hidden'/>
 			<div class='row'>
 				<div class='col-md-4'>
 					<h4>$Qids_title: ($dis:<span>$numb</span>)</h4>
@@ -165,7 +165,7 @@ echo <<<HTML
 		</form>
 	</div>
 	<div class='card-body'>
-		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2' style='width: 98%;'>
+		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2 table_text_left' style='width: 98%;'>
 			<thead>
 				<tr>
 					<th>#</th>

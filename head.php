@@ -89,11 +89,17 @@ function head()
     };
     ?>
     <style>
+        .table_text_left>tbody>tr>th,
+        .table_text_left>tbody>tr>td,
+        .table_text_left>thead>tr>td,
+        .table_text_left>thead>tr>th {
+            text-align: left !important;
+        }
+
         a {
             text-decoration: none;
             word-break: break-all !important;
         }
-
     </style>
 
 </head>

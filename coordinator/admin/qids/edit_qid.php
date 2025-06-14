@@ -34,7 +34,7 @@ function echo_form_post($id, $title, $qid, $qid_table)
 	// ---
 	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 	// ---
-	$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+	$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 	// ---
 	$id_row = <<<HTML
 		<div class='col-md-3'>
@@ -55,9 +55,9 @@ function echo_form_post($id, $title, $qid, $qid_table)
 	// ---
 	echo <<<HTML
         <form action='index.php?ty=qids/post&qid_table=$qid_table&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" hidden />
-            <input name='qid_table' value="$qid_table" hidden/>
-            <input name='edit' value="1" hidden/>
+            <input name='csrf_token' value="$csrf_token" type="hidden"/>
+            <input name='qid_table' value="$qid_table" type="hidden"/>
+            <input name='edit' value="1" type="hidden"/>
             <div class='container'>
                 <div class='row'>
                     $id_row

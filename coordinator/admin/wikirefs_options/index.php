@@ -104,7 +104,7 @@ echo <<<HTML
     </div>
     <div class='card-body'>
         <div class="form-group">
-            <table id="em2" class="table table-sm table-striped table-mobile-responsive table-mobile-sided" style="font-size:90%;">
+            <table id="em2" class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
                 <thead>
                     <tr>
                         <th>#</th>

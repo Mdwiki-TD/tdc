@@ -117,7 +117,7 @@ function make_mail_icon_new($tab, $func_name = "")
     $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params);
     //---
     return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm' pup-target='$mail_url' onclick='$func_name(this)'>Email</a>
+    	<a class='btn btn-outline-primary btn-sm spannowrap' pup-target='$mail_url' onclick='$func_name(this)'>Email</a>
     HTML;
 }
 
@@ -139,7 +139,7 @@ function make_project_to_user($project)
 //---
 function make_input_group($label, $id, $value, $required)
 {
-	$val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class='col-md-3'>
         <div class='input-group mb-3'>
@@ -152,7 +152,7 @@ function make_input_group($label, $id, $value, $required)
 //---
 function make_input_group_no_col($label, $id, $value, $required)
 {
-	$val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class='input-group mb-3'>
         <span class='input-group-text'>$label</span>
@@ -168,9 +168,7 @@ function makeDropdown($tab, $cat, $id, $add)
     //---
     foreach ($tab as $dd) {
         //---
-        $se = '';
-        //---
-        if ($cat == $dd) $se = 'selected';
+        $se = ($cat == $dd) ? 'selected' : '';
         //---
         $options .= <<<HTML
             <option value='$dd' $se>$dd</option>
@@ -183,7 +181,7 @@ function makeDropdown($tab, $cat, $id, $add)
     if (!empty($add)) {
         $add2 = ($add == 'all') ? 'All' : $add;
         $sel = "";
-        if ($cat == $add) $sel = "celected";
+        if ($cat == $add) $sel = "selected";
         $sel_line = "<option value='$add' $sel>$add2</option>";
     }
     //---
@@ -276,7 +274,7 @@ function make_datalist_options($hyh)
     }
     return $options;
 }
-//---
+
 function make_mdwiki_title($title)
 {
     if (!empty($title)) {
@@ -285,7 +283,7 @@ function make_mdwiki_title($title)
     }
     return $title;
 }
-//---
+
 function make_cat_url($category)
 {
     if (!empty($category)) {
@@ -294,12 +292,12 @@ function make_cat_url($category)
     }
     return $category;
 }
-//---
+
 function make_talk_url($lang, $user)
 {
     return "<a target='_blank' href='//$lang.wikipedia.org/w/index.php?title=User_talk:$user'>talk</a>";
 }
-//---
+
 function make_translation_url($title, $lang, $tr_type)
 {
     //---
@@ -322,7 +320,7 @@ function make_translation_url($title, $lang, $tr_type)
     //---
     return $url;
 }
-//---
+
 function make_mdwiki_user_url($user)
 {
     if (!empty($user)) {
@@ -331,7 +329,7 @@ function make_mdwiki_user_url($user)
     }
     return $user;
 }
-//---
+
 function make_target_url($target, $lang, $name = '', $deleted = false)
 {
     $display_name = (!empty($name)) ? $name : $target;

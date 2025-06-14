@@ -35,11 +35,11 @@ foreach ($qq as $Key => $table) {
 		<tr>
 			<td data-content="id">
 				<span><b>$ide</b></span>
-				<input name='rows[$numb][id]' value='$ide' hidden/>
+				<input name='rows[$numb][id]' value='$ide' type='hidden'/>
 			</td>
 			<td data-content="user">
 				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
-				<input name='rows[$numb][user]' value='$usere' hidden/>
+				<input name='rows[$numb][user]' value='$usere' type='hidden'/>
 			</td>
 			<td data-content="delete">
 				<input type='checkbox' name='rows[$numb][del]' value='$ide'/> <label> delete</label>
@@ -48,7 +48,7 @@ foreach ($qq as $Key => $table) {
 	HTML;
 };
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
 	<div class='card-header'>
@@ -56,21 +56,23 @@ echo <<<HTML
 	</div>
 	<div class='card-body'>
 		<form action="index.php?ty=admins" method="POST">
-			<input name='csrf_token' value="$csrf_token" hidden />
-			<input name='ty' value="admins" hidden/>
-			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
-					<thead>
-						<tr>
-							<th>id</th>
-							<th>User</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody id="coo_tab">
-						$table_rows
-					</tbody>
-				</table>
+			<input name='csrf_token' value="$csrf_token" type="hidden"/>
+			<input name='ty' value="admins" type="hidden"/>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+						<thead>
+							<tr>
+								<th>id</th>
+								<th>User</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody id="coo_tab">
+							$table_rows
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<div class="form-group d-flex justify-content-between">
 				<button type="submit" class="btn btn-outline-primary">Save</button>
@@ -91,7 +93,7 @@ HTML;
 			<tr>
 				<td>${ii}</td>
 				<td>
-					<input class='form-control' name='rows[${ii}][is_new]' value='yes' hidden/>
+					<input class='form-control' name='rows[${ii}][is_new]' value='yes' type='hidden'/>
 					<input class='form-control td_user_input' name='rows[${ii}][user]'/>
 				</td>
 				<td>-</td>

@@ -28,16 +28,15 @@ SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and 
 */
 //---
 $text = <<<HTML
-<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided'>
-    <thead>
-        <tr>
-            <th>#</th>
-            <th class='spannowrap'>User</th>
-            <th>Articles</th>
-        </tr>
-    </thead>
-    <tbody>
-
+    <table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th class='spannowrap'>User</th>
+                <th>Articles</th>
+            </tr>
+        </thead>
+        <tbody>
 HTML;
 //---
 $user_process_tab = get_users_process_new();

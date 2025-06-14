@@ -17,18 +17,18 @@ use function TDWIKI\csrf\generate_csrf_token;
 //---
 function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
 {
-    $test_line = (isset($_REQUEST['test'])) ? "<input name='test' value='1' hidden/>" : "";
+    $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
 	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 	$target2 = htmlspecialchars($new_target, ENT_QUOTES, 'UTF-8');
     //---
-    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
     //---
     echo <<<HTML
         <form action='index.php?ty=pages_users_to_main/fix_it&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" hidden />
-            <input type='text' id='id' name='id' value='$id' hidden/>
-            <input name='edit' value="1" hidden/>
+            <input name='csrf_token' value="$csrf_token" type="hidden"/>
+            <input id='id' name='id' value='$id' type='hidden'/>
+            <input name='edit' value="1" type="hidden"/>
             $test_line
             <div class='container'>
                 <div class='row'>

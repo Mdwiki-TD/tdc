@@ -69,7 +69,7 @@ if (user_in_coord == false) {
     </div>
 
     <div class="table-responsive">
-        <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="resultsTable" style="width:100%">
+        <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="resultsTable" style="width:100%">
             <thead class="">
                 <tr>
                     <th style="display:none">ID</th>

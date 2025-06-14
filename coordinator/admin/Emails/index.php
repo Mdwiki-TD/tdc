@@ -59,7 +59,7 @@ function get_sorted_array()
 	//---
 	return $sorted_array;
 }
-//---
+
 function filter_table($project_name)
 {
 	//---
@@ -167,11 +167,11 @@ foreach ($users_done as $user_name => $table) {
 		<td data-order='$email' data-search='$email' data-content='Email'>
 			<input class='form-control' size='25' name='email_$numb' value='$email' readonly/>
 		</td>
-		<td data-content=''>
+		<td data-content='Send Email'>
 			$mail_icon
 		</td>
 		<td data-order='$user_group2' data-search='$user_group2' data-content='Project'>
-			<input class='form-control' size='25' name='project_$numb' value='$user_group2' readonly/>
+			<input class='form-control' size='20' name='project_$numb' value='$user_group2' readonly/>
 		</td>
 		<td data-order='$wiki' data-search='$wiki' data-content='Wiki'>
 			<input class='form-control' size='4' name='wiki_$numb' value='$wiki' readonly/>
@@ -197,7 +197,7 @@ echo <<<HTML
 			</div>
 			<div class='col-md-9'>
 				<form method='get' action='index.php'>
-					<input name='ty' value='Emails' hidden/>
+					<input name='ty' value='Emails' type='hidden'/>
 					<div class='row'>
 						<div class='col-md-5'>
 							$project_filter
@@ -212,7 +212,7 @@ echo <<<HTML
 	</div>
 	<div class='card-body'>
 		<div class="form-group">
-			<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+			<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
 				<thead>
 					<tr>
 						<th>#</th>

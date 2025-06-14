@@ -206,7 +206,7 @@ if ($last_table == 'pages') {
 }
 //---
 $recent_table = <<<HTML
-    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="$table_id" style="font-size:90%;">
+    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="$table_id" style="font-size:90%;">
         <thead>
             $thead
         </thead>
@@ -236,7 +236,7 @@ $count_result = count($result);
 echo <<<HTML
 <div class='card-header'>
     <form method='get' action='index.php'>
-        <input name='ty' value='last' hidden/>
+        <input name='ty' value='last' type='hidden'/>
         <div class='row'>
             <div class='col-md-4'>
                 <h4>Recent translations ($count_result):</h4>

@@ -18,7 +18,7 @@ use function Actions\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 $cat = $_REQUEST['cat'] ?? 'All';
-$testin = (($_GET['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
+$testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
 //---
 function filter_stat($cat)
 {
@@ -136,7 +136,7 @@ echo <<<HTML
 	<div class='card-header'>
 		<form action="index.php?ty=tt" method="GET">
 			$testin
-			<input name='ty' value="tt" hidden/>
+			<input name='ty' value="tt" type="hidden"/>
 			<div class='row'>
 				<div class='col-md-6'>
 					<h4>Translate Type ($tt_count):</h4>
@@ -149,7 +149,7 @@ echo <<<HTML
 		</form>
 	</div>
 	<div class='card-body'>
-		<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+		<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -168,7 +168,7 @@ echo <<<HTML
 	</div>
 HTML;
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 $new_row = make_edit_icon_new("tt/edit_translate_type", ["new" => 1], $text = "Add one!");
 //---

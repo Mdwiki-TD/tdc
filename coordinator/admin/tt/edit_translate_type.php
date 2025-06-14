@@ -59,8 +59,8 @@ function echo_form($title, $lead, $full, $id)
     // ---
     echo <<<HTML
         <form action='index.php?ty=tt/post&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" hidden />
-            <input name='edit' value="1" hidden/>
+            <input name='csrf_token' value="$csrf_token" type="hidden"/>
+            <input name='edit' value="1" type="hidden"/>
             <div class='container'>
                 <div class='row'>
                     $id_row
