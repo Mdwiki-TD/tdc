@@ -52,7 +52,7 @@ function echo_form()
     HTML;
     //---
     $id_row = <<<HTML
-        <input class='form-control' type='text' value='$id' name='id' type='hidden'/>
+        <input class='form-control' value='$id' name='id' type='hidden'/>
     HTML;
     // ---
     $delete_row = <<<HTML
@@ -69,7 +69,7 @@ function echo_form()
     HTML;
     // ---
     if ($id == "") {
-        $id_row = "<input class='form-control' type='text' value='1' name='new' type='hidden'/>";
+        $id_row = "<input class='form-control' value='1' name='new' type='hidden'/>";
         $delete_row = "";
     }
     // ---
