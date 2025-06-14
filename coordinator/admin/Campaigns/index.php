@@ -44,7 +44,7 @@ foreach ($qq as $Key => $table) {
 				<input name='rows[$numb][id]' value='$id' data-original='$id' type='hidden'/>
 			</th>
 			<td data-content="Campaign">
-				<input class="form-control" size='10' name='rows[$numb][camp]' value='$campaign' data-original='$campaign'/>
+				<input class="form-control" size='15' name='rows[$numb][camp]' value='$campaign' data-original='$campaign'/>
 			</td>
 			<td data-content="Category1">
 				<input class="form-control" size='25' name='rows[$numb][cat1]' value='$category1' data-original='$category1'/>

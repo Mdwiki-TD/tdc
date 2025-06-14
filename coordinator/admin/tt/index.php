@@ -149,7 +149,7 @@ echo <<<HTML
 		</form>
 	</div>
 	<div class='card-body'>
-		<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+		<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
 			<thead>
 				<tr>
 					<th>#</th>

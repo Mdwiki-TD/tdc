@@ -74,20 +74,22 @@ echo <<<HTML
 		<form action="index.php?ty=full_translators" method="POST">
 			<input name='csrf_token' value="$csrf_token" type="hidden"/>
 			<input name='ty' value="full_translators" type="hidden"/>
-			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>User</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody id="full_tab">
-						$form_text
-						$form_text_plus
-					</tbody>
-				</table>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>User</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody id="full_tab">
+							$form_text
+							$form_text_plus
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<div class="form-group d-flex justify-content-between">
 				<button type="submit" class="btn btn-outline-primary">Save</button>

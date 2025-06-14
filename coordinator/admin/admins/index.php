@@ -58,19 +58,21 @@ echo <<<HTML
 		<form action="index.php?ty=admins" method="POST">
 			<input name='csrf_token' value="$csrf_token" type="hidden"/>
 			<input name='ty' value="admins" type="hidden"/>
-			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style="width:50%;">
-					<thead>
-						<tr>
-							<th>id</th>
-							<th>User</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody id="coo_tab">
-						$table_rows
-					</tbody>
-				</table>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+						<thead>
+							<tr>
+								<th>id</th>
+								<th>User</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody id="coo_tab">
+							$table_rows
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<div class="form-group d-flex justify-content-between">
 				<button type="submit" class="btn btn-outline-primary">Save</button>

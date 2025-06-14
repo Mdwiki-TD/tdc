@@ -72,7 +72,7 @@ function make_td($tabg, $nnnn)
     return $laly;
 };
 $sato = <<<HTML
-	<table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided" style="font-size:90%;">
+	<table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
         <thead>
             <tr>
                 <th>#</th>

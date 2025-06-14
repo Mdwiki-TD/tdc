@@ -135,7 +135,7 @@ function pagination_links($limit, $page, $table, $lang, $total_count)
 }
 //---
 $recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="pages_table" style="font-size:90%;">
+	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="pages_table" style="font-size:90%;">
 		<thead>
 			<tr>
 				<th>#</th>

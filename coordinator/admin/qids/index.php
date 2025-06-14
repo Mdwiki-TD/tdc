@@ -165,7 +165,7 @@ echo <<<HTML
 		</form>
 	</div>
 	<div class='card-body'>
-		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2' style='width: 98%;'>
+		<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2 table_text_left' style='width: 98%;'>
 			<thead>
 				<tr>
 					<th>#</th>

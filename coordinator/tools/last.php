@@ -206,7 +206,7 @@ if ($last_table == 'pages') {
 }
 //---
 $recent_table = <<<HTML
-    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided" id="$table_id" style="font-size:90%;">
+    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="$table_id" style="font-size:90%;">
         <thead>
             $thead
         </thead>

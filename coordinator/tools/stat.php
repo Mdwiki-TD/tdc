@@ -56,7 +56,7 @@ $fa = <<<HTML
 HTML;
 //---
 $table = <<<HTML
-	<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided'>
+	<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
 		<thead>
 			<tr>
 				<th>#</th>
@@ -175,7 +175,7 @@ foreach ($lilo as $k => $v) {
 //---
 echo <<<HTML
 	<div class=''>
-		<table class='table table-striped compact'>
+		<table class='table table-striped compact table_text_left'>
 			<thead>
 				<tr>
 					<th>Key</th>
