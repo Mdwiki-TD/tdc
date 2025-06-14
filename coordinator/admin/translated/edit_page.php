@@ -78,7 +78,7 @@ function echo_form($id, $table)
     $user       = $page_data[0]['user'] ?? '';
     $pupdate    = $page_data[0]['pupdate'] ?? '';
     //---
-    $test_line = (isset($_REQUEST['test'])) ? "<input name='test' value='1' hidden/>" : "";
+    $test_line = (isset($_REQUEST['test'])) ? "<input type="hidden" name="test" value="1" />" : "";
 
 	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 	$target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');

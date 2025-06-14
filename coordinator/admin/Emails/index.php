@@ -59,7 +59,7 @@ function get_sorted_array()
 	//---
 	return $sorted_array;
 }
-//---
+
 function filter_table($project_name)
 {
 	//---

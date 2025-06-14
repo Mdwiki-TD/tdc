@@ -45,7 +45,7 @@ function get_languages()
     //---
     return $tabes;
 }
-//---
+
 function make_td($tabg, $nnnn, $table)
 {
     //---

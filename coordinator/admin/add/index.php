@@ -86,7 +86,7 @@ foreach (range(1, 1) as $numb) {
 	HTML;
 };
 //---
-$testin = (($_GET['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
+$testin = (($_GET['test'] ?? '') != '') ? "<input type="hidden" name="test" value="1" />" : "";
 //---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
 //---

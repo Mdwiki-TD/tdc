@@ -82,7 +82,7 @@ function make_row($id, $title, $qid, $numb)
 	HTML;
 }
 
-$testin = (($_GET['test'] ?? '') != '') ? "<input name='test' value='1' hidden/>" : "";
+$testin = (($_GET['test'] ?? '') != '') ? "<input type="hidden" name="test" value="1" />" : "";
 //---
 $dis = $_GET['dis'] ?? 'all';
 //---
