@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/post.php';
 }
 //---
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" hidden />
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
     <div class='card-header'>
@@ -32,8 +32,8 @@ echo <<<HTML
     <div class='card-body'>
         <div class='row'>
             <form action='index.php' method="POST">
-                <input name='csrf_token' value="$csrf_token" hidden />
-                <input name='ty' value='settings' hidden/>
+                <input name='csrf_token' value="$csrf_token" type="hidden"/>
+                <input name='ty' value='settings' type="hidden"/>
     HTML;
 //---
 $nn = 0;
@@ -88,18 +88,18 @@ function make_settings_tab($tabe)
         //---
         $tr = <<<HTML
             <tr>
-                <input name='rows[$nn][id]' value='$id' hidden/>
+                <input name='rows[$nn][id]' value='$id' type="hidden"/>
                 <td data-order='$nn' data-content='#'>
                     $nn
                 </td>
                 <td data-content='Option'>
                     $displayed
-                    <!-- <input class='form-control' name='rows[$nn][title]' value="$title" hidden/>
-                    <input class='form-control' name='rows[$nn][displayed]' value='$displayed' hidden/> -->
+                    <!-- <input class='form-control' name='rows[$nn][title]' value="$title" type="hidden"/>
+                    <input class='form-control' name='rows[$nn][displayed]' value='$displayed' type="hidden"/> -->
                 </td>
                 <td data-content='Value'>
                     $value_line
-                    <!-- <input class='form-control' name='rows[$nn][type]' value='$type' hidden/> -->
+                    <!-- <input class='form-control' name='rows[$nn][type]' value='$type' type="hidden"/> -->
                 </td>
             </tr>
         HTML;
