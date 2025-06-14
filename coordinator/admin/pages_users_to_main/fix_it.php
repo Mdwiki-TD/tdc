@@ -17,7 +17,7 @@ use function TDWIKI\csrf\generate_csrf_token;
 //---
 function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
 {
-    $test_line = (isset($_REQUEST['test'])) ? "<input type="hidden" name="test" value="1" />" : "";
+    $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
 	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 	$target2 = htmlspecialchars($new_target, ENT_QUOTES, 'UTF-8');
