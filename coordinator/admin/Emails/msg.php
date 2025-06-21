@@ -1,8 +1,8 @@
 <?php
 //---
 if (user_in_coord == false) {
-	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
-	exit;
+    echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+    exit;
 };
 //---
 include_once 'coordinator/admin/Emails/sugust.php';
@@ -18,25 +18,68 @@ use function TDWIKI\csrf\generate_csrf_token;
 echo "</div>";
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 };
 //---
-$hoste = 'https://tools-static.wmflabs.org/cdnjs';
-if ($_SERVER['SERVER_NAME'] == 'localhost')  $hoste = 'https://cdnjs.cloudflare.com';
+function get_host()
+{
+    // $hoste = get_host();
+    //---
+    static $cached_host = null;
+    //---
+    if ($cached_host !== null) {
+        return $cached_host; // استخدم القيمة المحفوظة
+    }
+    //---
+    $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
+        ? "https://cdnjs.cloudflare.com"
+        : "https://tools-static.wmflabs.org/cdnjs";
+    //---
+    if ($hoste == "https://tools-static.wmflabs.org/cdnjs") {
+        $url = "https://tools-static.wmflabs.org";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true); // لا نريد تحميل الجسم
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // لمنع الطباعة
+
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3); // المهلة القصوى للاتصال
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; CDN-Checker)');
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+
+        $result = curl_exec($ch);
+        $curlError = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+
+        // إذا فشل الاتصال أو لم تكن الاستجابة ضمن 200–399، نستخدم cdnjs
+        if ($result === false || !empty($curlError) || $httpCode < 200 || $httpCode >= 400) {
+            $hoste = "https://cdnjs.cloudflare.com";
+        }
+    }
+
+    $cached_host = $hoste;
+
+    return $hoste;
+}
+
+$hoste = get_host();
+//---
 //---
 echo <<<HTML
-<script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
-<link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
-<script>
-    $('#mainnav').hide();
-    $('#maindiv').hide();
-</script>
-<div id='yeye' class='container-fluid'>
+    <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
+    <link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
+    <script>
+        $('#mainnav').hide();
+        $('#maindiv').hide();
+    </script>
+    <div id='yeye' class='container-fluid'>
 HTML;
-//---
-
 //---
 $title  = $_REQUEST['title'] ?? '';
 $test   = $_REQUEST['test'] ?? '';
@@ -51,11 +94,11 @@ $sugust_tab = get_sugust($title, $lang);
 $sugust = $sugust_tab['sugust'] ?? '';
 //---
 $here_params = array(
-	// 'username' => rawurlencode($user),
-	'code' => $lang,
-	'cat' => 'RTT',
-	'type' => 'lead',
-	'title' => $sugust
+    // 'username' => rawurlencode($user),
+    'code' => $lang,
+    'cat' => 'RTT',
+    'type' => 'lead',
+    'title' => $sugust
 );
 //---
 $here_url = "https://mdwiki.toolforge.org/Translation_Dashboard/translate/medwiki.php?" . http_build_query($here_params);
@@ -68,7 +111,7 @@ $Emails_array = [];
 
 foreach (fetch_query("select username, email from users;") as $Key => $ta) {
 
-	$Emails_array[$ta['username']] = $ta['email'];
+    $Emails_array[$ta['username']] = $ta['email'];
 };
 //---
 $email_to = $Emails_array[$user] ?? '';
@@ -79,19 +122,19 @@ $sugust2 = make_mdwiki_title($sugust);
 
 //---
 $url_views_2 = 'https://'
-	. 'pageviews.wmcloud.org/?project=' . $lang . '.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&range=all-time&pages=' . rawurlEncode($target);
+    . 'pageviews.wmcloud.org/?project=' . $lang . '.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&range=all-time&pages=' . rawurlEncode($target);
 //---
 $start = !empty($date) ? $date : '2019-01-01';
 $end = date("Y-m-d", strtotime("yesterday"));
 //---
 $url_views_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
-	'project' => "$lang.wikipedia.org",
-	'platform' => 'all-access',
-	'agent' => 'all-agents',
-	'start' => $start,
-	'end' => $end,
-	'redirects' => '0',
-	'pages' => $target,
+    'project' => "$lang.wikipedia.org",
+    'platform' => 'all-access',
+    'agent' => 'all-agents',
+    'start' => $start,
+    'end' => $end,
+    'redirects' => '0',
+    'pages' => $target,
 ));
 //---
 // $views2 = "<font color='#0000ff'>$views people</font>";
@@ -249,10 +292,10 @@ HTML;
 //---
 ?>
 <script>
-	$('#msg').summernote({
-		placeholder: 'Hello Bootstrap 4',
-		tabsize: 6,
-		// width: 370,
-		height: 350
-	});
+    $('#msg').summernote({
+        placeholder: 'Hello Bootstrap 4',
+        tabsize: 6,
+        // width: 370,
+        height: 350
+    });
 </script>
