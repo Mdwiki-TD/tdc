@@ -3,7 +3,13 @@
 if (user_in_coord == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
-};
+}
+//---
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+}
 //---
 include_once 'coordinator/admin/Emails/sugust.php';
 //---
@@ -16,12 +22,6 @@ use function Emails\Sugust\get_sugust;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 echo "</div>";
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
 //---
 function get_host()
 {
@@ -81,12 +81,13 @@ echo <<<HTML
     <div id='yeye' class='container-fluid'>
 HTML;
 //---
-$title  = $_REQUEST['title'] ?? '';
 $test   = $_REQUEST['test'] ?? '';
-$date   = $_REQUEST['date'] ?? '';
-$user   = $_REQUEST['user'] ?? '';
-$lang   = $_REQUEST['lang'] ?? '';
-$target = $_REQUEST['target'] ?? '';
+//---
+$title  = $_GET['title'] ?? $_POST['title'] ?? '';
+$date   = $_GET['date'] ?? $_POST['date'] ?? '';
+$user   = $_GET['user'] ?? $_POST['user'] ?? '';
+$lang   = $_GET['lang'] ?? $_POST['lang'] ?? '';
+$target = $_GET['target'] ?? $_POST['target'] ?? '';
 //---
 $views  = get_views($target, $lang, $date);
 //---

@@ -16,7 +16,7 @@ use function Results\GetCats\get_mdwiki_cat_members;
 use function Actions\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
-$cat = $_REQUEST['cat'] ?? 'All';
+$cat = $_GET['cat'] ?? 'All';
 $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
 //---
 function filter_stat($cat)

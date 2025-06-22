@@ -19,12 +19,10 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-
-//---
-$title  = (isset($_REQUEST['title'])) ? rawurldecode($_REQUEST['title']) : "";
-$lead    = $_REQUEST['lead'] ?? '';
-$full    = $_REQUEST['full'] ?? '';
-$id     = $_REQUEST['id'] ?? '';
+$title  = (isset($_GET['title'])) ? rawurldecode($_GET['title']) : "";
+$lead   = $_GET['lead'] ?? '';
+$full   = $_GET['full'] ?? '';
+$id     = $_GET['id'] ?? '';
 //---
 $header_title = ($id != "") ? "Edit Translate type" : "Add Translate type";
 //---
@@ -40,7 +38,7 @@ function echo_form($title, $lead, $full, $id)
     $lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
     $full_checked = ($full == 1 || $full == "1") ? 'checked' : '';
     //---
-	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
     //---
     $csrf_token = generate_csrf_token();
     //---

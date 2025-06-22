@@ -12,7 +12,7 @@ use function Results\GetCats\get_mdwiki_cat_members;
 use function SQLorAPI\Funcs\get_td_or_sql_categories;
 use function SQLorAPI\Funcs\get_td_or_sql_qids;
 //---
-$cat = $_REQUEST['cat'] ?? 'RTT';
+$cat = $_GET['cat'] ?? 'RTT';
 //---
 function filter_stat($cat)
 {
