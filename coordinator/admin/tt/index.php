@@ -7,8 +7,7 @@ INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT DISTINCT q.title,
 
 */
 //---
-// include_once 'results/getcats.php';
-// include_once 'actions/functions.php';
+
 use Tables\SqlTables\TablesSql;
 use function Actions\Html\makeDropdown;
 use function Actions\Html\make_mdwiki_title;
