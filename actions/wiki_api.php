@@ -15,24 +15,26 @@ function get_url_result_curl(string $url): string
     global $usr_agent;
 
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie.txt");
-    // curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie.txt");
-
-    curl_setopt($ch, CURLOPT_USERAGENT, $usr_agent);
-
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_USERAGENT => $usr_agent,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 5,
+        // لإضافة ملفات الكوكيز لاحقًا فقط أزل علامة التعليق:
+        // CURLOPT_COOKIEJAR => "cookie.txt",
+        // CURLOPT_COOKIEFILE => "cookie.txt",
+    ]);
 
     $output = curl_exec($ch);
-    if ($output === FALSE) {
-        echo ("<br>cURL Error: " . curl_error($ch) . "<br>$url");
+    if ($output === false) {
+        echo "<br>cURL Error: " . curl_error($ch) . "<br>$url";
     }
 
     curl_close($ch);
 
     return $output;
 }
+
 
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {
