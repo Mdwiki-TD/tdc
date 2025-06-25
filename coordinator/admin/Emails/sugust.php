@@ -6,7 +6,6 @@ Usage:
 use function Emails\Sugust\get_sugust;
 */
 
-// include_once 'infos/td_config.php';
 //---
 use Tables\Main\MainTables;
 use function Results\GetResults\get_cat_exists_and_missing;

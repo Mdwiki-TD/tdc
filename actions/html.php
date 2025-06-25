@@ -4,7 +4,6 @@ namespace Actions\Html;
 /*
 Usage:
 use function Actions\Html\banner_alert;
-use function Actions\Html\add_quotes;
 use function Actions\Html\login_card;
 use function Actions\Html\makeCard;
 use function Actions\Html\makeColSm4;
@@ -29,13 +28,6 @@ use function Actions\Html\div_alert; //  div_alert($texts, $type)
 //---
 use Tables\SqlTables\TablesSql;
 
-function add_quotes($str)
-{
-    // htmlspecialchars($str, ENT_QUOTES) ?
-    $quote = preg_match("/[']+/u", $str) ? '"' : "'";
-    return $quote . $str . $quote;
-};
-//---
 function banner_alert($text)
 {
     return <<<HTML

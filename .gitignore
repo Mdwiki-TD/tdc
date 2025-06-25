@@ -7,3 +7,5 @@ actions/html_side1_icons.php
 test_csrf/index.php
 csrf_old.php
 coordinator/admin/reports/index copy.php
+**/old
+/x
