@@ -72,6 +72,7 @@ $stylesheets = [
 
     "/Translation_Dashboard/css/mobile_format.css",
     "/tdc/css/Responsive_Table.css",
+    "/Translation_Dashboard/css/theme.css",
 ];
 
 $scripts = [
@@ -92,6 +93,7 @@ $scripts = [
     "/Translation_Dashboard/js/to.js",
     "/Translation_Dashboard/js/login.js",
     "/td/plugins/chart.js/Chart.min.js",
+    "/Translation_Dashboard/js/theme.js",
 
 ];
 
