@@ -7,8 +7,11 @@ include_once __DIR__ . '/actions/html.php';
 include_once __DIR__ . '/actions/html_side1.php';
 include_once __DIR__ . '/actions/functions.php';
 
-include_once __DIR__ . '/../auth/auth/user_infos.php';
-
+if (substr(__DIR__, 0, 2) == 'I:') {
+    include_once 'I:/mdwiki/auth_repo/oauth/user_infos.php';
+} else {
+    include_once __DIR__ . '/../auth/oauth/user_infos.php';
+}
 // with include inside
 include_once __DIR__ . '/actions/wiki_api.php';
 include_once __DIR__ . '/actions/mdwiki_api.php';
