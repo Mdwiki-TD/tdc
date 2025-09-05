@@ -35,6 +35,7 @@ function generateListItem($id, $href, $title, $filename, $ty, $icon, $target = '
 
 function generateSpan($filename, $text)
 {
+    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     return <<<HTML
 		<span class='d-flex align-items-center pb-1 mb-1 text-decoration-none border-bottom'>
 			<a class='nav-link' href='$filename'>

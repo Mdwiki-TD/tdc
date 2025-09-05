@@ -30,6 +30,7 @@ use Tables\SqlTables\TablesSql;
 
 function banner_alert($text)
 {
+    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     return <<<HTML
 	<div class='container'>
 		<div class="alert alert-danger" role="alert">
@@ -57,6 +58,7 @@ function login_card()
 
 function make_modal_fade($label, $text, $id, $button = '')
 {
+    $label = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
     $exampleModalLabel = rand(1000, 9999);
     return <<<HTML
 
@@ -82,6 +84,7 @@ function make_modal_fade($label, $text, $id, $button = '')
 function make_form_check_input($label, $name, $value_yes, $value_no, $checked)
 {
     //---
+    $label = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
     $label_line = (!empty($label)) ? "<label class='form-check-label' for='$name'>$label</label>" : "";
     //---
     return <<<HTML
@@ -120,9 +123,10 @@ function make_project_to_user($project)
     // $str = "";
     //---
     foreach (TablesSql::$s_projects_title_to_id as $p_title => $p_id) {
+        $p_title_escaped = htmlspecialchars($p_title, ENT_QUOTES, 'UTF-8');
         $cdcdc = $project == $p_title ? "selected" : "";
         $str .= <<<HTML
-			<option value='$p_title' $cdcdc>$p_title</option>
+			<option value='$p_title' $cdcdc>$p_title_escaped</option>
 		HTML;
     };
     //---
@@ -132,6 +136,7 @@ function make_project_to_user($project)
 function make_input_group($label, $id, $value, $required)
 {
     $val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $label = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class='col-md-3'>
         <div class='input-group mb-3'>
@@ -145,6 +150,7 @@ function make_input_group($label, $id, $value, $required)
 function make_input_group_no_col($label, $id, $value, $required)
 {
     $val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $label = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class='input-group mb-3'>
         <span class='input-group-text'>$label</span>
@@ -160,10 +166,11 @@ function makeDropdown($tab, $cat, $id, $add)
     //---
     foreach ($tab as $dd) {
         //---
+        $dd_escaped = htmlspecialchars($dd, ENT_QUOTES, 'UTF-8');
         $se = ($cat == $dd) ? 'selected' : '';
         //---
         $options .= <<<HTML
-            <option value='$dd' $se>$dd</option>
+            <option value='$dd' $se>$dd_escaped</option>
         HTML;
         //---
     };
@@ -171,7 +178,7 @@ function makeDropdown($tab, $cat, $id, $add)
     $sel_line = "";
     //---
     if (!empty($add)) {
-        $add2 = ($add == 'all') ? 'All' : $add;
+        $add2 = ($add == 'all') ? 'All' : htmlspecialchars($add, ENT_QUOTES, 'UTF-8');
         $sel = "";
         if ($cat == $add) $sel = "selected";
         $sel_line = "<option value='$add' $sel>$add2</option>";
@@ -187,6 +194,7 @@ function makeDropdown($tab, $cat, $id, $add)
 //---
 function makeCard($title, $table)
 {
+    $title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class="card">
         <div class="card-header aligncenter" style="font-weight:bold;">
@@ -202,6 +210,8 @@ function makeCard($title, $table)
 
 function makeColSm4($title, $table, $numb = 4, $table2 = '', $title2 = '')
 {
+    $title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $title2 = htmlspecialchars($title2, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class="col-md-$numb">
         <div class="card card2 mb-3">
@@ -228,6 +238,8 @@ function makeColSm4($title, $table, $numb = 4, $table2 = '', $title2 = '')
 
 function make_col_sm_body($title, $subtitle, $table, $numb = 4)
 {
+    $title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $subtitle = htmlspecialchars($subtitle, ENT_QUOTES, 'UTF-8');
     return <<<HTML
     <div class="col-md-$numb">
         <div class="card">
@@ -248,9 +260,10 @@ function make_drop($uxutable, $code)
     $options  =  "";
     //---
     foreach ($uxutable as $name => $cod) {
+        $name_escaped = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
         $cdcdc = $code == $cod ? "selected" : "";
         $options .= <<<HTML
-		<option value='$cod' $cdcdc>$name</option>
+		<option value='$cod' $cdcdc>$name_escaped</option>
 
 		HTML;
     };
@@ -262,7 +275,8 @@ function make_datalist_options($hyh)
 {
     $options = '';
     foreach ($hyh as $language => $code) {
-        $options .= "<option value='$code'>$language</option>";
+        $language_escaped = htmlspecialchars($language, ENT_QUOTES, 'UTF-8');
+        $options .= "<option value='$code'>$language_escaped</option>";
     }
     return $options;
 }
@@ -271,7 +285,8 @@ function make_mdwiki_title($title)
 {
     if (!empty($title)) {
         $encoded_title = rawurlencode(str_replace(' ', '_', $title));
-        return "<a target='_blank' href='https://mdwiki.org/wiki/$encoded_title'>$title</a>";
+        $title_escaped = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+        return "<a target='_blank' href='https://mdwiki.org/wiki/$encoded_title'>$title_escaped</a>";
     }
     return $title;
 }
@@ -280,7 +295,8 @@ function make_cat_url($category)
 {
     if (!empty($category)) {
         $encoded_category = rawurlencode(str_replace(' ', '_', $category));
-        return "<a target='_blank' href='https://mdwiki.org/wiki/Category:$encoded_category'>$category</a>";
+        $category_escaped = htmlspecialchars($category, ENT_QUOTES, 'UTF-8');
+        return "<a target='_blank' href='https://mdwiki.org/wiki/Category:$encoded_category'>$category_escaped</a>";
     }
     return $category;
 }
@@ -317,7 +333,8 @@ function make_mdwiki_user_url($user)
 {
     if (!empty($user)) {
         $encoded_user = rawurlencode(str_replace(' ', '_', $user));
-        return "<a href='https://mdwiki.org/wiki/User:$encoded_user'>$user</a>";
+        $user_escaped = htmlspecialchars($user, ENT_QUOTES, 'UTF-8');
+        return "<a href='https://mdwiki.org/wiki/User:$encoded_user'>$user_escaped</a>";
     }
     return $user;
 }
@@ -327,7 +344,8 @@ function make_target_url($target, $lang, $name = '', $deleted = false)
     $display_name = (!empty($name)) ? $name : $target;
     if (!empty($target)) {
         $encoded_target = rawurlencode(str_replace(' ', '_', $target));
-        $link = "<a target='_blank' href='https://$lang.wikipedia.org/wiki/$encoded_target'>$display_name</a>";
+        $display_name_escaped = htmlspecialchars($display_name, ENT_QUOTES, 'UTF-8');
+        $link = "<a target='_blank' href='https://$lang.wikipedia.org/wiki/$encoded_target'>$display_name_escaped</a>";
 
         if ($deleted == 1) {
             $link .= ' <span class="text-danger">(DELETED)</span>';
@@ -366,6 +384,7 @@ function make_edit_icon_new($target, $edit_params, $text = "Edit")
     $edit_url = "index.php?ty=$target&" . http_build_query($edit_params);
     //---
     if (empty($text)) $text = "Edit";
+    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     //---
     $class_sm = ($text == "Edit") ? "btn-sm" : "";
     //---

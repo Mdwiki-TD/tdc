@@ -335,6 +335,28 @@ function insert_to_projects($g_title, $g_id)
 
 function check_one($select = "*", $where = "", $value = "", $table = "")
 {
+    // Whitelist of allowed tables
+    $allowed_tables = ['users', 'qids', 'qids_others'];
+
+    // Whitelist of allowed columns for each table
+    $allowed_columns = [
+        'users' => ['*', 'username'],
+        'qids' => ['*', 'qid', 'title'],
+        'qids_others' => ['*', 'qid', 'title'],
+    ];
+
+    // Validate table name
+    if (!in_array($table, $allowed_tables)) {
+        error_log("check_one: Invalid table name: $table");
+        return false;
+    }
+
+    // Validate select and where columns
+    if (!in_array($select, $allowed_columns[$table]) || !in_array($where, $allowed_columns[$table])) {
+        error_log("check_one: Invalid column name for table $table");
+        return false;
+    }
+
     // ---
     // check if it's already in table
     $query = "SELECT $select FROM $table WHERE $where = ?";

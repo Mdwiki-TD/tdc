@@ -43,7 +43,7 @@ function echo_card_start($file_name, $ty)
 	HTML;
 }
 //---
-$ty = $_GET['ty'] ?? $_POST['ty'] ?? 'last';
+$ty = basename($_GET['ty'] ?? $_POST['ty'] ?? 'last');
 //---
 if ($ty == 'translate_type') $ty = 'tt';
 //---
