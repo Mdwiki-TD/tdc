@@ -8,9 +8,6 @@ Usage:
 
 */
 
-// include_once __DIR__ . '/../actions/mdwiki_sql.php';
-// include_once __DIR__ . '/../actions/td_api.php';
-
 use function Actions\MdwikiSql\fetch_query;
 use function Actions\TDApi\get_td_api;
 

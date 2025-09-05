@@ -16,10 +16,6 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 
-// include_once __DIR__ . '/../tablesd/tables.php';
-// include_once __DIR__ . '/../tablesd/langcode.php';
-// include_once __DIR__ . '/../actions/functions.php';
-
 use function Actions\Functions\test_print;
 use function Actions\MdwikiApi\get_mdwiki_url_with_params;
 use function Actions\Functions\start_with;
