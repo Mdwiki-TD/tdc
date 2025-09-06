@@ -1,11 +1,12 @@
+src/csrf_old.php
 
 /vendor
-results/getcats_new.php
-coordinator/admin/Campaigns copy/index.php
-actions/html_side1_icons.php
-/post_test
+src/results/getcats_new.php
+src/coordinator/admin/Campaigns copy/index.php
+src/actions/html_side1_icons.php
+src/post_test
 test_csrf/index.php
-csrf_old.php
-coordinator/admin/reports/index copy.php
+
+src/coordinator/admin/reports/index copy.php
 **/old
 /x

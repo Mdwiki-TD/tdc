@@ -13,8 +13,6 @@ use Tables\SqlTables\TablesSql;
 include_once __DIR__ . '/Tables/sql_tables.php';
 */
 //---
-// include_once __DIR__ . '/../actions/functions.php';
-//---
 use function SQLorAPI\Funcs\get_td_or_sql_projects;
 use function SQLorAPI\Funcs\get_td_or_sql_categories;
 
