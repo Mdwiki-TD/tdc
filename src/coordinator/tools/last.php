@@ -116,6 +116,8 @@ function make_td($tabg, $nnnn, $add_add)
     // ---
     $add_add_row = ($add_add) ? $add_add_row : '';
     // ---
+    $fixwikirefs = "../fixwikirefs.php?save=1&title=$targe2&lang=$llang&sourcetitle=$md_title_encoded";
+    // ---
     $laly = <<<HTML
         <tr>
             <td data-content='#'>
@@ -138,7 +140,7 @@ function make_td($tabg, $nnnn, $add_add)
             </td>
             $view_td
             <td data-content='Fixref'>
-                <a target='_blank' href="../fixwikirefs.php?save=1&title=$targe2&lang=$llang">Fix</a>
+                <a target='_blank' href="$fixwikirefs">Fix</a>
             </td>
             $add_add_row
         </tr>
