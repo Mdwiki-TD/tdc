@@ -6,6 +6,9 @@ ini_set('display_errors', 1);
 // Set the content type to JSON
 header('Content-Type: application/json');
 
+// Include the autoloader
+require_once __DIR__ . '/autoloader.php';
+
 // Include the CSRF token and configuration files
 include_once __DIR__ . '/csrf.php';
 include_once __DIR__ . '/infos/td_config.php';
@@ -30,11 +33,7 @@ foreach (glob(__DIR__ . "/tablesd/*.php") as $filename) {
 }
 include_once __DIR__ . '/tablesd/langcode.php';
 
-// ---
-// Authentication-related files will be handled separately
-// if (substr(__DIR__, 0, 2) == 'I:') {
-//     include_once 'I:/mdwiki/auth_repo/oauth/user_infos.php';
-// } else {
-//     include_once __DIR__ . '/../auth/oauth/user_infos.php';
-// }
-// ---
+// Include all results files
+foreach (glob(__DIR__ . "/results/*.php") as $filename) {
+    include_once $filename;
+}

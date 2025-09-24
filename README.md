@@ -27,12 +27,14 @@ The TDC system has been refactored to separate the frontend and backend concerns
 The project is organized into the following main directories:
 
 - `/backend`: Contains all the server-side PHP code.
-  - `/controllers`: Houses the business logic for each feature.
-  - `router.php`: The single entry point for all API requests. It directs requests to the appropriate controller.
-  - `bootstrap.php`: Initializes the backend application and loads all necessary dependencies.
+  - `/controllers`: Houses the business logic for each feature. This includes an `/admin` subdirectory for admin-specific controllers.
+  - `router.php`: The single, data-driven entry point for all API requests. It uses a routes array to map actions to controllers.
+  - `bootstrap.php`: Initializes the backend application, including the PSR-4 autoloader.
 - `/frontend`: Contains all the client-side code.
-  - `index.php`: The main landing page of the application.
+  - `index.php`: The main landing page (last edits).
   - `stat.php`: The page for viewing statistics.
+  - `process.php`: The page for viewing in-process translations.
+  - `/admin/reports.php`: The page for viewing reports (admin-only).
   - `/css`: Contains all the CSS stylesheets.
   - `/js`: Contains all the JavaScript files.
 - `/legacy`: The original codebase, preserved for reference during the migration.

@@ -18,61 +18,61 @@ $response = [
 $user_in_coord = true;
 // ---
 
-// Get the list of available tools and admin sections
-$tools_folders = array_map(fn ($file) => basename($file, '.php'), glob(__DIR__ . '/coordinator/tools/*.php'));
-$corrd_folders = array_map('basename', glob(__DIR__ . '/coordinator/admin/*', GLOB_ONLYDIR));
+// Define the routes
+$routes = [
+    'last' => ['\Controllers\LastEditsController', 'getLastEdits', 'params' => ['last_table', 'lang']],
+    'stat' => ['\Controllers\StatController', 'getStats', 'params' => ['cat']],
+    'process' => ['\Controllers\ProcessController', 'getProcessData', 'params' => []],
+    'reports_stats' => ['\Controllers\Admin\ReportsController', 'getReportsStats', 'params' => []],
+    'reports_data' => ['\Controllers\Admin\ReportsController', 'getReportsData', 'params' => ['year', 'month', 'user', 'lang', 'result']],
+];
 
-// Include the new controller
-include_once __DIR__ . '/controllers/LastEditsController.php';
-include_once __DIR__ . '/controllers/StatController.php';
+// Check if the requested action is in our defined routes
+if (array_key_exists($action, $routes)) {
+    $route = $routes[$action];
+    $controller = $route[0];
+    $method = $route[1];
+    $param_keys = $route['params'];
 
-// Route the request to the appropriate handler
-if ($action === 'last') {
-    $params = [
-        'last_table' => $_GET['last_table'] ?? 'pages',
-        'lang' => $_GET['lang'] ?? 'All',
-    ];
-    $response['data'] = \Controllers\LastEditsController::getLastEdits($params);
+    $params = [];
+    foreach ($param_keys as $key) {
+        if (isset($_GET[$key])) {
+            $params[$key] = $_GET[$key];
+        }
+    }
+
+    $response['data'] = call_user_func([$controller, $method], $params);
     $response['success'] = true;
-    $response['message'] = "Successfully retrieved last edits.";
-
-} elseif ($action === 'stat') {
-    $params = [
-        'cat' => $_GET['cat'] ?? 'RTT',
-    ];
-    $response['data'] = \Controllers\StatController::getStats($params);
-    $response['success'] = true;
-    $response['message'] = "Successfully retrieved stats.";
-
-} elseif (in_array($action, $tools_folders)) {
-    // For now, just confirm which file would be included
-    $response['success'] = true;
-    $response['message'] = "Action '{$action}' routed to tools.";
-    $response['data'] = "Would include: " . __DIR__ . "/coordinator/tools/{$action}.php";
-    // include_once __DIR__ . "/coordinator/tools/{$action}.php";
-
-} elseif ($action == "sidebar") {
-    // The sidebar logic will be handled differently in the new architecture
-    $response['success'] = true;
-    $response['message'] = "Sidebar action is not an API endpoint.";
-
-} elseif (in_array($action, $corrd_folders) && $user_in_coord) {
-    // For now, just confirm which file would be included
-    $response['success'] = true;
-    $response['message'] = "Action '{$action}' routed to admin section.";
-    $response['data'] = "Would include: " . __DIR__ . "/coordinator/admin/{$action}/index.php";
-    // include_once __DIR__ . "/coordinator/admin/{$action}/index.php";
+    $response['message'] = "Successfully executed action: {$action}.";
 
 } else {
-    $adminfile = __DIR__ . "/coordinator/admin/{$action}.php";
-    if (is_file($adminfile) && $user_in_coord) {
+    // Fallback to the old routing mechanism for non-refactored parts
+    $tools_folders = array_map(fn ($file) => basename($file, '.php'), glob(__DIR__ . '/coordinator/tools/*.php'));
+    $corrd_folders = array_map('basename', glob(__DIR__ . '/coordinator/admin/*', GLOB_ONLYDIR));
+
+    if (in_array($action, $tools_folders)) {
         $response['success'] = true;
-        $response['message'] = "Action '{$action}' routed to admin file.";
-        $response['data'] = "Would include: {$adminfile}";
-        // include_once $adminfile;
+        $response['message'] = "Action '{$action}' routed to legacy tools.";
+        $response['data'] = "Would include: " . __DIR__ . "/coordinator/tools/{$action}.php";
+
+    } elseif ($action == "sidebar") {
+        $response['success'] = true;
+        $response['message'] = "Sidebar action is not an API endpoint.";
+
+    } elseif (in_array($action, $corrd_folders) && $user_in_coord) {
+        $response['success'] = true;
+        $response['message'] = "Action '{$action}' routed to legacy admin section.";
+        $response['data'] = "Would include: " . __DIR__ . "/coordinator/admin/{$action}/index.php";
+
     } else {
-        $response['message'] = "Action '{$action}' not found.";
-        // include_once __DIR__ . "/coordinator/404.php";
+        $adminfile = __DIR__ . "/coordinator/admin/{$action}.php";
+        if (is_file($adminfile) && $user_in_coord) {
+            $response['success'] = true;
+            $response['message'] = "Action '{$action}' routed to legacy admin file.";
+            $response['data'] = "Would include: {$adminfile}";
+        } else {
+            $response['message'] = "Action '{$action}' not found.";
+        }
     }
 }
 

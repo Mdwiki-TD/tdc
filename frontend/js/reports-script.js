@@ -57,9 +57,10 @@ async function load_form() {
 
     console.log("loading publish_reports_stats");
     try {
-        const response = await $.getJSON('/api/index.php?get=publish_reports_stats');
-        if (response?.results) {
-            populateFilterOptions(response.results);
+        // const response = await $.getJSON('/api/index.php?get=publish_reports_stats');
+        const response = await $.getJSON('/backend/router.php?action=reports_stats');
+        if (response?.data) {
+            populateFilterOptions(response.data);
         }
     } catch (error) {
         console.error('Failed to load filter options:', error);
@@ -149,9 +150,9 @@ function getFormData(d) {
     });
 }
 
-function processTableData(json) {
+function processTableData(data) {
     // تخزين البيانات الأصلية كاملة
-    originalResults = json.results;
+    originalResults = data.results;
 
     // تجميع الصفوف حسب الحقول المطلوبة
     const grouped = {};
@@ -229,14 +230,17 @@ async function newDataTable() {
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0'); // الشهر يبدأ من 0، لذا نضيف 1
     // const end_point = `/api/index.php?get=publish_reports&year=${year}&month=${month}`;
-    const end_point = `/api/index.php?get=publish_reports`;
+    // const end_point = `/api/index.php?get=publish_reports`;
+    const end_point = '/backend/router.php?action=reports_data';
 
     // إعداد DataTable
     let table = $('#resultsTable').DataTable({
         ajax: {
             url: end_point,
             data: getFormData,
-            dataSrc: processTableData
+            dataSrc: function(json) {
+                return processTableData(json.data);
+            }
         },
         columns: getTableColumns(),
         // saveState: true,
