@@ -29,6 +29,8 @@ foreach (glob(__DIR__ . "/tablesd/*.php") as $filename) {
 
 include_once __DIR__ . '/tablesd/langcode.php';
 
-include_once __DIR__ . '/results/get_results.php';
-include_once __DIR__ . '/results/getcats.php';
+foreach (glob(__DIR__ . "/results/*.php") as $filename) {
+    include_once $filename;
+}
+
 require_once __DIR__ . '/coordinator/tools/recent_helps.php';
