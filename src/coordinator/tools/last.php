@@ -24,7 +24,7 @@ $last_table = $_GET['last_table'] ?? 'pages';
 // ---
 $last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
-function make_td($tabg, $nnnn, $add_add, $views_sql, $last_table)
+function make_td($tabg, $nnnn, $add_add, $last_table)
 {
     // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
@@ -58,11 +58,7 @@ function make_td($tabg, $nnnn, $add_add, $views_sql, $last_table)
     $view_td = "";
     //---
     if ($last_table == "pages") {
-        $views_number = $tabg['views'] ?? '';
-        //---
-        if (empty($views_number)) {
-            $views_number = $views_sql[$target] ?? "?";
-        }
+        $views_number = $tabg['views'] ?? '?';
         //---
         // $ccat = make_cat_url( $cat );
         $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
@@ -179,7 +175,7 @@ $noo = 0;
 // ---
 foreach ($qsl_results as $tat => $tabe) {
     $noo = $noo + 1;
-    $recent_rows .= make_td($tabe, $noo, $add_add, $views_sql, $last_table);
+    $recent_rows .= make_td($tabe, $noo, $add_add, $last_table);
 };
 //---
 $table_id = ($last_table == 'pages') ? 'last_tabel' : 'last_users_tabel';
