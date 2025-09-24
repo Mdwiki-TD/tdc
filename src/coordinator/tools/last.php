@@ -32,15 +32,13 @@ function make_td($tabg, $nnnn, $add_add)
     // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
     //---
-    //return $date . '<br>';
-    //---
     $user     = $tabg['user'] ?? "";
     //---
     $llang    = $tabg['lang'] ?? "";
     $md_title = trim($tabg['title'] ?? '');
     $cat      = $tabg['cat'] ?? "";
     $word     = $tabg['word'] ?? "";
-    $targe    = trim($tabg['target'] ?? '');
+    $target    = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
     // ---
@@ -66,7 +64,7 @@ function make_td($tabg, $nnnn, $add_add)
         $views_number = $tabg['views'] ?? '';
         //---
         if (empty($views_number)) {
-            $views_number = $views_sql[$targe] ?? "?";
+            $views_number = $views_sql[$target] ?? "?";
         }
         //---
         // $ccat = make_cat_url( $cat );
@@ -74,7 +72,7 @@ function make_td($tabg, $nnnn, $add_add)
         //---
         $word = $word ?? MainTables::$x_Words_table[$md_title];
         //---
-        $view = make_view_by_number($targe, $views_number, $llang, $pupdate);
+        $view = make_view_by_number($target, $views_number, $llang, $pupdate);
         //---
         $mail_icon = (user_in_coord != false) ? make_mail_icon_new($tabg, 'pup_window_email') : '';
         $mail_icon_td = (!empty($mail_icon)) ? "<td data-content='Email'>$mail_icon</td>" : '';
@@ -97,14 +95,13 @@ function make_td($tabg, $nnnn, $add_add)
     //---
     $nana = make_mdwiki_title($md_title);
     //---
-    $targe33_name = $targe;
+    $targe33_name = $target;
     //---
     // if ( strlen($targe33_name) > 15 ) {
     //     $targe33_name = substr($targe33_name, 0, 15) . '...';
     // }
     //---
-    $targe33 = make_target_url($targe, $llang, $targe33_name);
-    $targe2  = urlencode($targe);
+    $target_link = make_target_url($target, $llang, $targe33_name);
     //---
     $talk = make_talk_url($llang, $user);
     //---
@@ -116,13 +113,8 @@ function make_td($tabg, $nnnn, $add_add)
         </td>
     HTML : '';
     // ---
-    // $add_add_row = ($add_add) ? $add_add_row : '';
-    // ---
-    // $save_1 = ($GLOBALS['global_username'] == "Mr. Ibrahem") ? "" : "&save=1";
-    // $fixwikirefs = "../fixwikirefs.php?title=$targe2$save_1&lang=$llang&sourcetitle=$md_title_encoded";
-    // ---
     $params = [
-        "title" => $targe,
+        "title" => $target,
         "lang" => $llang,
         "sourcetitle" => $md_title,
         "mdwiki_revid" => $mdwiki_revid,
@@ -132,7 +124,8 @@ function make_td($tabg, $nnnn, $add_add)
         $params['save'] = 1;
     };
     // ---
-    $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params);
+    // $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params);
+    $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     // ---
     $laly = <<<HTML
         <tr>
@@ -149,7 +142,7 @@ function make_td($tabg, $nnnn, $add_add)
             $Campaign_td
             <!-- <td>$word</td> -->
             <td data-content='Translated' class="link_container">
-                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $targe33
+                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $target_link
             </td>
             <td data-content='Publication date'>
                 $pupdate
