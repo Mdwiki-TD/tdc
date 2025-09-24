@@ -15,9 +15,6 @@ HTML;
 
 function make_td($tabg, $nnnn)
 {
-    //---
-    // global $views_sql, $user_name;
-    //---
     $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? $tabg['add_date'] ?? "";
     //---

@@ -23,9 +23,9 @@ use function TDWIKI\csrf\generate_csrf_token;
 //---
 echo "</div>";
 //---
-function get_host()
+function get_host1()
 {
-    // $hoste = get_host();
+    // $hoste = get_host1();
     //---
     static $cached_host = null;
     //---
@@ -69,7 +69,7 @@ function get_host()
     return $hoste;
 }
 
-$hoste = get_host();
+$hoste = get_host1();
 //---
 //---
 echo <<<HTML

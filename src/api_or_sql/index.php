@@ -21,10 +21,6 @@ if (isset($_GET['use_td_api'])) {
     $use_td_api  = $_GET['use_td_api'] != "x";
 }
 
-include_once __DIR__ . '/process_data.php';
-include_once __DIR__ . '/recent_data.php';
-include_once __DIR__ . '/funcs.php';
-
 function super_function(array $api_params, array $sql_params, string $sql_query): array
 {
     global $use_td_api;
