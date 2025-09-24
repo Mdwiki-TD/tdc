@@ -116,7 +116,9 @@ function make_td($tabg, $nnnn, $add_add)
     // ---
     $add_add_row = ($add_add) ? $add_add_row : '';
     // ---
-    $fixwikirefs = "../fixwikirefs.php?save=1&title=$targe2&lang=$llang&sourcetitle=$md_title_encoded";
+    $save_1 = ($GLOBALS['global_username'] == "Mr. Ibrahem") ? "" : "&save=1";
+    // ---
+    $fixwikirefs = "../fixwikirefs.php?title=$targe2$save_1&lang=$llang&sourcetitle=$md_title_encoded";
     // ---
     $laly = <<<HTML
         <tr>
