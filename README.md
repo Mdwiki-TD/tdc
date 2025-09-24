@@ -15,14 +15,40 @@ TDC serves as a coordination hub for translation projects, enabling coordinators
 - Administer translation campaigns
 - Provide statistics and process monitoring
 
-## System Architecture
+## System Architecture (Refactored)
 
-The TDC system follows a layered architecture design pattern, separating concerns between presentation, business logic, and data persistence layers.
+The TDC system has been refactored to separate the frontend and backend concerns, following a modern API-driven architecture.
 
-### Component Organization
+- **Backend**: A PHP-based API that provides data to the frontend.
+- **Frontend**: A set of HTML, CSS, and JavaScript files that consume the backend API and render the user interface.
 
-- **Data Access Layer**: Retrieves data either directly from a SQL database or from an external API, determined by the `$use_td_api` global variable.
-- **Language Support System**: Manages language codes, names, and translations through a structured set of tables.
+### Project Structure
+
+The project is organized into the following main directories:
+
+- `/backend`: Contains all the server-side PHP code.
+  - `/controllers`: Houses the business logic for each feature.
+  - `router.php`: The single entry point for all API requests. It directs requests to the appropriate controller.
+  - `bootstrap.php`: Initializes the backend application and loads all necessary dependencies.
+- `/frontend`: Contains all the client-side code.
+  - `index.php`: The main landing page of the application.
+  - `stat.php`: The page for viewing statistics.
+  - `/css`: Contains all the CSS stylesheets.
+  - `/js`: Contains all the JavaScript files.
+- `/legacy`: The original codebase, preserved for reference during the migration.
+- `/tests`: Contains test scripts for the application.
+
+### How to Run the Application
+
+1.  **Serve the project root directory** using a web server (e.g., Apache, Nginx).
+2.  **Access the frontend pages** directly in your browser (e.g., `http://localhost/frontend/index.php`).
+3.  The frontend pages will automatically make API calls to the backend to fetch the necessary data.
+
+### How to Add a New Feature
+
+1.  **Create a new controller** in the `backend/controllers` directory to handle the business logic for the new feature.
+2.  **Add a new route** to `backend/router.php` that points to your new controller method.
+3.  **Create a new frontend page** in the `frontend` directory. This page should use JavaScript to fetch data from your new API endpoint and render it.
 
 ## Main Features
 
