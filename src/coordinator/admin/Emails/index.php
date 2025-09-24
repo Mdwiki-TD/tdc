@@ -6,10 +6,10 @@ if (user_in_coord == false) {
 };
 //---
 use Tables\SqlTables\TablesSql;
-use function Actions\Html\make_mail_icon_new;
-use function Actions\Html\make_project_to_user;
-use function Actions\Html\make_edit_icon_new;
-use function Actions\MdwikiSql\fetch_query;
+use function Utils\Html\make_mail_icon_new;
+use function Utils\Html\make_project_to_user;
+use function Utils\Html\make_edit_icon_new;
+use function APICalls\MdwikiSql\fetch_query;
 use function SQLorAPI\Funcs\get_users_by_last_pupdate;
 use function SQLorAPI\Funcs\get_td_or_sql_count_pages_not_empty;
 use function SQLorAPI\Funcs\get_td_or_sql_page_user_not_in_users;

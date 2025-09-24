@@ -1,9 +1,9 @@
 <?PHP
 
 use Tables\Langs\LangsTables;
-use function Actions\Html\make_mdwiki_title;
-use function Actions\Html\make_target_url;
-use function Actions\Html\make_edit_icon_new;
+use function Utils\Html\make_mdwiki_title;
+use function Utils\Html\make_target_url;
+use function Utils\Html\make_edit_icon_new;
 use function SQLorAPI\Recent\get_pages_users_to_main;
 use function SQLorAPI\Funcs\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent;

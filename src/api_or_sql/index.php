@@ -8,8 +8,8 @@ Usage:
 
 */
 
-use function Actions\MdwikiSql\fetch_query;
-use function Actions\TDApi\get_td_api;
+use function APICalls\MdwikiSql\fetch_query;
+use function APICalls\TDApi\get_td_api;
 
 $settings_tabe = array_column(get_td_api(['get' => 'settings']), 'value', 'title');
 //---

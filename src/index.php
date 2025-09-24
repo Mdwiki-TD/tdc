@@ -8,8 +8,8 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 //---
 include_once __DIR__ . '/header.php';
 //---
-use function Actions\Functions\test_print;
-use function Actions\HtmlSide\create_side;
+use function Utils\Functions\test_print;
+use function Utils\HtmlSide\create_side;
 
 echo <<<HTML
 	<!-- </div> -->

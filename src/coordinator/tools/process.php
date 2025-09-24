@@ -2,9 +2,9 @@
 use Tables\SqlTables\TablesSql;
 use Tables\Langs\LangsTables;
 // use Tables\Main\MainTables;
-use function Actions\Html\make_mdwiki_title;
+use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Process\get_process_all_new;
-// use function Actions\Html\make_cat_url;
+// use function Utils\Html\make_cat_url;
 
 echo <<<HTML
     <div class='card-header'>

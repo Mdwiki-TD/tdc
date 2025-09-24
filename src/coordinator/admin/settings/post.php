@@ -1,7 +1,7 @@
 <?PHP
 //---
-// use function Actions\MdwikiSql\update_settings;
-use function Actions\MdwikiSql\update_settings_value;
+// use function APICalls\MdwikiSql\update_settings;
+use function APICalls\MdwikiSql\update_settings_value;
 use function TDWIKI\csrf\verify_csrf_token;
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

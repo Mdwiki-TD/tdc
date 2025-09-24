@@ -1,10 +1,10 @@
 <?php
 
-namespace Actions\Functions;
+namespace Utils\Functions;
 /*
 Usage:
-use function Actions\Functions\test_print;
-use function Actions\Functions\start_with;
+use function Utils\Functions\test_print;
+use function Utils\Functions\start_with;
 */
 
 $print_t = false;
@@ -18,7 +18,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 
 define('print_te', $print_t);
 
-// use function Actions\TDApi\get_td_api;
+// use function APICalls\TDApi\get_td_api;
 
 function test_print($s)
 {

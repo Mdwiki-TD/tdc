@@ -1,11 +1,11 @@
 <?php
 
-namespace Actions\WikiApi;
+namespace APICalls\WikiApi;
 /*
 Usage:
-use function Actions\WikiApi\get_url_result_curl;
-use function Actions\WikiApi\make_view_by_number;
-use function Actions\WikiApi\get_views;
+use function APICalls\WikiApi\get_url_result_curl;
+use function APICalls\WikiApi\make_view_by_number;
+use function APICalls\WikiApi\get_views;
 */
 
 $usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";

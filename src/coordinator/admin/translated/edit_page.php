@@ -5,8 +5,8 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-use function Actions\MdwikiSql\execute_query;
-use function Actions\MdwikiSql\fetch_query;
+use function APICalls\MdwikiSql\execute_query;
+use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 use function TDWIKI\csrf\verify_csrf_token;
 //---

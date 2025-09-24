@@ -1,7 +1,7 @@
 <?php
 //---
-use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
-use function Actions\MdwikiSql\insert_to_translate_type;
+use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function APICalls\MdwikiSql\insert_to_translate_type;
 use function TDWIKI\csrf\verify_csrf_token;
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

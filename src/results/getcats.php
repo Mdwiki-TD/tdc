@@ -16,10 +16,10 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 
-use function Actions\Functions\test_print;
-use function Actions\MdwikiApi\get_mdwiki_url_with_params;
-use function Actions\Functions\start_with;
-use function Tables\TablesDir\open_td_Tables_file;
+use function Utils\Functions\test_print;
+use function APICalls\MdwikiApi\get_mdwiki_url_with_params;
+use function Utils\Functions\start_with;
+use function Utils\TablesDir\open_td_Tables_file;
 
 function get_category_from_cache(string $category): array
 {

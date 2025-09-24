@@ -1,17 +1,17 @@
 <?php
 
-namespace Actions\MdwikiSql;
+namespace APICalls\MdwikiSql;
 /*
 Usage:
-use function Actions\MdwikiSql\fetch_query;
-use function Actions\MdwikiSql\execute_query;
-use function Actions\MdwikiSql\sql_add_user;
-use function Actions\MdwikiSql\update_settings;
-use function Actions\MdwikiSql\update_settings_value;
-use function Actions\MdwikiSql\insert_to_translate_type;
-use function Actions\MdwikiSql\insert_to_projects;
-use function Actions\MdwikiSql\display_tables;
-use function Actions\MdwikiSql\check_one;
+use function APICalls\MdwikiSql\fetch_query;
+use function APICalls\MdwikiSql\execute_query;
+use function APICalls\MdwikiSql\sql_add_user;
+use function APICalls\MdwikiSql\update_settings;
+use function APICalls\MdwikiSql\update_settings_value;
+use function APICalls\MdwikiSql\insert_to_translate_type;
+use function APICalls\MdwikiSql\insert_to_projects;
+use function APICalls\MdwikiSql\display_tables;
+use function APICalls\MdwikiSql\check_one;
 */
 
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {

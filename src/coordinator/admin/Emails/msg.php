@@ -14,10 +14,10 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 include_once 'coordinator/admin/Emails/sugust.php';
 //---
 use Tables\Main\MainTables;
-use function Actions\MdwikiSql\fetch_query;
-use function Actions\WikiApi\get_views;
-use function Actions\Html\make_mdwiki_title;
-use function Actions\Html\make_target_url;
+use function APICalls\MdwikiSql\fetch_query;
+use function APICalls\WikiApi\get_views;
+use function Utils\Html\make_mdwiki_title;
+use function Utils\Html\make_target_url;
 use function Emails\Sugust\get_sugust;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
