@@ -10,4 +10,3 @@ test_csrf/index.php
 src/coordinator/admin/reports/index copy.php
 **/old
 /x
-src/coordinator/tools/last_old.php

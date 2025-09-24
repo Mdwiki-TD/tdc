@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?PHP
 
 use Tables\SqlTables\TablesSql;
 use Tables\Main\MainTables;
@@ -8,8 +6,6 @@ use Tables\Langs\LangsTables;
 
 use function Tools\RecentHelps\filter_recent;
 use function Tools\RecentHelps\do_add_date;
-// use function Actions\Html\make_cat_url;
-use function Tools\RecentHelps\filter_table;
 use function Actions\WikiApi\make_view_by_number;
 use function Actions\Html\make_mail_icon_new;
 use function Actions\Html\make_talk_url;
@@ -17,291 +13,283 @@ use function Actions\Html\make_target_url;
 use function Actions\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Funcs\get_pages_users_langs;
+// use function Actions\Html\make_cat_url;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
+use function Tools\RecentHelps\filter_table;
 
-/**
- * RecentTranslations
- * مسؤول عن بناء جدول "Recent translations" وعرضه
- */
-class RecentTranslations
+$last_tables = ['pages', 'pages_users'];
+// ---
+$last_table = $_GET['last_table'] ?? 'pages';
+// ---
+$last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
+
+function make_td($tabg, $nnnn, $add_add)
 {
-    private array $viewsSql;
-    private string $globalUsername;
-    private bool $userInCoord;
-
-    private array $allowedTables = ['pages', 'pages_users'];
-
-    public function __construct(array $viewsSql = [], string $globalUsername = '', bool $userInCoord = false)
-    {
-        $this->viewsSql = $viewsSql;
-        $this->globalUsername = $globalUsername;
-        $this->userInCoord = $userInCoord;
+    //---
+    global $views_sql, $last_table;
+    //---
+    // $id       = $tabg['id'] ?? "";
+    $date     = $tabg['date'] ?? "";
+    //---
+    $user     = $tabg['user'] ?? "";
+    //---
+    $llang    = $tabg['lang'] ?? "";
+    $md_title = trim($tabg['title'] ?? '');
+    $cat      = $tabg['cat'] ?? "";
+    $word     = $tabg['word'] ?? "";
+    $target    = trim($tabg['target'] ?? '');
+    $pupdate  = $tabg['pupdate'] ?? '';
+    $add_date = $tabg['add_date'] ?? '';
+    // ---
+    $mdwiki_revid = $tabg['mdwiki_revid'] ?? '';
+    //---
+    // if $add_date has : then split before first space
+    if (strpos($add_date, ':') !== false) {
+        $add_date = explode(' ', $add_date)[0];
+    };
+    //---
+    $user_name = $user;
+    // $user_name is the first word of the user if length > 15
+    if (strlen($user) > 15) {
+        $user_name = explode(' ', $user);
+        $user_name = $user_name[0];
     }
-
-    private function safeGet(string $key, $default = null)
-    {
-        return isset($_GET[$key]) ? trim($_GET[$key]) : $default;
-    }
-
-    private function normalizeLastTable(string|null $raw): string
-    {
-        $last = $raw ?: 'pages';
-        return in_array($last, $this->allowedTables, true) ? $last : 'pages';
-    }
-
-    private function renderRow(array $row, int $index, bool $addAdd, string $lastTable): string
-    {
-        // Extract with defaults
-        $date       = $row['date'] ?? '';
-        $user       = $row['user'] ?? '';
-        $langCode   = $row['lang'] ?? '';
-        $mdTitle    = trim($row['title'] ?? '');
-        $cat        = $row['cat'] ?? '';
-        $word       = $row['word'] ?? '';
-        $target     = trim($row['target'] ?? '');
-        $pupdate    = $row['pupdate'] ?? '';
-        $addDate    = $row['add_date'] ?? '';
-        $mdwikiRevid = $row['mdwiki_revid'] ?? '';
-
-        // simplify add_date (keep date part if time included)
-        if (strpos($addDate, ':') !== false) {
-            $addDate = explode(' ', $addDate)[0];
+    //---
+    $Campaign_td = "";
+    $mail_icon_td = "";
+    $view_td = "";
+    //---
+    if ($last_table == "pages") {
+        $views_number = $tabg['views'] ?? '';
+        //---
+        if (empty($views_number)) {
+            $views_number = $views_sql[$target] ?? "?";
         }
-
-        // user name display logic
-        $userName = $user;
-        if (mb_strlen($user, 'UTF-8') > 15) {
-            $parts = preg_split('/\s+/', $user);
-            $userName = $parts[0] ?? $user;
-        }
-
-        $campaignTd = '';
-        $mailIconTd = '';
-        $viewTd = '';
-
-        if ($lastTable === 'pages') {
-            $viewsNumber = $row['views'] ?? '';
-            if (empty($viewsNumber)) {
-                $viewsNumber = $this->viewsSql[$target] ?? '?';
-            }
-
-            // $ccat = make_cat_url( $cat );
-            $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
-
-            $word = $word ?? MainTables::$x_Words_table[$mdTitle] ?? '';
-
-            $view = make_view_by_number($target, $viewsNumber, $langCode, $pupdate);
-
-            $mailIcon = $this->userInCoord ? make_mail_icon_new($row, 'pup_window_email') : '';
-            $mailIconTd = !empty($mailIcon) ? "<td data-content='Email'>$mailIcon</td>" : '';
-
-            $viewTd = <<<HTML
-                <td data-content='Views'>
-                    $view
-                </td>
-            HTML;
-
-            $campaignTd = <<<HTML
-                <td data-content='Campaign'>
-                    $ccat
-                </td>
-            HTML;
-        }
-
-        $langDisplay = $langCode; // could map via LangsTables::$L_code_to_lang if desired
-
-        $mdTitleHtml = make_mdwiki_title($mdTitle);
-
-        $targetDisplay = $target;
-        // $targetDisplay = mb_strlen($targetDisplay, 'UTF-8') > 15 ? mb_substr($targetDisplay, 0, 15) . '...' : $targetDisplay;
-
-        $targetLink = make_target_url($target, $langCode, $targetDisplay);
-        $talk = make_talk_url($langCode, $user);
-
-        $mdTitleEncoded = rawurlencode($mdTitle);
-
-        $addAddCell = $addAdd ? <<<HTML
-            <td data-content='add_date'>
-                <a href="//medwiki.toolforge.org/wiki/{$langCode}/{$mdTitleEncoded}" target="_blank">{$addDate}</a>
+        //---
+        // $ccat = make_cat_url( $cat );
+        $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
+        //---
+        $word = $word ?? MainTables::$x_Words_table[$md_title];
+        //---
+        $view = make_view_by_number($target, $views_number, $llang, $pupdate);
+        //---
+        $mail_icon = (user_in_coord != false) ? make_mail_icon_new($tabg, 'pup_window_email') : '';
+        $mail_icon_td = (!empty($mail_icon)) ? "<td data-content='Email'>$mail_icon</td>" : '';
+        //---
+        $view_td = <<<HTML
+            <td data-content='Views'>
+                $view
             </td>
-        HTML : '';
-
-        $params = [
-            'title' => $target,
-            'lang'  => $langCode,
-            'sourcetitle' => $mdTitle,
-            'mdwiki_revid' => $mdwikiRevid,
-        ];
-
-        if ($this->globalUsername !== 'Mr. Ibrahem') {
-            $params['save'] = 1;
-        }
-
-        $fixwikirefs = '/fixwikirefs.php?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-
-        // ensure escaping of attributes that may contain quotes (user can contain quotes)
-        $userAttr = htmlspecialchars($user, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-        $userNameEsc = htmlspecialchars($userName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-
-        $rowHtml = <<<HTML
-            <tr>
-                <td data-content='#'>{$index}</td>
-                <td data-content='User'>
-                    <a href="/Translation_Dashboard/leaderboard.php?user={$userAttr}" data-bs-toggle="tooltip" data-bs-title="{$userAttr}">{$userNameEsc}</a> ({$talk})
-                </td>
-                {$mailIconTd}
-                <td data-content='Title'>{$mdTitleHtml}</td>
-                {$campaignTd}
-                <td data-content='Translated' class="link_container">
-                    <a href='/Translation_Dashboard/leaderboard.php?langcode={$langCode}'>{$langDisplay}</a> : {$targetLink}
-                </td>
-                <td data-content='Publication date'>{$pupdate}</td>
-                {$viewTd}
-                <td data-content='Fixref'>
-                    <a target='_blank' href="{$fixwikirefs}">Fix</a>
-                </td>
-                {$addAddCell}
-            </tr>
         HTML;
-
-        return $rowHtml;
-    }
-
-    public function render(): void
-    {
-        $rawLastTable = $this->safeGet('last_table', 'pages');
-        $lastTable = $this->normalizeLastTable($rawLastTable);
-
-        $lang = $this->safeGet('lang', 'All');
-        if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
-            $lang = 'All';
-        }
-
-        $mailTh = $this->userInCoord ? "<th>Email</th>" : '';
-
-        // fetch data
-        $results = ($lastTable === 'pages') ? get_recent_sql($lang) : get_recent_pages_users($lang);
-
-        // determine add_add (kept simple here; original forced true)
-        $addAdd = true; // or: (bool) do_add_date($results);
-        $thAdd = $addAdd ? "<th>add_date</th>" : '';
-
-        $rowsHtml = '';
-        $counter = 0;
-        foreach ($results as $item) {
-            $counter++;
-            $rowsHtml .= $this->renderRow($item, $counter, $addAdd, $lastTable);
-        }
-
-        $tableId = ($lastTable === 'pages') ? 'last_tabel' : 'last_users_tabel';
-
-        // build thead
-        if ($lastTable === 'pages') {
-            $thead = <<<HTML
-                <tr>
-                    <th>#</th>
-                    <th>User</th>
-                    {$mailTh}
-                    <th>Title</th>
-                    <th>Campaign</th>
-                    <th>Translated</th>
-                    <th>Publication date</th>
-                    <th>Views</th>
-                    <th>Fixref</th>
-                    {$thAdd}
-                </tr>
-            HTML;
-        } else {
-            $thead = <<<HTML
-                <tr>
-                    <th>#</th>
-                    <th>User</th>
-                    <th>Title</th>
-                    <th>Translated</th>
-                    <th>Publication date</th>
-                    <th>Fixref</th>
-                    {$thAdd}
-                </tr>
-            HTML;
-        }
-
-        $recentTable = <<<HTML
-            <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="{$tableId}" style="font-size:90%;">
-                <thead>{$thead}</thead>
-                <tbody>{$rowsHtml}</tbody>
-            </table>
+        //---
+        $Campaign_td = <<<HTML
+        <td data-content='Campaign'>
+            $ccat
+        </td>
         HTML;
-
-        // options for filters/menu
-        $resultForFilters = ($lastTable === 'pages') ? get_pages_langs() : get_pages_users_langs();
-        $filterByLang = filter_recent($lang, $resultForFilters);
-        $data = [
-            'pages' => 'Main',
-            'pages_users' => 'User',
-        ];
-        $filterTable = filter_table($data, $lastTable, 'last_table');
-        $countResult = count($resultForFilters);
-
-        echo <<<HTML
-            <div class='card-header'>
-                <form method='get' action='index.php'>
-                    <input name='ty' value='last' type='hidden'/>
-                    <div class='row'>
-                        <div class='col-md-4'>
-                            <h4>Recent translations ({$countResult}):</h4>
-                        </div>
-                        <div class='col-md-4'>
-                            {$filterTable}
-                        </div>
-                        <div class='col-md-3'>
-                            {$filterByLang}
-                        </div>
-                        <div class='aligncenter col-md-1'>
-                            <input class='btn btn-outline-primary' type='submit' value='Filter' />
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class='card-body'>
-                {$recentTable}
-            </div>
-            HTML;
     }
+    //---
+    // $lang2 = LangsTables::$L_code_to_lang[$llang] ?? $llang;
+    $lang2 = $llang;
+    //---
+    $nana = make_mdwiki_title($md_title);
+    //---
+    $targe33_name = $target;
+    //---
+    // if ( strlen($targe33_name) > 15 ) {
+    //     $targe33_name = substr($targe33_name, 0, 15) . '...';
+    // }
+    //---
+    $target_link = make_target_url($target, $llang, $targe33_name);
+    //---
+    $talk = make_talk_url($llang, $user);
+    //---
+    $md_title_encoded = rawurlencode($md_title);
+    //---
+    $add_add_row = ($add_add) ? <<<HTML
+        <td data-content='add_date'>
+            <a href="//medwiki.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
+        </td>
+    HTML : '';
+    // ---
+    $params = [
+        "title" => $target,
+        "lang" => $llang,
+        "sourcetitle" => $md_title,
+        "mdwiki_revid" => $mdwiki_revid,
+    ];
+    // ---
+    if ($GLOBALS['global_username'] !== "Mr. Ibrahem") {
+        $params['save'] = 1;
+    };
+    // ---
+    // $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params);
+    $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+    // ---
+    $laly = <<<HTML
+        <tr>
+            <td data-content='#'>
+                $nnnn
+            </td>
+            <td data-content='User'>
+                <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">$user_name</a> ($talk)
+            </td>
+            $mail_icon_td
+            <td data-content='Title'>
+                $nana
+            </td>
+            $Campaign_td
+            <!-- <td>$word</td> -->
+            <td data-content='Translated' class="link_container">
+                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $target_link
+            </td>
+            <td data-content='Publication date'>
+                $pupdate
+            </td>
+            $view_td
+            <td data-content='Fixref'>
+                <a target='_blank' href="$fixwikirefs">Fix</a>
+            </td>
+            $add_add_row
+        </tr>
+    HTML;
+    // ---
+    return $laly;
 }
 
-// --- bootstrap usage ---
-// Note: اجعل المتغيرات التالية تُمرَر حسب السياق الفعلي في تطبيقك:
-$views_sql = $views_sql ?? []; // إذا كانت موجودة من مكان آخر
-$global_username = $GLOBALS['global_username'] ?? '';
-$user_in_coord = defined('user_in_coord') ? (bool) user_in_coord : false;
+$lang = $_GET['lang'] ?? 'All';
 
-$rt = new RecentTranslations($views_sql, $global_username, $user_in_coord);
-$rt->render();
+if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
+    $lang = 'All';
+};
 
-// DataTables init script: init only tables that exist
-$tableSelector = ($tableId === 'last_tabel') ? '#last_tabel' : '#last_users_tabel';
-echo <<<JS
-    <script>
-        (function() {
-            function initIfExists(selector, options) {
-                if (document.querySelector(selector)) {
-                    $(selector).DataTable(options);
-                }
-            }
-
-            $(document).ready(function() {
-                initIfExists('#last_tabel', {
-                    stateSave: true,
-                    paging: false
-                });
-
-                initIfExists('#last_users_tabel', {
-                    stateSave: true,
-                    order: [[4, 'desc']],
-                    lengthMenu: [[100,150,200],[100,150,200]]
-                });
-            });
-        })();
-    </script>
-    JS;
+$mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
+//---
+if ($last_table == 'pages') {
+    $qsl_results = get_recent_sql($lang);
+} else {
+    $qsl_results = get_recent_pages_users($lang);
+}
+//---
+// $add_add = do_add_date($qsl_results);
+$add_add = true;
+$th_add = $add_add ? "<th>add_date</th>" : '';
+//---
+$recent_rows = "";
+// ---
+$noo = 0;
+// ---
+foreach ($qsl_results as $tat => $tabe) {
+    $noo = $noo + 1;
+    $recent_rows .= make_td($tabe, $noo, $add_add);
+};
+//---
+$table_id = ($last_table == 'pages') ? 'last_tabel' : 'last_users_tabel';
+//---
+if ($last_table == 'pages') {
+    $thead = <<<HTML
+        <tr>
+            <th>#</th>
+            <th>User</th>
+            $mail_th
+            <th>Title</th>
+            <th>Campaign</th>
+            <th>Translated</th>
+            <th>Publication date</th>
+            <th>Views</th>
+            <th>Fixref</th>
+            $th_add
+        </tr>
+    HTML;
+} else {
+    $thead = <<<HTML
+        <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Title</th>
+            <th>Translated</th>
+            <th>Publication date</th>
+            <th>Fixref</th>
+            $th_add
+        </tr>
+    HTML;
+}
+//---
+$recent_table = <<<HTML
+    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="$table_id" style="font-size:90%;">
+        <thead>
+            $thead
+        </thead>
+        <tbody>
+            $recent_rows
+        </tbody>
+    </table>
+HTML;
+//---
+if ($last_table == 'pages') {
+    $result = get_pages_langs();
+} else {
+    $result = get_pages_users_langs();
+}
+//---
+$filter_by_lang = filter_recent($lang, $result);
+//---
+$data = [
+    "pages" => 'Main',
+    "pages_users" => 'User',
+];
+//---
+$filter_ta = filter_table($data, $last_table, 'last_table');
+//---
+$count_result = count($result);
+//---
+echo <<<HTML
+<div class='card-header'>
+    <form method='get' action='index.php'>
+        <input name='ty' value='last' type='hidden'/>
+        <div class='row'>
+            <div class='col-md-4'>
+                <h4>Recent translations ($count_result):</h4>
+            </div>
+            <div class='col-md-4'>
+                $filter_ta
+            </div>
+            <div class='col-md-3'>
+                $filter_by_lang
+            </div>
+            <div class='aligncenter col-md-1'>
+                <input class='btn btn-outline-primary' type='submit' value='Filter' />
+            </div>
+        </div>
+    </form>
+</div>
+<div class='card-body'>
+HTML;
+//---
+echo $recent_table;
+//---
+?>
+<script>
+    $(document).ready(function() {
+        var t = $('#last_tabel').DataTable({
+            stateSave: true,
+            // order: [ [6, 'desc'] ],
+            paging: false,
+            // lengthMenu: [[100, 150, 200], [250, 150, 200]],
+            // scrollY: 800
+        });
+        var t = $('#last_users_tabel').DataTable({
+            stateSave: true,
+            order: [
+                [4, 'desc']
+            ],
+            // paging: false,
+            lengthMenu: [
+                [100, 150, 200],
+                [100, 150, 200]
+            ],
+            // scrollY: 800
+        });
+    });
+</script>
