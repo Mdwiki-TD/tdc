@@ -43,6 +43,8 @@ function make_td($tabg, $nnnn, $add_add)
     $targe    = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
+    // ---
+    $mdwiki_revid = $tabg['mdwiki_revid'] ?? '';
     //---
     // if $add_date has : then split before first space
     if (strpos($add_date, ':') !== false) {
@@ -108,17 +110,29 @@ function make_td($tabg, $nnnn, $add_add)
     //---
     $md_title_encoded = rawurlencode($md_title);
     //---
-    $add_add_row = <<<HTML
+    $add_add_row = ($add_add) ? <<<HTML
         <td data-content='add_date'>
             <a href="//medwiki.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
         </td>
-    HTML;
+    HTML : '';
     // ---
-    $add_add_row = ($add_add) ? $add_add_row : '';
+    // $add_add_row = ($add_add) ? $add_add_row : '';
     // ---
-    $save_1 = ($GLOBALS['global_username'] == "Mr. Ibrahem") ? "" : "&save=1";
+    // $save_1 = ($GLOBALS['global_username'] == "Mr. Ibrahem") ? "" : "&save=1";
+    // $fixwikirefs = "../fixwikirefs.php?title=$targe2$save_1&lang=$llang&sourcetitle=$md_title_encoded";
     // ---
-    $fixwikirefs = "../fixwikirefs.php?title=$targe2$save_1&lang=$llang&sourcetitle=$md_title_encoded";
+    $params = [
+        "title" => $targe2,
+        "lang" => $llang,
+        "sourcetitle" => $md_title_encoded,
+        "mdwiki_revid" => $mdwiki_revid,
+    ];
+    // ---
+    if ($GLOBALS['global_username'] !== "Mr. Ibrahem") {
+        $params['save'] = 1;
+    };
+    // ---
+    $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params);
     // ---
     $laly = <<<HTML
         <tr>

@@ -40,8 +40,8 @@ function get_recent_sql($lang): array
     $sql_query = <<<SQL
         select distinct
             p.id, p.title, p.word, p.translate_type, p.cat,
-            p.lang, p.user, p.target, p.date, p.pupdate, p.add_date, p.deleted, p.target, p.lang,
-            (select v.views from views_new_all v where p.target = v.target AND p.lang = v.lang LIMIT 1) as views
+            p.lang, p.user, p.target, p.date, p.pupdate, p.add_date, p.deleted, p.mdwiki_revid,
+            p.target, p.lang, (select v.views from views_new_all v where p.target = v.target AND p.lang = v.lang LIMIT 1) as views
         from pages p
         where p.target != ''
         $lang_line
