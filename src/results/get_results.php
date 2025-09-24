@@ -11,8 +11,8 @@ use function Results\GetResults\get_cat_exists_and_missing;
 */
 
 use function Results\GetCats\get_mdwiki_cat_members;
-use function Actions\Functions\test_print;
-use function Tables\TablesDir\open_td_Tables_file;
+use function Utils\Functions\test_print;
+use function Utils\TablesDir\open_td_Tables_file;
 
 function get_cat_exists_and_missing($cat, $camp, $depth, $code, $use_cache = true)
 {

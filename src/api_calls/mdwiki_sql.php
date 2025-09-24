@@ -1,17 +1,17 @@
 <?php
 
-namespace Actions\MdwikiSql;
+namespace APICalls\MdwikiSql;
 /*
 Usage:
-use function Actions\MdwikiSql\fetch_query;
-use function Actions\MdwikiSql\execute_query;
-use function Actions\MdwikiSql\sql_add_user;
-use function Actions\MdwikiSql\update_settings;
-use function Actions\MdwikiSql\update_settings_value;
-use function Actions\MdwikiSql\insert_to_translate_type;
-use function Actions\MdwikiSql\insert_to_projects;
-use function Actions\MdwikiSql\display_tables;
-use function Actions\MdwikiSql\check_one;
+use function APICalls\MdwikiSql\fetch_query;
+use function APICalls\MdwikiSql\execute_query;
+use function APICalls\MdwikiSql\sql_add_user;
+use function APICalls\MdwikiSql\update_settings;
+use function APICalls\MdwikiSql\update_settings_value;
+use function APICalls\MdwikiSql\insert_to_translate_type;
+use function APICalls\MdwikiSql\insert_to_projects;
+use function APICalls\MdwikiSql\display_tables;
+use function APICalls\MdwikiSql\check_one;
 */
 
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
@@ -150,7 +150,7 @@ class Database
             $result = $q->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (PDOException $e) {
-            echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
+            echo "SQL Error:" . $e->getMessage() . "<br>" . $sql_query;
             return [];
         }
     }
@@ -160,19 +160,21 @@ class Database
         $this->db = null;
     }
 }
-
 function get_dbname($table_name)
 {
-    // ---
-    $dbname = 'mdwiki';
-    // ---
-    $gets_new_db = ["missing", "missing_qids", "publish_reports", "login_attempts", "logins", "publish_reports_stats"];
-    // ---
-    if (in_array($table_name, $gets_new_db)) {
-        $dbname = 'mdwiki_new';
+    // Load from configuration file or define as class constant
+    $table_db_mapping = [
+        'mdwiki_new' => ["missing", "missing_qids", "publish_reports", "login_attempts", "logins", "publish_reports_stats"],
+        'mdwiki' => [] // default
+    ];
+
+    foreach ($table_db_mapping as $db => $tables) {
+        if (in_array($table_name, $tables)) {
+            return $db;
+        }
     }
-    // ---
-    return $dbname;
+
+    return 'mdwiki'; // default
 }
 
 function execute_query($sql_query, $params = null, $table_name = null)

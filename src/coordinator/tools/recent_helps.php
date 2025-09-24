@@ -12,7 +12,7 @@ use function Tools\RecentHelps\filter_table;
 */
 
 use Tables\Langs\LangsTables;
-use function Actions\Functions\test_print;
+use function Utils\Functions\test_print;
 
 function filter_recent($lang, $result)
 {

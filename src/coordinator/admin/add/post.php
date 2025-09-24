@@ -2,7 +2,7 @@
 //---
 require_once __DIR__ . '/add_post.php';
 //---
-use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
+use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
 use function TDWIKI\csrf\verify_csrf_token;
 use function Add\AddPost\add_pages_to_db;
 

@@ -7,8 +7,8 @@ use function Add\AddPost\add_pages_to_db;
 */
 //---
 use Tables\Main\MainTables;
-use function Actions\MdwikiSql\execute_query;
-use function Actions\MdwikiSql\fetch_query;
+use function APICalls\MdwikiSql\execute_query;
+use function APICalls\MdwikiSql\fetch_query;
 
 function insert_to_pages($t)
 {

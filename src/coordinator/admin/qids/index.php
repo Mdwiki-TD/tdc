@@ -5,8 +5,8 @@ if (user_in_coord == false) {
 	exit;
 };
 //---
-use function Actions\Html\make_mdwiki_title;
-use function Actions\Html\make_edit_icon_new;
+use function Utils\Html\make_mdwiki_title;
+use function Utils\Html\make_edit_icon_new;
 use function SQLorAPI\Funcs\get_td_or_sql_qids;
 use function SQLorAPI\Funcs\get_td_or_sql_qids_others;
 use function TDWIKI\csrf\generate_csrf_token;

@@ -1,9 +1,9 @@
 <?php
 //---
-use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
-use function Actions\MdwikiSql\sql_update_user;
-use function Actions\MdwikiSql\sql_add_user;
-use function Actions\MdwikiSql\check_one;
+use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function APICalls\MdwikiSql\sql_update_user;
+use function APICalls\MdwikiSql\sql_add_user;
+use function APICalls\MdwikiSql\check_one;
 use function TDWIKI\csrf\verify_csrf_token;
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

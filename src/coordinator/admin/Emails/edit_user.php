@@ -5,7 +5,7 @@ if (user_in_coord == false) {
     exit;
 };
 //---
-use function Actions\Html\make_project_to_user;
+use function Utils\Html\make_project_to_user;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 echo '</div><script>

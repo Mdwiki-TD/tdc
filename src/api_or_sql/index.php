@@ -8,8 +8,8 @@ Usage:
 
 */
 
-use function Actions\MdwikiSql\fetch_query;
-use function Actions\TDApi\get_td_api;
+use function APICalls\MdwikiSql\fetch_query;
+use function APICalls\TDApi\get_td_api;
 
 $settings_tabe = array_column(get_td_api(['get' => 'settings']), 'value', 'title');
 //---
@@ -20,10 +20,6 @@ $use_td_api  = false;
 if (isset($_GET['use_td_api'])) {
     $use_td_api  = $_GET['use_td_api'] != "x";
 }
-
-include_once __DIR__ . '/process_data.php';
-include_once __DIR__ . '/recent_data.php';
-include_once __DIR__ . '/funcs.php';
 
 function super_function(array $api_params, array $sql_params, string $sql_query): array
 {

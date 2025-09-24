@@ -6,14 +6,14 @@ use Tables\Langs\LangsTables;
 
 use function Tools\RecentHelps\filter_recent;
 use function Tools\RecentHelps\do_add_date;
-use function Actions\WikiApi\make_view_by_number;
-use function Actions\Html\make_mail_icon_new;
-use function Actions\Html\make_talk_url;
-use function Actions\Html\make_target_url;
-use function Actions\Html\make_mdwiki_title;
+use function APICalls\WikiApi\make_view_by_number;
+use function Utils\Html\make_mail_icon_new;
+use function Utils\Html\make_talk_url;
+use function Utils\Html\make_target_url;
+use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Funcs\get_pages_users_langs;
-// use function Actions\Html\make_cat_url;
+// use function Utils\Html\make_cat_url;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
 use function Tools\RecentHelps\filter_table;
@@ -24,11 +24,8 @@ $last_table = $_GET['last_table'] ?? 'pages';
 // ---
 $last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
-function make_td($tabg, $nnnn, $add_add)
+function make_td($tabg, $nnnn, $add_add, $last_table)
 {
-    //---
-    global $views_sql, $last_table;
-    //---
     // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
     //---
@@ -61,11 +58,7 @@ function make_td($tabg, $nnnn, $add_add)
     $view_td = "";
     //---
     if ($last_table == "pages") {
-        $views_number = $tabg['views'] ?? '';
-        //---
-        if (empty($views_number)) {
-            $views_number = $views_sql[$target] ?? "?";
-        }
+        $views_number = $tabg['views'] ?? '?';
         //---
         // $ccat = make_cat_url( $cat );
         $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
@@ -182,7 +175,7 @@ $noo = 0;
 // ---
 foreach ($qsl_results as $tat => $tabe) {
     $noo = $noo + 1;
-    $recent_rows .= make_td($tabe, $noo, $add_add);
+    $recent_rows .= make_td($tabe, $noo, $add_add, $last_table);
 };
 //---
 $table_id = ($last_table == 'pages') ? 'last_tabel' : 'last_users_tabel';

@@ -1,9 +1,9 @@
 <?php
 
-namespace Actions\HtmlSide;
+namespace Utils\HtmlSide;
 /*
 Usage:
-use function Actions\HtmlSide\create_side;
+use function Utils\HtmlSide\create_side;
 */
 
 function generateListItem($id, $href, $title, $filename, $ty, $icon, $target = '')

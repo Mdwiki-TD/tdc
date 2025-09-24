@@ -1,12 +1,12 @@
 <?php
 
-namespace Actions\MdwikiApi;
+namespace APICalls\MdwikiApi;
 /*
 Usage:
-use function Actions\MdwikiApi\get_mdwiki_url_with_params;
+use function APICalls\MdwikiApi\get_mdwiki_url_with_params;
 */
 
-use function Actions\Functions\test_print;
+use function Utils\Functions\test_print;
 
 function post_url_mdwiki(string $endPoint, array $params = []): string
 {

@@ -2,9 +2,9 @@
 use Tables\SqlTables\TablesSql;
 use Tables\Langs\LangsTables;
 // use Tables\Main\MainTables;
-use function Actions\Html\make_mdwiki_title;
+use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Process\get_process_all_new;
-// use function Actions\Html\make_cat_url;
+// use function Utils\Html\make_cat_url;
 
 echo <<<HTML
     <div class='card-header'>
@@ -15,9 +15,6 @@ HTML;
 
 function make_td($tabg, $nnnn)
 {
-    //---
-    // global $views_sql, $user_name;
-    //---
     $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? $tabg['add_date'] ?? "";
     //---

@@ -6,8 +6,8 @@ if (user_in_coord == false) {
 };
 //---
 use function TDWIKI\csrf\generate_csrf_token;
-use function Actions\MdwikiSql\execute_query;
-use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
+use function APICalls\MdwikiSql\execute_query;
+use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
 use function TDWIKI\csrf\verify_csrf_token; // if (verify_csrf_token())  {
 //---
 echo '</div><script>

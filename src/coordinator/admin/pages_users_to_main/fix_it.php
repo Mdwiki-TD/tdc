@@ -11,8 +11,8 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
-use function Actions\MdwikiSql\fetch_query;
+use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)

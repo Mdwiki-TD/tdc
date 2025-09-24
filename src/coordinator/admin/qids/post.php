@@ -1,9 +1,9 @@
 <?php
 // ---
-use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
-use function Actions\MdwikiSql\execute_query;
-use function Actions\MdwikiSql\fetch_query;
-use function Actions\MdwikiSql\check_one;
+use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function APICalls\MdwikiSql\execute_query;
+use function APICalls\MdwikiSql\fetch_query;
+use function APICalls\MdwikiSql\check_one;
 use function TDWIKI\csrf\verify_csrf_token;
 
 // ---

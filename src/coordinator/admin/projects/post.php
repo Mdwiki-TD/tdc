@@ -1,8 +1,8 @@
 <?php
 //---
-use function Actions\MdwikiSql\insert_to_projects;
-use function Actions\MdwikiSql\execute_query;
-use function Actions\Html\div_alert; // echo div_alert($texts, 'success');
+use function APICalls\MdwikiSql\insert_to_projects;
+use function APICalls\MdwikiSql\execute_query;
+use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
 use function TDWIKI\csrf\verify_csrf_token;
 //---
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

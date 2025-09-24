@@ -1,9 +1,9 @@
 <?PHP
 
-namespace Tables\TablesDir;
+namespace Utils\TablesDir;
 /*
 
-use function Tables\TablesDir\open_td_Tables_file;
+use function Utils\TablesDir\open_td_Tables_file;
 
 */
 
@@ -13,23 +13,17 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 
-use function Actions\Functions\test_print;
-
-$tables_dir = __DIR__ . '/../../td/Tables';
-//---
-if (substr($tables_dir, 0, 2) == 'I:') {
-    $tables_dir = 'I:/mdwiki/mdwiki/public_html/td/Tables';
-}
-//---
-if (!getenv('tables_dir')) {
-    // set env
-    putenv('tables_dir=' . $tables_dir);
-}
-// ---
+use function Utils\Functions\test_print;
 
 function open_td_Tables_file($path)
 {
-    global $tables_dir;
+    //---
+    // $tables_dir = __DIR__ . '/../../td/Tables';
+    $tables_dir = getenv("HOME") . '/public_html/td/Tables';
+    //---
+    if (substr($tables_dir, 0, 2) == 'I:') {
+        $tables_dir = 'I:/mdwiki/mdwiki/public_html/td/Tables';
+    }
     //---
     $file_path = "$tables_dir/$path";
     //---

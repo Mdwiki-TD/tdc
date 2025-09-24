@@ -9,11 +9,11 @@ INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT DISTINCT q.title,
 //---
 
 use Tables\SqlTables\TablesSql;
-use function Actions\Html\makeDropdown;
-use function Actions\Html\make_mdwiki_title;
-use function Actions\Html\make_edit_icon_new;
+use function Utils\Html\makeDropdown;
+use function Utils\Html\make_mdwiki_title;
+use function Utils\Html\make_edit_icon_new;
 use function Results\GetCats\get_mdwiki_cat_members;
-use function Actions\MdwikiSql\fetch_query;
+use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 $cat = $_GET['cat'] ?? 'All';
