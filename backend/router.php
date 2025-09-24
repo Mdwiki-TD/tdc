@@ -24,6 +24,7 @@ $corrd_folders = array_map('basename', glob(__DIR__ . '/coordinator/admin/*', GL
 
 // Include the new controller
 include_once __DIR__ . '/controllers/LastEditsController.php';
+include_once __DIR__ . '/controllers/StatController.php';
 
 // Route the request to the appropriate handler
 if ($action === 'last') {
@@ -34,6 +35,14 @@ if ($action === 'last') {
     $response['data'] = \Controllers\LastEditsController::getLastEdits($params);
     $response['success'] = true;
     $response['message'] = "Successfully retrieved last edits.";
+
+} elseif ($action === 'stat') {
+    $params = [
+        'cat' => $_GET['cat'] ?? 'RTT',
+    ];
+    $response['data'] = \Controllers\StatController::getStats($params);
+    $response['success'] = true;
+    $response['message'] = "Successfully retrieved stats.";
 
 } elseif (in_array($action, $tools_folders)) {
     // For now, just confirm which file would be included
