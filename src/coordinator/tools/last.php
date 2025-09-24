@@ -122,9 +122,9 @@ function make_td($tabg, $nnnn, $add_add)
     // $fixwikirefs = "../fixwikirefs.php?title=$targe2$save_1&lang=$llang&sourcetitle=$md_title_encoded";
     // ---
     $params = [
-        "title" => $targe2,
+        "title" => $targe,
         "lang" => $llang,
-        "sourcetitle" => $md_title_encoded,
+        "sourcetitle" => $md_title,
         "mdwiki_revid" => $mdwiki_revid,
     ];
     // ---
