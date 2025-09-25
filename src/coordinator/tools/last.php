@@ -117,7 +117,7 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
         $params['save'] = 1;
     };
     // ---
-    // $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params);
+    // $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     // ---
     $laly = <<<HTML

@@ -40,7 +40,7 @@ function post_url(string $endPoint, array $params = []): string
 
     $ch = curl_init();
 
-    $url = "{$endPoint}?" . http_build_query($params);
+    $url = "{$endPoint}?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     curl_setopt_array($ch, [
         CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
@@ -49,7 +49,7 @@ function post_url(string $endPoint, array $params = []): string
         CURLOPT_TIMEOUT => 10,
         // لإضافة POST:
         // CURLOPT_POST => true,
-        // CURLOPT_POSTFIELDS => http_build_query($params),
+        // CURLOPT_POSTFIELDS => http_build_query($params, '', '&', PHP_QUERY_RFC3986),
         // لاستخدام ملفات الكوكيز:
         // CURLOPT_COOKIEJAR => "cookie.txt",
         // CURLOPT_COOKIEFILE => "cookie.txt",
