@@ -27,8 +27,11 @@ $form_text = '';
 foreach ($qq as $Key => $table) {
 	$numb += 1;
 	//---
-	$user_id	= $table['id'] ?? "";
-	$usere	= $table['user'] ?? "";
+	$user_id = $table['id'] ?? "";
+	$usere	 = $table['user'] ?? "";
+	$active	 = $table['active'] ?? "";
+	//---
+	$active_checked = ($active == 1 || $active == "1") ? 'checked' : '';
 	//---
 	$form_text .= <<<HTML
 		<tr>
@@ -39,6 +42,13 @@ foreach ($qq as $Key => $table) {
 			<td data-content="user">
 				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
 				<input name='rows[$numb][user]' value='$usere' type='hidden'/>
+			</td>
+			<td data-content="active">
+				<div class='form-check form-switch'>
+					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$active'>
+					<input type='hidden' name='rows[$numb][active]' value='0'>
+					<input class='form-check-input' type='checkbox' name='rows[$numb][active]' value='1' $active_checked>
+				</div>
 			</td>
 			<td data-content="delete">
 				<input type='checkbox' name='rows[$numb][del]' value='$user_id'/> <label> delete</label>
@@ -58,6 +68,12 @@ $form_text_plus = <<<HTML
 			<input class='form-control' name='rows[$numb][is_new]' value='yes' type='hidden'/>
 			<input class='form-control td_user_input' name='rows[$numb][user]' />
 		</td>
+		<td data-content="active">
+			<div class="form-check form-switch">
+				<input type="hidden" name="rows[$numb][active]" value="1">
+				-
+			</div>
+		</td>
 		<td data-content="delete">
 			-
 		</td>
@@ -66,14 +82,16 @@ HTML;
 //---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
+$ty_name = "full_translators";
+//---
 echo <<<HTML
 	<div class='card-header'>
 		<h4>Full article translators:</h4>
 	</div>
 	<div class='card-body'>
-		<form action="index.php?ty=full_translators" method="POST">
+		<form action="index.php?ty=$ty_name" method="POST">
 			<input name='csrf_token' value="$csrf_token" type="hidden"/>
-			<input name='ty' value="full_translators" type="hidden"/>
+			<input name='ty' value="$ty_name" type="hidden"/>
 			<div class="row">
 				<div class="col-md-6 col-sm-12">
 					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
@@ -81,6 +99,7 @@ echo <<<HTML
 							<tr>
 								<th>ID</th>
 								<th>User</th>
+								<th>Active</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
@@ -112,6 +131,7 @@ HTML;
 				</td>
 				<td>
 					<input class='form-control' name='rows[${ii}][is_new]' value='yes' type='hidden'/>
+					<input class='form-control' name='rows[${ii}][active]' value='1' type='hidden'/>
 					<input class='form-control td_user_input' name='rows[${ii}][user]'/>
 				</td>
 				<td>-</td>
