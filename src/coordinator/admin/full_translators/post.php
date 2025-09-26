@@ -10,6 +10,8 @@ if (verify_csrf_token()) {
 	$errors = [];
 	$texts = [];
 	//---
+	$table_name = "full_translators";
+	//---
 	foreach ($_POST['rows'] ?? [] as $key => $table) {
 		// { "id": "1", "user": "" }
 		// { "id": "4", "user": "Dr3939", "del": "4" }
@@ -20,7 +22,7 @@ if (verify_csrf_token()) {
 		$user  	= $table['user'] ?? '';
 		//---
 		if (!empty($del) && !empty($u_id)) {
-			$qua2 = "DELETE FROM full_translators WHERE id = ?";
+			$qua2 = "DELETE FROM $table_name WHERE id = ?";
 			// ---
 			$result = execute_query($qua2, $params = [$u_id]);
 			// ---
@@ -34,21 +36,37 @@ if (verify_csrf_token()) {
 			continue;
 		};
 		//---
-		$is_new = $table['is_new'] ?? '';
+		// $is_new = $table['is_new'] ?? '';
 		//---
 		$user = trim($user);
 		//---
-		if (!empty($user) && empty($u_id) && $is_new == 'yes') {
-			$qua = "INSERT INTO full_translators (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM full_translators WHERE user = ?)";
+		$active = $table['active'] ?? '';
+		$active_orginal_value = $table['active_orginal_value'] ?? '';
+		//---
+		if ($active == $active_orginal_value && !empty($u_id)) {
+			continue;
+		};
+		//---
+		if (!empty($user)) { // && empty($u_id) && $is_new == 'yes'
 			//---
-			$texts[] = "User $user Added.";
+			// $qua = "INSERT INTO $table_name (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $table_name WHERE user = ?)";
 			//---
-			$result = execute_query($qua, $params = [$user, $user]);
+			$qua = <<<SQL
+				INSERT INTO $table_name (user, active)
+				VALUES (?, ?)
+				ON DUPLICATE KEY UPDATE
+					active = VALUES(active)
+			SQL;
+			//---
+			$result = execute_query($qua, $params = [$user, $active]);
 			//---
 			if ($result === false) {
 				$errors[] = "Failed to add user $user.";
+			} else {
+				$texts[] = (empty($u_id)) ? "User $user Added." : "User $user Updated.";
 			}
 		};
+		//---
 	}
 	// ---
 	echo div_alert($texts, 'success');

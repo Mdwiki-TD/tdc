@@ -18,10 +18,10 @@ use function SQLorAPI\Funcs\get_coordinator;
 $user_in_coord = false;
 $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Tools</a>';
 //---
-$coords = array_column(get_coordinator(), 'user');
+$coords = array_column(get_coordinator(), 'active', 'user');
 //---
 if (isset($GLOBALS['global_username']) && $GLOBALS['global_username'] != '') {
-	if (in_array($GLOBALS['global_username'], $coords)) {
+	if (($coords[$GLOBALS['global_username']] ?? 0) == 1) {
 		$coord_tools = '<a href="index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span> <i class="bi bi-tools me-1"></i> Coordinator Tools</a>';
 		$user_in_coord = true;
 	}
