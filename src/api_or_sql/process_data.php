@@ -23,7 +23,7 @@ function get_process_all_new(): array
         return $process_all;
     }
     // ---
-    $api_params = ['get' => 'in_process', 'limit' => "100", 'order' => 'add_date'];
+    $api_params = ['get' => 'in_process', 'limit' => "100", "order" => 'add_date'];
     $sql_t = "select * from in_process ORDER BY add_date DESC limit 100";
     //---
     $process_all = super_function($api_params, [], $sql_t);
@@ -64,7 +64,7 @@ function get_users_process_new(): array
     // ---
     // ttp://localhost:9002/api.php?get=in_process&distinct=true&limit=50&group=user&order=count&select=count
     // ---
-    $api_params = ['get' => 'in_process', 'distinct' => 'true', 'group' => 'user', 'order' => 'count', 'select' => 'count'];
+    $api_params = ['get' => 'in_process', 'distinct' => 'true', "select" => 'user', 'group' => 'user', "order" => '2', "count" => '*'];
     // ---
     $sql_t = 'select DISTINCT user, count(*) as count from in_process group by user order by count desc';
     // ---

@@ -28,7 +28,7 @@ function get_recent_sql($lang): array
     //---
     $sql_params = [];
     //---
-    $api_params = array('get' => 'pages_with_views', 'target' => 'not_empty', 'limit' => '250', 'order' => 'pupdate_or_add_date');
+    $api_params = array('get' => 'pages_with_views', 'target' => 'not_empty', 'limit' => '250', "order" => 'pupdate_or_add_date');
     //---
     if (!empty($lang) && $lang != 'All') {
         $lang_line = "and p.lang = ?";
@@ -79,7 +79,7 @@ function get_recent_pages_users($lang): array
     $api_params = [
         'get' => 'pages_users',
         'target' => 'not_empty',
-        'order' => 'pupdate',
+        "order" => 'pupdate',
         // 'title_not_in_pages' => '0',
         'limit' => '100'
     ];
@@ -119,7 +119,7 @@ function get_recent_translated($lang, $table, $limit, $offset): array
 {
     // ---
     $sql_params = [];
-    $api_params = array('get' => $table, 'order' => 'pupdate', 'limit' => $limit, 'offset' => $offset);
+    $api_params = array('get' => $table, "order" => 'pupdate', 'limit' => $limit, 'offset' => $offset);
     //---
     $query = "SELECT * FROM $table WHERE target != ''";
     //---
@@ -158,7 +158,7 @@ function get_total_translations_count($lang, $table): int
 {
     //---
     $sql_params = [];
-    $api_params = ['get' => $table, 'select' => 'COUNT(*)'];
+    $api_params = ['get' => $table, 'select' => 'count(*)'];
     //---
     $query = "select COUNT(*) AS count from $table where target != ''";
     //---
