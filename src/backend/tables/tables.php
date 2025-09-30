@@ -18,7 +18,6 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	error_reporting(E_ALL);
 };
 //---
-use Tables\Langs\LangsTables;
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
 use function Utils\TablesDir\open_td_Tables_file;
 //---
@@ -33,13 +32,8 @@ class MainTables
 	public static $x_Langs_table = [];
 }
 // ---
+/*
 $tables_d = array(
-	// 'enwiki_pageviews' => &MainTables::$x_enwiki_pageviews_table,
-	// 'words' => &MainTables::$x_Words_table,
-	// 'allwords' => &MainTables::$x_All_Words_table,
-	// 'all_refcount' => &MainTables::$x_All_Refs_table,
-	// 'lead_refcount' => &MainTables::$x_Lead_Refs_table,
-	// 'assessments' => &MainTables::$x_Assessments_table,
 	'langs_tables' => &MainTables::$x_Langs_table,
 );
 //---
@@ -47,6 +41,7 @@ foreach ($tables_d as $key => &$value) {
 	$file = "jsons/{$key}.json";
 	$value = open_td_Tables_file($file);
 }
+*/
 //---
 $titles_infos = td_or_sql_titles_infos();
 
@@ -66,3 +61,14 @@ foreach ($titles_infos as $k => $tab) {
 	// ---
 	MainTables::$x_Assessments_table[$title] = $tab['importance'];
 };
+
+if (file_exists(__DIR__ . '/lang_names.json')) {
+	$contents = file_get_contents(__DIR__ . '/lang_names.json');
+	if ($contents !== false) {
+		$data = json_decode($contents, true);
+		if (is_array($data)) {
+			MainTables::$x_Langs_table = $data;
+			ksort(MainTables::$x_Langs_table);
+		}
+	}
+}
