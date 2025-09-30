@@ -6,6 +6,9 @@ namespace SQLorAPI\Get;
 
 Usage:
 
+use function SQLorAPI\Get\super_function;
+use function SQLorAPI\Get\isvalid;
+
 */
 
 use function APICalls\MdwikiSql\fetch_query;
@@ -21,27 +24,19 @@ if (isset($_GET['use_td_api'])) {
     $use_td_api  = $_GET['use_td_api'] != "x";
 }
 
-function super_function(array $api_params, array $sql_params, string $sql_query): array
+function isvalid($str)
 {
-    global $use_td_api;
-    // ---
-    $data = ($use_td_api) ? get_td_api($api_params) : [];
-    // ---
-    if (empty($data)) {
-        $data = fetch_query($sql_query, $sql_params);
-    }
-    // ---
-    return $data;
+    return !empty($str) && strtolower($str) != "all";
 }
 
-function super_function_new(array $api_params, array $sql_params, string $sql_query, string $table_name): array
+function super_function(array $api_params, array $sql_params, string $sql_query, $table_name = null, $no_refind = false): array
 {
     global $use_td_api;
     // ---
     $data = ($use_td_api) ? get_td_api($api_params) : [];
     // ---
-    if (empty($data)) {
-        $data = fetch_query($sql_query, $sql_params, $table_name);
+    if (empty($data) && !$no_refind) {
+        $data = fetch_query($sql_query, $sql_params, $table_name = $table_name);
     }
     // ---
     return $data;

@@ -8,11 +8,9 @@ use function APICalls\WikiApi\make_view_by_number;
 use function APICalls\WikiApi\get_views;
 */
 
-$usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
-
 function get_url_result_curl(string $url): string
 {
-    global $usr_agent;
+    $usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
 
     $ch = curl_init($url);
     curl_setopt_array($ch, [
@@ -53,16 +51,21 @@ function make_view_by_number($target, $numb, $lang, $pupdate)
         // 'range' => 'all-time',
         'redirects' => '0',
         'pages' => $target,
-    ));
+    ), '', '&', PHP_QUERY_RFC3986);
+    // ---
+    $numb3 = (is_numeric($numb2)) ? number_format($numb2) : $numb2;
+    $link = "<a target='_blank' href='$url'>$numb3</a>";
+    // ---
+    if (is_numeric($numb2) && intval($numb2) > 0) {
+        return $link;
+    }
+    // ---
     $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
-
+    // ---
     $url2 = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
-
-    $link = "<a target='_blank' href='$url'>$numb2</a>";
-
-    if ($numb2 == '?' || $numb2 == 0 || $numb2 == '0') {
-        $link = "<a target='_blank' name='toget' hrefjson='$url2' href='$url'>$numb2</a>";
-    };
+    // ---
+    $link = "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
+    // ---
     return $link;
 };
 

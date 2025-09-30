@@ -43,7 +43,6 @@ https://db-names.toolforge.org/
 "zh-yue" : "yue"
 */
 // ---
-// require_once __DIR__ . '/tables.php';
 use Tables\Main\MainTables;
 
 class LangsTables
@@ -51,6 +50,7 @@ class LangsTables
     public static $L_skip_codes = [];
     public static $L_change_codes = [];
     public static $L_code_to_wikiname = [];
+    public static $L_code_to_lang_name = [];
     public static $L_lang_to_code = [];
     public static $L_code_to_lang = [];
 }
@@ -414,5 +414,6 @@ foreach (MainTables::$x_Langs_table as $_ => $lang_tab) {
     $lang_title = "($lang_code) $lang_name";
     // ---
     LangsTables::$L_code_to_lang[$lang_code] = $lang_title;
+    LangsTables::$L_code_to_lang_name[$lang_code] = $lang_name;
     LangsTables::$L_lang_to_code[$lang_title] = $lang_code;
 };

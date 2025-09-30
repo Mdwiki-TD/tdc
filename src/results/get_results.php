@@ -14,9 +14,9 @@ use function Results\GetCats\get_mdwiki_cat_members;
 use function Utils\Functions\test_print;
 use function Utils\TablesDir\open_td_Tables_file;
 
-function get_cat_exists_and_missing($cat, $camp, $depth, $code, $use_cache = true)
+function get_cat_exists_and_missing($cat, $depth, $code, $use_cache = true)
 {
-    $members_to = get_mdwiki_cat_members($cat, $use_cache = $use_cache, $depth = $depth, $camp = $camp);
+    $members_to = get_mdwiki_cat_members($cat, $use_cache = $use_cache, $depth = $depth);
     // z("<br>members_to size:" . count($members_to));
     $members = [];
     foreach ($members_to as $mr) {
