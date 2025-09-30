@@ -114,6 +114,7 @@ class Database
             }
         }
     }
+
     public function executequery($sql_query, $params = null)
     {
         try {

@@ -24,7 +24,6 @@ function get_host()
         $url = "https://tools-static.wmflabs.org";
         $ch = curl_init($url);
 
-        // إعداد الخيارات باستخدام curl_setopt_array
         curl_setopt_array($ch, [
             CURLOPT_HEADER => true,
             CURLOPT_NOBODY => true, // لا نريد تحميل الجسم

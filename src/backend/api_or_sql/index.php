@@ -6,6 +6,9 @@ namespace SQLorAPI\Get;
 
 Usage:
 
+use function SQLorAPI\Get\super_function;
+use function SQLorAPI\Get\isvalid;
+
 */
 
 use function APICalls\MdwikiSql\fetch_query;
@@ -19,6 +22,11 @@ $use_td_api  = false;
 // ---
 if (isset($_GET['use_td_api'])) {
     $use_td_api  = $_GET['use_td_api'] != "x";
+}
+
+function isvalid($str)
+{
+    return !empty($str) && strtolower($str) != "all";
 }
 
 function super_function(array $api_params, array $sql_params, string $sql_query, $table_name = null, $no_refind = false): array

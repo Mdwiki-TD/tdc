@@ -95,7 +95,7 @@ function get_category_members(string $category, bool $use_cache = true): array
     return $all;
 }
 
-function get_mdwiki_cat_members(string $category, bool $use_cache = true, int $depth = 0, string $camp = ''): array
+function get_mdwiki_cat_members(string $category, bool $use_cache = true, int $depth = 0): array
 {
     $titles = [];
     $categories_to_process = [$category];
