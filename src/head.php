@@ -58,7 +58,6 @@ $hoste = get_host();
 $stylesheets = [
     "/Translation_Dashboard/css/styles.css",
     "/Translation_Dashboard/css/dashboard_new1.css",
-    "/Translation_Dashboard/css/sidebars.css",
     "$hoste/ajax/libs/font-awesome/5.15.3/css/all.min.css",
     "$hoste/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css",
     "$hoste/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css",
@@ -72,6 +71,8 @@ $stylesheets = [
     "/Translation_Dashboard/css/mobile_format.css",
     "/tdc/css/Responsive_Table.css",
     "/Translation_Dashboard/css/theme.css",
+    "/tdc/css/sidebar-desktop.css",
+    "/tdc/css/sidebar-mobile.css",
 ];
 
 $scripts = [
@@ -92,6 +93,7 @@ $scripts = [
     "/Translation_Dashboard/js/to.js",
     "/Translation_Dashboard/js/login.js",
     "/td/plugins/chart.js/Chart.min.js",
+    "/tdc/js/sidebar.js",
     "/Translation_Dashboard/js/theme.js",
 
 ];
@@ -146,6 +148,15 @@ function head()
         a {
             text-decoration: none;
             word-break: break-all !important;
+        }
+
+
+        .logo-text {
+            background: linear-gradient(45deg, #6b8cff, #8b9fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: opacity 0.3s ease;
         }
     </style>
 
