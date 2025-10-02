@@ -6,45 +6,7 @@ Usage:
 use function Utils\HtmlSide\create_side;
 */
 
-function generateListItem($id, $href, $title, $filename, $ty, $icon, $target = '')
-{
-    // ---
-    $class = $ty == $href ? 'active' : '';
-    // ---
-    // $icon = (!empty($icon)) ? "<i class='bi $icon me-1'></i>" : '';
-    // ---
-    if (!empty($icon)) {
-        $title = "<i class='bi $icon me-1'></i>" . $title;
-    }
-    // ---
-    $li1 = "<a class='linknave rounded' href='$filename?ty=%s'>%s</a>";
-    $li2 = "<a target='_blank' class='linknave rounded' href='%s'>%s</a>";
-    // ---
-    $template = $target ? $li2 : $li1;
-    // ---
-    $link = sprintf($template, $href, $title);
-    // ---
-    $text = <<<HTML
-        <li id='$id' class='$class'>
-            $link
-        </li>
-    HTML;
-    // ---
-    return $text;
-}
-
-function generateSpan($filename, $text)
-{
-    return <<<HTML
-		<span class='d-flex align-items-center pb-1 mb-1 text-decoration-none border-bottom'>
-			<a class='nav-link' href='$filename'>
-				<span id='Home' class='fs-5 fw-semibold'>$text</span>
-			</a>
-		</span>
-	HTML;
-}
-
-function create_side($filename, $ty)
+function menu_data()
 {
 
     $mainMenuIcons = [
@@ -92,26 +54,47 @@ function create_side($filename, $ty)
             ['id' => 'fixwikirefs', 'admin' => 0, 'href' => '/fixwikirefs.php', 'title' => 'Fixwikirefs', 'target' => '_blank', 'icon' => 'bi-wrench'],
         ],
     ];
+    return [$mainMenuIcons, $mainMenu];
+}
 
-    $homeSpan = generateSpan($filename, 'Coordinator Tools');
+function generateListItem($href, $title, $icon, $target)
+{
+    // ---
+    // $icon = (!empty($icon)) ? "<i class='bi $icon me-1'></i>" : '';
+    // ---
+    $icon_tag = (!empty($icon)) ? "<i class='bi $icon me-1'></i>" : "";
+    // ---
+    $target_attr = ($target) ? "target='_blank'" : '';
+    // ---
+    $link = <<<HTML
+        <a $target_attr class='linknave rounded' href='$href' title='$title' data-bs-toggle='tooltip' data-bs-placement='right'>
+            $icon_tag
+            <span class='hide-on-collapse-inline'>$title</span>
+        </a>
+    HTML;
+    // ---
+    return $link;
+}
+
+function create_side($filename, $ty)
+{
+
+    [$mainMenuIcons, $mainMenu] = menu_data();
 
     $sidebar = <<<HTML
-        <!-- $homeSpan -->
-        <div class="Dropdown_menu_toggle px-3">☰ Open list</div>
-        <div class="div_menu navbar-collapse">
         <ul class="list-unstyled">
     HTML;
 
     foreach ($mainMenu as $key => $items) {
         $lis = '';
         // ---
-        $is_active = false;
+        $group_is_active = false;
         // ---
         foreach ($items as $item) {
             $href = $item['href'] ?? '';
             // ---
             if ($href == $ty) {
-                $is_active = true;
+                $group_is_active = true;
             }
             // ---
             $icon_1 = $item['icon'] ?? '';
@@ -121,12 +104,25 @@ function create_side($filename, $ty)
 
             if ($admin == 1 && !user_in_coord) continue;
 
-            $lis .= generateListItem($item['id'], $item['href'], $item['title'], $filename, $ty, $icon_1, $target);
+            $class = $ty == $href ? 'active' : '';
+            // ---
+            $href_full = ($target) ? $href : "$filename?ty=$href";
+            // ---
+            $id = $item['id'];
+            // ---
+            $link = generateListItem($href_full, $item['title'], $icon_1, $target);
+            // ---
+            $lis .= <<<HTML
+                <li id='$id' class='$class'>
+                    $link
+                </li>
+            HTML;
+            // ---
         }
 
         if (!empty($lis)) {
-            $show = $is_active ? 'show' : '';
-            $expanded = $is_active ? 'true' : 'false';
+            $show = $group_is_active ? 'show' : '';
+            $expanded = $group_is_active ? 'true' : 'false';
             // ---
             $icon = $mainMenuIcons[$key] ?? '';
             $icon = (!empty($icon)) ? "<i class='bi $icon me-1'></i>" : '';
@@ -135,16 +131,22 @@ function create_side($filename, $ty)
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
                         data-bs-target="#$key-collapse" aria-expanded="$expanded">
-                        <!-- <i class="bi bi-chevron-right"></i>  -->
                         $icon
-                        $key
+                        <span class='hide-on-collapse-inline'>$key</span>
                     </button>
                     <div class="collapse $show" id="$key-collapse">
-                        <ul class="
-                        navbar-nav flex-row flex-wrap
-                        btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            $lis
-                        </ul>
+                        <div class="d-none d-md-inline">
+                            <!-- desktop -->
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                $lis
+                            </ul>
+                        </div>
+                        <div class="d-inline d-md-none">
+                            <!-- mobile -->
+                            <ul class="navbar-nav flex-row flex-wrap btn-toggle-nav-mobile list-unstyled fw-normal pb-1 small">
+                                $lis
+                            </ul>
+                        </div>
                     </div>
                 </li>
                 <li class="border-top my-1"></li>
@@ -152,6 +154,6 @@ function create_side($filename, $ty)
         }
     }
 
-    $sidebar .= "</ul></div>";
+    $sidebar .= "</ul>";
     return $sidebar;
 }

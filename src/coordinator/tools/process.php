@@ -69,7 +69,7 @@ $table_html = <<<HTML
             <tr>
                 <th>#</th>
                 <th>User</th>
-                <th><span data-toggle="tooltip" title="Language">Lang.</span></th>
+                <th><span data-bs-toggle="tooltip" title="Language">Lang.</span></th>
                 <th>Title</th>
                 <th>Campaign</th>
                 <th>Date</th>

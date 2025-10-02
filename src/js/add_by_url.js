@@ -35,7 +35,7 @@ async function add_new_row() {
             <td data-content="Wiki title">
                 <input class="form-control" size="20" name="rows[${ii}][target]" required />
             </td>
-            <td data-content="Publication date">
+            <td data-content="Published">
                 <input class="form-control" size="10" name="rows[${ii}][pupdate]" placeholder='YYYY-MM-DD' required />
             </td>
             <td data-content="Delete">

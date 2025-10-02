@@ -4,6 +4,7 @@ use Tables\SqlTables\TablesSql;
 use Tables\Main\MainTables;
 use Tables\Langs\LangsTables;
 
+use function TDC\Head\get_host;
 use function Tools\RecentHelps\filter_recent;
 use function Tools\RecentHelps\do_add_date;
 use function APICalls\WikiApi\make_view_by_number;
@@ -68,16 +69,16 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
         $view = make_view_by_number($target, $views_number, $llang, $pupdate);
         //---
         $mail_icon = (user_in_coord != false) ? make_mail_icon_new($tabg, 'pup_window_email') : '';
-        $mail_icon_td = (!empty($mail_icon)) ? "<td data-content='Email'>$mail_icon</td>" : '';
+        $mail_icon_td = (!empty($mail_icon)) ? "<td>$mail_icon</td>" : '';
         //---
         $view_td = <<<HTML
-            <td data-content='Views'>
+            <td>
                 $view
             </td>
         HTML;
         //---
         $Campaign_td = <<<HTML
-        <td data-content='Campaign'>
+        <td>
             $ccat
         </td>
         HTML;
@@ -101,7 +102,7 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
     $md_title_encoded = rawurlencode($md_title);
     //---
     $add_add_row = ($add_add) ? <<<HTML
-        <td data-content='add_date'>
+        <td>
             <a href="//medwiki.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
         </td>
     HTML : '';
@@ -120,31 +121,36 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
     // $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     $fixwikirefs = "/fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     // ---
+    $flags = "";
+    // ---
     $laly = <<<HTML
         <tr>
-            <td data-content='#'>
+            <td>
                 $nnnn
             </td>
-            <td data-content='User'>
+            <td>
                 <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">$user_name</a> ($talk)
             </td>
             $mail_icon_td
-            <td data-content='Title'>
+            <td>
                 $nana
             </td>
             $Campaign_td
             <!-- <td>$word</td> -->
-            <td data-content='Translated' class="link_container">
+            <td class="link_container">
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $target_link
             </td>
-            <td data-content='Publication date'>
+            <td>
                 $pupdate
             </td>
-            $view_td
-            <td data-content='Fixref'>
+                $view_td
+            <td>
                 <a target='_blank' href="$fixwikirefs">Fix</a>
             </td>
-            $add_add_row
+                $add_add_row
+            <td>
+                $flags
+            </td>
         </tr>
     HTML;
     // ---
@@ -157,7 +163,7 @@ if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
 
-$mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
+$mail_th = (user_in_coord != false) ? "<th><span title='Email'>@</span></th>" : '';
 //---
 if ($last_table == 'pages') {
     $qsl_results = get_recent_sql($lang);
@@ -178,9 +184,21 @@ foreach ($qsl_results as $tat => $tabe) {
     $recent_rows .= make_td($tabe, $noo, $add_add, $last_table);
 };
 //---
-$table_id = ($last_table == 'pages') ? 'last_tabel' : 'last_users_tabel';
+$table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
+//---
+$Toggle_column = "";
 //---
 if ($last_table == 'pages') {
+    $Campaign_number = (user_in_coord != false) ? 4 : 3;
+    $fix_number = (user_in_coord != false) ? 8 : 7;
+    $Toggle_column = <<<HTML
+        <div>
+            <span class="toggle-vis btn" data-column="0">Toggle columns:</span>
+            <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
+            <a class="toggle-vis btn btn-outline-primary" data-column="$fix_number" type="button">Fixref</a>
+        </div>
+    HTML;
+    //---
     $thead = <<<HTML
         <tr>
             <th>#</th>
@@ -189,10 +207,13 @@ if ($last_table == 'pages') {
             <th>Title</th>
             <th>Campaign</th>
             <th>Translated</th>
-            <th>Publication date</th>
+            <th>Published</th>
             <th>Views</th>
             <th>Fixref</th>
             $th_add
+            <th>
+                Flags
+            </th>
         </tr>
     HTML;
 } else {
@@ -202,7 +223,7 @@ if ($last_table == 'pages') {
             <th>User</th>
             <th>Title</th>
             <th>Translated</th>
-            <th>Publication date</th>
+            <th>Published</th>
             <th>Fixref</th>
             $th_add
         </tr>
@@ -210,7 +231,8 @@ if ($last_table == 'pages') {
 }
 //---
 $recent_table = <<<HTML
-    <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="$table_id" style="font-size:90%;">
+    $Toggle_column
+    <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
         <thead>
             $thead
         </thead>
@@ -236,6 +258,8 @@ $data = [
 $filter_ta = filter_table($data, $last_table, 'last_table');
 //---
 $count_result = count($result);
+//---
+$hoste = get_host();
 //---
 echo <<<HTML
     <div class='card'>
@@ -267,24 +291,43 @@ HTML;
 ?>
 <script>
     $(document).ready(function() {
-        var t = $('#last_tabel').DataTable({
+        var table = $('#last_table').DataTable({
             stateSave: true,
             // order: [ [6, 'desc'] ],
             paging: false,
             // lengthMenu: [[100, 150, 200], [250, 150, 200]],
-            // scrollY: 800
+            // scrollY: 800,
+            responsive: {
+                details: true
+            }
         });
-        var t = $('#last_users_tabel').DataTable({
+        var t = $('#last_users_table').DataTable({
             stateSave: true,
-            order: [
-                [4, 'desc']
-            ],
+            // order: [ [4, 'desc'] ],
             // paging: false,
             lengthMenu: [
                 [100, 150, 200],
                 [100, 150, 200]
             ],
-            // scrollY: 800
+            // scrollY: 800,
+            responsive: {
+                details: true
+            }
+        });
+        document.querySelectorAll('a.toggle-vis').forEach((el) => {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // add class mb_btn_active to this
+                el.classList.toggle('btn-outline-primary');
+                el.classList.toggle('btn-outline-secondary');
+
+                let columnIdx = e.target.getAttribute('data-column');
+                let column = table.column(columnIdx);
+
+                // Toggle the visibility
+                column.visible(!column.visible());
+            });
         });
     });
 </script>

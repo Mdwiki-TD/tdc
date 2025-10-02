@@ -37,14 +37,8 @@ if (isset($GLOBALS['time_start'])) {
 			console.error("Missing pup-target attribute");
 			return;
 		}
-		window.open(target, '', 'width=600,height=400, left=100, top=100, location=no');
+		window.open(target, '', 'width=600,height=500, left=100, top=100, location=no');
 	}
-
-	$(".Dropdown_menu_toggle").on("click", function() {
-		$(".div_menu").toggleClass("mactive");
-		// ---
-		$(".Dropdown_menu_toggle").text($(".div_menu").hasClass("mactive") ? "✖ Close list" : "☰ Open list");
-	});
 
 	$('.sortable').DataTable({
 		stateSave: true,

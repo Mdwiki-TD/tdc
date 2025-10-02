@@ -21,21 +21,27 @@ function echo_card_start($file_name, $ty)
 {
 	$sidebar = create_side($file_name, $ty);
 	echo <<<HTML
-	<style>
-		@media (min-width: 768px) {
-			.colmd2 {
-				width: 14% !important;
-			}
-			.colmd10 {
-				width: 86% !important;
-			}
-		}
-
-	</style>
 		<div class='row content'>
 			<!-- <div class='col-md-2 px-0' style="width: 10.66666667%;"> -->
-			<div class='col-md-2 px-0 colmd2'>
-				$sidebar
+			<div class='col-md-2 px-0 colmd2 border'>
+				<div class="d-none d-md-block p-2 mt-3 position-relative d-flex align-items-center">
+					<div class="">
+						<!-- <button class="border rounded-3 p-1 text-decoration-none" onclick="toggleSidebar()">
+							<i class="bi bi-list bi-lg py-2 p-1"></i>
+						</button> -->
+						<span class="logo-text fw-bold mb-0 h5"> <span class='hide-on-collapse-inline'>Coordinator Tools</span> </h5>
+					</div>
+					<button class="main-toggle-btn position-absolute top-50 start-100 translate-middle"
+						onclick="toggleSidebar()">
+						<i class="fas fa-chevron-left"></i>
+					</button>
+
+				</div>
+				<div class="d-block d-md-none Dropdown_menu_toggle px-3">☰ Open list</div>
+				<hr>
+				<div class="div_menu navbar-collapse">
+					$sidebar
+				</div>
 			</div>
 			<div class='px-0 col-md-10 colmd10'>
 				<div class='container-fluid'>

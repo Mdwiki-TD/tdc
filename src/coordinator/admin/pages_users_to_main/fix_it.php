@@ -67,7 +67,7 @@ function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
                     <div class='col-md-3'>
                         <div class='input-group mb-3'>
                             <div class='input-group-prepend'>
-                                <span class='input-group-text'>Publication date</span>
+                                <span class='input-group-text'>Published</span>
                             </div>
                             <input class='form-control' type='text' id='pupdate' name='pupdate' value='$pupdate' placeholder='YYYY-MM-DD' required/>
                         </div>
@@ -116,7 +116,7 @@ function page_already_exist($in_db)
                         $db_user
                     </li>
                     <li class='list-group-item'>
-                        <span class='fw-bold'>Publication date:</span>
+                        <span class='fw-bold'>Published:</span>
                         $db_pupdate
                     </li>
                 </ul>

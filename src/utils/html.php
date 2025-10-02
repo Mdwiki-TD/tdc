@@ -109,7 +109,7 @@ function make_mail_icon_new($tab, $func_name = "")
     $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params);
     //---
     return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm spannowrap' pup-target='$mail_url' onclick='$func_name(this)'>Email</a>
+    	<a class='btn btn-outline-primary btn-sm spannowrap' pup-target='$mail_url' onclick='$func_name(this)'>@</a>
     HTML;
 }
 
