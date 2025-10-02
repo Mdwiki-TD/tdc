@@ -4,6 +4,7 @@ use Tables\SqlTables\TablesSql;
 use Tables\Main\MainTables;
 use Tables\Langs\LangsTables;
 
+use function TDC\Head\get_host;
 use function Tools\RecentHelps\filter_recent;
 use function Tools\RecentHelps\do_add_date;
 use function APICalls\WikiApi\make_view_by_number;
@@ -237,7 +238,13 @@ $filter_ta = filter_table($data, $last_table, 'last_table');
 //---
 $count_result = count($result);
 //---
+$hoste = get_host();
+//---
 echo <<<HTML
+<!--
+	<script src='$hoste/ajax/libs/datatables.net-buttons/3.2.5/js/dataTables.buttons.min.js'></script>
+	<script src='$hoste/ajax/libs/datatables.net-buttons/3.2.5/js/buttons.colVis.min.js'></script> -->
+
     <div class='card'>
         <div class='card-header'>
             <form method='get' action='index.php'>
@@ -268,7 +275,7 @@ HTML;
 <script>
     $(document).ready(function() {
         var t = $('#last_tabel').DataTable({
-            stateSave: true,
+            stateSave: false,
             // order: [ [6, 'desc'] ],
             paging: false,
             // lengthMenu: [[100, 150, 200], [250, 150, 200]],

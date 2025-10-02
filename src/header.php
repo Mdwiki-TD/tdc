@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 //---
 $time_start = microtime(true);
