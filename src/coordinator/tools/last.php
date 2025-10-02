@@ -25,7 +25,7 @@ $last_table = $_GET['last_table'] ?? 'pages';
 // ---
 $last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
-function make_td($tabg, $nnnn, $add_add, $last_table)
+function make_td($tabg, $nnnn, $last_table)
 {
     // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
@@ -101,12 +101,6 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
     //---
     $md_title_encoded = rawurlencode($md_title);
     //---
-    $add_add_row = ($add_add) ? <<<HTML
-        <td>
-            <a href="//medwiki.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
-        </td>
-    HTML : '';
-    // ---
     $params = [
         "title" => $target,
         "lang" => $llang,
@@ -136,7 +130,6 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
                 $nana
             </td>
             $Campaign_td
-            <!-- <td>$word</td> -->
             <td class="link_container">
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $target_link
             </td>
@@ -147,7 +140,9 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
             <td>
                 <a target='_blank' href="$fixwikirefs">Fix</a>
             </td>
-                $add_add_row
+            <td>
+                <a href="//medwiki.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
+            </td>
             <td>
                 $flags
             </td>
@@ -171,17 +166,13 @@ if ($last_table == 'pages') {
     $qsl_results = get_recent_pages_users($lang);
 }
 //---
-// $add_add = do_add_date($qsl_results);
-$add_add = true;
-$th_add = $add_add ? "<th>add_date</th>" : '';
-//---
 $recent_rows = "";
 // ---
 $noo = 0;
 // ---
 foreach ($qsl_results as $tat => $tabe) {
     $noo = $noo + 1;
-    $recent_rows .= make_td($tabe, $noo, $add_add, $last_table);
+    $recent_rows .= make_td($tabe, $noo, $last_table);
 };
 //---
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
@@ -210,7 +201,7 @@ if ($last_table == 'pages') {
             <th>Published</th>
             <th>Views</th>
             <th>Fixref</th>
-            $th_add
+            <th>add_date</th>
             <th>
                 Flags
             </th>
@@ -225,7 +216,10 @@ if ($last_table == 'pages') {
             <th>Translated</th>
             <th>Published</th>
             <th>Fixref</th>
-            $th_add
+            <th>add_date</th>
+            <th>
+                Flags
+            </th>
         </tr>
     HTML;
 }
@@ -303,7 +297,6 @@ HTML;
         });
         var t = $('#last_users_table').DataTable({
             stateSave: true,
-            // order: [ [4, 'desc'] ],
             // paging: false,
             lengthMenu: [
                 [100, 150, 200],
