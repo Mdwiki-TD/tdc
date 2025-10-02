@@ -69,8 +69,8 @@ echo <<<HTML
 		<nav class="navbar navbar-expand-lg bg-body-tertiary shadow" id="mainnav">
 			<div class="container-fluid" id="navbardiv">
 				<a class="navbar-brand mb-0 h1" href="/Translation_Dashboard/index.php" style="color:#0d6efd;">
-					<span class='d-none d-sm-inline tool_title'>WikiProjectMed Translation Dashboard</span>
-					<span class='d-inline d-sm-none tool_title'>WikiProjectMed TD</span>
+					<span class='d-none d-md-inline tool_title'>WikiProjectMed Translation Dashboard</span>
+					<span class='d-inline d-md-none tool_title'>WikiProjectMed TD</span>
 				</a>
 				<button class="navbar-toggler me_ms_by_dir" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar"
 					aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
