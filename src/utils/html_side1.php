@@ -128,7 +128,7 @@ function create_side($filename, $ty)
             // ---
             $sidebar .= <<<HTML
                 <li class="mb-1">
-                    <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
+                    <button class="btn btn-toggle1 align-items-center rounded" data-bs-toggle="collapse"
                         data-bs-target="#$key-collapse" aria-expanded="$expanded">
                         $icon
                         $key
