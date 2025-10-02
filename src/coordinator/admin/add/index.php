@@ -74,7 +74,7 @@ foreach (range(1, 1) as $numb) {
 		<td data-content='Target'>
 			<input class="form-control" size='20' name='rows[$numb][target]'/>
 		</td>
-		<td data-content='Publication date'>
+		<td data-content='Published'>
 			<input class="form-control" size='10' name='rows[$numb][pupdate]' placeholder='YYYY-MM-DD'/>
 		</td>
 		<td data-content="Delete">
@@ -112,7 +112,7 @@ echo <<<HTML
 								<th>User</th>
 								<th>Lang.</th>
 								<th>Target</th>
-								<th>Publication date</th>
+								<th>Published</th>
 							</tr>
 						</thead>
 						<tbody id='tab_data'>

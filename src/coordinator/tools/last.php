@@ -138,7 +138,7 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
             <td data-content='Translated' class="link_container">
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $target_link
             </td>
-            <td data-content='Publication date'>
+            <td data-content='Published'>
                 $pupdate
             </td>
             $view_td
@@ -190,7 +190,7 @@ if ($last_table == 'pages') {
             <th>Title</th>
             <th>Campaign</th>
             <th>Translated</th>
-            <th>Publication date</th>
+            <th>Published</th>
             <th>Views</th>
             <th>Fixref</th>
             $th_add
@@ -203,7 +203,7 @@ if ($last_table == 'pages') {
             <th>User</th>
             <th>Title</th>
             <th>Translated</th>
-            <th>Publication date</th>
+            <th>Published</th>
             <th>Fixref</th>
             $th_add
         </tr>
@@ -241,10 +241,6 @@ $count_result = count($result);
 $hoste = get_host();
 //---
 echo <<<HTML
-<!--
-	<script src='$hoste/ajax/libs/datatables.net-buttons/3.2.5/js/dataTables.buttons.min.js'></script>
-	<script src='$hoste/ajax/libs/datatables.net-buttons/3.2.5/js/buttons.colVis.min.js'></script> -->
-
     <div class='card'>
         <div class='card-header'>
             <form method='get' action='index.php'>
@@ -275,7 +271,7 @@ HTML;
 <script>
     $(document).ready(function() {
         var t = $('#last_tabel').DataTable({
-            stateSave: false,
+            stateSave: true,
             // order: [ [6, 'desc'] ],
             paging: false,
             // lengthMenu: [[100, 150, 200], [250, 150, 200]],
@@ -283,9 +279,7 @@ HTML;
         });
         var t = $('#last_users_tabel').DataTable({
             stateSave: true,
-            order: [
-                [4, 'desc']
-            ],
+            // order: [ [4, 'desc'] ],
             // paging: false,
             lengthMenu: [
                 [100, 150, 200],

@@ -127,7 +127,7 @@ function echo_form($id, $table)
                     <div class='col-md-3'>
                         <div class='input-group mb-3'>
                             <div class='input-group-prepend'>
-                                <span class='input-group-text'>Publication date</span>
+                                <span class='input-group-text'>Published</span>
                             </div>
                             <input class='form-control' type='text' id='pupdate' name='pupdate' value='$pupdate' placeholder='YYYY-MM-DD' required/>
                         </div>

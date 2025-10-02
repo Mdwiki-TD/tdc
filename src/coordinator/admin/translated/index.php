@@ -84,7 +84,7 @@ function make_td($tabg, $nnnn, $table)
 			<td data-content='Translated'>
 				$targe33
 			</td>
-			<td data-content='Publication date'>
+			<td data-content='Published'>
 				$pupdate
 			</td>
 			<td data-content='Edit'>
@@ -142,7 +142,7 @@ $recent_table = <<<HTML
 				<th>Lang.</th>
 				<th>Title</th>
 				<th>Translated</th>
-				<th>Publication date</th>
+				<th>Published</th>
 				<th>Edit</th>
 			</tr>
 		</thead>

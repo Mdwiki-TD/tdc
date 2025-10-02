@@ -74,7 +74,7 @@ function head()
 
         "$hoste/ajax/libs/datatables.net-bs5/2.3.4/dataTables.bootstrap5.min.css",
 
-        // "$hoste/ajax/libs/datatables.net-responsive-bs5/3.0.4/responsive.bootstrap5.min.css",
+        "$hoste/ajax/libs/datatables.net-responsive-bs5/3.0.4/responsive.bootstrap5.min.css",
 
         "/Translation_Dashboard/css/mobile_format.css",
         "/tdc/css/Responsive_Table.css",
@@ -94,7 +94,7 @@ function head()
         "$hoste/ajax/libs/datatables.net-bs5/2.3.4/dataTables.bootstrap5.min.js",
 
         // "$hoste/ajax/libs/datatables.net-fixedheader/3.4.0/dataTables.fixedHeader.min.js",
-        // "$hoste/ajax/libs/datatables-responsive/3.0.4/dataTables.responsive.js",
+        "$hoste/ajax/libs/datatables-responsive/3.0.4/dataTables.responsive.min.js",
 
         "/Translation_Dashboard/js/to.js",
         "/Translation_Dashboard/js/login.js",
