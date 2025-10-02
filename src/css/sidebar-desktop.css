@@ -33,10 +33,26 @@
         transform: rotate(180deg);
     }
 
-    /* hide text when collapsed */
-    /* .sidebar .hide-on-collapse {
-        transition: opacity 0.18s ease;
-    } */
+    body.sidebar-collapsed .sidebar .hide-on-collapse-inline {
+        display: inline;
+    }
+
+    /* preserve some of your utility classes */
+    .collapsed1 .hide-on-collapse-inline {
+        display: none;
+    }
+
+    .collapsed1 .btn-toggle {
+        display: block;
+        font-size: 1.8rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    .collapsed1 .linknave {
+        font-size: 1rem;
+        text-align: center;
+    }
 
     body.sidebar-collapsed .sidebar .hide-on-collapse {
         opacity: 0;
@@ -44,7 +60,7 @@
     }
 
     /* preserve some of your utility classes */
-    .collapsed .hide-on-collapse {
+    .collapsed1 .hide-on-collapse {
         opacity: 0;
         visibility: hidden;
     }
@@ -60,12 +76,12 @@
         transition: all 0.3s ease;
     }
 
-    .colmd2.collapsed {
-        width: 10%;
+    .colmd2.collapsed1 {
+        width: 6%;
     }
 
     .colmd10.expanded {
-        width: 90%;
+        width: 94%;
     }
 
 }

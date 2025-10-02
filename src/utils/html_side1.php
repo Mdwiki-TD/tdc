@@ -69,7 +69,7 @@ function generateListItem($href, $title, $icon, $target)
     $link = <<<HTML
         <a $target_attr class='linknave rounded' href='$href' title='$title' data-bs-toggle='tooltip' data-bs-placement='right'>
             $icon_tag
-            <span class='hide-on-collapse'>$title</span>
+            <span class='hide-on-collapse-inline'>$title</span>
         </a>
     HTML;
     // ---
@@ -132,7 +132,7 @@ function create_side($filename, $ty)
                     <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
                         data-bs-target="#$key-collapse" aria-expanded="$expanded">
                         $icon
-                        $key
+                        <span class='hide-on-collapse-inline'>$key</span>
                     </button>
                     <div class="collapse $show" id="$key-collapse">
                         <div class="d-none d-md-inline">

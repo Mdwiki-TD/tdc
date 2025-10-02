@@ -36,26 +36,6 @@
     background-color: var(--btn_toggle_hover-bg);
 }
 
-.btn-toggle::before {
-    width: 1.25em;
-    line-height: 0;
-    content: "\f285";
-    /* \f285: <i class="bi bi-chevron-right"></i> */
-    font-family: "bootstrap-icons";
-    transition: transform .35s ease;
-    transform-origin: .5em 50%;
-}
-
-.btn-toggle[aria-expanded="true"] {
-    background-color: var(--btn_toggle_hover-bg);
-    /* color: var(--btn_toggle_active-color); */
-}
-
-.btn-toggle[aria-expanded="true"]::before {
-    content: "\f282";
-    /* \f282: <i class="bi bi-chevron-down"></i> */
-}
-
 .btn-toggle-nav-mobile a {
     display: inline-flex;
     padding: .1875rem .5rem;
@@ -81,7 +61,28 @@
     font-weight: 600;
 }
 
+.btn-toggle[aria-expanded="true"] {
+    background-color: var(--btn_toggle_hover-bg);
+    /* color: var(--btn_toggle_active-color); */
+}
+
 @media (max-width: 767.98px) {
+
+    .btn-toggle::before {
+        width: 1.25em;
+        line-height: 0;
+        content: "\f285";
+        /* \f285: <i class="bi bi-chevron-right"></i> */
+        font-family: "bootstrap-icons";
+        transition: transform .35s ease;
+        transform-origin: .5em 50%;
+    }
+
+
+    .btn-toggle[aria-expanded="true"]::before {
+        content: "\f282";
+        /* \f282: <i class="bi bi-chevron-down"></i> */
+    }
 
     .Dropdown_menu_toggle {
         cursor: pointer;

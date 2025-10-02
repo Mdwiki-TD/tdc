@@ -29,7 +29,7 @@ function echo_card_start($file_name, $ty)
 						<!-- <button class="border rounded-3 p-1 text-decoration-none" onclick="toggleSidebar()">
 							<i class="bi bi-list bi-lg py-2 p-1"></i>
 						</button> -->
-						<span class="logo-text fw-bold mb-0 h5"> Coordinator Tools</h5>
+						<span class="logo-text fw-bold mb-0 h5"> <span class='hide-on-collapse-inline'>Coordinator Tools</span> </h5>
 					</div>
 					<button class="main-toggle-btn position-absolute top-50 start-100 translate-middle"
 						onclick="toggleSidebar()">
