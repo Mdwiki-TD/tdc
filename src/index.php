@@ -37,7 +37,7 @@ function echo_card_start($file_name, $ty)
 					</button>
 
 				</div>
-				<div class="d-block d-md-none Dropdown_menu_toggle px-3">☰ Open list</div>
+				<div class="d-block d-md-none Dropdown_menu_toggle px-3">☰ Open Sidebar</div>
 				<hr>
 				<div class="div_menu navbar-collapse">
 					$sidebar
