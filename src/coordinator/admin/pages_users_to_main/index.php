@@ -194,26 +194,28 @@ $filter_la = filter_recent($lang, $lang_table);
 $count_result = count($sql_results);
 //---
 echo <<<HTML
-	<div class='card-header'>
-		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-			<input name='ty' value='pages_users_to_main' type='hidden'/>
-			<div class='row'>
-				<div class='col-md-7'>
-					<h4>Userpages need to be moved to main pages: ($count_result)</h4>
-				</div>
-				<div class='col-md-3'>
-					$filter_la
-				</div>
-				<div class='aligncenter col-md-2'>
-					<input class='btn btn-outline-primary' type='submit' value='Filter' />
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class='card-body'>
+    <div class='card'>
+        <div class='card-header'>
+            <form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
+                <input name='ty' value='pages_users_to_main' type='hidden'/>
+                <div class='row'>
+                    <div class='col-md-7'>
+                        <h4>Userpages need to be moved to main pages: ($count_result)</h4>
+                    </div>
+                    <div class='col-md-3'>
+                        $filter_la
+                    </div>
+                    <div class='aligncenter col-md-2'>
+                        <input class='btn btn-outline-primary' type='submit' value='Filter' />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class='card-body'>
+            $recent_table
+        </div>
+    </div>
 HTML;
-//---
-echo $recent_table;
 //---
 ?>
 <script src="/tdc/js/fix_u_targets.js"></script>

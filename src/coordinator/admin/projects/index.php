@@ -69,36 +69,38 @@ HTML;
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
-	<div class='card-header'>
-		<h4>Projects:</h4>
-	</div>
-	<div class='card-body'>
-		<form action="index.php?ty=projects" method="POST">
-			<input name='csrf_token' value="$csrf_token" type="hidden"/>
-			<input name='ty' value="projects" type="hidden"/>
-			<div class="row">
-				<div class="col-md-6 col-sm-12">
-					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-						<thead>
-							<tr>
-								<th>Id</th>
-								<th>Project</th>
-								<th>Delete</th>
-							</tr>
-						</thead>
-						<tbody id="g_tab">
-							$form_text
-							$form_text_plus
-						</tbody>
-					</table>
+	<div class='card'>
+		<div class='card-header'>
+			<h4>Projects:</h4>
+		</div>
+		<div class='card-body'>
+			<form action="index.php?ty=projects" method="POST">
+				<input name='csrf_token' value="$csrf_token" type="hidden"/>
+				<input name='ty' value="projects" type="hidden"/>
+				<div class="row">
+					<div class="col-md-6 col-sm-12">
+						<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Project</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody id="g_tab">
+								$form_text
+								$form_text_plus
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-			<div class="form-group d-flex justify-content-between">
-				<button type="submit" class="btn btn-outline-primary">Save</button>
-				<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
-				<span> </span>
-			</div>
-		</form>
+				<div class="form-group d-flex justify-content-between">
+					<button type="submit" class="btn btn-outline-primary">Save</button>
+					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
+					<span> </span>
+				</div>
+			</form>
+		</div>
 	</div>
 HTML;
 ?>

@@ -69,36 +69,38 @@ foreach ($qq as $Key => $table) {
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
-	<div class='card-header'>
-		<h4>Campaigns:</h4>
-	</div>
-	<div class='card-body'>
-		<form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
-			<input name='csrf_token' value="$csrf_token" type="hidden"/>
-			<input name='ty' value="Campaigns" type="hidden"/>
-			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Campaign</th>
-							<th>Category1</th>
-							<th>Category2</th>
-							<th>Depth</th>
-							<th>Default</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody id="tab_logic">
-						$table_rows
-					</tbody>
-				</table>
-			</div>
-			<div class="form-group d-flex justify-content-between">
-				<button type="submit" class="btn btn-outline-primary">Save</button>
-				<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
-			</div>
-		</form>
+	<div class='card'>
+		<div class='card-header'>
+			<h4>Campaigns:</h4>
+		</div>
+		<div class='card-body'>
+			<form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
+				<input name='csrf_token' value="$csrf_token" type="hidden"/>
+				<input name='ty' value="Campaigns" type="hidden"/>
+				<div class="form-group">
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Campaign</th>
+								<th>Category1</th>
+								<th>Category2</th>
+								<th>Depth</th>
+								<th>Default</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody id="tab_logic">
+							$table_rows
+						</tbody>
+					</table>
+				</div>
+				<div class="form-group d-flex justify-content-between">
+					<button type="submit" class="btn btn-outline-primary">Save</button>
+					<span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
+				</div>
+			</form>
+		</div>
 	</div>
 HTML;
 //---

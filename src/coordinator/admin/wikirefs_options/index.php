@@ -99,28 +99,30 @@ foreach ($tabes as $tab) {
 }
 //---
 echo <<<HTML
-    <div class='card-header'>
-        <h4>Fix wikirefs options:</h4>
-    </div>
-    <div class='card-body'>
-        <div class="form-group">
-            <table id="em2" class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Lang.</th>
-                        <th>Move dots</th>
-                        <th>Expand infobox</th>
-                        <th>add |language=en</th>
-                        <th>Edit</th>
-                    </tr>
-                </thead>
-                <tbody id="refs_tab">
-                    $sato
-                </tbody>
-            </table>
+    <div class='card'>
+        <div class='card-header'>
+            <h4>Fix wikirefs options:</h4>
         </div>
-        </div></div>
+        <div class='card-body'>
+            <div class="form-group">
+                <table id="em2" class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Lang.</th>
+                            <th>Move dots</th>
+                            <th>Expand infobox</th>
+                            <th>add |language=en</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="refs_tab">
+                        $sato
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 HTML;
 //---
 $new_row = make_edit_icon_new("wikirefs_options/edit", ["new" => 1], $text = "Add one!");

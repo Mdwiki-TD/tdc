@@ -56,7 +56,7 @@ if (!isset($_GET['nonav'])) {
 // list of folders in coordinator
 $corrd_folders = array_map('basename', glob('coordinator/admin/*', GLOB_ONLYDIR));
 //---
-$tools_folders = array_map(fn ($file) => basename($file, '.php'), glob('coordinator/tools/*.php'));
+$tools_folders = array_map(fn($file) => basename($file, '.php'), glob('coordinator/tools/*.php'));
 //---
 // test_print("corrd_folders" . json_encode($corrd_folders));
 // test_print("tools_folders" . json_encode($tools_folders));

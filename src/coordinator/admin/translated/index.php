@@ -149,11 +149,11 @@ $recent_table = <<<HTML
 		<tbody>
 HTML;
 //---
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
+$page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 // ---
-$qsl_results = get_recent_translated($lang, $table, $limit, $offset);
+$sql_results = get_recent_translated($lang, $table, $limit, $offset);
 //---
 $total_count = get_total_translations_count($lang, $table);
 //---
@@ -164,7 +164,7 @@ if ($total_count > $limit) {
 }
 //---
 $noo = 0;
-foreach ($qsl_results as $tat => $tabe) {
+foreach ($sql_results as $tat => $tabe) {
     //---
     $noo = $noo + 1;
     $recent_table .= make_td($tabe, $noo, $table);
@@ -186,30 +186,33 @@ $data = [
 //---
 $filter_ns = filter_table($data, $table, 'table');
 //---
-$count_result = count($qsl_results);
+$count_result = count($sql_results);
 //---
 echo <<<HTML
-	<div class='card-header'>
-		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-			<input name='ty' value='translated' type='hidden'/>
-			<div class='row'>
-				<div class='col-md-4'>
-					<h4>Translated Pages ($count_result):</h4>
-				</div>
-				<div class='col-md-4'>
-					$filter_ns
-				</div>
-				<div class='col-md-3'>
-					$filter_lang
-				</div>
-				<div class='aligncenter col-md-1'>
-					<input class='btn btn-outline-primary' type='submit' value='Filter' />
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class='card-body'>
-        $pagination
+    <div class='card'>
+        <div class='card-header'>
+            <form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
+                <input name='ty' value='translated' type='hidden'/>
+                <div class='row'>
+                    <div class='col-md-4'>
+                        <h4>Translated Pages ($count_result):</h4>
+                    </div>
+                    <div class='col-md-4'>
+                        $filter_ns
+                    </div>
+                    <div class='col-md-3'>
+                        $filter_lang
+                    </div>
+                    <div class='aligncenter col-md-1'>
+                        <input class='btn btn-outline-primary' type='submit' value='Filter' />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class='card-body'>
+            $pagination
+        </div>
+    </div>
 HTML;
 //---
 echo $recent_table;

@@ -188,49 +188,50 @@ foreach ($users_done as $user_name => $table) {
 };
 //---
 echo <<<HTML
-	<div class='card-header'>
-		<div class='row'>
-			<div class='col-md-3'>
-				<span class="card-title h4" style="font-weight:bold;">
-					Emails: $numb
-				</span>
-			</div>
-			<div class='col-md-9'>
-				<form method='get' action='index.php'>
-					<input name='ty' value='Emails' type='hidden'/>
-					<div class='row'>
-						<div class='col-md-5'>
-							$project_filter
+	<div class='card'>
+		<div class='card-header'>
+			<div class='row'>
+				<div class='col-md-3'>
+					<span class="card-title h4" style="font-weight:bold;">
+						Emails: $numb
+					</span>
+				</div>
+				<div class='col-md-9'>
+					<form method='get' action='index.php'>
+						<input name='ty' value='Emails' type='hidden'/>
+						<div class='row'>
+							<div class='col-md-5'>
+								$project_filter
+							</div>
+							<div class='aligncenter col-md-3'>
+								<input class='btn btn-outline-primary' type='submit' value='Filter' />
+							</div>
 						</div>
-						<div class='aligncenter col-md-3'>
-							<input class='btn btn-outline-primary' type='submit' value='Filter' />
-						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class='card-body'>
-		<div class="form-group">
-			<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Username</th>
-						<th>Email</th>
-						<th></th>
-						<th>Project</th>
-						<th>Wiki</th>
-						<th>Live</th>
-						<th>Edit</th>
-					</tr>
-				</thead>
-				<tbody>
-					$form_rows
-				</tbody>
-			</table>
+		<div class='card-body'>
+			<div class="form-group">
+				<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Username</th>
+							<th>Email</th>
+							<th></th>
+							<th>Project</th>
+							<th>Wiki</th>
+							<th>Live</th>
+							<th>Edit</th>
+						</tr>
+					</thead>
+					<tbody>
+						$form_rows
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
 	</div>
 HTML;
 //---

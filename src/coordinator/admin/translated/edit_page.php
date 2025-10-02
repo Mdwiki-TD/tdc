@@ -26,11 +26,11 @@ $id         = $_GET['id'] ?? $_POST['id'] ?? '';
 $table      = $_GET['table'] ?? $_POST['table'] ?? 'pages';
 //---
 echo <<<HTML
-<div class='card'>
-    <div class='card-header'>
-        <h4>Edit Page (id: $id, table: $table)</h4>
-    </div>
-    <div class='card-body'>
+    <div class='card'>
+        <div class='card-header'>
+            <h4>Edit Page (id: $id, table: $table)</h4>
+        </div>
+        <div class='card-body'>
 HTML;
 //---
 function delete_page($id, $table)
