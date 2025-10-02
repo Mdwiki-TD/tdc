@@ -35,7 +35,7 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
     $md_title = trim($tabg['title'] ?? '');
     $cat      = $tabg['cat'] ?? "";
     $word     = $tabg['word'] ?? "";
-    $target    = trim($tabg['target'] ?? '');
+    $target   = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
     // ---
@@ -157,7 +157,7 @@ if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
 
-$mail_th = (user_in_coord != false) ? "<th>Email</th>" : '';
+$mail_th = (user_in_coord != false) ? "<th>@</th>" : '';
 //---
 if ($last_table == 'pages') {
     $qsl_results = get_recent_sql($lang);
