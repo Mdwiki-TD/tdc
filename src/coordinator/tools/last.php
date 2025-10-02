@@ -35,7 +35,7 @@ function make_td($tabg, $nnnn, $add_add, $last_table)
     $md_title = trim($tabg['title'] ?? '');
     $cat      = $tabg['cat'] ?? "";
     $word     = $tabg['word'] ?? "";
-    $target    = trim($tabg['target'] ?? '');
+    $target   = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
     // ---
