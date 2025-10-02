@@ -21,14 +21,6 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 // ---
 $header_title = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
 //---
-echo <<<HTML
-<div class='card'>
-    <div class='card-header'>
-        <h4>$header_title</h4>
-    </div>
-    <div class='card-body'>
-HTML;
-
 function echo_form_post($id, $title, $qid, $qid_table)
 {
 	// ---
@@ -53,7 +45,7 @@ function echo_form_post($id, $title, $qid, $qid_table)
 	// ---
 	$dis = $_GET['dis'] ?? 'all';
 	// ---
-	echo <<<HTML
+	return <<<HTML
         <form action='index.php?ty=qids/post&qid_table=$qid_table&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
             <input name='qid_table' value="$qid_table" type="hidden"/>
@@ -93,10 +85,16 @@ $table  = $_GET['qid_table'] ?? '';
 // ---
 if ($table != 'qids' && $table != 'qids_others') $table = 'qids';
 // ---
-echo_form_post($id, $title, $qid, $table);
+$form = echo_form_post($id, $title, $qid, $table);
 // ---
 echo <<<HTML
+    <div class='card'>
+        <div class='card-header'>
+            <h4>$header_title</h4>
+        </div>
+        <div class='card-body'>
+            $form
+        </div>
     </div>
-</div>
 HTML;
 // ---

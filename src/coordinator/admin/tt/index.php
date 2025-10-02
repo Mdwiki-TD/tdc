@@ -131,45 +131,46 @@ foreach (TablesSql::$s_cat_titles as $title) {
 	//---
 };
 //---
-echo <<<HTML
-	<div class='card-header'>
-		<form action="index.php?ty=tt" method="GET">
-			$testin
-			<input name='ty' value="tt" type="hidden"/>
-			<div class='row'>
-				<div class='col-md-6'>
-					<h4>Translate Type ($tt_count):</h4>
-				</div>
-				<div class='col-md-4'>
-					$uuu
-				</div>
-				<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
-			</div>
-		</form>
-	</div>
-	<div class='card-body'>
-		<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>id</th>
-					<th>Title</th>
-					<th>Lead</th>
-					<th>Full</th>
-					<th>Edit</th>
-				</tr>
-			</thead>
-			<tbody id="tab_ma">
-				$table_rows
-			</tbody>
-		</table>
-	</div>
-	</div>
-HTML;
-//---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 $new_row = make_edit_icon_new("tt/edit_translate_type", ["new" => 1], $text = "Add one!");
+//---
+echo <<<HTML
+    <div class='card'>
+		<div class='card-header'>
+			<form action="index.php?ty=tt" method="GET">
+				$testin
+				<input name='ty' value="tt" type="hidden"/>
+				<div class='row'>
+					<div class='col-md-6'>
+						<h4>Translate Type ($tt_count):</h4>
+					</div>
+					<div class='col-md-4'>
+						$uuu
+					</div>
+					<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
+				</div>
+			</form>
+		</div>
+		<div class='card-body'>
+			<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>id</th>
+						<th>Title</th>
+						<th>Lead</th>
+						<th>Full</th>
+						<th>Edit</th>
+					</tr>
+				</thead>
+				<tbody id="tab_ma">
+					$table_rows
+				</tbody>
+			</table>
+		</div>
+	</div>
+HTML;
 //---
 echo <<<HTML
 	<div class='card mt-1'>

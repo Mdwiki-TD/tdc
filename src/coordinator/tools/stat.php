@@ -37,25 +37,7 @@ function filter_stat($cat)
 //---
 $uuu = filter_stat($cat);
 //---
-$fa = <<<HTML
-	<div class='card-header'>
-		<form method='get' action='index.php'>
-			<input name='ty' value='stat' type='hidden'/>
-			<div class='row'>
-				<div class='col-md-3'>
-					<h4>Status:</h4>
-				</div>
-				<div class='col-md-3'>
-					$uuu
-				</div>
-				<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
-			</div>
-		</form>
-	</div>
-	<div class='cardbody'>
-HTML;
-//---
-$table = <<<HTML
+$table_html = <<<HTML
 	<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
 		<thead>
 			<tr>
@@ -116,8 +98,7 @@ foreach ($titles as $title) {
 	$pv = MainTables::$x_enwiki_pageviews_table[$title] ?? 0;
 	if (!isset(MainTables::$x_enwiki_pageviews_table[$title])) $no_pv += 1;
 	//---
-	//---
-	$table .= <<<HTML
+	$table_html .= <<<HTML
 	<tr>
 		<td data-content='#'>
 			$i</td>
@@ -141,7 +122,7 @@ foreach ($titles as $title) {
 	HTML;
 }
 //---
-$table .= "</table>";
+$table_html .= "</table>";
 //---
 $with_q = $i - $no_qid;
 $with_word = $i - $no_word;
@@ -150,8 +131,6 @@ $with_ref = $i - $no_ref;
 $with_allref = $i - $no_allref;
 $with_Importance = $i - $no_Importance;
 $with_pv = $i - $no_pv;
-//---
-echo $fa;
 //---
 $lilo = [
 	'qid' => ['with' => $with_q, 'without' => $no_qid],
@@ -174,33 +153,43 @@ foreach ($lilo as $k => $v) {
 }
 //---
 echo <<<HTML
-	<div class=''>
-		<table class='table table-striped compact table_text_left'>
-			<thead>
-				<tr>
-					<th>Key</th>
-					$ths
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th>With</th>
-					$with
-				</tr>
-				<tr>
-					<th>Without</th>
-					$without
-				</tr>
-			</tbody>
-		</table>
+	<div class='card'>
+		<div class='card-header'>
+			<form method='get' action='index.php'>
+				<input name='ty' value='stat' type='hidden'/>
+				<div class='row'>
+					<div class='col-md-3'>
+						<h4>Status:</h4>
+					</div>
+					<div class='col-md-3'>
+						$uuu
+					</div>
+					<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
+				</div>
+			</form>
+		</div>
+		<div class='card-body1'>
+			<table class='table table-striped compact table_text_left'>
+				<thead>
+					<tr>
+						<th>Key</th>
+						$ths
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>With</th>
+						$with
+					</tr>
+					<tr>
+						<th>Without</th>
+						$without
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class='card-body'>
+			$table_html
+		</div>
 	</div>
 HTML;
-//---
-
-//---
-echo $table;
-//---
-echo '
-</div>
-</div>
-';

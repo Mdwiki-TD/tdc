@@ -26,13 +26,6 @@ $id     = $_GET['id'] ?? '';
 //---
 $header_title = ($id != "") ? "Edit Translate type" : "Add Translate type";
 //---
-echo <<<HTML
-<div class='card'>
-    <div class='card-header'>
-        <h4>$header_title</h4>
-    </div>
-    <div class='card-body'>
-HTML;
 function echo_form($title, $lead, $full, $id)
 {
     $lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
@@ -55,7 +48,7 @@ function echo_form($title, $lead, $full, $id)
     // ---
     if ($id == "") $id_row = "";
     // ---
-    echo <<<HTML
+    return <<<HTML
         <form action='index.php?ty=tt/post&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
             <input name='edit' value="1" type="hidden"/>
@@ -103,10 +96,16 @@ function echo_form($title, $lead, $full, $id)
     HTML;
 }
 //---
-echo_form($title, $lead, $full, $id);
+$form = echo_form($title, $lead, $full, $id);
 //---
 echo <<<HTML
+    <div class='card'>
+        <div class='card-header'>
+            <h4>$header_title</h4>
+        </div>
+        <div class='card-body'>
+            $form
+        </div>
     </div>
-</div>
 HTML;
 //---

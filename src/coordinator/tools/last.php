@@ -238,29 +238,31 @@ $filter_ta = filter_table($data, $last_table, 'last_table');
 $count_result = count($result);
 //---
 echo <<<HTML
-<div class='card-header'>
-    <form method='get' action='index.php'>
-        <input name='ty' value='last' type='hidden'/>
-        <div class='row'>
-            <div class='col-md-4'>
-                <h4>Recent translations ($count_result):</h4>
-            </div>
-            <div class='col-md-4'>
-                $filter_ta
-            </div>
-            <div class='col-md-3'>
-                $filter_by_lang
-            </div>
-            <div class='aligncenter col-md-1'>
-                <input class='btn btn-outline-primary' type='submit' value='Filter' />
-            </div>
+    <div class='card'>
+        <div class='card-header'>
+            <form method='get' action='index.php'>
+                <input name='ty' value='last' type='hidden'/>
+                <div class='row'>
+                    <div class='col-md-4'>
+                        <h4>Recent translations ($count_result):</h4>
+                    </div>
+                    <div class='col-md-4'>
+                        $filter_ta
+                    </div>
+                    <div class='col-md-3'>
+                        $filter_by_lang
+                    </div>
+                    <div class='aligncenter col-md-1'>
+                        <input class='btn btn-outline-primary' type='submit' value='Filter' />
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
-<div class='card-body'>
+        <div class='card-body'>
+            $recent_table
+        </div>
+    </div>
 HTML;
-//---
-echo $recent_table;
 //---
 ?>
 <script>

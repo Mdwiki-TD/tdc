@@ -3,13 +3,6 @@
 use function SQLorAPI\Process\get_users_process_new;
 
 //---
-echo <<<HTML
-    <div class='card-header'>
-        <h4>Translations in process</h4>
-    </div>
-    <div class='card-body'>
-HTML;
-//---
 /*
 
 صفحات مكررة
@@ -75,5 +68,13 @@ $text .= <<<HTML
 	</table>
 HTML;
 //---
-echo $text;
-//---
+echo <<<HTML
+    <div class='card'>
+        <div class='card-header'>
+            <h4>Translations in process</h4>
+        </div>
+        <div class='card-body'>
+            $text
+        </div>
+    </div>
+HTML;

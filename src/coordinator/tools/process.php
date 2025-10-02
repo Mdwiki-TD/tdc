@@ -1,17 +1,11 @@
 <?PHP
+
 use Tables\SqlTables\TablesSql;
 use Tables\Langs\LangsTables;
 // use Tables\Main\MainTables;
 use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Process\get_process_all_new;
 // use function Utils\Html\make_cat_url;
-
-echo <<<HTML
-    <div class='card-header'>
-        <h4>Translations in process:</h4>
-    </div>
-    <div class='card-body'>
-HTML;
 
 function make_td($tabg, $nnnn)
 {
@@ -68,7 +62,8 @@ function make_td($tabg, $nnnn)
     //---
     return $laly;
 };
-$sato = <<<HTML
+
+$table_html = <<<HTML
 	<table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
         <thead>
             <tr>
@@ -89,13 +84,22 @@ $noo = 0;
 foreach ($dd1 as $tat => $tabe) {
     //---
     $noo = $noo + 1;
-    $sato .= make_td($tabe, $noo);
+    $table_html .= make_td($tabe, $noo);
     //---
 };
 //---
-$sato .= <<<HTML
+$table_html .= <<<HTML
         </tbody>
     </table>
 HTML;
-echo $sato;
 //---
+echo <<<HTML
+    <div class='card'>
+        <div class='card-header'>
+            <h4>Translations in process:</h4>
+        </div>
+        <div class='card-body'>
+            $table_html
+        </div>
+    </div>
+HTML;

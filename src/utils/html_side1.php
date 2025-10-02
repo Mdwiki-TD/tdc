@@ -88,7 +88,7 @@ function create_side($filename, $ty)
         ],
         'Tools' => [
             ['id' => 'stat', 'admin' => 0, 'href' => 'stat', 'title' => 'Status', 'icon' => 'bi-graph-up'],
-            ['id' => 'wikirefs_options', 'admin' => 1, 'href' => 'wikirefs_options', 'title' => 'Fixwikirefs (Options)', 'icon' => 'bi-wrench-adjustable'],
+            ['id' => 'wikirefs_options', 'admin' => 1, 'href' => 'wikirefs_options', 'title' => 'Fix refs (Options)', 'icon' => 'bi-wrench-adjustable'],
             ['id' => 'fixwikirefs', 'admin' => 0, 'href' => '/fixwikirefs.php', 'title' => 'Fixwikirefs', 'target' => '_blank', 'icon' => 'bi-wrench'],
         ],
     ];

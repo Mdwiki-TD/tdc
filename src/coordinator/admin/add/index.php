@@ -91,39 +91,41 @@ $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" valu
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
 echo <<<HTML
-	<select class='catsoptions' data-bs-theme="auto" hidden>$cats</select>
-	<div class='card-header'>
-		<h4>Add translations:</h4>
-	</div>
-	<div class='cardbody p-2'>
-		<form action="index.php?ty=add" method="POST">
-			<input name='csrf_token' value="$csrf_token" type="hidden"/>
-			$testin
-			<input name='ty' value="add" type="hidden"/>
-			<div class="form-group">
-				<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='font-size:95%;'>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Mdwiki Title</th>
-							<th>Campaign</th>
-							<th>Type</th>
-							<th>User</th>
-							<th>Lang.</th>
-							<th>Target</th>
-							<th>Publication date</th>
-						</tr>
-					</thead>
-					<tbody id='tab_data'>
-						$table
-					</tbody>
-				</table>
-			</div>
-			<div class="form-group d-flex justify-content-between">
-				<button type="submit" class="btn btn-outline-primary mb-10">Save</button>
-				<span role='button' id="add_new_row" class="btn btn-outline-primary" onclick='add_new_row()'>New row</span>
-			</div>
-		</form>
+	<div class='card'>
+		<select class='catsoptions' data-bs-theme="auto" hidden>$cats</select>
+		<div class='card-header'>
+			<h4>Add translations:</h4>
+		</div>
+		<div class='cardbody p-2'>
+			<form action="index.php?ty=add" method="POST">
+				<input name='csrf_token' value="$csrf_token" type="hidden"/>
+				$testin
+				<input name='ty' value="add" type="hidden"/>
+				<div class="form-group">
+					<table class='table table-striped compact table-mobile-responsive table-mobile-sided' style='font-size:95%;'>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Mdwiki Title</th>
+								<th>Campaign</th>
+								<th>Type</th>
+								<th>User</th>
+								<th>Lang.</th>
+								<th>Target</th>
+								<th>Publication date</th>
+							</tr>
+						</thead>
+						<tbody id='tab_data'>
+							$table
+						</tbody>
+					</table>
+				</div>
+				<div class="form-group d-flex justify-content-between">
+					<button type="submit" class="btn btn-outline-primary mb-10">Save</button>
+					<span role='button' id="add_new_row" class="btn btn-outline-primary" onclick='add_new_row()'>New row</span>
+				</div>
+			</form>
+		</div>
 	</div>
 HTML;
 //---

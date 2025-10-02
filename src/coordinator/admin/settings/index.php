@@ -23,17 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 //---
-echo <<<HTML
-    <div class='card-header'>
-        <h4>Settings:</h4>
-    </div>
-    <div class='card-body'>
-        <div class='row'>
-            <form action='index.php' method="POST">
-                <input name='csrf_token' value="$csrf_token" type="hidden"/>
-                <input name='ty' value='settings' type="hidden"/>
-    HTML;
-//---
 $nn = 0;
 //---
 function make_settings_tab($tabe)
@@ -122,12 +111,20 @@ $qq = get_td_or_sql_settings();
 //---
 $text = make_settings_tab($qq);
 //---
-echo $text;
-//---
 echo <<<HTML
-            <button type='submit' class='btn btn-outline-primary'>Save</button>
-        </form>
+	<div class='card'>
+        <div class='card-header'>
+            <h4>Settings:</h4>
+        </div>
+        <div class='card-body'>
+            <div class='row'>
+                <form action='index.php' method="POST">
+                    <input name='csrf_token' value="$csrf_token" type="hidden"/>
+                    <input name='ty' value='settings' type="hidden"/>
+                $text
+                <button type='submit' class='btn btn-outline-primary'>Save</button>
+            </form>
+        </div>
     </div>
-</div>
 HTML;
 //---

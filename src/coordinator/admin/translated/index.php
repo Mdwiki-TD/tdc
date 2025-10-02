@@ -189,27 +189,30 @@ $filter_ns = filter_table($data, $table, 'table');
 $count_result = count($qsl_results);
 //---
 echo <<<HTML
-	<div class='card-header'>
-		<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-			<input name='ty' value='translated' type='hidden'/>
-			<div class='row'>
-				<div class='col-md-4'>
-					<h4>Translated Pages ($count_result):</h4>
-				</div>
-				<div class='col-md-4'>
-					$filter_ns
-				</div>
-				<div class='col-md-3'>
-					$filter_lang
-				</div>
-				<div class='aligncenter col-md-1'>
-					<input class='btn btn-outline-primary' type='submit' value='Filter' />
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class='card-body'>
-        $pagination
+    <div class='card'>
+        <div class='card-header'>
+            <form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
+                <input name='ty' value='translated' type='hidden'/>
+                <div class='row'>
+                    <div class='col-md-4'>
+                        <h4>Translated Pages ($count_result):</h4>
+                    </div>
+                    <div class='col-md-4'>
+                        $filter_ns
+                    </div>
+                    <div class='col-md-3'>
+                        $filter_lang
+                    </div>
+                    <div class='aligncenter col-md-1'>
+                        <input class='btn btn-outline-primary' type='submit' value='Filter' />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class='card-body'>
+            $pagination
+        </div>
+    </div>
 HTML;
 //---
 echo $recent_table;

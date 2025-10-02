@@ -19,12 +19,12 @@ function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
 {
     $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
-	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-	$target2 = htmlspecialchars($new_target, ENT_QUOTES, 'UTF-8');
+    $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $target2 = htmlspecialchars($new_target, ENT_QUOTES, 'UTF-8');
     //---
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
     //---
-    echo <<<HTML
+    return <<<HTML
         <form action='index.php?ty=pages_users_to_main/fix_it&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
             <input id='id' name='id' value='$id' type='hidden'/>
@@ -152,19 +152,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user       = $page_data[0]['user'] ?? '';
     $pupdate    = $page_data[0]['pupdate'] ?? '';
     //---
-    echo <<<HTML
-    <div class='card'>
-        <div class='card-header'>
-            <h4>Edit Page ($old_target)</h4>
-        </div>
-        <div class='card-body'>
-    HTML;
-    //---
-    echo_form($id, $title, $new_target, $lang, $new_user, $pupdate);
+    $form = echo_form($id, $title, $new_target, $lang, $new_user, $pupdate);
     //---
     echo <<<HTML
+        <div class='card'>
+            <div class='card-header'>
+                <h4>Edit Page ($old_target)</h4>
+            </div>
+            <div class='card-body'>
+                $form
+            </div>
         </div>
-    </div>
     HTML;
     //---
 }
