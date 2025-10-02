@@ -163,7 +163,7 @@ if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
 
-$mail_th = (user_in_coord != false) ? "<th>@</th>" : '';
+$mail_th = (user_in_coord != false) ? "<th><span title='Email'>@</span></th>" : '';
 //---
 if ($last_table == 'pages') {
     $qsl_results = get_recent_sql($lang);
