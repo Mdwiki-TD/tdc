@@ -1,19 +1,53 @@
-.main-toggle-btn {
-    background: white;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    transition: transform 0.3s ease;
+.btn-toggle-nav a {
+    display: inline-flex;
+    padding: .1875rem .5rem;
+    margin-top: .125rem;
+    margin-left: 1.25rem;
+    text-decoration: none;
 }
 
-.collapsed-toggle-btn {
-    transform: rotate(180deg);
+.btn-toggle-nav li.active>a {
+    background-color: var(--btn_toggle_nav-active-bg);
 }
+
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: var(--btn_toggle_nav-hover-bg);
+}
+
 
 @media (min-width: 768px) {
+
+    .main-toggle-btn {
+        background: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        border: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .collapsed-toggle-btn {
+        transform: rotate(180deg);
+    }
+
+    /* hide text when collapsed */
+    /* .sidebar .hide-on-collapse {
+        transition: opacity 0.18s ease;
+    } */
+
+    body.sidebar-collapsed .sidebar .hide-on-collapse {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    /* preserve some of your utility classes */
+    .collapsed .hide-on-collapse {
+        opacity: 0;
+        visibility: hidden;
+    }
 
     /* not mobile */
     .colmd2 {
@@ -27,11 +61,11 @@
     }
 
     .colmd2.collapsed {
-        width: 6%;
+        width: 10%;
     }
 
     .colmd10.expanded {
-        width: 94%;
+        width: 90%;
     }
 
 }

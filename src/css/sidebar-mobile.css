@@ -56,7 +56,7 @@
     /* \f282: <i class="bi bi-chevron-down"></i> */
 }
 
-.btn-toggle-nav a {
+.btn-toggle-nav-mobile a {
     display: inline-flex;
     padding: .1875rem .5rem;
     margin-top: .125rem;
@@ -64,12 +64,12 @@
     text-decoration: none;
 }
 
-.btn-toggle-nav li.active>a {
+.btn-toggle-nav-mobile li.active>a {
     background-color: var(--btn_toggle_nav-active-bg);
 }
 
-.btn-toggle-nav a:hover,
-.btn-toggle-nav a:focus {
+.btn-toggle-nav-mobile a:hover,
+.btn-toggle-nav-mobile a:focus {
     background-color: var(--btn_toggle_nav-hover-bg);
 }
 
@@ -81,11 +81,7 @@
     font-weight: 600;
 }
 
-.lh-tight {
-    line-height: 1.25;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
 
     .Dropdown_menu_toggle {
         cursor: pointer;
