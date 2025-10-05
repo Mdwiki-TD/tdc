@@ -47,6 +47,7 @@ function menu_data()
             ['id' => 'projects', 'admin' => 1, 'href' => 'projects', 'title' => 'Projects', 'icon' => 'bi-kanban'],
             ['id' => 'Campaigns', 'admin' => 1, 'href' => 'Campaigns', 'title' => 'Campaigns', 'icon' => 'bi-megaphone'],
             ['id' => 'settings', 'admin' => 1, 'href' => 'settings', 'title' => 'Settings', 'icon' => 'bi-gear'],
+            ['id' => 'categories', 'admin' => 0, 'href' => 'categories', 'title' => 'Categories', 'icon' => 'bi-tags'],
         ],
         'Tools' => [
             ['id' => 'stat', 'admin' => 0, 'href' => 'stat', 'title' => 'Status', 'icon' => 'bi-graph-up'],

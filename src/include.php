@@ -1,5 +1,11 @@
 <?PHP
-// has no include inside
+
+if ((getenv("HOME") ?: "") === '') {
+    $new_home = 'I:/mdwiki/mdwiki';
+    putenv("HOME=$new_home");
+    $_ENV['HOME'] = $new_home;
+}
+
 include_once __DIR__ . '/csrf.php';
 include_once __DIR__ . '/backend/infos/td_config.php';
 

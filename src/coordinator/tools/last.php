@@ -285,42 +285,50 @@ HTML;
 ?>
 <script>
     $(document).ready(function() {
-        var table = $('#last_table').DataTable({
-            stateSave: true,
-            // order: [ [6, 'desc'] ],
-            paging: false,
-            // lengthMenu: [[100, 150, 200], [250, 150, 200]],
-            // scrollY: 800,
-            responsive: {
-                details: true
-            }
-        });
-        var t = $('#last_users_table').DataTable({
-            stateSave: true,
-            // paging: false,
-            lengthMenu: [
-                [100, 150, 200],
-                [100, 150, 200]
-            ],
-            // scrollY: 800,
-            responsive: {
-                details: true
-            }
-        });
-        document.querySelectorAll('a.toggle-vis').forEach((el) => {
-            el.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // add class mb_btn_active to this
-                el.classList.toggle('btn-outline-primary');
-                el.classList.toggle('btn-outline-secondary');
-
-                let columnIdx = e.target.getAttribute('data-column');
-                let column = table.column(columnIdx);
-
-                // Toggle the visibility
-                column.visible(!column.visible());
+        var tableElement = $('#last_table');
+        if (tableElement.length) {
+            var table = $('#last_table').DataTable({
+                stateSave: true,
+                // order: [ [6, 'desc'] ],
+                paging: false,
+                // lengthMenu: [[100, 150, 200], [250, 150, 200]],
+                // scrollY: 800,
+                responsive: {
+                    details: true
+                }
             });
-        });
+            // ---
+            document.querySelectorAll('a.toggle-vis').forEach((el) => {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // add class mb_btn_active to this
+                    el.classList.toggle('btn-outline-primary');
+                    el.classList.toggle('btn-outline-secondary');
+
+                    let columnIdx = e.target.getAttribute('data-column');
+                    let column = table.column(columnIdx);
+
+                    // Toggle the visibility
+                    column.visible(!column.visible());
+                });
+            });
+        }
+        // ---
+        var usersTableElement = $('#last_users_table');
+        if (usersTableElement.length) {
+            var t = $('#last_users_table').DataTable({
+                stateSave: true,
+                // paging: false,
+                lengthMenu: [
+                    [100, 150, 200],
+                    [100, 150, 200]
+                ],
+                // scrollY: 800,
+                responsive: {
+                    details: true
+                }
+            });
+        }
     });
 </script>
