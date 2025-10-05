@@ -25,7 +25,7 @@ $ini = Read_ini_file('OAuthConfig.ini');
 //---
 */
 //---
-$ROOT_PATH = explode('public_html', __FILE__)[0];
+$ROOT_PATH = getenv("HOME") ?: 'I:/mdwiki/mdwiki';
 //---
 $_dir = $ROOT_PATH . '/confs/';
 //---

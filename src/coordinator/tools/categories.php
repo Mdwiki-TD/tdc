@@ -1,17 +1,8 @@
-<?PHP
-
-function category_url($category, $lang, $name)
-{
-    $encoded_category = rawurlencode(str_replace(' ', '_', $category));
-    return "<a target='_blank' href='https://$lang.wikipedia.org/wiki/Category:$encoded_category'>$name</a>";
-}
-
-?>
 <div class='card'>
     <div class='card-header'>
         <span class="h4">
             <a target="_blank" href="https://www.wikidata.org/wiki/Q107014860#sitelinks-wikipedia">
-                <img src="https://www.wikidata.org/static/favicon/wikidata.ico" / width="25px">
+                <img src="https://www.wikidata.org/static/favicon/wikidata.ico" width="25" alt="Wikidata favicon">
             </a>
             Translations Categories</span>
     </div>
@@ -21,7 +12,8 @@ function category_url($category, $lang, $name)
                 <tr>
                     <th>#</th>
                     <th>Language</th>
-                    <th>Category</th>
+                    <th>Already created</th>
+                    <th>Not Created</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +35,7 @@ function category_url($category, $lang, $name)
         info: false,
         searching: false,
         ajax: function(data, callback, settings) {
-            // اجلب البيانات من الاثنين مع Promise.all
+            // Fetch data from both sources with Promise.all
             Promise.all([
                 fetch(langs_url).then(res => res.json()),
                 fetch(rest_api).then(res => res.json())
@@ -72,7 +64,7 @@ function category_url($category, $lang, $name)
                     return row;
                 });
 
-                // عدادات الأعمدة
+                // Column counters
                 $('#cat_count').text(categoryCount);
                 $('#fallback_count').text(fallbackCount);
 
