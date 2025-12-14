@@ -193,7 +193,7 @@ echo <<<HTML
 			<div class='row'>
 				<div class='col-md-3'>
 					<span class="card-title h4" style="font-weight:bold;">
-						Emails: $numb
+						Users: $numb
 					</span>
 				</div>
 				<div class='col-md-9'>
