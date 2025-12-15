@@ -248,6 +248,7 @@ HTML;
 <script type="text/javascript">
 	$(document).ready(function() {
 		var t = $('#em').DataTable({
+			dom: 'Blfrtip',
 			stateSave: true,
 			// order: [[5	, 'desc']],
 			// paging: false,
@@ -256,6 +257,27 @@ HTML;
 				[50, 100, 150]
 			],
 			// scrollY: 800
+			buttons: [
+				{
+					extend: 'csv',
+					text: 'Export CSV',
+					className: 'btn btn-primary',
+					exportOptions: {
+						columns: [0, 1, 2, 4, 5, 6],
+						format: {
+							body: function(data, row, column, node) {
+								var $node = $(node);
+								var $input = $node.find('input');
+
+								if ($input.length) {
+									return $input.val();
+								}
+
+								return $node.text().trim();
+							}
+						}
+					}
+				]
 		});
 	});
 </script>
