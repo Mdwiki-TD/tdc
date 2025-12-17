@@ -165,16 +165,16 @@ foreach ($users_done as $user_name => $table) {
 			<span><a href='/Translation_Dashboard/leaderboard.php?user=$user_name'>$user_name</a></span>
 		</td>
 		<td data-order='$email' data-search='$email' data-content='Email'>
-			<input class='form-control' size='25' name='email_$numb' value='$email' readonly/>
+			$email
 		</td>
 		<td data-content='Send Email'>
 			$mail_icon
 		</td>
 		<td data-order='$user_group2' data-search='$user_group2' data-content='Project'>
-			<input class='form-control' size='20' name='project_$numb' value='$user_group2' readonly/>
+			$user_group2
 		</td>
 		<td data-order='$wiki' data-search='$wiki' data-content='Wiki'>
-			<input class='form-control' size='4' name='wiki_$numb' value='$wiki' readonly/>
+			$wiki
 		</td>
 		<td data-order='$live' data-content='Live'>
 			<span>$live</span>
@@ -244,10 +244,27 @@ echo <<<HTML
 		</div>
 	</div>
 HTML;
+
+$hoste = ($_SERVER["SERVER_NAME"] == "localhost")
+	? "https://cdnjs.cloudflare.com"
+	: "https://tools-static.wmflabs.org/cdnjs";
+
+echo <<<HTML
+	<link href="$hoste/ajax/libs/datatables.net-buttons-dt/3.2.5/buttons.dataTables.min.css" rel='stylesheet'/>
+	<script src="$hoste/ajax/libs/datatables-buttons/3.2.5/js/dataTables.buttons.min.js"></script>
+	<script src="$hoste/ajax/libs/datatables.net-buttons-dt/3.2.5/buttons.dataTables.js"></script>
+	<script src="$hoste/ajax/libs/datatables-buttons/3.2.5/js/buttons.html5.js"></script>
+HTML;
+
 ?>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var t = $('#em').DataTable({
+			layout: {
+				topStart: {
+					buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+				}
+			},
 			stateSave: true,
 			// order: [[5	, 'desc']],
 			// paging: false,
