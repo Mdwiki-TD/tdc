@@ -262,7 +262,7 @@ HTML;
 		var t = $('#em').DataTable({
 			layout: {
 				topStart: {
-					buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+					buttons: ['copy', 'csv']
 				}
 			},
 			stateSave: true,
