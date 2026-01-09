@@ -73,10 +73,15 @@ echo <<<HTML
 					<span class='d-none d-md-inline tool_title'>WikiProjectMed Translation Dashboard</span>
 					<span class='d-inline d-md-none tool_title'>WikiProjectMed TD</span>
 				</a>
-				<button class="navbar-toggler me_ms_by_dir" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar"
-					aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
+				<div class="d-flex align-items-center order-lg-last">
+					<button class="navbar-toggler me_ms_by_dir" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar"
+						aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<button class="theme-toggle btn btn-link me-ms-auto" aria-label="Toggle theme">
+						<i class="bi bi-moon-stars-fill"></i>
+					</button>
+				</div>
 				<div class="collapse navbar-collapse" id="collapsibleNavbar">
 					<ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
 						<li class="nav-item col-6 col-lg-auto" id="leaderboard">
@@ -115,11 +120,6 @@ echo <<<HTML
 					<ul class="navbar-nav flex-row flex-wrap bd-navbar-nav ms-lg-auto">
 						$li_user
 					</ul>
-				</div>
-				<div class="d-flex ms-2">
-					<button class="theme-toggle btn btn-link me-ms-auto" aria-label="Toggle theme">
-						<i class="bi bi-moon-stars-fill"></i>
-					</button>
 				</div>
 			</div>
 		</nav>
