@@ -1,0 +1,380 @@
+# Refactor Plan - Mdwiki Translation Dashboard Coordinator (TDC)
+
+**Generated:** 2026-01-26
+**Codebase Size:** ~958 lines of PHP code across 40+ files
+**Current Status:** Functional but requires significant improvements
+
+---
+
+## Executive Summary
+
+This refactor plan addresses critical security vulnerabilities, code quality issues, and architectural weaknesses in the TDC codebase. The project is a PHP-based web application for managing translation dashboards with MediaWiki/Wikidata integration.
+
+### Key Findings
+- **Critical Security Issues:** CSRF bypass, SQL injection risks, XSS vulnerabilities
+- **No Test Coverage:** Only 1 test file exists
+- **Poor Architecture:** Global scope pollution, tight coupling, no separation of concerns
+- **Code Duplication:** Repeated patterns across 6+ admin modules
+- **Hardcoded Configuration:** Environment-specific paths embedded in code
+
+---
+
+## Priority Classification
+
+- 🔴 **CRITICAL** - Security vulnerabilities that must be fixed immediately
+- 🟠 **HIGH** - Major issues affecting code quality and maintainability
+- 🟡 **MEDIUM** - Important improvements for long-term health
+- 🟢 **LOW** - Nice-to-have enhancements
+
+---
+
+## Phase 1: Security Fixes (CRITICAL)
+
+### 1.1 Fix CSRF Verification 🔴
+**File:** `src/csrf.php:19`
+
+**Problem:** Default return value is `true`, effectively disabling CSRF protection.
+
+```php
+// CURRENT (INSECURE)
+function verify_csrf_token()
+{
+    // return true;  // DEFAULT IS TO RETURN TRUE - SECURITY RISK!
+    // ...
+}
+```
+
+**Action Required:**
+- Change default to return `false`
+- Remove HTML echo statements (use proper error logging)
+- Implement token rotation per request
+- Add session secure flag for HTTPS
+
+### 1.2 Fix SQL Injection in LIMIT/OFFSET 🔴
+**File:** `src/backend/api_or_sql/recent_data.php:131-154`
+
+**Problem:** LIMIT and OFFSET values are concatenated directly into queries.
+
+```php
+// CURRENT (VULNERABLE)
+if ($limit > 0) {
+    $query .= " \n LIMIT $limit ";  // No parameterization!
+}
+if ($offset > 0) {
+    $query .= " OFFSET $offset ";   // No parameterization!
+}
+```
+
+**Action Required:**
+- Cast to integers before use: `$limit = (int)$limit;`
+- Add input validation for reasonable ranges
+- Use PDO prepared statements
+
+### 1.3 Fix XSS Vulnerabilities 🔴
+**File:** `src/utils/html.php:132-143`
+
+**Problem:** HEREDOC strings may not properly escape all user input.
+
+**Action Required:**
+- Audit all HTML output functions
+- Ensure all user data passes through `htmlspecialchars()`
+- Consider using a templating engine (Twig, Plates)
+
+### 1.4 Add Authentication Middleware 🟠
+**Files:** All admin module index files
+
+**Problem:** Authentication check duplicated in 6+ files:
+- `src/coordinator/admin/Campaigns/index.php`
+- `src/coordinator/admin/settings/index.php`
+- `src/coordinator/admin/tt/index.php`
+- `src/coordinator/admin/qids/index.php`
+- `src/coordinator/admin/users_no_inprocess/index.php`
+- `src/coordinator/admin/add/index.php`
+
+**Action Required:**
+- Create `src/middleware/auth.php` with centralized auth check
+- Implement middleware pattern for route protection
+
+---
+
+## Phase 2: Architecture Improvements (HIGH)
+
+### 2.1 Implement Autoloading 🟠
+**File:** `src/include.php`
+
+**Problem:** Global scope pollution with 40+ file includes.
+
+```php
+// CURRENT
+foreach (glob(__DIR__ . "/utils/*.php") as $filename) {
+    include_once $filename;
+}
+foreach (glob(__DIR__ . "/backend/api_calls/*.php") as $filename) {
+    include_once $filename;
+}
+// ... more includes
+```
+
+**Action Required:**
+- Implement PSR-4 autoloading via Composer
+- Convert to proper namespace structure
+- Remove all `include_once` and `require_once` statements
+
+### 2.2 Configuration Management 🟠
+**Files:** Multiple files with hardcoded paths
+
+**Problem:**
+```php
+// Hardcoded in multiple locations
+$this->home_dir = getenv("HOME") ?: 'I:/mdwiki/mdwiki';
+```
+
+**Action Required:**
+- Create `.env` file for environment-specific configuration
+- Use `vlucas/phpdotenv` for environment variable loading
+- Remove all hardcoded paths
+- Support development, staging, production environments
+
+### 2.3 Refactor Data Access Layer 🟡
+**Directory:** `src/backend/`
+
+**Current Issues:**
+- Mixed responsibilities (API calls, SQL, business logic)
+- Static variables causing shared state issues
+- No proper abstraction
+
+**Action Required:**
+- Implement Repository pattern for data access
+- Separate API calls from business logic
+- Add proper dependency injection
+- Remove static variable caching (use proper caching layer)
+
+### 2.4 Create Service Layer 🟡
+**Files:** Scattered business logic
+
+**Action Required:**
+- Create `src/Services/` directory
+- Move business logic from controllers to services
+- Implement proper separation of concerns
+
+---
+
+## Phase 3: Code Quality (MEDIUM)
+
+### 3.1 Eliminate Code Duplication 🟠
+**Files:** All admin module index pages
+
+**Problem:** Table generation pattern duplicated across 6+ files.
+
+**Action Required:**
+- Create shared component: `src/Components/AdminTable.php`
+- Extract common table rendering logic
+- Use configuration arrays for table-specific differences
+
+### 3.2 Add Type Hints 🟡
+**Files:** All PHP files
+
+**Problem:** No PHP type hints anywhere in the codebase.
+
+**Action Required:**
+- Add parameter types and return types to all functions
+- Enable strict_types: `declare(strict_types=1);`
+- Consider PHPStan for static analysis
+- Target PHP 8.1+ for modern features
+
+### 3.3 Improve Error Handling 🟠
+**File:** `src/backend/api_calls/wiki_api.php:26-32`
+
+**Problem:** Errors printed to HTML output instead of proper handling.
+
+```php
+// CURRENT
+if ($output === false) {
+    echo "<br>cURL Error: " . curl_error($ch) . "<br>$url";
+}
+```
+
+**Action Required:**
+- Implement exception-based error handling
+- Create custom exception classes
+- Add proper logging (Monolog recommended)
+- Return proper error responses to frontend
+
+### 3.4 Add Input Validation 🟠
+**Files:** Multiple files accepting user input
+
+**Problem:** No validation for parameters like `$dis`, `$limit`, `$offset`.
+
+**Action Required:**
+- Create validation layer
+- Validate all user input at controller boundary
+- Sanitize data before database operations
+- Return proper error messages for invalid input
+
+---
+
+## Phase 4: Testing & Documentation (MEDIUM)
+
+### 4.1 Implement Test Suite 🟠
+**Directory:** `tests/`
+
+**Current Status:** Only 1 test file (`getcats.php`), no structure.
+
+**Action Required:**
+- Set up PHPUnit
+- Create test directory structure:
+  ```
+  tests/
+  ├── Unit/
+  │   ├── Backend/
+  │   ├── Utils/
+  │   └── Services/
+  ├── Integration/
+  │   └── ApiCalls/
+  └── Feature/
+      └── AdminWorkflow/
+  ```
+- Target 80%+ code coverage
+
+### 4.2 Add Documentation 🟡
+**Files:** All source files
+
+**Problem:** Minimal or no documentation throughout codebase.
+
+**Action Required:**
+- Add PHPDoc comments to all public functions
+- Create API documentation
+- Write developer setup guide
+- Document architecture decisions
+- Add contribution guidelines
+
+---
+
+## Phase 5: Performance & Modernization (LOW)
+
+### 5.1 Implement Caching 🟢
+**Files:** Multiple locations with repeated data fetching
+
+**Problem:** Static class arrays rebuilt on every page load.
+
+**Action Required:**
+- Implement proper caching layer (Redis/Memcached)
+- Cache configuration data that doesn't change
+- Add cache invalidation strategy
+
+### 5.2 Add Build System 🟢
+**Root:** No package.json or build process
+
+**Action Required:**
+- Add Composer for PHP dependencies
+- Set up npm for frontend assets
+- Implement build pipeline for CSS/JS minification
+- Add development/production builds
+
+### 5.3 CI/CD Pipeline 🟢
+**Action Required:**
+- Add GitHub Actions workflow
+- Run tests on every commit
+- Add code quality checks (PHPStan, PHP-CS-Fixer)
+- Automated deployment to staging/production
+
+### 5.4 Clean Up Dead Code 🟢
+**Files:**
+- `src/csrf_old.php` (obsolete)
+- `src/coordinator/admin/reports/index copy.php` (duplicate)
+- `src/coordinator/admin/Campaigns copy/` (duplicate)
+
+**Action Required:**
+- Remove all duplicate files
+- Delete unused code
+- Clean up `.gitignore` to ignore test directories properly
+
+---
+
+## Implementation Roadmap
+
+### Sprint 1 (Weeks 1-2): Critical Security
+- [ ] Fix CSRF verification (1.1)
+- [ ] Fix SQL injection in recent_data.php (1.2)
+- [ ] Audit and fix XSS vulnerabilities (1.3)
+- [ ] Deploy security fixes immediately
+
+### Sprint 2 (Weeks 3-4): Authentication & Configuration
+- [ ] Implement authentication middleware (1.4)
+- [ ] Add environment configuration (2.2)
+- [ ] Remove hardcoded paths
+
+### Sprint 3 (Weeks 5-6): Architecture Foundation
+- [ ] Implement PSR-4 autoloading (2.1)
+- [ ] Set up Composer
+- [ ] Begin refactoring data access layer (2.3)
+
+### Sprint 4 (Weeks 7-8): Code Quality
+- [ ] Extract shared table component (3.1)
+- [ ] Add type hints to core files (3.2)
+- [ ] Improve error handling (3.3)
+
+### Sprint 5 (Weeks 9-10): Testing Foundation
+- [ ] Set up PHPUnit (4.1)
+- [ ] Write first batch of unit tests
+- [ ] Add PHPDoc to public APIs (4.2)
+
+### Sprint 6 (Weeks 11-12): Polish & Modernization
+- [ ] Implement caching (5.1)
+- [ ] Add build system (5.2)
+- [ ] Set up CI/CD (5.3)
+- [ ] Clean up dead code (5.4)
+
+---
+
+## Success Metrics
+
+- **Security:** All critical vulnerabilities patched, no high-severity issues remaining
+- **Testing:** 80%+ code coverage achieved
+- **Code Quality:** PHPStan at level 5 with no errors
+- **Performance:** Page load time reduced by 30%+
+- **Maintainability:** Code duplication reduced by 50%+
+
+---
+
+## Technology Stack Recommendations
+
+### Keep
+- PHP 8.1+ (upgrade from current version)
+- MySQL/PDO
+- Bootstrap 5 (frontend)
+- DataTables (jQuery plugin)
+
+### Add
+- **Composer** - Dependency management
+- **Monolog** - Logging
+- **Twig** - Templating (optional)
+- **PHPUnit** - Testing framework
+- **PHPStan** - Static analysis
+- **vlucas/phpdotenv** - Environment configuration
+
+### Consider for Future
+- Laravel/Symfony components (if full framework migration desired)
+- Redis/Memcached for caching
+- Docker for development environment
+
+---
+
+## Risk Assessment
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| Breaking existing functionality | High | Comprehensive testing, gradual refactoring |
+| Deployment downtime | Medium | Blue-green deployment strategy |
+| Team unfamiliar with new patterns | Medium | Training, documentation, pair programming |
+| Performance regression | Low | Benchmarking before/after changes |
+
+---
+
+## Notes
+
+- This codebase is functional but has accumulated technical debt
+- Prioritize security fixes above all else
+- Refactor gradually while maintaining functionality
+- Consider this as an opportunity to modernize the entire application
+- Engage team in planning and decision-making process
