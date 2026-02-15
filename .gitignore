@@ -11,3 +11,5 @@ src/coordinator/admin/reports/index copy.php
 **/old
 /x
 .vscode/settings.json
+.env
+.claude/settings.local.json
