@@ -38,7 +38,7 @@ $(".lang_input").autocomplete({
 			url: api_end_point + "?get=lang_names",
 			dataType: "json",
 			success: function (data) {
-				cachedData = data.results; // تخزين البيانات مؤقتًا
+				cachedData = data.results; //
 				const filteredData = filterData(cachedData, request.term);
 				response(filteredData);
 			}
