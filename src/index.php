@@ -93,6 +93,6 @@ echo <<<HTML
 </div>
 HTML;
 //---
-echo "<script src='/Translation_Dashboard/js/autocomplate.js'></script>";
+echo "<script src='/tdc/js/autocomplate.js'></script>";
 //---
 include_once __DIR__ . '/footer.php';
