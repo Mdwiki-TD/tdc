@@ -2,7 +2,7 @@
 
 if ((getenv("HOME") ?: "") === '') {
     $new_home = 'I:/mdwiki/mdwiki';
-    putenv("HOME=$new_home");
+    putenv('HOME=' . $new_home);
     $_ENV['HOME'] = $new_home;
 }
 
