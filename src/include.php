@@ -12,12 +12,7 @@ include_once __DIR__ . '/backend/infos/td_config.php';
 foreach (glob(__DIR__ . "/utils/*.php") as $filename) {
     include_once $filename;
 }
-if (substr(__DIR__, 0, 2) == 'I:') {
-    include_once 'I:/mdwiki/auth_repo/oauth/user_infos.php';
-} else {
-    include_once __DIR__ . '/../auth/oauth/user_infos.php';
-}
-
+include_once __DIR__ . '/userinfos_wrap.php';
 foreach (glob(__DIR__ . "/backend/api_calls/*.php") as $filename) {
     include_once $filename;
 }
