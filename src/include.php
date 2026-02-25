@@ -6,6 +6,12 @@ if ((getenv("HOME") ?: "") === '') {
     $_ENV['HOME'] = $new_home;
 }
 
+$env = getenv('APP_ENV') ?: ($_ENV['APP_ENV'] ?? 'development');
+
+if ($env === 'development' && file_exists(__DIR__ . '/load_env.php')) {
+    include_once __DIR__ . '/load_env.php';
+}
+
 include_once __DIR__ . '/csrf.php';
 include_once __DIR__ . '/backend/infos/td_config.php';
 

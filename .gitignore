@@ -13,3 +13,4 @@ src/coordinator/admin/reports/index copy.php
 .vscode/settings.json
 .env
 .claude/settings.local.json
+composer.lock
