@@ -7,18 +7,6 @@ use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
 use function APICalls\MdwikiSql\fetch_query;
 
-$vendorAutoload = dirname(__DIR__) . '/vendor/autoload.php';
-
-if (!file_exists($vendorAutoload)) {
-    $vendorAutoload = dirname(dirname(__DIR__)) . '/vendor/autoload.php';
-}
-
-if (file_exists($vendorAutoload)) {
-    require_once $vendorAutoload;
-} else {
-    die("Vendor autoload not found. Please run 'composer install' in the project root.");
-}
-
 $cookieDomain = $_SERVER['SERVER_NAME'] ?? 'localhost';
 $secure = ($cookieDomain === 'localhost') ? false : true;
 // ---

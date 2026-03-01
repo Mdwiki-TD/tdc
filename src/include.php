@@ -1,9 +1,15 @@
 <?PHP
 
-if ((getenv("HOME") ?: "") === '') {
-    $new_home = 'I:/mdwiki/mdwiki';
-    putenv('HOME=' . $new_home);
-    $_ENV['HOME'] = $new_home;
+$vendorAutoload = dirname(__DIR__) . '/vendor/autoload.php';
+
+if (!file_exists($vendorAutoload)) {
+    $vendorAutoload = dirname(dirname(__DIR__)) . '/vendor/autoload.php';
+}
+
+if (file_exists($vendorAutoload)) {
+    require_once $vendorAutoload;
+} else {
+    die("Vendor autoload not found. Please run 'composer install' in the project root.");
 }
 
 $env = getenv('APP_ENV') ?: ($_ENV['APP_ENV'] ?? 'development');
