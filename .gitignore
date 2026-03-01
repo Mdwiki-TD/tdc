@@ -15,3 +15,6 @@ src/coordinator/admin/reports/index copy.php
 .claude/settings.local.json
 composer.lock
 src/load_env.php
+
+# PHPUnit cache
+.phpunit.cache
