@@ -541,7 +541,7 @@ class QidsHandler extends AdminPostHandler
             $titleOfQid = $txTab['title'];
 
             if (!empty($id) && $txId != $id) {
-                $this->addError("Qid:($qid) already used in database with with id:($txId).");
+                $this->addError("Qid:($qid) already used in database with id:($txId).");
                 return false;
             }
 
@@ -607,7 +607,7 @@ class QidsHandler extends AdminPostHandler
         if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
             $this->addSuccess("Data Changes successfully of title: $title, Qid: $qid");
         } else {
-            $this->addError("Failed to chanhe data of title: $title, Qid: $qid. Found: qid in db:$qidOfTitle");
+            $this->addError("Failed to change data of title: $title, Qid: $qid. Found: qid in db:$qidOfTitle");
         }
     }
 
