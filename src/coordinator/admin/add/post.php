@@ -1,7 +1,6 @@
 <?php
 //---
 require_once __DIR__ . '/add_post.php';
-require_once __DIR__ . '/../../../backend/api_calls/AdminPostHandler.php';
 //---
 use AdminPost\AddPagesHandler;
 //---
