@@ -20,7 +20,10 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 };
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	require __DIR__ . '/post.php';
+	require_once __DIR__ . '/add_post.php';
+	$handler = new AdminPost\AddPagesHandler();
+	$handler->handleRequest($_POST);
+	$handler->render();
 }
 //---
 $cats = "";

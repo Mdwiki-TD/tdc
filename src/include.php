@@ -29,6 +29,7 @@ include_once __DIR__ . '/backend/api_calls/mdwiki_api.php';
 include_once __DIR__ . '/backend/api_calls/mdwiki_sql.php';
 include_once __DIR__ . '/backend/api_calls/td_api.php';
 include_once __DIR__ . '/backend/api_calls/wiki_api.php';
+include_once __DIR__ . '/backend/api_calls/AdminPostHandler.php';
 
 include_once __DIR__ . '/userinfos_wrap.php';
 

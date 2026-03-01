@@ -1,5 +1,18 @@
 {
     "require": {
         "defuse/php-encryption": "2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5",
+        "phpstan/phpstan": "^1.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdminPost\\": "src/backend/api_calls/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "phpstan": "phpstan analyse"
     }
 }

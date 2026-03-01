@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    paths:
+        - src/backend/api_calls/AdminPostHandler.php
+    excludePaths:
+        - vendor
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Function .+ not found#'
+        - '#Call to an undefined function#'

@@ -22,7 +22,9 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 };
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	require __DIR__ . '/post.php';
+	$handler = new AdminPost\EmailsHandler();
+	$handler->handleRequest($_POST);
+	$handler->render();
 }
 //---
 include_once __DIR__ . '/sugust.php';
