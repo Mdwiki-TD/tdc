@@ -114,7 +114,15 @@ if ($cookieDomain == 'localhost') {
     // ---
     if ($access == null) {
         echo ba_alert("No access keys found. Login again.");
-        setcookie('username', '', time() - 3600, "/", $cookieDomain, true, true);
+        // setcookie('username', '', time() - 3600, "/", $cookieDomain, true, true);
+        setcookie('username', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'domain' => $domain,
+            'secure' => $secure,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
         $username = '';
         unset($_SESSION['username']);
     }
