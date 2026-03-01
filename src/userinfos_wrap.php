@@ -24,12 +24,16 @@ function de_code_value($value)
     if (empty(trim($value))) {
         return "";
     }
-    // ---
-    $cookieKey = getenv('COOKIE_KEY') ?: ($_ENV['COOKIE_KEY'] ?? '');
-    $cookieKey      = $cookieKey  ? Key::loadFromAsciiSafeString($cookieKey)  : null;
+
+    $cookieKeyString = getenv('COOKIE_KEY') ?: ($_ENV['COOKIE_KEY'] ?? '');
+    $cookieKey = $cookieKeyString  ? Key::loadFromAsciiSafeString($cookieKeyString) : null;
+
+    if ($cookieKey === null) {
+        return "";
+    }
     try {
         $value = Crypto::decrypt($value, $cookieKey);
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
         $value = "";
     }
     return $value;
@@ -106,7 +110,7 @@ if ($cookieDomain == 'localhost') {
         setcookie('username', '', [
             'expires' => time() - 3600,
             'path' => '/',
-            'domain' => $domain,
+            'domain' => $cookieDomain,
             'secure' => $secure,
             'httponly' => true,
             'samesite' => 'Lax',
