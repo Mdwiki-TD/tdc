@@ -1390,7 +1390,6 @@ src/backend/tables/
 - [ ] Fix XSS in HEREDOC (P0)
 - [ ] Remove hardcoded passwords (P0)
 - [ ] Setup Composer
-- [ ] Create `.env` configuration
 
 ### Week 3-4: Architecture
 - [ ] Implement PSR-4 autoloading

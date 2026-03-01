@@ -18,7 +18,7 @@ use function Utils\Functions\test_print;
 function open_td_Tables_file($path)
 {
     //---
-    $tables_dir = getenv("HOME") . '/public_html/td/Tables';
+    $tables_dir = (getenv("HOME") ?: $_ENV['HOME']) . '/public_html/td/Tables';
     //---
     // if (substr($tables_dir, 0, 2) == 'I:') { $tables_dir = 'I:/mdwiki/mdwiki/public_html/td/Tables'; }
     //---

@@ -11,11 +11,8 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-// use function Infos\TdConfig\get_configs;
 use function SQLorAPI\Funcs\get_td_or_sql_settings;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
-// $conf = get_configs('conf.json');
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/post.php';
