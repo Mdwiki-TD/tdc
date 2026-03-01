@@ -13,7 +13,6 @@ if ($env === 'development' && file_exists(__DIR__ . '/load_env.php')) {
 }
 
 include_once __DIR__ . '/csrf.php';
-include_once __DIR__ . '/backend/infos/td_config.php';
 
 include_once __DIR__ . '/utils/functions.php';
 include_once __DIR__ . '/utils/html_side1.php';
