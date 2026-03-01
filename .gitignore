@@ -14,3 +14,4 @@ src/coordinator/admin/reports/index copy.php
 .env
 .claude/settings.local.json
 composer.lock
+src/load_env.php
