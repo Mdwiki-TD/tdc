@@ -12,7 +12,9 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 };
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	require __DIR__ . '/post.php';
+	$handler = new AdminPost\ProjectsHandler();
+	$handler->handleRequest($_POST);
+	$handler->render();
 }
 //---
 use function SQLorAPI\Funcs\get_td_or_sql_projects;

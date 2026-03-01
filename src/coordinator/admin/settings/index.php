@@ -15,7 +15,9 @@ use function SQLorAPI\Funcs\get_td_or_sql_settings;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require __DIR__ . '/post.php';
+    $handler = new AdminPost\SettingsHandler();
+    $handler->handleRequest($_POST);
+    $handler->render();
 }
 //---
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
