@@ -13,8 +13,6 @@ use function Tools\RecentHelps\filter_recent;
 //---
 $lang = $_GET['lang'] ?? 'All';
 //---
-// if ($_SERVER['SERVER_NAME'] == 'localhost' && $lang == "All") $lang = "ar";
-//---
 $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
 //---
 if (!isset($_GET['table']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $table = "pages_users";
