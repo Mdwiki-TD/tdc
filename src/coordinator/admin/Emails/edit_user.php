@@ -37,7 +37,7 @@ echo <<<HTML
     <div class='card-body'>
 HTML;
 
-function echo_form($user, $wiki, $project, $email, $user_id)
+function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
 {
     //---
     $project_line = make_project_to_user($project);
@@ -105,7 +105,7 @@ function echo_form($user, $wiki, $project, $email, $user_id)
     HTML;
 }
 //---
-echo_form($user, $wiki, $project, $email, $user_id);
+edit_user_echo_form($user, $wiki, $project, $email, $user_id);
 //---
 echo <<<HTML
     </div>
