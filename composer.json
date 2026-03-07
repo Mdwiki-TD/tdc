@@ -1,5 +1,18 @@
 {
+    "name": "mdwiki/tdc",
+    "description": "A PHP library for Translation Dashboard Coordinators",
+    "autoload": {
+        "psr-4": {},
+        "files": []
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^2.1"
+    },
     "require": {
-        "defuse/php-encryption": "2.4"
+        "defuse/php-encryption": "^2.4"
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
