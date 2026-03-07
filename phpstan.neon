@@ -1,0 +1,8 @@
+parameters:
+    level: 5
+    excludePaths:
+        - vendor
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - "#Function .+ not found#"
+        - "#Call to an undefined function#"
