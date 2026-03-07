@@ -1,8 +1,24 @@
 parameters:
     level: 5
+    paths:
+        - src/
+
     excludePaths:
         - vendor
+        - *_old.php
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - "#Function .+ not found#"
         - "#Call to an undefined function#"
+
+    # Scan directories for class definitions
+    # scanDirectories:
+        # - I:/mdwiki/auth_repo/vendor/
+
+    # Scan files for class definitions
+    scanFiles:
+        - src/include.php
+        - src/load_env.php
+
+    bootstrapFiles:
+        - tests/bootstrap.php
