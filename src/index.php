@@ -82,10 +82,10 @@ if (in_array($ty, $tools_files)) {
 	$sidebar = create_side($filename, $ty);
 	echo $sidebar;
 	//
-} elseif (in_array($ty, $corrd_folders) && user_in_coord) {
+} elseif (in_array($ty, $corrd_folders) && $GLOBALS['user_is_coordinator']) {
 	include_once __DIR__ . "/coordinator/admin/$ty/index.php";
 	//
-} elseif (is_file($adminfile) && user_in_coord) {
+} elseif (is_file($adminfile) && $GLOBALS['user_is_coordinator']) {
 	include_once $adminfile;
 } else {
 	test_print("can't find $adminfile");

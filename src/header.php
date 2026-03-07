@@ -29,10 +29,12 @@ if (!empty($GLOBALS['global_username'] ?? "")) {
 }
 //---
 define('user_in_coord', $user_in_coord);
+$GLOBALS['user_in_coord'] = $user_in_coord;
+$GLOBALS['user_is_coordinator'] = $user_in_coord;
 //---
 $testsline = '';
 //---
-if (user_in_coord == true) {
+if ($GLOBALS['user_is_coordinator'] == true) {
 	$testsline = <<<HTML
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="tests">
 		<a class="nav-link py-2 px-0 px-lg-2" href="tests.php"><span class="navtitles"></span>Tests</a>

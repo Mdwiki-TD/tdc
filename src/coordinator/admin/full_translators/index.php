@@ -1,6 +1,6 @@
 <?php
 //---
-if (user_in_coord == false) {
+if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
