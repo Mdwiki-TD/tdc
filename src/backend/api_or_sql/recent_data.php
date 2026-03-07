@@ -170,7 +170,7 @@ function get_total_translations_count($lang, $table): int
     //---
     $dd = super_function($api_params, $sql_params, $query);
     // ---
-    $result = (int)$dd[0]['count'] ?? 0;
+    $result = (int)($dd[0]['count'] ?? 0);
     // ---
     return $result;
 }
