@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token()) {
         // ---
     } elseif (($_POST['id'] ?? '') != "") {
         // ---
-        $id = $_POST['id'] ?? '';
+        $id = $_POST['id'];
         //---
         $qua = "UPDATE language_settings
             SET
