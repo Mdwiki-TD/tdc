@@ -25,7 +25,7 @@ $last_table = $_GET['last_table'] ?? 'pages';
 // ---
 $last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
-function make_td($tabg, $nnnn, $last_table)
+function last_make_td($tabg, $nnnn, $last_table)
 {
     // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
@@ -174,7 +174,7 @@ $noo = 0;
 // ---
 foreach ($qsl_results as $tat => $tabe) {
     $noo = $noo + 1;
-    $recent_rows .= make_td($tabe, $noo, $last_table);
+    $recent_rows .= last_make_td($tabe, $noo, $last_table);
 };
 //---
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
