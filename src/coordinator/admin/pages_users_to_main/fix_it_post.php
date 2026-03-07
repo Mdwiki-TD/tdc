@@ -21,8 +21,8 @@ function delete_user_page($id)
     //---
     $find_it_1 = fetch_query("SELECT 1 FROM pages_users       WHERE id = ? LIMIT 1", [$id]);
     $find_it_2 = fetch_query("SELECT 1 FROM pages_users_to_main WHERE id = ? LIMIT 1", [$id]);
-    $delete_done = (empty($find_it)) ? true : false;
     //---
+    // $delete_done = (empty($find_it)) ? true : false;
     $delete_done = empty($find_it_1) && empty($find_it_2);
     //---
     return $delete_done;
