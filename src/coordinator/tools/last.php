@@ -131,7 +131,7 @@ function make_td($tabg, $nnnn, $last_table)
             </td>
             $Campaign_td
             <td class="link_container">
-                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a> : $target_link
+                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a>: $target_link
             </td>
             <td>
                 $pupdate
@@ -141,7 +141,7 @@ function make_td($tabg, $nnnn, $last_table)
                 <a target='_blank' href="$fixwikirefs">Fix</a>
             </td>
             <td>
-                <a href="//medwiki.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
+                <a href="//mdwikicx.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
             </td>
             <td>
                 $flags
@@ -178,15 +178,33 @@ foreach ($qsl_results as $tat => $tabe) {
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
 //---
 $Toggle_column = "";
-//---
+function column_number($name)
+{
+    $columns = [
+        "campaign" => 3,
+        "fixref" => 7,
+        "flags" => 9,
+    ];
+    $result = $columns[$name] ?? 0;
+    if ($result == 0) {
+        return 0;
+    }
+    if (user_in_coord != false) {
+        $result = $result + 1;
+    }
+    return $result;
+}
+
 if ($last_table == 'pages') {
-    $Campaign_number = (user_in_coord != false) ? 4 : 3;
-    $fix_number = (user_in_coord != false) ? 8 : 7;
+    $Campaign_number = column_number('campaign');
+    $fix_number = column_number('fixref');
+    $flags_number = column_number('flags');
     $Toggle_column = <<<HTML
         <div>
-            <span class="toggle-vis btn" data-column="0">Toggle columns:</span>
+            <span class="" data-column="0">Toggle columns:</span>
             <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
             <a class="toggle-vis btn btn-outline-primary" data-column="$fix_number" type="button">Fixref</a>
+            <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
         </div>
     HTML;
     //---
@@ -201,10 +219,8 @@ if ($last_table == 'pages') {
             <th>Published</th>
             <th>Views</th>
             <th>Fixref</th>
-            <th>add_date</th>
-            <th>
-                Flags
-            </th>
+            <th>Draft</th>
+            <th>Flags</th>
         </tr>
     HTML;
 } else {
@@ -216,10 +232,8 @@ if ($last_table == 'pages') {
             <th>Translated</th>
             <th>Published</th>
             <th>Fixref</th>
-            <th>add_date</th>
-            <th>
-                Flags
-            </th>
+            <th>Draft</th>
+            <th>Flags</th>
         </tr>
     HTML;
 }
