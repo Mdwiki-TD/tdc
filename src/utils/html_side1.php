@@ -111,7 +111,7 @@ function menu_data(): array
  *
  * @return string HTML for the navigation item
  */
-function generateListItem($href, $title, $icon, $target)
+function generateListItem(string $href, string $title, ?string $icon, ?string $target): string
 {
     $icon_tag = (!empty($icon)) ? "<i class='bi {$icon} me-1'></i>" : "";
     $target_attr = ($target) ? "target='_blank'" : '';
@@ -144,7 +144,7 @@ function generateListItem($href, $title, $icon, $target)
  * // Returns HTML with 'last' menu item marked as active
  * ```
  */
-function create_side($filename, $ty)
+function create_side(string $filename, string $ty): string
 {
     [$mainMenuIcons, $mainMenu] = menu_data();
 
@@ -168,48 +168,54 @@ function create_side($filename, $ty)
             $target = $item['target'] ?? '';
             $admin = $item['admin'] ?? 0;
 
-            if ($admin == 1 && !$GLOBALS['user_is_coordinator']) continue;
+            // Skip admin items for non-coordinators
+            if ($admin === 1 && !$GLOBALS['user_is_coordinator']) {
+                continue;
+            }
 
-            $class = $ty == $href ? 'active' : '';
+            $class = ($ty === $href) ? 'active' : '';
 
-            $href_full = ($target) ? $href : "$filename?ty=$href";
+            // Build full URL (unless external link)
+            $href_full = ($target) ? $href : "{$filename}?ty={$href}";
 
-            $id = $item['id'];
-
-            $link = generateListItem($href_full, $item['title'], $icon, $target);
+            $id = $item['id'] ?? '';
+            $link = generateListItem($href_full, $item['title'] ?? '', $icon, $target);
 
             $lis .= <<<HTML
-                <li id='$id' class='$class'>
-                    $link
+                <li id='{$id}' class='{$class}'>
+                    {$link}
                 </li>
             HTML;
         }
 
+        // Only render group if it has visible items
         if (!empty($lis)) {
             $show = $group_is_active ? 'show' : '';
             $expanded = $group_is_active ? 'true' : 'false';
 
-            $icon = $mainMenuIcons[$groupKey] ?? '';
-            $icon = (!empty($icon)) ? "<i class='bi $icon me-1'></i>" : '';
+            $icon_class = $mainMenuIcons[$groupKey] ?? '';
+            $icon_html = (!empty($icon_class)) ? "<i class='bi {$icon_class} me-1'></i>" : '';
+
+            $escaped_key = htmlspecialchars($groupKey, ENT_QUOTES, 'UTF-8');
 
             $sidebar .= <<<HTML
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
-                        data-bs-target="#$groupKey-collapse" aria-expanded="$expanded">
-                        $icon
-                        <span class='hide-on-collapse-inline'>$groupKey</span>
+                        data-bs-target="#{$escaped_key}-collapse" aria-expanded="{$expanded}">
+                        {$icon_html}
+                        <span class='hide-on-collapse-inline'>{$escaped_key}</span>
                     </button>
-                    <div class="collapse $show" id="$groupKey-collapse">
+                    <div class="collapse {$show}" id="{$escaped_key}-collapse">
                         <div class="d-none d-md-inline">
                             <!-- desktop -->
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                $lis
+                                {$lis}
                             </ul>
                         </div>
                         <div class="d-inline d-md-none">
                             <!-- mobile -->
                             <ul class="navbar-nav flex-row flex-wrap btn-toggle-nav-mobile list-unstyled fw-normal pb-1 small">
-                                $lis
+                                {$lis}
                             </ul>
                         </div>
                     </div>
@@ -220,5 +226,6 @@ function create_side($filename, $ty)
     }
 
     $sidebar .= "</ul>";
+
     return $sidebar;
 }
