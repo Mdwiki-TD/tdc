@@ -65,7 +65,7 @@ function edit_page($id, $table, $title, $target, $lang, $user, $pupdate)
     }
 }
 
-function echo_form($id, $table)
+function translated_edit_echo_form($id, $table)
 {
     //---
     $page_data = fetch_query("SELECT * FROM $table WHERE id = ?", [$id]);
@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token()) {
         </script>
     HTML;
 } else {
-    echo_form($id, $table);
+    translated_edit_echo_form($id, $table);
 }
 //---
 echo <<<HTML
