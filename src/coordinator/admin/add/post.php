@@ -17,9 +17,9 @@ if (verify_csrf_token()) {
 		// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
 		//---
 		$mdtitle	= $table['mdtitle'] ?? '';
-		$cat		= rawurldecode($table['cat']) ?? '';
+		$cat		= rawurldecode($table['cat'] ?? '');
 		$type		= $table['type'] ?? '';
-		$user		= rawurldecode($table['user']) ?? '';
+		$user		= rawurldecode($table['user'] ?? '');
 		$lang		= $table['lang'] ?? '';
 		$target		= $table['target'] ?? '';
 		$pupdate	= $table['pupdate'] ?? '';
