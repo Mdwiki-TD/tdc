@@ -7,7 +7,7 @@ use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Process\get_process_all_new;
 // use function Utils\Html\make_cat_url;
 
-function make_td($tabg, $nnnn)
+function process_make_td($tabg, $nnnn)
 {
     $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? $tabg['add_date'] ?? "";
@@ -84,7 +84,7 @@ $noo = 0;
 foreach ($dd1 as $tat => $tabe) {
     //---
     $noo = $noo + 1;
-    $table_html .= make_td($tabe, $noo);
+    $table_html .= process_make_td($tabe, $noo);
     //---
 };
 //---
