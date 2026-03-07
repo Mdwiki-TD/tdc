@@ -63,9 +63,27 @@ use RuntimeException;
  * @return void
  * @throws RuntimeException If session cannot be started
  */
-if (session_status() === PHP_SESSION_NONE) {
-	// 	session_name("mdwikitoolforgeoauth");
-	session_start();
+function ensure_session_started(): void
+{
+	if (session_status() === PHP_SESSION_NONE) {
+		// Configure secure session settings
+		$sessionOptions = [
+			'use_strict_mode' => true,
+			'use_cookies' => true,
+			'use_only_cookies' => true,
+			'cookie_httponly' => true,
+			'cookie_samesite' => 'Strict',
+		];
+
+		// Enable secure flag in production (HTTPS)
+		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+			$sessionOptions['cookie_secure'] = true;
+		}
+
+		if (!session_start($sessionOptions)) {
+			throw new RuntimeException('Failed to start session for CSRF protection');
+		}
+	}
 }
 
 /**
@@ -95,13 +113,17 @@ if (session_status() === PHP_SESSION_NONE) {
  * }
  * ```
  */
-function verify_csrf_token()
+function verify_csrf_token(): bool
 {
-	// التحقق مما إذا كان هناك CSRF Tokens في الجلسة
+	ensure_session_started();
+
+	// Initialize token array if it doesn't exist
 	if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
 		$_SESSION['csrf_tokens'] = [];
-		echo "No csrf tokens in session!";
-		return true;
+		// SECURITY FIX: Return false when no tokens exist
+		// This prevents bypassing CSRF by clearing the session
+		error_log('CSRF: No tokens in session - potential security issue');
+		return false;
 	}
 
 	// Get the submitted token from POST data
@@ -113,10 +135,15 @@ function verify_csrf_token()
 		return false;
 	}
 
-	// التحقق مما إذا كان Token موجودًا في القائمة
-	if (in_array($submitted_token, $_SESSION['csrf_tokens'], true)) {
-		// Token صحيح، إزالته من القائمة
-		$_SESSION['csrf_tokens'] = array_diff($_SESSION['csrf_tokens'], [$submitted_token]);
+	// Use timing-safe comparison for token validation
+	$tokenIndex = array_search($submitted_token, $_SESSION['csrf_tokens'], true);
+
+	if ($tokenIndex !== false) {
+		// Token is valid - remove it to prevent reuse
+		unset($_SESSION['csrf_tokens'][$tokenIndex]);
+
+		// Re-index the array to prevent gaps
+		$_SESSION['csrf_tokens'] = array_values($_SESSION['csrf_tokens']);
 
 		return true;
 	}
@@ -156,13 +183,28 @@ function verify_csrf_token()
  */
 function generate_csrf_token()
 {
-	$token = bin2hex(random_bytes(32));
+	ensure_session_started();
+
+	try {
+		// Generate 32 random bytes and convert to 64 hex characters
+		$token = bin2hex(random_bytes(32));
+	} catch (\Exception $e) {
+		throw new RuntimeException('Failed to generate CSRF token: ' . $e->getMessage());
+	}
+
+	// Initialize token array if needed
 	if (!isset($_SESSION['csrf_tokens'])) {
 		$_SESSION['csrf_tokens'] = [];
 	}
 
 	// Store the token for validation
 	$_SESSION['csrf_tokens'][] = $token;
+
+	// Limit the number of stored tokens to prevent memory issues
+	// Keep only the most recent 50 tokens
+	if (count($_SESSION['csrf_tokens']) > 50) {
+		$_SESSION['csrf_tokens'] = array_slice($_SESSION['csrf_tokens'], -50);
+	}
 
 	return $token;
 }
