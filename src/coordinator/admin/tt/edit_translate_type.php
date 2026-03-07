@@ -26,7 +26,7 @@ $id     = $_GET['id'] ?? '';
 //---
 $header_title = ($id != "") ? "Edit Translate type" : "Add Translate type";
 //---
-function echo_form($title, $lead, $full, $id)
+function tt_edit_echo_form($title, $lead, $full, $id)
 {
     $lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
     $full_checked = ($full == 1 || $full == "1") ? 'checked' : '';
@@ -96,7 +96,7 @@ function echo_form($title, $lead, $full, $id)
     HTML;
 }
 //---
-$form = echo_form($title, $lead, $full, $id);
+$form = tt_edit_echo_form($title, $lead, $full, $id);
 //---
 echo <<<HTML
     <div class='card'>
