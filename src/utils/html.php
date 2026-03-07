@@ -59,11 +59,11 @@ function banner_alert(string $text): string
 {
     // $escaped = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     return <<<HTML
-        <div class='container'>
-            <div class="alert alert-danger" role="alert">
-                <i class="bi bi-exclamation-triangle"></i> {$text}
-            </div>
+    <div class='container'>
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> {$text}
         </div>
+    </div>
     HTML;
 }
 
@@ -132,23 +132,26 @@ function make_modal_fade(string $label, string $text, string $id, string $button
  *
  * @return string HTML for the email button
  */
-function make_mail_icon_new($tab, $func_name = "")
+function make_mail_icon_new(array $tab, string $func_name = "pup_window_new"): string
 {
-    if (empty($func_name)) $func_name = "pup_window_new";
+    if (empty($func_name)) {
+        $func_name = "pup_window_new";
+    }
 
-    $mail_params = array(
-        'user'   => $tab['user'],
-        'lang'   => $tab['lang'],
-        'target' => $tab['target'],
-        'date'   => $tab['pupdate'],
-        'title'  => $tab['title'],
-        'nonav'  => '1'
-    );
+    $mail_params = [
+        'user' => $tab['user'] ?? '',
+        'lang' => $tab['lang'] ?? '',
+        'target' => $tab['target'] ?? '',
+        'date' => $tab['pupdate'] ?? '',
+        'title' => $tab['title'] ?? '',
+        'nonav' => '1'
+    ];
 
-    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params);
+    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params, '', '&', PHP_QUERY_RFC3986);
+    $escaped_url = htmlspecialchars($mail_url, ENT_QUOTES, 'UTF-8');
 
     return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm spannowrap' pup-target='$mail_url' onclick='$func_name(this)'>@</a>
+    	<a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$escaped_url}' onclick='{$func_name}(this)'>@</a>
     HTML;
 }
 
@@ -159,18 +162,15 @@ function make_mail_icon_new($tab, $func_name = "")
  *
  * @return string HTML option elements
  */
-function make_project_to_user($project)
+function make_project_to_user(string $project): string
 {
-
     $str = "<option value='Uncategorized'>Uncategorized</option>";
-    // $str = "";
 
     foreach (TablesSql::$s_projects_title_to_id as $p_title => $p_id) {
-        $cdcdc = $project == $p_title ? "selected" : "";
-        $str .= <<<HTML
-			<option value='$p_title' $cdcdc>$p_title</option>
-		HTML;
-    };
+        $selected = ($project === $p_title) ? "selected" : "";
+        $escaped = htmlspecialchars($p_title, ENT_QUOTES, 'UTF-8');
+        $str .= "<option value='{$escaped}' {$selected}>{$escaped}</option>";
+    }
 
     return $str;
 }
@@ -191,8 +191,8 @@ function make_input_group(string $label, string $id, string $value, string $requ
     return <<<HTML
     <div class='col-md-3'>
         <div class='input-group mb-3'>
-            <span class='input-group-text'>$label</span>
-            <input class='form-control' type='text' name='$id' value='$val2' $required/>
+            <span class='input-group-text'>{$label}</span>
+            <input class='form-control' type='text' name='{$id}' value='{$val2}' {$required}/>
         </div>
     </div>
     HTML;
@@ -208,13 +208,16 @@ function make_input_group(string $label, string $id, string $value, string $requ
  *
  * @return string HTML for the input group
  */
-function make_input_group_no_col($label, $id, $value, $required)
+function make_input_group_no_col(string $label, string $id, string $value, string $required): string
 {
     $val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $label = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+
+
     return <<<HTML
     <div class='input-group mb-3'>
-        <span class='input-group-text'>$label</span>
-        <input class='form-control' type='text' name='$id' value='$val2' $required/>
+        <span class='input-group-text'>{$label}</span>
+        <input class='form-control' type='text' name='{$id}' value='{$val2}' {$required}/>
     </div>
     HTML;
 }
@@ -416,11 +419,12 @@ function make_mdwiki_title(string $title): string
  *
  * @return string HTML anchor element or original category if empty
  */
-function make_cat_url($category)
+function make_cat_url(string $category): string
 {
     if (!empty($category)) {
         $encoded_category = rawurlencode(str_replace(' ', '_', $category));
-        return "<a target='_blank' href='https://mdwiki.org/wiki/Category:$encoded_category'>$category</a>";
+        $escaped_category = htmlspecialchars($category, ENT_QUOTES, 'UTF-8');
+        return "<a target='_blank' href='https://mdwiki.org/wiki/Category:{$encoded_category}'>{$escaped_category}</a>";
     }
     return $category;
 }
@@ -433,9 +437,11 @@ function make_cat_url($category)
  *
  * @return string HTML anchor element
  */
-function make_talk_url($lang, $user)
+function make_talk_url(string $lang, string $user): string
 {
-    return "<a target='_blank' href='//$lang.wikipedia.org/w/index.php?title=User_talk:$user'>talk</a>";
+    $escaped_lang = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
+    $escaped_user = rawurlencode($user);
+    return "<a target='_blank' href='//{$escaped_lang}.wikipedia.org/w/index.php?title=User_talk:{$escaped_user}'>talk</a>";
 }
 
 /**
@@ -447,25 +453,20 @@ function make_talk_url($lang, $user)
  *
  * @return string Content Translation URL
  */
-function make_translation_url($title, $lang, $tr_type)
+function make_translation_url(string $title, string $lang, string $tr_type): string
 {
+    $page = ($tr_type === 'all') ? "User:Mr. Ibrahem/{$title}/full" : "User:Mr. Ibrahem/{$title}";
 
-    $page = $tr_type == 'all' ? "User:Mr. Ibrahem/$title/full" : "User:Mr. Ibrahem/$title";
-
-    $params = array(
+    $params = [
         'page' => $page,
         'from' => "simple",
         'sx' => 'true',
         'to' => $lang,
         'targettitle' => $title
-    );
+    ];
 
-    $url = "//$lang.wikipedia.org/wiki/Special:ContentTranslation";
-
-    // $url .= "?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986) . "#/sx/sentence-selector";
+    $url = "//{$lang}.wikipedia.org/wiki/Special:ContentTranslation";
     $url .= "?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986) . "#/sx?previousRoute=dashboard&eventSource=direct_preselect";
-
-    // $url = "//$lang.wikipedia.org/wiki/Special:ContentTranslation?page=User%3AMr.+Ibrahem%2F$title&from=en&to=$lang&targettitle=$title#draft";
 
     return $url;
 }
@@ -497,14 +498,18 @@ function make_mdwiki_user_url(string $user): string
  *
  * @return string HTML anchor element or original target if empty
  */
-function make_target_url($target, $lang, $name = '', $deleted = false)
+function make_target_url(string $target, string $lang, string $name = '', bool $deleted = false): string
 {
     $display_name = (!empty($name)) ? $name : $target;
+
     if (!empty($target)) {
         $encoded_target = rawurlencode(str_replace(' ', '_', $target));
-        $link = "<a target='_blank' href='https://$lang.wikipedia.org/wiki/$encoded_target'>$display_name</a>";
+        $escaped_display = htmlspecialchars($display_name, ENT_QUOTES, 'UTF-8');
+        $escaped_lang = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
 
-        if ($deleted == 1) {
+        $link = "<a target='_blank' href='https://{$escaped_lang}.wikipedia.org/wiki/{$encoded_target}'>{$escaped_display}</a>";
+
+        if ($deleted) {
             $link .= ' <span class="text-danger">(DELETED)</span>';
         }
         return $link;
