@@ -445,33 +445,6 @@ function make_talk_url(string $lang, string $user): string
 }
 
 /**
- * Generate a Content Translation tool URL
- *
- * @param string $title    Article title to translate
- * @param string $lang     Target language code
- * @param string $tr_type  Translation type ('lead' or 'all')
- *
- * @return string Content Translation URL
- */
-function make_translation_url(string $title, string $lang, string $tr_type): string
-{
-    $page = ($tr_type === 'all') ? "User:Mr. Ibrahem/{$title}/full" : "User:Mr. Ibrahem/{$title}";
-
-    $params = [
-        'page' => $page,
-        'from' => "simple",
-        'sx' => 'true',
-        'to' => $lang,
-        'targettitle' => $title
-    ];
-
-    $url = "//{$lang}.wikipedia.org/wiki/Special:ContentTranslation";
-    $url .= "?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986) . "#/sx?previousRoute=dashboard&eventSource=direct_preselect";
-
-    return $url;
-}
-
-/**
  * Generate a link to an MDWiki user page
  *
  * @param string $user Username

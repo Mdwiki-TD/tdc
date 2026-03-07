@@ -21,7 +21,6 @@ use function Utils\Html\make_datalist_options;
 use function Utils\Html\make_mdwiki_title;
 use function Utils\Html\make_cat_url;
 use function Utils\Html\make_talk_url;
-use function Utils\Html\make_translation_url;
 use function Utils\Html\make_mdwiki_user_url;
 use function Utils\Html\make_target_url;
 use function Utils\Html\div_alert;
@@ -181,14 +180,6 @@ class HtmlTest extends TestCase
     {
         $result = make_talk_url("ar", "Mr. User");
         $this->assertStringContainsString("<a target='_blank' href='//ar.wikipedia.org/w/index.php?title=User_talk:Mr.%20User'>talk</a>", $result);
-    }
-
-    public function testMakeTranslationUrl()
-    {
-        $result = make_translation_url("Article", "es", "all");
-        $this->assertStringContainsString("//es.wikipedia.org/wiki/Special:ContentTranslation", $result);
-        $this->assertStringContainsString("page=User%3AMr.+Ibrahem%2FArticle%2Ffull", $result);
-        $this->assertStringContainsString("to=es", $result);
     }
 
     public function testMakeMdwikiUserUrl()
