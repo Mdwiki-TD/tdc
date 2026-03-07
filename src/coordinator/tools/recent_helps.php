@@ -36,7 +36,7 @@ function filter_recent($lang, $result)
                 class="selectpicker"
                 id='lang'
                 name='lang'
-                placeholder='two letter code'
+                placeholder='Language code'
                 data-live-search="true"
                 data-container="body"
                 data-live-search-style="begins"
