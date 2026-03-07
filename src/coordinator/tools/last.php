@@ -64,7 +64,9 @@ function make_td($tabg, $nnnn, $last_table)
         // $ccat = make_cat_url( $cat );
         $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
         //---
-        $word = $word ?? MainTables::$x_Words_table[$md_title];
+        if (!$word || $word == 0) {
+            $word = MainTables::$x_Words_table[$md_title] ?? 0;
+        }
         //---
         $view = make_view_by_number($target, $views_number, $llang, $pupdate);
         //---
