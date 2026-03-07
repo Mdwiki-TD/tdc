@@ -15,7 +15,7 @@ $qid_table = $_GET['qid_table'] ?? 'qids';
 //---
 if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
 
-function filter_table($data, $vav, $id)
+function filter_qids_table($data, $vav, $id)
 {
 	//---
 	$l_list = "";
@@ -46,7 +46,7 @@ function filter_table($data, $vav, $id)
 	return $uuu;
 }
 
-function make_row($id, $title, $qid, $numb)
+function qids_make_row($id, $title, $qid, $numb)
 {
 	global $qid_table;
 	//---
@@ -111,7 +111,7 @@ foreach ($qq1 as $Key => $table) {
 		$done[] = $id;
 		//---
 		$numb += 1;
-		$form_rows .= make_row($id, $title, $qid, $numb);
+		$form_rows .= qids_make_row($id, $title, $qid, $numb);
 	}
 	//---
 	if ($dis == 'duplicate') {
@@ -123,7 +123,7 @@ foreach ($qq1 as $Key => $table) {
 			$done[] = $id2;
 			//---
 			$numb += 1;
-			$form_rows .= make_row($id2, $title2, $qid2, $numb);
+			$form_rows .= qids_make_row($id2, $title2, $qid2, $numb);
 		}
 	};
 	//---
@@ -134,7 +134,7 @@ $data = [
 	"qids_others" => 'Qids Others',
 ];
 //---
-$filter_ta = filter_table($data, $qid_table, 'qid_table');
+$filter_ta = filter_qids_table($data, $qid_table, 'qid_table');
 //---
 $dis_data = [
 	"empty" => 'Empty',
@@ -142,7 +142,7 @@ $dis_data = [
 	"duplicate" => 'Duplicate',
 ];
 //---
-$filter_dis = filter_table($dis_data, $dis, 'dis');
+$filter_dis = filter_qids_table($dis_data, $dis, 'dis');
 //---
 echo <<<HTML
 	<div class='card'>
