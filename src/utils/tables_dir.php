@@ -30,7 +30,7 @@ function open_td_Tables_file($path)
     }
     $contents = file_get_contents($file_path);
 
-    if ($contents === null || $contents === false) {
+    if ($contents === false) {
         test_print("---- Failed to read file contents from $file_path");
         return [];
     }
