@@ -15,7 +15,7 @@ use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
-function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
+function fix_it_echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
 {
     $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user       = $page_data[0]['user'] ?? '';
     $pupdate    = $page_data[0]['pupdate'] ?? '';
     //---
-    $form = echo_form($id, $title, $new_target, $lang, $new_user, $pupdate);
+    $form = fix_it_echo_form($id, $title, $new_target, $lang, $new_user, $pupdate);
     //---
     echo <<<HTML
         <div class='card'>
