@@ -57,24 +57,24 @@
 
 ### 1.2 Technology Stack
 
-| Layer | Technology | Notes |
-|-------|-----------|-------|
-| Language | PHP 7.4+ | No strict types, mixed procedural/OOP |
-| Frontend | Bootstrap 5, jQuery 3.x, DataTables | No framework bundling |
-| Database | MySQL via PDO | Single `Database` class, connection per query |
-| Auth | External OAuth (`auth_repo/oauth/user_infos.php`) | Global `$GLOBALS['global_username']` |
-| Deployment | GitHub Actions → SSH → shell script | No automated tests |
+| Layer      | Technology                                        | Notes                                         |
+| ---------- | ------------------------------------------------- | --------------------------------------------- |
+| Language   | PHP 7.4+                                          | No strict types, mixed procedural/OOP         |
+| Frontend   | Bootstrap 5, jQuery 3.x, DataTables               | No framework bundling                         |
+| Database   | MySQL via PDO                                     | Single `Database` class, connection per query |
+| Auth       | External OAuth (`auth_repo/oauth/user_infos.php`) | Global `$GLOBALS['global_username']`          |
+| Deployment | GitHub Actions → SSH → shell script               | No automated tests                            |
 
 ### 1.3 Key Modules
 
-| Module | Location | Purpose | Lines |
-|--------|----------|---------|-------|
-| CSRF Protection | `src/csrf.php` | Token generation/verification | 77 |
-| Database Access | `src/backend/api_calls/mdwiki_sql.php` | PDO wrapper, query execution | 397 |
-| API Client | `src/backend/api_calls/td_api.php` | Translation Dashboard API | 108 |
-| Data Access Abstraction | `src/backend/api_or_sql/` | API/SQL dual-mode layer | ~450 |
-| Admin Modules | `src/coordinator/admin/*/` | CRUD for 11 entities | ~1500 |
-| HTML Helpers | `src/utils/html.php` | 376 lines of HEREDOC strings | 376 |
+| Module                  | Location                               | Purpose                       | Lines |
+| ----------------------- | -------------------------------------- | ----------------------------- | ----- |
+| CSRF Protection         | `src/csrf.php`                         | Token generation/verification | 77    |
+| Database Access         | `src/backend/api_calls/mdwiki_sql.php` | PDO wrapper, query execution  | 397   |
+| API Client              | `src/backend/api_calls/td_api.php`     | Translation Dashboard API     | 108   |
+| Data Access Abstraction | `src/backend/api_or_sql/`              | API/SQL dual-mode layer       | ~450  |
+| Admin Modules           | `src/coordinator/admin/*/`             | CRUD for 11 entities          | ~1500 |
+| HTML Helpers            | `src/utils/html.php`                   | 376 lines of HEREDOC strings  | 376   |
 
 ---
 
@@ -85,6 +85,7 @@
 #### CVE-2024-CSRF: Default Return `true`
 
 **File:** `src/csrf.php:17-66`
+
 ```php
 function verify_csrf_token()
 {
@@ -105,11 +106,13 @@ function verify_csrf_token()
 #### CVE-2024-SQLi: Dynamic Table Name Concatenation
 
 **File:** `src/coordinator/admin/qids/post.php:24`
+
 ```php
 $qua = "INSERT INTO $qid_table (title, qid) SELECT ?, ? WHERE NOT EXISTS ...";
 ```
 
 **Variable Source:** `$_GET["qid_table"]` (line 15)
+
 ```php
 $qid_table = $_GET["qid_table"] ?? '';
 if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
@@ -124,6 +127,7 @@ if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
 #### CVE-2024-XSS: Unescaped HEREDOC Output
 
 **File:** `src/utils/html.php:134-142`
+
 ```php
 function make_input_group($label, $id, $value, $required)
 {
@@ -147,6 +151,7 @@ function make_input_group($label, $id, $value, $required)
 ### 2.2 Global Scope Pollution
 
 **File:** `src/include.php` (43 lines)
+
 ```php
 <?php
 // Lines 3-7: Environment mutation
@@ -191,6 +196,7 @@ foreach (glob(__DIR__ . "/results/*.php") as $filename) {
 ```
 
 **Problems:**
+
 1. **40+ files loaded** into global scope on every request
 2. **No autoloading** - all code always loaded
 3. **Hardcoded paths** (`I:/mdwiki/`) - breaks portability
@@ -203,6 +209,7 @@ foreach (glob(__DIR__ . "/results/*.php") as $filename) {
 ### 2.3 Primitive Obsession / Magic Numbers
 
 **File:** `src/index.php:52-54`
+
 ```php
 $ty = $_GET['ty'] ?? $_POST['ty'] ?? 'last';
 if ($ty == 'translate_type') $ty = 'tt';
@@ -211,11 +218,13 @@ if ($ty == 'translate_type') $ty = 'tt';
 **Issue:** String-based routing without enum or constants.
 
 **File:** `src/coordinator/admin/qids/index.php:89`
+
 ```php
 if (!isset($_GET['dis']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $dis = "empty";
 ```
 
 **Issues:**
+
 1. Hardcoded username check
 2. No role-based access control abstraction
 
@@ -224,15 +233,16 @@ if (!isset($_GET['dis']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $dis =
 ### 2.4 Switch Statements / Conditional Chains
 
 **File:** `src/index.php:72-87` (Routing Logic)
+
 ```php
 if (in_array($ty, $tools_folders)) {
     include_once __DIR__ . "/coordinator/tools/$ty.php";
 } elseif ($ty == "sidebar") {
     $sidebar = create_side($filename, $ty);
     echo $sidebar;
-} elseif (in_array($ty, $corrd_folders) && user_in_coord) {
+} elseif (in_array($ty, $corrd_folders) && $GLOBALS['user_is_coordinator']) {
     include_once __DIR__ . "/coordinator/admin/$ty/index.php";
-} elseif (is_file($adminfile) && user_in_coord) {
+} elseif (is_file($adminfile) && $GLOBALS['user_is_coordinator']) {
     include_once $adminfile;
 } else {
     test_print("can't find $adminfile");
@@ -251,7 +261,7 @@ if (in_array($ty, $tools_folders)) {
 
 ```php
 // Pattern 1: Auth check (appears in every admin/index.php)
-if (user_in_coord == false) {
+if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
@@ -273,11 +283,12 @@ $csrf_token = generate_csrf_token();
 ```
 
 **Locations:**
-- `src/coordinator/admin/users/index.php` (if exists)
-- `src/coordinator/admin/projects/index.php`
-- `src/coordinator/admin/qids/index.php`
-- `src/coordinator/admin/settings/index.php`
-- And 7+ more admin modules...
+
+-   `src/coordinator/admin/users/index.php` (if exists)
+-   `src/coordinator/admin/projects/index.php`
+-   `src/coordinator/admin/qids/index.php`
+-   `src/coordinator/admin/settings/index.php`
+-   And 7+ more admin modules...
 
 **Duplication:** ~80 lines per module × 11 modules = ~880 lines of boilerplate
 
@@ -301,23 +312,26 @@ function get_td_or_sql_categories(): array
 ```
 
 **Problems:**
+
 1. **No cache invalidation** - data never refreshes within request
 2. **Testing hostile** - cannot reset state between tests
 3. **Memory leaks** - long-running processes accumulate data
 4. **Inconsistent behavior** - some functions check `!empty($categories)`, others check `!empty($categories ?? [])`
 
 **Examples:**
-- `get_td_or_sql_categories()` (line 53)
-- `get_coordinator()` (line 72)
-- `get_users_by_last_pupdate()` (line 91)
-- `get_td_or_sql_count_pages_not_empty()` (line 139)
-- And 10+ more...
+
+-   `get_td_or_sql_categories()` (line 53)
+-   `get_coordinator()` (line 72)
+-   `get_users_by_last_pupdate()` (line 91)
+-   `get_td_or_sql_count_pages_not_empty()` (line 139)
+-   And 10+ more...
 
 ---
 
 ### 2.7 Error Output to HTML
 
 **File:** `src/backend/api_calls/mdwiki_sql.php:137-138`
+
 ```php
 } catch (PDOException $e) {
     echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;  // ← Exposes internals
@@ -326,6 +340,7 @@ function get_td_or_sql_categories(): array
 ```
 
 **File:** `src/backend/api_calls/mdwiki_sql.php:160`
+
 ```php
 } catch (PDOException $e) {
     echo "SQL Error:" . $e->getMessage() . "<br>" . $sql_query;
@@ -334,6 +349,7 @@ function get_td_or_sql_categories(): array
 ```
 
 **Issues:**
+
 1. Database errors exposed to users
 2. Query structure exposed
 3. No structured logging for debugging
@@ -344,6 +360,7 @@ function get_td_or_sql_categories(): array
 ### 2.8 Code Comments in Arabic
 
 **File:** `src/csrf.php:21-24`
+
 ```php
 // التحقق مما إذا كان هناك CSRF Tokens في الجلسة
 if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
@@ -358,6 +375,7 @@ if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
 ### 2.9 Dead Code
 
 **File:** `src/backend/api_or_sql/index.php:21`
+
 ```php
 $use_td_api  = false;  // ← Immediately overwrites computed value
 ```
@@ -365,6 +383,7 @@ $use_td_api  = false;  // ← Immediately overwrites computed value
 Lines 18-19 compute `$use_td_api`, but line 21 hardcodes it to `false`.
 
 **File:** `src/include.php:29`
+
 ```php
 // include_once __DIR__ . '/backend/api_or_sql/index.php';  // ← Commented out but file still loaded via glob
 ```
@@ -373,14 +392,14 @@ Lines 18-19 compute `$use_td_api`, but line 21 hardcodes it to `false`.
 
 ### 2.10 Mixed Naming Conventions
 
-| File | Pattern | Example |
-|------|---------|---------|
-| `funcs.php` | snake_case | `get_td_or_sql_categories()` |
-| `mdwiki_sql.php` | snake_case | `fetch_query()`, `sql_add_user()` |
-| `td_api.php` | snake_case | `get_td_api()` |
-| `tables.php` | PascalCase class | `class MainTables` |
-| Global variable | snake_case | `$use_td_api`, `$user_in_coord` |
-| Constants | Not used | N/A |
+| File             | Pattern          | Example                                          |
+| ---------------- | ---------------- | ------------------------------------------------ |
+| `funcs.php`      | snake_case       | `get_td_or_sql_categories()`                     |
+| `mdwiki_sql.php` | snake_case       | `fetch_query()`, `sql_add_user()`                |
+| `td_api.php`     | snake_case       | `get_td_api()`                                   |
+| `tables.php`     | PascalCase class | `class MainTables`                               |
+| Global variable  | snake_case       | `$use_td_api`, `$GLOBALS['user_is_coordinator']` |
+| Constants        | Not used         | N/A                                              |
 
 **Issue:** No PSR-4 or PSR-12 compliance.
 
@@ -424,6 +443,7 @@ Lines 18-19 compute `$use_td_api`, but line 21 hardcodes it to `false`.
 ### 3.2 High Coupling: Hardcoded Paths
 
 **File:** `src/include.php:15-19`
+
 ```php
 if (substr(__DIR__, 0, 2) == 'I:') {
     include_once 'I:/mdwiki/auth_repo/oauth/user_infos.php';
@@ -439,22 +459,20 @@ if (substr(__DIR__, 0, 2) == 'I:') {
 ### 3.3 Tight Coupling: Global State
 
 **Global Variables Used Across Codebase:**
+
 ```php
 // Defined in src/backend/api_or_sql/index.php:17-25
 global $use_td_api;
-
-// Defined in src/header.php:19-31
-global $user_in_coord;
-define('user_in_coord', $user_in_coord);  // ← Both global AND constant
 
 // From external auth
 $GLOBALS['global_username']  // ← Used in 20+ files without null check
 ```
 
 **Dependent Files:**
-- `src/header.php:24-28`
-- `src/coordinator/admin/qids/index.php:89`
-- And 18+ more...
+
+-   `src/header.php:24-28`
+-   `src/coordinator/admin/qids/index.php:89`
+-   And 18+ more...
 
 ---
 
@@ -500,6 +518,7 @@ $GLOBALS['global_username']  // ← Used in 20+ files without null check
 ```
 
 **Coupling Issues:**
+
 1. **No interface abstraction** - direct function calls
 2. **Static cache in data layer** - prevents testability
 3. **Global mode switch** (`$use_td_api`) affects all calls
@@ -508,12 +527,12 @@ $GLOBALS['global_username']  // ← Used in 20+ files without null check
 
 ### 3.5 Dependency Table: External Services
 
-| Service | Location | Fallback | Error Handling |
-|---------|----------|----------|----------------|
-| Translation Dashboard API | `td_api.php:86` | Returns empty array | Silent failure |
-| MySQL Database | `mdwiki_sql.php:72` | Echoes error, exits | Exposes internals |
-| MediaWiki API | (referenced, not directly analyzed) | Unknown | Unknown |
-| OAuth | External repo | Unknown | Unknown |
+| Service                   | Location                            | Fallback            | Error Handling    |
+| ------------------------- | ----------------------------------- | ------------------- | ----------------- |
+| Translation Dashboard API | `td_api.php:86`                     | Returns empty array | Silent failure    |
+| MySQL Database            | `mdwiki_sql.php:72`                 | Echoes error, exits | Exposes internals |
+| MediaWiki API             | (referenced, not directly analyzed) | Unknown             | Unknown           |
+| OAuth                     | External repo                       | Unknown             | Unknown           |
 
 ---
 
@@ -521,18 +540,19 @@ $GLOBALS['global_username']  // ← Used in 20+ files without null check
 
 ### Phase 1: Critical Security Fixes (Week 1)
 
-| Priority | Issue | File | Action |
-|----------|-------|------|--------|
-| P0 | CSRF default `true` | `src/csrf.php:25` | Change to `return false` |
-| P0 | SQL table injection | `qids/post.php:24` | Whitelist validation |
-| P0 | XSS in HEREDOC | `utils/html.php:134+` | Escape all variables |
-| P1 | Debug mode exposure | Multiple files | Remove `display_errors` in production |
+| Priority | Issue               | File                  | Action                                |
+| -------- | ------------------- | --------------------- | ------------------------------------- |
+| P0       | CSRF default `true` | `src/csrf.php:25`     | Change to `return false`              |
+| P0       | SQL table injection | `qids/post.php:24`    | Whitelist validation                  |
+| P0       | XSS in HEREDOC      | `utils/html.php:134+` | Escape all variables                  |
+| P1       | Debug mode exposure | Multiple files        | Remove `display_errors` in production |
 
 ---
 
 ### Phase 2: Dependency Injection & Autoloading (Week 2-3)
 
 **2.1 Implement PSR-4 Autoloading**
+
 ```php
 // composer.json (new file)
 {
@@ -545,6 +565,7 @@ $GLOBALS['global_username']  // ← Used in 20+ files without null check
 ```
 
 **2.2 Create Service Container**
+
 ```php
 // src/Core/Container.php (new file)
 namespace TDC\Core;
@@ -563,6 +584,7 @@ class Container {
 ```
 
 **2.3 Dependency Injection for Database**
+
 ```php
 // Before (global):
 $db = new Database($_SERVER['SERVER_NAME'] ?? '', $dbname);
@@ -651,11 +673,11 @@ abstract class AdminController {
 
 **4.2 Migrate Each Admin Module**
 
-| Module | Current Files | Target Class |
-|--------|---------------|--------------|
-| Projects | `projects/index.php`, `projects/post.php` | `ProjectAdminController` |
-| QIDs | `qids/index.php`, `qids/post.php`, `qids/edit_qid.php` | `QidAdminController` |
-| Settings | `settings/index.php`, `settings/post.php` | `SettingsAdminController` |
+| Module   | Current Files                                          | Target Class              |
+| -------- | ------------------------------------------------------ | ------------------------- |
+| Projects | `projects/index.php`, `projects/post.php`              | `ProjectAdminController`  |
+| QIDs     | `qids/index.php`, `qids/post.php`, `qids/edit_qid.php` | `QidAdminController`      |
+| Settings | `settings/index.php`, `settings/post.php`              | `SettingsAdminController` |
 
 ---
 
@@ -755,11 +777,13 @@ abstract class DatabaseTestCase extends TestCase {
 ### 5.1 `src/csrf.php`
 
 **Current Issues:**
-- Line 25: Returns `true` by default (critical security bug)
-- Line 24: Echoes error message
-- Arabic comments
+
+-   Line 25: Returns `true` by default (critical security bug)
+-   Line 24: Echoes error message
+-   Arabic comments
 
 **Required Changes:**
+
 ```php
 // Line 17-26 (BEFORE)
 function verify_csrf_token()
@@ -781,6 +805,7 @@ function verify_csrf_token(): bool
 ```
 
 **Full Refactor Required:**
+
 ```php
 // src/Security/CsrfProtection.php (new file)
 namespace TDC\Security;
@@ -825,14 +850,16 @@ final class CsrfProtection {
 ### 5.2 `src/include.php`
 
 **Current Issues:**
-- 43 lines of wildcard includes
-- Hardcoded `I:/mdwiki/` paths
-- Environment mutation
-- No conditional loading
+
+-   43 lines of wildcard includes
+-   Hardcoded `I:/mdwiki/` paths
+-   Environment mutation
+-   No conditional loading
 
 **Required Changes:**
 
 **Step 1: Replace with Composer autoload**
+
 ```php
 // src/include.php (AFTER - 3 lines)
 <?php
@@ -844,6 +871,7 @@ session_start();
 ```
 
 **Step 2: Create bootstrap.php**
+
 ```php
 // bootstrap.php (new file)
 <?php
@@ -863,10 +891,11 @@ DatabaseConnection::initialize();
 ### 5.3 `src/backend/api_calls/mdwiki_sql.php`
 
 **Current Issues:**
-- Lines 44, 61: Hardcoded password `'root11'` for localhost
-- Line 72: Hardcoded connection string
-- Lines 137-138, 160: Errors echoed to HTML
-- No connection pooling (new instance per query)
+
+-   Lines 44, 61: Hardcoded password `'root11'` for localhost
+-   Line 72: Hardcoded connection string
+-   Lines 137-138, 160: Errors echoed to HTML
+-   No connection pooling (new instance per query)
 
 **Required Changes:**
 
@@ -993,10 +1022,11 @@ final class QueryExecutor {
 ### 5.4 `src/backend/api_or_sql/funcs.php`
 
 **Current Issues:**
-- Lines 28-161: Static cache in every function (15 functions)
-- No cache invalidation
-- Testing hostile
-- Mixed return types (array indexed differently)
+
+-   Lines 28-161: Static cache in every function (15 functions)
+-   No cache invalidation
+-   Testing hostile
+-   Mixed return types (array indexed differently)
 
 **Required Changes:**
 
@@ -1064,10 +1094,11 @@ final class InMemoryCache implements CacheInterface {
 ### 5.5 `src/utils/html.php` (376 lines)
 
 **Current Issues:**
-- 376 lines of HEREDOC strings
-- No XSS escaping on parameters
-- No template engine
-- Direct HTML generation in business logic
+
+-   376 lines of HEREDOC strings
+-   No XSS escaping on parameters
+-   No template engine
+-   Direct HTML generation in business logic
 
 **Required Changes:**
 
@@ -1118,6 +1149,7 @@ final class Escaper {
 ```
 
 **Alternative: Use Twig Template Engine**
+
 ```twig
 {# templates/admin/projects_form.twig #}
 <form action="{{ path('admin_projects') }}" method="POST">
@@ -1140,15 +1172,17 @@ final class Escaper {
 ### 5.6 `src/coordinator/admin/projects/`
 
 **Current Files:**
-- `index.php` (106 lines) - Form display
-- `post.php` (50 lines) - Form processing
+
+-   `index.php` (106 lines) - Form display
+-   `post.php` (50 lines) - Form processing
 
 **Current Issues:**
-- Auth check duplicated
-- CSRF handling duplicated
-- No validation
-- Direct database access
-- Error messages to HTML
+
+-   Auth check duplicated
+-   CSRF handling duplicated
+-   No validation
+-   Direct database access
+-   Error messages to HTML
 
 **Refactor To:**
 
@@ -1257,67 +1291,68 @@ final class ProjectStoreRequest {
 
 ### 6.1 Critical Risks (Immediate Action Required)
 
-| Risk | Severity | Impact | Files Affected |
-|------|----------|--------|----------------|
-| CSRF default bypass | **CRITICAL** | Any user can perform actions on behalf of others | `src/csrf.php:25` |
-| SQL injection potential | **CRITICAL** | Database compromise, data theft | `qids/post.php:24` + 5+ locations |
-| XSS via HEREDOC | **HIGH** | Session hijacking, data theft | `utils/html.php` (376 lines) |
-| Password in source | **CRITICAL** | Database compromised if repo exposed | `mdwiki_sql.php:61` |
+| Risk                    | Severity     | Impact                                           | Files Affected                    |
+| ----------------------- | ------------ | ------------------------------------------------ | --------------------------------- |
+| CSRF default bypass     | **CRITICAL** | Any user can perform actions on behalf of others | `src/csrf.php:25`                 |
+| SQL injection potential | **CRITICAL** | Database compromise, data theft                  | `qids/post.php:24` + 5+ locations |
+| XSS via HEREDOC         | **HIGH**     | Session hijacking, data theft                    | `utils/html.php` (376 lines)      |
+| Password in source      | **CRITICAL** | Database compromised if repo exposed             | `mdwiki_sql.php:61`               |
 
 ---
 
 ### 6.2 High-Priority Technical Debt
 
-| Issue | Impact | Effort | Priority |
-|-------|--------|--------|----------|
-| No test coverage | Cannot safely refactor | High | P1 |
-| Global scope pollution | Memory issues, testing hostile | Medium | P1 |
-| Static caching (no invalidation) | Stale data served | Medium | P1 |
-| No error logging | Production debugging impossible | Low | P1 |
-| Mixed naming conventions | Maintenance burden | Low | P2 |
-| Arabic comments | Collaboration barrier | Low | P2 |
-| Dead code | Confusion, bloat | Low | P3 |
+| Issue                            | Impact                          | Effort | Priority |
+| -------------------------------- | ------------------------------- | ------ | -------- |
+| No test coverage                 | Cannot safely refactor          | High   | P1       |
+| Global scope pollution           | Memory issues, testing hostile  | Medium | P1       |
+| Static caching (no invalidation) | Stale data served               | Medium | P1       |
+| No error logging                 | Production debugging impossible | Low    | P1       |
+| Mixed naming conventions         | Maintenance burden              | Low    | P2       |
+| Arabic comments                  | Collaboration barrier           | Low    | P2       |
+| Dead code                        | Confusion, bloat                | Low    | P3       |
 
 ---
 
 ### 6.3 Maintainability Metrics
 
-| Metric | Current | Target | Status |
-|--------|---------|--------|--------|
-| Test Coverage | ~1% | 80% | Critical |
-| Cyclomatic Complexity (avg) | Unknown | <10 | Needs measurement |
-| Code Duplication | ~30% | <5% | High |
-| Largest Function | 161 lines | <50 lines | Exceeded |
-| Files per Directory | Variable | <20 | Mixed |
-| Dependency Depth | 5+ layers | <4 | Exceeded |
+| Metric                      | Current   | Target    | Status            |
+| --------------------------- | --------- | --------- | ----------------- |
+| Test Coverage               | ~1%       | 80%       | Critical          |
+| Cyclomatic Complexity (avg) | Unknown   | <10       | Needs measurement |
+| Code Duplication            | ~30%      | <5%       | High              |
+| Largest Function            | 161 lines | <50 lines | Exceeded          |
+| Files per Directory         | Variable  | <20       | Mixed             |
+| Dependency Depth            | 5+ layers | <4        | Exceeded          |
 
 ---
 
 ### 6.4 Scalability Concerns
 
-| Concern | Current Behavior | Scaling Limit |
-|---------|-----------------|---------------|
-| Database Connections | New connection per query | Connection exhaustion at ~100 req/s |
-| Static Caching | Never expires | Memory growth unbounded |
-| File Loading | All files on every request | CPU waste at high concurrency |
-| Session Storage | PHP default (files) | Not horizontally scalable |
+| Concern              | Current Behavior           | Scaling Limit                       |
+| -------------------- | -------------------------- | ----------------------------------- |
+| Database Connections | New connection per query   | Connection exhaustion at ~100 req/s |
+| Static Caching       | Never expires              | Memory growth unbounded             |
+| File Loading         | All files on every request | CPU waste at high concurrency       |
+| Session Storage      | PHP default (files)        | Not horizontally scalable           |
 
 ---
 
 ### 6.5 Deployment Risks
 
-| Risk | Current Mitigation | Recommendation |
-|------|-------------------|----------------|
-| No pre-deploy tests | None | Add PHPUnit tests to CI |
-| SSH key in secrets | Basic | Add rotation policy |
-| Direct production deploy | None | Add staging environment |
-| No rollback mechanism | Manual | Add deployment rollback |
+| Risk                     | Current Mitigation | Recommendation          |
+| ------------------------ | ------------------ | ----------------------- |
+| No pre-deploy tests      | None               | Add PHPUnit tests to CI |
+| SSH key in secrets       | Basic              | Add rotation policy     |
+| Direct production deploy | None               | Add staging environment |
+| No rollback mechanism    | Manual             | Add deployment rollback |
 
 ---
 
 ## Appendix A: File Inventory
 
 ### Backend API Layer (4 files, 722 lines)
+
 ```
 src/backend/api_calls/
 ├── mdwiki_api.php        (MediaWiki API client)
@@ -1327,6 +1362,7 @@ src/backend/api_calls/
 ```
 
 ### Data Access Layer (4 files, 700+ lines)
+
 ```
 src/backend/api_or_sql/
 ├── index.php             (44 lines) - Dual-mode router
@@ -1336,6 +1372,7 @@ src/backend/api_or_sql/
 ```
 
 ### Admin Modules (33 files, ~2000+ lines)
+
 ```
 src/coordinator/admin/
 ├── add/                  (3 files)
@@ -1355,6 +1392,7 @@ src/coordinator/admin/
 ```
 
 ### Configuration (3 files)
+
 ```
 src/backend/infos/
 └── td_config.php         (72 lines) - JSON config management
@@ -1370,45 +1408,49 @@ src/backend/tables/
 
 ## Appendix B: Recommended Tools
 
-| Tool | Purpose | Integration Point |
-|------|---------|-------------------|
-| PHPStan | Static analysis | CI pipeline |
-| Psalm | Type checking | CI pipeline |
-| PHPUnit | Unit testing | Development + CI |
-| PHP-CS-Fixer | Code style | Pre-commit hook |
-| Rector | Automated refactoring | Development |
-| Xdebug | Debugging | Development |
-| Blackfire | Performance profiling | Staging |
+| Tool         | Purpose               | Integration Point |
+| ------------ | --------------------- | ----------------- |
+| PHPStan      | Static analysis       | CI pipeline       |
+| Psalm        | Type checking         | CI pipeline       |
+| PHPUnit      | Unit testing          | Development + CI  |
+| PHP-CS-Fixer | Code style            | Pre-commit hook   |
+| Rector       | Automated refactoring | Development       |
+| Xdebug       | Debugging             | Development       |
+| Blackfire    | Performance profiling | Staging           |
 
 ---
 
 ## Appendix C: Migration Checklist
 
 ### Week 1-2: Security & Foundation
-- [ ] Fix CSRF default return (P0)
-- [ ] Fix SQL injection vectors (P0)
-- [ ] Fix XSS in HEREDOC (P0)
-- [ ] Remove hardcoded passwords (P0)
-- [ ] Setup Composer
+
+-   [ ] Fix CSRF default return (P0)
+-   [ ] Fix SQL injection vectors (P0)
+-   [ ] Fix XSS in HEREDOC (P0)
+-   [ ] Remove hardcoded passwords (P0)
+-   [ ] Setup Composer
 
 ### Week 3-4: Architecture
-- [ ] Implement PSR-4 autoloading
-- [ ] Create service container
-- [ ] Extract domain entities
-- [ ] Create repository interfaces
+
+-   [ ] Implement PSR-4 autoloading
+-   [ ] Create service container
+-   [ ] Extract domain entities
+-   [ ] Create repository interfaces
 
 ### Week 5-7: Refactor
-- [ ] Consolidate admin modules
-- [ ] Replace static caching with proper cache
-- [ ] Remove global scope pollution
-- [ ] Implement front controller
+
+-   [ ] Consolidate admin modules
+-   [ ] Replace static caching with proper cache
+-   [ ] Remove global scope pollution
+-   [ ] Implement front controller
 
 ### Week 8-10: Quality
-- [ ] Add PHPUnit tests
-- [ ] Setup CI with PHPStan
-- [ ] Add error logging
-- [ ] Document API
+
+-   [ ] Add PHPUnit tests
+-   [ ] Setup CI with PHPStan
+-   [ ] Add error logging
+-   [ ] Document API
 
 ---
 
-*End of Report*
+_End of Report_
