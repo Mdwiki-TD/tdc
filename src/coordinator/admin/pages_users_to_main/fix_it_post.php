@@ -10,7 +10,7 @@ require_once __DIR__ . '/../add/add_post.php';
 use function APICalls\MdwikiSql\execute_query;
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\verify_csrf_token;
-use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function Utils\Html\div_alert;
 use function Add\AddPost\add_pages_to_db;
 //---
 

@@ -11,7 +11,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---

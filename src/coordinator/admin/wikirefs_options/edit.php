@@ -7,7 +7,7 @@ if ($GLOBALS['user_is_coordinator'] == false) {
 //---
 use function TDWIKI\csrf\generate_csrf_token;
 use function APICalls\MdwikiSql\execute_query;
-use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function Utils\Html\div_alert;
 use function TDWIKI\csrf\verify_csrf_token; // if (verify_csrf_token())  {
 //---
 echo '</div><script>

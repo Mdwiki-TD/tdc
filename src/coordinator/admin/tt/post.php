@@ -1,6 +1,6 @@
 <?php
 //---
-use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\insert_to_translate_type;
 use function TDWIKI\csrf\verify_csrf_token;
 //---

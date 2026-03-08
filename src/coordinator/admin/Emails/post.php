@@ -1,6 +1,6 @@
 <?php
 //---
-use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\sql_update_user;
 use function APICalls\MdwikiSql\sql_add_user;
 use function APICalls\MdwikiSql\check_one;
