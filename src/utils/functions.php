@@ -1,5 +1,42 @@
 <?php
 
+/**
+ * Utility Functions Module
+ *
+ * Provides common utility functions used throughout the Translation Dashboard
+ * application. These functions handle debugging, string manipulation, and
+ * other general-purpose operations.
+ *
+ * Features:
+ * - Conditional debug printing based on test mode
+ * - String prefix checking utilities
+ * - Test mode detection and configuration
+ *
+ * Usage Example:
+ * ```php
+ * use function Utils\Functions\test_print;
+ * use function Utils\Functions\start_with;
+ *
+ * // Debug output (only visible in test mode)
+ * test_print("Debug message: " . $variable);
+ *
+ * // Check if string starts with prefix
+ * if (start_with($url, 'https://')) {
+ *     // Handle secure URL
+ * }
+ * ```
+ *
+ * Environment Variables:
+ * - test (REQUEST/COOKIE): Enables debug mode when set
+ *
+ * @package    Utils
+ * @subpackage Functions
+ * @author     Translation Dashboard Team
+ * @version    2.0.0
+ * @since      1.0.0
+ * @license    GPL-3.0-or-later
+ */
+
 namespace Utils\Functions;
 
 /**
