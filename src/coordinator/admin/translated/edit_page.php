@@ -78,8 +78,8 @@ function translated_edit_echo_form($id, $table)
     //---
     $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
-	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-	$target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+    $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
     //---
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
     //---
@@ -153,36 +153,54 @@ function translated_edit_echo_form($id, $table)
     HTML;
 }
 //---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token()) {
-    if (isset($_POST['delete'])) {
-        delete_page($_POST['delete'], $table);
-        // ---
-    } elseif (isset($_POST['edit'])) {
-        $title      = $_POST['title'] ?? '';
-        $target     = $_POST['target'] ?? '';
-        $lang       = $_POST['lang'] ?? '';
-        $user       = $_POST['user'] ?? '';
-        $pupdate    = $_POST['pupdate'] ?? '';
-        //---
-        edit_page($id, $table, $title, $target, $lang, $user, $pupdate);
-    }
-    //---
-    // green text success
-    echo <<<HTML
-        <div class='alert alert-success' role='alert'>Page updated<br>
-            window will close in 3 seconds
-        </div>
-        <script>
-            setTimeout(function() {
-                window.close();
-            }, 3000);
-        </script>
-    HTML;
-} else {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     translated_edit_echo_form($id, $table);
+    echo <<<HTML
+        </div>
+    </div>
+    HTML;
+    exit;
+}
+// ---
+$close_btn = <<<HTML
+	<div class="aligncenter">
+		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+	</div>
+HTML;
+// ---
+if (!verify_csrf_token()) {
+    echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+    echo $close_btn;
+    return;
 }
 //---
+if (isset($_POST['delete'])) {
+    delete_page($_POST['delete'], $table);
+    // ---
+} elseif (isset($_POST['edit'])) {
+    $title      = $_POST['title'] ?? '';
+    $target     = $_POST['target'] ?? '';
+    $lang       = $_POST['lang'] ?? '';
+    $user       = $_POST['user'] ?? '';
+    $pupdate    = $_POST['pupdate'] ?? '';
+    //---
+    edit_page($id, $table, $title, $target, $lang, $user, $pupdate);
+}
+//---
+//---
+// green text success
 echo <<<HTML
+    <div class='alert alert-success' role='alert'>Page updated<br>
+        window will close in 3 seconds
+    </div>
+HTML;
+echo $close_btn;
+echo <<<HTML
+    <script>
+        setTimeout(function() {
+            window.close();
+        }, 3000);
+    </script>
     </div>
 </div>
 HTML;
