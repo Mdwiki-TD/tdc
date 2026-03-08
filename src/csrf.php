@@ -134,18 +134,16 @@ function verify_csrf_token(): bool
 		error_log('CSRF: No token submitted in POST request');
 		return false;
 	}
+	foreach ($_SESSION['csrf_tokens'] as $key => $token) {
+		if (hash_equals($token, $submitted_token)) {
+			// Token is valid - remove it to prevent reuse
+			unset($_SESSION['csrf_tokens'][$key]);
 
-	// Use timing-safe comparison for token validation
-	$tokenIndex = array_search($submitted_token, $_SESSION['csrf_tokens'], true);
+			// Re-index the array to prevent gaps
+			$_SESSION['csrf_tokens'] = array_values($_SESSION['csrf_tokens']);
 
-	if ($tokenIndex !== false) {
-		// Token is valid - remove it to prevent reuse
-		unset($_SESSION['csrf_tokens'][$tokenIndex]);
-
-		// Re-index the array to prevent gaps
-		$_SESSION['csrf_tokens'] = array_values($_SESSION['csrf_tokens']);
-
-		return true;
+			return true;
+		}
 	}
 	echo <<<HTML
 		<div class='alert alert-danger' role='alert'>
