@@ -28,49 +28,66 @@ function delete_user_page($id)
     return $delete_done;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['edit'])) {
-    // ---
-    $texts = [];
-    $errors = [];
+// ---
+$close_btn = <<<HTML
+	<div class="aligncenter">
+		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+	</div>
+HTML;
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['edit'])) {
+    exit;
+}
+
+if (!verify_csrf_token()) {
+    echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+    echo $close_btn;
+    return;
+}
+
+// ---
+$texts = [];
+$errors = [];
+//---
+$title      = $_POST['title'] ?? '';
+$lang       = $_POST['lang'] ?? '';
+$new_target = $_POST['new_target'] ?? '';
+$new_user   = $_POST['new_user'] ?? '';
+$pupdate    = $_POST['pupdate'] ?? '';
+//---
+$id         = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+//---
+if ($id <= 0) {
+    $errors[] = "Invalid id supplied.";
+}
+//---
+$page_data = fetch_query("SELECT * FROM pages_users WHERE id = ?", [$id]);
+//---
+if (empty($page_data)) {
+    $errors[] = "Page with id:($id) not found.";
+} else {
+    $t_type    = $page_data[0]['translate_type'] ?? '';
+    $cat       = $page_data[0]['cat'] ?? '';
+    $word      = $page_data[0]['word'] ?? '';
     //---
-    $title      = $_POST['title'] ?? '';
-    $lang       = $_POST['lang'] ?? '';
-    $new_target = $_POST['new_target'] ?? '';
-    $new_user   = $_POST['new_user'] ?? '';
-    $pupdate    = $_POST['pupdate'] ?? '';
+    $result = add_pages_to_db($title, $t_type, $cat, $lang, $new_user, $new_target, $pupdate, $word);
     //---
-    $id         = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-    //---
-    if ($id <= 0) {
-        $errors[] = "Invalid id supplied.";
-    }
-    //---
-    $page_data = fetch_query("SELECT * FROM pages_users WHERE id = ?", [$id]);
-    //---
-    if (empty($page_data)) {
-        $errors[] = "Page with id:($id) not found.";
+    if ($result === false) {
+        $errors[] = "Failed to add translations.";
     } else {
-        $t_type    = $page_data[0]['translate_type'] ?? '';
-        $cat       = $page_data[0]['cat'] ?? '';
-        $word      = $page_data[0]['word'] ?? '';
+        $texts[] = "Translations added successfully.";
         //---
-        $result = add_pages_to_db($title, $t_type, $cat, $lang, $new_user, $new_target, $pupdate, $word);
+        $del_it = delete_user_page($id);
         //---
-        if ($result === false) {
-            $errors[] = "Failed to add translations.";
+        if ($del_it) {
+            $texts[] = "Page with id:($id) deleted from pages_users .";
         } else {
-            $texts[] = "Translations added successfully.";
-            //---
-            $del_it = delete_user_page($id);
-            //---
-            if ($del_it) {
-                $texts[] = "Page with id:($id) deleted from pages_users .";
-            } else {
-                $errors[] = "Failed to delete page with id:($id).";
-            }
+            $errors[] = "Failed to delete page with id:($id).";
         }
     }
-    //---
-    echo div_alert($texts, 'success');
-    echo div_alert($errors, 'danger');
 }
+//---
+echo div_alert($texts, 'success');
+echo div_alert($errors, 'danger');
+
+echo $close_btn;
