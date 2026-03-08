@@ -163,7 +163,7 @@ function get_total_translations_count($lang, $table): int
     $query = "select COUNT(*) AS count from $table where target != ''";
     //---
     if (!empty($lang) && $lang != 'All') {
-        $query .= "and lang = ?";
+        $query .= " AND lang = ?";
         $sql_params[] = $lang;
         $api_params['lang'] = $lang;
     }
@@ -189,7 +189,7 @@ function get_pages_users_to_main($lang): array
     $api_params = array('get' => "pages_users_to_main");
     //---
     if (!empty($lang) && $lang != 'All') {
-        $query .= "AND pu.lang = ?";
+        $query .= " AND pu.lang = ?";
         $sql_params[] = $lang;
         $api_params['lang'] = $lang;
     }
