@@ -28,7 +28,6 @@ if (!empty($GLOBALS['global_username'] ?? "")) {
 	}
 }
 //---
-define('user_is_coordinator', $user_is_coordinator);
 $GLOBALS['user_is_coordinator'] = $user_is_coordinator;
 //---
 $testsline = '';

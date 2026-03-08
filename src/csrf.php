@@ -145,12 +145,6 @@ function verify_csrf_token(): bool
 			return true;
 		}
 	}
-	echo <<<HTML
-		<div class='alert alert-danger' role='alert'>
-		Invalid or Reused CSRF Token!
-	</div>
-	HTML;
-
 	// Token not found or already used
 	error_log('CSRF: Invalid or reused token detected');
 	return false;
