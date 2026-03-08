@@ -59,11 +59,11 @@ function banner_alert(string $text): string
 {
     // $escaped = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     return <<<HTML
-    <div class='container'>
-        <div class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle"></i> {$text}
+        <div class='container'>
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> {$text}
+            </div>
         </div>
-    </div>
     HTML;
 }
 
