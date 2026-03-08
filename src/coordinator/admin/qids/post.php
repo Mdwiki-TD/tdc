@@ -70,6 +70,12 @@ function work_one_rows_add_new($qid, $title, $qid_table, &$texts, &$errors)
 	}
 }
 // ---
+$close_btn = <<<HTML
+	<div class="aligncenter">
+		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+	</div>
+HTML;
+// ---
 if (verify_csrf_token()) {
 	// ---
 	// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
@@ -145,8 +151,4 @@ if (verify_csrf_token()) {
 	// echo div_alert(["return to Qids page in 1 seconds"]);
 };
 // ---
-echo <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
+echo $close_btn;

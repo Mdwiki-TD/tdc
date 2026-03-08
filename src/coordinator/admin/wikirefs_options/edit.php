@@ -8,7 +8,7 @@ if ($GLOBALS['user_is_coordinator'] == false) {
 use function TDWIKI\csrf\generate_csrf_token;
 use function APICalls\MdwikiSql\execute_query;
 use function Utils\Html\div_alert;
-use function TDWIKI\csrf\verify_csrf_token; // if (verify_csrf_token())  {
+use function TDWIKI\csrf\verify_csrf_token;
 //---
 echo '</div><script>
     $("#mainnav").hide();
@@ -132,79 +132,85 @@ function echo_form()
 
 $id = $_GET['id'] ?? '';
 //---
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo_form();
+    echo "</div> </div>";
+    exit;
+}
+if (!verify_csrf_token()) {
+    echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+    return;
+}
+
 $errors = [];
 $texts = [];
-//---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token()) {
+
+// ---
+$lang_code = trim($_POST['lang_code'] ?? '');
+$expend    = filter_var($_POST['expend'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
+$move_dots = filter_var($_POST['move_dots'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
+$add_en_lang = filter_var($_POST['add_en_lang'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
+// ---
+if (isset($_POST['delete'])) {
+    $id = $_POST['delete'];
+    $qua = "DELETE FROM language_settings WHERE id = ?";
     // ---
-    $lang_code = trim($_POST['lang_code'] ?? '');
-    $expend    = filter_var($_POST['expend'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
-    $move_dots = filter_var($_POST['move_dots'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
-    $add_en_lang = filter_var($_POST['add_en_lang'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
+    $result = execute_query($qua, $params = [$id]);
     // ---
-    if (isset($_POST['delete'])) {
-        $id = $_POST['delete'];
-        $qua = "DELETE FROM language_settings WHERE id = ?";
-        // ---
-        $result = execute_query($qua, $params = [$id]);
-        // ---
-        if ($result === false) {
-            $errors[] = "Failed to delete language $lang_code.";
-        } else {
-            $texts[] = "language $lang_code deleted.";
-        }
-        // ---
-    } elseif (($_POST['id'] ?? '') != "") {
-        // ---
-        $id = $_POST['id'];
-        //---
-        $qua = "UPDATE language_settings
-            SET
-                lang_code = ?,
-                expend = ?,
-                move_dots = ?,
-                add_en_lang = ?
-            WHERE
-                id = ?
-            ";
-        $params = [$lang_code, $expend, $move_dots, $add_en_lang, $id];
-        //---
-        $result = execute_query($qua, $params);
-        //---
-        if ($result === false) {
-            $errors[] = "Failed to update language $lang_code.";
-        } else {
-            $texts[] = "language $lang_code updated.";
-        }
-        // ---
-    } elseif (($_POST['new'] ?? '') != "") {
-        // ---
-        if ($lang_code == "") {
-            $errors[] = "Lang code is empty.";
-        } else {
-            // ---
-            $qua = "INSERT INTO language_settings (lang_code, expend, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
-            $params = [$lang_code, $expend, $move_dots, $add_en_lang];
-            // ---
-            $result = execute_query($qua, $params);
-            // ---
-            if ($result === false) {
-                $errors[] = "Failed to add language $lang_code.";
-            } else {
-                $texts[] = "language $lang_code added.";
-            }
-        }
-        // ---
+    if ($result === false) {
+        $errors[] = "Failed to delete language $lang_code.";
     } else {
-        $errors[] = "Id is empty.";
+        $texts[] = "language $lang_code deleted.";
     }
+    // ---
+} elseif (($_POST['id'] ?? '') != "") {
+    // ---
+    $id = $_POST['id'];
     //---
-    echo div_alert($texts, 'success');
-    echo div_alert($errors, 'danger');
+    $qua = "UPDATE language_settings
+        SET
+            lang_code = ?,
+            expend = ?,
+            move_dots = ?,
+            add_en_lang = ?
+        WHERE
+            id = ?
+        ";
+    $params = [$lang_code, $expend, $move_dots, $add_en_lang, $id];
     //---
+    $result = execute_query($qua, $params);
+    //---
+    if ($result === false) {
+        $errors[] = "Failed to update language $lang_code.";
+    } else {
+        $texts[] = "language $lang_code updated.";
+    }
+    // ---
+} elseif (($_POST['new'] ?? '') != "") {
+    // ---
+    if ($lang_code == "") {
+        $errors[] = "Lang code is empty.";
+    } else {
+        // ---
+        $qua = "INSERT INTO language_settings (lang_code, expend, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
+        $params = [$lang_code, $expend, $move_dots, $add_en_lang];
+        // ---
+        $result = execute_query($qua, $params);
+        // ---
+        if ($result === false) {
+            $errors[] = "Failed to add language $lang_code.";
+        } else {
+            $texts[] = "language $lang_code added.";
+        }
+    }
+    // ---
 } else {
-    echo_form();
+    $errors[] = "Id is empty.";
 }
+//---
+echo div_alert($texts, 'success');
+echo div_alert($errors, 'danger');
+//---
 //---
 echo <<<HTML
     </div>

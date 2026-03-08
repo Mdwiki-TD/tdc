@@ -13,6 +13,12 @@ $("#maindiv").hide();
 // ---
 $cat = $_GET['cat'] ?? '';
 //---
+$close_btn = <<<HTML
+	<div class="aligncenter">
+		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+	</div>
+HTML;
+//---
 if (verify_csrf_token()) {
 	$texts = [];
 	$errors = [];
@@ -42,8 +48,4 @@ if (verify_csrf_token()) {
 	echo div_alert($texts, 'success');
 	echo div_alert($errors, 'danger');
 };
-echo <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
+echo $close_btn;

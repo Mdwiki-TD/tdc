@@ -13,7 +13,23 @@ $("#mainnav").hide();
 $("#maindiv").hide();
 </script>';
 // ---
-if (isset($_POST['emails']) && verify_csrf_token()) {
+$close_btn = <<<HTML
+	<div class="aligncenter">
+		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+	</div>
+HTML;
+// ---
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || isset($_POST['emails'])) {
+	exit;
+}
+// ---
+if (!verify_csrf_token()) {
+	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+	echo $close_btn;
+	return;
+}
+// ---
+if (isset($_POST['emails'])) {
 	$texts = [];
 	$errors = [];
 	//---
@@ -78,8 +94,5 @@ if (isset($_POST['emails']) && verify_csrf_token()) {
 	echo div_alert($texts, 'success');
 	echo div_alert($errors, 'danger');
 }
-echo <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
+// ---
+echo $close_btn;
