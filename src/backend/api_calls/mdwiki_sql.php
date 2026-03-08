@@ -78,7 +78,7 @@ class Database
 
         $print_t = (isset($_REQUEST['test']) || isset($_COOKIE['test'])) ? true : false;
 
-        if ($print_t && gettype($s) == 'string') {
+        if ($print_t && is_string($s)) {
             echo "\n<br>\n$s";
         } elseif ($print_t) {
             echo "\n<br>\n";
