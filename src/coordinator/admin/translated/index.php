@@ -43,7 +43,7 @@ function get_languages()
     return $tabes;
 }
 
-function make_td($tabg, $nnnn, $table)
+function translated_make_td($tabg, $nnnn, $table)
 {
     //---
     $id = $tabg['id'] ?? "";
@@ -165,7 +165,7 @@ $noo = 0;
 foreach ($sql_results as $tat => $tabe) {
     //---
     $noo = $noo + 1;
-    $recent_table .= make_td($tabe, $noo, $table);
+    $recent_table .= translated_make_td($tabe, $noo, $table);
     //---
 };
 //---

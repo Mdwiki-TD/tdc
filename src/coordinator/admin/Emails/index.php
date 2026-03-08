@@ -1,6 +1,6 @@
 <?php
 //---
-if (user_in_coord == false) {
+if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
@@ -60,7 +60,7 @@ function get_sorted_array()
 	return $sorted_array;
 }
 
-function filter_table($project_name)
+function emails_filter_table($project_name)
 {
 	//---
 	TablesSql::$s_projects_title_to_id["empty"] = "empty";
@@ -113,7 +113,7 @@ $main_project = (isset($_GET['project'])) ? $_GET['project'] : 'All';
 //---
 // if ($main_project == 'empty') { $main_project = 'Uncategorized'; }
 //---
-$project_filter = filter_table($main_project);
+$project_filter = emails_filter_table($main_project);
 //---
 foreach ($users_done as $user_name => $table) {
 	//---

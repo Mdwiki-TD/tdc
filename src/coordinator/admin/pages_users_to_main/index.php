@@ -72,7 +72,7 @@ $recent_table = <<<HTML
 		<tbody>
 HTML;
 
-function make_td($tabg, $nnnn)
+function page_users_make_td($tabg, $nnnn)
 {
     //---
     $id          = $tabg['id'] ?? "";
@@ -179,7 +179,7 @@ foreach ($sql_results as $tat => $tabe) {
     //---
     $noo = $noo + 1;
     //---
-    $recent_table .= make_td($tabe, $noo);
+    $recent_table .= page_users_make_td($tabe, $noo);
     //---
 };
 //---

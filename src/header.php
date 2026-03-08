@@ -16,7 +16,7 @@ include_once __DIR__ . '/head.php';
 //---
 use function SQLorAPI\Funcs\get_coordinator;
 //---
-$user_in_coord = false;
+$user_is_coordinator = false;
 $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Tools</a>';
 //---
 $coords = array_column(get_coordinator(), 'active', 'user');
@@ -24,15 +24,15 @@ $coords = array_column(get_coordinator(), 'active', 'user');
 if (!empty($GLOBALS['global_username'] ?? "")) {
 	if (($coords[$GLOBALS['global_username']] ?? 0) == 1) {
 		$coord_tools = '<a href="index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span> <i class="bi bi-tools me-1"></i> Coordinator Tools</a>';
-		$user_in_coord = true;
+		$user_is_coordinator = true;
 	}
 }
 //---
-define('user_in_coord', $user_in_coord);
+$GLOBALS['user_is_coordinator'] = $user_is_coordinator;
 //---
 $testsline = '';
 //---
-if (user_in_coord == true) {
+if ($GLOBALS['user_is_coordinator'] == true) {
 	$testsline = <<<HTML
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="tests">
 		<a class="nav-link py-2 px-0 px-lg-2" href="tests.php"><span class="navtitles"></span>Tests</a>
@@ -52,7 +52,7 @@ if (!empty($GLOBALS['global_username'] ?? "")) {
 	$li_user = <<<HTML
 	</li>
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="">
-		<a href="/Translation_Dashboard/leaderboard.php?user=$username" class="nav-link py-2 px-0 px-lg-2">
+		<a href="/Translation_Dashboard/leaderboard.php?user=$u_name" class="nav-link py-2 px-0 px-lg-2">
 			<i class="fas fa-user fa-sm fa-fw mr-2"></i> <span class="navtitles">$u_name</span>
 		</a>
 	</li>

@@ -25,7 +25,7 @@ $last_table = $_GET['last_table'] ?? 'pages';
 // ---
 $last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
-function make_td($tabg, $nnnn, $last_table)
+function last_make_td($tabg, $nnnn, $last_table)
 {
     // $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? "";
@@ -64,11 +64,13 @@ function make_td($tabg, $nnnn, $last_table)
         // $ccat = make_cat_url( $cat );
         $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
         //---
-        $word = $word ?? MainTables::$x_Words_table[$md_title];
+        if (!$word || $word == 0) {
+            $word = MainTables::$x_Words_table[$md_title] ?? 0;
+        }
         //---
         $view = make_view_by_number($target, $views_number, $llang, $pupdate);
         //---
-        $mail_icon = (user_in_coord != false) ? make_mail_icon_new($tabg, 'pup_window_email') : '';
+        $mail_icon = ($GLOBALS['user_is_coordinator'] != false) ? make_mail_icon_new($tabg, 'pup_window_email') : '';
         $mail_icon_td = (!empty($mail_icon)) ? "<td>$mail_icon</td>" : '';
         //---
         $view_td = <<<HTML
@@ -158,7 +160,7 @@ if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
 
-$mail_th = (user_in_coord != false) ? "<th><span title='Email'>@</span></th>" : '';
+$mail_th = ($GLOBALS['user_is_coordinator'] != false) ? "<th><span title='Email'>@</span></th>" : '';
 //---
 if ($last_table == 'pages') {
     $qsl_results = get_recent_sql($lang);
@@ -172,7 +174,7 @@ $noo = 0;
 // ---
 foreach ($qsl_results as $tat => $tabe) {
     $noo = $noo + 1;
-    $recent_rows .= make_td($tabe, $noo, $last_table);
+    $recent_rows .= last_make_td($tabe, $noo, $last_table);
 };
 //---
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
@@ -189,7 +191,7 @@ function column_number($name)
     if ($result == 0) {
         return 0;
     }
-    if (user_in_coord != false) {
+    if ($GLOBALS['user_is_coordinator'] != false) {
         $result = $result + 1;
     }
     return $result;

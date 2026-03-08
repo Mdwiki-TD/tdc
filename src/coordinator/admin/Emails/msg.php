@@ -1,6 +1,6 @@
 <?php
 //---
-if (user_in_coord == false) {
+if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 }
@@ -11,7 +11,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 }
 //---
-include_once 'coordinator/admin/Emails/sugust.php';
+include_once __DIR__ . '/sugust.php';
 //---
 use Tables\Main\MainTables;
 use function APICalls\MdwikiSql\fetch_query;
@@ -117,7 +117,7 @@ foreach (fetch_query("select username, email from users;") as $Key => $ta) {
 };
 //---
 $email_to = $Emails_array[$user] ?? '';
-$cc_to    = $Emails_array[$username] ?? '';
+$cc_to    = $Emails_array[$GLOBALS['global_username']] ?? '';
 //---
 $title2  =    make_mdwiki_title($title);
 $sugust2 = make_mdwiki_title($sugust);

@@ -1,7 +1,7 @@
 # Static Analysis Report: Translation Dashboard Codebase
 
-**Analysis Date:** 2026-02-15  
-**Analyzer:** opencode  
+**Analysis Date:** 2026-02-15
+**Analyzer:** opencode
 **Codebase:** WikiProjectMed Translation Dashboard (PHP)
 
 ---
@@ -12,12 +12,12 @@ This report documents critical security vulnerabilities, logical errors, perform
 
 ### Criticality Rating Overview
 
-| Category | Critical | High | Medium | Low |
-|----------|----------|------|--------|-----|
-| Security | 3 | 2 | 1 | 0 |
-| Logic | 0 | 3 | 2 | 1 |
-| Performance | 0 | 1 | 3 | 2 |
-| Architecture | 0 | 2 | 4 | 1 |
+| Category     | Critical | High | Medium | Low |
+| ------------ | -------- | ---- | ------ | --- |
+| Security     | 3        | 2    | 1      | 0   |
+| Logic        | 0        | 3    | 2      | 1   |
+| Performance  | 0        | 1    | 3      | 2   |
+| Architecture | 0        | 2    | 4      | 1   |
 
 ---
 
@@ -38,10 +38,11 @@ if ($server_name === 'localhost') {
 
 **Impact:** Credentials exposed in source code. If repository is compromised, database access is granted.
 
-**Recommendation:** 
-- Use environment variables or secure credential vault
-- Never commit credentials to version control
-- Implement separate configuration for development/production
+**Recommendation:**
+
+-   Use environment variables or secure credential vault
+-   Never commit credentials to version control
+-   Implement separate configuration for development/production
 
 ---
 
@@ -60,9 +61,10 @@ if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
 **Impact:** An attacker can clear session tokens (via session fixation) and bypass CSRF protection entirely.
 
 **Recommendation:**
-- Return `false` when no tokens exist
-- Require token presence for all state-changing operations
-- Log security events for monitoring
+
+-   Return `false` when no tokens exist
+-   Require token presence for all state-changing operations
+-   Log security events for monitoring
 
 ---
 
@@ -87,9 +89,10 @@ if (!in_array($select, $allowed_columns[$table]) || !in_array($where, $allowed_c
 **Impact:** SQL injection possible through table and column parameters despite whitelist existence.
 
 **Recommendation:**
-- Enable the validation by uncommenting `return false`
-- Add positive validation for all SQL identifiers
-- Use parameterized queries exclusively
+
+-   Enable the validation by uncommenting `return false`
+-   Add positive validation for all SQL identifiers
+-   Use parameterized queries exclusively
 
 ---
 
@@ -108,9 +111,10 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 **Impact:** Any user can enable debug mode by setting a cookie or request parameter, potentially exposing sensitive information.
 
 **Recommendation:**
-- Require authentication for debug mode
-- Use IP whitelist for development debugging
-- Remove debug triggers in production
+
+-   Require authentication for debug mode
+-   Use IP whitelist for development debugging
+-   Remove debug triggers in production
 
 ---
 
@@ -126,8 +130,9 @@ $url2 = "<a target='_blank' href='$url2'>$url2</a>";  // VULNERABILITY: No escap
 **Impact:** If API parameters contain malicious content, it could be reflected as XSS.
 
 **Recommendation:**
-- Use `htmlspecialchars()` for all HTML output
-- Implement context-aware encoding
+
+-   Use `htmlspecialchars()` for all HTML output
+-   Implement context-aware encoding
 
 ---
 
@@ -140,11 +145,13 @@ ini_set('session.use_strict_mode', '1');
 ```
 
 **Issue:** While strict mode is enabled, other session security settings are missing:
-- No HTTPOnly cookie flag
-- No Secure flag
-- No SameSite attribute
+
+-   No HTTPOnly cookie flag
+-   No Secure flag
+-   No SameSite attribute
 
 **Recommendation:**
+
 ```php
 ini_set('session.cookie_httponly', '1');
 ini_set('session.cookie_secure', '1');
@@ -202,6 +209,7 @@ if ($GLOBALS['global_username'] !== "Mr. Ibrahem") {
 **Issue:** No null check before comparison. If `$GLOBALS['global_username']` is not set, this will cause issues.
 
 **Recommendation:**
+
 ```php
 if (($GLOBALS['global_username'] ?? '') !== "Mr. Ibrahem") {
 ```
@@ -223,6 +231,7 @@ if ($params) {
 **Issue:** Empty array `$params = []` is truthy, but should be treated same as null.
 
 **Recommendation:**
+
 ```php
 if (!empty($params)) {
     $q->execute($params);
@@ -260,9 +269,10 @@ function execute_query($sql_query, $params = null, $table_name = null) {
 **Impact:** Every database query creates a new connection. High overhead, resource exhaustion under load.
 
 **Recommendation:**
-- Implement singleton pattern or connection pooling
-- Use persistent connections
-- Consider PDO connection pooling via third-party library
+
+-   Implement singleton pattern or connection pooling
+-   Use persistent connections
+-   Consider PDO connection pooling via third-party library
 
 ---
 
@@ -280,9 +290,10 @@ if (!empty($stats_data)) {
 **Issue:** Static cache never invalidates. Data becomes stale over time.
 
 **Recommendation:**
-- Implement TTL-based cache expiration
-- Add cache invalidation hooks for data updates
-- Consider using APCu or Redis for proper caching
+
+-   Implement TTL-based cache expiration
+-   Add cache invalidation hooks for data updates
+-   Consider using APCu or Redis for proper caching
 
 ---
 
@@ -334,20 +345,22 @@ Multiple files contain redundant type casts and conversions that could be optimi
 
 ```php
 $GLOBALS['global_username']
-$user_in_coord  // Global constant via define()
+$GLOBALS['user_is_coordinator']  // Global constant via define()
 MainTables::$x_enwiki_pageviews_table  // Static mutable state
 ```
 
-**Impact:** 
-- Difficult to test (requires global state setup)
-- Hidden dependencies
-- Thread safety concerns
-- State mutation tracking difficulty
+**Impact:**
+
+-   Difficult to test (requires global state setup)
+-   Hidden dependencies
+-   Thread safety concerns
+-   State mutation tracking difficulty
 
 **Recommendation:**
-- Implement dependency injection container
-- Use class instances instead of static state
-- Pass dependencies explicitly
+
+-   Implement dependency injection container
+-   Use class instances instead of static state
+-   Pass dependencies explicitly
 
 ---
 
@@ -368,9 +381,10 @@ if (substr(__DIR__, 0, 2) == 'I:') {
 **Impact:** Code not portable, breaks on different systems.
 
 **Recommendation:**
-- Use configuration files for paths
-- Use environment variables
-- Implement proper path resolution
+
+-   Use configuration files for paths
+-   Use environment variables
+-   Implement proper path resolution
 
 ---
 
@@ -381,9 +395,10 @@ if (substr(__DIR__, 0, 2) == 'I:') {
 Functions like `make_td()` mix database result processing with HTML generation.
 
 **Recommendation:**
-- Implement proper MVC or similar pattern
-- Separate data transformation from presentation
-- Use templating engine
+
+-   Implement proper MVC or similar pattern
+-   Separate data transformation from presentation
+-   Use templating engine
 
 ---
 
@@ -402,9 +417,10 @@ Some files use proper namespaces (`namespace SQLorAPI\Funcs;`) while others use 
 Database and API calls use concrete classes directly without interfaces.
 
 **Recommendation:**
-- Create `DatabaseInterface` for database operations
-- Create `ApiClientInterface` for API calls
-- Enable mocking for testing
+
+-   Create `DatabaseInterface` for database operations
+-   Create `ApiClientInterface` for API calls
+-   Enable mocking for testing
 
 ---
 
@@ -433,9 +449,10 @@ function test_print(string $s): void
 ### 5.2 Missing PHPDoc Documentation
 
 Most files lack comprehensive PHPDoc blocks for:
-- File-level documentation
-- Class documentation
-- Method documentation with @param, @return, @throws
+
+-   File-level documentation
+-   Class documentation
+-   Method documentation with @param, @return, @throws
 
 ### 5.3 Magic Strings/Numbers
 
@@ -478,23 +495,23 @@ Hardcoded strings like `'root11'`, `'localhost:3306'`, session names scattered t
 
 ## 7. Files Analyzed
 
-| File | Lines | Issues |
-|------|-------|--------|
-| src/backend/api_calls/mdwiki_sql.php | 397 | 5 |
-| src/csrf.php | 77 | 2 |
-| src/header.php | 152 | 2 |
-| src/include.php | 43 | 2 |
-| src/utils/functions.php | 43 | 1 |
-| src/backend/api_calls/td_api.php | 108 | 2 |
-| src/backend/api_calls/wiki_api.php | 94 | 1 |
-| src/coordinator/tools/last.php | 335 | 2 |
-| src/backend/tables/tables.php | 77 | 1 |
-| src/backend/infos/td_config.php | 72 | 1 |
-| src/backend/api_or_sql/index.php | 44 | 1 |
-| src/backend/api_or_sql/funcs.php | 422 | 1 |
-| src/coordinator/admin/add/post.php | 46 | 0 |
-| src/coordinator/admin/add/add_post.php | 79 | 0 |
+| File                                   | Lines | Issues |
+| -------------------------------------- | ----- | ------ |
+| src/backend/api_calls/mdwiki_sql.php   | 397   | 5      |
+| src/csrf.php                           | 77    | 2      |
+| src/header.php                         | 152   | 2      |
+| src/include.php                        | 43    | 2      |
+| src/utils/functions.php                | 43    | 1      |
+| src/backend/api_calls/td_api.php       | 108   | 2      |
+| src/backend/api_calls/wiki_api.php     | 94    | 1      |
+| src/coordinator/tools/last.php         | 335   | 2      |
+| src/backend/tables/tables.php          | 77    | 1      |
+| src/backend/infos/td_config.php        | 72    | 1      |
+| src/backend/api_or_sql/index.php       | 44    | 1      |
+| src/backend/api_or_sql/funcs.php       | 422   | 1      |
+| src/coordinator/admin/add/post.php     | 46    | 0      |
+| src/coordinator/admin/add/add_post.php | 79    | 0      |
 
 ---
 
-*Report generated by opencode static analysis*
+_Report generated by opencode static analysis_

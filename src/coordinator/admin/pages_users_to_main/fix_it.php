@@ -1,6 +1,6 @@
 <?php
 //---
-if (user_in_coord == false) {
+if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
@@ -11,11 +11,11 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     error_reporting(E_ALL);
 };
 //---
-use function Utils\Html\div_alert; // echo div_alert($texts, 'success');
+use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
-function echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
+function fix_it_echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
 {
     $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user       = $page_data[0]['user'] ?? '';
     $pupdate    = $page_data[0]['pupdate'] ?? '';
     //---
-    $form = echo_form($id, $title, $new_target, $lang, $new_user, $pupdate);
+    $form = fix_it_echo_form($id, $title, $new_target, $lang, $new_user, $pupdate);
     //---
     echo <<<HTML
         <div class='card'>
