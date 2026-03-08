@@ -1,28 +1,75 @@
 <?php
 
+/**
+ * Database Abstraction Layer for MDWiki SQL Operations
+ *
+ * Provides a secure, PDO-based database abstraction layer for interacting
+ * with MySQL/MariaDB databases in the Translation Dashboard application.
+ * Supports both local development and Wikimedia Toolforge environments.
+ *
+ * Features:
+ * - Automatic environment detection (localhost vs production)
+ * - Prepared statement support for SQL injection prevention
+ * - Configurable database suffix for multi-database support
+ * - Automatic SQL mode adjustment for GROUP BY compatibility
+ * - Secure credential management via external configuration
+ *
+ * Security Considerations:
+ * - Credentials are loaded from external configuration file, never hardcoded
+ * - All queries use prepared statements
+ * - Error messages are logged, not displayed in production
+ * - Database connections are properly closed after use
+ *
+ * Usage Example:
+ * ```php
+ * use function APICalls\MdwikiSql\fetch_query;
+ * use function APICalls\MdwikiSql\execute_query;
+ *
+ * // Fetch results (SELECT queries)
+ * $users = fetch_query("SELECT * FROM users WHERE active = ?", [1]);
+ *
+ * // Execute queries (INSERT, UPDATE, DELETE)
+ * execute_query("UPDATE settings SET value = ? WHERE id = ?", ['new_value', 5]);
+ * ```
+ *
+ * Configuration:
+ * Database credentials are stored in ~/confs/db.ini:
+ * ```ini
+ * user = your_toolforge_username
+ * password = your_database_password
+ * ```
+ *
+ * @package    APICalls
+ * @subpackage MdwikiSql
+ * @author     Translation Dashboard Team
+ * @version    2.0.0
+ * @since      1.0.0
+ * @license    GPL-3.0-or-later
+ *
+ * @see https://www.php.net/manual/en/book.pdo.php
+ * @see https://wikitech.wikimedia.org/wiki/Help:Toolforge/Database
+ */
+
 namespace APICalls\MdwikiSql;
-/*
-Usage:
-use function APICalls\MdwikiSql\fetch_query;
-use function APICalls\MdwikiSql\execute_query;
-use function APICalls\MdwikiSql\sql_add_user;
-use function APICalls\MdwikiSql\update_settings;
-use function APICalls\MdwikiSql\update_settings_value;
-use function APICalls\MdwikiSql\insert_to_translate_type;
-use function APICalls\MdwikiSql\insert_to_projects;
-use function APICalls\MdwikiSql\display_tables;
-use function APICalls\MdwikiSql\check_one;
-*/
 
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 };
-//---
+
 use PDO;
 use PDOException;
+use RuntimeException;
 
+/**
+ * Database Connection and Query Management Class
+ *
+ * Encapsulates PDO database operations with automatic connection management,
+ * error handling, and environment-specific configuration.
+ *
+ * @package APICalls\MdwikiSql
+ */
 class Database
 {
 
@@ -78,7 +125,7 @@ class Database
 
         $print_t = (isset($_REQUEST['test']) || isset($_COOKIE['test'])) ? true : false;
 
-        if ($print_t && gettype($s) == 'string') {
+        if ($print_t && is_string($s)) {
             echo "\n<br>\n$s";
         } elseif ($print_t) {
             echo "\n<br>\n";

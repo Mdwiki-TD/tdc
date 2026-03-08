@@ -1,37 +1,91 @@
 <!DOCTYPE html>
 <?php
-//---
+
+/**
+ * HTML Header and Navigation Module
+ *
+ * Generates the HTML header, navigation bar, and user interface elements
+ * for the Translation Dashboard application. Handles user authentication
+ * state display and coordinator access control.
+ *
+ * Features:
+ * - Responsive navigation bar with Bootstrap 5
+ * - User authentication state display
+ * - Coordinator tools access control
+ * - Theme toggle functionality
+ * - Debug mode activation
+ * - Session security configuration
+ *
+ * Dependencies:
+ * - Bootstrap 5 CSS/JS
+ * - Font Awesome icons
+ * - OAuth authentication system
+ * - CSRF protection module
+ *
+ * Usage:
+ * ```php
+ * include_once __DIR__ . '/header.php';
+ * // $user_is_coordinator is now available as a boolean
+ * // Navigation HTML has been output
+ * ```
+ *
+ * @package    UI
+ * @subpackage Header
+ * @author     Translation Dashboard Team
+ * @version    2.0.0
+ * @since      1.0.0
+ * @license    GPL-3.0-or-later
+ */
+
+// Track page load time for performance monitoring
 $time_start = microtime(true);
-//---
+
+// Enable debug mode via request or cookie
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
-};
-//---
+}
+
+// Configure secure session settings
 ini_set('session.use_strict_mode', '1');
-//---
+
+// Load application dependencies
 include_once __DIR__ . '/include.php';
 include_once __DIR__ . '/head.php';
-//---
+
 use function SQLorAPI\Funcs\get_coordinator;
-//---
+
+/**
+ * Flag indicating if current user is a coordinator
+ *
+ * @var bool
+ */
 $user_is_coordinator = false;
+
+/**
+ * Coordinator tools navigation link HTML
+ *
+ * @var string
+ */
 $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Tools</a>';
-//---
+
+// Get coordinator list and check user access
 $coords = array_column(get_coordinator(), 'active', 'user');
-//---
+
+// Check if current user is a coordinator
 if (!empty($GLOBALS['global_username'] ?? "")) {
-	if (($coords[$GLOBALS['global_username']] ?? 0) == 1) {
+	$current_user = $GLOBALS['global_username'];
+	if (($coords[$current_user] ?? 0) == 1) {
 		$coord_tools = '<a href="index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span> <i class="bi bi-tools me-1"></i> Coordinator Tools</a>';
 		$user_is_coordinator = true;
 	}
 }
-//---
+
 $GLOBALS['user_is_coordinator'] = $user_is_coordinator;
-//---
+// Generate tests menu item for coordinators
 $testsline = '';
-//---
+
 if ($GLOBALS['user_is_coordinator'] == true) {
 	$testsline = <<<HTML
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="tests">
@@ -39,21 +93,22 @@ if ($GLOBALS['user_is_coordinator'] == true) {
 	</li>
 	HTML;
 };
-//---
+
+// Generate user menu based on authentication state
 $li_user = <<<HTML
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
 		<a role="button" class="nav-link py-2 px-0 px-lg-2" onclick="login()">
 			<i class="fas fa-sign-in-alt fa-sm fa-fw mr-2"></i> <span class="navtitles">Login</span>
 		</a>
 HTML;
-//---
-if (!empty($GLOBALS['global_username'] ?? "")) {
-	$u_name = $GLOBALS['global_username'];
+
+if (!empty($GLOBALS['global_username'] ?? '')) {
+	$u_name = htmlspecialchars($GLOBALS['global_username'], ENT_QUOTES, 'UTF-8');
 	$li_user = <<<HTML
 	</li>
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="">
-		<a href="/Translation_Dashboard/leaderboard.php?user=$u_name" class="nav-link py-2 px-0 px-lg-2">
-			<i class="fas fa-user fa-sm fa-fw mr-2"></i> <span class="navtitles">$u_name</span>
+        <a href="/Translation_Dashboard/leaderboard.php?user={$u_name}" class="nav-link py-2 px-0 px-lg-2">
+            <i class="fas fa-user fa-sm fa-fw mr-2"></i> <span class="navtitles">{$u_name}</span>
 		</a>
 	</li>
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
@@ -63,7 +118,8 @@ if (!empty($GLOBALS['global_username'] ?? "")) {
 	</li>
 HTML;
 }
-//---
+
+// Output HTML header and navigation
 echo <<<HTML
 <body>
 	<header class="mb-3 border-bottom">
@@ -144,6 +200,7 @@ HTML;
 
 ?>
 <main id="body">
+	<!-- Main content container -->
 	<!-- <div id="maindiv" class="container-fluid"> -->
 	<div id="maindiv" class="container-fluid">
 

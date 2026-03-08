@@ -1,11 +1,6 @@
 <?php
 //---
 namespace Add\AddPost;
-/*
-require_once __DIR__ . '/add_post.php';
-use function Add\AddPost\add_pages_to_db;
-*/
-//---
 use Tables\Main\MainTables;
 use function APICalls\MdwikiSql\execute_query;
 use function APICalls\MdwikiSql\fetch_query;
