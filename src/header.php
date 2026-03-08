@@ -85,7 +85,7 @@ if (!empty($GLOBALS['global_username'] ?? "")) {
 $GLOBALS['user_is_coordinator'] = $user_is_coordinator;
 // Generate tests menu item for coordinators
 $testsline = '';
-//---
+
 if ($GLOBALS['user_is_coordinator'] == true) {
 	$testsline = <<<HTML
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="tests">
@@ -93,21 +93,22 @@ if ($GLOBALS['user_is_coordinator'] == true) {
 	</li>
 	HTML;
 };
-//---
+
+// Generate user menu based on authentication state
 $li_user = <<<HTML
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
 		<a role="button" class="nav-link py-2 px-0 px-lg-2" onclick="login()">
 			<i class="fas fa-sign-in-alt fa-sm fa-fw mr-2"></i> <span class="navtitles">Login</span>
 		</a>
 HTML;
-//---
-if (!empty($GLOBALS['global_username'] ?? "")) {
-	$u_name = $GLOBALS['global_username'];
+
+if (!empty($GLOBALS['global_username'] ?? '')) {
+	$u_name = htmlspecialchars($GLOBALS['global_username'], ENT_QUOTES, 'UTF-8');
 	$li_user = <<<HTML
 	</li>
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="">
-		<a href="/Translation_Dashboard/leaderboard.php?user=$u_name" class="nav-link py-2 px-0 px-lg-2">
-			<i class="fas fa-user fa-sm fa-fw mr-2"></i> <span class="navtitles">$u_name</span>
+        <a href="/Translation_Dashboard/leaderboard.php?user={$u_name}" class="nav-link py-2 px-0 px-lg-2">
+            <i class="fas fa-user fa-sm fa-fw mr-2"></i> <span class="navtitles">{$u_name}</span>
 		</a>
 	</li>
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
@@ -118,6 +119,7 @@ if (!empty($GLOBALS['global_username'] ?? "")) {
 HTML;
 }
 
+// Output HTML header and navigation
 echo <<<HTML
 <body>
 	<header class="mb-3 border-bottom">
@@ -198,6 +200,7 @@ HTML;
 
 ?>
 <main id="body">
+	<!-- Main content container -->
 	<!-- <div id="maindiv" class="container-fluid"> -->
 	<div id="maindiv" class="container-fluid">
 
