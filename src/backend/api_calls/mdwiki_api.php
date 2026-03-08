@@ -132,7 +132,7 @@ function post_url_mdwiki(string $endPoint, array $params = []): string
     curl_close($ch);
 
     // return is_string($output) ? $output : '';
-    return $output;
+    return $output === false ? '' : $output;
 }
 
 /**
