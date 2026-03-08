@@ -69,86 +69,92 @@ function work_one_rows_add_new($qid, $title, $qid_table, &$texts, &$errors)
 		$errors[] = "Failed to add Qid for title: $title. qid_of_title:$qid_of_title";
 	}
 }
-// ---
+
 $close_btn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
 HTML;
+
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+	exit;
+}
+
+if (!verify_csrf_token()) {
+	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+	echo $close_btn;
+	return;
+}
 // ---
-if (verify_csrf_token()) {
+// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+// ---
+foreach ($_POST['rows'] ?? [] as $key => $table) {
+	// '{ "ty": "qids/post", "qid_table": "qids", "rows": { "1": { "title": "23423434", "qid": "" } } }'
 	// ---
-	// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+	$title = trim($table['title'] ?? '');
+	$qid   = trim($table['qid'] ?? '');
+	$id    = $table['id'] ?? '';
 	// ---
-	foreach ($_POST['rows'] ?? [] as $key => $table) {
-		// '{ "ty": "qids/post", "qid_table": "qids", "rows": { "1": { "title": "23423434", "qid": "" } } }'
+	if (empty($title)) {
+		$errors[] = "Title is required. qid=($qid)";
+		continue;
+	}
+	// ---
+	if (empty($qid)) {
+		$errors[] = "Qid is required. title=($title)";
+		continue;
+	}
+	// ---
+	$tx_tab = check_one($select = "*", $where = "qid", $value = $qid, $table = $qid_table);
+	// ---
+	if ($tx_tab) {
+		$tx_id = $tx_tab['id'];
+		$title_of_qid = $tx_tab['title'];
 		// ---
-		$title = trim($table['title'] ?? '');
-		$qid   = trim($table['qid'] ?? '');
-		$id    = $table['id'] ?? '';
-		// ---
-		if (empty($title)) {
-			$errors[] = "Title is required. qid=($qid)";
+		if (!empty($id) && $tx_id != $id) {
+			$errors[] = "Qid:($qid) already used in database with with id:($tx_id).";
 			continue;
 		}
 		// ---
-		if (empty($qid)) {
-			$errors[] = "Qid is required. title=($title)";
+		if (!empty($title_of_qid) && empty($id) && $title_of_qid != $title) {
+			$errors[] = "Qid:($qid) already used in database with title:($title_of_qid).";
+			continue;
+		}
+	}
+	// ---
+	$tt_tab = check_one($select = "*", $where = "title", $value = $title, $table = $qid_table);
+	// ---
+	if ($tt_tab) {
+		$qid_of_title5 = $tt_tab['qid'];
+		$tt_id = $tt_tab['id'];
+		// ---
+		if (!empty($id) && $tt_id != $id) {
+			$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
 			continue;
 		}
 		// ---
-		$tx_tab = check_one($select = "*", $where = "qid", $value = $qid, $table = $qid_table);
-		// ---
-		if ($tx_tab) {
-			$tx_id = $tx_tab['id'];
-			$title_of_qid = $tx_tab['title'];
-			// ---
-			if (!empty($id) && $tx_id != $id) {
-				$errors[] = "Qid:($qid) already used in database with with id:($tx_id).";
-				continue;
-			}
-			// ---
-			if (!empty($title_of_qid) && empty($id) && $title_of_qid != $title) {
-				$errors[] = "Qid:($qid) already used in database with title:($title_of_qid).";
-				continue;
-			}
+		if (empty($id) && !empty($qid_of_title5) && $qid_of_title5 != $qid) {
+			$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
+			continue;
 		}
 		// ---
-		$tt_tab = check_one($select = "*", $where = "title", $value = $title, $table = $qid_table);
-		// ---
-		if ($tt_tab) {
-			$qid_of_title5 = $tt_tab['qid'];
-			$tt_id = $tt_tab['id'];
-			// ---
-			if (!empty($id) && $tt_id != $id) {
-				$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
-				continue;
-			}
-			// ---
-			if (empty($id) && !empty($qid_of_title5) && $qid_of_title5 != $qid) {
-				$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
-				continue;
-			}
-			// ---
-		}
-		// ---
-		if (empty($id)) {
-			work_one_rows_add_new($qid, $title, $qid_table, $texts, $errors);
-		} else {
-			work_one_rows($qid, $id, $title, $qid_table, $texts, $errors);
-		}
 	}
 	// ---
-	if (!empty($texts)) {
-		$texts[] = "table:($qid_table)";
-	} elseif (!empty($errors)) {
-		$errors[] = "table:($qid_table)";
+	if (empty($id)) {
+		work_one_rows_add_new($qid, $title, $qid_table, $texts, $errors);
+	} else {
+		work_one_rows($qid, $id, $title, $qid_table, $texts, $errors);
 	}
-	// ---
-	echo div_alert($texts, 'success');
-	echo div_alert($errors, 'danger');
-	// ---
-	// echo div_alert(["return to Qids page in 1 seconds"]);
-};
+}
 // ---
+if (!empty($texts)) {
+	$texts[] = "table:($qid_table)";
+} elseif (!empty($errors)) {
+	$errors[] = "table:($qid_table)";
+}
+// ---
+echo div_alert($texts, 'success');
+echo div_alert($errors, 'danger');
+
 echo $close_btn;
