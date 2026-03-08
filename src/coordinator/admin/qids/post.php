@@ -93,22 +93,20 @@ if (verify_csrf_token()) {
 			continue;
 		}
 		// ---
-		if ($qid && !empty($qid)) {
-			$tx_tab = check_one($select = "*", $where = "qid", $value = $qid, $table = $qid_table);
+		$tx_tab = check_one($select = "*", $where = "qid", $value = $qid, $table = $qid_table);
+		// ---
+		if ($tx_tab) {
+			$tx_id = $tx_tab['id'];
+			$title_of_qid = $tx_tab['title'];
 			// ---
-			if ($tx_tab) {
-				$tx_id = $tx_tab['id'];
-				$title_of_qid = $tx_tab['title'];
-				// ---
-				if (!empty($id) && $tx_id != $id) {
-					$errors[] = "Qid:($qid) already used in database with with id:($tx_id).";
-					continue;
-				}
-				// ---
-				if (!empty($title_of_qid) && empty($id) && $title_of_qid != $title) {
-					$errors[] = "Qid:($qid) already used in database with title:($title_of_qid).";
-					continue;
-				}
+			if (!empty($id) && $tx_id != $id) {
+				$errors[] = "Qid:($qid) already used in database with with id:($tx_id).";
+				continue;
+			}
+			// ---
+			if (!empty($title_of_qid) && empty($id) && $title_of_qid != $title) {
+				$errors[] = "Qid:($qid) already used in database with title:($title_of_qid).";
+				continue;
 			}
 		}
 		// ---
