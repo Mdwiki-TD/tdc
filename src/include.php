@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 $vendorAutoload = dirname(__DIR__) . '/vendor/autoload.php';
 
