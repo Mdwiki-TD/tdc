@@ -1,35 +1,89 @@
 <!DOCTYPE html>
 <?php
-//---
+
+/**
+ * HTML Header and Navigation Module
+ *
+ * Generates the HTML header, navigation bar, and user interface elements
+ * for the Translation Dashboard application. Handles user authentication
+ * state display and coordinator access control.
+ *
+ * Features:
+ * - Responsive navigation bar with Bootstrap 5
+ * - User authentication state display
+ * - Coordinator tools access control
+ * - Theme toggle functionality
+ * - Debug mode activation
+ * - Session security configuration
+ *
+ * Dependencies:
+ * - Bootstrap 5 CSS/JS
+ * - Font Awesome icons
+ * - OAuth authentication system
+ * - CSRF protection module
+ *
+ * Usage:
+ * ```php
+ * include_once __DIR__ . '/header.php';
+ * // $user_is_coordinator is now available as a boolean
+ * // Navigation HTML has been output
+ * ```
+ *
+ * @package    UI
+ * @subpackage Header
+ * @author     Translation Dashboard Team
+ * @version    2.0.0
+ * @since      1.0.0
+ * @license    GPL-3.0-or-later
+ */
+
+// Track page load time for performance monitoring
 $time_start = microtime(true);
-//---
+
+// Enable debug mode via request or cookie
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
-};
-//---
+}
+
+// Configure secure session settings
 ini_set('session.use_strict_mode', '1');
-//---
+
+// Load application dependencies
 include_once __DIR__ . '/include.php';
 include_once __DIR__ . '/head.php';
-//---
+
 use function SQLorAPI\Funcs\get_coordinator;
-//---
+
+/**
+ * Flag indicating if current user is a coordinator
+ *
+ * @var bool
+ */
 $user_is_coordinator = false;
+
+/**
+ * Coordinator tools navigation link HTML
+ *
+ * @var string
+ */
 $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Tools</a>';
-//---
+
+// Get coordinator list and check user access
 $coords = array_column(get_coordinator(), 'active', 'user');
-//---
+
+// Check if current user is a coordinator
 if (!empty($GLOBALS['global_username'] ?? "")) {
-	if (($coords[$GLOBALS['global_username']] ?? 0) == 1) {
+	$current_user = $GLOBALS['global_username'];
+	if (($coords[$current_user] ?? 0) == 1) {
 		$coord_tools = '<a href="index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span> <i class="bi bi-tools me-1"></i> Coordinator Tools</a>';
 		$user_is_coordinator = true;
 	}
 }
-//---
+
 $GLOBALS['user_is_coordinator'] = $user_is_coordinator;
-//---
+// Generate tests menu item for coordinators
 $testsline = '';
 //---
 if ($GLOBALS['user_is_coordinator'] == true) {
@@ -63,7 +117,7 @@ if (!empty($GLOBALS['global_username'] ?? "")) {
 	</li>
 HTML;
 }
-//---
+
 echo <<<HTML
 <body>
 	<header class="mb-3 border-bottom">
