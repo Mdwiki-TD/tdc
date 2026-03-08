@@ -42,9 +42,8 @@ function add_it($id, $title, $qid, $qid_table)
 	}
 }
 
-function work_one_rows($qid, $id, $title, $qid_table)
+function work_one_rows($qid, $id, $title, $qid_table, &$texts, &$errors)
 {
-	global $texts, $errors;
 	// ---
 	add_it($id, $title, $qid, $qid_table);
 	// ---
@@ -57,9 +56,8 @@ function work_one_rows($qid, $id, $title, $qid_table)
 	}
 }
 
-function work_one_rows_add_new($qid, $title, $qid_table)
+function work_one_rows_add_new($qid, $title, $qid_table, &$texts, &$errors)
 {
-	global $texts, $errors;
 	// ---
 	add_it("", $title, $qid, $qid_table);
 	// ---
@@ -129,9 +127,9 @@ if (verify_csrf_token()) {
 		}
 		// ---
 		if (empty($id)) {
-			work_one_rows_add_new($qid, $title, $qid_table);
+			work_one_rows_add_new($qid, $title, $qid_table, $texts, $errors);
 		} else {
-			work_one_rows($qid, $id, $title, $qid_table);
+			work_one_rows($qid, $id, $title, $qid_table, $texts, $errors);
 		}
 	}
 	// ---
