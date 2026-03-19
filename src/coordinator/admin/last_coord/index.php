@@ -15,18 +15,13 @@ use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
 
 $last_tables = ['pages', 'pages_users'];
-// ---
 $last_table = $_GET['last_table'] ?? 'pages';
-// ---
 $last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
 function last_make_td($tabg, $nnnn, $last_table)
 {
-    // $id       = $tabg['id'] ?? "";
-    $date     = $tabg['date'] ?? "";
-    //---
     $user     = $tabg['user'] ?? "";
-    //---
+
     $llang    = $tabg['lang'] ?? "";
     $md_title = trim($tabg['title'] ?? '');
     $cat      = $tabg['cat'] ?? "";
@@ -34,94 +29,94 @@ function last_make_td($tabg, $nnnn, $last_table)
     $target   = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
-    // ---
+
     $mdwiki_revid = $tabg['mdwiki_revid'] ?? '';
-    //---
+
     // if $add_date has : then split before first space
     if (strpos($add_date, ':') !== false) {
         $add_date = explode(' ', $add_date)[0];
     };
-    //---
+
     $user_name = $user;
     // $user_name is the first word of the user if length > 15
     if (strlen($user) > 15) {
         $user_name = explode(' ', $user);
         $user_name = $user_name[0];
     }
-    //---
+
     $Campaign_td = "";
-    $mail_icon_td = "";
     $view_td = "";
-    //---
+    $mail_icon = "";
+
     if ($last_table == "pages") {
         $views_number = $tabg['views'] ?? '?';
-        //---
+
         // $ccat = make_cat_url( $cat );
         $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
-        //---
+
         if (!$word || $word == 0) {
             $word = MainTables::$x_Words_table[$md_title] ?? 0;
         }
-        //---
+
         $view = make_view_by_number($target, $views_number, $llang, $pupdate);
-        //---
-        $mail_icon = ($GLOBALS['user_is_coordinator'] != false) ? make_mail_icon_new($tabg, 'pup_window_email') : '';
-        $mail_icon_td = (!empty($mail_icon)) ? "<td>$mail_icon</td>" : '';
-        //---
+
+        $mail_icon = make_mail_icon_new($tabg, 'pup_window_email');
+
         $view_td = <<<HTML
             <td>
                 $view
             </td>
         HTML;
-        //---
+
         $Campaign_td = <<<HTML
         <td>
             $ccat
         </td>
         HTML;
     }
-    //---
+
     $lang2 = $llang;
-    //---
+
     $nana = make_mdwiki_title($md_title);
-    //---
+
     $targe33_name = $target;
-    //---
-    // if ( strlen($targe33_name) > 15 ) {
-    //     $targe33_name = substr($targe33_name, 0, 15) . '...';
-    // }
-    //---
+
     $target_link = make_target_url($target, $llang, $targe33_name);
-    //---
+
     $talk = make_talk_url($llang, $user);
-    //---
+
     $md_title_encoded = rawurlencode($md_title);
-    //---
+
     $params = [
         "title" => $target,
         "lang" => $llang,
         "sourcetitle" => $md_title,
         "mdwiki_revid" => $mdwiki_revid,
     ];
-    // ---
+
     if ($GLOBALS['global_username'] !== "Mr. Ibrahem") {
         $params['save'] = 1;
     };
-    // ---
+
     // $fixwikirefs = "../fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     $fixwikirefs = "/fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-    // ---
+
     $flags = "";
-    // ---
+
     $laly = <<<HTML
         <tr>
             <td>
                 $nnnn
             </td>
             <td>
-                <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">$user_name</a> ($talk)
+                <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
+                    $user_name
+
+                </a> ($talk)
             </td>
-            $mail_icon_td
+            <td>
+                $mail_icon
+            </td>
             <td>
                 $nana
             </td>
@@ -144,7 +139,7 @@ function last_make_td($tabg, $nnnn, $last_table)
             </td>
         </tr>
     HTML;
-    // ---
+
     return $laly;
 }
 
@@ -154,25 +149,23 @@ if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
 
-$mail_th = ($GLOBALS['user_is_coordinator'] != false) ? "<th><span title='Email'>@</span></th>" : '';
-//---
 if ($last_table == 'pages') {
     $qsl_results = get_recent_sql($lang);
 } else {
     $qsl_results = get_recent_pages_users($lang);
 }
-//---
+
 $recent_rows = "";
-// ---
+
 $noo = 0;
-// ---
+
 foreach ($qsl_results as $tat => $tabe) {
     $noo = $noo + 1;
     $recent_rows .= last_make_td($tabe, $noo, $last_table);
 };
-//---
+
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
-//---
+
 $Toggle_column = "";
 function column_number($name)
 {
@@ -203,12 +196,14 @@ if ($last_table == 'pages') {
             <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
         </div>
     HTML;
-    //---
+
     $thead = <<<HTML
         <tr>
             <th>#</th>
             <th>User</th>
-            $mail_th
+            <th>
+                <span title='Email'>@</span>
+            </th>
             <th>Title</th>
             <th>Campaign</th>
             <th>Translated</th>
@@ -233,7 +228,7 @@ if ($last_table == 'pages') {
         </tr>
     HTML;
 }
-//---
+
 $recent_table = <<<HTML
     $Toggle_column
     <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
@@ -245,7 +240,7 @@ $recent_table = <<<HTML
         </tbody>
     </table>
 HTML;
-//---
+
 if ($last_table == 'pages') {
     $result = get_pages_langs();
 } else {
@@ -254,11 +249,11 @@ if ($last_table == 'pages') {
 
 function filter_recent($lang, $result)
 {
-    //---
+
     ksort($result);
-    //---
+
     $lang_list = "<option data-tokens='All' value='All'>All</option>";
-    //---
+
     foreach ($result as $codr) {
         $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
         $selected = ($codr == $lang) ? 'selected' : '';
@@ -270,7 +265,7 @@ function filter_recent($lang, $result)
 }
 
 $filter_by_lang = filter_recent($lang, $result);
-//---
+
 $data = [
     "pages" => 'Main',
     "pages_users" => 'User',
@@ -278,9 +273,9 @@ $data = [
 
 function filter_table($data, $vav, $id)
 {
-    //---
+
     $l_list = "";
-    //---
+
     foreach ($data as $table_name => $label) {
         $checked = ($table_name == $vav) ? "checked" : "";
         $l_list .= <<<HTML
@@ -298,9 +293,9 @@ function filter_table($data, $vav, $id)
     return $l_list;
 }
 $filter_ta = filter_table($data, $last_table, 'last_table');
-//---
+
 $count_result = count($result);
-//---
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
@@ -348,7 +343,7 @@ echo <<<HTML
         </div>
     </div>
 HTML;
-//---
+
 ?>
 <script>
     $(document).ready(function() {
@@ -364,7 +359,7 @@ HTML;
                     details: true
                 }
             });
-            // ---
+
             document.querySelectorAll('a.toggle-vis').forEach((el) => {
                 el.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -381,7 +376,7 @@ HTML;
                 });
             });
         }
-        // ---
+
         var usersTableElement = $('#last_users_table');
         if (usersTableElement.length) {
             var t = $('#last_users_table').DataTable({
