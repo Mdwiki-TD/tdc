@@ -80,7 +80,7 @@ echo <<<HTML
             <h4>Translations in process:</h4>
         </div>
         <div class='card-body'>
-            <table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
+            <table id="process_table" class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -97,4 +97,16 @@ echo <<<HTML
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#process_table').DataTable({
+                stateSave: true,
+                lengthMenu: [
+                    [25, 50, 100, 200],
+                    [25, 50, 100, 200]
+                ]
+            });
+        });
+    </script>
 HTML;
