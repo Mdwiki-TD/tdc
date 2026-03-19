@@ -2,41 +2,30 @@
 
 use Tables\SqlTables\TablesSql;
 use Tables\Langs\LangsTables;
-// use Tables\Main\MainTables;
 use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Process\get_process_all_new;
-// use function Utils\Html\make_cat_url;
 
 function process_make_td($tabg, $nnnn)
 {
-    $id       = $tabg['id'] ?? "";
     $date     = $tabg['date'] ?? $tabg['add_date'] ?? "";
-    //---
-    // if $_date_ has : then split before first space
+
+    // if $date has : then split before first space
     if (strpos($date, ':') !== false) {
         $date = explode(' ', $date)[0];
     };
-    //---
-    //return $date . '<br>';
-    //---
     $user     = $tabg['user'] ?? "";
     $llang    = $tabg['lang'] ?? "";
     $md_title = $tabg['title'] ?? "";
     $cat      = $tabg['cat'] ?? "";
-    // $word     = $tabg['word'] ?? "";
-    // $pupdate  = $tabg['date'] ?? '';
-    //---
+
     $talk_url = "//$llang.wikipedia.org/w/index.php?title=User_talk:$user&action=edit&section=new";
-    //---
+
     $lang2 = LangsTables::$L_code_to_lang[$llang] ?? $llang;
-    //---
-    // $ccat = make_cat_url( $cat );
+
     $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
-    //---
-    // $worde = $word ?? MainTables::$x_Words_table[$md_title];
-    //---
+
     $nana = make_mdwiki_title($md_title);
-    //---
+
     $laly = <<<HTML
         <tr>
             <td data-content="#">
@@ -59,47 +48,42 @@ function process_make_td($tabg, $nnnn)
             </td>
         </tr>
         HTML;
-    //---
+
     return $laly;
 };
 
-$table_html = <<<HTML
-	<table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>User</th>
-                <th><span data-bs-toggle="tooltip" title="Language">Lang.</span></th>
-                <th>Title</th>
-                <th>Campaign</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-HTML;
-//---
+$tbody_html = "";
+
 $dd1 = get_process_all_new();
-//---
+
 $noo = 0;
 foreach ($dd1 as $tat => $tabe) {
-    //---
     $noo = $noo + 1;
-    $table_html .= process_make_td($tabe, $noo);
-    //---
+    $tbody_html .= process_make_td($tabe, $noo);
 };
-//---
-$table_html .= <<<HTML
-        </tbody>
-    </table>
-HTML;
-//---
+
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
             <h4>Translations in process:</h4>
         </div>
         <div class='card-body'>
-            $table_html
+            <table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th><span data-bs-toggle="tooltip" title="Language">Lang.</span></th>
+                        <th>Title</th>
+                        <th>Campaign</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $tbody_html
+                </tbody>
+            </table>
         </div>
     </div>
 HTML;
