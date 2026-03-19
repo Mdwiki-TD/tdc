@@ -2,63 +2,8 @@
 
 namespace SQLorAPI\Process;
 
-/*
-
-Usage:
-
-use function SQLorAPI\Process\get_process_all_new;
-use function SQLorAPI\Process\get_user_process_new;
-use function SQLorAPI\Process\get_users_process_new;
-use function SQLorAPI\Process\get_lang_in_process_new;
-*/
-
 use function SQLorAPI\Get\super_function;
 use function SQLorAPI\Get\isvalid;
-
-function get_process_all_new(): array
-{
-    // ---
-    static $process_all = [];
-    // ---
-    if (!empty($process_all)) {
-        return $process_all;
-    }
-    // ---
-    $api_params = ['get' => 'in_process', 'limit' => "100", "order" => 'add_date'];
-    $sql_t = "select * from in_process ORDER BY add_date DESC limit 100";
-    //---
-    $process_all = super_function($api_params, [], $sql_t);
-    // ---
-    return $process_all;
-}
-
-function get_user_process_new(string $user, string $year_y = "all")
-{
-    // ---
-    static $cache = [];
-    // ---
-    if (!empty($cache[$user] ?? [])) {
-        return $cache[$user];
-    }
-    // ---
-    $api_params = ['get' => 'in_process', 'user' => $user];
-    // ---
-    $query = "select * from in_process where user = ?";
-    // ---
-    $params = [$user];
-    // ---
-    if (isvalid($year_y)) {
-        $query .= " AND YEAR(add_date) = ?";
-        $params[] = $year_y;
-        $api_params['year'] = $year_y;
-    }
-    // ---
-    $data = super_function($api_params, $params, $query, "in_process", true);
-    // ---
-    $cache[$user] = $data;
-    // ---
-    return $data;
-}
 
 function get_users_process_new(): array
 {

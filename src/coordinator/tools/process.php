@@ -1,105 +1,78 @@
-<?PHP
-
-use Tables\SqlTables\TablesSql;
-use Tables\Langs\LangsTables;
-// use Tables\Main\MainTables;
-use function Utils\Html\make_mdwiki_title;
-use function SQLorAPI\Process\get_process_all_new;
-// use function Utils\Html\make_cat_url;
-
-function process_make_td($tabg, $nnnn)
-{
-    $id       = $tabg['id'] ?? "";
-    $date     = $tabg['date'] ?? $tabg['add_date'] ?? "";
-    //---
-    // if $_date_ has : then split before first space
-    if (strpos($date, ':') !== false) {
-        $date = explode(' ', $date)[0];
-    };
-    //---
-    //return $date . '<br>';
-    //---
-    $user     = $tabg['user'] ?? "";
-    $llang    = $tabg['lang'] ?? "";
-    $md_title = $tabg['title'] ?? "";
-    $cat      = $tabg['cat'] ?? "";
-    // $word     = $tabg['word'] ?? "";
-    // $pupdate  = $tabg['date'] ?? '';
-    //---
-    $talk_url = "//$llang.wikipedia.org/w/index.php?title=User_talk:$user&action=edit&section=new";
-    //---
-    $lang2 = LangsTables::$L_code_to_lang[$llang] ?? $llang;
-    //---
-    // $ccat = make_cat_url( $cat );
-    $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
-    //---
-    // $worde = $word ?? MainTables::$x_Words_table[$md_title];
-    //---
-    $nana = make_mdwiki_title($md_title);
-    //---
-    $laly = <<<HTML
-        <tr>
-            <td data-content="#">
-                $nnnn
-            </td>
-            <td data-content="User">
-                <a target='' href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a> (<a target="_blank" href="$talk_url">talk</a>)
-            </td>
-            <td data-content="Lang.">
-                <a target='' href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a>
-            </td>
-            <td data-content="Title">
-                $nana
-            </td>
-            <td data-content="Campaign">
-                $ccat
-            </td>
-            <td data-content="Date">
-                $date
-            </td>
-        </tr>
-        HTML;
-    //---
-    return $laly;
-};
-
-$table_html = <<<HTML
-	<table class="table table-sm table-striped soro table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>User</th>
-                <th><span data-bs-toggle="tooltip" title="Language">Lang.</span></th>
-                <th>Title</th>
-                <th>Campaign</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-HTML;
-//---
-$dd1 = get_process_all_new();
-//---
-$noo = 0;
-foreach ($dd1 as $tat => $tabe) {
-    //---
-    $noo = $noo + 1;
-    $table_html .= process_make_td($tabe, $noo);
-    //---
-};
-//---
-$table_html .= <<<HTML
-        </tbody>
-    </table>
-HTML;
-//---
-echo <<<HTML
-    <div class='card'>
-        <div class='card-header'>
-            <h4>Translations in process:</h4>
-        </div>
-        <div class='card-body'>
-            $table_html
-        </div>
+<div class='card'>
+    <div class='card-header'>
+        <h4>Translations in process:</h4>
     </div>
-HTML;
+    <div class='card-body'>
+        <table id="process_table" class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" style="font-size:90%;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Lang.</th>
+                    <th>Title</th>
+                    <th>Campaign</th>
+                    <th>Draft</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Determine endpoint based on environment
+        const host = window.location.hostname === 'localhost' ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
+        const apiUrl = `/api.php?get=in_process&limit=200&order=add_date`;
+
+        $('#process_table').DataTable({
+            ajax: {
+                url: apiUrl,
+                dataSrc: 'results' // Tells DataTables to look for the array inside the 'results' key
+            },
+            stateSave: true,
+            lengthMenu: [
+                [25, 50, 100, 200],
+                [25, 50, 100, 200]
+            ],
+            columns: [{
+                    data: null,
+                    render: (data, type, row, meta) => meta.row + 1
+                },
+                {
+                    data: 'user',
+                    render: function(data, type, row) {
+                        let talkUrl = `//${row.lang}.wikipedia.org/w/index.php?title=User_talk:${data}&action=edit&section=new`;
+                        return `<a href='/Translation_Dashboard/leaderboard.php?user=${data}'>${data}</a> (<a target="_blank" href="${talkUrl}">talk</a>)`;
+                    }
+                },
+                {
+                    data: 'lang',
+                    render: function(data, type, row) {
+                        return `<a href='/Translation_Dashboard/leaderboard.php?langcode=${data}'>(${data}) ${row.autonym}</a>`;
+                    }
+                },
+                {
+                    data: 'title',
+                    render: function(data, type, row) {
+                        let encoded = encodeURIComponent(data);
+                        return `<a href="//mdwiki.org/wiki/${encoded}" target="_blank">${data}</a>`;
+                    }
+                },
+                {
+                    data: 'campaign'
+                },
+                {
+                    data: 'add_date',
+                    render: function(data, type, row) {
+                        // Extract YYYY-MM-DD from the timestamp
+                        let dateOnly = data.includes(' ') ? data.split(' ')[0] : data;
+                        let encodedTitle = encodeURIComponent(row.title);
+                        return `<a href="//mdwikicx.toolforge.org/wiki/${row.lang}/${encodedTitle}" target="_blank">${dateOnly}</a>`;
+                    }
+                }
+            ]
+        });
+    });
+</script>
