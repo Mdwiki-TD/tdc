@@ -66,7 +66,6 @@ $tools_files = [
 	"categories",
 	"last",
 	"last1",
-	"last_coord",
 	"process_total",
 	"process",
 	"recent_helps",
