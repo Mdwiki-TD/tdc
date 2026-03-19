@@ -65,6 +65,8 @@ $corrd_folders = array_map('basename', glob('coordinator/admin/*', GLOB_ONLYDIR)
 $tools_files = [
 	"categories",
 	"last",
+	"last1",
+	"last_coord",
 	"process_total",
 	"process",
 	"recent_helps",
