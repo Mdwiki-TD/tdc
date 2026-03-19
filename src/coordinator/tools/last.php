@@ -5,8 +5,6 @@ use Tables\Main\MainTables;
 use Tables\Langs\LangsTables;
 
 use function APICalls\WikiApi\make_view_by_number;
-use function Utils\Html\make_mail_icon_new;
-use function Utils\Html\make_talk_url;
 use function Utils\Html\make_target_url;
 use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
@@ -14,9 +12,8 @@ use function SQLorAPI\Funcs\get_pages_users_langs;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
 
-$last_tables = ['pages', 'pages_users'];
 $last_table = $_GET['last_table'] ?? 'pages';
-$last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
+$last_table = in_array($last_table, ['pages', 'pages_users']) ? $last_table : 'pages';
 
 function last_make_td($tabg, $nnnn, $last_table)
 {
@@ -72,13 +69,11 @@ function last_make_td($tabg, $nnnn, $last_table)
         HTML;
     }
 
-    $lang2 = $llang;
+    $mdwiki_title = make_mdwiki_title($md_title);
 
-    $nana = make_mdwiki_title($md_title);
-
-    $targe33_name = $target;
-
-    $target_link = make_target_url($target, $llang, $targe33_name);
+    $encoded_target = rawurlencode(str_replace(' ', '_', $target));
+    $escaped_display = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+    $target_link = "<a target='_blank' href='https://{$llang}.wikipedia.org/wiki/{$encoded_target}'>{$escaped_display}</a>";
 
     $md_title_encoded = rawurlencode($md_title);
 
@@ -97,11 +92,11 @@ function last_make_td($tabg, $nnnn, $last_table)
                 </a>
             </td>
             <td>
-                $nana
+                $mdwiki_title
             </td>
             $Campaign_td
             <td class="link_container">
-                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$lang2</a>: $target_link
+                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$llang</a>: $target_link
             </td>
             <td>
                 $pupdate
@@ -143,25 +138,10 @@ foreach ($qsl_results as $tat => $tabe) {
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
 
 $Toggle_column = "";
-function column_number($name)
-{
-    $columns = [
-        "campaign" => 3,
-        "flags" => 9,
-    ];
-    $result = $columns[$name] ?? 0;
-    if ($result == 0) {
-        return 0;
-    }
-    if ($GLOBALS['user_is_coordinator'] != false) {
-        $result = $result + 1;
-    }
-    return $result;
-}
 
 if ($last_table == 'pages') {
-    $Campaign_number = column_number('campaign');
-    $flags_number = column_number('flags');
+    $Campaign_number = 3;
+    $flags_number = 9;
     $Toggle_column = <<<HTML
         <div>
             <span class="" data-column="0">Toggle columns:</span>
@@ -234,33 +214,28 @@ function filter_recent($lang, $result)
 
 $filter_by_lang = filter_recent($lang, $result);
 
+
 $data = [
     "pages" => 'Main',
     "pages_users" => 'User',
 ];
 
-function filter_table($data, $vav, $id)
-{
+$filter_ta = "";
 
-    $l_list = "";
-
-    foreach ($data as $table_name => $label) {
-        $checked = ($table_name == $vav) ? "checked" : "";
-        $l_list .= <<<HTML
-			<div class="form-check form-check-inline">
-				<input class="form-check-input"
-					type="radio"
-					name="$id"
-					id="radio_$table_name"
-					value="$table_name"
-					$checked>
-				<label class="form-check-label" for="radio_$table_name">$label</label>
-			</div>
-		HTML;
-    }
-    return $l_list;
+foreach ($data as $table_name => $label) {
+    $checked = ($table_name == $last_table) ? "checked" : "";
+    $filter_ta .= <<<HTML
+        <div class="form-check form-check-inline">
+            <input class="form-check-input"
+                type="radio"
+                name="last_table"
+                id="radio_$table_name"
+                value="$table_name"
+                $checked>
+            <label class="form-check-label" for="radio_$table_name">$label</label>
+        </div>
+    HTML;
 }
-$filter_ta = filter_table($data, $last_table, 'last_table');
 
 $count_result = count($result);
 
