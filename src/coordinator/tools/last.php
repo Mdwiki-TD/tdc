@@ -86,7 +86,6 @@ function last_make_td($tabg, $nnnn, $last_table)
         HTML;
     }
     //---
-    // $lang2 = LangsTables::$L_code_to_lang[$llang] ?? $llang;
     $lang2 = $llang;
     //---
     $nana = make_mdwiki_title($md_title);
