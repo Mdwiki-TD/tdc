@@ -1,28 +1,24 @@
 <?PHP
 
-use function Utils\Html\make_mdwiki_title;
-use function APICalls\TDApi\get_td_api;
-
 function process_make_td($tab, $nnnn)
 {
     // { "id": 3284, "title": "Triquetral fracture", "user": "SeaTub", "lang": "es", "cat": "RTT", "translate_type": "all", "word": 198, "add_date": "2026-02-17 03:00:00", "campaign": "Main", "autonym": "español" }
-    $date     = $tab['date'] ?? $tab['add_date'] ?? "";
 
-    // if $date has : then split before first space `2026-02-25 03:00:00` > `2026-02-25`
-    if (strpos($date, ':') !== false) {
-        $date = explode(' ', $date)[0];
-    };
     $user      = $tab['user'] ?? "";
     $lang_code = $tab['lang'] ?? "";
     $md_title  = $tab['title'] ?? "";
     $autonym   = $tab['autonym'] ?? "";
     $campaign  = $tab['campaign'] ?? "";
 
+    $date     = $tab['add_date'] ?? "";
+    // if $date has : then split before first space `2026-02-25 03:00:00` > `2026-02-25`
+    if (strpos($date, ':') !== false) {
+        $date = explode(' ', $date)[0];
+    };
     $lang_title = "($lang_code) $autonym";
 
     $talk_url = "//$lang_code.wikipedia.org/w/index.php?title=User_talk:$user&action=edit&section=new";
 
-    $mdwiki_link = make_mdwiki_title($md_title);
     $md_title_encoded = rawurlencode($md_title);
 
     $laly = <<<HTML
@@ -37,7 +33,7 @@ function process_make_td($tab, $nnnn)
                 <a target='' href='/Translation_Dashboard/leaderboard.php?langcode=$lang_code'>$lang_title</a>
             </td>
             <td data-content="Title">
-                $mdwiki_link
+                <a href="//mdwiki.org/wiki/$md_title_encoded" target="_blank">$md_title</a>
             </td>
             <td data-content="Campaign">
                 $campaign
@@ -51,6 +47,23 @@ function process_make_td($tab, $nnnn)
     return $laly;
 };
 
+function get_td_api(array $params): array
+{
+    $endPoint = (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
+    $endPoint .= '/api.php';
+
+    $out = file_get_contents("$endPoint?" . http_build_query($params));
+
+    $results = json_decode($out, true);
+
+    if (!is_array($results)) {
+        $results = [];
+    }
+
+    $result = $results['results'] ?? [];
+
+    return $result;
+}
 $data = get_td_api(['get' => 'in_process', 'limit' => "100", "order" => 'add_date']);
 
 $tbody_html = "";
