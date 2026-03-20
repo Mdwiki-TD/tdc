@@ -1,11 +1,39 @@
 <?PHP
 
-use Tables\SqlTables\TablesSql;
-use Tables\Main\MainTables;
-use Tables\Langs\LangsTables;
+function make_view_by_number($target, $numb, $lang, $pupdate)
+{
+    // remove spaces and tab characters
+    $target = trim($target);
+    $numb2 = (!empty($numb)) ? $numb : "?";
+    $start = !empty($pupdate) ? $pupdate : '2019-01-01';
+    $end = date("Y-m-d", strtotime("yesterday"));
 
-use function APICalls\WikiApi\make_view_by_number;
-
+    $url = 'https://pageviews.wmcloud.org/?' . http_build_query(array(
+        'project' => "$lang.wikipedia.org",
+        'platform' => 'all-access',
+        'agent' => 'all-agents',
+        'start' => $start,
+        'end' => $end,
+        // 'range' => 'all-time',
+        'redirects' => '0',
+        'pages' => $target,
+    ), '', '&', PHP_QUERY_RFC3986);
+    // ---
+    $numb3 = (is_numeric($numb2)) ? number_format($numb2) : $numb2;
+    $link = "<a target='_blank' href='$url'>$numb3</a>";
+    // ---
+    if (is_numeric($numb2) && intval($numb2) > 0) {
+        return $link;
+    }
+    // ---
+    $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
+    // ---
+    $url2 = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
+    // ---
+    $link = "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
+    // ---
+    return $link;
+};
 function make_mail_icon_url(array $tab): string
 {
     $mail_params = [
@@ -84,11 +112,10 @@ function last_make_td($tabg, $nnnn, $last_table)
 
     $llang    = $tabg['lang'] ?? "";
     $md_title = trim($tabg['title'] ?? '');
-    $cat      = $tabg['cat'] ?? "";
-    $word     = $tabg['word'] ?? "";
     $target   = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
     $add_date = $tabg['add_date'] ?? '';
+    $campaign = $tabg['campaign'] ?? '';
 
     $mdwiki_revid = $tabg['mdwiki_revid'] ?? '';
 
@@ -109,15 +136,8 @@ function last_make_td($tabg, $nnnn, $last_table)
     if ($last_table == "pages") {
         $views_number = $tabg['views'] ?? '?';
 
-        if (!$word || $word == 0) {
-            $word = MainTables::$x_Words_table[$md_title] ?? 0;
-        }
-
         $view = make_view_by_number($target, $views_number, $llang, $pupdate);
     }
-
-    // $ccat = make_cat_url( $cat );
-    $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
 
     $encoded_title = rawurlencode(str_replace(' ', '_', $md_title));
     $escaped_title = htmlspecialchars($md_title, ENT_QUOTES, 'UTF-8');
@@ -130,7 +150,6 @@ function last_make_td($tabg, $nnnn, $last_table)
 
     $mail_icon = make_mail_icon_url($tabg);
 
-    $escaped_lang = htmlspecialchars($llang, ENT_QUOTES, 'UTF-8');
     $escaped_user = rawurlencode($user);
 
     $params = [
@@ -158,7 +177,7 @@ function last_make_td($tabg, $nnnn, $last_table)
             <td>
                 <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
                     $user_name
-                </a> (<a target='_blank' href='//{$escaped_lang}.wikipedia.org/w/index.php?title=User_talk:{$escaped_user}'>talk</a>)
+                </a> (<a target='_blank' href='//{$llang}.wikipedia.org/w/index.php?title=User_talk:{$escaped_user}'>talk</a>)
             </td>
             <td>
     	        <a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$mail_icon}' onclick='pup_window_new(this)'>@</a>
@@ -167,7 +186,7 @@ function last_make_td($tabg, $nnnn, $last_table)
                 <a target='_blank' href='https://mdwiki.org/wiki/{$encoded_title}'>{$escaped_title}</a>
             </td>
             <td>
-                $ccat
+                $campaign
             </td>
             <td class="link_container">
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$llang</a>: $target_link
@@ -200,11 +219,11 @@ function filter_recent($lang, $data)
     $lang_list = "<option data-tokens='All' value='All'>All</option>";
 
     foreach ($data as $codr) {
-        $code = $codr["lang"] ?? "";
-        $langeee = LangsTables::$L_code_to_lang[$code] ?? '';
+        $code    = $codr["lang"] ?? "";
+        $autonym = $codr["autonym"] ?? "";
         $selected = ($code == $lang) ? 'selected' : '';
         $lang_list .= <<<HTML
-            <option data-tokens='$code' value='$code' $selected>$langeee</option>
+            <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
             HTML;
     };
     return $lang_list;
@@ -249,7 +268,9 @@ $fix_number = 8;
 
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
 
-$api_params_langs = ['get' => $last_table, 'distinct' => "1", 'select' => 'lang', 'lang' => 'not_empty'];
+$api_params_langs = [
+    'get' => ($last_table == 'pages') ? 'pages_langs' : 'pages_users_langs',
+];
 
 $result = get_td_api($api_params_langs);
 
