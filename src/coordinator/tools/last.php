@@ -211,7 +211,7 @@ echo <<<HTML
             </form>
         </div>
         <div class='card-body'>
-            <div>
+            <div class="d-none d-md-inline">
                 <span class="" data-column="0">Toggle columns:</span>
                 <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
                 <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
