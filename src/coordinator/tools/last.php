@@ -5,14 +5,63 @@ use Tables\Main\MainTables;
 use Tables\Langs\LangsTables;
 
 use function APICalls\WikiApi\make_view_by_number;
-use function SQLorAPI\Recent\get_recent_pages_users;
-use function SQLorAPI\Funcs\get_pages_users_langs;
-use function SQLorAPI\Funcs\get_pages_langs;
-use function SQLorAPI\Recent\get_recent_sql;
 
-$last_table = $_GET['last_table'] ?? 'pages';
-$last_table = in_array($last_table, ['pages', 'pages_users']) ? $last_table : 'pages';
 
+function post_url(string $endPoint, array $params = []): string
+{
+    $usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
+
+    $ch = curl_init();
+
+    $url = "{$endPoint}?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_USERAGENT => $usr_agent,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_TIMEOUT => 10,
+    ]);
+
+    $output = curl_exec($ch);
+
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if ($http_code !== 200) {
+        error_log('post_url: Error: API request failed with status code ' . $http_code);
+    }
+
+    if ($output === FALSE) {
+        error_log("post_url: cURL Error: " . curl_error($ch));
+    }
+
+    if (curl_errno($ch)) {
+        error_log('post_url: Error:' . curl_error($ch));
+    }
+
+    curl_close($ch);
+    return $output;
+}
+
+function get_td_api(array $params): array
+{
+    $endPoint = (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
+    $endPoint .= '/api.php';
+
+    $out = post_url($endPoint, $params);
+
+    $results = json_decode($out, true);
+
+    if (!is_array($results)) {
+        $results = [];
+    }
+
+    $result = $results['results'] ?? [];
+
+    if (isset($result['error'])) {
+        $result = [];
+    }
+    return $result;
+}
 function last_make_td($tabg, $nnnn, $last_table)
 {
     $user     = $tabg['user'] ?? "";
@@ -64,7 +113,6 @@ function last_make_td($tabg, $nnnn, $last_table)
 
     $md_title_encoded = rawurlencode($md_title);
 
-
     $flags = "";
 
     $laly = <<<HTML
@@ -111,10 +159,11 @@ function filter_recent($lang, $data)
     $lang_list = "<option data-tokens='All' value='All'>All</option>";
 
     foreach ($data as $codr) {
-        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
-        $selected = ($codr == $lang) ? 'selected' : '';
+        $code = $codr["lang"] ?? "";
+        $langeee = LangsTables::$L_code_to_lang[$code] ?? '';
+        $selected = ($code == $lang) ? 'selected' : '';
         $lang_list .= <<<HTML
-            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
+            <option data-tokens='$code' value='$code' $selected>$langeee</option>
             HTML;
     };
     return $lang_list;
@@ -122,7 +171,27 @@ function filter_recent($lang, $data)
 
 $lang = $_GET['lang'] ?? 'All';
 
-$qsl_results = ($last_table == 'pages') ? get_recent_sql($lang) : get_recent_pages_users($lang);
+
+$api_params_users = [
+    'get' => 'pages_users',
+    'target' => 'not_empty',
+    "lang" => $lang,
+    "order" => 'pupdate',
+    'limit' => '100',
+];
+
+$api_params_pages = [
+    'get' => 'pages_with_views',
+    'target' => 'not_empty',
+    "lang" => $lang,
+    "order" => 'pupdate_or_add_date',
+    'limit' => '250',
+];
+
+$last_table = $_GET['last_table'] ?? 'pages';
+$last_table = in_array($last_table, ['pages', 'pages_users']) ? $last_table : 'pages';
+
+$qsl_results = ($last_table == 'pages') ? get_td_api($api_params_pages) : get_td_api($api_params_users);
 
 $recent_rows = "";
 
@@ -136,10 +205,11 @@ foreach ($qsl_results as $tat => $tabe) {
 $Campaign_number = 3;
 $flags_number = 8;
 
-
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
 
-$result = ($last_table == 'pages') ? get_pages_langs() : get_pages_users_langs();
+$api_params_langs = ['get' => $last_table, 'distinct' => "1", 'select' => 'lang', 'lang' => 'not_empty'];
+
+$result = get_td_api($api_params_langs);
 
 $filter_by_lang = filter_recent($lang, $result);
 
