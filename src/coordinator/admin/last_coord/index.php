@@ -5,9 +5,6 @@ use Tables\Main\MainTables;
 use Tables\Langs\LangsTables;
 
 use function APICalls\WikiApi\make_view_by_number;
-use function Utils\Html\make_mail_icon_new;
-use function Utils\Html\make_talk_url;
-use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Funcs\get_pages_users_langs;
 use function SQLorAPI\Funcs\get_pages_langs;
@@ -16,6 +13,22 @@ use function SQLorAPI\Recent\get_recent_sql;
 $last_table = $_GET['last_table'] ?? 'pages';
 $last_table = in_array($last_table, ['pages', 'pages_users']) ? $last_table : 'pages';
 
+function make_mail_icon_url(array $tab): string
+{
+    $mail_params = [
+        'user' => $tab['user'] ?? '',
+        'lang' => $tab['lang'] ?? '',
+        'target' => $tab['target'] ?? '',
+        'date' => $tab['pupdate'] ?? '',
+        'title' => $tab['title'] ?? '',
+        'nonav' => '1'
+    ];
+
+    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params, '', '&', PHP_QUERY_RFC3986);
+    $escaped_url = htmlspecialchars($mail_url, ENT_QUOTES, 'UTF-8');
+
+    return $escaped_url;
+}
 function last_make_td($tabg, $nnnn, $last_table)
 {
     $user     = $tabg['user'] ?? "";
@@ -44,7 +57,7 @@ function last_make_td($tabg, $nnnn, $last_table)
 
     $view = "";
 
-    $mail_icon = make_mail_icon_new($tabg, 'pup_window_email');
+    $mail_icon = make_mail_icon_url($tabg);
 
     if ($last_table == "pages") {
         $views_number = $tabg['views'] ?? '?';
@@ -59,13 +72,16 @@ function last_make_td($tabg, $nnnn, $last_table)
     // $ccat = make_cat_url( $cat );
     $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
 
-    $mdwiki_title = make_mdwiki_title($md_title);
+    $encoded_title = rawurlencode(str_replace(' ', '_', $md_title));
+    $escaped_title = htmlspecialchars($md_title, ENT_QUOTES, 'UTF-8');
 
     $encoded_target = rawurlencode(str_replace(' ', '_', $target));
     $escaped_display = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+
     $target_link = "<a target='_blank' href='https://{$llang}.wikipedia.org/wiki/{$encoded_target}'>{$escaped_display}</a>";
 
-    $talk = make_talk_url($llang, $user);
+    $escaped_lang = htmlspecialchars($llang, ENT_QUOTES, 'UTF-8');
+    $escaped_user = rawurlencode($user);
 
     $md_title_encoded = rawurlencode($md_title);
 
@@ -92,13 +108,13 @@ function last_make_td($tabg, $nnnn, $last_table)
             <td>
                 <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
                     $user_name
-                </a> ($talk)
+                </a> (<a target='_blank' href='//{$escaped_lang}.wikipedia.org/w/index.php?title=User_talk:{$escaped_user}'>talk</a>)
             </td>
             <td>
-                $mail_icon
+    	        <a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$mail_icon}' onclick='pup_window_new(this)'>@</a>
             </td>
             <td>
-                $mdwiki_title
+                <a target='_blank' href='https://mdwiki.org/wiki/{$encoded_title}'>{$escaped_title}</a>
             </td>
             <td>
                 $ccat
@@ -127,17 +143,25 @@ function last_make_td($tabg, $nnnn, $last_table)
     return $laly;
 }
 
+function filter_recent($lang, $data)
+{
+
+    ksort($data);
+    $lang_list = "<option data-tokens='All' value='All'>All</option>";
+
+    foreach ($data as $codr) {
+        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
+        $selected = ($codr == $lang) ? 'selected' : '';
+        $lang_list .= <<<HTML
+            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
+            HTML;
+    };
+    return $lang_list;
+}
+
 $lang = $_GET['lang'] ?? 'All';
 
-if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
-    $lang = 'All';
-};
-
-if ($last_table == 'pages') {
-    $qsl_results = get_recent_sql($lang);
-} else {
-    $qsl_results = get_recent_pages_users($lang);
-}
+$qsl_results = ($last_table == 'pages') ? get_recent_sql($lang) : get_recent_pages_users($lang);
 
 $recent_rows = "";
 
@@ -148,75 +172,17 @@ foreach ($qsl_results as $tat => $tabe) {
     $recent_rows .= last_make_td($tabe, $noo, $last_table);
 };
 
-$table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
-
-$Toggle_column = "";
-
-$thead = <<<HTML
-    <tr>
-        <th>#</th>
-        <th>User</th>
-        <th> <span title='Email'>@</span> </th>
-        <th>Title</th>
-        <th>Campaign</th>
-        <th>Translated</th>
-        <th>Published</th>
-        <th>Views</th>
-        <th>Fixref</th>
-        <th>Draft</th>
-        <th>Flags</th>
-    </tr>
-HTML;
-
 $Campaign_number = 4;
 $flags_number = 10;
 $fix_number = 8;
-$Toggle_column = <<<HTML
-    <div>
-        <span class="" data-column="0">Toggle columns:</span>
-        <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
-        <a class="toggle-vis btn btn-outline-primary" data-column="$fix_number" type="button">Fixref</a>
-        <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
-    </div>
-HTML;
 
+$table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
 
-$recent_table = <<<HTML
-    $Toggle_column
-    <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
-        <thead>
-            $thead
-        </thead>
-        <tbody>
-            $recent_rows
-        </tbody>
-    </table>
-HTML;
-
-if ($last_table == 'pages') {
-    $result = get_pages_langs();
-} else {
-    $result = get_pages_users_langs();
-}
-
-function filter_recent($lang, $result)
-{
-
-    ksort($result);
-
-    $lang_list = "<option data-tokens='All' value='All'>All</option>";
-
-    foreach ($result as $codr) {
-        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
-        $selected = ($codr == $lang) ? 'selected' : '';
-        $lang_list .= <<<HTML
-            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
-            HTML;
-    };
-    return $lang_list;
-}
+$result = ($last_table == 'pages') ? get_pages_langs() : get_pages_users_langs();
 
 $filter_by_lang = filter_recent($lang, $result);
+
+$count_result = count($result);
 
 
 $data = [
@@ -240,8 +206,6 @@ foreach ($data as $table_name => $label) {
         </div>
     HTML;
 }
-
-$count_result = count($result);
 
 echo <<<HTML
     <div class='card'>
@@ -286,7 +250,32 @@ echo <<<HTML
             </form>
         </div>
         <div class='card-body'>
-            $recent_table
+            <div>
+                <span class="" data-column="0">Toggle columns:</span>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$fix_number" type="button">Fixref</a>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
+            </div>
+            <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th> <span title='Email'>@</span> </th>
+                        <th>Title</th>
+                        <th>Campaign</th>
+                        <th>Translated</th>
+                        <th>Published</th>
+                        <th>Views</th>
+                        <th>Fixref</th>
+                        <th>Draft</th>
+                        <th>Flags</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $recent_rows
+                </tbody>
+            </table>
         </div>
     </div>
 HTML;

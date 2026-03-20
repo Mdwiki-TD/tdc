@@ -5,8 +5,6 @@ use Tables\Main\MainTables;
 use Tables\Langs\LangsTables;
 
 use function APICalls\WikiApi\make_view_by_number;
-use function Utils\Html\make_target_url;
-use function Utils\Html\make_mdwiki_title;
 use function SQLorAPI\Recent\get_recent_pages_users;
 use function SQLorAPI\Funcs\get_pages_users_langs;
 use function SQLorAPI\Funcs\get_pages_langs;
@@ -41,38 +39,27 @@ function last_make_td($tabg, $nnnn, $last_table)
         $user_name = $user_name[0];
     }
 
-    $Campaign_td = "";
-    $view_td = "";
+    $view = "";
 
     if ($last_table == "pages") {
         $views_number = $tabg['views'] ?? '?';
-
-        // $ccat = make_cat_url( $cat );
-        $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
 
         if (!$word || $word == 0) {
             $word = MainTables::$x_Words_table[$md_title] ?? 0;
         }
 
         $view = make_view_by_number($target, $views_number, $llang, $pupdate);
-
-        $view_td = <<<HTML
-            <td>
-                $view
-            </td>
-        HTML;
-
-        $Campaign_td = <<<HTML
-        <td>
-            $ccat
-        </td>
-        HTML;
     }
 
-    $mdwiki_title = make_mdwiki_title($md_title);
+    // $ccat = make_cat_url( $cat );
+    $ccat = TablesSql::$s_cat_to_camp[$cat] ?? $cat;
+
+    $encoded_title = rawurlencode(str_replace(' ', '_', $md_title));
+    $escaped_title = htmlspecialchars($md_title, ENT_QUOTES, 'UTF-8');
 
     $encoded_target = rawurlencode(str_replace(' ', '_', $target));
     $escaped_display = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+
     $target_link = "<a target='_blank' href='https://{$llang}.wikipedia.org/wiki/{$encoded_target}'>{$escaped_display}</a>";
 
     $md_title_encoded = rawurlencode($md_title);
@@ -88,20 +75,23 @@ function last_make_td($tabg, $nnnn, $last_table)
             <td>
                 <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
                     $user_name
-
                 </a>
             </td>
             <td>
-                $mdwiki_title
+                <a target='_blank' href='https://mdwiki.org/wiki/{$encoded_title}'>{$escaped_title}</a>
             </td>
-            $Campaign_td
+            <td>
+                $ccat
+            </td>
             <td class="link_container">
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$llang</a>: $target_link
             </td>
             <td>
                 $pupdate
             </td>
-                $view_td
+            <td>
+                $view
+            </td>
             <td>
                 <a href="//mdwikicx.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
             </td>
@@ -114,17 +104,25 @@ function last_make_td($tabg, $nnnn, $last_table)
     return $laly;
 }
 
+function filter_recent($lang, $data)
+{
+
+    ksort($data);
+    $lang_list = "<option data-tokens='All' value='All'>All</option>";
+
+    foreach ($data as $codr) {
+        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
+        $selected = ($codr == $lang) ? 'selected' : '';
+        $lang_list .= <<<HTML
+            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
+            HTML;
+    };
+    return $lang_list;
+}
+
 $lang = $_GET['lang'] ?? 'All';
 
-if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
-    $lang = 'All';
-};
-
-if ($last_table == 'pages') {
-    $qsl_results = get_recent_sql($lang);
-} else {
-    $qsl_results = get_recent_pages_users($lang);
-}
+$qsl_results = ($last_table == 'pages') ? get_recent_sql($lang) : get_recent_pages_users($lang);
 
 $recent_rows = "";
 
@@ -135,84 +133,17 @@ foreach ($qsl_results as $tat => $tabe) {
     $recent_rows .= last_make_td($tabe, $noo, $last_table);
 };
 
+$Campaign_number = 3;
+$flags_number = 8;
+
+
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
 
-$Toggle_column = "";
-
-if ($last_table == 'pages') {
-    $Campaign_number = 3;
-    $flags_number = 9;
-    $Toggle_column = <<<HTML
-        <div>
-            <span class="" data-column="0">Toggle columns:</span>
-            <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
-            <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
-        </div>
-    HTML;
-
-    $thead = <<<HTML
-        <tr>
-            <th>#</th>
-            <th>User</th>
-            <th>Title</th>
-            <th>Campaign</th>
-            <th>Translated</th>
-            <th>Published</th>
-            <th>Views</th>
-            <th>Draft</th>
-            <th>Flags</th>
-        </tr>
-    HTML;
-} else {
-    $thead = <<<HTML
-        <tr>
-            <th>#</th>
-            <th>User</th>
-            <th>Title</th>
-            <th>Translated</th>
-            <th>Published</th>
-            <th>Draft</th>
-            <th>Flags</th>
-        </tr>
-    HTML;
-}
-
-$recent_table = <<<HTML
-    $Toggle_column
-    <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
-        <thead>
-            $thead
-        </thead>
-        <tbody>
-            $recent_rows
-        </tbody>
-    </table>
-HTML;
-
-if ($last_table == 'pages') {
-    $result = get_pages_langs();
-} else {
-    $result = get_pages_users_langs();
-}
-
-function filter_recent($lang, $result)
-{
-
-    ksort($result);
-
-    $lang_list = "<option data-tokens='All' value='All'>All</option>";
-
-    foreach ($result as $codr) {
-        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
-        $selected = ($codr == $lang) ? 'selected' : '';
-        $lang_list .= <<<HTML
-            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
-            HTML;
-    };
-    return $lang_list;
-}
+$result = ($last_table == 'pages') ? get_pages_langs() : get_pages_users_langs();
 
 $filter_by_lang = filter_recent($lang, $result);
+
+$count_result = count($result);
 
 
 $data = [
@@ -236,8 +167,6 @@ foreach ($data as $table_name => $label) {
         </div>
     HTML;
 }
-
-$count_result = count($result);
 
 echo <<<HTML
     <div class='card'>
@@ -282,7 +211,29 @@ echo <<<HTML
             </form>
         </div>
         <div class='card-body'>
-            $recent_table
+            <div>
+                <span class="" data-column="0">Toggle columns:</span>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
+            </div>
+            <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Title</th>
+                        <th>Campaign</th>
+                        <th>Translated</th>
+                        <th>Published</th>
+                        <th>Views</th>
+                        <th>Draft</th>
+                        <th>Flags</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $recent_rows
+                </tbody>
+            </table>
         </div>
     </div>
 HTML;
@@ -290,9 +241,10 @@ HTML;
 ?>
 <script>
     $(document).ready(function() {
+        var table;
         var tableElement = $('#last_table');
         if (tableElement.length) {
-            var table = $('#last_table').DataTable({
+            table = $('#last_table').DataTable({
                 stateSave: true,
                 // order: [ [6, 'desc'] ],
                 paging: false,
@@ -302,7 +254,24 @@ HTML;
                     details: true
                 }
             });
+        }
 
+        var usersTableElement = $('#last_users_table');
+        if (usersTableElement.length) {
+            table = $('#last_users_table').DataTable({
+                stateSave: true,
+                // paging: false,
+                lengthMenu: [
+                    [100, 150, 200],
+                    [100, 150, 200]
+                ],
+                // scrollY: 800,
+                responsive: {
+                    details: true
+                }
+            });
+        }
+        if (table) {
             document.querySelectorAll('a.toggle-vis').forEach((el) => {
                 el.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -320,20 +289,5 @@ HTML;
             });
         }
 
-        var usersTableElement = $('#last_users_table');
-        if (usersTableElement.length) {
-            var t = $('#last_users_table').DataTable({
-                stateSave: true,
-                // paging: false,
-                lengthMenu: [
-                    [100, 150, 200],
-                    [100, 150, 200]
-                ],
-                // scrollY: 800,
-                responsive: {
-                    details: true
-                }
-            });
-        }
     });
 </script>
