@@ -36,6 +36,22 @@ function make_view_by_number($target, $numb, $lang, $pupdate)
     // ---
     return $link;
 };
+function make_mail_icon_url(array $tab): string
+{
+    $mail_params = [
+        'user' => $tab['user'] ?? '',
+        'lang' => $tab['lang'] ?? '',
+        'target' => $tab['target'] ?? '',
+        'date' => $tab['pupdate'] ?? '',
+        'title' => $tab['title'] ?? '',
+        'nonav' => '1'
+    ];
+
+    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params, '', '&', PHP_QUERY_RFC3986);
+    $escaped_url = htmlspecialchars($mail_url, ENT_QUOTES, 'UTF-8');
+
+    return $escaped_url;
+}
 
 function post_url(string $endPoint, array $params = []): string
 {
@@ -133,6 +149,25 @@ function last_make_td($tabg, $nnnn, $last_table)
 
     $target_link = "<a target='_blank' href='https://{$llang}.wikipedia.org/wiki/{$encoded_target}'>{$escaped_display}</a>";
 
+
+    $mail_icon = make_mail_icon_url($tabg);
+
+    $escaped_user = rawurlencode($user);
+
+    $params = [
+        "title" => $target,
+        "lang" => $llang,
+        "sourcetitle" => $md_title,
+        "mdwiki_revid" => $mdwiki_revid,
+    ];
+
+    $excludedUsers = ['Mr. Ibrahem']; // TODO: This should ideally be moved to a configuration file.
+    if (!in_array($GLOBALS['global_username'], $excludedUsers)) {
+        $params['save'] = 1;
+    };
+
+    $fixwikirefs = "/fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+
     $md_title_encoded = rawurlencode($md_title);
 
     $flags = "";
@@ -145,7 +180,10 @@ function last_make_td($tabg, $nnnn, $last_table)
             <td>
                 <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
                     $user_name
-                </a>
+                </a> (<a target='_blank' href='//{$llang}.wikipedia.org/w/index.php?title=User_talk:{$escaped_user}'>talk</a>)
+            </td>
+            <td>
+    	        <a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$mail_icon}' onclick='pup_window_new(this)'>@</a>
             </td>
             <td>
                 <a target='_blank' href='https://mdwiki.org/wiki/{$encoded_title}'>{$escaped_title}</a>
@@ -161,6 +199,9 @@ function last_make_td($tabg, $nnnn, $last_table)
             </td>
             <td>
                 $view
+            </td>
+            <td>
+                <a target='_blank' href="$fixwikirefs">Fix</a>
             </td>
             <td>
                 <a href="//mdwikicx.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
@@ -195,7 +236,6 @@ $lang = $_GET['lang'] ?? 'All';
 
 if (empty($lang)) $lang = "All";
 
-
 $api_params_users = [
     'get' => 'pages_users',
     'target' => 'not_empty',
@@ -226,8 +266,9 @@ foreach ($qsl_results as $tat => $tabe) {
     $recent_rows .= last_make_td($tabe, $noo, $last_table);
 };
 
-$Campaign_number = 3;
-$flags_number = 8;
+$Campaign_number = 4;
+$flags_number = 10;
+$fix_number = 8;
 
 $table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
 
@@ -268,7 +309,7 @@ echo <<<HTML
     <div class='card'>
         <div class='card-header'>
             <form method='get' action='index.php'>
-                <input name='ty' value='last' type='hidden'/>
+                <input name='ty' value='last_coord' type='hidden'/>
                 <div class='row'>
                     <div class='col-md-4'>
                         <h4>Recent translations ($count_result):</h4>
@@ -310,6 +351,7 @@ echo <<<HTML
             <div class="d-none d-md-inline">
                 <span class="" data-column="0">Toggle columns:</span>
                 <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$fix_number" type="button">Fixref</a>
                 <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
             </div>
             <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
@@ -317,11 +359,13 @@ echo <<<HTML
                     <tr>
                         <th>#</th>
                         <th>User</th>
+                        <th> <span title='Email'>@</span> </th>
                         <th>Title</th>
                         <th>Campaign</th>
                         <th>Translated</th>
                         <th>Published</th>
                         <th>Views</th>
+                        <th>Fixref</th>
                         <th>Draft</th>
                         <th>Flags</th>
                     </tr>

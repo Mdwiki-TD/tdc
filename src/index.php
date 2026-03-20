@@ -49,7 +49,9 @@ function echo_card_start($file_name, $ty)
 	HTML;
 }
 //---
-$ty = $_GET['ty'] ?? $_POST['ty'] ?? 'last';
+$default_ty = $GLOBALS['user_is_coordinator'] ? "last_coord" : "last";
+//---
+$ty = $_GET['ty'] ?? $_POST['ty'] ?? $default_ty;
 //---
 if ($ty == 'translate_type') $ty = 'tt';
 //---
@@ -65,6 +67,7 @@ $corrd_folders = array_map('basename', glob('coordinator/admin/*', GLOB_ONLYDIR)
 $tools_files = [
 	"categories",
 	"last",
+	"last1",
 	"process_total",
 	"process",
 	"recent_helps",

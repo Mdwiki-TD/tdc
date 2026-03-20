@@ -62,11 +62,10 @@ function menu_data(): array
     // Menu structure: [id, admin-required, href, title, icon, optional target]
     $mainMenu = [
         'Translations' => [
-            ['id' => 'last', 'admin' => 0, 'href' => 'last', 'title' => 'Recent', 'icon' => 'bi-clock-history'],
-            // ['id' => 'last_users', 'admin' => 0, 'href' => 'last_users', 'title' => 'Recent in User space', 'icon' => 'bi-person-workspace'],
+            ['id' => 'last', 'admin' => 0, 'no_admin' => 1,  'href' => 'last', 'title' => 'Recent', 'icon' => 'bi-clock-history'],
+            ['id' => 'last_coord', 'admin' => 1, 'href' => 'last_coord', 'title' => 'Recent', 'icon' => 'bi-clock-history'],
             ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process', 'icon' => 'bi-hourglass'],
             ['id' => 'process_total', 'admin' => 0, 'href' => 'process_total', 'title' => 'In Process (Total)', 'icon' => 'bi-hourglass-split'],
-            // ['id' => 'publish_reports', 'admin' => 0, 'href' => '/publish_reports', 'title' => 'Publish Reports', 'target' => '_blank', 'icon' => 'bi-file-earmark-text'],
             ['id' => 'reports', 'admin' => 0, 'href' => 'reports', 'title' => 'Publish Reports', 'icon' => 'bi-file-earmark-text'],
         ],
         'Pages' => [
@@ -167,7 +166,12 @@ function create_side(string $filename, string $ty): string
             $icon = $item['icon'] ?? '';
             $target = $item['target'] ?? '';
             $admin = $item['admin'] ?? 0;
+            $no_admin = $item['no_admin'] ?? 0;
 
+            // Skip non admin items for coordinators
+            if ($no_admin === 1 && $GLOBALS['user_is_coordinator']) {
+                continue;
+            }
             // Skip admin items for non-coordinators
             if ($admin === 1 && !$GLOBALS['user_is_coordinator']) {
                 continue;
