@@ -16,6 +16,8 @@ use function SQLorAPI\Funcs\get_pages_langs;
 use function SQLorAPI\Recent\get_recent_sql;
 use function Tools\RecentHelps\filter_table;
 
+const MAX_USERNAME_DISPLAY_LENGTH = 15;
+
 $last_tables = ['pages', 'pages_users'];
 // ---
 $last_table = $_GET['last_table'] ?? 'pages';
@@ -46,7 +48,7 @@ function last_make_td($tabg, $nnnn, $last_table)
     //---
     $user_name = $user;
     // $user_name is the first word of the user if length > 15
-    if (strlen($user) > 15) {
+    if (strlen($user) > MAX_USERNAME_DISPLAY_LENGTH) {
         $user_name = explode(' ', $user);
         $user_name = $user_name[0];
     }

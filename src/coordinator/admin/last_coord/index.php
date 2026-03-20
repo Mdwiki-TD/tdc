@@ -1,5 +1,7 @@
 <?PHP
 
+const MAX_USERNAME_DISPLAY_LENGTH = 15;
+
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {
     // remove spaces and tab characters
@@ -126,7 +128,7 @@ function last_make_td($tabg, $nnnn, $last_table)
 
     $user_name = $user;
     // $user_name is the first word of the user if length > 15
-    if (strlen($user) > 15) {
+    if (strlen($user) > MAX_USERNAME_DISPLAY_LENGTH) {
         $user_name = explode(' ', $user);
         $user_name = $user_name[0];
     }
@@ -159,7 +161,8 @@ function last_make_td($tabg, $nnnn, $last_table)
         "mdwiki_revid" => $mdwiki_revid,
     ];
 
-    if ($GLOBALS['global_username'] !== "Mr. Ibrahem") {
+    $excludedUsers = ['Mr. Ibrahem']; // TODO: This should ideally be moved to a configuration file.
+    if (!in_array($GLOBALS['global_username'], $excludedUsers)) {
         $params['save'] = 1;
     };
 
