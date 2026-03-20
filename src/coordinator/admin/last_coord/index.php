@@ -234,6 +234,7 @@ function filter_recent($lang, $data)
 
 $lang = $_GET['lang'] ?? 'All';
 
+if (empty($lang)) $lang = "All";
 
 $api_params_users = [
     'get' => 'pages_users',
