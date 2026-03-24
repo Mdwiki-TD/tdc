@@ -46,7 +46,7 @@ function tt_edit_echo_form($title, $lead, $full, $id)
         </div>
     HTML;
     // ---
-    if ($id == "") $id_row = "";
+    if (empty($id)) $id_row = "";
     // ---
     return <<<HTML
         <form action='index.php?ty=tt/post&nonav=120' method="POST">

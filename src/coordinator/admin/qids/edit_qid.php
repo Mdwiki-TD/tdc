@@ -39,7 +39,7 @@ function echo_form_post($id, $title, $qid, $qid_table)
 		</div>
 	HTML;
 	// ---
-	if ($id == "") {
+	if (empty($id)) {
 		$id_row = "";
 	}
 	// ---

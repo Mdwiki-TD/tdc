@@ -68,7 +68,7 @@ function echo_form()
         </div>
     HTML;
     // ---
-    if ($id == "") {
+    if (empty($id)) {
         $id_row = "<input class='form-control' value='1' name='new' type='hidden'/>";
         $delete_row = "";
     }
@@ -188,7 +188,7 @@ if (isset($_POST['delete'])) {
     // ---
 } elseif (($_POST['new'] ?? '') != "") {
     // ---
-    if ($lang_code == "") {
+    if (empty($lang_code)) {
         $errors[] = "Lang code is empty.";
     } else {
         // ---

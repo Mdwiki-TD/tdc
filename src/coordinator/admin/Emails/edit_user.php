@@ -55,7 +55,7 @@ function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
         </div>
     HTML;
     // ---
-    if ($user_id == "") $id_row = "";
+    if (empty($user_id)) $id_row = "";
     // ---
     echo <<<HTML
         <form action='index.php?ty=Emails/post&nonav=120' method="POST">

@@ -84,7 +84,7 @@ class IndexTest extends TestCase
         $user_group = '';
         $user_group2 = $user_group;
 
-        if ($user_group2 == '') {
+        if (empty($user_group2)) {
             $user_group2 = 'Uncategorized';
         }
 
@@ -96,7 +96,7 @@ class IndexTest extends TestCase
         $user_group = 'MyProject';
         $user_group2 = $user_group;
 
-        if ($user_group2 == '') {
+        if (empty($user_group2)) {
             $user_group2 = 'Uncategorized';
         }
 

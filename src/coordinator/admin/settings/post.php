@@ -34,7 +34,7 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
     // if (empty($title) || empty($displayed) || empty($type)) continue;
     // $re = update_settings($id, $title, $displayed, $value, $type);
     //---
-    if (empty($id) || $value == "") continue;
+    if (empty($id) || empty($value)) continue;
     //---
     $re = update_settings_value($id, $value);
 }
