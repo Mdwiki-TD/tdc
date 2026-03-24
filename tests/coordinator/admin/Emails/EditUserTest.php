@@ -81,11 +81,11 @@ class EditUserTest extends TestCase
     public function testEditUserFormHeaderTitle()
     {
         $user_id = '456';
-        $header_title = ($user_id != "") ? "Edit User" : "Add New User";
+        $header_title = (!empty($user_id)) ? "Edit User" : "Add New User";
         $this->assertEquals("Edit User", $header_title);
 
         $user_id = '';
-        $header_title = ($user_id != "") ? "Edit User" : "Add New User";
+        $header_title = (!empty($user_id)) ? "Edit User" : "Add New User";
         $this->assertEquals("Add New User", $header_title);
     }
 
@@ -117,11 +117,11 @@ class EditUserTest extends TestCase
     public function testEditUserFormIdRowGeneration()
     {
         $user_id = '789';
-        $id_row_should_exist = ($user_id != "");
+        $id_row_should_exist = (!empty($user_id));
         $this->assertTrue($id_row_should_exist);
 
         $user_id = '';
-        $id_row_should_exist = ($user_id != "");
+        $id_row_should_exist = (!empty($user_id));
         $this->assertFalse($id_row_should_exist);
     }
 

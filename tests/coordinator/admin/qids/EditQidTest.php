@@ -34,14 +34,14 @@ class EditQidTest extends TestCase
     public function testIdRowGenerationWithId()
     {
         $id = '456';
-        $id_row_exists = ($id != "");
+        $id_row_exists = (!empty($id));
         $this->assertTrue($id_row_exists);
     }
 
     public function testIdRowGenerationWithoutId()
     {
         $id = '';
-        $id_row_exists = ($id != "");
+        $id_row_exists = (!empty($id));
         $this->assertFalse($id_row_exists);
     }
 

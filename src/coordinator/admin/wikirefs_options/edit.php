@@ -41,7 +41,7 @@ function echo_form()
     $move_dots   = filter_var($_GET['move_dots'] ?? '', FILTER_VALIDATE_INT) ?: '';
     $add_en_lang = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
     // ---
-    $header_title = ($id != "") ? "Edit language settings" : "Add language settings";
+    $header_title = (!empty($id)) ? "Edit language settings" : "Add language settings";
     //---
     echo <<<HTML
         <div class='card'>

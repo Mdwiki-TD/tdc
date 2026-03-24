@@ -24,7 +24,7 @@ $lead   = $_GET['lead'] ?? '';
 $full   = $_GET['full'] ?? '';
 $id     = $_GET['id'] ?? '';
 //---
-$header_title = ($id != "") ? "Edit Translate type" : "Add Translate type";
+$header_title = (!empty($id)) ? "Edit Translate type" : "Add Translate type";
 //---
 function tt_edit_echo_form($title, $lead, $full, $id)
 {

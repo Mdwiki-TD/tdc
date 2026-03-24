@@ -27,7 +27,7 @@ $project = $_GET['project'] ?? '';
 $email   = $_GET['email'] ?? '';
 $user_id = $_GET['user_id'] ?? '';
 //---
-$header_title = ($user_id != "") ? "Edit User" : "Add New User";
+$header_title = (!empty($user_id)) ? "Edit User" : "Add New User";
 //---
 echo <<<HTML
 <div class='card'>
