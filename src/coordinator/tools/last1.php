@@ -26,9 +26,6 @@ $last_table = in_array($last_table, $last_tables) ? $last_table : 'pages';
 
 function last_make_td($tabg, $nnnn, $last_table)
 {
-    // $id       = $tabg['id'] ?? "";
-    $date     = $tabg['date'] ?? "";
-
     $user     = $tabg['user'] ?? "";
 
     $llang    = $tabg['lang'] ?? "";
@@ -274,6 +271,7 @@ echo <<<HTML
                         </div>
                     </div>
                     <div class='col-md-3'>
+                        <div class="input-group">
                         <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
                         <select aria-label="Language code"
                             class="selectpicker"
@@ -289,6 +287,7 @@ echo <<<HTML
                             >
                             $filter_by_lang
                         </select>
+                        </div>
                     </div>
                     <div class='aligncenter col-md-1'>
                         <input class='btn btn-outline-primary' type='submit' value='Filter' />

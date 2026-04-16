@@ -1,7 +1,20 @@
 <?PHP
 
 const MAX_USERNAME_DISPLAY_LENGTH = 15;
+function test_print_o($s)
+{
+    if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
+        return;
+    }
+    $print_t = (isset($_REQUEST['test']) || isset($_COOKIE['test'])) ? true : false;
 
+    if ($print_t && is_string($s)) {
+        echo "\n<br>\n$s";
+    } elseif ($print_t) {
+        echo "\n<br>\n";
+        print_r($s);
+    }
+}
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {
     // remove spaces and tab characters
@@ -59,6 +72,12 @@ function post_url(string $endPoint, array $params = []): string
     if ($http_code !== 200) {
         error_log('post_url: Error: API request failed with status code ' . $http_code);
     }
+
+    // remove "&format=json" from $url then make it link <a href="$url2">
+    $url2 = str_replace('&format=json', '', $url);
+    $url2 = "<a target='_blank' href='$url2'>$url2</a>";
+
+    test_print_o("post_url: (http_code: $http_code) $url2");
 
     if ($output === FALSE) {
         error_log("post_url: cURL Error: " . curl_error($ch));

@@ -28,7 +28,12 @@ function get_recent_sql($lang): array
     //---
     $sql_params = [];
     //---
-    $api_params = array('get' => 'pages_with_views', 'target' => 'not_empty', 'limit' => '250', "order" => 'pupdate_or_add_date');
+    $api_params = [
+        'get' => 'pages_with_views',
+        'target' => 'not_empty',
+        "order" => 'pupdate_or_add_date',
+        'limit' => '250',
+    ];
     //---
     if (!empty($lang) && $lang != 'All') {
         $lang_line = "and p.lang = ?";
