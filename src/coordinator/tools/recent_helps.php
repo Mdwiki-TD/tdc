@@ -21,11 +21,12 @@ function filter_recent2($lang, $result)
     //---
     $lang_list = "<option data-tokens='All' value='All'>All</option>";
     //---
-    foreach ($result as $codr) {
-        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
-        $selected = ($codr == $lang) ? 'selected' : '';
+    foreach ($result as $lang_code) {
+        $langeee = LangsTables::$L_code_to_lang[$lang_code] ?? '';
+        $selected = ($lang_code == $lang) ? 'selected' : '';
+        if (empty($lang_code)) continue;
         $lang_list .= <<<HTML
-            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
+            <option data-tokens='$lang_code' value='$lang_code' $selected>$langeee</option>
             HTML;
     };
     //---

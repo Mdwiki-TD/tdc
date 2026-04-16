@@ -70,6 +70,7 @@ function emails_filter_table($project_name)
 	HTML;
 	//---
 	foreach (TablesSql::$s_projects_title_to_id as $p_title => $p_id) {
+		if (empty($p_title)) continue;
 		$cdcdc = $project_name == $p_title ? "selected" : "";
 		$l_list .= <<<HTML
 			<option data-tokens='$p_title' value='$p_title' $cdcdc>$p_title</option>

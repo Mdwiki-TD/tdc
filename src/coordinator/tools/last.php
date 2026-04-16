@@ -202,6 +202,7 @@ function filter_recent($lang, $data)
     foreach ($data as $codr) {
         $code    = $codr["lang"] ?? "";
         $autonym = $codr["autonym"] ?? "";
+        if (empty($code)) continue;
         $selected = ($code == $lang) ? 'selected' : '';
         $lang_list .= <<<HTML
             <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
