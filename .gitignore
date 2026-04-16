@@ -16,3 +16,4 @@ src/coordinator/admin/reports/index copy.php
 composer.lock
 src/load_env.php
 /.phpunit.cache
+/build/coverage-html
