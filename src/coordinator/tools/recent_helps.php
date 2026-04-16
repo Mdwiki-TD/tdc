@@ -14,7 +14,7 @@ use function Tools\RecentHelps\filter_table;
 use Tables\Langs\LangsTables;
 use function Utils\Functions\test_print;
 
-function filter_recent($lang, $result)
+function filter_recent2($lang, $result)
 {
     //---
     ksort($result);
@@ -29,27 +29,7 @@ function filter_recent($lang, $result)
             HTML;
     };
     //---
-    $result = <<<HTML
-        <div class="input-group">
-            <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
-            <select aria-label="Language code"
-                class="selectpicker"
-                id='lang'
-                name='lang'
-                placeholder='Language code'
-                data-live-search="true"
-                data-container="body"
-                data-live-search-style="begins"
-                data-bs-theme="auto"
-                data-style='btn active'
-                data-width="90%"
-                >
-                $lang_list
-            </select>
-        </div>
-    HTML;
-    //---
-    return $result;
+    return $lang_list;
 }
 
 function do_add_date($results)

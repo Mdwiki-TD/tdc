@@ -9,7 +9,7 @@ use function SQLorAPI\Recent\get_recent_translated;
 use function SQLorAPI\Recent\get_total_translations_count;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
-use function Tools\RecentHelps\filter_recent;
+use function Tools\RecentHelps\filter_recent2;
 //---
 $lang = $_GET['lang'] ?? 'All';
 //---
@@ -175,7 +175,7 @@ $recent_table .= <<<HTML
 HTML;
 //---
 $lang_table = get_languages();
-$filter_lang = filter_recent($lang, $lang_table);
+$filter_lang = filter_recent2($lang, $lang_table);
 //---
 $data = [
     "pages" => 'Main',
@@ -204,7 +204,21 @@ echo <<<HTML
                         </div>
                     </div>
                     <div class='col-md-3'>
-                        $filter_lang
+                        <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
+                        <select aria-label="Language code"
+                            class="selectpicker"
+                            id='lang'
+                            name='lang'
+                            placeholder='Language code'
+                            data-live-search="true"
+                            data-container="body"
+                            data-live-search-style="begins"
+                            data-bs-theme="auto"
+                            data-style='btn active'
+                            data-width="90%"
+                            >
+                            $filter_lang
+                        </select>
                     </div>
                     <div class='aligncenter col-md-1'>
                         <input class='btn btn-outline-primary' type='submit' value='Filter' />

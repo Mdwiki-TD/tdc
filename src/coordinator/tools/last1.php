@@ -4,7 +4,7 @@ use Tables\SqlTables\TablesSql;
 use Tables\Main\MainTables;
 use Tables\Langs\LangsTables;
 
-use function Tools\RecentHelps\filter_recent;
+use function Tools\RecentHelps\filter_recent2;
 use function APICalls\WikiApi\make_view_by_number;
 use function Utils\Html\make_mail_icon_new;
 use function Utils\Html\make_talk_url;
@@ -244,7 +244,7 @@ if ($last_table == 'pages') {
     $result = get_pages_users_langs();
 }
 
-$filter_by_lang = filter_recent($lang, $result);
+$filter_by_lang = filter_recent2($lang, $result);
 
 $count_result = count($result);
 
@@ -274,7 +274,21 @@ echo <<<HTML
                         </div>
                     </div>
                     <div class='col-md-3'>
-                        $filter_by_lang
+                        <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
+                        <select aria-label="Language code"
+                            class="selectpicker"
+                            id='lang'
+                            name='lang'
+                            placeholder='Language code'
+                            data-live-search="true"
+                            data-container="body"
+                            data-live-search-style="begins"
+                            data-bs-theme="auto"
+                            data-style='btn active'
+                            data-width="90%"
+                            >
+                            $filter_by_lang
+                        </select>
                     </div>
                     <div class='aligncenter col-md-1'>
                         <input class='btn btn-outline-primary' type='submit' value='Filter' />
