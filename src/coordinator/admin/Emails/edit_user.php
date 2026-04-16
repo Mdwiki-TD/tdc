@@ -27,7 +27,7 @@ $project = $_GET['project'] ?? '';
 $email   = $_GET['email'] ?? '';
 $user_id = $_GET['user_id'] ?? '';
 //---
-$header_title = ($user_id != "") ? "Edit User" : "Add New User";
+$header_title = (!empty($user_id)) ? "Edit User" : "Add New User";
 //---
 echo <<<HTML
 <div class='card'>
@@ -55,7 +55,7 @@ function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
         </div>
     HTML;
     // ---
-    if ($user_id == "") $id_row = "";
+    if (empty($user_id)) $id_row = "";
     // ---
     echo <<<HTML
         <form action='index.php?ty=Emails/post&nonav=120' method="POST">

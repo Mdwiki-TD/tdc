@@ -125,9 +125,9 @@ foreach ($users_done as $user_name => $table) {
 	//---
 	$user_group2 = $user_group;
 	// ---
-	if ($user_group2 == '') $user_group2 = 'Uncategorized';
+	if (empty($user_group2)) $user_group2 = 'Uncategorized';
 	//---
-	if ($main_project != "" && $main_project != "All" && $user_group2 != $main_project) {
+	if (!empty($main_project) && $main_project != "All" && $user_group2 != $main_project) {
 		continue;
 	}
 	//---

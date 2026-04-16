@@ -75,7 +75,7 @@ class IndexTest extends TestCase
         $user_group = 'SomeProject';
 
         // When main_project is "All", should not filter
-        $should_continue = ($main_project != "" && $main_project != "All" && $user_group != $main_project);
+        $should_continue = (!empty($main_project) && $main_project != "All" && $user_group != $main_project);
         $this->assertFalse($should_continue);
     }
 
@@ -84,7 +84,7 @@ class IndexTest extends TestCase
         $user_group = '';
         $user_group2 = $user_group;
 
-        if ($user_group2 == '') {
+        if (empty($user_group2)) {
             $user_group2 = 'Uncategorized';
         }
 
@@ -96,7 +96,7 @@ class IndexTest extends TestCase
         $user_group = 'MyProject';
         $user_group2 = $user_group;
 
-        if ($user_group2 == '') {
+        if (empty($user_group2)) {
             $user_group2 = 'Uncategorized';
         }
 
@@ -108,7 +108,7 @@ class IndexTest extends TestCase
         $main_project = 'ProjectA';
         $user_group2 = 'ProjectB';
 
-        $should_skip = ($main_project != "" && $main_project != "All" && $user_group2 != $main_project);
+        $should_skip = (!empty($main_project) && $main_project != "All" && $user_group2 != $main_project);
         $this->assertTrue($should_skip);
     }
 
@@ -117,7 +117,7 @@ class IndexTest extends TestCase
         $main_project = 'ProjectA';
         $user_group2 = 'ProjectA';
 
-        $should_skip = ($main_project != "" && $main_project != "All" && $user_group2 != $main_project);
+        $should_skip = (!empty($main_project) && $main_project != "All" && $user_group2 != $main_project);
         $this->assertFalse($should_skip);
     }
 

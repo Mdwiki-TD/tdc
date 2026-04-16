@@ -45,7 +45,7 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 	$cat2 = $table['cat2'];
 	$dep  = $table['dep'];
 	//---
-	$def = ($default_cat == $ido) ? 1 : 0;
+	$is_default = ($default_cat == $ido) ? 1 : 0;
 	//---
 	$qua = "UPDATE categories
 		SET
@@ -53,12 +53,12 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 			category = ?,
 			category2 = ?,
 			depth = ?,
-			def = ?
+			is_default = ?
 		WHERE
 			id = ?
 	";
 	//---
-	$params = [$camp, $cat1, $cat2, $dep, $def, $ido];
+	$params = [$camp, $cat1, $cat2, $dep, $is_default, $ido];
 	//---
 	// if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) echo "<br>$qua<br>";
 	//---
@@ -77,10 +77,10 @@ if (isset($_POST['new'])) {
 		$cat2 = $table['cat2'];
 		$dep  = $table['dep'];
 		//---
-		$def = ($default_cat == $ido) ? 1 : 0;
+		$is_default = ($default_cat == $ido) ? 1 : 0;
 		//---
-		$qua = "INSERT INTO categories (category, campaign, depth, def, category2) SELECT ?, ?, ?, ?, ?";
-		$params = [$cat1, $camp, $dep, $def, $cat2];
+		$qua = "INSERT INTO categories (category, campaign, depth, is_default, category2) SELECT ?, ?, ?, ?, ?";
+		$params = [$cat1, $camp, $dep, $is_default, $cat2];
 		//---
 		if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 			echo "<br>$qua<br>";
