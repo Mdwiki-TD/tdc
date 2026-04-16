@@ -240,7 +240,6 @@ $filter_by_lang = filter_recent($lang, $result);
 
 $count_result = count($result);
 
-
 $data = [
     "pages" => 'Main',
     "pages_users" => 'User',

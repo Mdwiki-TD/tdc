@@ -238,18 +238,6 @@ if ($last_table == 'pages') {
     HTML;
 }
 
-$recent_table = <<<HTML
-    $Toggle_column
-    <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
-        <thead>
-            $thead
-        </thead>
-        <tbody>
-            $recent_rows
-        </tbody>
-    </table>
-HTML;
-
 if ($last_table == 'pages') {
     $result = get_pages_langs();
 } else {
@@ -258,6 +246,8 @@ if ($last_table == 'pages') {
 
 $filter_by_lang = filter_recent($lang, $result);
 
+$count_result = count($result);
+
 $data = [
     "pages" => 'Main',
     "pages_users" => 'User',
@@ -265,7 +255,6 @@ $data = [
 
 $filter_ta = filter_table($data, $last_table, 'last_table');
 
-$count_result = count($result);
 
 echo <<<HTML
     <div class='card'>
@@ -294,7 +283,15 @@ echo <<<HTML
             </form>
         </div>
         <div class='card-body'>
-            $recent_table
+            $Toggle_column
+            <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
+                <thead>
+                    $thead
+                </thead>
+                <tbody>
+                    $recent_rows
+                </tbody>
+            </table>
         </div>
     </div>
 HTML;
