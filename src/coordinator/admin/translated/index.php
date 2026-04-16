@@ -196,7 +196,12 @@ echo <<<HTML
                         <h4>Translated Pages ($count_result):</h4>
                     </div>
                     <div class='col-md-4'>
-                        $filter_ns
+                        <div class="input-group">
+                            <span class="input-group-text">Namespace:</span>
+                            <div class="form-control">
+                                $filter_ns
+                            </div>
+                        </div>
                     </div>
                     <div class='col-md-3'>
                         $filter_lang

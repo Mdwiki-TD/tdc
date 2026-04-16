@@ -98,15 +98,5 @@ function filter_table($data, $vav, $id)
 			</div>
 		HTML;
     }
-    //---
-    $uuu = <<<HTML
-		<div class="input-group">
-			<span class="input-group-text">Namespace:</span>
-			<div class="form-control">
-				$l_list
-			</div>
-		</div>
-	HTML;
-    //---
-    return $uuu;
+    return $l_list;
 }
