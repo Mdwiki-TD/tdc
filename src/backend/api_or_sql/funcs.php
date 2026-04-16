@@ -57,7 +57,7 @@ function get_td_or_sql_categories(): array
     }
     // ---
     $api_params = ['get' => 'categories'];
-    $query = "select id, category, category2, campaign, depth, def from categories";
+    $query = "select id, category, category2, campaign, depth, is_default from categories";
     //---
     $data = super_function($api_params, [], $query);
     // ---

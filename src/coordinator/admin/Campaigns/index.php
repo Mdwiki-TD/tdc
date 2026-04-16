@@ -34,7 +34,7 @@ foreach ($qq as $Key => $table) {
 	$campaign 	= $table['campaign'] ?? "";
 	$depth		= $table['depth'] ?? "";
 	//---
-	$checked    = ($table['def'] == 1) ? 'checked' : '';
+	$checked    = ($table['is_default'] == 1) ? 'checked' : '';
 	//---
 	$table_rows .= <<<HTML
 	<tr>
