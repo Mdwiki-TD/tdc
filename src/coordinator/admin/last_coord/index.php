@@ -1,7 +1,7 @@
 <?PHP
 
 const MAX_USERNAME_DISPLAY_LENGTH = 15;
-function test_print_o($s)
+function test_print_z($s)
 {
     if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
         return;
@@ -93,7 +93,7 @@ function post_url(string $endPoint, array $params = []): string
     $url2 = str_replace('&format=json', '', $url);
     $url2 = "<a target='_blank' href='$url2'>$url2</a>";
 
-    test_print_o("post_url: (http_code: $http_code) $url2");
+    test_print_z("post_url: (http_code: $http_code) $url2");
 
     if ($output === FALSE) {
         error_log("post_url: cURL Error: " . curl_error($ch));
