@@ -70,6 +70,7 @@ foreach (MainTables::$x_Langs_table as $_ => $lang_tab) {
     $lang_code = $lang_tab['code'] ?? "";
     $lang_name = $lang_tab['autonym'] ?? "";
 
+    if (empty($lang_code)) continue;
     if (isset(LangsTables::$L_change_codes[$lang_code]) && isset(LangsTables::$L_code_to_lang[LangsTables::$L_change_codes[$lang_code]])) {
         continue;
     }

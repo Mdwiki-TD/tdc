@@ -1,7 +1,20 @@
 <?PHP
 
 const MAX_USERNAME_DISPLAY_LENGTH = 15;
+function test_print_z($s)
+{
+    if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
+        return;
+    }
+    $print_t = (isset($_REQUEST['test']) || isset($_COOKIE['test'])) ? true : false;
 
+    if ($print_t && is_string($s)) {
+        echo "\n<br>\n$s";
+    } elseif ($print_t) {
+        echo "\n<br>\n";
+        print_r($s);
+    }
+}
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {
     // remove spaces and tab characters
@@ -20,20 +33,20 @@ function make_view_by_number($target, $numb, $lang, $pupdate)
         'redirects' => '0',
         'pages' => $target,
     ), '', '&', PHP_QUERY_RFC3986);
-    // ---
+
     $numb3 = (is_numeric($numb2)) ? number_format($numb2) : $numb2;
     $link = "<a target='_blank' href='$url'>$numb3</a>";
-    // ---
+
     if (is_numeric($numb2) && intval($numb2) > 0) {
         return $link;
     }
-    // ---
+
     $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
-    // ---
+
     $url2 = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
-    // ---
+
     $link = "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
-    // ---
+
     return $link;
 };
 function make_mail_icon_url(array $tab): string
@@ -75,6 +88,12 @@ function post_url(string $endPoint, array $params = []): string
     if ($http_code !== 200) {
         error_log('post_url: Error: API request failed with status code ' . $http_code);
     }
+
+    // remove "&format=json" from $url then make it link <a href="$url2">
+    $url2 = str_replace('&format=json', '', $url);
+    $url2 = "<a target='_blank' href='$url2'>$url2</a>";
+
+    test_print_z("post_url: (http_code: $http_code) $url2");
 
     if ($output === FALSE) {
         error_log("post_url: cURL Error: " . curl_error($ch));
@@ -225,6 +244,7 @@ function filter_recent($lang, $data)
         $code    = $codr["lang"] ?? "";
         $autonym = $codr["autonym"] ?? "";
         $selected = ($code == $lang) ? 'selected' : '';
+        if (empty($code)) continue;
         $lang_list .= <<<HTML
             <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
             HTML;

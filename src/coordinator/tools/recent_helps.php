@@ -14,42 +14,23 @@ use function Tools\RecentHelps\filter_table;
 use Tables\Langs\LangsTables;
 use function Utils\Functions\test_print;
 
-function filter_recent($lang, $result)
+function filter_recent2($lang, $result)
 {
     //---
     ksort($result);
     //---
     $lang_list = "<option data-tokens='All' value='All'>All</option>";
     //---
-    foreach ($result as $codr) {
-        $langeee = LangsTables::$L_code_to_lang[$codr] ?? '';
-        $selected = ($codr == $lang) ? 'selected' : '';
+    foreach ($result as $lang_code) {
+        $langeee = LangsTables::$L_code_to_lang[$lang_code] ?? '';
+        $selected = ($lang_code == $lang) ? 'selected' : '';
+        if (empty($lang_code)) continue;
         $lang_list .= <<<HTML
-            <option data-tokens='$codr' value='$codr' $selected>$langeee</option>
+            <option data-tokens='$lang_code' value='$lang_code' $selected>$langeee</option>
             HTML;
     };
     //---
-    $result = <<<HTML
-        <div class="input-group">
-            <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
-            <select aria-label="Language code"
-                class="selectpicker"
-                id='lang'
-                name='lang'
-                placeholder='Language code'
-                data-live-search="true"
-                data-container="body"
-                data-live-search-style="begins"
-                data-bs-theme="auto"
-                data-style='btn active'
-                data-width="90%"
-                >
-                $lang_list
-            </select>
-        </div>
-    HTML;
-    //---
-    return $result;
+    return $lang_list;
 }
 
 function do_add_date($results)
@@ -98,15 +79,5 @@ function filter_table($data, $vav, $id)
 			</div>
 		HTML;
     }
-    //---
-    $uuu = <<<HTML
-		<div class="input-group">
-			<span class="input-group-text">Namespace:</span>
-			<div class="form-control">
-				$l_list
-			</div>
-		</div>
-	HTML;
-    //---
-    return $uuu;
+    return $l_list;
 }

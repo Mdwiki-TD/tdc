@@ -6,7 +6,7 @@ use function Utils\Html\make_target_url;
 use function Utils\Html\make_edit_icon_new;
 use function SQLorAPI\Recent\get_pages_users_to_main;
 use function SQLorAPI\Funcs\get_pages_users_langs;
-use function Tools\RecentHelps\filter_recent;
+use function Tools\RecentHelps\filter_recent2;
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
 //---
 $lang = $_GET['lang'] ?? 'All';
@@ -189,7 +189,7 @@ $recent_table .= <<<HTML
 HTML;
 //---
 $lang_table = get_languages();
-$filter_la = filter_recent($lang, $lang_table);
+$filter_la = filter_recent2($lang, $lang_table);
 //---
 $count_result = count($sql_results);
 //---
@@ -203,7 +203,23 @@ echo <<<HTML
                         <h4>Userpages need to be moved to main pages: ($count_result)</h4>
                     </div>
                     <div class='col-md-3'>
-                        $filter_la
+                        <div class="input-group">
+                            <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
+                            <select aria-label="Language code"
+                                class="selectpicker"
+                                id='lang'
+                                name='lang'
+                                placeholder='Language code'
+                                data-live-search="true"
+                                data-container="body"
+                                data-live-search-style="begins"
+                                data-bs-theme="auto"
+                                data-style='btn active'
+                                data-width="90%"
+                                >
+                                $filter_la
+                            </select>
+                        </div>
                     </div>
                     <div class='aligncenter col-md-2'>
                         <input class='btn btn-outline-primary' type='submit' value='Filter' />
