@@ -6,7 +6,7 @@ namespace SQLorAPI\Funcs;
 
 Usage:
 
-use function SQLorAPI\Funcs\get_coordinator;
+use function SQLorAPI\Funcs\get_coordinators_new;
 use function SQLorAPI\Funcs\get_td_or_sql_settings;
 use function SQLorAPI\Funcs\get_td_or_sql_qids;
 use function SQLorAPI\Funcs\get_td_or_sql_qids_others;
@@ -66,25 +66,24 @@ function get_td_or_sql_categories(): array
     return $categories;
 }
 
-function get_coordinator(): array
+function get_coordinators_new(): array
 {
     // ---
-    static $coordinator = [];
+    static $coordinators = [];
     // ---
-    if (!empty($coordinator ?? [])) {
-        return $coordinator;
+    if (!empty($coordinators ?? [])) {
+        return $coordinators;
     }
     // ---
-    $api_params = ['get' => 'coordinator'];
-    $query = "SELECT id, user, active FROM coordinator order by id";
+    $api_params = ['get' => 'coordinators'];
+    $query = "SELECT id, username, is_active FROM coordinators order by id";
     //---
     $data = super_function($api_params, [], $query);
     // ---
-    $coordinator = $data;
+    $coordinators = $data;
     // ---
     return $data;
 }
-
 function get_users_by_last_pupdate(): array
 {
     // ---

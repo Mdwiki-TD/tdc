@@ -5,7 +5,7 @@ if ($GLOBALS['user_is_coordinator'] == false) {
 	exit;
 };
 //---
-use function SQLorAPI\Funcs\get_coordinator;
+use function SQLorAPI\Funcs\get_coordinators_new;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 //---
-$qq = get_coordinator();
+$qq = get_coordinators_new();
 //---
 sort($qq);
 //---
@@ -30,10 +30,10 @@ foreach ($qq as $Key => $table) {
 	$numb += 1;
 	//---
 	$user_id = $table['id'] ?? "";
-	$usere	 = $table['user'] ?? "";
-	$active	 = $table['active'] ?? "";
+	$usere	 = $table['username'] ?? "";
+	$is_active	 = $table['is_active'] ?? "";
 	//---
-	$active_checked = ($active == 1 || $active == "1") ? 'checked' : '';
+	$active_checked = ($is_active == 1 || $is_active == "1") ? 'checked' : '';
 	//---
 	$form_text .= <<<HTML
 		<tr>
@@ -43,13 +43,13 @@ foreach ($qq as $Key => $table) {
 			</td>
 			<td data-content="user">
 				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
-				<input name='rows[$numb][user]' value='$usere' type='hidden'/>
+				<input name='rows[$numb][username]' value='$usere' type='hidden'/>
 			</td>
 			<td data-content="active">
 				<div class='form-check form-switch'>
-					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$active'>
-					<input type='hidden' name='rows[$numb][active]' value='0'>
-					<input class='form-check-input' type='checkbox' name='rows[$numb][active]' value='1' $active_checked>
+					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$is_active'>
+					<input type='hidden' name='rows[$numb][is_active]' value='0'>
+					<input class='form-check-input' type='checkbox' name='rows[$numb][is_active]' value='1' $active_checked>
 				</div>
 			</td>
 			<td data-content="delete">
@@ -68,11 +68,11 @@ $form_text_plus = <<<HTML
 		</td>
 		<td data-content="user">
 			<input class='form-control' name='rows[$numb][is_new]' value='yes' type='hidden'/>
-			<input class='form-control td_user_input' name='rows[$numb][user]' />
+			<input class='form-control td_user_input' name='rows[$numb][username]' />
 		</td>
 		<td data-content="active">
 			<div class="form-check form-switch">
-				<input type="hidden" name="rows[$numb][active]" value="1">
+				<input type="hidden" name="rows[$numb][is_active]" value="1">
 				-
 			</div>
 		</td>
@@ -136,8 +136,8 @@ HTML;
 				</td>
 				<td>
 					<input class='form-control' name='rows[${ii}][is_new]' value='yes' type='hidden'/>
-					<input class='form-control' name='rows[${ii}][active]' value='1' type='hidden'/>
-					<input class='form-control td_user_input' name='rows[${ii}][user]'/>
+					<input class='form-control' name='rows[${ii}][is_active]' value='1' type='hidden'/>
+					<input class='form-control td_user_input' name='rows[${ii}][username]'/>
 				</td>
 				<td>-</td>
 			</tr>

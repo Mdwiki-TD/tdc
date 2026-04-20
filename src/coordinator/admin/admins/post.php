@@ -24,16 +24,16 @@ if (!verify_csrf_token()) {
 $errors = [];
 $texts = [];
 //---
-$table_name = "coordinator";
+$table_name = "coordinators";
 //---
 foreach ($_POST['rows'] ?? [] as $key => $table) {
-	// '{ "id": "11", "user": "Ifteebd10", "del": "11" }'
-	// '{ "id": "11", "user": "Ifteebd10", "is_new": "yes" }'
+	// '{ "id": "11", "username": "Ifteebd10", "del": "11" }'
+	// '{ "id": "11", "username": "Ifteebd10", "is_new": "yes" }'
 	//---
 	$u_id  	= $table['id'] ?? '';
 	$del  	= $table['del'] ?? '';
 	//---
-	$user  	= $table['user'] ?? '';
+	$username  	= $table['username'] ?? '';
 	//---
 	if (!empty($del) && !empty($u_id)) {
 		$qua2 = "DELETE FROM $table_name WHERE id = ?";
@@ -41,43 +41,43 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 		$result = execute_query($qua2, $params = [$u_id]);
 		// ---
 		if ($result === false) {
-			$errors[] = "Failed to delete user $user.";
+			$errors[] = "Failed to delete user $username.";
 			continue;
 		}
 		// ---
-		$texts[] = "User $user deleted.";
+		$texts[] = "User $username deleted.";
 		// ---
 		continue;
 	};
 	//---
 	// $is_new = $table['is_new'] ?? '';
 	//---
-	$user = trim($user);
+	$username = trim($username);
 	//---
-	$active = $table['active'] ?? '';
+	$is_active = $table['is_active'] ?? '';
 	$active_orginal_value = $table['active_orginal_value'] ?? '';
 	//---
-	if ($active == $active_orginal_value && !empty($u_id)) {
+	if ($is_active == $active_orginal_value && !empty($u_id)) {
 		continue;
 	};
 	//---
-	if (!empty($user)) { // && empty($u_id) && $is_new == 'yes'
+	if (!empty($username)) { // && empty($u_id) && $is_new == 'yes'
 		//---
-		// $qua = "INSERT INTO $table_name (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $table_name WHERE user = ?)";
+		// $qua = "INSERT INTO $table_name (username) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $table_name WHERE username = ?)";
 		//---
 		$qua = <<<SQL
-			INSERT INTO $table_name (user, active)
+			INSERT INTO $table_name (username, is_active)
 			VALUES (?, ?)
 			ON DUPLICATE KEY UPDATE
-				active = VALUES(active)
+				is_active = VALUES(is_active)
 		SQL;
 		//---
-		$result = execute_query($qua, $params = [$user, $active]);
+		$result = execute_query($qua, $params = [$username, $is_active]);
 		//---
 		if ($result === false) {
-			$errors[] = "Failed to add user $user.";
+			$errors[] = "Failed to add user $username.";
 		} else {
-			$texts[] = (empty($u_id)) ? "User $user Added." : "User $user Updated.";
+			$texts[] = (empty($u_id)) ? "User $username Added." : "User $username Updated.";
 		}
 	};
 	//---
