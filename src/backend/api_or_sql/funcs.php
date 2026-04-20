@@ -209,7 +209,7 @@ function get_td_or_sql_users_no_inprocess(): array
     // ---
     $sql_params = [];
     $api_params = ['get' => 'users_no_inprocess'];
-    $query = "SELECT id, user, active FROM users_no_inprocess order by id";
+    $query = "SELECT id, user, is_active FROM users_no_inprocess order by id";
     //---
     $users = super_function($api_params, $sql_params, $query);
     // ---
@@ -225,7 +225,7 @@ function get_td_or_sql_full_translators(): array
     // ---
     $sql_params = [];
     $api_params = ['get' => 'full_translators'];
-    $query = "SELECT id, user, active FROM full_translators order by id";
+    $query = "SELECT id, user, is_active FROM full_translators order by id";
     //---
     $full_translators = super_function($api_params, $sql_params, $query);
     // ---
