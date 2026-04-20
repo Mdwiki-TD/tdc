@@ -5,7 +5,7 @@ if ($GLOBALS['user_is_coordinator'] == false) {
 	exit;
 };
 //---
-use function SQLorAPI\Funcs\get_coordinators_new;
+use function SQLorAPI\Funcs\get_coordinators;
 use function TDWIKI\csrf\generate_csrf_token;
 //---
 if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 //---
-$qq = get_coordinators_new();
+$qq = get_coordinators();
 //---
 sort($qq);
 //---

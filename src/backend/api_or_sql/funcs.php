@@ -6,7 +6,7 @@ namespace SQLorAPI\Funcs;
 
 Usage:
 
-use function SQLorAPI\Funcs\get_coordinators_new;
+use function SQLorAPI\Funcs\get_coordinators;
 use function SQLorAPI\Funcs\get_td_or_sql_settings;
 use function SQLorAPI\Funcs\get_td_or_sql_qids;
 use function SQLorAPI\Funcs\get_td_or_sql_qids_others;
@@ -66,7 +66,7 @@ function get_td_or_sql_categories(): array
     return $categories;
 }
 
-function get_coordinators_new(): array
+function get_coordinators(): array
 {
     // ---
     static $coordinators = [];
