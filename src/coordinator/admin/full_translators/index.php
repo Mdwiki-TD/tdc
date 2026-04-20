@@ -29,9 +29,9 @@ foreach ($qq as $Key => $table) {
 	//---
 	$user_id = $table['id'] ?? "";
 	$usere	 = $table['user'] ?? "";
-	$active	 = $table['active'] ?? "";
+	$is_active	 = $table['is_active'] ?? "";
 	//---
-	$active_checked = ($active == 1 || $active == "1") ? 'checked' : '';
+	$active_checked = ($is_active == 1 || $is_active == "1") ? 'checked' : '';
 	//---
 	$form_text .= <<<HTML
 		<tr>
@@ -45,9 +45,9 @@ foreach ($qq as $Key => $table) {
 			</td>
 			<td data-content="active">
 				<div class='form-check form-switch'>
-					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$active'>
-					<input type='hidden' name='rows[$numb][active]' value='0'>
-					<input class='form-check-input' type='checkbox' name='rows[$numb][active]' value='1' $active_checked>
+					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$is_active'>
+					<input type='hidden' name='rows[$numb][is_active]' value='0'>
+					<input class='form-check-input' type='checkbox' name='rows[$numb][is_active]' value='1' $active_checked>
 				</div>
 			</td>
 			<td data-content="delete">
@@ -70,7 +70,7 @@ $form_text_plus = <<<HTML
 		</td>
 		<td data-content="active">
 			<div class="form-check form-switch">
-				<input type="hidden" name="rows[$numb][active]" value="1">
+				<input type="hidden" name="rows[$numb][is_active]" value="1">
 				-
 			</div>
 		</td>
@@ -133,7 +133,7 @@ HTML;
 				</td>
 				<td>
 					<input class='form-control' name='rows[${ii}][is_new]' value='yes' type='hidden'/>
-					<input class='form-control' name='rows[${ii}][active]' value='1' type='hidden'/>
+					<input class='form-control' name='rows[${ii}][is_active]' value='1' type='hidden'/>
 					<input class='form-control td_user_input' name='rows[${ii}][user]'/>
 				</td>
 				<td>-</td>

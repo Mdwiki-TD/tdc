@@ -321,7 +321,6 @@ function get_td_or_sql_categories(): array
 **Examples:**
 
 -   `get_td_or_sql_categories()` (line 53)
--   `get_coordinator()` (line 72)
 -   `get_users_by_last_pupdate()` (line 91)
 -   `get_td_or_sql_count_pages_not_empty()` (line 139)
 -   And 10+ more...

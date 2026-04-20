@@ -26,7 +26,7 @@
  * use function APICalls\MdwikiSql\execute_query;
  *
  * // Fetch results (SELECT queries)
- * $users = fetch_query("SELECT * FROM users WHERE active = ?", [1]);
+ * $users = fetch_query("SELECT * FROM users WHERE is_active = ?", [1]);
  *
  * // Execute queries (INSERT, UPDATE, DELETE)
  * execute_query("UPDATE settings SET value = ? WHERE id = ?", ['new_value', 5]);

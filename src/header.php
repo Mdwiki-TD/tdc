@@ -54,7 +54,7 @@ ini_set('session.use_strict_mode', '1');
 include_once __DIR__ . '/include.php';
 include_once __DIR__ . '/head.php';
 
-use function SQLorAPI\Funcs\get_coordinator;
+use function SQLorAPI\Funcs\get_coordinators;
 
 /**
  * Flag indicating if current user is a coordinator
@@ -71,7 +71,7 @@ $user_is_coordinator = false;
 $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Tools</a>';
 
 // Get coordinator list and check user access
-$coords = array_column(get_coordinator(), 'active', 'user');
+$coords = array_column(get_coordinators(), 'is_active', 'username');
 
 // Check if current user is a coordinator
 if (!empty($GLOBALS['global_username'] ?? "")) {

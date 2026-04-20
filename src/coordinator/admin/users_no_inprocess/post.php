@@ -54,10 +54,10 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 	//---
 	$user = trim($user);
 	//---
-	$active = $table['active'] ?? '';
+	$is_active = $table['is_active'] ?? '';
 	$active_orginal_value = $table['active_orginal_value'] ?? '';
 	//---
-	if ($active == $active_orginal_value && !empty($u_id)) {
+	if ($is_active == $active_orginal_value && !empty($u_id)) {
 		continue;
 	};
 	//---
@@ -66,13 +66,13 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 		// $qua = "INSERT INTO $table_name (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $table_name WHERE user = ?)";
 		//---
 		$qua = <<<SQL
-			INSERT INTO $table_name (user, active)
+			INSERT INTO $table_name (user, is_active)
 			VALUES (?, ?)
 			ON DUPLICATE KEY UPDATE
-				active = VALUES(active)
+				is_active = VALUES(is_active)
 		SQL;
 		//---
-		$result = execute_query($qua, $params = [$user, $active]);
+		$result = execute_query($qua, $params = [$user, $is_active]);
 		//---
 		if ($result === false) {
 			$errors[] = "Failed to add user $user.";
