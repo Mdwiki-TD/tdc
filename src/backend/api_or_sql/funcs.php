@@ -82,7 +82,7 @@ function get_coordinators(): array
     // ---
     $coordinators = $data;
     // ---
-    return $data;
+    return $coordinators;
 }
 function get_users_by_last_pupdate(): array
 {
