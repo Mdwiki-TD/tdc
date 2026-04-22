@@ -46,17 +46,17 @@ function make_td($tabg, $numb)
             <td data-content='#'>
                 <span>$lang</span>
             </td>
-            <td data-content='Move dots'>
+            <td data-content='Move dots' data-order='$move_dots'>
                 <div class='form-check form-switch'>
                     <input class='form-check-input' type='checkbox' name='rows[$numb][move_dots]' value='1' $move_dots disabled/>
                 </div>
             </td>
-            <td data-content='Expend infobox'>
+            <td data-content='Expend infobox' data-order='$expend2'>
                 <div class='form-check form-switch'>
                     <input class='form-check-input' type='checkbox' name='rows[$numb][expend]' value='1' $expend2 disabled/>
                 </div>
             </td>
-            <td data-content='Add |language=en'>
+            <td data-content='Add |language=en' data-order='$add_en_lang'>
                 <div class='form-check form-switch'>
                     <input class='form-check-input' type='checkbox' name='rows[$numb][add_en_lang]' value='1' $add_en_lang disabled/>
                 </div>

@@ -43,7 +43,7 @@ foreach ($qq as $Key => $table) {
 				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
 				<input name='rows[$numb][user]' value='$usere' type='hidden'/>
 			</td>
-			<td data-content="Active">
+			<td data-content="Active" data-order='$is_active'>
 				<div class='form-check form-switch'>
 					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$is_active'>
 					<input type='hidden' name='rows[$numb][is_active]' value='0'>
