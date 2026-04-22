@@ -374,7 +374,7 @@ if ((getenv("HOME") ?: "") === '') {
     putenv("HOME=$new_home");
 }
 if (substr(__DIR__, 0, 2) == 'I:') {
-    include_once 'I:/mdwiki/auth_repo/oauth/user_infos.php';
+    include_once 'I:/MD_TOOLS/mdwiki.toolforge.org/PHP_REPOS/auth_repo/oauth/user_infos.php';
 }
 ```
 

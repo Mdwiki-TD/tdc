@@ -13,7 +13,7 @@ parameters:
 
     # Scan directories for class definitions
     # scanDirectories:
-        # - I:/mdwiki/auth_repo/vendor/
+        # - I:/MD_TOOLS/mdwiki.toolforge.org/PHP_REPOS/auth_repo/vendor/
 
     # Scan files for class definitions
     scanFiles:
