@@ -156,7 +156,7 @@ function make_input_group($label, $id, $value, $required)
 <?php
 // Lines 3-7: Environment mutation
 if ((getenv("HOME") ?: "") === '') {
-    $new_home = 'I:/mdwiki/mdwiki';
+    $new_home = 'I:/MD_TOOLS/MDWIKI_MAIN_REPO';
     putenv("HOME=$new_home");
     $_ENV['HOME'] = $new_home;
 }
