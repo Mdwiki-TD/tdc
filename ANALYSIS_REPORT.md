@@ -370,11 +370,11 @@ MainTables::$x_enwiki_pageviews_table  // Static mutable state
 
 ```php
 if ((getenv("HOME") ?: "") === '') {
-    $new_home = 'I:/mdwiki/mdwiki';
+    $new_home = 'I:/MD_TOOLS/MDWIKI_MAIN_REPO';
     putenv("HOME=$new_home");
 }
 if (substr(__DIR__, 0, 2) == 'I:') {
-    include_once 'I:/mdwiki/auth_repo/oauth/user_infos.php';
+    include_once 'I:/MD_TOOLS/mdwiki.toolforge.org/PHP_REPOS/auth_repo/oauth/user_infos.php';
 }
 ```
 

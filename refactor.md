@@ -156,7 +156,7 @@ function make_input_group($label, $id, $value, $required)
 <?php
 // Lines 3-7: Environment mutation
 if ((getenv("HOME") ?: "") === '') {
-    $new_home = 'I:/mdwiki/mdwiki';
+    $new_home = 'I:/MD_TOOLS/MDWIKI_MAIN_REPO';
     putenv("HOME=$new_home");
     $_ENV['HOME'] = $new_home;
 }
@@ -168,7 +168,7 @@ foreach (glob(__DIR__ . "/utils/*.php") as $filename) {
 
 // Lines 16-19: Conditional external include
 if (substr(__DIR__, 0, 2) == 'I:') {
-    include_once 'I:/mdwiki/auth_repo/oauth/user_infos.php';
+    include_once 'I:/MD_TOOLS/mdwiki.toolforge.org/PHP_REPOS/auth_repo/oauth/user_infos.php';
 } else {
     include_once __DIR__ . '/../auth/oauth/user_infos.php';
 }
@@ -445,7 +445,7 @@ Lines 18-19 compute `$use_td_api`, but line 21 hardcodes it to `false`.
 
 ```php
 if (substr(__DIR__, 0, 2) == 'I:') {
-    include_once 'I:/mdwiki/auth_repo/oauth/user_infos.php';
+    include_once 'I:/MD_TOOLS/mdwiki.toolforge.org/PHP_REPOS/auth_repo/oauth/user_infos.php';
 } else {
     include_once __DIR__ . '/../auth/oauth/user_infos.php';
 }

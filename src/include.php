@@ -20,7 +20,7 @@
  *
  * Environment Setup:
  * - Sets HOME environment variable for configuration file discovery
- * - Handles Windows development environment (I:/mdwiki/mdwiki)
+ * - Handles Windows development environment (I:/MD_TOOLS/MDWIKI_MAIN_REPO)
  * - Production uses Toolforge standard HOME path
  *
  * Usage:
