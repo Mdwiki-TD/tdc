@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Tables\SqlTables\TablesSql;
 
 use function Utils\Html\banner_alert;
-use function Utils\Html\login_card;
 use function Utils\Html\make_modal_fade;
 use function Utils\Html\make_mail_icon_new;
 use function Utils\Html\make_project_to_user;
@@ -33,13 +32,6 @@ class HtmlTest extends TestCase
         $result = banner_alert("Test Alert Error");
         $this->assertStringContainsString("Test Alert Error", $result);
         $this->assertStringContainsString("alert alert-danger", $result);
-    }
-
-    public function testLoginCard()
-    {
-        $result = login_card();
-        $this->assertStringContainsString("Login", $result);
-        $this->assertStringContainsString("onclick='login()'", $result);
     }
 
     public function testMakeModalFade()
