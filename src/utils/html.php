@@ -68,28 +68,6 @@ function banner_alert(string $text): string
 }
 
 /**
- * Generate a login card component
- *
- * @return string HTML for the login card
- */
-function login_card(): string
-{
-    return <<<HTML
-    <div class='card' style='font-weight: bold;'>
-        <div class='card-body'>
-            <div class='row'>
-                <div class='col-md-10'>
-                    <a role='button' class='btn btn-outline-primary' onclick='login()'>
-                        <i class='fas fa-sign-in-alt fa-sm fa-fw mr-1'></i><span class='navtitles'>Login</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    HTML;
-}
-
-/**
  * Generate a Bootstrap modal dialog
  *
  * @param string $label   Modal title

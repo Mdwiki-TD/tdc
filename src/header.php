@@ -97,7 +97,7 @@ if ($GLOBALS['user_is_coordinator'] == true) {
 // Generate user menu based on authentication state
 $li_user = <<<HTML
 	<li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
-		<a role="button" class="nav-link py-2 px-0 px-lg-2" onclick="login()">
+		<a role="button" class="nav-link py-2 px-0 px-lg-2" href="/auth/login.php">
 			<i class="fas fa-sign-in-alt fa-sm fa-fw mr-2"></i> <span class="navtitles">Login</span>
 		</a>
 HTML;
@@ -190,7 +190,7 @@ echo <<<HTML
 					<div class="modal-body">Select &quot;Logout&quot; below if you are ready to end your current session.</div>
 					<div class="modal-footer">
 						<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
-						<a class="btn btn-outline-primary" href="/auth/index.php?a=logout">Logout</a>
+						<a class="btn btn-outline-primary" href="/auth/logout.php">Logout</a>
 					</div>
 				</div>
 			</div>
