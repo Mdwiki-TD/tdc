@@ -260,7 +260,7 @@ if (!empty($params)) {
 
 ```php
 function execute_query($sql_query, $params = null, $table_name = null) {
-    $db = new Database($_SERVER['SERVER_NAME'] ?? '', $dbname);  // New connection per query
+    $db = new Database('DB_NAME');  // New connection per query
     // ... execute ...
     $db = null;  // Destroy connection
 }

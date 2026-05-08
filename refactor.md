@@ -586,7 +586,7 @@ class Container {
 
 ```php
 // Before (global):
-$db = new Database($_SERVER['SERVER_NAME'] ?? '', $dbname);
+$db = new Database('DB_NAME');
 
 // After (injected):
 class UserRepository {
