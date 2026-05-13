@@ -23,7 +23,9 @@ use function Utils\TablesDir\open_td_tables_file;
 
 function get_category_from_cache(string $category): array
 {
-    $file_path = "cats_cash/{$category}.json";
+    $tables_path = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
+    // ---
+    $file_path = "$tables_path/cats_cash/$category.json";
 
     $data = open_td_tables_file($file_path);
 

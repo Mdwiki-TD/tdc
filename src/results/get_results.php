@@ -24,7 +24,9 @@ function get_cat_exists_and_missing($cat, $depth, $code, $use_cache = true)
     };
     test_print("members size:" . count($members));
     // ---
-    $json_file = "cash_exists/$code.json";
+    $tables_path = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
+    // ---
+    $json_file = "$tables_path/cash_exists/$code.json";
     $exists = open_td_tables_file($json_file);
 
     test_print("$json_file: exists size:" . count($exists));
