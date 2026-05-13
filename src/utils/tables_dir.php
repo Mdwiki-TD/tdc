@@ -3,7 +3,7 @@
 namespace Utils\TablesDir;
 /*
 
-use function Utils\TablesDir\open_td_Tables_file;
+use function Utils\TablesDir\open_td_tables_file;
 
 */
 
@@ -15,17 +15,11 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 
 use function Utils\Functions\test_print;
 
-function open_td_Tables_file($path)
+function open_td_tables_file($file_path)
 {
     //---
-    $tables_dir = (getenv("HOME") ?: ($_ENV['HOME'] ?? "")) . '/public_html/td/Tables';
-    //---
-    // if (substr($tables_dir, 0, 2) == 'I:') { $tables_dir = 'I:/MD_TOOLS/MDWIKI_MAIN_REPO/public_html/td/Tables'; }
-    //---
-    $file_path = "$tables_dir/$path";
-    //---
     if (!is_file($file_path)) {
-        test_print("---- open_td_Tables_file: file $file_path does not exist");
+        test_print("---- open_td_tables_file: file $file_path does not exist");
         return [];
     }
     $contents = file_get_contents($file_path);
@@ -44,7 +38,7 @@ function open_td_Tables_file($path)
         $len = count($result);
         if (isset($result['list'])) $len = count($result['list']);
         // ---
-        test_print("---- open_td_Tables_file File: $file_path: Exists size: $len");
+        test_print("---- open_td_tables_file File: $file_path: Exists size: $len");
     }
 
     return $result;

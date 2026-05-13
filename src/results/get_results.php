@@ -12,11 +12,11 @@ use function Results\GetResults\get_cat_exists_and_missing;
 
 use function Results\GetCats\get_mdwiki_cat_members;
 use function Utils\Functions\test_print;
-use function Utils\TablesDir\open_td_Tables_file;
+use function Utils\TablesDir\open_td_tables_file;
 
 function get_cat_exists_and_missing($cat, $depth, $code, $use_cache = true)
 {
-    $members_to = get_mdwiki_cat_members($cat, $use_cache = $use_cache, $depth = $depth);
+    $members_to = get_mdwiki_cat_members($cat, $use_cache, $depth);
     // z("<br>members_to size:" . count($members_to));
     $members = [];
     foreach ($members_to as $mr) {
@@ -24,8 +24,10 @@ function get_cat_exists_and_missing($cat, $depth, $code, $use_cache = true)
     };
     test_print("members size:" . count($members));
     // ---
-    $json_file = "cash_exists/$code.json";
-    $exists = open_td_Tables_file($json_file);
+    $tables_path = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
+    // ---
+    $json_file = "$tables_path/cash_exists/$code.json";
+    $exists = open_td_tables_file($json_file);
 
     test_print("$json_file: exists size:" . count($exists));
 
