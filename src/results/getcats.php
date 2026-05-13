@@ -19,13 +19,13 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 use function Utils\Functions\test_print;
 use function APICalls\MdwikiApi\get_mdwiki_url_with_params;
 use function Utils\Functions\start_with;
-use function Utils\TablesDir\open_td_Tables_file;
+use function Utils\TablesDir\open_td_tables_file;
 
 function get_category_from_cache(string $category): array
 {
     $file_path = "cats_cash/{$category}.json";
 
-    $data = open_td_Tables_file($file_path);
+    $data = open_td_tables_file($file_path);
 
     if (!isset($data['list']) || !is_array($data['list'])) {
         test_print("Invalid format in JSON file: $file_path");

@@ -19,7 +19,6 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 };
 //---
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
-use function Utils\TablesDir\open_td_Tables_file;
 //---
 class MainTables
 {
@@ -31,18 +30,6 @@ class MainTables
 	public static $x_Assessments_table = [];
 	public static $x_Langs_table = [];
 }
-// ---
-/*
-$tables_d = array(
-	'langs_tables' => &MainTables::$x_Langs_table,
-);
-//---
-foreach ($tables_d as $key => &$value) {
-	$file = "jsons/{$key}.json";
-	$value = open_td_Tables_file($file);
-}
-*/
-//---
 $titles_infos = td_or_sql_titles_infos();
 
 // var_dump(json_encode($titles_infos, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
