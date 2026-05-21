@@ -397,20 +397,29 @@ function td_or_sql_titles_infos($titles = []): array
     // ---
     $api_params = ['get' => 'titles', 'titles' => $titles];
     // ---
-    $qua = "SELECT * FROM titles_infos";
+    $qua = <<<SQL
+        select
+            ase.title AS title,
+            ase.importance AS importance,
+            rc.r_lead_refs AS r_lead_refs,
+            rc.r_all_refs AS r_all_refs,
+            ep.en_views AS en_views,
+            w.w_lead_words AS w_lead_words,
+            w.w_all_words AS w_all_words,
+            q.qid AS qid
+        from
+            assessments ase
+            left join enwiki_pageviews ep on ase.title = ep.title
+            left join qids q on q.title = ase.title
+            left join refs_counts rc on rc.r_title = ase.title
+            left join words w on w.w_title = ase.title
+    SQL;
     // ---
     $sql_params = [];
     // ---
-    /*
-    if (!empty($titles)) {
-        $titles = implode("','", $titles);
-        $qua .= " WHERE title IN ('$titles')";
-    }
-    */
-    // ---
     if (!empty($titles)) {
         $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
-        $qua .= " WHERE title IN ($placeholders)";
+        $qua .= " WHERE ase.title IN ($placeholders)";
         $sql_params = $titles;              // pass to super_function
     }
     // ---

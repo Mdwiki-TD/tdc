@@ -318,7 +318,7 @@ function get_configs($fileo) {
 **File:** `src/backend/tables/tables.php:51-63`
 
 ```php
-foreach ($titles_infos as $k => $tab) {
+foreach ($_titles_infos as $k => $tab) {
     $title = $tab['title'];
     MainTables::$x_enwiki_pageviews_table[$title] = $tab['en_views'];
     // ... multiple static array assignments
