@@ -30,12 +30,12 @@ class MainTables
 	public static $x_Assessments_table = [];
 	public static $x_Langs_table = [];
 }
-$titles_infos = td_or_sql_titles_infos();
+$_titles_infos = td_or_sql_titles_infos();
 
-// var_dump(json_encode($titles_infos, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+// var_dump(json_encode($_titles_infos, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 // [{ "title": "11p deletion syndrome", "importance": "", "r_lead_refs": 5, "r_all_refs": 14, "en_views": 1592, "w_lead_words": 221, "w_all_words": 547, "qid": "Q1892153" }, ...]
 // ---
-foreach ($titles_infos as $k => $tab) {
+foreach ($_titles_infos as $k => $tab) {
 	$title = $tab['title'];
 	// ---
 	MainTables::$x_enwiki_pageviews_table[$title] = $tab['en_views'];
