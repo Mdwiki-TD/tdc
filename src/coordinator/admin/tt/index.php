@@ -83,26 +83,24 @@ function make_row($id, $title, $lead, $full, $numb)
 	//---
 	return <<<HTML
 	<tr>
-		<th data-content="#" data-sort="$numb">
+		<th data-sort="$numb">
 			$numb
 		</th>
-		<th data-content="#" data-sort="$id">
-			$id
-		</th>
-		<td data-content="title" data-sort="$title">
+		<!-- <th data-sort="$id"> $id </th> -->
+		<td data-sort="$title">
 			$md_title
 		</td>
-		<td data-content='Lead' data-sort='$lead'>
+		<td data-sort='$lead'>
 			<div class='form-check form-switch'>
 				<input class='form-check-input' type='checkbox' name='lead_$numb' value='1' $lead_checked disabled>
 			</div>
 		</td>
-		<td data-content='Full' data-sort='$full'>
+		<td data-sort='$full'>
 			<div class='form-check form-switch'>
 				<input class='form-check-input' type='checkbox' name='full_$numb' value='1' $full_checked disabled>
 			</div>
 		</td>
-		<td data-content="Edit">
+		<td>
 			$edit_icon
 		</td>
 	</tr>
@@ -153,11 +151,11 @@ echo <<<HTML
 			</form>
 		</div>
 		<div class='card-body'>
-			<table id='em' class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
+			<table id='em' class='table table-striped compact table_responsive table_text_left'>
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>id</th>
+						<!-- <th>id</th> -->
 						<th>Title</th>
 						<th>Lead</th>
 						<th>Full</th>
