@@ -32,6 +32,7 @@ function make_settings_tab($tabe)
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Key</th>
                         <th>Option</th>
                         <th>Value</th>
                     </tr>
@@ -75,6 +76,9 @@ function make_settings_tab($tabe)
                 <input name='rows[$nn][id]' value='$id' type="hidden"/>
                 <td data-order='$nn' data-content='#'>
                     $nn
+                </td>
+                <td data-content='Key'>
+                    $title
                 </td>
                 <td data-content='Option'>
                     $displayed
