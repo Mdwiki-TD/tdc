@@ -29,7 +29,19 @@ function echo_card_start($file_name, $ty)
 						<!-- <button class="border rounded-3 p-1 text-decoration-none" onclick="toggleSidebar()">
 							<i class="bi bi-list bi-lg py-2 p-1"></i>
 						</button> -->
-						<span class="logo-text fw-bold mb-0 h5"> <span class='hide-on-collapse-inline'>Coordinator Tools</span> </h5>
+						<span class="logo-text">
+							<span class="hide-on-collapse-inline fw-bold mb-0 h5">
+								Coordinator Tools
+							</span>
+						</span>
+						<div class="show-on-collapse">
+							<div class="form-check form-switch">
+								<input class="form-check-input" type="checkbox" id="keep-close-toggle"
+									onchange="ToggleKeepSideBarClose()">
+							</div>
+							<label class="form-check-label" for="keep-close-toggle">Keep close
+							</label>
+						</div>
 					</div>
 					<button class="main-toggle-btn position-absolute top-50 start-100 translate-middle"
 						onclick="toggleSidebar()">
