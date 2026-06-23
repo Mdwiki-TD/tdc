@@ -85,7 +85,6 @@ function get_recent_pages_users($lang): array
         'get' => 'pages_users',
         'target' => 'not_empty',
         "order" => 'pupdate',
-        // 'title_not_in_pages' => '0',
         'limit' => '100'
     ];
     //---

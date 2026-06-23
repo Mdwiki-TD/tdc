@@ -103,7 +103,7 @@ $here_params = array(
     'title' => $sugust
 );
 //---
-$here_url = "https://mdwiki.toolforge.org/Translation_Dashboard/translate/medwiki.php?" . http_build_query($here_params);
+$here_url = "https://mdwiki.toolforge.org/Translation_Dashboard/translate_med/index.php?" . http_build_query($here_params);
 //---
 $HERE = "<a target='_blank' href='$here_url'><b>HERE</b></a>";
 //---
@@ -175,7 +175,7 @@ $mag = <<<HTML
             display: inline-block;
             margin-right: 1rem;
             vertical-align: middle;
-            border-style: none;' src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Wiki_Project_Med_Foundation_logo.svg/400px-Wiki_Project_Med_Foundation_logo.svg.png' alt='Wiki Project Med Foundation logo'>
+            border-style: none;' src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Wiki_Project_Med_Foundation_logo.svg/250px-Wiki_Project_Med_Foundation_logo.svg.png' alt='Wiki Project Med Foundation logo'>
           </td>
           <td>
             <a style='display: inline-block;
