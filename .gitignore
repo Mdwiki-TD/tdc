@@ -17,3 +17,4 @@ composer.lock
 src/load_env.php
 /.phpunit.cache
 /build/coverage-html
+/.commandcode
