@@ -75,6 +75,47 @@ The project is open-source and available on GitHub: [Mdwiki-TD/tdc](https://gith
 
 # End points
 
-| Endpoint | Method | Description |
-| -------- | ------ | ----------- |
-| `/`      | GET    | Main entry  |
+| Endpoint                         | Method   | Description                                             |
+| -------------------------------- | -------- | ------------------------------------------------------- |
+| `/`                              | GET      | Main entry — recent translations dashboard              |
+| `?ty=last`                       | GET      | Recent translations table                               |
+| `?ty=last1`                      | GET      | Recent translations (SQL-based)                         |
+| `?ty=categories`                 | GET      | Translation languages with Wikidata category status     |
+| `?ty=process`                    | GET      | Translations currently in progress                      |
+| `?ty=process_total`              | GET      | Per-user translation count summary                      |
+| `?ty=recent_helps`               | GET      | Helper utilities for recent translations                |
+| `?ty=stat`                       | GET      | Per-category article statistics                         |
+| `?ty=sidebar`                    | GET      | Sidebar HTML (for AJAX reload)                          |
+| `?ty=Campaigns`                  | GET/POST | List and edit translation campaigns                     |
+| `?ty=Campaigns/post`             | POST     | Save/update/delete campaign categories                  |
+| `?ty=Emails`                     | GET/POST | List users with emails and project filters              |
+| `?ty=Emails/post`                | POST     | Save user email/wiki/project edits                      |
+| `?ty=Emails/msg`                 | GET/POST | Compose and send email to translator                    |
+| `?ty=Emails/edit_user`           | GET      | Edit or add a single user                               |
+| `?ty=add`                        | GET/POST | Add new translation entries                             |
+| `?ty=add/post`                   | POST     | Save new translation rows                               |
+| `?ty=admins`                     | GET/POST | List, add, delete coordinators                          |
+| `?ty=admins/post`                | POST     | Save coordinator changes                                |
+| `?ty=full_translators`           | GET/POST | Manage full article translators                         |
+| `?ty=full_translators/post`      | POST     | Save full translator changes                            |
+| `?ty=last_coord`                 | GET      | Coordinator view of recent translations                 |
+| `?ty=pages_users_to_main`        | GET      | Pages needing move to main namespace                    |
+| `?ty=pages_users_to_main/fix_it` | GET/POST | Edit page transfer details                              |
+| `?ty=projects`                   | GET/POST | Manage project groups                                   |
+| `?ty=projects/post`              | POST     | Save project changes                                    |
+| `?ty=qids`                       | GET      | List Wikidata QIDs                                      |
+| `?ty=qids/edit_qid`              | GET/POST | Edit or add a QID entry                                 |
+| `?ty=qids/post`                  | POST     | Save QID changes                                        |
+| `?ty=reports`                    | GET      | View publish reports with filters                       |
+| `?ty=settings`                   | GET/POST | Manage application settings                             |
+| `?ty=settings/post`              | POST     | Save settings changes                                   |
+| `?ty=translated`                 | GET      | Paginated list of all translated pages                  |
+| `?ty=translated/edit_page`       | GET/POST | Edit or delete a translated page                        |
+| `?ty=tt`                         | GET      | List articles by translate type                         |
+| `?ty=tt/edit_translate_type`     | GET/POST | Edit or add translate type                              |
+| `?ty=tt/post`                    | POST     | Save translate type changes                             |
+| `?ty=users_no_inprocess`         | GET/POST | Manage users excluded from "in process"                 |
+| `?ty=users_no_inprocess/post`    | POST     | Save exclusion list changes                             |
+| `?ty=wikirefs_options`           | GET      | Per-language fix wikirefs settings                      |
+| `?ty=wikirefs_options/edit`      | GET/POST | Edit language settings                                  |
+| `sugust.php`                     | GET      | JSON endpoint for article suggestions (`?title=&lang=`) |
