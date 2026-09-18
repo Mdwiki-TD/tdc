@@ -1,23 +1,5 @@
 <?php
 
-/**
- * Application Footer Module
- *
- * Provides the closing HTML structure and JavaScript initialization
- * for the Translation Dashboard application. Includes:
- * - Page load time calculation and display
- * - Popup window utilities
- * - DataTable initialization
- * - Bootstrap tooltip initialization
- *
- * @package    UI
- * @subpackage Footer
- * @author     Translation Dashboard Team
- * @version    2.0.0
- * @since      1.0.0
- * @license    GPL-3.0-or-later
- */
-
 // Calculate and display page load time
 if (isset($GLOBALS['time_start'])) {
 	$time_start = (float)$GLOBALS['time_start'];
@@ -39,7 +21,6 @@ if (isset($GLOBALS['time_start'])) {
 
 <!-- Common JavaScript -->
 <script src="/Translation_Dashboard/js/c.js"></script>
-
 <script>
 	/**
 	 * Open email popup window
@@ -107,7 +88,6 @@ if (isset($GLOBALS['time_start'])) {
 		}, 200);
 	});
 </script>
-
 </body>
 
 </html>

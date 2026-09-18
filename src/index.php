@@ -1,6 +1,7 @@
 <?php
 
-include_once __DIR__ . '/header.php';
+include_once __DIR__ . '/include.php';
+include_once __DIR__ . '/templates/header.php';
 
 use function Utils\Functions\test_print;
 use function Utils\HtmlSide\create_side;
@@ -109,4 +110,4 @@ HTML;
 
 echo "<script src='/tdc/js/autocomplate.js'></script>";
 
-include_once __DIR__ . '/footer.php';
+include_once __DIR__ . '/templates/footer.php';

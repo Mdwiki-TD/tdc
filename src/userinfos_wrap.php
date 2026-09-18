@@ -1,42 +1,39 @@
 <?php
 
-// include_once __DIR__ . '/userinfos_wrap.php';
-
-
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
 use function APICalls\MdwikiSql\fetch_query;
+use function SQLorAPI\Funcs\get_coordinators;
+use OAuth\Settings\Settings;
 
-$cookieDomain = $_SERVER['SERVER_NAME'] ?? 'localhost';
-$secure = ($cookieDomain === 'localhost') ? false : true;
+function get_key(Settings $settings, string $key_type = "cookie")
+{
+    $use_key  = ($key_type === "decrypt") ? $settings->decryptKey : $settings->cookieKey;
 
-if ($cookieDomain != 'localhost') {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_name("mdwikitoolforgeoauth");
-        // Ensure $domain is defined, fallback to server name
-        session_set_cookie_params(0, "/", $cookieDomain, $secure, $secure);
-    }
+    return $use_key;
 }
 
-function decode_value($value)
+function decode_value(string $value, $use_key): string
 {
-    $value = trim((string)$value);
-    if ($value === '') {
-        return '';
-    }
+    if (empty(trim($value))) return "";
+
     $cookieKeyRaw = getenv('COOKIE_KEY') ?: ($_ENV['COOKIE_KEY'] ?? '');
     if (empty($cookieKeyRaw)) {
         return '';
     }
     try {
-        $cookieKey = Key::loadFromAsciiSafeString($cookieKeyRaw);
-        return Crypto::decrypt($value, $cookieKey);
+        $use_key = Key::loadFromAsciiSafeString($cookieKeyRaw);
     } catch (\Throwable $e) {
-        return '';
+        return "";
+    }
+    try {
+        return Crypto::decrypt($value, $use_key);
+    } catch (\Throwable $e) {
+        return "";
     }
 }
 
-function get_access_from_db($user)
+function get_access_from_db(string $user, $decrypt_key): array
 {
     $user = trim($user);
 
@@ -46,21 +43,21 @@ function get_access_from_db($user)
         WHERE user_name = ? or user_name_hash = ?;
     SQL;
 
-    $result = fetch_query($query, [$user, hash('sha256', $user)]);
+    $result = fetch_query($query, [$user, hash('sha256', $user)], true);
 
     if ($result) {
         return [
-            'access_key' => decode_value($result[0]['access_key']),
-            'access_secret' => decode_value($result[0]['access_secret'])
+            'access_key' => decode_value($result[0]['access_key'], $decrypt_key),
+            'access_secret' => decode_value($result[0]['access_secret'], $decrypt_key)
         ];
     }
     return [];
 }
 
-function get_from_cookies($key)
+function get_from_cookies(string $key, $cookie_key): string
 {
     if (isset($_COOKIE[$key])) {
-        $value = decode_value($_COOKIE[$key]);
+        $value = decode_value($_COOKIE[$key], $cookie_key);
     } else {
         // echo "key: $key<br>";
         $value = "";
@@ -71,7 +68,7 @@ function get_from_cookies($key)
     return $value;
 }
 
-function ba_alert($text)
+function ba_alert(string $text): string
 {
     return <<<HTML
 	<div class='container'>
@@ -82,30 +79,78 @@ function ba_alert($text)
 	HTML;
 }
 
-if (session_status() === PHP_SESSION_NONE) session_start();
-
-$username = get_from_cookies('username');
-
-if ($cookieDomain == 'localhost') {
-    $username = $_SESSION['username'] ?? '';
-} elseif (!empty($username)) {
-    $access = get_access_from_db($username);
-    if (empty($access)) {
-        echo ba_alert("No access keys found. Login again.");
-        setcookie('username', '', [
-            'expires' => time() - 3600,
-            'path' => '/',
-            'domain' => $cookieDomain,
-            'secure' => $secure,
-            'httponly' => true,
-            'samesite' => 'Lax',
-        ]);
-        $username = '';
-        unset($_SESSION['username']);
-    }
+/**
+ * Helper function to remove the username cookie safely.
+ */
+function clear_user_cookie(string $domain): void
+{
+    setcookie('username', '', [
+        'expires'  => time() - 3600,
+        'path'     => '/',
+        'domain'   => $domain,
+        'secure'   => true,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
 }
 
-$global_username = $username;
+function load_user(Settings $settings): array
+{
 
-define('global_username', $global_username);
-$GLOBALS['global_username'] = $global_username;
+    $cookieDomain = $_SERVER['SERVER_NAME'] ?? 'localhost';
+
+    // 1. Initialize session if not already active
+    if (session_status() === PHP_SESSION_NONE) {
+        // Set custom session configuration only in production environment
+        if ($cookieDomain != 'localhost') {
+            session_name("mdwikitoolforgeoauth");
+            session_set_cookie_params(0, "/", $cookieDomain, true, true);
+        }
+
+        // Start the PHP session
+        session_start();
+    }
+
+    $cookie_key  = get_key($settings, "cookie");
+
+    // 2. Fetch initial username based on environment
+    $username = get_from_cookies('username', $cookie_key);
+
+    // Override with session data in development environment
+    if ($cookieDomain == 'localhost') {
+        $username = $_SESSION['username'] ?? $username;
+    }
+
+    // 3. Validate user access in production
+    if (!empty($username)) {
+        $decrypt_key  = get_key($settings, "decrypt");
+        $access = get_access_from_db($username, $decrypt_key);
+
+        if (empty($access)) {
+            echo ba_alert("No access keys found. Login again.");
+
+            // Clear identity
+            clear_user_cookie($cookieDomain);
+            unset($_SESSION['username']);
+            $username = '';
+        }
+    }
+
+    // 4. Set global variables safely
+    $GLOBALS['global_username'] = $username;
+
+    if (!defined('global_username')) {
+        define('global_username', $username);
+    }
+
+    $user_is_coordinator = false;
+
+    if (!empty($username)) {
+        $coordinators = array_column(get_coordinators(), 'is_active', 'username');
+        $user_is_coordinator = (($coordinators[$username] ?? 0) == 1);
+
+        $GLOBALS['user_is_coordinator'] = $user_is_coordinator;
+    }
+
+    return [$username, $user_is_coordinator];
+}
