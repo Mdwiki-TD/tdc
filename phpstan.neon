@@ -18,7 +18,6 @@ parameters:
     # Scan files for class definitions
     scanFiles:
         - src/include.php
-        - src/app/load_env.php
 
     bootstrapFiles:
         - tests/bootstrap.php
