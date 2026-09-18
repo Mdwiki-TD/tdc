@@ -2,17 +2,6 @@
 
 namespace SQLorAPI\Recent;
 
-/*
-
-Usage:
-
-use function SQLorAPI\Recent\get_recent_sql;
-use function SQLorAPI\Recent\get_recent_pages_users;
-use function SQLorAPI\Recent\get_recent_translated;
-use function SQLorAPI\Recent\get_total_translations_count;
-use function SQLorAPI\Recent\get_pages_users_to_main;
-*/
-
 use function SQLorAPI\Get\super_function;
 
 function get_recent_sql($lang): array

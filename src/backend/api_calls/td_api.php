@@ -1,15 +1,8 @@
 <?php
 
 namespace APICalls\TDApi;
-/*
-Usage:
 
-use function APICalls\TDApi\get_td_api;
-use function APICalls\TDApi\compare_it;
-
-*/
-
-function test_print_o($s)
+function test_print_z($s)
 {
     if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
         return;
@@ -23,17 +16,7 @@ function test_print_o($s)
         print_r($s);
     }
 }
-function compare_it($t1, $t2)
-{
-    echo "<br>fetch _query:<br>";
-    // //---
-    var_dump(json_encode($t1, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    // //---
-    echo "<br>get_td_api:<br>";
-    // //---
-    var_dump(json_encode($t2, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-}
 function post_url(string $endPoint, array $params = []): string
 {
     $usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
@@ -47,12 +30,6 @@ function post_url(string $endPoint, array $params = []): string
         CURLOPT_USERAGENT => $usr_agent,
         CURLOPT_CONNECTTIMEOUT => 10,
         CURLOPT_TIMEOUT => 10,
-        // لإضافة POST:
-        // CURLOPT_POST => true,
-        // CURLOPT_POSTFIELDS => http_build_query($params, '', '&', PHP_QUERY_RFC3986),
-        // لاستخدام ملفات الكوكيز:
-        // CURLOPT_COOKIEJAR => "cookie.txt",
-        // CURLOPT_COOKIEFILE => "cookie.txt",
     ]);
 
     $output = curl_exec($ch);
@@ -64,17 +41,17 @@ function post_url(string $endPoint, array $params = []): string
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
     if ($http_code !== 200) {
-        test_print_o('post_url: Error: API request failed with status code ' . $http_code);
+        test_print_z('post_url: Error: API request failed with status code ' . $http_code);
     }
 
-    test_print_o("post_url: (http_code: $http_code) $url2");
+    test_print_z("post_url: (http_code: $http_code) $url2");
 
     if ($output === FALSE) {
-        test_print_o("post_url: cURL Error: " . curl_error($ch));
+        test_print_z("post_url: cURL Error: " . curl_error($ch));
     }
 
     if (curl_errno($ch)) {
-        test_print_o('post_url: Error:' . curl_error($ch));
+        test_print_z('post_url: Error:' . curl_error($ch));
     }
 
     curl_close($ch);
@@ -97,11 +74,9 @@ function get_td_api(array $params): array
     $result = $results['results'] ?? [];
 
     if (isset($result['error'])) {
-        test_print_o('Error:' . json_encode($result['error'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        test_print_z('Error:' . json_encode($result['error'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         $result = [];
     }
-
-    // var_dump(json_encode(, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-
     return $result;
 }
+

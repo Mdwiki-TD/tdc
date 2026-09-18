@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 use function SQLorAPI\Process\get_users_process_new;
 

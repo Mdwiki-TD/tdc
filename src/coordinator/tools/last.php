@@ -1,6 +1,6 @@
-<?PHP
+<?php
 
-const MAX_USERNAME_DISPLAY_LENGTH = 15;
+use function APICalls\TDApi\get_td_api;
 
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {
@@ -37,67 +37,6 @@ function make_view_by_number($target, $numb, $lang, $pupdate)
     return $link;
 };
 
-function post_url(string $endPoint, array $params = []): string
-{
-    $usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
-
-    $ch = curl_init();
-
-    $url = "{$endPoint}?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-    curl_setopt_array($ch, [
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_USERAGENT => $usr_agent,
-        CURLOPT_CONNECTTIMEOUT => 10,
-        CURLOPT_TIMEOUT => 10,
-    ]);
-
-    $output = curl_exec($ch);
-
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    if ($http_code !== 200) {
-        error_log('post_url: Error: API request failed with status code ' . $http_code);
-    }
-
-    // remove "&format=json" from $url then make it link <a href="$url2">
-    $url2 = str_replace('&format=json', '', $url);
-    $url2 = "<a target='_blank' href='$url2'>$url2</a>";
-
-    // error_log("post_url: (http_code: $http_code) $url2");
-
-    if ($output === FALSE) {
-        error_log("post_url: cURL Error: " . curl_error($ch));
-    }
-
-    if (curl_errno($ch)) {
-        error_log('post_url: Error:' . curl_error($ch));
-    }
-
-    curl_close($ch);
-    return $output;
-}
-
-function get_td_api(array $params): array
-{
-    $endPoint = (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
-    $endPoint .= '/api.php';
-
-    $out = post_url($endPoint, $params);
-
-    $results = json_decode($out, true);
-
-    if (!is_array($results)) {
-        $results = [];
-    }
-
-    $result = $results['results'] ?? [];
-
-    if (isset($result['error'])) {
-        $result = [];
-    }
-    return $result;
-}
 function last_make_td($tabg, $nnnn, $last_table)
 {
     $user     = $tabg['user'] ?? "";
@@ -116,9 +55,10 @@ function last_make_td($tabg, $nnnn, $last_table)
         $add_date = explode(' ', $add_date)[0];
     };
 
+    $max_username_display_length = 15;
     $user_name = $user;
     // $user_name is the first word of the user if length > 15
-    if (strlen($user) > MAX_USERNAME_DISPLAY_LENGTH) {
+    if (strlen($user) > $max_username_display_length) {
         $user_name = explode(' ', $user);
         $user_name = $user_name[0];
     }
@@ -190,6 +130,7 @@ function filter_recent($lang, $data)
         $code    = $codr["lang"] ?? "";
         $autonym = $codr["autonym"] ?? "";
         if (empty($code)) continue;
+
         $selected = ($code == $lang) ? 'selected' : '';
         $lang_list .= <<<HTML
             <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
@@ -356,6 +297,7 @@ HTML;
                 }
             });
         }
+
         var usersTableElement = $('#last_users_table');
         if (usersTableElement.length) {
             table = $('#last_users_table').DataTable({
@@ -388,5 +330,6 @@ HTML;
                 });
             });
         }
+
     });
 </script>

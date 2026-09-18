@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 use Tables\Langs\LangsTables;
 use function Utils\Html\make_mdwiki_title;

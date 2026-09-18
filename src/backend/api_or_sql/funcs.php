@@ -2,26 +2,6 @@
 
 namespace SQLorAPI\Funcs;
 
-/*
-
-Usage:
-
-use function SQLorAPI\Funcs\get_coordinators;
-use function SQLorAPI\Funcs\get_td_or_sql_settings;
-use function SQLorAPI\Funcs\get_td_or_sql_qids;
-use function SQLorAPI\Funcs\get_td_or_sql_qids_others;
-use function SQLorAPI\Funcs\get_td_or_sql_categories;
-use function SQLorAPI\Funcs\get_users_by_last_pupdate;
-use function SQLorAPI\Funcs\get_td_or_sql_count_pages_not_empty;
-use function SQLorAPI\Funcs\get_td_or_sql_page_user_not_in_users;
-use function SQLorAPI\Funcs\get_td_or_sql_full_translators;
-use function SQLorAPI\Funcs\get_td_or_sql_projects;
-use function SQLorAPI\Funcs\get_pages_langs;
-use function SQLorAPI\Funcs\td_or_sql_titles_infos;
-use function SQLorAPI\Funcs\get_pages_users_langs;
-use function SQLorAPI\Funcs\get_publish_reports_stats;
-use function SQLorAPI\Funcs\get_td_or_sql_language_settings;
-*/
 
 use function SQLorAPI\Get\super_function;
 
@@ -42,7 +22,7 @@ function get_publish_reports_stats(): array
 
     $api_params = ['get' => 'publish_reports_stats'];
 
-    $stats_data = super_function($api_params, [], $query, 'publish_reports');
+    $stats_data = super_function($api_params, [], $query);
 
     return $stats_data;
 }

@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 include_once __DIR__ . '/header.php';
 
@@ -73,7 +73,6 @@ $corrd_folders = array_map('basename', glob('coordinator/admin/*', GLOB_ONLYDIR)
 $tools_files = [
 	"categories",
 	"last",
-	"last1",
 	"process_total",
 	"process",
 	"recent_helps",

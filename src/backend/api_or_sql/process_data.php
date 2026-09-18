@@ -58,7 +58,7 @@ function get_lang_in_process_new($code, $year_y = "all"): array
         $api_params['year'] = $year_y;
     }
 
-    $data = super_function($api_params, $params, $query, "in_process", true);
+    $data = super_function($api_params, $params, $query, true);
 
     // $cache[$code] = array_column($data, 'title');
     $cache[$code] = $data;

@@ -1,12 +1,6 @@
 <?php
 
 namespace APICalls\WikiApi;
-/*
-Usage:
-use function APICalls\WikiApi\get_url_result_curl;
-use function APICalls\WikiApi\make_view_by_number;
-use function APICalls\WikiApi\get_views;
-*/
 
 function get_url_result_curl(string $url): string
 {

@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 // use function APICalls\MdwikiSql\update_settings;
 use function APICalls\MdwikiSql\update_settings_value;

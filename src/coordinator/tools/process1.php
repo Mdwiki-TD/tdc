@@ -1,4 +1,6 @@
-<?PHP
+<?php
+
+use function APICalls\TDApi\get_td_api;
 
 function process_make_td($tab, $nnnn)
 {
@@ -46,24 +48,6 @@ function process_make_td($tab, $nnnn)
 
     return $laly;
 };
-
-function get_td_api(array $params): array
-{
-    $endPoint = (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
-    $endPoint .= '/api.php';
-
-    $out = file_get_contents("$endPoint?" . http_build_query($params));
-
-    $results = json_decode($out, true);
-
-    if (!is_array($results)) {
-        $results = [];
-    }
-
-    $result = $results['results'] ?? [];
-
-    return $result;
-}
 
 $data = get_td_api(['get' => 'in_process', 'limit' => "100", "order" => 'add_date']);
 
