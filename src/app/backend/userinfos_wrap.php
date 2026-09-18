@@ -1,7 +1,6 @@
 <?php
 
 use Defuse\Crypto\Crypto;
-use Defuse\Crypto\Key;
 use function APICalls\MdwikiSql\fetch_query;
 use function SQLorAPI\Funcs\get_coordinators;
 use OAuth\Settings\Settings;
@@ -17,15 +16,8 @@ function decode_value(string $value, $use_key): string
 {
     if (empty(trim($value))) return "";
 
-    $cookieKeyRaw = getenv('COOKIE_KEY') ?: ($_ENV['COOKIE_KEY'] ?? '');
-    if (empty($cookieKeyRaw)) {
-        return '';
-    }
-    try {
-        $use_key = Key::loadFromAsciiSafeString($cookieKeyRaw);
-    } catch (\Throwable $e) {
-        return "";
-    }
+    if ($use_key === null) return "";
+
     try {
         return Crypto::decrypt($value, $use_key);
     } catch (\Throwable $e) {
@@ -97,12 +89,12 @@ function clear_user_cookie(string $domain): void
 function load_user(Settings $settings): array
 {
 
-    $cookieDomain = $_SERVER['SERVER_NAME'] ?? 'localhost';
+    $cookieDomain = $settings->domain;
 
     // 1. Initialize session if not already active
     if (session_status() === PHP_SESSION_NONE) {
         // Set custom session configuration only in production environment
-        if ($cookieDomain != 'localhost') {
+        if ($settings->is_production()) {
             session_name("mdwikitoolforgeoauth");
             session_set_cookie_params(0, "/", $cookieDomain, true, true);
         }
@@ -117,12 +109,12 @@ function load_user(Settings $settings): array
     $username = get_from_cookies('username', $cookie_key);
 
     // Override with session data in development environment
-    if ($cookieDomain == 'localhost') {
+    if ($settings->is_development()) {
         $username = $_SESSION['username'] ?? $username;
     }
 
     // 3. Validate user access in production
-    if (!empty($username)) {
+    if ($settings->is_production() && !empty($username)) {
         $decrypt_key  = get_key($settings, "decrypt");
         $access = get_access_from_db($username, $decrypt_key);
 
