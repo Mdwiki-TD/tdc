@@ -76,8 +76,9 @@ include_once __DIR__ . '/utils/tables_dir.php';
 
 include_once __DIR__ . '/backend/api_calls/mdwiki_api.php';
 include_once __DIR__ . '/backend/api_calls/mdwiki_sql.php';
-include_once __DIR__ . '/backend/api_calls/td_api.php';
 include_once __DIR__ . '/backend/api_calls/wiki_api.php';
+
+include_once __DIR__ . '/backend/td_api_wrap/td_api.php';
 
 include_once __DIR__ . '/userinfos_wrap.php';
 

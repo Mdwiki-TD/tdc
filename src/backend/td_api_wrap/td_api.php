@@ -19,17 +19,23 @@ function test_print_z($s)
 
 function post_url(string $endPoint, array $params = []): string
 {
+    if (empty($params)) return "";
+
+    $time_start = microtime(true);
     $usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
 
     $ch = curl_init();
 
     $url = "{$endPoint}?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+
     curl_setopt_array($ch, [
         CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_USERAGENT => $usr_agent,
+        // CURLOPT_COOKIEJAR => "cookie.txt",
+        // CURLOPT_COOKIEFILE => "cookie.txt",
         CURLOPT_CONNECTTIMEOUT => 10,
-        CURLOPT_TIMEOUT => 10,
+        CURLOPT_TIMEOUT => 8,
     ]);
 
     $output = curl_exec($ch);
@@ -44,7 +50,10 @@ function post_url(string $endPoint, array $params = []): string
         test_print_z('post_url: Error: API request failed with status code ' . $http_code);
     }
 
-    test_print_z("post_url: (http_code: $http_code) $url2");
+    $execution_time = (microtime(true) - $time_start);
+    $execution_time = round($execution_time, 4);
+
+    test_print_z("post_url (time: $execution_time s): (http_code: $http_code) $url2");
 
     if ($output === FALSE) {
         test_print_z("post_url: cURL Error: " . curl_error($ch));
@@ -61,22 +70,22 @@ function post_url(string $endPoint, array $params = []): string
 function get_td_api(array $params): array
 {
     $endPoint = (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
+
     $endPoint .= '/api.php';
 
     $out = post_url($endPoint, $params);
 
-    $results = json_decode($out, true);
+    $api_results = json_decode($out, true);
 
-    if (!is_array($results)) {
-        $results = [];
+    if (!is_array($api_results)) {
+        $api_results = [];
     }
 
-    $result = $results['results'] ?? [];
+    $result = $api_results['results'] ?? [];
 
     if (isset($result['error'])) {
         test_print_z('Error:' . json_encode($result['error'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-        $result = [];
     }
-    return $result;
-}
 
+    return $api_results;
+}

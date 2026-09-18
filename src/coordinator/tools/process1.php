@@ -49,7 +49,8 @@ function process_make_td($tab, $nnnn)
     return $laly;
 };
 
-$data = get_td_api(['get' => 'in_process', 'limit' => "100", "order" => 'add_date']);
+$api_results = get_td_api(['get' => 'in_process', 'limit' => "100", "order" => 'add_date']);
+$data = $api_results['results'] ?? [];
 
 $tbody_html = "";
 $noo = 0;

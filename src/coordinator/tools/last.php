@@ -162,7 +162,8 @@ $api_params_pages = [
 $last_table = $_GET['last_table'] ?? 'pages';
 $last_table = in_array($last_table, ['pages', 'pages_users']) ? $last_table : 'pages';
 
-$qsl_results = ($last_table == 'pages') ? get_td_api($api_params_pages) : get_td_api($api_params_users);
+$api_results = ($last_table == 'pages') ? get_td_api($api_params_pages) : get_td_api($api_params_users);
+$qsl_results = $api_results['results'] ?? [];
 
 $recent_rows = "";
 
@@ -182,7 +183,8 @@ $api_params_langs = [
     'get' => ($last_table == 'pages') ? 'pages_langs' : 'pages_users_langs',
 ];
 
-$result = get_td_api($api_params_langs);
+$api_results = get_td_api($api_params_langs);
+$result = $api_results['results'] ?? [];
 
 $filter_by_lang = filter_recent($lang, $result);
 

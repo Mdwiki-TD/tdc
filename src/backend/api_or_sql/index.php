@@ -9,7 +9,10 @@ function use_td_api_or_sql(): bool
 {
     static $use_td_api = null;
     if ($use_td_api === null) {
-        $data = get_td_api(['get' => 'settings']);
+        // var_dump(json_encode($settings_tabe, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        // "{ "allow_type_of_translate": 0, "translation_button_in_progress_table": 1, "fix_ref_in_text": 0, "use_td_api": 1, "use_mdwikicx": 1}"
+        $api_results = get_td_api(['get' => 'settings']);
+        $data = $api_results['results'] ?? [];
 
         $settings_tabe = array_column($data, 'value', 'title');
 
@@ -35,7 +38,19 @@ function super_function(
 ): array {
     $use_td_api = use_td_api_or_sql();
 
-    $api_data = ($use_td_api) ? get_td_api($api_params) : [];
+    $api_results = ($use_td_api) ? get_td_api($api_params) : [];
+
+    $api_data = $api_results['results'] ?? [];
+
+    if (empty($api_data) && (getenv('APP_ENV') === 'testing' || defined('PHPUNIT_RUNNING'))) {
+        return [];
+    }
+    $length = $api_results['length'];
+
+    if ($length === 0) {
+        // API return empty list. no need to check sql.
+        return $api_data;
+    }
 
     if (empty($api_data) && !$no_refind) {
         $api_data = fetch_query($sql_query, $sql_params);

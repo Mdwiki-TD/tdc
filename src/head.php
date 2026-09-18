@@ -87,7 +87,6 @@ function head()
         "$hoste/ajax/libs/datatables-responsive/3.0.4/dataTables.responsive.min.js",
 
         "/Translation_Dashboard/js/to.js",
-        "/Translation_Dashboard/js/login.js",
         "/td/plugins/chart.js/Chart.min.js",
         "/tdc/js/sidebar.js",
         "/Translation_Dashboard/js/theme.js",
