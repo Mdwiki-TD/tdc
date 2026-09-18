@@ -65,25 +65,25 @@ use RuntimeException;
  */
 function ensure_session_started(): void
 {
-	if (session_status() === PHP_SESSION_NONE) {
-		// Configure secure session settings
-		$sessionOptions = [
-			'use_strict_mode' => true,
-			'use_cookies' => true,
-			'use_only_cookies' => true,
-			'cookie_httponly' => true,
-			'cookie_samesite' => 'Strict',
-		];
+    if (session_status() === PHP_SESSION_NONE) {
+        // Configure secure session settings
+        $sessionOptions = [
+            'use_strict_mode' => true,
+            'use_cookies' => true,
+            'use_only_cookies' => true,
+            'cookie_httponly' => true,
+            'cookie_samesite' => 'Strict',
+        ];
 
-		// Enable secure flag in production (HTTPS)
-		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
-			$sessionOptions['cookie_secure'] = true;
-		}
-
-		if (!session_start($sessionOptions)) {
-			throw new RuntimeException('Failed to start session for CSRF protection');
-		}
-	}
+        // Enable secure flag in production (HTTPS)
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+            $sessionOptions['cookie_secure'] = true;
+        }
+        // Start the PHP session
+        if (!session_start($sessionOptions)) {
+            throw new RuntimeException('Failed to start session for CSRF protection');
+        }
+    }
 }
 
 /**
@@ -115,39 +115,39 @@ function ensure_session_started(): void
  */
 function verify_csrf_token(): bool
 {
-	ensure_session_started();
 
-	// Initialize token array if it doesn't exist
-	if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
-		$_SESSION['csrf_tokens'] = [];
-		// SECURITY FIX: Return false when no tokens exist
-		// This prevents bypassing CSRF by clearing the session
-		error_log('CSRF: No tokens in session - potential security issue');
-		return false;
-	}
 
-	// Get the submitted token from POST data
-	$submitted_token = $_POST['csrf_token'] ?? null;
+    // Initialize token array if it doesn't exist
+    if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
+        $_SESSION['csrf_tokens'] = [];
+        // SECURITY FIX: Return false when no tokens exist
+        // This prevents bypassing CSRF by clearing the session
+        error_log('CSRF: No tokens in session - potential security issue');
+        return false;
+    }
 
-	// Reject if no token was submitted
-	if (!$submitted_token || !is_string($submitted_token)) {
-		error_log('CSRF: No token submitted in POST request');
-		return false;
-	}
-	foreach ($_SESSION['csrf_tokens'] as $key => $token) {
-		if (hash_equals($token, $submitted_token)) {
-			// Token is valid - remove it to prevent reuse
-			unset($_SESSION['csrf_tokens'][$key]);
+    // Get the submitted token from POST data
+    $submitted_token = $_POST['csrf_token'] ?? null;
 
-			// Re-index the array to prevent gaps
-			$_SESSION['csrf_tokens'] = array_values($_SESSION['csrf_tokens']);
+    // Reject if no token was submitted
+    if (!$submitted_token || !is_string($submitted_token)) {
+        error_log('CSRF: No token submitted in POST request');
+        return false;
+    }
+    foreach ($_SESSION['csrf_tokens'] as $key => $token) {
+        if (hash_equals($token, $submitted_token)) {
+            // Token is valid - remove it to prevent reuse
+            unset($_SESSION['csrf_tokens'][$key]);
 
-			return true;
-		}
-	}
-	// Token not found or already used
-	error_log('CSRF: Invalid or reused token detected');
-	return false;
+            // Re-index the array to prevent gaps
+            $_SESSION['csrf_tokens'] = array_values($_SESSION['csrf_tokens']);
+
+            return true;
+        }
+    }
+    // Token not found or already used
+    error_log('CSRF: Invalid or reused token detected');
+    return false;
 }
 
 /**
@@ -175,30 +175,30 @@ function verify_csrf_token(): bool
  */
 function generate_csrf_token()
 {
-	ensure_session_started();
 
-	try {
-		// Generate 32 random bytes and convert to 64 hex characters
-		$token = bin2hex(random_bytes(32));
-	} catch (\Exception $e) {
-		throw new RuntimeException('Failed to generate CSRF token: ' . $e->getMessage());
-	}
 
-	// Initialize token array if needed
-	if (!isset($_SESSION['csrf_tokens'])) {
-		$_SESSION['csrf_tokens'] = [];
-	}
+    try {
+        // Generate 32 random bytes and convert to 64 hex characters
+        $token = bin2hex(random_bytes(32));
+    } catch (\Exception $e) {
+        throw new RuntimeException('Failed to generate CSRF token: ' . $e->getMessage());
+    }
 
-	// Store the token for validation
-	$_SESSION['csrf_tokens'][] = $token;
+    // Initialize token array if needed
+    if (!isset($_SESSION['csrf_tokens'])) {
+        $_SESSION['csrf_tokens'] = [];
+    }
 
-	// Limit the number of stored tokens to prevent memory issues
-	// Keep only the most recent 50 tokens
-	if (count($_SESSION['csrf_tokens']) > 50) {
-		$_SESSION['csrf_tokens'] = array_slice($_SESSION['csrf_tokens'], -50);
-	}
+    // Store the token for validation
+    $_SESSION['csrf_tokens'][] = $token;
 
-	return $token;
+    // Limit the number of stored tokens to prevent memory issues
+    // Keep only the most recent 50 tokens
+    if (count($_SESSION['csrf_tokens']) > 50) {
+        $_SESSION['csrf_tokens'] = array_slice($_SESSION['csrf_tokens'], -50);
+    }
+
+    return $token;
 }
 
 /**
@@ -210,8 +210,8 @@ function generate_csrf_token()
  */
 function get_token_count(): int
 {
-	ensure_session_started();
-	return count($_SESSION['csrf_tokens'] ?? []);
+
+    return count($_SESSION['csrf_tokens'] ?? []);
 }
 
 /**
@@ -224,6 +224,8 @@ function get_token_count(): int
  */
 function clear_all_tokens(): void
 {
-	ensure_session_started();
-	$_SESSION['csrf_tokens'] = [];
+
+    $_SESSION['csrf_tokens'] = [];
 }
+
+ensure_session_started();

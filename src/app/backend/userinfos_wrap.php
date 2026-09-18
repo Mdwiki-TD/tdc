@@ -5,6 +5,28 @@ use function APICalls\MdwikiSql\fetch_query;
 use function SQLorAPI\Funcs\get_coordinators;
 use OAuth\Settings\Settings;
 
+function ensure_session_started(): void
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        // Configure secure session settings
+        $sessionOptions = [
+            'use_strict_mode' => true,
+            'use_cookies' => true,
+            'use_only_cookies' => true,
+            'cookie_httponly' => true,
+            'cookie_samesite' => 'Strict',
+        ];
+
+        // Enable secure flag in production (HTTPS)
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+            $sessionOptions['cookie_secure'] = true;
+        }
+        // Start the PHP session
+        if (!headers_sent()) {
+            session_start($sessionOptions);
+        }
+    }
+}
 function get_key(Settings $settings, string $key_type = "cookie")
 {
     $use_key  = ($key_type === "decrypt") ? $settings->decryptKey : $settings->cookieKey;
@@ -85,25 +107,13 @@ function clear_user_cookie(string $domain): void
         'samesite' => 'Lax',
     ]);
 }
-
 function load_user(Settings $settings): array
 {
+    ensure_session_started();
 
     $cookieDomain = $settings->domain;
 
     // 1. Initialize session if not already active
-    if (session_status() === PHP_SESSION_NONE) {
-        // Set custom session configuration only in production environment
-        if ($settings->is_production()) {
-            session_name("mdwikitoolforgeoauth");
-            session_set_cookie_params(0, "/", $cookieDomain, true, true);
-        }
-
-        // Start the PHP session
-        if (!headers_sent()) {
-            session_start();
-        }
-    }
 
     $cookie_key  = get_key($settings, "cookie");
 
