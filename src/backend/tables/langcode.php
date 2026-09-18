@@ -2,17 +2,8 @@
 
 namespace Tables\Langs;
 
-/*
-Usage:
-use Tables\Langs\LangsTables;
-
-(\$)(skip_codes|change_codes|code_to_wikiname|lang_to_code|code_to_lang)\b
-LangsTables::$1L_$2
-
-*/
 
 /*
-"gsw": "als",
 "gswsgs": "bat-smg",
 "fiu-vro": "vro",
 "roa-rup": "rup",
@@ -52,11 +43,14 @@ class LangsTables
 }
 
 LangsTables::$L_change_codes = [
+    "gsw" => "als",
+    "sgs" => "bat-smg",
     "nb"    =>    "no",
     "bat_smg"    =>    "bat-smg",
     "be-x-old"    =>    "be-tarask",
     "be_x_old"    =>    "be-tarask",
     "cbk_zam"    =>    "cbk-zam",
+    "vro"    =>    "fiu-vro",
     "fiu_vro"    =>    "fiu-vro",
     "map_bms"    =>    "map-bms",
     "nds_nl"    =>    "nds-nl",
@@ -64,6 +58,7 @@ LangsTables::$L_change_codes = [
     "zh_classical"    =>    "zh-classical",
     "zh_min_nan"    =>    "zh-min-nan",
     "zh_yue"    =>    "zh-yue",
+    "yue"    =>    "zh-yue",
 ];
 
 foreach (MainTables::$x_Langs_table as $_ => $lang_tab) {
