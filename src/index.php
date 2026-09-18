@@ -14,7 +14,7 @@ HTML;
 
 function echo_card_start($file_name, $ty)
 {
-	$sidebar = create_side($file_name, $ty);
+	$sidebar = create_side($file_name, $ty, $GLOBALS['user_is_coordinator']);
 	echo <<<HTML
 		<div class='row content'>
 			<!-- <div class='col-md-2 px-0' style="width: 10.66666667%;"> -->
@@ -88,7 +88,7 @@ if (in_array($ty, $tools_files)) {
 	include_once __DIR__ . "/coordinator/tools/$ty.php";
 	//
 } elseif ($ty == "sidebar") {
-	$sidebar = create_side($filename, $ty);
+	$sidebar = create_side($filename, $ty, $GLOBALS['user_is_coordinator']);
 	echo $sidebar;
 	//
 } elseif (in_array($ty, $corrd_folders) && $GLOBALS['user_is_coordinator']) {

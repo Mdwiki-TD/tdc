@@ -143,7 +143,7 @@ function generateListItem(string $href, string $title, ?string $icon, ?string $t
  * // Returns HTML with 'last' menu item marked as active
  * ```
  */
-function create_side(string $filename, string $ty): string
+function create_side(string $filename, string $ty, $user_is_coordinator): string
 {
     [$mainMenuIcons, $mainMenu] = menu_data();
 
@@ -169,11 +169,11 @@ function create_side(string $filename, string $ty): string
             $no_admin = $item['no_admin'] ?? 0;
 
             // Skip non admin items for coordinators
-            if ($no_admin === 1 && $GLOBALS['user_is_coordinator']) {
+            if ($no_admin === 1 && $user_is_coordinator) {
                 continue;
             }
             // Skip admin items for non-coordinators
-            if ($admin === 1 && !$GLOBALS['user_is_coordinator']) {
+            if ($admin === 1 && !$user_is_coordinator) {
                 continue;
             }
 

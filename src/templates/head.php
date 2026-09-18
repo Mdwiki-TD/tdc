@@ -9,18 +9,20 @@ $hoste = (getenv('APP_ENV') === 'production')
 $stylesheets = [
     "/Translation_Dashboard/css/styles.css",
     "/Translation_Dashboard/css/dashboard_new1.css",
+    // "/Translation_Dashboard/css/sidebars.css",
     "$hoste/ajax/libs/font-awesome/5.15.3/css/all.min.css",
     "$hoste/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css",
     "$hoste/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css",
     "$hoste/ajax/libs/bootstrap-select/1.14.0-beta3/css/bootstrap-select.min.css",
     "$hoste/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css",
 
+    // "$hoste/ajax/libs/datatables.net-bs5/1.13.5/dataTables.bootstrap5.min.css",
     "$hoste/ajax/libs/datatables.net-bs5/2.3.4/dataTables.bootstrap5.min.css",
 
     "$hoste/ajax/libs/datatables.net-responsive-bs5/3.0.4/responsive.bootstrap5.min.css",
 
     "/Translation_Dashboard/css/mobile_format.css",
-    "/tdc/css/Responsive_Table.css",
+    "/Translation_Dashboard/css/Responsive_Table.css",
     "/Translation_Dashboard/css/theme.css",
     "/tdc/css/sidebar-desktop.css",
     "/tdc/css/sidebar-mobile.css",
@@ -33,6 +35,8 @@ $scripts = [
     "$hoste/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js",
     "$hoste/ajax/libs/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js",
 
+    // "$hoste/ajax/libs/datatables.net/2.1.1/jquery.dataTables.min.js",
+    // "$hoste/ajax/libs/datatables.net-bs5/1.13.5/dataTables.bootstrap5.min.js",
     "$hoste/ajax/libs/datatables.net/2.3.4/dataTables.min.js",
     "$hoste/ajax/libs/datatables.net-bs5/2.3.4/dataTables.bootstrap5.min.js",
 
@@ -83,6 +87,8 @@ function print_full_head(): string
         <head>
             <meta charset="UTF-8">
             <meta name="robots" content="noindex">
+            <link rel="icon" href="/favicon.svg" sizes="any">
+            <link rel="icon" href="/favicon.svg" type="image/svg+xml">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="color-scheme" content="light dark">
@@ -96,6 +102,16 @@ function print_full_head(): string
                 .table_text_left>thead>tr>td,
                 .table_text_left>thead>tr>th {
                     text-align: left !important;
+                }
+
+                .leaderboard_tables>tbody>tr>td,
+                .leaderboard_tables>tbody>tr>th,
+                .leaderboard_tables>thead>tr>td,
+                .leaderboard_tables>thead>tr>th {
+                    padding: 6px;
+                    line-height: 1.42857143;
+                    vertical-align: top;
+                    border-top: 1px solid #ddd;
                 }
 
                 a {
@@ -136,6 +152,7 @@ function write_body(string $coord_tools, string $li_user): string
             <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" id="mainnav">
                 <div class="container-fluid" id="navbardiv">
                     <a class="navbar-brand mb-0 h1" href="/Translation_Dashboard/index.php" style="color:#0d6efd;">
+                        <img class='med-logo' width="40px" height="40px" src='/favicon.svg' decoding='async' alt='Wiki Project Med Foundation logo'>
                         <span class='d-none d-md-inline tool_title'>WikiProjectMed Translation Dashboard</span>
                         <span class='d-inline d-md-none tool_title'>WikiProjectMed TD</span>
                     </a>
