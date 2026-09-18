@@ -14,7 +14,8 @@ src/coordinator/admin/reports/index copy.php
 .env
 .claude/settings.local.json
 composer.lock
-src/load_env.php
+load_env.php
 /.phpunit.cache
 /build/coverage-html
 /.commandcode
+_works_files/tree.py
