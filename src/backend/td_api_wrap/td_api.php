@@ -2,7 +2,7 @@
 
 namespace APICalls\TDApi;
 
-function test_print_z($s)
+function test_print_z($s): void
 {
     if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
         return;
