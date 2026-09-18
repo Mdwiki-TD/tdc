@@ -2,6 +2,8 @@
 
 namespace APICalls\TDApi;
 
+use OAuth\Settings\Settings;
+
 function test_print_z($s): void
 {
     if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
@@ -69,7 +71,8 @@ function post_url(string $endPoint, array $params = []): string
 
 function get_td_api(array $params): array
 {
-    $endPoint = (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
+    $settings = Settings::getInstance();
+    $endPoint = $settings->ServerUrl;
 
     $endPoint .= '/api.php';
 

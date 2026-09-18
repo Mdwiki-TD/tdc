@@ -52,8 +52,6 @@
 
 namespace APICalls\MdwikiSql;
 
-;
-
 use PDO;
 use PDOException;
 use RuntimeException;
@@ -109,7 +107,8 @@ class Database
             error_log($e->getMessage());
             // Display a generic message
             echo "Unable to connect to the database. Please try again later.";
-            exit();
+            throw new \RuntimeException('Database connection failed');
+            // exit();
         }
     }
 
