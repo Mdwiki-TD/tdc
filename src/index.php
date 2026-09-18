@@ -1,13 +1,7 @@
 <?PHP
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-};
-//---
+
 include_once __DIR__ . '/header.php';
-//---
+
 use function Utils\Functions\test_print;
 use function Utils\HtmlSide\create_side;
 
@@ -16,7 +10,7 @@ echo <<<HTML
 	<script>$("#coord").addClass("active");</script>
 	<!-- <div id="maindiv" class="container-fluid"> -->
 HTML;
-//---
+
 function echo_card_start($file_name, $ty)
 {
 	$sidebar = create_side($file_name, $ty);
@@ -60,22 +54,22 @@ function echo_card_start($file_name, $ty)
 					<div class='card'>
 	HTML;
 }
-//---
+
 $default_ty = $GLOBALS['user_is_coordinator'] ? "last_coord" : "last";
-//---
+
 $ty = $_GET['ty'] ?? $_POST['ty'] ?? $default_ty;
-//---
+
 if ($ty == 'translate_type') $ty = 'tt';
-//---
+
 $filename = $_SERVER['SCRIPT_NAME'];
-//---
+
 if (!isset($_GET['nonav'])) {
 	echo_card_start($filename, $ty);
 };
-//---
+
 // list of folders in coordinator
 $corrd_folders = array_map('basename', glob('coordinator/admin/*', GLOB_ONLYDIR));
-//---
+
 $tools_files = [
 	"categories",
 	"last",
@@ -85,9 +79,9 @@ $tools_files = [
 	"recent_helps",
 	"stat",
 ];
-//---
+
 // test_print("corrd_folders" . json_encode($corrd_folders));
-//---
+
 $adminfile = __DIR__ . "/coordinator/admin/$ty.php";
 
 if (in_array($ty, $tools_files)) {
@@ -106,14 +100,14 @@ if (in_array($ty, $tools_files)) {
 	test_print("can't find $adminfile");
 	include_once __DIR__ . "/coordinator/404.php";
 };
-//---
+
 echo <<<HTML
 			</div>
 		</div>
 	</div>
 </div>
 HTML;
-//---
+
 echo "<script src='/tdc/js/autocomplate.js'></script>";
-//---
+
 include_once __DIR__ . '/footer.php';

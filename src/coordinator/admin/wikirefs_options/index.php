@@ -1,33 +1,29 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
-//---
+
+;
+
 use function SQLorAPI\Funcs\get_td_or_sql_language_settings;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function Utils\Html\make_edit_icon_new;
-//---
+
 // language_settings (lang_code, move_dots, expend, add_en_lang)
-// ---
+
 function make_td($tabg, $numb)
 {
-    //---
+
     $id             = $tabg['id'] ?? 0;
     $lang           = $tabg['lang_code'] ?? "";
     $expend2        = ($tabg['expend'] == 1) ? 'checked' : '';
     $move_dots      = ($tabg['move_dots'] == 1) ? 'checked' : '';
     $add_en_lang    = ($tabg['add_en_lang'] == 1) ? 'checked' : '';
-    //---
+
     $lang = strtolower($lang);
-    //---
+
     $edit_params = [
         'id'   => $id,
         'lang_code'  => $lang,
@@ -35,9 +31,9 @@ function make_td($tabg, $numb)
         'move_dots'  => $tabg['move_dots'],
         'add_en_lang'  => $tabg['add_en_lang']
     ];
-    //---
+
     $edit_icon = make_edit_icon_new("wikirefs_options/edit", $edit_params);
-    //---
+
     $laly = <<<HTML
         <tr>
             <td data-content='#'>
@@ -66,38 +62,38 @@ function make_td($tabg, $numb)
             </td>
         </tr>
         HTML;
-    //---
+
     return $laly;
 };
-//---
+
 $tabes = get_td_or_sql_language_settings();
-//---
+
 $tabes_codes = array_column($tabes, 'lang_code');
-//---
+
 $langs_d = get_pages_langs();
-//---
+
 foreach ($langs_d as $tat) {
     $lal = strtolower($tat);
-    //---
+
     if (!in_array($lal, $tabes_codes)) {
         $tabes[] = ['lang_code' => $lal, 'expend' => 0, 'move_dots' => 0, 'add_en_lang' => 0];
     }
 }
-//---
+
 // ksort($tabes);
 usort($tabes, function ($a, $b) {
     return strcmp($a['lang_code'] ?? '', $b['lang_code'] ?? '');
 });
-//---
+
 $n = -1;
-// ---
+
 $sato = "";
-// ---
+
 foreach ($tabes as $tab) {
     $n += 1;
     $sato .= make_td($tab, $n);
 }
-//---
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
@@ -124,9 +120,9 @@ echo <<<HTML
         </div>
     </div>
 HTML;
-//---
+
 $new_row = make_edit_icon_new("wikirefs_options/edit", ["new" => 1], $text = "Add one!");
-//---
+
 echo <<<HTML
 	<div class='card mt-2 mb-2'>
 		<div class='card-body'>

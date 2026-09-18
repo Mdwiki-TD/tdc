@@ -1,25 +1,25 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
-//---
+
 use function Utils\Html\make_mdwiki_title;
 use function Utils\Html\make_edit_icon_new;
 use function SQLorAPI\Funcs\get_td_or_sql_qids;
 use function SQLorAPI\Funcs\get_td_or_sql_qids_others;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
+
 $qid_table = $_GET['qid_table'] ?? 'qids';
-//---
+
 if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
 
 function filter_qids_table($data, $vav, $id)
 {
-	//---
+
 	$l_list = "";
-	//---
+
 	foreach ($data as $table_name => $label) {
 		$checked = ($table_name == $vav) ? "checked" : "";
 		$l_list .= <<<HTML
@@ -34,7 +34,7 @@ function filter_qids_table($data, $vav, $id)
 			</div>
 		HTML;
 	}
-	//---
+
 	$uuu = <<<HTML
 		<div class="input-group">
 			<div class="form-control" style="background-color: transparent; border: none;">
@@ -42,25 +42,25 @@ function filter_qids_table($data, $vav, $id)
 			</div>
 		</div>
 	HTML;
-	//---
+
 	return $uuu;
 }
 
 function qids_make_row($id, $title, $qid, $numb)
 {
 	global $qid_table;
-	//---
+
 	$edit_params = array(
 		'id'   => $id,
 		'qid_table'  => $qid_table,
 		'title'  => $title,
 		'qid'  => $qid
 	);
-	//---
+
 	$edit_icon = make_edit_icon_new("qids/edit_qid", $edit_params);
-	//---
+
 	$md_title = make_mdwiki_title($title);
-	//---
+
 	return <<<HTML
 	<tr>
 		<th data-content="#" data-sort="$numb">
@@ -83,67 +83,67 @@ function qids_make_row($id, $title, $qid, $numb)
 }
 
 $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
-//---
+
 $dis = $_GET['dis'] ?? 'all';
-//---
+
 if (!isset($_GET['dis']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $dis = "empty";
-//---
+
 $Qids_title = ($qid_table == "qids") ? "TD Qids" : "Qids Others";
-//---
+
 if ($qid_table == "qids") {
 	$qq1 = get_td_or_sql_qids($dis);
 } else {
 	$qq1 = get_td_or_sql_qids_others($dis);
 }
-// ---
+
 $numb = 0;
-//---
+
 $done = [];
-//---
+
 $form_rows = "";
-//---
+
 foreach ($qq1 as $Key => $table) {
 	$id 	= $table['id'] ?? "";
 	$title 	= $table['title'] ?? "";
 	$qid 	= $table['qid'] ?? "";
-	//---
+
 	if (!in_array($id, $done)) {
 		$done[] = $id;
-		//---
+
 		$numb += 1;
 		$form_rows .= qids_make_row($id, $title, $qid, $numb);
 	}
-	//---
+
 	if ($dis == 'duplicate') {
 		$id2 	= $table['id2'] ?? "";
 		$title2 = $table['title2'] ?? "";
 		$qid2 	= $table['qid2'] ?? "";
-		//---
+
 		if (!in_array($id2, $done)) {
 			$done[] = $id2;
-			//---
+
 			$numb += 1;
 			$form_rows .= qids_make_row($id2, $title2, $qid2, $numb);
 		}
 	};
-	//---
+
 };
-//---
+
 $data = [
 	"qids" => 'TD Qids',
 	"qids_others" => 'Qids Others',
 ];
-//---
+
 $filter_ta = filter_qids_table($data, $qid_table, 'qid_table');
-//---
+
 $dis_data = [
 	"empty" => 'Empty',
 	"all" => 'All',
 	"duplicate" => 'Duplicate',
 ];
-//---
+
 $filter_dis = filter_qids_table($dis_data, $dis, 'dis');
-//---
+
 echo <<<HTML
 	<div class='card'>
 		<div class='card-header'>
@@ -183,9 +183,9 @@ echo <<<HTML
 		</div>
 	</div>
 HTML;
-// ---
+
 $new_row = make_edit_icon_new("qids/edit_qid", ["new" => 1, "qid_table" => $qid_table], $text = "Add one!");
-//---
+
 echo <<<HTML
 	<div class='card mt-1'>
 		<div class='card-body'>

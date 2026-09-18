@@ -1,34 +1,30 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
-//---
+
 use function Utils\Html\make_project_to_user;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
+
 echo '</div><script>
     $("#mainnav").hide();
     $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
-//---
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
-//---
+
+
+;
+
 $user    = $_GET['user'] ?? '';
 $wiki    = $_GET['wiki'] ?? '';
 $project = $_GET['project'] ?? '';
 $email   = $_GET['email'] ?? '';
 $user_id = $_GET['user_id'] ?? '';
-//---
+
 $header_title = (!empty($user_id)) ? "Edit User" : "Add New User";
-//---
+
 echo <<<HTML
 <div class='card'>
     <div class='card-header'>
@@ -39,11 +35,11 @@ HTML;
 
 function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
 {
-    //---
+
     $project_line = make_project_to_user($project);
-    //---
+
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-    //---
+
     $id_row = <<<HTML
         <div class='col-md-3'>
             <div class='input-group mb-3'>
@@ -54,9 +50,9 @@ function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
             </div>
         </div>
     HTML;
-    // ---
+
     if (empty($user_id)) $id_row = "";
-    // ---
+
     echo <<<HTML
         <form action='index.php?ty=Emails/post&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
@@ -104,11 +100,11 @@ function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
         </form>
     HTML;
 }
-//---
+
 edit_user_echo_form($user, $wiki, $project, $email, $user_id);
-//---
+
 echo <<<HTML
     </div>
 </div>
 HTML;
-//---
+

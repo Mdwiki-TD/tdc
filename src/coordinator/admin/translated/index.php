@@ -10,61 +10,61 @@ use function SQLorAPI\Recent\get_total_translations_count;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
 use function Tools\RecentHelps\filter_recent2;
-//---
+
 $lang = $_GET['lang'] ?? 'All';
-//---
+
 $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
-//---
+
 if (!isset($_GET['table']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $table = "pages_users";
-//---
+
 if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
-//---
+
 function get_languages()
 {
-    //---
+
     $tabes = [];
-    //---
+
     $llangs = get_pages_langs();
-    //---
+
     foreach ($llangs as $tat) {
-        //---
+
         if (gettype($tat) !== 'string') {
             echo "<br>tat: $tat";
             continue;
         }
-        //---
+
         $tabes[] = strtolower($tat);
     };
-    //---
+
     ksort($tabes);
-    //---
+
     return $tabes;
 }
 
 function translated_make_td($tabg, $nnnn, $table)
 {
-    //---
+
     $id = $tabg['id'] ?? "";
-    //---
+
     $user = $tabg['user'] ?? "";
     $lang = $tabg['lang'] ?? "";
     $md_title = trim($tabg['title'] ?? '');
     $target = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
-    //---
+
     $mdwiki_title = make_mdwiki_title($md_title);
-    //---
+
     $targe33 = make_target_url($target, $lang);
-    //---
+
     $edit_params = array(
         'id'   => $id,
         'table' => $table
     );
-    //---
+
     $edit_icon = make_edit_icon_new("translated/edit_page", $edit_params);
-    //---
+
     $laly = <<<HTML
 		<tr>
 			<td data-content='#'>
@@ -90,15 +90,15 @@ function translated_make_td($tabg, $nnnn, $table)
 			</td>
 		</tr>
 	HTML;
-    //---
+
     return $laly;
 };
-//---
+
 function pagination_links($limit, $page, $table, $lang, $total_count)
 {
-    //---
+
     $total_pages = ceil($total_count / $limit);
-    //---
+
     $base_url = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
 
     $links = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
@@ -115,7 +115,7 @@ function pagination_links($limit, $page, $table, $lang, $total_count)
     $links .= '</ul></nav>';
 
     $offset = ($page - 1) * $limit;
-    //---
+
     // احسب رقم أول عنصر في الصفحة الحالية
     $start_item = $offset + 1;
 
@@ -130,7 +130,7 @@ function pagination_links($limit, $page, $table, $lang, $total_count)
 
     return $summary . $links;
 }
-//---
+
 $recent_table = <<<HTML
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="pages_table" style="font-size:90%;">
 		<thead>
@@ -146,46 +146,46 @@ $recent_table = <<<HTML
 		</thead>
 		<tbody>
 HTML;
-//---
+
 $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
 $page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
-// ---
+
 $sql_results = get_recent_translated($lang, $table, $limit, $offset);
-//---
+
 $total_count = get_total_translations_count($lang, $table);
-//---
+
 $pagination = "";
-//---
+
 if ($total_count > $limit) {
     $pagination = pagination_links($limit, $page, $table, $lang, $total_count);
 }
-//---
+
 $noo = 0;
 foreach ($sql_results as $tat => $tabe) {
-    //---
+
     $noo = $noo + 1;
     $recent_table .= translated_make_td($tabe, $noo, $table);
-    //---
+
 };
-//---
+
 $recent_table .= <<<HTML
 		</tbody>
 	</table>
 HTML;
-//---
+
 $lang_table = get_languages();
 $filter_lang = filter_recent2($lang, $lang_table);
-//---
+
 $data = [
     "pages" => 'Main',
     "pages_users" => 'User',
 ];
-//---
+
 $filter_ns = filter_table($data, $table, 'table');
-//---
+
 $count_result = count($sql_results);
-//---
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
@@ -231,9 +231,9 @@ echo <<<HTML
         </div>
     </div>
 HTML;
-//---
+
 echo $recent_table;
-//---
+
 ?>
 <script>
     $(document).ready(function() {

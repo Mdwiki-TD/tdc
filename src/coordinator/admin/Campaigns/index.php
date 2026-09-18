@@ -1,31 +1,27 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
-//---
+
 use function SQLorAPI\Funcs\get_td_or_sql_categories;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-};
-//---
+
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
-//---
+
 $uuux = '';
-//---
+
 $qq = get_td_or_sql_categories();
-//---
+
 $numb = 0;
-//---
+
 $table_rows = "";
-//---
+
 foreach ($qq as $Key => $table) {
 	$numb += 1;
 	$id 		= $table['id'] ?? "";
@@ -33,9 +29,9 @@ foreach ($qq as $Key => $table) {
 	$category2 	= $table['category2'] ?? "";
 	$campaign 	= $table['campaign'] ?? "";
 	$depth		= $table['depth'] ?? "";
-	//---
+
 	$checked    = ($table['is_default'] == 1) ? 'checked' : '';
-	//---
+
 	$table_rows .= <<<HTML
 	<tr>
 		<div class='form-group'>
@@ -65,9 +61,9 @@ foreach ($qq as $Key => $table) {
 	</tr>
 	HTML;
 };
-//---
+
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-//---
+
 echo <<<HTML
 	<div class='card'>
 		<div class='card-header'>
@@ -103,7 +99,7 @@ echo <<<HTML
 		</div>
 	</div>
 HTML;
-//---
+
 ?>
 </div>
 <script type="text/javascript">
@@ -122,9 +118,9 @@ HTML;
 				<td></td>
 			</tr>
 		`;
-		// ---
+
 		$('#tab_logic').append(e);
-		// ---
+
 	};
 </script>
 </div>

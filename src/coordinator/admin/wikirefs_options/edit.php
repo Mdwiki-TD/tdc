@@ -1,27 +1,23 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
-//---
+
 use function TDWIKI\csrf\generate_csrf_token;
 use function APICalls\MdwikiSql\execute_query;
 use function Utils\Html\div_alert;
 use function TDWIKI\csrf\verify_csrf_token;
-//---
+
 echo '</div><script>
     $("#mainnav").hide();
     $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
-//---
+
+;
+
 /*
 $edit_params = [
     'id'   => $id,
@@ -31,18 +27,18 @@ $edit_params = [
     'add_en_lang'  => $tabg['add_en_lang']
 ];
 */
-// ---
+
 function echo_form()
 {
-    //---
+
     $id          = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
     $lang_code   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');
     $expend      = filter_var($_GET['expend'] ?? '', FILTER_VALIDATE_INT) ?: '';
     $move_dots   = filter_var($_GET['move_dots'] ?? '', FILTER_VALIDATE_INT) ?: '';
     $add_en_lang = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
-    // ---
+
     $header_title = (!empty($id)) ? "Edit language settings" : "Add language settings";
-    //---
+
     echo <<<HTML
         <div class='card'>
             <div class='card-header'>
@@ -50,11 +46,11 @@ function echo_form()
             </div>
             <div class='card-body'>
     HTML;
-    //---
+
     $id_row = <<<HTML
         <input class='form-control' value='$id' name='id' type='hidden'/>
     HTML;
-    // ---
+
     $delete_row = <<<HTML
         <div class='col-6'>
             <div class='input-group form-control mb-1 alert alert-warning p-2'>
@@ -67,20 +63,20 @@ function echo_form()
             </div>
         </div>
     HTML;
-    // ---
+
     if (empty($id)) {
         $id_row = "<input class='form-control' value='1' name='new' type='hidden'/>";
         $delete_row = "";
     }
-    // ---
+
     $u_rows = "";
-    // ---
+
     $params = [
         'move_dots'  => $move_dots,
         'expend'  => $expend,
         'add_en_lang'  => $add_en_lang
     ];
-    // ---
+
     foreach ($params as $key => $value) {
         $checked = ($value == 1 || $value == "1") ? 'checked' : '';
         $u_rows .= <<<HTML
@@ -97,9 +93,9 @@ function echo_form()
             </div>
         HTML;
     }
-    // ---
+
     $csrf_token = generate_csrf_token();
-    //---
+
     echo <<<HTML
         <form action='index.php?ty=wikirefs_options/edit&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
@@ -131,7 +127,7 @@ function echo_form()
 }
 
 $id = $_GET['id'] ?? '';
-//---
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo_form();
     echo "</div> </div>";
@@ -145,28 +141,28 @@ if (!verify_csrf_token()) {
 $errors = [];
 $texts = [];
 
-// ---
+
 $lang_code = trim($_POST['lang_code'] ?? '');
 $expend    = filter_var($_POST['expend'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
 $move_dots = filter_var($_POST['move_dots'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
 $add_en_lang = filter_var($_POST['add_en_lang'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
-// ---
+
 if (isset($_POST['delete'])) {
     $id = $_POST['delete'];
     $qua = "DELETE FROM language_settings WHERE id = ?";
-    // ---
+
     $result = execute_query($qua, $params = [$id]);
-    // ---
+
     if ($result === false) {
         $errors[] = "Failed to delete language $lang_code.";
     } else {
         $texts[] = "language $lang_code deleted.";
     }
-    // ---
+
 } elseif (($_POST['id'] ?? '') != "") {
-    // ---
+
     $id = $_POST['id'];
-    //---
+
     $qua = "UPDATE language_settings
         SET
             lang_code = ?,
@@ -177,43 +173,43 @@ if (isset($_POST['delete'])) {
             id = ?
         ";
     $params = [$lang_code, $expend, $move_dots, $add_en_lang, $id];
-    //---
+
     $result = execute_query($qua, $params);
-    //---
+
     if ($result === false) {
         $errors[] = "Failed to update language $lang_code.";
     } else {
         $texts[] = "language $lang_code updated.";
     }
-    // ---
+
 } elseif (($_POST['new'] ?? '') != "") {
-    // ---
+
     if (empty($lang_code)) {
         $errors[] = "Lang code is empty.";
     } else {
-        // ---
+
         $qua = "INSERT INTO language_settings (lang_code, expend, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
         $params = [$lang_code, $expend, $move_dots, $add_en_lang];
-        // ---
+
         $result = execute_query($qua, $params);
-        // ---
+
         if ($result === false) {
             $errors[] = "Failed to add language $lang_code.";
         } else {
             $texts[] = "language $lang_code added.";
         }
     }
-    // ---
+
 } else {
     $errors[] = "Id is empty.";
 }
-//---
+
 echo div_alert($texts, 'success');
 echo div_alert($errors, 'danger');
-//---
-//---
+
+
 echo <<<HTML
     </div>
 </div>
 HTML;
-//---
+

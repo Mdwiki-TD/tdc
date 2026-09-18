@@ -1,30 +1,26 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
-//---
+
 use function APICalls\MdwikiSql\execute_query;
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 use function TDWIKI\csrf\verify_csrf_token;
-//---
+
 echo '</div><script>
     $("#mainnav").hide();
     $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
-//---
+
+;
+
 $id         = $_GET['id'] ?? $_POST['id'] ?? '';
 $table      = $_GET['table'] ?? $_POST['table'] ?? 'pages';
-//---
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
@@ -32,15 +28,15 @@ echo <<<HTML
         </div>
         <div class='card-body'>
 HTML;
-//---
+
 function delete_page($id, $table)
 {
     $qua = "DELETE FROM $table WHERE id = ?";
-    // ---
+
     $params = [$id];
-    // ---
+
     execute_query($qua, $params);
-    //---
+
 }
 
 function edit_page($id, $table, $title, $target, $lang, $user, $pupdate)
@@ -56,9 +52,9 @@ function edit_page($id, $table, $title, $target, $lang, $user, $pupdate)
         id = ?
     ";
     $params = [$title, $target, $lang, $user, $pupdate, $id];
-    //---
+
     execute_query($qua, $params);
-    //---
+
     if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
         echo "<pre>$qua</pre>";
         // echo "<pre>$params</pre>";
@@ -67,22 +63,22 @@ function edit_page($id, $table, $title, $target, $lang, $user, $pupdate)
 
 function translated_edit_echo_form($id, $table)
 {
-    //---
+
     $page_data = fetch_query("SELECT * FROM $table WHERE id = ?", [$id]);
-    //---
+
     $title      = $page_data[0]['title'] ?? '';
     $target     = $page_data[0]['target'] ?? '';
     $lang       = $page_data[0]['lang'] ?? '';
     $user       = $page_data[0]['user'] ?? '';
     $pupdate    = $page_data[0]['pupdate'] ?? '';
-    //---
+
     $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
     $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
     $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
-    //---
+
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-    //---
+
     echo <<<HTML
         <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
@@ -152,7 +148,7 @@ function translated_edit_echo_form($id, $table)
         </form>
     HTML;
 }
-//---
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     translated_edit_echo_form($id, $table);
     echo <<<HTML
@@ -161,33 +157,33 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     HTML;
     exit;
 }
-// ---
+
 $close_btn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
 HTML;
-// ---
+
 if (!verify_csrf_token()) {
     echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
     echo $close_btn;
     return;
 }
-//---
+
 if (isset($_POST['delete'])) {
     delete_page($_POST['delete'], $table);
-    // ---
+
 } elseif (isset($_POST['edit'])) {
     $title      = $_POST['title'] ?? '';
     $target     = $_POST['target'] ?? '';
     $lang       = $_POST['lang'] ?? '';
     $user       = $_POST['user'] ?? '';
     $pupdate    = $_POST['pupdate'] ?? '';
-    //---
+
     edit_page($id, $table, $title, $target, $lang, $user, $pupdate);
 }
-//---
-//---
+
+
 // green text success
 echo <<<HTML
     <div class='alert alert-success' role='alert'>Page updated<br>
@@ -204,4 +200,4 @@ echo <<<HTML
     </div>
 </div>
 HTML;
-//---
+

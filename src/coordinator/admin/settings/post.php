@@ -1,11 +1,11 @@
 <?PHP
-//---
+
 // use function APICalls\MdwikiSql\update_settings;
 use function APICalls\MdwikiSql\update_settings_value;
 use function TDWIKI\csrf\verify_csrf_token;
-//---
+
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-//---
+
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
@@ -24,18 +24,18 @@ if (!verify_csrf_token()) {
 }
 foreach ($_POST['rows'] ?? [] as $key => $table) {
     // { "id": "2", "title": "translation_button_in_progress_table", "displayed": "Display translation button in progress table?", "value": "1", "type": "check" }
-    //---
+
     $id        = $table["id"] ?? '';
     $title     = $table["title"] ?? '';
     $displayed = $table["displayed"] ?? '';
     $value     = $table["value"] ?? '';
     $type      = $table["type"] ?? '';
-    //---
+
     // if (empty($title) || empty($displayed) || empty($type)) continue;
     // $re = update_settings($id, $title, $displayed, $value, $type);
-    //---
+
     // dont use empty for value because it can be 0 or "0" which is valid, but empty will treat it as empty
     if (empty($id) || $value === "") continue;
-    //---
+
     $re = update_settings_value($id, $value);
 }

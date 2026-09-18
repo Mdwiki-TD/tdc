@@ -10,11 +10,7 @@ use function Results\GetCats\get_category_members;
 use function Results\GetCats\get_mdwiki_cat_members;
 */
 
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
+;
 
 use function Utils\Functions\test_print;
 use function APICalls\MdwikiApi\get_mdwiki_url_with_params;
@@ -24,7 +20,7 @@ use function Utils\TablesDir\open_td_tables_file;
 function get_category_from_cache(string $category): array
 {
     $tables_path = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
-    // ---
+
     $file_path = "$tables_path/cats_cash/$category.json";
 
     $data = open_td_tables_file($file_path);

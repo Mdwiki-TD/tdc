@@ -52,20 +52,20 @@ function make_view_by_number($target, $numb, $lang, $pupdate)
         'redirects' => '0',
         'pages' => $target,
     ), '', '&', PHP_QUERY_RFC3986);
-    // ---
+
     $numb3 = (is_numeric($numb2)) ? number_format($numb2) : $numb2;
     $link = "<a target='_blank' href='$url'>$numb3</a>";
-    // ---
+
     if (is_numeric($numb2) && intval($numb2) > 0) {
         return $link;
     }
-    // ---
+
     $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
-    // ---
+
     $url2 = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
-    // ---
+
     $link = "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
-    // ---
+
     return $link;
 };
 
@@ -74,16 +74,16 @@ function get_views($target, $lang, $pupdate)
     if (empty($target)) return 0;
     $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
     $url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
-    // ---
+
     // $output = file_get_contents( $url );
     $output = get_url_result_curl($url);
-    // ---
+
     $result = json_decode($output, true);
-    //---
+
     if (!is_array($result)) {
         $result = [];
     }
-    //---
+
     // $view = 0;
     // foreach ($result['items'] AS $da) $view += $da['views'];
 

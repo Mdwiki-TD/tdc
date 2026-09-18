@@ -1,32 +1,28 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
-//---
+
+;
+
 use function SQLorAPI\Funcs\get_td_or_sql_settings;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/post.php';
 }
-//---
+
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-//---
+
 $nn = 0;
-//---
+
 function make_settings_tab($tabe)
 {
-    //---
+
     global $nn;
-    //---
+
     $tab = <<<HTML
             <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
                 <thead>
@@ -39,28 +35,28 @@ function make_settings_tab($tabe)
                 </thead>
                 <tbody>
     HTML;
-    //---
+
     foreach ($tabe as $key => $v) {
-        // ---
+
         $ignored = $v['ignored'] ?? 0;
-        // ---
+
         if ($ignored == 1 || $ignored == "1") {
             continue;
         }
-        // ---
+
         $id       = $v['id'] ?? "";
         $title    = $v['title'] ?? "";
         $displayed = $v['displayed'] ?? "";
         $value    = $v['value'] ?? "";
-        //---
+
         $nn += 1;
-        //---
+
         $type     = $v['type'] ?? $v['Type'] ?? "";
-        //---
+
         $value_line = <<<HTML
             <input class='form-control' size='4' name='rows[$nn][value]' value='$value'/>
         HTML;
-        //---
+
         if ($type == 'check') {
             $checked = ($value == 1 || $value == "1") ? 'checked' : '';
             $value_line = <<<HTML
@@ -70,7 +66,7 @@ function make_settings_tab($tabe)
                 </div>
             HTML;
         }
-        //---
+
         $tr = <<<HTML
             <tr>
                 <input name='rows[$nn][id]' value='$id' type="hidden"/>
@@ -91,11 +87,11 @@ function make_settings_tab($tabe)
                 </td>
             </tr>
         HTML;
-        //---
+
         $tab .= $tr;
-        //---
+
     };
-    //---
+
     $result = <<<HTML
         <div class='form-group'>
                 $tab
@@ -103,15 +99,15 @@ function make_settings_tab($tabe)
             </table>
         </div>
     HTML;
-    //---
+
     return $result;
-    //---
+
 };
-//---
+
 $qq = get_td_or_sql_settings();
-//---
+
 $text = make_settings_tab($qq);
-//---
+
 echo <<<HTML
 	<div class='card'>
         <div class='card-header'>
@@ -128,4 +124,4 @@ echo <<<HTML
         </div>
     </div>
 HTML;
-//---
+

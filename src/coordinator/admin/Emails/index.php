@@ -1,10 +1,10 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
-//---
+
 use Tables\SqlTables\TablesSql;
 use function Utils\Html\make_mail_icon_new;
 use function Utils\Html\make_project_to_user;
@@ -14,61 +14,57 @@ use function SQLorAPI\Funcs\get_users_by_last_pupdate;
 use function SQLorAPI\Funcs\get_td_or_sql_count_pages_not_empty;
 use function SQLorAPI\Funcs\get_td_or_sql_page_user_not_in_users;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-};
-//---
+
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
-//---
+
 include_once __DIR__ . '/sugust.php';
 
 function get_sorted_array()
 {
 	$users_done = [];
-	//---
+
 	$live_pages = get_td_or_sql_count_pages_not_empty();
-	//---
+
 	$ddi = fetch_query("select user_id, username, email, wiki, user_group from users;");
-	//---
+
 	foreach ($ddi as $Key => $gk) {
 		$users_done[$gk['username']] = $gk;
 	};
-	//---
+
 	$der = get_td_or_sql_page_user_not_in_users();
-	//---
+
 	foreach ($der as $d => $tat) if (!array_key_exists($tat, $users_done)) {
 		$users_done[$tat] = array('user_id' => 0, 'username' => $tat, 'email' => '', 'wiki' => '', 'user_group' => '');
 	}
-	//---
+
 	$sorted_array = [];
-	//---
+
 	foreach ($users_done as $u => $tab) {
 		$tab['live'] = $live_pages[$u] ?? 0;
 		$sorted_array[$u] = $tab;
 	};
-	//---
+
 	// sort $sorted_array by live
 	uasort($sorted_array, function ($a, $b) {
 		return $b['live'] <=> $a['live']; // للترتيب تنازليًا، عكسها ($a['live'] <=> $b['live']) للترتيب تصاعديًا
 	});
-	//---
+
 	return $sorted_array;
 }
 
 function emails_filter_table($project_name)
 {
-	//---
+
 	TablesSql::$s_projects_title_to_id["empty"] = "empty";
-	//---
+
 	$l_list = <<<HTML
 		<option data-tokens='all' value='All'>All</option>
 	HTML;
-	//---
+
 	foreach (TablesSql::$s_projects_title_to_id as $p_title => $p_id) {
 		if (empty($p_title)) continue;
 		$cdcdc = $project_name == $p_title ? "selected" : "";
@@ -76,7 +72,7 @@ function emails_filter_table($project_name)
 			<option data-tokens='$p_title' value='$p_title' $cdcdc>$p_title</option>
 		HTML;
 	};
-	//---
+
 	$uuu = <<<HTML
 		<div class="input-group">
 			<span class="input-group-text">Project:</span>
@@ -96,57 +92,57 @@ function emails_filter_table($project_name)
 			</select>
 		</div>
 	HTML;
-	//---
+
 	return $uuu;
 }
-//---
+
 $numb = 0;
-//---
+
 $last_user_to_tab = get_users_by_last_pupdate();
-//---
+
 $users_done = get_sorted_array();
-//---
+
 $form_rows = '';
-//---
+
 $limit = (isset($_GET['limit'])) ? $_GET['limit'] : 0;
-//---
+
 $main_project = (isset($_GET['project'])) ? $_GET['project'] : 'All';
-//---
+
 // if ($main_project == 'empty') { $main_project = 'Uncategorized'; }
-//---
+
 $project_filter = emails_filter_table($main_project);
-//---
+
 foreach ($users_done as $user_name => $table) {
-	//---
+
 	$table = $users_done[$user_name];
-	//---
+
 	$live		= $table['live'] ?? "";
-	//---
+
 	$user_group	= $table['user_group'] ?? "";
-	//---
+
 	$user_group2 = $user_group;
-	// ---
+
 	if (empty($user_group2)) $user_group2 = 'Uncategorized';
-	//---
+
 	if (!empty($main_project) && $main_project != "All" && $user_group2 != $main_project) {
 		continue;
 	}
-	//---
+
 	$numb += 1;
-	//---
+
 	if ($limit > 0 && $numb > $limit) break;
-	//---
+
 	$user_id    = $table['user_id'] ?? "";
 	$email 		= $table['email'] ?? "";
 	$wiki		= $table['wiki'] ?? "";
 	$user 		= $table['username'] ?? "";
-	//---
+
 	$mail_icon = '';
-	//---
+
 	if (array_key_exists($user_name, $last_user_to_tab)) {
 		$mail_icon = make_mail_icon_new($last_user_to_tab[$user_name], 'pup_window_email');
 	}
-	//---
+
 	$edit_params = array(
 		'user_id'   => $user_id,
 		'user'  => $user,
@@ -154,9 +150,9 @@ foreach ($users_done as $user_name => $table) {
 		'wiki'  => $wiki,
 		'project'  => $user_group
 	);
-	//---
+
 	$edit_icon = make_edit_icon_new("Emails/edit_user", $edit_params);
-	//---
+
 	$form_rows .= <<<HTML
 	<tr>
 		<td data-order='$numb' data-content='#'>
@@ -185,9 +181,9 @@ foreach ($users_done as $user_name => $table) {
 		</td>
 	</tr>
 	HTML;
-	//---
+
 };
-//---
+
 echo <<<HTML
 	<div class='card'>
 		<div class='card-header'>
@@ -235,9 +231,9 @@ echo <<<HTML
 		</div>
 	</div>
 HTML;
-//---
+
 $new_row = make_edit_icon_new("Emails/edit_user", ["new" => 1], $text = "Add one!");
-//---
+
 echo <<<HTML
 	<div class='card mt-1'>
 		<div class='card-body'>

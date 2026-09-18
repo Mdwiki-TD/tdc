@@ -1,40 +1,36 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-};
-//---
+
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
-//---
+
 use function SQLorAPI\Funcs\get_td_or_sql_projects;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
+
 $numb = 0;
-//---
+
 $projs = get_td_or_sql_projects();
-//---
+
 // sort $projs by g_id
 uasort($projs, function ($a, $b) {
 	return $a['g_id'] <=> $b['g_id'];
 });
-//---
+
 $form_text = '';
-//---
+
 foreach ($projs as $gtitle => $tab) {
 	$numb += 1;
-	//---
+
 	$gid = $tab['g_id'] ?? "";
 	$gtitle = $tab['g_title'] ?? "";
-	//---
+
 	$form_text .= <<<HTML
 	<tr>
 		<td data-content='id'>
@@ -50,9 +46,9 @@ foreach ($projs as $gtitle => $tab) {
 	</tr>
 	HTML;
 };
-//---
+
 $numb += 1;
-//---
+
 $form_text_plus = <<<HTML
 	<tr>
 		<td data-content="id">
@@ -65,9 +61,9 @@ $form_text_plus = <<<HTML
 		</td>
 	</tr>
 HTML;
-//---
+
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-//---
+
 echo <<<HTML
 	<div class='card'>
 		<div class='card-header'>
@@ -107,7 +103,7 @@ HTML;
 <script type="text/javascript">
 	function add_row() {
 		var ii = $('#g_tab >tr').length + 1;
-		// ---
+
 		var e = `
 			<tr>
 				<td>
@@ -119,7 +115,7 @@ HTML;
 				<td>-</td>
 			</tr>
 		`;
-		// ---
+
 		$('#g_tab').append(e);
 	};
 </script>

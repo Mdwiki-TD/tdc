@@ -1,18 +1,14 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 }
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-}
-//---
+
+
+
 include_once __DIR__ . '/sugust.php';
-//---
+
 use Tables\Main\MainTables;
 use function APICalls\MdwikiSql\fetch_query;
 use function APICalls\WikiApi\get_views;
@@ -20,23 +16,23 @@ use function Utils\Html\make_mdwiki_title;
 use function Utils\Html\make_target_url;
 use function Emails\Sugust\get_sugust;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
+
 echo "</div>";
-//---
+
 function get_host1()
 {
     // $hoste = get_host1();
-    //---
+
     static $cached_host = null;
-    //---
+
     if ($cached_host !== null) {
         return $cached_host; // استخدم القيمة المحفوظة
     }
-    //---
+
     $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
         ? "https://cdnjs.cloudflare.com"
         : "https://tools-static.wmflabs.org/cdnjs";
-    //---
+
     if ($hoste == "https://tools-static.wmflabs.org/cdnjs") {
         $url = "https://tools-static.wmflabs.org";
         $ch = curl_init($url);
@@ -70,8 +66,8 @@ function get_host1()
 }
 
 $hoste = get_host1();
-//---
-//---
+
+
 echo <<<HTML
     <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
     <link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
@@ -81,20 +77,20 @@ echo <<<HTML
     </script>
     <div id='yeye' class='container-fluid'>
 HTML;
-//---
+
 $test   = $_REQUEST['test'] ?? '';
-//---
+
 $title  = $_GET['title'] ?? $_POST['title'] ?? '';
 $date   = $_GET['date'] ?? $_POST['date'] ?? '';
 $user   = $_GET['user'] ?? $_POST['user'] ?? '';
 $lang   = $_GET['lang'] ?? $_POST['lang'] ?? '';
 $target = $_GET['target'] ?? $_POST['target'] ?? '';
-//---
+
 $views  = get_views($target, $lang, $date);
-//---
+
 $sugust_tab = get_sugust($title, $lang);
 $sugust = $sugust_tab['sugust'] ?? '';
-//---
+
 $here_params = array(
     // 'username' => rawurlencode($user),
     'code' => $lang,
@@ -102,33 +98,33 @@ $here_params = array(
     'type' => 'lead',
     'title' => $sugust
 );
-//---
+
 $here_url = "https://mdwiki.toolforge.org/Translation_Dashboard/translate_med/index.php?" . http_build_query($here_params);
-//---
+
 $HERE = "<a target='_blank' href='$here_url'><b>HERE</b></a>";
-//---
+
 
 $Emails_array = [];
-//---
+
 
 foreach (fetch_query("select username, email from users;") as $Key => $ta) {
 
     $Emails_array[$ta['username']] = $ta['email'];
 };
-//---
+
 $email_to = $Emails_array[$user] ?? '';
 $cc_to    = $Emails_array[$GLOBALS['global_username']] ?? '';
-//---
+
 $title2  =    make_mdwiki_title($title);
 $sugust2 = make_mdwiki_title($sugust);
 
-//---
+
 $url_views_2 = 'https://'
     . 'pageviews.wmcloud.org/?project=' . $lang . '.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&range=all-time&pages=' . rawurlEncode($target);
-//---
+
 $start = !empty($date) ? $date : '2019-01-01';
 $end = date("Y-m-d", strtotime("yesterday"));
-//---
+
 $url_views_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
     'project' => "$lang.wikipedia.org",
     'platform' => 'all-access',
@@ -138,13 +134,13 @@ $url_views_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
     'redirects' => '0',
     'pages' => $target,
 ));
-//---
+
 // $views2 = "<font color='#0000ff'>$views people</font>";
 $views2 = "<a target='_blank' href='$url_views_3'><font color='#0000ff'>$views people</font></a>";
-//---
+
 $lang2 = MainTables::$x_Langs_table[$lang]['name'] ?? $lang;
 $lang2 = make_target_url($target, $lang, $name = $lang2);
-//---
+
 // print tabs values
 $msg = <<<HTML
 <font color='#0000ff'>Thank you</font> for your prior translation of $title2 into $lang2.<br>
@@ -152,7 +148,7 @@ Since this translation has gone live on <font color='#311873'>$date</font> it ha
 Would you be interested in translating $sugust2? If so, simply click $HERE.<br>
 Once again thank you for improving access to knowledge.<br>
 HTML;
-//---
+
 $mag = <<<HTML
     <div dir='ltr' style='
         background-color: #f8f9fa !important;
@@ -236,11 +232,11 @@ $mag = <<<HTML
 
 
     HTML;
-//---
+
 $post_php = "/gmail1/index.php";
-//---
+
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-//---
+
 echo <<<HTML
     <div class1='container-fluid'>
         <form action='$post_php' method="POST">
@@ -291,7 +287,7 @@ echo <<<HTML
         </form>
     </div>
 HTML;
-//---
+
 ?>
 <script>
     $('#msg').summernote({

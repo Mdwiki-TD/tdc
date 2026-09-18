@@ -2,30 +2,20 @@
 
 namespace TDC\Head;
 
-/*
-use function TDC\Head\get_host;
-*/
-
-if (isset($_REQUEST["test"])) {
-    ini_set("display_errors", 1);
-    ini_set("display_startup_errors", 1);
-    error_reporting(E_ALL);
-}
-
 function get_host()
 {
     // $hoste = get_host();
-    //---
+
     static $cached_host = null;
-    //---
+
     if ($cached_host !== null) {
         return $cached_host; // استخدم القيمة المحفوظة
     }
-    //---
+
     $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
         ? "https://cdnjs.cloudflare.com"
         : "https://tools-static.wmflabs.org/cdnjs";
-    //---
+
     if ($hoste == "https://tools-static.wmflabs.org/cdnjs") {
         $url = "https://tools-static.wmflabs.org";
         $ch = curl_init($url);
@@ -107,7 +97,7 @@ function head()
     $scripts_module = [
         "/Translation_Dashboard/js/color-modes.js",
     ];
-    // ---
+
     foreach ($stylesheets as $css) {
         echo "\n\t<link rel='stylesheet' href='" . $css . "'>";
     }

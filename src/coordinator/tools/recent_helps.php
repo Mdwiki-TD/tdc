@@ -16,11 +16,11 @@ use function Utils\Functions\test_print;
 
 function filter_recent2($lang, $result)
 {
-    //---
+
     ksort($result);
-    //---
+
     $lang_list = "<option data-tokens='All' value='All'>All</option>";
-    //---
+
     foreach ($result as $lang_code) {
         $langeee = LangsTables::$L_code_to_lang[$lang_code] ?? '';
         $selected = ($lang_code == $lang) ? 'selected' : '';
@@ -29,42 +29,42 @@ function filter_recent2($lang, $result)
             <option data-tokens='$lang_code' value='$lang_code' $selected>$langeee</option>
             HTML;
     };
-    //---
+
     return $lang_list;
 }
 
 function do_add_date($results)
 {
-    //---
+
     foreach ($results as $tat => $tabe) {
         $pupdate  = $tabe['pupdate'] ?? ''; // 2025-01-30
         $add_date = $tabe['add_date'] ?? ''; // 2025-01-29
-        //---
+
         if (strpos($pupdate, ':') !== false) $pupdate = explode(' ', $pupdate)[0];
         if (strpos($add_date, ':') !== false) $add_date = explode(' ', $add_date)[0];
-        //---
+
         $add_date = str_replace("-", "", $add_date);
         $pupdate  = str_replace("-", "", $pupdate);
-        //---
+
         // change str to number
         $add_add = intval($add_date);
         $add_pup = intval($pupdate);
-        //---
+
         if ($add_add > $add_pup) {
             test_print("add_add($add_add) > add_pup($add_pup)");
             return true;
         }
-        //---
+
     };
-    //---
+
     return false;
 }
 
 function filter_table($data, $vav, $id)
 {
-    //---
+
     $l_list = "";
-    //---
+
     foreach ($data as $table_name => $label) {
         $checked = ($table_name == $vav) ? "checked" : "";
         $l_list .= <<<HTML

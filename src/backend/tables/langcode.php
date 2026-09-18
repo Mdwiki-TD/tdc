@@ -10,7 +10,7 @@ use Tables\Langs\LangsTables;
 LangsTables::$1L_$2
 
 */
-//---
+
 /*
 "gsw": "als",
 "gswsgs": "bat-smg",

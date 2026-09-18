@@ -1,40 +1,36 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
-//---
+
 use function TDWIKI\csrf\generate_csrf_token;
-//---
+
 echo '</div><script>
     $("#mainnav").hide();
     $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
-//---
+
+;
+
 $title  = (isset($_GET['title'])) ? rawurldecode($_GET['title']) : "";
 $lead   = $_GET['lead'] ?? '';
 $full   = $_GET['full'] ?? '';
 $id     = $_GET['id'] ?? '';
-//---
+
 $header_title = (!empty($id)) ? "Edit Translate type" : "Add Translate type";
-//---
+
 function tt_edit_echo_form($title, $lead, $full, $id)
 {
     $lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
     $full_checked = ($full == 1 || $full == "1") ? 'checked' : '';
-    //---
+
     $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-    //---
+
     $csrf_token = generate_csrf_token();
-    //---
+
     $id_row = <<<HTML
         <div class='col-md-3'>
             <div class='input-group mb-3'>
@@ -45,9 +41,9 @@ function tt_edit_echo_form($title, $lead, $full, $id)
             </div>
         </div>
     HTML;
-    // ---
+
     if (empty($id)) $id_row = "";
-    // ---
+
     return <<<HTML
         <form action='index.php?ty=tt/post&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
@@ -95,9 +91,9 @@ function tt_edit_echo_form($title, $lead, $full, $id)
         </form>
     HTML;
 }
-//---
+
 $form = tt_edit_echo_form($title, $lead, $full, $id);
-//---
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
@@ -108,4 +104,4 @@ echo <<<HTML
         </div>
     </div>
 HTML;
-//---
+

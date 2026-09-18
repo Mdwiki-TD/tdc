@@ -1,33 +1,29 @@
 <?php
-// ---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
-// ---
+
 use function TDWIKI\csrf\generate_csrf_token;
-// ---
+
 echo '</div><script>
     $("#mainnav").hide();
     $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
-// ---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-};
-// ---
+
+
+
 $header_title = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
-//---
+
 function echo_form_post($id, $title, $qid, $qid_table)
 {
-	// ---
+
 	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-	// ---
+
 	$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-	// ---
+
 	$id_row = <<<HTML
 		<div class='col-md-3'>
 			<div class='input-group mb-3'>
@@ -38,13 +34,13 @@ function echo_form_post($id, $title, $qid, $qid_table)
 			</div>
 		</div>
 	HTML;
-	// ---
+
 	if (empty($id)) {
 		$id_row = "";
 	}
-	// ---
+
 	$dis = $_GET['dis'] ?? 'all';
-	// ---
+
 	return <<<HTML
         <form action='index.php?ty=qids/post&qid_table=$qid_table&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
@@ -77,16 +73,16 @@ function echo_form_post($id, $title, $qid, $qid_table)
         </form>
     HTML;
 }
-// ---
+
 $title  = $_GET['title'] ?? '';
 $qid    = $_GET['qid'] ?? '';
 $id     = $_GET['id'] ?? '';
 $table  = $_GET['qid_table'] ?? '';
-// ---
+
 if ($table != 'qids' && $table != 'qids_others') $table = 'qids';
-// ---
+
 $form = echo_form_post($id, $title, $qid, $table);
-// ---
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
@@ -97,4 +93,4 @@ echo <<<HTML
         </div>
     </div>
 HTML;
-// ---
+

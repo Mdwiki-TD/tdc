@@ -32,7 +32,7 @@ function compare_it($t1, $t2)
     echo "<br>get_td_api:<br>";
     // //---
     var_dump(json_encode($t2, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    //---
+
 }
 function post_url(string $endPoint, array $params = []): string
 {
@@ -54,21 +54,21 @@ function post_url(string $endPoint, array $params = []): string
         // CURLOPT_COOKIEJAR => "cookie.txt",
         // CURLOPT_COOKIEFILE => "cookie.txt",
     ]);
-    // ---
+
     $output = curl_exec($ch);
-    // ---
+
     // remove "&format=json" from $url then make it link <a href="$url2">
     $url2 = str_replace('&format=json', '', $url);
     $url2 = "<a target='_blank' href='$url2'>$url2</a>";
-    //---
+
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    //---
+
     if ($http_code !== 200) {
         test_print_o('post_url: Error: API request failed with status code ' . $http_code);
     }
-    //---
+
     test_print_o("post_url: (http_code: $http_code) $url2");
-    // ---
+
     if ($output === FALSE) {
         test_print_o("post_url: cURL Error: " . curl_error($ch));
     }
@@ -85,23 +85,23 @@ function get_td_api(array $params): array
 {
     $endPoint = (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
     $endPoint .= '/api.php';
-    //---
+
     $out = post_url($endPoint, $params);
-    //---
+
     $results = json_decode($out, true);
-    //---
+
     if (!is_array($results)) {
         $results = [];
     }
-    //---
+
     $result = $results['results'] ?? [];
-    //---
+
     if (isset($result['error'])) {
         test_print_o('Error:' . json_encode($result['error'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         $result = [];
     }
-    //---
+
     // var_dump(json_encode(, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-    //---
+
     return $result;
 }

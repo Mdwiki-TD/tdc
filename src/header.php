@@ -40,16 +40,6 @@
 // Track page load time for performance monitoring
 $time_start = microtime(true);
 
-// Enable debug mode via request or cookie
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-}
-
-// Configure secure session settings
-ini_set('session.use_strict_mode', '1');
-
 // Load application dependencies
 include_once __DIR__ . '/include.php';
 include_once __DIR__ . '/head.php';

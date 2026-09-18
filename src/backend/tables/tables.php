@@ -2,7 +2,7 @@
 
 namespace Tables\Main;
 
-//---
+
 /*
 (\$)(enwiki_pageviews_table|Words_table|All_Words_table|All_Refs_table|Lead_Refs_table|Assessments_table|Langs_table)\b
 
@@ -12,14 +12,10 @@ use Tables\Main\MainTables;
 
 */
 
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-};
-//---
+
+
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
-//---
+
 class MainTables
 {
 	public static $x_enwiki_pageviews_table = [];
@@ -34,18 +30,18 @@ $_titles_infos = td_or_sql_titles_infos();
 
 // var_dump(json_encode($_titles_infos, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 // [{ "title": "11p deletion syndrome", "importance": "", "r_lead_refs": 5, "r_all_refs": 14, "en_views": 1592, "w_lead_words": 221, "w_all_words": 547, "qid": "Q1892153" }, ...]
-// ---
+
 foreach ($_titles_infos as $k => $tab) {
 	$title = $tab['title'];
-	// ---
+
 	MainTables::$x_enwiki_pageviews_table[$title] = $tab['en_views'];
-	// ---
+
 	MainTables::$x_Words_table[$title] = $tab['w_lead_words'];
 	MainTables::$x_All_Words_table[$title] = $tab['w_all_words'];
-	// ---
+
 	MainTables::$x_All_Refs_table[$title] = $tab['r_all_refs'];
 	MainTables::$x_Lead_Refs_table[$title] = $tab['r_lead_refs'];
-	// ---
+
 	MainTables::$x_Assessments_table[$title] = $tab['importance'];
 };
 

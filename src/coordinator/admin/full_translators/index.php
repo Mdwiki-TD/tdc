@@ -1,38 +1,34 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
-//---
+
 use function SQLorAPI\Funcs\get_td_or_sql_full_translators;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-};
-//---
+
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
-//---
+
 $qq = get_td_or_sql_full_translators();
-//---
+
 $numb = 0;
-//---
+
 $form_text = '';
-//---
+
 foreach ($qq as $Key => $table) {
 	$numb += 1;
-	//---
+
 	$user_id = $table['id'] ?? "";
 	$usere	 = $table['user'] ?? "";
 	$is_active	 = $table['is_active'] ?? "";
-	//---
+
 	$active_checked = ($is_active == 1 || $is_active == "1") ? 'checked' : '';
-	//---
+
 	$form_text .= <<<HTML
 		<tr>
 			<td data-content="id">
@@ -56,9 +52,9 @@ foreach ($qq as $Key => $table) {
 		</tr>
 	HTML;
 };
-//---
+
 $numb += 1;
-//---
+
 $form_text_plus = <<<HTML
 	<tr>
 		<td data-content="id">
@@ -79,11 +75,11 @@ $form_text_plus = <<<HTML
 		</td>
 	</tr>
 HTML;
-//---
+
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-//---
+
 $ty_name = "full_translators";
-//---
+
 echo <<<HTML
 	<div class='card'>
 		<div class='card-header'>
@@ -125,7 +121,7 @@ HTML;
 
 	function add_row_v() {
 		var ii = $('#full_tab >tr').length + 1;
-		// ---
+
 		var e = `
 			<tr>
 				<td>
@@ -139,7 +135,7 @@ HTML;
 				<td>-</td>
 			</tr>
 		`;
-		// ---
+
 		$('#full_tab').append(e);
 	};
 	// });

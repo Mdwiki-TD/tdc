@@ -1,8 +1,8 @@
 <?PHP
-//---
+
 use function SQLorAPI\Process\get_users_process_new;
 
-//---
+
 /*
 
 صفحات مكررة
@@ -19,7 +19,7 @@ and B.target != ''
 للحذف:
 SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and A.lang = B.lang and A.title = B.title and B.target != '';
 */
-//---
+
 $text = <<<HTML
     <table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
         <thead>
@@ -31,22 +31,22 @@ $text = <<<HTML
         </thead>
         <tbody>
 HTML;
-//---
+
 $user_process_tab = get_users_process_new();
 // sort user_process_tab by value
 arsort($user_process_tab);
-//---
+
 $n = 0;
-//---
+
 foreach ($user_process_tab as $user => $count) {
-    // ---
+
     if ($user != 'test' && !empty($user) && $count > 0) {
-        //---
+
         $n++;
-        //---
+
         $use = rawurlEncode($user);
         $use = str_replace('+', '_', $use);
-        //---
+
         $text .= <<<HTML
         <tr>
             <td data-content='#'>
@@ -62,12 +62,12 @@ foreach ($user_process_tab as $user => $count) {
         HTML;
     };
 };
-//---
+
 $text .= <<<HTML
 	</tbody>
 	</table>
 HTML;
-//---
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>

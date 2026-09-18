@@ -7,17 +7,13 @@ use function Utils\TablesDir\open_td_tables_file;
 
 */
 
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
+;
 
 use function Utils\Functions\test_print;
 
 function open_td_tables_file($file_path)
 {
-    //---
+
     if (!is_file($file_path)) {
         test_print("---- open_td_tables_file: file $file_path does not exist");
         return [];
@@ -37,7 +33,7 @@ function open_td_tables_file($file_path)
     } else {
         $len = count($result);
         if (isset($result['list'])) $len = count($result['list']);
-        // ---
+
         test_print("---- open_td_tables_file File: $file_path: Exists size: $len");
     }
 

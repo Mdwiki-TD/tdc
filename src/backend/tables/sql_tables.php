@@ -44,7 +44,7 @@ foreach ($categories_tab as $k => $tab) {
         TablesSql::$s_cat_to_camp[$tab['category']] = $tab['campaign'];
 
         TablesSql::$s_campaign_input_list[$tab['campaign']] = $tab['campaign'];
-        // ---
+
         // $catinput_depth[$tab['category']] = $tab['depth'];
         TablesSql::$s_camp_input_depth[$tab['campaign']] = $tab['depth'];
 

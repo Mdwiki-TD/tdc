@@ -8,38 +8,38 @@ use function SQLorAPI\Recent\get_pages_users_to_main;
 use function SQLorAPI\Funcs\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent2;
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
-//---
+
 $lang = $_GET['lang'] ?? 'All';
-//---
+
 if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
 };
-//---
+
 function get_languages()
 {
-    //---
+
     $tabes = [];
-    //---
+
     $llangs = get_pages_users_langs();
-    //---
+
     foreach ($llangs as $tat) {
-        //---
+
         if (gettype($tat) !== 'string') {
             // echo "<br>tat: $tat";
             continue;
         }
-        //---
+
         $lag = strtolower($tat);
-        //---
+
         $tabes[] = $lag;
-        //---
+
     };
-    //---
+
     ksort($tabes);
-    //---
+
     return $tabes;
 }
-//---
+
 $Toggle_column = <<<HTML
     <div>
         <span class="toggle-vis btn" data-column="0">Toggle columns:</span>
@@ -50,7 +50,7 @@ $Toggle_column = <<<HTML
         <a class="toggle-vis btn btn-outline-primary" data-column="4" type="button">Publication</a>
     </div>
 HTML;
-//---
+
 $recent_table = <<<HTML
     $Toggle_column
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="pages_table" style="font-size:90%;">
@@ -74,52 +74,52 @@ HTML;
 
 function page_users_make_td($tabg, $nnnn)
 {
-    //---
+
     $id          = $tabg['id'] ?? "";
-    //---
+
     $user      = $tabg['user'] ?? "";
     $lang      = $tabg['lang'] ?? "";
     $md_title = trim($tabg['title'] ?? '');
     $target      = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
-    //---
+
     $mdwiki_title = make_mdwiki_title($md_title);
     $targe33 = make_target_url($target, $lang);
-    //---
+
     $new_user   = $tabg['new_user'] ?? "";
     $new_target = $tabg['new_target'] ?? "";
-    //---
+
     $targe44 = make_target_url($new_target, $lang);
-    //---
+
     $edit_params = array(
         'id'   => $id,
         'new_user'   => $new_user,
         'new_target'   => $new_target
 
     );
-    //---
+
     $edit_icon = make_edit_icon_new("pages_users_to_main/fix_it", $edit_params);
-    //---
+
     $qid          = $tabg['qid'] ?? "";
     $new_qid      = $tabg['new_qid'] ?? "";
-    //---
+
     $qid_link = (!empty($qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$qid'>$qid</a>" : "";
     $new_qid_link = (!empty($new_qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$new_qid'>$new_qid</a>" : "";
-    //---
+
     $new_target2 = htmlspecialchars($new_target, ENT_QUOTES);
-    //---
+
     if (!empty($qid) && empty($new_qid)) {
         $same_qid = "bg-info-subtle";
         $new_qid_link = "<a class='fw-bold' target='_blank' href='https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$new_target2' u-lang='$lang' u-qid='$qid' u-target='$new_target2'>Link it!</a>";
     } else {
         $same_qid = ($qid == $new_qid) ? "bg-info-subtle" : "bg-danger-subtle";
     }
-    //---
+
     if (!empty($qid) && $new_qid == $qid) {
         $same_qid = "";
         $new_qid_link = "<a target='_blank' href='https://wikidata.org/wiki/$new_qid'>Same</a>";
     }
-    //---
+
     $laly = <<<HTML
         <tr>
             <td data-content='#'>
@@ -153,46 +153,46 @@ function page_users_make_td($tabg, $nnnn)
             </td>
         </tr>
     HTML;
-    //---
+
     return $laly;
 };
-//---
+
 $sql_results = get_pages_users_to_main($lang);
-//---
+
 $titles = array_column($sql_results, "title");
-//---
+
 // Only attempt to fetch QIDs if we have titles
 $titles_qids = [];
-//---
+
 if (!empty($titles)) {
     $infos = td_or_sql_titles_infos($titles);
-    //---
+
     $titles_qids = array_column($infos, "qid", "title");
-    // ---
+
     // var_export($titles_qids);
 }
-//---
+
 $noo = 0;
 foreach ($sql_results as $tat => $tabe) {
-    //---
+
     $tabe["qid"] = $titles_qids[$tabe["title"]] ?? "";
-    //---
+
     $noo = $noo + 1;
-    //---
+
     $recent_table .= page_users_make_td($tabe, $noo);
-    //---
+
 };
-//---
+
 $recent_table .= <<<HTML
 		</tbody>
 	</table>
 HTML;
-//---
+
 $lang_table = get_languages();
 $filter_la = filter_recent2($lang, $lang_table);
-//---
+
 $count_result = count($sql_results);
-//---
+
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
@@ -232,7 +232,7 @@ echo <<<HTML
         </div>
     </div>
 HTML;
-//---
+
 ?>
 <script src="/tdc/js/fix_u_targets.js"></script>
 <script>

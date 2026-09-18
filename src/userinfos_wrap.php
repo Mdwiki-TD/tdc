@@ -1,7 +1,7 @@
 <?php
-//---
+
 // include_once __DIR__ . '/userinfos_wrap.php';
-//---
+
 
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
@@ -83,9 +83,9 @@ function ba_alert($text)
 }
 
 if (session_status() === PHP_SESSION_NONE) session_start();
-//---
+
 $username = get_from_cookies('username');
-//---
+
 if ($cookieDomain == 'localhost') {
     $username = $_SESSION['username'] ?? '';
 } elseif (!empty($username)) {
@@ -104,8 +104,8 @@ if ($cookieDomain == 'localhost') {
         unset($_SESSION['username']);
     }
 }
-//---
+
 $global_username = $username;
-//---
+
 define('global_username', $global_username);
 $GLOBALS['global_username'] = $global_username;

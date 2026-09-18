@@ -1,29 +1,25 @@
 <?php
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 };
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
-//---
+
+;
+
 use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
+
 function fix_it_echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
 {
     $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
     $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
     $target2 = htmlspecialchars($new_target, ENT_QUOTES, 'UTF-8');
-    //---
+
     $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-    //---
+
     return <<<HTML
         <form action='index.php?ty=pages_users_to_main/fix_it&nonav=120' method="POST">
             <input name='csrf_token' value="$csrf_token" type="hidden"/>
@@ -82,24 +78,24 @@ function fix_it_echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
         </form>
     HTML;
 }
-//---
+
 echo '</div><script>
 $("#mainnav").hide();
 $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
-//---
+
 function page_already_exist($in_db)
 {
-    // ---
+
     // var_export(json_encode($in_db, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
     // '[ { "id": 7553, "title": "Baclofen toxicity", "word": 213, "translate_type": "lead", "cat": "RTT", "lang": "uk", "user": "الاء هارون", "target": "سمية الباكلوفين", "date": "2025-04-25", "pupdate": "2025-02-20", "add_date": "2025-04-25 03:00:00", "deleted": 0 } ]'
-    // ---
+
     $db_target = $in_db[0]['target'] ?? '';
     $db_user = $in_db[0]['user'] ?? '';
     $db_pupdate = $in_db[0]['pupdate'] ?? '';
     $lang = $in_db[0]['lang'] ?? '';
-    // ---
+
     return <<<HTML
         <div class='card mb-3'>
             <div class='card-header alert alert-danger'>
@@ -124,36 +120,36 @@ function page_already_exist($in_db)
         </div>
         HTML;
 }
-//---
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/fix_it_post.php';
 } else {
-    //---
+
     $id         = $_GET['id'] ?? '';
     $new_target = $_GET['new_target'] ?? '';
     $new_user   = $_GET['new_user'] ?? '';
-    //---
+
     $page_data = fetch_query("SELECT * FROM pages_users WHERE id = ?", [$id]);
-    //---
+
     $title      = $page_data[0]['title'] ?? '';
     $lang       = $page_data[0]['lang'] ?? '';
-    //---
+
     $in_db = fetch_query("SELECT * FROM pages WHERE title = ? AND lang = ? and (target != '' AND target IS NOT NULL)", [$title, $lang]);
-    //---
+
     if (!empty($in_db)) {
-        // ---
+
         echo page_already_exist($in_db);
-        // ---
+
     }
-    //---
+
     // var_export(json_encode($in_db, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-    //---
+
     $old_target = $page_data[0]['target'] ?? '';
     $user       = $page_data[0]['user'] ?? '';
     $pupdate    = $page_data[0]['pupdate'] ?? '';
-    //---
+
     $form = fix_it_echo_form($id, $title, $new_target, $lang, $new_user, $pupdate);
-    //---
+
     echo <<<HTML
         <div class='card'>
             <div class='card-header'>
@@ -164,5 +160,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     HTML;
-    //---
+
 }

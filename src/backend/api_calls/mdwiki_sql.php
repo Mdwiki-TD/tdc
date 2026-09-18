@@ -52,11 +52,7 @@
 
 namespace APICalls\MdwikiSql;
 
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-};
+;
 
 use PDO;
 use PDOException;
@@ -227,7 +223,7 @@ function execute_query(string $sql_query, $params = null, $table_name = null)
     // Destroy the database object
     $db = null;
 
-    //---
+
     return $results;
 };
 function fetch_query(string $sql_query, $params = null, $table_name = null)
@@ -251,7 +247,7 @@ function fetch_query(string $sql_query, $params = null, $table_name = null)
     // Destroy the database object
     $db = null;
 
-    //---
+
     return $results;
 };
 
@@ -321,7 +317,7 @@ function update_settings_value($id, $value)
     if ($id == 0 || $id == '0' || empty($id)) {
         return;
     }
-    // ---
+
     $query = <<<SQL
         UPDATE settings SET value = ? WHERE id = ?
     SQL;
@@ -335,17 +331,17 @@ function update_settings_value($id, $value)
 
 function insert_to_translate_type($tt_title, $tt_lead, $tt_full, $tt_id = 0)
 {
-    //---
+
     $query = "UPDATE translate_type SET tt_lead = ?, tt_full = ? WHERE tt_id = ?";
     $params = [$tt_lead, $tt_full, $tt_id];
-    //---
+
     if ($tt_id == 0 || $tt_id == '0' || empty($tt_id)) {
         $query = "INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT ?, ?, ?";
         $params = [$tt_title, $tt_lead, $tt_full];
     };
-    //---
+
     $result = execute_query($query, $params);
-    //---
+
     return $result;
 }
 
@@ -353,14 +349,14 @@ function insert_to_projects($g_title, $g_id)
 {
     $query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
     $params = [$g_title, $g_id];
-    //---
+
     if ($g_id == 0 || $g_id == '0' || empty($g_id)) {
         $query = "INSERT INTO projects (g_title) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM projects WHERE g_title = ?)";
         $params = [$g_title, $g_title];
     };
-    //---
+
     $result = execute_query($query, $params);
-    //---
+
     return $result;
 }
 
@@ -387,20 +383,20 @@ function check_one($select = "*", $where = "", $value = "", $table = "")
         error_log("check_one: Invalid column name for table $table");
         // return false;
     }
-    // ---
+
     // check if it's already in table
     $query = "SELECT $select FROM $table WHERE $where = ?";
-    // ---
+
     $result = fetch_query($query, [$value]);
-    //---
+
     if (count($result) > 0) {
         foreach ($result as $key => $tab) {
-            // ---
+
             // echo "<br>check_one: $where: $tab[$select]<br>";
-            // ---
+
             return $tab[$select] ?? $tab;
         }
     }
-    //---
+
     return false;
 }

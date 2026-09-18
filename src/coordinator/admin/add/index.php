@@ -1,56 +1,52 @@
 <?php
-//---
+
 /*
 name=(["'])(\w+)\[\](\$\{*\w+\}*)["']
 name=$1rows[$3][$2]$1
 */
-//---
+
 if ($GLOBALS['user_is_coordinator'] == false) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
-//---
+
 use function SQLorAPI\Funcs\get_td_or_sql_categories;
 use function TDWIKI\csrf\generate_csrf_token;
-//---
-if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-};
-//---
+
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
-//---
+
 $cats = "";
-//---
+
 $qqq = get_td_or_sql_categories();
-//---
+
 foreach ($qqq as $Key => $ta) {
 	$ca = $ta['category'] ?? "";
 	$ds = $ta['campaign'] ?? "";
 	if (!empty($ca)) $cats .= "<option value='$ca'>$ds</option>";
 };
-//---
+
 $typies = <<<HTML
 	<select name='rows[%s][type]' id='rows[%s][type]' class='form-select w-100' data-bs-theme="auto">
 		<option value='lead'>Lead</option><option value='all'>All</option>
 	</select>
 	HTML;
-//---
+
 $table = "";
-//---
+
 foreach (range(1, 1) as $numb) {
-	//---
+
 	$cats_line = <<<HTML
 		<select class='form-select catsoptions' name='rows[$numb][cat]' data-bs-theme="auto">
 			$cats
 		</select>
 	HTML;
-	//---
+
 	$type_line = sprintf($typies, $numb, $numb);
-	//---
+
 	$table .= <<<HTML
 	<tr id="row_$numb">
 		<td data-order='$numb' data-content='#'>
@@ -85,11 +81,11 @@ foreach (range(1, 1) as $numb) {
 	</tr>
 	HTML;
 };
-//---
+
 $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
-//---
+
 $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-//---
+
 echo <<<HTML
 	<div class='card'>
 		<select class='catsoptions' data-bs-theme="auto" hidden>$cats</select>
@@ -128,7 +124,7 @@ echo <<<HTML
 		</div>
 	</div>
 HTML;
-//---
+
 ?>
 <div class='cardbody p-3'>
 
