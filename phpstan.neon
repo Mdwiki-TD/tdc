@@ -18,7 +18,7 @@ parameters:
     # Scan files for class definitions
     scanFiles:
         - src/include.php
-        - src/load_env.php
+        - src/app/load_env.php
 
     bootstrapFiles:
         - tests/bootstrap.php
