@@ -3,7 +3,7 @@
 header('Content-Type: application/json');
 
 include_once __DIR__ . '/include.php';
-include_once __DIR__ . '/coordinator/admin/Emails/sugust.php';
+include_once __DIR__ . '/app/coordinator/admin/Emails/sugust.php';
 
 use function Emails\Sugust\get_sugust;
 
