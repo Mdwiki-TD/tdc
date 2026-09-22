@@ -14,7 +14,7 @@ echo print_full_head();
 
 $settings = Settings::getInstance();
 
-[$username, $user_is_coordinator] = load_user($settings);
+[$username, $user_is_coordinator] = resolveUsername($settings);
 
 $coord_tools = '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Tools</a>';
 

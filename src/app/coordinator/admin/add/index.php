@@ -5,7 +5,7 @@ name=(["'])(\w+)\[\](\$\{*\w+\}*)["']
 name=$1rows[$3][$2]$1
 */
 
-if ($GLOBALS['user_is_coordinator'] == false) {
+if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };

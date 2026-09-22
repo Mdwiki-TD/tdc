@@ -1,6 +1,6 @@
 <?php
 
-if ($GLOBALS['user_is_coordinator'] == false) {
+if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 }
