@@ -66,7 +66,7 @@ function menu_data(): array
             ['id' => 'last_coord', 'admin' => 1, 'href' => 'last_coord', 'title' => 'Recent', 'icon' => 'bi-clock-history'],
             ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process', 'icon' => 'bi-hourglass'],
             ['id' => 'process_total', 'admin' => 0, 'href' => 'process_total', 'title' => 'In Process (Total)', 'icon' => 'bi-hourglass-split'],
-            ['id' => 'reports', 'admin' => 0, 'href' => 'reports', 'title' => 'Publish Reports', 'icon' => 'bi-file-earmark-text'],
+            ['id' => 'reports', 'admin' => 1, 'href' => 'reports', 'title' => 'Publish Reports', 'icon' => 'bi-file-earmark-text'],
         ],
         'Pages' => [
             ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type', 'icon' => 'bi-translate'],
