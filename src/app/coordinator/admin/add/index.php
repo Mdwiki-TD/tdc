@@ -6,7 +6,7 @@ name=$1rows[$3][$2]$1
 */
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
-	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+	header('Location: /index.php');
 	exit;
 };
 
