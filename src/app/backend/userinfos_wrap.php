@@ -107,6 +107,9 @@ function clear_user_cookie(string $domain): void
         'samesite' => 'Lax',
     ]);
 }
+/**
+ * @deprecated Use CurrentUser class instead
+ */
 function load_user(Settings $settings): array
 {
     ensure_session_started();

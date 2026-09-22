@@ -1,6 +1,6 @@
 <?php
 
-if ($GLOBALS['user_is_coordinator'] == false) {
+if (!CurrentUser::getInstance()->isCoordinator()) {
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit;
 }
@@ -113,7 +113,7 @@ foreach (fetch_query("select username, email from users;") as $Key => $ta) {
 };
 
 $email_to = $Emails_array[$user] ?? '';
-$cc_to    = $Emails_array[$GLOBALS['global_username']] ?? '';
+$cc_to    = $Emails_array[CurrentUser::getInstance()->getUsername()] ?? '';
 
 $title2  =    make_mdwiki_title($title);
 $sugust2 = make_mdwiki_title($sugust);

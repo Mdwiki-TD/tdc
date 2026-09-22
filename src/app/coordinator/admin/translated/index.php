@@ -15,7 +15,7 @@ $lang = $_GET['lang'] ?? 'All';
 
 $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
 
-if (!isset($_GET['table']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $table = "pages_users";
+if (!isset($_GET['table']) && CurrentUser::getInstance()->getUsername() == "Mr. Ibrahem") $table = "pages_users";
 
 if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';

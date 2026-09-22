@@ -1,6 +1,6 @@
 <?php
 
-if ($GLOBALS['user_is_coordinator'] == false) {
+if (!CurrentUser::getInstance()->isCoordinator()) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };

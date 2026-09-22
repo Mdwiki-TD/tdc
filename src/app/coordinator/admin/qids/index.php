@@ -1,6 +1,6 @@
 <?php
 
-if ($GLOBALS['user_is_coordinator'] == false) {
+if (!CurrentUser::getInstance()->isCoordinator()) {
 	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
 	exit;
 };
@@ -86,7 +86,7 @@ $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" valu
 
 $dis = $_GET['dis'] ?? 'all';
 
-if (!isset($_GET['dis']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $dis = "empty";
+if (!isset($_GET['dis']) && CurrentUser::getInstance()->getUsername() == "Mr. Ibrahem") $dis = "empty";
 
 $Qids_title = ($qid_table == "qids") ? "TD Qids" : "Qids Others";
 

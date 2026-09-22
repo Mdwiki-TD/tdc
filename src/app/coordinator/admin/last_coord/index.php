@@ -53,8 +53,9 @@ function make_mail_icon_url(array $tab): string
 
     return $escaped_url;
 }
-function last_make_td($tabg, $nnnn, $last_table)
+function last_make_td($tabg, $nnnn, $last_table, ?CurrentUser $currentUser = null)
 {
+    $currentUser = $currentUser ?? CurrentUser::getInstance();
     $user     = $tabg['user'] ?? "";
 
     $llang    = $tabg['lang'] ?? "";
@@ -108,7 +109,7 @@ function last_make_td($tabg, $nnnn, $last_table)
     ];
 
     $excludedUsers = ['Mr. Ibrahem']; // TODO: This should ideally be moved to a configuration file.
-    if (!in_array($GLOBALS['global_username'], $excludedUsers)) {
+    if (!in_array($currentUser->getUsername(), $excludedUsers)) {
         $params['save'] = 1;
     };
 
