@@ -6,7 +6,7 @@ name=$1rows[$3][$2]$1
 */
 
 if ($GLOBALS['user_is_coordinator'] == false) {
-	echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+	header('Location: /index.php');
 	exit;
 };
 
