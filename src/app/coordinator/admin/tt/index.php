@@ -255,13 +255,13 @@ class TtIndexController
                 $(document).ready(function() {
                     var t = $('#em').DataTable({
                         stateSave: true,
-                        # order: [[5	, 'desc']],
-                        # paging: false,
+                        // order: [[5	, 'desc']],
+                        // paging: false,
                         lengthMenu: [
                             [250, 500],
                             [250, 500]
                         ],
-                        # scrollY: 800
+                        // scrollY: 800
                     });
                 });
             </script>
