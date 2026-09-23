@@ -145,10 +145,7 @@ class EditUserController
 
         echo $this->buildFormHtml($this->user, $this->wiki, $this->project, $this->email, $this->userId);
 
-        echo <<<HTML
-            </div>
-        </div>
-        HTML;
+        echo "</div></div>";
     }
 }
 

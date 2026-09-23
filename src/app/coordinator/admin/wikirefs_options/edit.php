@@ -29,21 +29,15 @@ class WikiRefsOptionsEditController
 
         $this->renderHeaderScripts();
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $result = (new WikiRefsOptionsEditPostHandler())->handle($_POST);
+            echo div_alert($result['texts'], 'success');
+            echo div_alert($result['errors'], 'danger');
+        } else {
             $this->renderForm();
-            echo "</div> </div>";
-            exit;
         }
 
-        $result = (new WikiRefsOptionsEditPostHandler())->handle($_POST);
-
-        echo div_alert($result['texts'], 'success');
-        echo div_alert($result['errors'], 'danger');
-
-        echo <<<HTML
-            </div>
-        </div>
-        HTML;
+        echo "</div></div>";
     }
 
     /**

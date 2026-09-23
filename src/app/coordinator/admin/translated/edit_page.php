@@ -46,13 +46,16 @@ class EditPageController
             <div class='card-body'>
         HTML;
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $closeBtn = $this->getCloseButtonHtml();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handlePostRequest();
+            echo $closeBtn;
+        } else {
             $this->renderEditForm($this->id, $this->table);
-            echo "</div></div>";
-            exit;
         }
 
-        $this->handlePostRequest();
+        echo "</div></div>";
     }
 
     /**
@@ -162,13 +165,11 @@ class EditPageController
      */
     private function handlePostRequest(): void
     {
-        $closeBtn = $this->getCloseButtonHtml();
 
         $result = (new EditPagePostHandler())->handle($_POST, $this->id, $this->table);
 
         if ($result['csrfError']) {
             echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-            echo $closeBtn;
             return;
         }
 
@@ -177,15 +178,12 @@ class EditPageController
                 window will close in 3 seconds
             </div>
         HTML;
-        echo $closeBtn;
         echo <<<HTML
             <script>
                 setTimeout(function() {
                     window.close();
                 }, 3000);
             </script>
-            </div>
-        </div>
         HTML;
     }
 
