@@ -5,20 +5,17 @@ namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\User\CurrentUser;
 use function App\csrf\generate_csrf_token;
-use function App\APICalls\MdwikiSql\execute_query;
 use function App\Utils\Html\div_alert;
-use function App\csrf\verify_csrf_token;
+
+require_once __DIR__ . '/edit_post.php';
 
 /**
  * Class WikiRefsOptionsEditController
  * Handles add/edit/delete of a single language_settings row (GET
- * renders the form, POST persists the change).
+ * renders the form, POST persists the change via WikiRefsOptionsEditPostHandler).
  */
 class WikiRefsOptionsEditController
 {
-    private array $errors = [];
-    private array $texts = [];
-
     /**
      * Executes authorization check and handles the incoming request.
      */
@@ -38,7 +35,10 @@ class WikiRefsOptionsEditController
             exit;
         }
 
-        $this->handlePostRequest();
+        $result = (new WikiRefsOptionsEditPostHandler())->handle($_POST);
+
+        echo div_alert($result['texts'], 'success');
+        echo div_alert($result['errors'], 'danger');
 
         echo <<<HTML
             </div>
@@ -156,98 +156,6 @@ class WikiRefsOptionsEditController
                 </div>
             </form>
         HTML;
-    }
-
-    /**
-     * Handles the POST submission: delete, update, or insert.
-     */
-    private function handlePostRequest(): void
-    {
-        if (!verify_csrf_token()) {
-            echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-            return;
-        }
-
-        $langCode  = trim($_POST['lang_code'] ?? '');
-        $expend    = filter_var($_POST['expend'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
-        $moveDots  = filter_var($_POST['move_dots'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
-        $addEnLang = filter_var($_POST['add_en_lang'] ?? 0, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1]]) ?: 0;
-
-        if (isset($_POST['delete'])) {
-            $this->deleteRow($_POST['delete'], $langCode);
-        } elseif (($_POST['id'] ?? '') != "") {
-            $this->updateRow($_POST['id'], $langCode, $expend, $moveDots, $addEnLang);
-        } elseif (($_POST['new'] ?? '') != "") {
-            $this->insertRow($langCode, $expend, $moveDots, $addEnLang);
-        } else {
-            $this->errors[] = "Id is empty.";
-        }
-
-        echo div_alert($this->texts, 'success');
-        echo div_alert($this->errors, 'danger');
-    }
-
-    /**
-     * Deletes a language_settings row.
-     */
-    private function deleteRow($id, string $langCode): void
-    {
-        $qua = "DELETE FROM language_settings WHERE id = ?";
-
-        $result = execute_query($qua, [$id]);
-
-        if ($result === false) {
-            $this->errors[] = "Failed to delete language $langCode.";
-        } else {
-            $this->texts[] = "language $langCode deleted.";
-        }
-    }
-
-    /**
-     * Updates an existing language_settings row.
-     */
-    private function updateRow($id, string $langCode, int $expend, int $moveDots, int $addEnLang): void
-    {
-        $qua = "UPDATE language_settings
-            SET
-                lang_code = ?,
-                expend = ?,
-                move_dots = ?,
-                add_en_lang = ?
-            WHERE
-                id = ?
-            ";
-        $params = [$langCode, $expend, $moveDots, $addEnLang, $id];
-
-        $result = execute_query($qua, $params);
-
-        if ($result === false) {
-            $this->errors[] = "Failed to update language $langCode.";
-        } else {
-            $this->texts[] = "language $langCode updated.";
-        }
-    }
-
-    /**
-     * Inserts a new language_settings row.
-     */
-    private function insertRow(string $langCode, int $expend, int $moveDots, int $addEnLang): void
-    {
-        if (empty($langCode)) {
-            $this->errors[] = "Lang code is empty.";
-            return;
-        }
-
-        $qua = "INSERT INTO language_settings (lang_code, expend, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
-        $params = [$langCode, $expend, $moveDots, $addEnLang];
-
-        $result = execute_query($qua, $params);
-
-        if ($result === false) {
-            $this->errors[] = "Failed to add language $langCode.";
-        } else {
-            $this->texts[] = "language $langCode added.";
-        }
     }
 }
 
