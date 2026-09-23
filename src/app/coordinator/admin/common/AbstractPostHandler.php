@@ -44,14 +44,6 @@ abstract class AbstractPostHandler extends AbstractSubPostHandler
 {
     protected bool $csrfError = false;
 
-    public function validateCoordinator(): void
-    {
-        // Validate user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            // return to home page
-            exit;
-        }
-    }
     /**
      * Verifies CSRF, then delegates to process() if valid.
      *
