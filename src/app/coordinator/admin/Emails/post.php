@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/Emails/post.php
 
+namespace App\Coordinator\Admin\Emails;
+
 use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\sql_update_user;
 use function APICalls\MdwikiSql\sql_add_user;

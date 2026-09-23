@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/tt/index.php
 
+namespace App\Coordinator\Admin\TranslateType;
+
 use Tables\SqlTables\TablesSql;
 use function Utils\Html\makeDropdown;
 use function Utils\Html\make_mdwiki_title;

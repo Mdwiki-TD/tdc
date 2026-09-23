@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/qids/post.php
 
+namespace App\Coordinator\Admin\Qids;
+
 use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\execute_query;
 use function APICalls\MdwikiSql\check_one;

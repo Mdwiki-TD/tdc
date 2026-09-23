@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/reports/index.php
 
+namespace App\Coordinator\Admin\Reports;
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {

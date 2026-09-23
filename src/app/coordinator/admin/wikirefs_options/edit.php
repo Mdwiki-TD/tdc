@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/wikirefs_options/edit.php
 
+namespace App\Coordinator\Admin\WikiRefsOptions;
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {

@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/admins/post.php
 
+namespace App\Coordinator\Admin\Admins;
+
 use function APICalls\MdwikiSql\execute_query;
 use function Utils\Html\div_alert;
 use function TDWIKI\csrf\verify_csrf_token;

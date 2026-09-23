@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/users_no_inprocess/index.php
 
+namespace App\Coordinator\Admin\UsersNoInprocess;
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {

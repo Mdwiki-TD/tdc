@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/Campaigns/index.php
 
+namespace App\Coordinator\Admin\Campaigns;
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {

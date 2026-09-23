@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/projects/post.php
 
+namespace App\Coordinator\Admin\Projects;
+
 use function APICalls\MdwikiSql\insert_to_projects;
 use function APICalls\MdwikiSql\execute_query;
 use function Utils\Html\div_alert;

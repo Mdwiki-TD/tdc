@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/Campaigns/post.php
 
+namespace App\Coordinator\Admin\Campaigns;
+
 use function APICalls\MdwikiSql\execute_query;
 use function TDWIKI\csrf\verify_csrf_token;
 use User\CurrentUser;

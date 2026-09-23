@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/settings/post.php
 
+namespace App\Coordinator\Admin\settings;
+
 use function APICalls\MdwikiSql\update_settings_value;
 use function TDWIKI\csrf\verify_csrf_token;
 use User\CurrentUser;

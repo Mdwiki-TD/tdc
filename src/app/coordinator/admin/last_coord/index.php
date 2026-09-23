@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/last_coord/index.php
 
+namespace App\Coordinator\Admin\LastCoord;
+
 use function APICalls\TDApi\get_td_api;
 use User\CurrentUser;
 

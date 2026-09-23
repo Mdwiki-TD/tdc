@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/full_translators/index.php
 
+namespace App\Coordinator\Admin\FullTranslators;
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {

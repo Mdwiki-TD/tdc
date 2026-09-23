@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/users_no_inprocess/post.php
 
+namespace App\Coordinator\Admin\UsersNoInprocess;
+
 use function APICalls\MdwikiSql\execute_query;
 use function Utils\Html\div_alert;
 use function TDWIKI\csrf\verify_csrf_token;

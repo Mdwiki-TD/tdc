@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/qids/edit_qid.php
 
+namespace App\Coordinator\Admin\Qids;
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {

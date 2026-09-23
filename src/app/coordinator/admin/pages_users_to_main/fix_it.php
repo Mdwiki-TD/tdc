@@ -1,7 +1,7 @@
 <?php
 // src/app/coordinator/admin/pages_users_to_main/fix_it.php
 
-namespace Controllers\PagesUsersToMain;
+namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use User\CurrentUser;
 use function APICalls\MdwikiSql\fetch_query;

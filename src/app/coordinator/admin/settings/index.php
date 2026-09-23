@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/settings/index.php
 
+namespace App\Coordinator\Admin\settings;
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {

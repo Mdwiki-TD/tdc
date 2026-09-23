@@ -1,6 +1,9 @@
 <?php
 // src/app/coordinator/admin/Emails/index.php
 
+namespace App\Coordinator\Admin\Emails;
+
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {

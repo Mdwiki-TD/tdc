@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/add/post.php
 
+namespace App\Coordinator\Admin\Add;
+
 use function Utils\Html\div_alert;
 use function TDWIKI\csrf\verify_csrf_token;
 use function Add\AddPost\add_pages_to_db;

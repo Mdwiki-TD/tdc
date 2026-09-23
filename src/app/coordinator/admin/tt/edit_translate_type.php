@@ -1,6 +1,8 @@
 <?php
 // src/app/coordinator/admin/tt/edit_translate_type.php
 
+namespace App\Coordinator\Admin\TranslateType;
+
 use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
