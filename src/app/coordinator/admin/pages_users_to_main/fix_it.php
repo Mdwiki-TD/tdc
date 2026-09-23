@@ -120,6 +120,7 @@ function page_already_exist($in_db)
         HTML;
 }
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/fix_it_post.php';
 } else {
@@ -136,9 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $in_db = fetch_query("SELECT * FROM pages WHERE title = ? AND lang = ? and (target != '' AND target IS NOT NULL)", [$title, $lang]);
 
     if (!empty($in_db)) {
-
         echo page_already_exist($in_db);
-
     }
 
     // var_export(json_encode($in_db, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
