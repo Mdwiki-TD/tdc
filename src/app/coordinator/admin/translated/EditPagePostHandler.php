@@ -3,28 +3,33 @@
 
 namespace App\Coordinator\Admin\Translated;
 
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class EditPagePostHandler
  * Handles the POST submission for a single translated page row:
- * delete or update. Pure request/DB logic, no rendering.
+ * delete or update.
  */
-class EditPagePostHandler
+class EditPagePostHandler extends AbstractPostHandler
 {
-    /**
-     * Handles POST data submission for editing or deleting records.
-     * @return array{success: bool, csrfError: bool}
-     */
-    public function handle(array $post, string $id, string $table): array
-    {
-        if (!verify_csrf_token()) {
-            return ['success' => false, 'csrfError' => true];
-        }
+    private string $id;
+    private string $table;
 
+    /**
+     * id/table come from the route, not the posted fields we loop over,
+     * so they're passed in up front rather than through process()'s $post.
+     */
+    public function __construct(string $id, string $table)
+    {
+        $this->id = $id;
+        $this->table = $table;
+    }
+
+    protected function process(array $post): void
+    {
         if (isset($post['delete'])) {
-            $this->deletePage($post['delete'], $table);
+            $this->deletePage($post['delete'], $this->table);
         } elseif (isset($post['edit'])) {
             $title   = $post['title'] ?? '';
             $target  = $post['target'] ?? '';
@@ -32,10 +37,8 @@ class EditPagePostHandler
             $user    = $post['user'] ?? '';
             $pupdate = $post['pupdate'] ?? '';
 
-            $this->editPage($id, $table, $title, $target, $lang, $user, $pupdate);
+            $this->editPage($this->id, $this->table, $title, $target, $lang, $user, $pupdate);
         }
-
-        return ['success' => true, 'csrfError' => false];
     }
 
     /**

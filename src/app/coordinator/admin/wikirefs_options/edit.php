@@ -7,7 +7,7 @@ use App\User\CurrentUser;
 use function App\csrf\generate_csrf_token;
 use function App\Utils\Html\div_alert;
 
-require_once __DIR__ . '/edit_post.php';
+require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
 
 /**
  * Class WikiRefsOptionsEditController
@@ -31,6 +31,9 @@ class WikiRefsOptionsEditController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = (new WikiRefsOptionsEditPostHandler())->handle($_POST);
+            if ($result['csrfError']) {
+                echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+            }
             echo div_alert($result['texts'], 'success');
             echo div_alert($result['errors'], 'danger');
         } else {

@@ -1,31 +1,20 @@
 <?php
-// src/app/coordinator/admin/wikirefs_options/edit_post.php
+// src/app/coordinator/admin/wikirefs_options/WikiRefsOptionsEditPostHandler.php
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class WikiRefsOptionsEditPostHandler
  * Handles the POST submission for a single language_settings row:
- * delete, update, or insert. Pure request/DB logic, no rendering.
+ * delete, update, or insert.
  */
-class WikiRefsOptionsEditPostHandler
+class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
 {
-    private array $errors = [];
-    private array $texts = [];
-
-    /**
-     * @return array{errors: string[], texts: string[]}
-     */
-    public function handle(array $post): array
+    protected function process(array $post): void
     {
-        if (!verify_csrf_token()) {
-            $this->errors[] = "Invalid or Reused CSRF Token!";
-            return $this->result();
-        }
-
         $langCode  = trim($post['lang_code'] ?? '');
         $expend    = $this->boolInt($post['expend'] ?? 0);
         $moveDots  = $this->boolInt($post['move_dots'] ?? 0);
@@ -38,24 +27,8 @@ class WikiRefsOptionsEditPostHandler
         } elseif (($post['new'] ?? '') != "") {
             $this->insertRow($langCode, $expend, $moveDots, $addEnLang);
         } else {
-            $this->errors[] = "Id is empty.";
+            $this->addError("Id is empty.");
         }
-
-        return $this->result();
-    }
-
-    private function boolInt($value): int
-    {
-        return filter_var(
-            $value,
-            FILTER_VALIDATE_INT,
-            ['options' => ['min_range' => 0, 'max_range' => 1]]
-        ) ?: 0;
-    }
-
-    private function result(): array
-    {
-        return ['errors' => $this->errors, 'texts' => $this->texts];
     }
 
     /**
@@ -68,9 +41,9 @@ class WikiRefsOptionsEditPostHandler
         $result = execute_query($qua, [$id]);
 
         if ($result === false) {
-            $this->errors[] = "Failed to delete language $langCode.";
+            $this->addError("Failed to delete language $langCode.");
         } else {
-            $this->texts[] = "language $langCode deleted.";
+            $this->addText("language $langCode deleted.");
         }
     }
 
@@ -93,9 +66,9 @@ class WikiRefsOptionsEditPostHandler
         $result = execute_query($qua, $params);
 
         if ($result === false) {
-            $this->errors[] = "Failed to update language $langCode.";
+            $this->addError("Failed to update language $langCode.");
         } else {
-            $this->texts[] = "language $langCode updated.";
+            $this->addText("language $langCode updated.");
         }
     }
 
@@ -105,7 +78,7 @@ class WikiRefsOptionsEditPostHandler
     private function insertRow(string $langCode, int $expend, int $moveDots, int $addEnLang): void
     {
         if (empty($langCode)) {
-            $this->errors[] = "Lang code is empty.";
+            $this->addError("Lang code is empty.");
             return;
         }
 
@@ -115,9 +88,9 @@ class WikiRefsOptionsEditPostHandler
         $result = execute_query($qua, $params);
 
         if ($result === false) {
-            $this->errors[] = "Failed to add language $langCode.";
+            $this->addError("Failed to add language $langCode.");
         } else {
-            $this->texts[] = "language $langCode added.";
+            $this->addText("language $langCode added.");
         }
     }
 }
