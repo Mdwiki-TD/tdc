@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/Campaigns/index.php
 
 use User\CurrentUser;
 

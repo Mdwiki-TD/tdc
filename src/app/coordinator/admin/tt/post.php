@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/tt/post.php
 
 use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\insert_to_translate_type;

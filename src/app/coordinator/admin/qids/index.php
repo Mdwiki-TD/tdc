@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/qids/index.php
 
 use User\CurrentUser;
 

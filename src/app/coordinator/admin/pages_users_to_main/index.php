@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/pages_users_to_main/index.php
 
 use Tables\Langs\LangsTables;
 use function Utils\Html\make_mdwiki_title;

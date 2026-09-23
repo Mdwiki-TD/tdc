@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/Emails/msg.php
 
 use User\CurrentUser;
 

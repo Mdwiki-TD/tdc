@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/full_translators/index.php
 
 use User\CurrentUser;
 

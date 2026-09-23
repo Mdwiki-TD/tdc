@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/projects/index.php
 
 use User\CurrentUser;
 

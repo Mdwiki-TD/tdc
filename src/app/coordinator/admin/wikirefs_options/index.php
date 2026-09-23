@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/wikirefs_options/index.php
 
 use User\CurrentUser;
 
