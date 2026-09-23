@@ -13,11 +13,11 @@ class PostTest extends TestCase
             'g_title' => 'Test Project'
         ];
 
-        $g_id = $table['g_id'] ?? '';
-        $g_title = $table['g_title'] ?? '';
+        $gId = $table['g_id'] ?? '';
+        $gTitle = $table['g_title'] ?? '';
 
-        $this->assertEquals('6', $g_id);
-        $this->assertEquals('Test Project', $g_title);
+        $this->assertEquals('6', $gId);
+        $this->assertEquals('Test Project', $gTitle);
     }
 
     public function testDeleteDetection()
@@ -28,10 +28,10 @@ class PostTest extends TestCase
             'del' => '5'
         ];
 
-        $g_id = $table['g_id'] ?? '';
+        $gId = $table['g_id'] ?? '';
         $del = $table['del'] ?? '';
 
-        $shouldDelete = (!empty($del) && !empty($g_id));
+        $shouldDelete = (!empty($del) && !empty($gId));
         $this->assertTrue($shouldDelete);
     }
 
@@ -42,92 +42,92 @@ class PostTest extends TestCase
             'g_title' => 'Project'
         ];
 
-        $g_id = $table['g_id'] ?? '';
+        $gId = $table['g_id'] ?? '';
         $del = $table['del'] ?? '';
 
-        $shouldDelete = (!empty($del) && !empty($g_id));
+        $shouldDelete = (!empty($del) && !empty($gId));
         $this->assertFalse($shouldDelete);
     }
 
     public function testTrimTitle()
     {
-        $g_title = '  Test Project  ';
-        $trimmed = trim($g_title);
+        $gTitle = '  Test Project  ';
+        $trimmed = trim($gTitle);
         $this->assertEquals('Test Project', $trimmed);
 
-        $g_title = "\tProject\n";
-        $trimmed = trim($g_title);
+        $gTitle = "\tProject\n";
+        $trimmed = trim($gTitle);
         $this->assertEquals('Project', $trimmed);
     }
 
     public function testEmptyTitleSkip()
     {
-        $g_title = '';
-        $shouldSkip = empty($g_title);
+        $gTitle = '';
+        $shouldSkip = empty($gTitle);
         $this->assertTrue($shouldSkip);
 
-        $g_title = '   ';
-        $g_title = trim($g_title);
-        $shouldSkip = empty($g_title);
+        $gTitle = '   ';
+        $gTitle = trim($gTitle);
+        $shouldSkip = empty($gTitle);
         $this->assertTrue($shouldSkip);
     }
 
     public function testNonEmptyTitle()
     {
-        $g_title = 'Valid Project';
-        $shouldSkip = empty($g_title);
+        $gTitle = 'Valid Project';
+        $shouldSkip = empty($gTitle);
         $this->assertFalse($shouldSkip);
     }
 
     public function testAddOrUpdateLogic()
     {
         // Add case (no g_id)
-        $g_id = '';
-        $action = empty($g_id) ? 'Added' : 'Updated';
+        $gId = '';
+        $action = empty($gId) ? 'Added' : 'Updated';
         $this->assertEquals('Added', $action);
 
         // Update case (has g_id)
-        $g_id = '10';
-        $action = empty($g_id) ? 'Added' : 'Updated';
+        $gId = '10';
+        $action = empty($gId) ? 'Added' : 'Updated';
         $this->assertEquals('Updated', $action);
     }
 
     public function testDeleteMessage()
     {
-        $g_title = 'MyProject';
-        $message = "Project $g_title deleted.";
+        $gTitle = 'MyProject';
+        $message = "Project $gTitle deleted.";
         $this->assertEquals('Project MyProject deleted.', $message);
         $this->assertStringContainsString('deleted', $message);
     }
 
     public function testAddMessage()
     {
-        $g_title = 'NewProject';
-        $message = "Project $g_title Added.";
+        $gTitle = 'NewProject';
+        $message = "Project $gTitle Added.";
         $this->assertEquals('Project NewProject Added.', $message);
         $this->assertStringContainsString('Added', $message);
     }
 
     public function testUpdateMessage()
     {
-        $g_title = 'ExistingProject';
-        $message = "Project $g_title Updated.";
+        $gTitle = 'ExistingProject';
+        $message = "Project $gTitle Updated.";
         $this->assertEquals('Project ExistingProject Updated.', $message);
         $this->assertStringContainsString('Updated', $message);
     }
 
     public function testDeleteQueryConstruction()
     {
-        $table_name = 'projects';
-        $qua2 = "DELETE FROM $table_name WHERE g_id = ?";
+        $tableName = 'projects';
+        $qua2 = "DELETE FROM $tableName WHERE g_id = ?";
         $this->assertEquals('DELETE FROM projects WHERE g_id = ?', $qua2);
         $this->assertStringContainsString('WHERE g_id = ?', $qua2);
     }
 
     public function testParamsArrayForDelete()
     {
-        $g_id = '15';
-        $params = [$g_id];
+        $gId = '15';
+        $params = [$gId];
         $this->assertCount(1, $params);
         $this->assertEquals('15', $params[0]);
     }
@@ -195,37 +195,37 @@ class PostTest extends TestCase
     public function testEmptyGIdHandling()
     {
         $table = ['g_title' => 'New Project'];
-        $g_id = $table['g_id'] ?? '';
+        $gId = $table['g_id'] ?? '';
 
-        $this->assertEquals('', $g_id);
-        $this->assertTrue(empty($g_id));
+        $this->assertEquals('', $gId);
+        $this->assertTrue(empty($gId));
     }
 
     public function testDeleteWithMissingGId()
     {
-        $g_id = '';
+        $gId = '';
         $del = '5';
 
-        $shouldDelete = (!empty($del) && !empty($g_id));
+        $shouldDelete = (!empty($del) && !empty($gId));
         $this->assertFalse($shouldDelete);
     }
 
     public function testBothFieldsRequired()
     {
         // Test that both del and g_id must be present for delete
-        $g_id = '5';
+        $gId = '5';
         $del = '';
-        $shouldDelete = (!empty($del) && !empty($g_id));
+        $shouldDelete = (!empty($del) && !empty($gId));
         $this->assertFalse($shouldDelete);
 
-        $g_id = '';
+        $gId = '';
         $del = '5';
-        $shouldDelete = (!empty($del) && !empty($g_id));
+        $shouldDelete = (!empty($del) && !empty($gId));
         $this->assertFalse($shouldDelete);
 
-        $g_id = '5';
+        $gId = '5';
         $del = '5';
-        $shouldDelete = (!empty($del) && !empty($g_id));
+        $shouldDelete = (!empty($del) && !empty($gId));
         $this->assertTrue($shouldDelete);
     }
 }

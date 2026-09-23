@@ -9,8 +9,8 @@ class MsgTest extends TestCase
     public function testGetHost1ReturnsString()
     {
         // Since get_host1() is defined in msg.php, we need to test its logic
-        $server_name = 'localhost';
-        $hoste = ($server_name == "localhost")
+        $serverName = 'localhost';
+        $hoste = ($serverName == "localhost")
             ? "https://cdnjs.cloudflare.com"
             : "https://tools-static.wmflabs.org/cdnjs";
 
@@ -19,8 +19,8 @@ class MsgTest extends TestCase
 
     public function testGetHost1NonLocalhost()
     {
-        $server_name = 'production.server';
-        $hoste = ($server_name == "localhost")
+        $serverName = 'production.server';
+        $hoste = ($serverName == "localhost")
             ? "https://cdnjs.cloudflare.com"
             : "https://tools-static.wmflabs.org/cdnjs";
 
@@ -30,16 +30,16 @@ class MsgTest extends TestCase
     public function testGetHost1CachingLogic()
     {
         // Test static caching logic
-        static $cached_host = null;
+        static $cachedHost = null;
 
-        $this->assertNull($cached_host);
+        $this->assertNull($cachedHost);
 
-        $cached_host = "https://cdnjs.cloudflare.com";
-        $this->assertEquals("https://cdnjs.cloudflare.com", $cached_host);
+        $cachedHost = "https://cdnjs.cloudflare.com";
+        $this->assertEquals("https://cdnjs.cloudflare.com", $cachedHost);
 
         // Second call should return cached value
-        if ($cached_host !== null) {
-            $result = $cached_host;
+        if ($cachedHost !== null) {
+            $result = $cachedHost;
         }
         $this->assertEquals("https://cdnjs.cloudflare.com", $result);
     }
@@ -74,17 +74,17 @@ class MsgTest extends TestCase
 
     public function testEmailParametersArray()
     {
-        $here_params = [
+        $hereParams = [
             'code' => 'ar',
             'cat' => 'RTT',
             'type' => 'lead',
             'title' => 'TestTitle'
         ];
 
-        $this->assertArrayHasKey('code', $here_params);
-        $this->assertArrayHasKey('cat', $here_params);
-        $this->assertArrayHasKey('type', $here_params);
-        $this->assertArrayHasKey('title', $here_params);
+        $this->assertArrayHasKey('code', $hereParams);
+        $this->assertArrayHasKey('cat', $hereParams);
+        $this->assertArrayHasKey('type', $hereParams);
+        $this->assertArrayHasKey('title', $hereParams);
     }
 
     public function testHttpBuildQuery()
@@ -135,30 +135,30 @@ class MsgTest extends TestCase
 
     public function testEmailArrayConstruction()
     {
-        $emails_array = [];
+        $emailsArray = [];
         $username = 'testuser';
         $email = 'test@example.com';
 
-        $emails_array[$username] = $email;
+        $emailsArray[$username] = $email;
 
-        $this->assertArrayHasKey('testuser', $emails_array);
-        $this->assertEquals('test@example.com', $emails_array['testuser']);
+        $this->assertArrayHasKey('testuser', $emailsArray);
+        $this->assertEquals('test@example.com', $emailsArray['testuser']);
     }
 
     public function testEmailLookup()
     {
-        $emails_array = [
+        $emailsArray = [
             'user1' => 'user1@example.com',
             'user2' => 'user2@example.com'
         ];
 
         $user = 'user1';
-        $email_to = $emails_array[$user] ?? '';
-        $this->assertEquals('user1@example.com', $email_to);
+        $emailTo = $emailsArray[$user] ?? '';
+        $this->assertEquals('user1@example.com', $emailTo);
 
         $user = 'nonexistent';
-        $email_to = $emails_array[$user] ?? '';
-        $this->assertEquals('', $email_to);
+        $emailTo = $emailsArray[$user] ?? '';
+        $this->assertEquals('', $emailTo);
     }
 
     public function testHtmlSpecialCharsEscaping()

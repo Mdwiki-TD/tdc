@@ -8,19 +8,19 @@ class IndexTest extends TestCase
 {
     public function testQidTableValidation()
     {
-        $qid_table = 'qids';
-        $isValid = ($qid_table == 'qids' || $qid_table == 'qids_others');
+        $qidTable = 'qids';
+        $isValid = ($qidTable == 'qids' || $qidTable == 'qids_others');
         $this->assertTrue($isValid);
 
-        $qid_table = 'qids_others';
-        $isValid = ($qid_table == 'qids' || $qid_table == 'qids_others');
+        $qidTable = 'qids_others';
+        $isValid = ($qidTable == 'qids' || $qidTable == 'qids_others');
         $this->assertTrue($isValid);
 
-        $qid_table = 'invalid';
-        if ($qid_table != 'qids' && $qid_table != 'qids_others') {
-            $qid_table = 'qids';
+        $qidTable = 'invalid';
+        if ($qidTable != 'qids' && $qidTable != 'qids_others') {
+            $qidTable = 'qids';
         }
-        $this->assertEquals('qids', $qid_table);
+        $this->assertEquals('qids', $qidTable);
     }
 
     public function testFilterQidsTableStructure()
@@ -38,38 +38,38 @@ class IndexTest extends TestCase
 
     public function testDisFilterData()
     {
-        $dis_data = [
+        $disData = [
             'empty' => 'Empty',
             'all' => 'All',
             'duplicate' => 'Duplicate'
         ];
 
-        $this->assertArrayHasKey('empty', $dis_data);
-        $this->assertArrayHasKey('all', $dis_data);
-        $this->assertArrayHasKey('duplicate', $dis_data);
+        $this->assertArrayHasKey('empty', $disData);
+        $this->assertArrayHasKey('all', $disData);
+        $this->assertArrayHasKey('duplicate', $disData);
     }
 
     public function testRadioButtonChecked()
     {
-        $table_name = 'qids';
+        $tableName = 'qids';
         $vav = 'qids';
 
-        $checked = ($table_name == $vav) ? 'checked' : '';
+        $checked = ($tableName == $vav) ? 'checked' : '';
         $this->assertEquals('checked', $checked);
 
         $vav = 'qids_others';
-        $checked = ($table_name == $vav) ? 'checked' : '';
+        $checked = ($tableName == $vav) ? 'checked' : '';
         $this->assertEquals('', $checked);
     }
 
     public function testQidsTitle()
     {
-        $qid_table = 'qids';
-        $title = ($qid_table == "qids") ? "TD Qids" : "Qids Others";
+        $qidTable = 'qids';
+        $title = ($qidTable == "qids") ? "TD Qids" : "Qids Others";
         $this->assertEquals("TD Qids", $title);
 
-        $qid_table = 'qids_others';
-        $title = ($qid_table == "qids") ? "TD Qids" : "Qids Others";
+        $qidTable = 'qids_others';
+        $title = ($qidTable == "qids") ? "TD Qids" : "Qids Others";
         $this->assertEquals("Qids Others", $title);
     }
 
@@ -137,17 +137,17 @@ class IndexTest extends TestCase
 
     public function testEditParamsArray()
     {
-        $edit_params = [
+        $editParams = [
             'id' => 123,
             'qid_table' => 'qids',
             'title' => 'Test Title',
             'qid' => 'Q12345'
         ];
 
-        $this->assertArrayHasKey('id', $edit_params);
-        $this->assertArrayHasKey('qid_table', $edit_params);
-        $this->assertArrayHasKey('title', $edit_params);
-        $this->assertArrayHasKey('qid', $edit_params);
+        $this->assertArrayHasKey('id', $editParams);
+        $this->assertArrayHasKey('qid_table', $editParams);
+        $this->assertArrayHasKey('title', $editParams);
+        $this->assertArrayHasKey('qid', $editParams);
     }
 
     public function testNewRowParams()
@@ -200,8 +200,8 @@ class IndexTest extends TestCase
 
     public function testFormInlineClass()
     {
-        $form_class = 'form-inline';
-        $this->assertEquals('form-inline', $form_class);
+        $formClass = 'form-inline';
+        $this->assertEquals('form-inline', $formClass);
     }
 
     public function testMarginBlockEnd()
@@ -212,8 +212,8 @@ class IndexTest extends TestCase
 
     public function testFilterButtonText()
     {
-        $button_text = 'Filter';
-        $this->assertEquals('Filter', $button_text);
+        $buttonText = 'Filter';
+        $this->assertEquals('Filter', $buttonText);
     }
 
     public function testDisDisplayInHeader()

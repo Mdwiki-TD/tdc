@@ -74,48 +74,48 @@ class PostTest extends TestCase
 
     public function testUserIdComparison()
     {
-        $user_id = '123';
-        $tt_id = '123';
+        $userId = '123';
+        $ttId = '123';
 
-        $matches = ($tt_id != $user_id);
+        $matches = ($ttId != $userId);
         $this->assertFalse($matches);
 
-        $tt_id = '456';
-        $matches = ($tt_id != $user_id);
+        $ttId = '456';
+        $matches = ($ttId != $userId);
         $this->assertTrue($matches);
     }
 
     public function testUserIdEmptyCheck()
     {
-        $user_id = '';
-        $isEmpty = empty($user_id);
+        $userId = '';
+        $isEmpty = empty($userId);
         $this->assertTrue($isEmpty);
 
-        $user_id = '0';
-        $isEmpty = empty($user_id);
+        $userId = '0';
+        $isEmpty = empty($userId);
         $this->assertTrue($isEmpty);
 
-        $user_id = '123';
-        $isEmpty = empty($user_id);
+        $userId = '123';
+        $isEmpty = empty($userId);
         $this->assertFalse($isEmpty);
     }
 
     public function testDuplicateUserDetection()
     {
         // Simulate checking for duplicate
-        $user_id = '';
-        $tt_username = 'existinguser';
+        $userId = '';
+        $ttUsername = 'existinguser';
 
-        $isDuplicate = (empty($user_id) && !empty($tt_username));
+        $isDuplicate = (empty($userId) && !empty($ttUsername));
         $this->assertTrue($isDuplicate);
     }
 
     public function testDuplicateUserWithId()
     {
-        $user_id = '123';
-        $tt_id = '456';
+        $userId = '123';
+        $ttId = '456';
 
-        $isDuplicate = (!empty($user_id) && $tt_id != $user_id);
+        $isDuplicate = (!empty($userId) && $ttId != $userId);
         $this->assertTrue($isDuplicate);
     }
 
@@ -153,13 +153,13 @@ class PostTest extends TestCase
         $email = $table['email'] ?? '';
         $wiki = $table['wiki'] ?? '';
         $project = $table['project'] ?? '';
-        $user_id = $table['user_id'] ?? '';
+        $userId = $table['user_id'] ?? '';
 
         $this->assertEquals('testuser', $user);
         $this->assertEquals('test@example.com', $email);
         $this->assertEquals('ar', $wiki);
         $this->assertEquals('TestProject', $project);
-        $this->assertEquals('123', $user_id);
+        $this->assertEquals('123', $userId);
     }
 
     public function testPostDataExtractionWithMissingFields()
@@ -208,12 +208,12 @@ class PostTest extends TestCase
 
     public function testConditionalAddOrUpdate()
     {
-        $user_id = '';
-        $action = empty($user_id) ? 'add' : 'update';
+        $userId = '';
+        $action = empty($userId) ? 'add' : 'update';
         $this->assertEquals('add', $action);
 
-        $user_id = '123';
-        $action = empty($user_id) ? 'add' : 'update';
+        $userId = '123';
+        $action = empty($userId) ? 'add' : 'update';
         $this->assertEquals('update', $action);
     }
 

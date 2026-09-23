@@ -48,7 +48,7 @@ class EditUserTest extends TestCase
         $wiki = $_GET['wiki'];
         $project = $_GET['project'];
         $email = $_GET['email'];
-        $user_id = $_GET['user_id'];
+        $userId = $_GET['user_id'];
 
         // Call the function (need to include the file to get the function)
         // Since we can't easily isolate the function, we'll test the output structure
@@ -80,13 +80,13 @@ class EditUserTest extends TestCase
 
     public function testEditUserFormHeaderTitle()
     {
-        $user_id = '456';
-        $header_title = (!empty($user_id)) ? "Edit User" : "Add New User";
-        $this->assertEquals("Edit User", $header_title);
+        $userId = '456';
+        $headerTitle = (!empty($userId)) ? "Edit User" : "Add New User";
+        $this->assertEquals("Edit User", $headerTitle);
 
-        $user_id = '';
-        $header_title = (!empty($user_id)) ? "Edit User" : "Add New User";
-        $this->assertEquals("Add New User", $header_title);
+        $userId = '';
+        $headerTitle = (!empty($userId)) ? "Edit User" : "Add New User";
+        $this->assertEquals("Add New User", $headerTitle);
     }
 
     public function testEditUserFormInputEscaping()
@@ -116,13 +116,13 @@ class EditUserTest extends TestCase
 
     public function testEditUserFormIdRowGeneration()
     {
-        $user_id = '789';
-        $id_row_should_exist = (!empty($user_id));
-        $this->assertTrue($id_row_should_exist);
+        $userId = '789';
+        $idRowShouldExist = (!empty($userId));
+        $this->assertTrue($idRowShouldExist);
 
-        $user_id = '';
-        $id_row_should_exist = (!empty($user_id));
-        $this->assertFalse($id_row_should_exist);
+        $userId = '';
+        $idRowShouldExist = (!empty($userId));
+        $this->assertFalse($idRowShouldExist);
     }
 
     public function testEditUserFormRequiredFields()
@@ -156,8 +156,8 @@ class EditUserTest extends TestCase
     public function testEditUserFormReadonlyUserId()
     {
         // When user_id exists, it should be readonly
-        $user_id = '123';
-        $isReadonly = !empty($user_id);
+        $userId = '123';
+        $isReadonly = !empty($userId);
         $this->assertTrue($isReadonly);
     }
 }
