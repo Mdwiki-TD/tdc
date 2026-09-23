@@ -1,6 +1,6 @@
 <?php
 
-use function APICalls\TDApi\get_td_api;
+use function App\APICalls\TDApi\get_td_api;
 
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {

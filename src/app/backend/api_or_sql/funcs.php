@@ -1,9 +1,9 @@
 <?php
 
-namespace SQLorAPI\Funcs;
+namespace App\SQLorAPI\Funcs;
 
 
-use function SQLorAPI\Get\super_function;
+use function App\SQLorAPI\Get\super_function;
 
 function get_publish_reports_stats(): array
 {

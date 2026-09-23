@@ -4,11 +4,11 @@ namespace Tests\Backend\ApiOrSql;
 
 use PHPUnit\Framework\TestCase;
 
-use function SQLorAPI\Recent\get_recent_sql;
-use function SQLorAPI\Recent\get_recent_pages_users;
-use function SQLorAPI\Recent\get_recent_translated;
-use function SQLorAPI\Recent\get_total_translations_count;
-use function SQLorAPI\Recent\get_pages_users_to_main;
+use function App\SQLorAPI\Recent\get_recent_sql;
+use function App\SQLorAPI\Recent\get_recent_pages_users;
+use function App\SQLorAPI\Recent\get_recent_translated;
+use function App\SQLorAPI\Recent\get_total_translations_count;
+use function App\SQLorAPI\Recent\get_pages_users_to_main;
 
 class RecentDataTest extends TestCase
 {

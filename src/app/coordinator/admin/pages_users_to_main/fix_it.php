@@ -1,14 +1,17 @@
 <?php
+// src/app/coordinator/admin/pages_users_to_main/fix_it.php
 
-use User\CurrentUser;
+namespace App\Coordinator\Admin\PagesUsersToMain;
+
+use App\User\CurrentUser;
+use function App\APICalls\MdwikiSql\fetch_query;
+use function App\csrf\generate_csrf_token;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 };
 
-use function APICalls\MdwikiSql\fetch_query;
-use function TDWIKI\csrf\generate_csrf_token;
 
 function fix_it_echo_form($id, $title, $new_target, $lang, $new_user, $pupdate)
 {

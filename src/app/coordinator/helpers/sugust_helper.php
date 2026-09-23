@@ -1,10 +1,11 @@
 <?php
+// src/app/coordinator/helpers/sugust_helper.php
 
-namespace Emails\Sugust;
+namespace App\Emails\Sugust;
 
-use Tables\Main\MainTables;
-use function Results\GetResults\get_cat_exists_and_missing;
-use function SQLorAPI\Process\get_lang_in_process_new;
+use App\Tables\Main\MainTables;
+use function App\Results\GetResults\get_cat_exists_and_missing;
+use function App\SQLorAPI\Process\get_lang_in_process_new;
 
 function get_sugust($title, $lang)
 {

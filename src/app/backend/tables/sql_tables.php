@@ -1,6 +1,6 @@
 <?php
 
-namespace Tables\SqlTables;
+namespace App\Tables\SqlTables;
 
 
 /*
@@ -8,13 +8,13 @@ namespace Tables\SqlTables;
 
 TablesSql::$1s_$2
 
-use Tables\SqlTables\TablesSql;
+use App\Tables\SqlTables\TablesSql;
 
 include_once __DIR__ . '/Tables/sql_tables.php';
 */
 
-use function SQLorAPI\Funcs\get_td_or_sql_projects;
-use function SQLorAPI\Funcs\get_td_or_sql_categories;
+use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
+use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
 
 class TablesSql
 {

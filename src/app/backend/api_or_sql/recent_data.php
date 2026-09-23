@@ -1,8 +1,8 @@
 <?php
 
-namespace SQLorAPI\Recent;
+namespace App\SQLorAPI\Recent;
 
-use function SQLorAPI\Get\super_function;
+use function App\SQLorAPI\Get\super_function;
 
 function get_recent_sql($lang): array
 {

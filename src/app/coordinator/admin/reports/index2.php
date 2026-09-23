@@ -1,6 +1,9 @@
 <?php
+// src/app/coordinator/admin/reports/index2.php
 
-use User\CurrentUser;
+namespace App\Coordinator\Admin\Reports;
+
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
@@ -60,13 +63,13 @@ foreach ($keys as $key => $use_select_picker) {
 
     // echo "$key: <textarea>" . $form_options[$key] . "</textarea>";
 }
-// ----
+
 $year_options = $form_options["year"] ?? "";
 $month_options = $form_options["month"] ?? "";
 $lang_options = $form_options["lang"] ?? "";
 $user_options = $form_options["user"] ?? "";
 $result_options = $form_options["result"] ?? "";
-// ----
+
 echo <<<HTML
     <style>
         pre.json-data {

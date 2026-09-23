@@ -1,4 +1,4 @@
 <?php
+// src/app/coordinator/admin/index.php
 
-include_once __DIR__ . '/../../tools/last.php';
-?>
+header('Location: /index.php');

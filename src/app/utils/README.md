@@ -251,7 +251,7 @@ require_once __DIR__ . '/utils/tables_dir.php';
 #### HTML Components
 
 ```php
-use Utils\Html;
+use App\Utils\Html;
 
 // Create a Bootstrap card
 echo Html::makeCard('Translation Stats', '<p>42 translations</p>');
@@ -270,7 +270,7 @@ echo Html::make_target_url('Diabetes', 'ar', 'Diabetes (Arabic)', false);
 #### Sidebar Navigation
 
 ```php
-use Utils\HtmlSide;
+use App\Utils\HtmlSide;
 
 // Generate sidebar (reads $GLOBALS['user_is_coordinator'] for access control)
 $sidebar = HtmlSide::create_side('last.php', 'last');
@@ -280,7 +280,7 @@ echo $sidebar;
 #### Debug Output
 
 ```php
-use Utils\Functions\test_print;
+use App\Utils\Functions\test_print;
 
 // Only prints when ?test=1 is in the URL or test cookie is set
 test_print(['key' => 'value', 'count' => 42]);
@@ -290,7 +290,7 @@ test_print("Debug message");
 #### JSON Data Loading
 
 ```php
-use Utils\TablesDir\open_td_tables_file;
+use App\Utils\TablesDir\open_td_tables_file;
 
 $data = open_td_tables_file('/path/to/data.json');
 if (!empty($data)) {

@@ -14,8 +14,8 @@
  *
  * Usage Example:
  * ```php
- * use function Utils\Functions\test_print;
- * use function Utils\Functions\start_with;
+ * use function App\Utils\Functions\test_print;
+ * use function App\Utils\Functions\start_with;
  *
  * // Debug output (only visible in test mode)
  * test_print("Debug message: " . $variable);
@@ -37,7 +37,7 @@
  * @license    GPL-3.0-or-later
  */
 
-namespace Utils\Functions;
+namespace App\Utils\Functions;
 
 function test_print($s)
 {

@@ -1,19 +1,17 @@
 <?php
 
-use User\CurrentUser;
+
+use App\User\CurrentUser;
+use function App\APICalls\MdwikiSql\execute_query;
+use function App\APICalls\MdwikiSql\fetch_query;
+use function App\csrf\verify_csrf_token;
+use function App\Utils\Html\div_alert;
+use function Add\AddPost\add_pages_to_db;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 };
-
-require_once __DIR__ . '/../add/add_post.php';
-
-use function APICalls\MdwikiSql\execute_query;
-use function APICalls\MdwikiSql\fetch_query;
-use function TDWIKI\csrf\verify_csrf_token;
-use function Utils\Html\div_alert;
-use function Add\AddPost\add_pages_to_db;
 
 
 function delete_user_page($id)

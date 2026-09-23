@@ -1,6 +1,9 @@
 <?php
+// src/app/coordinator/admin/projects/index.php
 
-use User\CurrentUser;
+namespace App\Coordinator\Admin\Projects;
+
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
@@ -11,8 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }
 
-use function SQLorAPI\Funcs\get_td_or_sql_projects;
-use function TDWIKI\csrf\generate_csrf_token;
+use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
+use function App\csrf\generate_csrf_token;
 
 $numb = 0;
 

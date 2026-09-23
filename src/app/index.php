@@ -1,112 +1,218 @@
 <?php
+// src/app/index.php
 
-use function Utils\Functions\test_print;
-use function Utils\HtmlSide\create_side;
-use User\CurrentUser;
+namespace App;
 
-echo <<<HTML
-	<!-- </div> -->
-	<script>$("#coord").addClass("active");</script>
-	<!-- <div id="maindiv" class="container-fluid"> -->
-HTML;
+use App\User\CurrentUser;
+use function App\Utils\Functions\test_print;
+use function App\Utils\HtmlSide\create_side;
 
-$currentUser = CurrentUser::getInstance();
-$user_is_coordinator = $currentUser->isCoordinator();
-
-function echo_card_start($file_name, $ty, $user_is_coordinator)
+/**
+ * Class AppRouter
+ * Handles layout initialization and dynamic request routing for the application.
+ */
+class AppRouter
 {
-	$sidebar = create_side($file_name, $ty, $user_is_coordinator);
-	echo <<<HTML
-		<div class='row content'>
-			<!-- <div class='col-md-2 px-0' style="width: 10.66666667%;"> -->
-			<div class='col-md-2 px-0 colmd2 border'>
-				<div class="d-none d-md-block p-2 mt-3 position-relative d-flex align-items-center">
-					<div class="">
-						<!-- <button class="border rounded-3 p-1 text-decoration-none" onclick="toggleSidebar()">
-							<i class="bi bi-list bi-lg py-2 p-1"></i>
-						</button> -->
-						<span class="logo-text">
-							<span class="hide-on-collapse-inline fw-bold mb-0 h5">
-								Coordinator Tools
-							</span>
-						</span>
-						<div class="show-on-collapse">
-							<div class="form-check form-switch">
-								<input class="form-check-input" type="checkbox" id="keep-close-toggle"
-									onchange="ToggleKeepSideBarClose()">
-							</div>
-							<label class="form-check-label" for="keep-close-toggle">Keep close
-							</label>
-						</div>
-					</div>
-					<button class="main-toggle-btn position-absolute top-50 start-100 translate-middle"
-						onclick="toggleSidebar()">
-						<i class="fas fa-chevron-left"></i>
-					</button>
+	private CurrentUser $currentUser;
+	private bool $isCoordinator;
+	private string $ty;
+	private string $scriptName;
 
-				</div>
-				<div class="d-block d-md-none Dropdown_menu_toggle px-3">☰ Open Sidebar</div>
-				<hr>
-				<div class="div_menu navbar-collapse">
-					$sidebar
-				</div>
-			</div>
-			<div class='px-0 col-md-10 colmd10'>
-				<div class='container-fluid'>
-					<div class='card'>
-	HTML;
+	/**
+	 * @var array List of allowed tool scripts
+	 */
+	private array $toolsFiles = [
+		"categories",
+		"last",
+		"process_total",
+		"process",
+		"recent_helps",
+		"stat",
+	];
+
+	public function __construct()
+	{
+		$this->currentUser = CurrentUser::getInstance();
+		$this->isCoordinator = $this->currentUser->isCoordinator();
+		$this->scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+		$this->ty = $this->resolveTy();
+	}
+
+	/**
+	 * Main entry point to run the application request.
+	 */
+	public function handleRequest(): void
+	{
+		if (!$this->shouldHideNav()) {
+			$this->renderHeader();
+		}
+
+		$this->dispatch();
+
+		if (!$this->shouldHideNav()) {
+			$this->renderFooter();
+		}
+	}
+
+	/**
+	 * Determines, maps, and sanitizes the requested route key ('ty').
+	 */
+	private function resolveTy(): string
+	{
+		$defaultTy = $this->isCoordinator ? "last_coord" : "last";
+		$rawTy = $_GET['ty'] ?? $_POST['ty'] ?? $defaultTy;
+
+		$preDefinedTy = [
+			"add/index",
+			"add/post",
+			"admins/index",
+			"admins/post",
+			"Campaigns/index",
+			"Campaigns/post",
+			"Emails/edit_user",
+			"Emails/index",
+			"Emails/msg",
+			"Emails/post",
+			"full_translators/index",
+			"full_translators/post",
+			"last_coord/index",
+			"pages_users_to_main/fix_it",
+			"pages_users_to_main/fix_it_post",
+			"pages_users_to_main/index",
+			"projects/index",
+			"projects/post",
+			"qids/edit_qid",
+			"qids/index",
+			"qids/post",
+			"reports/index",
+			"settings/index",
+			"settings/post",
+			"translated/edit_page",
+			"translated/index",
+			"tt/edit_translate_type",
+			"tt/index",
+			"tt/post",
+			"users_no_inprocess/index",
+			"users_no_inprocess/post",
+			"wikirefs_options/edit",
+			"wikirefs_options/index",
+		];
+		if (in_array($rawTy, $preDefinedTy)) {
+			return $rawTy;
+		}
+		// Map route aliases
+		if ($rawTy === 'translate_type') {
+			$rawTy = 'tt';
+		}
+
+		// Sanitize parameter to prevent directory traversal
+		return preg_replace('/[^a-zA-Z0-9_-]/', '', $rawTy);
+	}
+
+	/**
+	 * Checks if navigation header wrapper should be omitted.
+	 */
+	private function shouldHideNav(): bool
+	{
+		return isset($_GET['nonav']);
+	}
+
+	/**
+	 * Renders the sidebar and opening HTML wrapper structure.
+	 */
+	private function renderHeader(): void
+	{
+		$sidebar = create_side($this->scriptName, $this->ty, $this->isCoordinator);
+
+		echo <<<HTML
+        <div class='row content'>
+            <div class='col-md-2 px-0 colmd2 border'>
+                <div class="d-none d-md-block p-2 mt-3 position-relative d-flex align-items-center">
+                    <div>
+                        <span class="logo-text">
+                            <span class="hide-on-collapse-inline fw-bold mb-0 h5">
+                                Coordinator Tools
+                            </span>
+                        </span>
+                        <div class="show-on-collapse">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="keep-close-toggle" onchange="ToggleKeepSideBarClose()">
+                            </div>
+                            <label class="form-check-label" for="keep-close-toggle">Keep close</label>
+                        </div>
+                    </div>
+                    <button class="main-toggle-btn position-absolute top-50 start-100 translate-middle" onclick="toggleSidebar()">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                <div class="d-block d-md-none Dropdown_menu_toggle px-3">☰ Open Sidebar</div>
+                <hr>
+                <div class="div_menu navbar-collapse">
+                    {$sidebar}
+                </div>
+            </div>
+            <div class='px-0 col-md-10 colmd10'>
+                <div class='container-fluid'>
+                    <div class='card'>
+        HTML;
+	}
+
+	private function renderFooter(): void
+	{
+		echo <<<HTML
+                    </div>
+                </div>
+            </div>
+        </div>
+        HTML;
+	}
+	/**
+	 * Dispatches the request to the target script or view based on routes and permissions.
+	 */
+	private function dispatch(): void
+	{
+		$coordFolders = $this->getCoordinatorFolders();
+		$adminFile = __DIR__ . "/coordinator/admin/{$this->ty}.php";
+
+		if (in_array($this->ty, $this->toolsFiles, true)) {
+			include_once __DIR__ . "/tools/{$this->ty}.php";
+			return;
+		}
+
+		if ($this->ty === "sidebar") {
+			echo create_side($this->scriptName, $this->ty, $this->isCoordinator);
+			return;
+		}
+
+		if ($this->isCoordinator && in_array($this->ty, $coordFolders, true)) {
+			include_once __DIR__ . "/coordinator/admin/{$this->ty}/index.php";
+			return;
+		}
+
+		if ($this->isCoordinator && is_file($adminFile)) {
+			include_once $adminFile;
+			return;
+		}
+
+		// Fallback for missing or unauthorized routes
+		test_print("can't find {$adminFile}");
+		include_once __DIR__ . "/coordinator/404.php";
+	}
+
+	/**
+	 * Fetches existing directory names under coordinator/admin folder.
+	 */
+	private function getCoordinatorFolders(): array
+	{
+		$directories = glob(__DIR__ . '/coordinator/admin/*', GLOB_ONLYDIR);
+		if ($directories === false) {
+			return [];
+		}
+
+		return array_map('basename', $directories);
+	}
 }
 
-$default_ty = $user_is_coordinator ? "last_coord" : "last";
-
-$ty = $_GET['ty'] ?? $_POST['ty'] ?? $default_ty;
-
-if ($ty == 'translate_type') $ty = 'tt';
-
-$filename = $_SERVER['SCRIPT_NAME'];
-
-if (!isset($_GET['nonav'])) {
-	echo_card_start($filename, $ty, $user_is_coordinator);
-};
-
-// list of folders in coordinator
-$corrd_folders = array_map('basename', glob(__DIR__ . '/coordinator/admin/*', GLOB_ONLYDIR));
-
-$tools_files = [
-	"categories",
-	"last",
-	"process_total",
-	"process",
-	"recent_helps",
-	"stat",
-];
-
-// test_print("corrd_folders" . json_encode($corrd_folders));
-
-$adminfile = __DIR__ . "/coordinator/admin/$ty.php";
-
-if (in_array($ty, $tools_files)) {
-	include_once __DIR__ . "/tools/$ty.php";
-	//
-} elseif ($ty == "sidebar") {
-	$sidebar = create_side($filename, $ty, $user_is_coordinator);
-	echo $sidebar;
-	//
-} elseif (in_array($ty, $corrd_folders) && $user_is_coordinator) {
-	include_once __DIR__ . "/coordinator/admin/$ty/index.php";
-	//
-} elseif (is_file($adminfile) && $user_is_coordinator) {
-	include_once $adminfile;
-} else {
-	test_print("can't find $adminfile");
-	include_once __DIR__ . "/coordinator/404.php";
-};
-
-echo <<<HTML
-			</div>
-		</div>
-	</div>
-</div>
-HTML;
-
-echo "<script src='/tdc/js/autocomplate.js'></script>";
+// Instantiate and execute application router
+$router = new AppRouter();
+$router->handleRequest();

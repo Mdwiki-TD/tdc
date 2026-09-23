@@ -1,10 +1,13 @@
 <?php
+// src/app/coordinator/admin/qids/post.php
 
-use function Utils\Html\div_alert;
-use function APICalls\MdwikiSql\execute_query;
-use function APICalls\MdwikiSql\check_one;
-use function TDWIKI\csrf\verify_csrf_token;
-use User\CurrentUser;
+namespace App\Coordinator\Admin\Qids;
+
+use function App\Utils\Html\div_alert;
+use function App\APICalls\MdwikiSql\execute_query;
+use function App\APICalls\MdwikiSql\check_one;
+use function App\csrf\verify_csrf_token;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');

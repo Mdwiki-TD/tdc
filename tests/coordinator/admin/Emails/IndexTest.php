@@ -3,7 +3,7 @@
 namespace Tests\Coordinator\Admin\Emails;
 
 use PHPUnit\Framework\TestCase;
-use Tables\SqlTables\TablesSql;
+use App\Tables\SqlTables\TablesSql;
 
 class IndexTest extends TestCase
 {

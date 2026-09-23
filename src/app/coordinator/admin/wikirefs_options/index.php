@@ -1,15 +1,18 @@
 <?php
+// src/app/coordinator/admin/wikirefs_options/index.php
 
-use User\CurrentUser;
+namespace App\Coordinator\Admin\WikiRefsOptions;
+
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 };
 
-use function SQLorAPI\Funcs\get_td_or_sql_language_settings;
-use function SQLorAPI\Funcs\get_pages_langs;
-use function Utils\Html\make_edit_icon_new;
+use function App\SQLorAPI\Funcs\get_td_or_sql_language_settings;
+use function App\SQLorAPI\Funcs\get_pages_langs;
+use function App\Utils\Html\make_edit_icon_new;
 
 // language_settings (lang_code, move_dots, expend, add_en_lang)
 

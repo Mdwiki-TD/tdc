@@ -1,14 +1,17 @@
 <?php
+// src/app/coordinator/admin/admins/index.php
 
-use User\CurrentUser;
+namespace App\Coordinator\Admin\Admins;
+
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
 
-use function SQLorAPI\Funcs\get_coordinators;
-use function TDWIKI\csrf\generate_csrf_token;
+use function App\SQLorAPI\Funcs\get_coordinators;
+use function App\csrf\generate_csrf_token;
 
 
 

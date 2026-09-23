@@ -19,14 +19,14 @@
  * include_once __DIR__ . '/csrf.php';
  *
  * // Generate a token for a form
- * use function TDWIKI\csrf\generate_csrf_token;
+ * use function App\csrf\generate_csrf_token;
  * $token = generate_csrf_token();
  *
  * // In your form, include the token
  * echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token) . '">';
  *
  * // Validate the token on form submission
- * use function TDWIKI\csrf\verify_csrf_token;
+ * use function App\csrf\verify_csrf_token;
  * if (verify_csrf_token()) {
  *     // Token is valid, process the form
  * } else {
@@ -50,7 +50,7 @@
  * @see https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
  */
 
-namespace TDWIKI\csrf;
+namespace App\csrf;
 
 use RuntimeException;
 

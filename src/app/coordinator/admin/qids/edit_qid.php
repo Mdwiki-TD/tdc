@@ -1,13 +1,16 @@
 <?php
+// src/app/coordinator/admin/qids/edit_qid.php
 
-use User\CurrentUser;
+namespace App\Coordinator\Admin\Qids;
+
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
 
-use function TDWIKI\csrf\generate_csrf_token;
+use function App\csrf\generate_csrf_token;
 
 echo '</div><script>
     $("#mainnav").hide();

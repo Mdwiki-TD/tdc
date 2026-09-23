@@ -1,15 +1,12 @@
 <?php
+// src/app/coordinator/helpers/add_helper.php
 
 namespace Add\AddPost;
-use Tables\Main\MainTables;
-use function APICalls\MdwikiSql\execute_query;
-use function APICalls\MdwikiSql\fetch_query;
-use User\CurrentUser;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
+use App\Tables\Main\MainTables;
+use function App\APICalls\MdwikiSql\execute_query;
+use function App\APICalls\MdwikiSql\fetch_query;
+
 function insert_to_pages($t)
 {
 

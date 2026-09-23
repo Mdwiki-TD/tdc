@@ -1,6 +1,6 @@
 <?php
 
-namespace Tables\Main;
+namespace App\Tables\Main;
 
 
 /*
@@ -8,13 +8,13 @@ namespace Tables\Main;
 
 MainTables::$1x_$2
 
-use Tables\Main\MainTables;
+use App\Tables\Main\MainTables;
 
 */
 
 
 
-use function SQLorAPI\Funcs\td_or_sql_titles_infos;
+use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
 
 class MainTables
 {

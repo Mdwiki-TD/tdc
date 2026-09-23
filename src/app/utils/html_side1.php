@@ -23,7 +23,7 @@
  *
  * Usage Example:
  * ```php
- * use function Utils\HtmlSide\create_side;
+ * use function App\Utils\HtmlSide\create_side;
  *
  * $sidebar = create_side($_SERVER['SCRIPT_NAME'], 'last', true);
  * echo $sidebar;
@@ -37,7 +37,7 @@
  * @license    GPL-3.0-or-later
  */
 
-namespace Utils\HtmlSide;
+namespace App\Utils\HtmlSide;
 
 /**
  * Get menu data configuration

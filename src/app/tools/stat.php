@@ -2,11 +2,11 @@
 
 
 
-use Tables\Main\MainTables;
-use function Utils\Html\makeDropdown;
-use function Results\GetCats\get_mdwiki_cat_members;
-use function SQLorAPI\Funcs\get_td_or_sql_categories;
-use function SQLorAPI\Funcs\get_td_or_sql_qids;
+use App\Tables\Main\MainTables;
+use function App\Utils\Html\makeDropdown;
+use function App\Results\GetCats\get_mdwiki_cat_members;
+use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
+use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
 
 $cat = $_GET['cat'] ?? 'RTT';
 

@@ -135,11 +135,11 @@ class FixItPostTest extends TestCase
             ]
         ];
 
-        $t_type = $page_data[0]['translate_type'] ?? '';
+        $tType = $page_data[0]['translate_type'] ?? '';
         $cat = $page_data[0]['cat'] ?? '';
         $word = $page_data[0]['word'] ?? '';
 
-        $this->assertEquals('lead', $t_type);
+        $this->assertEquals('lead', $tType);
         $this->assertEquals('RTT', $cat);
         $this->assertEquals('500', $word);
     }

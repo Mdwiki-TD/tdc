@@ -1,6 +1,9 @@
 <?php
+// src/app/coordinator/admin/reports/index.php
 
-use User\CurrentUser;
+namespace App\Coordinator\Admin\Reports;
+
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');

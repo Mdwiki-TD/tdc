@@ -139,7 +139,7 @@ coordinator/
 - **POST-Redirect-GET**: All `post.php` handlers process form submissions and redirect back to the listing page
 - **CRUD Pattern**: Each admin module follows a consistent structure: `index.php` (list/form), `post.php` (handler), optional `edit_*.php` (edit form)
 - **Role-Based Access Control**: `$GLOBALS['user_is_coordinator']` is checked at the top of every admin file
-- **CSRF Protection**: All POST handlers use `generate_csrf_token()` and `verify_csrf_token()` from `TDWIKI\csrf`
+- **CSRF Protection**: All POST handlers use `generate_csrf_token()` and `verify_csrf_token()` from `App\csrf`
 
 ### Code Organization
 
