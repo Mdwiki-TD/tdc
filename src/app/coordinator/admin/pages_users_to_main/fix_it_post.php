@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\csrf\verify_csrf_token;
@@ -14,18 +14,14 @@ use function Add\AddPost\add_pages_to_db;
  * Class FixItPostProcessor
  * Handles input validation, database inserts, and table cleaning for POST submissions.
  */
-class FixItPostProcessor
+class FixItPostProcessor extends AbstractSubPostHandler
 {
     /**
      * Validates and triggers the submission handling.
      */
     public function handle(): void
     {
-        // Check coordinator authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         // Verify POST method and form trigger flag
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['edit'])) {

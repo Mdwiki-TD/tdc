@@ -3,7 +3,6 @@
 
 namespace App\Coordinator\Admin\Projects;
 
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
 use function App\csrf\generate_csrf_token;

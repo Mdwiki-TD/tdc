@@ -33,11 +33,7 @@ class QidsPostController extends AbstractSubPostHandler
 	 */
 	public function handleRequest(): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+		$this->validateCoordinator();
 
 		$this->renderHeaderScripts();
 

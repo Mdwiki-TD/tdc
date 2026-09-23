@@ -3,7 +3,6 @@
 
 namespace App\Coordinator\Admin\Add;
 
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\Utils\Html\div_alert;
 use function App\csrf\verify_csrf_token;
@@ -21,11 +20,7 @@ class AddPostProcessor extends AbstractSubPostHandler
 	 */
 	public function handle(): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+		$this->validateCoordinator();
 
 		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 			exit;

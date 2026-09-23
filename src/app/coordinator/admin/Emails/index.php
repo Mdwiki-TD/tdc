@@ -3,7 +3,6 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractController;
 use App\Tables\SqlTables\TablesSql;
 use function App\Utils\Html\make_mail_icon_new;

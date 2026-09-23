@@ -3,7 +3,6 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\csrf\generate_csrf_token;
@@ -21,11 +20,7 @@ class FixItController extends AbstractController
      */
     public function handleRequest(): void
     {
-        // Check coordinator authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $this->renderHeaderScripts();
 

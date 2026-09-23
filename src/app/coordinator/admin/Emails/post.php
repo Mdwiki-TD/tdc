@@ -3,7 +3,6 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\Utils\Html\div_alert;
 use function App\APICalls\MdwikiSql\sql_update_user;
@@ -23,11 +22,7 @@ class EmailsPostProcessor extends AbstractSubPostHandler
 	 */
 	public function handle(): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+		$this->validateCoordinator();
 
 		echo '</div><script>
             $("#mainnav").hide();

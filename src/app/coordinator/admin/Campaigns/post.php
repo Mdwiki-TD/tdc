@@ -26,11 +26,7 @@ class CampaignsPostProcessor
 	 */
 	public function handle(): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+		$this->validateCoordinator();
 
 		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 			exit;

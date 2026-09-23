@@ -3,7 +3,6 @@
 
 namespace App\Coordinator\Admin\Admins;
 
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_coordinators;
 use function App\csrf\generate_csrf_token;
