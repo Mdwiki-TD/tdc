@@ -11,11 +11,13 @@ use function SQLorAPI\Funcs\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
 use function Tools\RecentHelps\filter_recent2;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
+$CurrentUser = CurrentUser::getInstance();
+
+if (!$CurrentUser->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
-$global_username = CurrentUser::getInstance()->getUsername();
+$global_username = $CurrentUser->getUsername();
 
 $lang = $_GET['lang'] ?? 'All';
 
