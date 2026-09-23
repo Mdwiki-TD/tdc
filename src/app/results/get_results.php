@@ -9,7 +9,7 @@ use function App\Utils\TablesDir\open_td_tables_file;
 function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
 {
     $membersTo = get_mdwiki_cat_members($cat, $useCache, $depth);
-    // z("<br>members_to size:" . count($membersTo));
+    // z("<br>membersTo size:" . count($membersTo));
     $members = [];
     foreach ($membersTo as $mr) {
         $members[] = $mr;
