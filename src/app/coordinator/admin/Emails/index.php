@@ -105,13 +105,13 @@ class EmailsIndexController
 	 */
 	private function emailsFilterTable(string $projectName): string
 	{
-		TablesSql::$s_projects_title_to_id["empty"] = "empty";
+		TablesSql::$sProjectsTitleToId["empty"] = "empty";
 
 		$lList = <<<HTML
             <option data-tokens='all' value='All'>All</option>
         HTML;
 
-		foreach (TablesSql::$s_projects_title_to_id as $pTitle => $pId) {
+		foreach (TablesSql::$sProjectsTitleToId as $pTitle => $pId) {
 			if (empty($pTitle)) {
 				continue;
 			}
