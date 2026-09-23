@@ -4,12 +4,6 @@ use function Utils\Functions\test_print;
 use function Utils\HtmlSide\create_side;
 use User\CurrentUser;
 
-echo <<<HTML
-	<!-- </div> -->
-	<script>$("#coord").addClass("active");</script>
-	<!-- <div id="maindiv" class="container-fluid"> -->
-HTML;
-
 $currentUser = CurrentUser::getInstance();
 $user_is_coordinator = $currentUser->isCoordinator();
 
@@ -101,12 +95,3 @@ if (in_array($ty, $tools_files)) {
 	test_print("can't find $adminfile");
 	include_once __DIR__ . "/coordinator/404.php";
 };
-
-echo <<<HTML
-			</div>
-		</div>
-	</div>
-</div>
-HTML;
-
-echo "<script src='/tdc/js/autocomplate.js'></script>";

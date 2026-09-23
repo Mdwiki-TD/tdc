@@ -1,6 +1,9 @@
 <?php
 // src/app/coordinator/admin/pages_users_to_main/index.php
 
+namespace App\Coordinator\Admin\PagesUsersToMain;
+
+use User\CurrentUser;
 use Tables\Langs\LangsTables;
 use function Utils\Html\make_mdwiki_title;
 use function Utils\Html\make_target_url;
@@ -9,7 +12,6 @@ use function SQLorAPI\Recent\get_pages_users_to_main;
 use function SQLorAPI\Funcs\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent2;
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
-use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
