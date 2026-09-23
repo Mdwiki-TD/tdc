@@ -67,28 +67,28 @@ function edit_page($id, $table, $title, $target, $lang, $user, $pupdate)
 function translated_edit_echo_form($id, $table)
 {
 
-    $page_data = fetch_query("SELECT * FROM $table WHERE id = ?", [$id]);
+    $pageData = fetch_query("SELECT * FROM $table WHERE id = ?", [$id]);
 
-    $title      = $page_data[0]['title'] ?? '';
-    $target     = $page_data[0]['target'] ?? '';
-    $lang       = $page_data[0]['lang'] ?? '';
-    $user       = $page_data[0]['user'] ?? '';
-    $pupdate    = $page_data[0]['pupdate'] ?? '';
+    $title      = $pageData[0]['title'] ?? '';
+    $target     = $pageData[0]['target'] ?? '';
+    $lang       = $pageData[0]['lang'] ?? '';
+    $user       = $pageData[0]['user'] ?? '';
+    $pupdate    = $pageData[0]['pupdate'] ?? '';
 
-    $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
+    $testLine = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
 
     $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
     $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
-    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+    $csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
     echo <<<HTML
         <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" type="hidden"/>
+            <input name='csrf_token' value="$csrfToken" type="hidden"/>
             <input id='id' name='id' value='$id' type='hidden'/>
             <input name='edit' value="1" type="hidden"/>
             <input name='table' value="$table" type="hidden"/>
-            $test_line
+            $testLine
             <div class='container'>
                 <div class='row'>
                     <div class='col-md-3'>
@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$close_btn = <<<HTML
+$closeBtn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
@@ -169,7 +169,7 @@ HTML;
 
 if (!verify_csrf_token()) {
     echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-    echo $close_btn;
+    echo $closeBtn;
     return;
 }
 
@@ -193,7 +193,7 @@ echo <<<HTML
         window will close in 3 seconds
     </div>
 HTML;
-echo $close_btn;
+echo $closeBtn;
 echo <<<HTML
     <script>
         setTimeout(function() {

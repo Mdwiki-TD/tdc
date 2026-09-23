@@ -10,17 +10,17 @@ class FixItTest extends TestCase
     {
         $id = '123';
         $title = 'Test Title';
-        $new_target = 'TestTarget';
+        $newTarget = 'TestTarget';
         $lang = 'ar';
-        $new_user = 'testuser';
+        $newUser = 'testuser';
         $pupdate = '2024-01-15';
 
         // Test that all parameters are properly passed
         $this->assertEquals('123', $id);
         $this->assertEquals('Test Title', $title);
-        $this->assertEquals('TestTarget', $new_target);
+        $this->assertEquals('TestTarget', $newTarget);
         $this->assertEquals('ar', $lang);
-        $this->assertEquals('testuser', $new_user);
+        $this->assertEquals('testuser', $newUser);
         $this->assertEquals('2024-01-15', $pupdate);
     }
 
@@ -40,12 +40,12 @@ class FixItTest extends TestCase
     public function testTestLineGeneration()
     {
         $_REQUEST['test'] = '1';
-        $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
-        $this->assertStringContainsString('name="test"', $test_line);
+        $testLine = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
+        $this->assertStringContainsString('name="test"', $testLine);
 
         unset($_REQUEST['test']);
-        $test_line = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
-        $this->assertEquals('', $test_line);
+        $testLine = (isset($_REQUEST['test'])) ? '<input type="hidden" name="test" value="1" />' : "";
+        $this->assertEquals('', $testLine);
     }
 
     public function testFormActionUrl()
@@ -59,7 +59,7 @@ class FixItTest extends TestCase
 
     public function testPageAlreadyExistDataExtraction()
     {
-        $in_db = [
+        $inDb = [
             [
                 'target' => 'ExistingTarget',
                 'user' => 'existinguser',
@@ -68,28 +68,28 @@ class FixItTest extends TestCase
             ]
         ];
 
-        $db_target = $in_db[0]['target'] ?? '';
-        $db_user = $in_db[0]['user'] ?? '';
-        $db_pupdate = $in_db[0]['pupdate'] ?? '';
-        $lang = $in_db[0]['lang'] ?? '';
+        $dbTarget = $inDb[0]['target'] ?? '';
+        $dbUser = $inDb[0]['user'] ?? '';
+        $dbPupdate = $inDb[0]['pupdate'] ?? '';
+        $lang = $inDb[0]['lang'] ?? '';
 
-        $this->assertEquals('ExistingTarget', $db_target);
-        $this->assertEquals('existinguser', $db_user);
-        $this->assertEquals('2023-12-01', $db_pupdate);
+        $this->assertEquals('ExistingTarget', $dbTarget);
+        $this->assertEquals('existinguser', $dbUser);
+        $this->assertEquals('2023-12-01', $dbPupdate);
         $this->assertEquals('ar', $lang);
     }
 
     public function testPageAlreadyExistWithEmptyData()
     {
-        $in_db = [];
+        $inDb = [];
 
-        $db_target = $in_db[0]['target'] ?? '';
-        $db_user = $in_db[0]['user'] ?? '';
-        $db_pupdate = $in_db[0]['pupdate'] ?? '';
+        $dbTarget = $inDb[0]['target'] ?? '';
+        $dbUser = $inDb[0]['user'] ?? '';
+        $dbPupdate = $inDb[0]['pupdate'] ?? '';
 
-        $this->assertEquals('', $db_target);
-        $this->assertEquals('', $db_user);
-        $this->assertEquals('', $db_pupdate);
+        $this->assertEquals('', $dbTarget);
+        $this->assertEquals('', $dbUser);
+        $this->assertEquals('', $dbPupdate);
     }
 
     public function testWikipediaUrlConstruction()
@@ -108,12 +108,12 @@ class FixItTest extends TestCase
         $_GET['new_user'] = 'newuser';
 
         $id = $_GET['id'] ?? '';
-        $new_target = $_GET['new_target'] ?? '';
-        $new_user = $_GET['new_user'] ?? '';
+        $newTarget = $_GET['new_target'] ?? '';
+        $newUser = $_GET['new_user'] ?? '';
 
         $this->assertEquals('456', $id);
-        $this->assertEquals('NewTarget', $new_target);
-        $this->assertEquals('newuser', $new_user);
+        $this->assertEquals('NewTarget', $newTarget);
+        $this->assertEquals('newuser', $newUser);
 
         unset($_GET['id'], $_GET['new_target'], $_GET['new_user']);
     }
@@ -121,18 +121,18 @@ class FixItTest extends TestCase
     public function testEmptyGetParameters()
     {
         $id = $_GET['id'] ?? '';
-        $new_target = $_GET['new_target'] ?? '';
-        $new_user = $_GET['new_user'] ?? '';
+        $newTarget = $_GET['new_target'] ?? '';
+        $newUser = $_GET['new_user'] ?? '';
 
         $this->assertEquals('', $id);
-        $this->assertEquals('', $new_target);
-        $this->assertEquals('', $new_user);
+        $this->assertEquals('', $newTarget);
+        $this->assertEquals('', $newUser);
     }
 
     public function testCardHeaderStructure()
     {
-        $old_target = 'OldTarget';
-        $header = "Edit Page ($old_target)";
+        $oldTarget = 'OldTarget';
+        $header = "Edit Page ($oldTarget)";
 
         $this->assertStringContainsString('Edit Page', $header);
         $this->assertStringContainsString('OldTarget', $header);
@@ -140,9 +140,9 @@ class FixItTest extends TestCase
 
     public function testInputRequiredAttributes()
     {
-        $required_fields = ['title', 'lang', 'new_target', 'new_user', 'pupdate'];
+        $requiredFields = ['title', 'lang', 'new_target', 'new_user', 'pupdate'];
 
-        foreach ($required_fields as $field) {
+        foreach ($requiredFields as $field) {
             $this->assertIsString($field);
             $this->assertNotEmpty($field);
         }
@@ -157,12 +157,12 @@ class FixItTest extends TestCase
 
     public function testDuplicatePageDetection()
     {
-        $in_db = [['id' => 1]];
-        $isDuplicate = !empty($in_db);
+        $inDb = [['id' => 1]];
+        $isDuplicate = !empty($inDb);
         $this->assertTrue($isDuplicate);
 
-        $in_db = [];
-        $isDuplicate = !empty($in_db);
+        $inDb = [];
+        $isDuplicate = !empty($inDb);
         $this->assertFalse($isDuplicate);
     }
 

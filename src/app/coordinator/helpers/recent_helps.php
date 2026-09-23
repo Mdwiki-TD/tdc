@@ -11,18 +11,18 @@ function filter_recent2($lang, $result)
 
     ksort($result);
 
-    $lang_list = "<option data-tokens='All' value='All'>All</option>";
+    $langList = "<option data-tokens='All' value='All'>All</option>";
 
-    foreach ($result as $lang_code) {
-        $langeee = LangsTables::$L_code_to_lang[$lang_code] ?? '';
-        $selected = ($lang_code == $lang) ? 'selected' : '';
-        if (empty($lang_code)) continue;
-        $lang_list .= <<<HTML
-            <option data-tokens='$lang_code' value='$lang_code' $selected>$langeee</option>
+    foreach ($result as $langCode) {
+        $langeee = LangsTables::$LCodeToLang[$langCode] ?? '';
+        $selected = ($langCode == $lang) ? 'selected' : '';
+        if (empty($langCode)) continue;
+        $langList .= <<<HTML
+            <option data-tokens='$langCode' value='$langCode' $selected>$langeee</option>
             HTML;
     };
 
-    return $lang_list;
+    return $langList;
 }
 
 function do_add_date($results)
@@ -30,20 +30,20 @@ function do_add_date($results)
 
     foreach ($results as $tat => $tabe) {
         $pupdate  = $tabe['pupdate'] ?? ''; // 2025-01-30
-        $add_date = $tabe['add_date'] ?? ''; // 2025-01-29
+        $addDate = $tabe['add_date'] ?? ''; // 2025-01-29
 
         if (strpos($pupdate, ':') !== false) $pupdate = explode(' ', $pupdate)[0];
-        if (strpos($add_date, ':') !== false) $add_date = explode(' ', $add_date)[0];
+        if (strpos($addDate, ':') !== false) $addDate = explode(' ', $addDate)[0];
 
-        $add_date = str_replace("-", "", $add_date);
+        $addDate = str_replace("-", "", $addDate);
         $pupdate  = str_replace("-", "", $pupdate);
 
         // change str to number
-        $add_add = intval($add_date);
-        $add_pup = intval($pupdate);
+        $addAdd = intval($addDate);
+        $addPup = intval($pupdate);
 
-        if ($add_add > $add_pup) {
-            test_print("add_add($add_add) > add_pup($add_pup)");
+        if ($addAdd > $addPup) {
+            test_print("add_add($addAdd) > add_pup($addPup)");
             return true;
         }
 
@@ -55,21 +55,21 @@ function do_add_date($results)
 function filter_table($data, $vav, $id)
 {
 
-    $l_list = "";
+    $lList = "";
 
-    foreach ($data as $table_name => $label) {
-        $checked = ($table_name == $vav) ? "checked" : "";
-        $l_list .= <<<HTML
+    foreach ($data as $tableName => $label) {
+        $checked = ($tableName == $vav) ? "checked" : "";
+        $lList .= <<<HTML
 			<div class="form-check form-check-inline">
 				<input class="form-check-input"
 					type="radio"
 					name="$id"
-					id="radio_$table_name"
-					value="$table_name"
+					id="radio_$tableName"
+					value="$tableName"
 					$checked>
-				<label class="form-check-label" for="radio_$table_name">$label</label>
+				<label class="form-check-label" for="radio_$tableName">$label</label>
 			</div>
 		HTML;
     }
-    return $l_list;
+    return $lList;
 }

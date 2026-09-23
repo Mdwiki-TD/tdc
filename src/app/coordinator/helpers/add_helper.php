@@ -42,15 +42,15 @@ function insert_to_pages($t)
 	return $result2;
 }
 
-function add_pages_to_db($title, $translate_type, $cat, $lang, $user, $target, $pupdate, $word)
+function add_pages_to_db($title, $translateType, $cat, $lang, $user, $target, $pupdate, $word)
 {
 
-	$translate_type = (!empty($translate_type)) ? $translate_type : 'lead';
+	$translateType = (!empty($translateType)) ? $translateType : 'lead';
 	$cat = (!empty($cat)) ? $cat : 'RTT';
 
 	if (empty($word)) {
-		$word = MainTables::$x_Words_table[$title] ?? 0;
-		if ($translate_type == 'all') $word = MainTables::$x_All_Words_table[$title] ?? 0;
+		$word = MainTables::$xWordsTable[$title] ?? 0;
+		if ($translateType == 'all') $word = MainTables::$xAllWordsTable[$title] ?? 0;
 	}
 
 	// add them all to array
@@ -61,15 +61,15 @@ function add_pages_to_db($title, $translate_type, $cat, $lang, $user, $target, $
 		'target'	=> trim($target),
 		'pupdate'	=> trim($pupdate),
 		'cat'		=> trim($cat),
-		'translate_type' => trim($translate_type),
+		'translate_type' => trim($translateType),
 		'word'		=> $word
 	];
 
 	insert_to_pages($t);
 
-	$find_it = fetch_query("SELECT * FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?", [$title, $lang, $user, $target]);
+	$findIt = fetch_query("SELECT * FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?", [$title, $lang, $user, $target]);
 
-	$insert_done = (!empty($find_it)) ? true : false;
+	$insertDone = (!empty($findIt)) ? true : false;
 
-	return $insert_done;
+	return $insertDone;
 }

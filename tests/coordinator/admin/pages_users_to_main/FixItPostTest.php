@@ -9,25 +9,25 @@ class FixItPostTest extends TestCase
     public function testDeleteUserPageLogic()
     {
         // Test the deletion verification logic
-        $find_it_1 = []; // Empty means deleted
-        $find_it_2 = []; // Empty means deleted
+        $findIt_1 = []; // Empty means deleted
+        $findIt_2 = []; // Empty means deleted
 
-        $delete_done = empty($find_it_1) && empty($find_it_2);
-        $this->assertTrue($delete_done);
+        $deleteDone = empty($findIt_1) && empty($findIt_2);
+        $this->assertTrue($deleteDone);
 
         // Test when one table still has record
-        $find_it_1 = [['id' => 1]];
-        $find_it_2 = [];
+        $findIt_1 = [['id' => 1]];
+        $findIt_2 = [];
 
-        $delete_done = empty($find_it_1) && empty($find_it_2);
-        $this->assertFalse($delete_done);
+        $deleteDone = empty($findIt_1) && empty($findIt_2);
+        $this->assertFalse($deleteDone);
 
         // Test when both tables still have records
-        $find_it_1 = [['id' => 1]];
-        $find_it_2 = [['id' => 1]];
+        $findIt_1 = [['id' => 1]];
+        $findIt_2 = [['id' => 1]];
 
-        $delete_done = empty($find_it_1) && empty($find_it_2);
-        $this->assertFalse($delete_done);
+        $deleteDone = empty($findIt_1) && empty($findIt_2);
+        $this->assertFalse($deleteDone);
     }
 
     public function testPostDataExtraction()
@@ -41,15 +41,15 @@ class FixItPostTest extends TestCase
 
         $title = $_POST['title'] ?? '';
         $lang = $_POST['lang'] ?? '';
-        $new_target = $_POST['new_target'] ?? '';
-        $new_user = $_POST['new_user'] ?? '';
+        $newTarget = $_POST['new_target'] ?? '';
+        $newUser = $_POST['new_user'] ?? '';
         $pupdate = $_POST['pupdate'] ?? '';
         $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
 
         $this->assertEquals('Test Title', $title);
         $this->assertEquals('ar', $lang);
-        $this->assertEquals('NewTarget', $new_target);
-        $this->assertEquals('newuser', $new_user);
+        $this->assertEquals('NewTarget', $newTarget);
+        $this->assertEquals('newuser', $newUser);
         $this->assertEquals('2024-01-15', $pupdate);
         $this->assertEquals(123, $id);
 
@@ -104,20 +104,20 @@ class FixItPostTest extends TestCase
     public function testPageDataValidation()
     {
         // Page found
-        $page_data = [['title' => 'Test', 'cat' => 'RTT']];
+        $pageData = [['title' => 'Test', 'cat' => 'RTT']];
         $errors = [];
 
-        if (empty($page_data)) {
+        if (empty($pageData)) {
             $errors[] = "Page with id:(123) not found.";
         }
 
         $this->assertCount(0, $errors);
 
         // Page not found
-        $page_data = [];
+        $pageData = [];
         $errors = [];
 
-        if (empty($page_data)) {
+        if (empty($pageData)) {
             $errors[] = "Page with id:(123) not found.";
         }
 
@@ -127,7 +127,7 @@ class FixItPostTest extends TestCase
 
     public function testPageDataFieldExtraction()
     {
-        $page_data = [
+        $pageData = [
             [
                 'translate_type' => 'lead',
                 'cat' => 'RTT',
@@ -135,9 +135,9 @@ class FixItPostTest extends TestCase
             ]
         ];
 
-        $tType = $page_data[0]['translate_type'] ?? '';
-        $cat = $page_data[0]['cat'] ?? '';
-        $word = $page_data[0]['word'] ?? '';
+        $tType = $pageData[0]['translate_type'] ?? '';
+        $cat = $pageData[0]['cat'] ?? '';
+        $word = $pageData[0]['word'] ?? '';
 
         $this->assertEquals('lead', $tType);
         $this->assertEquals('RTT', $cat);
@@ -176,12 +176,12 @@ class FixItPostTest extends TestCase
 
     public function testDeleteSuccessMessage()
     {
-        $del_it = true;
+        $delIt = true;
         $id = 123;
         $texts = [];
         $errors = [];
 
-        if ($del_it) {
+        if ($delIt) {
             $texts[] = "Page with id:($id) deleted from pages_users .";
         } else {
             $errors[] = "Failed to delete page with id:($id).";
@@ -194,12 +194,12 @@ class FixItPostTest extends TestCase
 
     public function testDeleteFailureMessage()
     {
-        $del_it = false;
+        $delIt = false;
         $id = 123;
         $texts = [];
         $errors = [];
 
-        if ($del_it) {
+        if ($delIt) {
             $texts[] = "Page with id:($id) deleted from pages_users .";
         } else {
             $errors[] = "Failed to delete page with id:($id).";

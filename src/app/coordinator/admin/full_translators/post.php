@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	exit;
 }
 
-$close_btn = <<<HTML
+$closeBtn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
@@ -27,27 +27,27 @@ HTML;
 
 if (!verify_csrf_token()) {
 	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $close_btn;
+	echo $closeBtn;
 	return;
 }
 $errors = [];
 $texts = [];
 
-$table_name = "full_translators";
+$tableName = "full_translators";
 
 foreach ($_POST['rows'] ?? [] as $key => $table) {
 	// { "id": "1", "user": "" }
 	// { "id": "4", "user": "Dr3939", "del": "4" }
 
-	$u_id  	= $table['id'] ?? '';
+	$uId  	= $table['id'] ?? '';
 	$del  	= $table['del'] ?? '';
 
 	$user  	= $table['user'] ?? '';
 
-	if (!empty($del) && !empty($u_id)) {
-		$qua2 = "DELETE FROM $table_name WHERE id = ?";
+	if (!empty($del) && !empty($uId)) {
+		$qua2 = "DELETE FROM $tableName WHERE id = ?";
 
-		$result = execute_query($qua2, $params = [$u_id]);
+		$result = execute_query($qua2, $params = [$uId]);
 
 		if ($result === false) {
 			$errors[] = "Failed to delete user $user.";
@@ -59,34 +59,34 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 		continue;
 	};
 
-	// $is_new = $table['is_new'] ?? '';
+	// $isNew = $table['is_new'] ?? '';
 
 	$user = trim($user);
 
-	$is_active = $table['is_active'] ?? '';
-	$active_orginal_value = $table['active_orginal_value'] ?? '';
+	$isActive = $table['is_active'] ?? '';
+	$activeOrginalValue = $table['active_orginal_value'] ?? '';
 
-	if ($is_active == $active_orginal_value && !empty($u_id)) {
+	if ($isActive == $activeOrginalValue && !empty($uId)) {
 		continue;
 	};
 
-	if (!empty($user)) { // && empty($u_id) && $is_new == 'yes'
+	if (!empty($user)) { // && empty($uId) && $isNew == 'yes'
 
-		// $qua = "INSERT INTO $table_name (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $table_name WHERE user = ?)";
+		// $qua = "INSERT INTO $tableName (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $tableName WHERE user = ?)";
 
 		$qua = <<<SQL
-			INSERT INTO $table_name (user, is_active)
+			INSERT INTO $tableName (user, is_active)
 			VALUES (?, ?)
 			ON DUPLICATE KEY UPDATE
 				is_active = VALUES(is_active)
 		SQL;
 
-		$result = execute_query($qua, $params = [$user, $is_active]);
+		$result = execute_query($qua, $params = [$user, $isActive]);
 
 		if ($result === false) {
 			$errors[] = "Failed to add user $user.";
 		} else {
-			$texts[] = (empty($u_id)) ? "User $user Added." : "User $user Updated.";
+			$texts[] = (empty($uId)) ? "User $user Added." : "User $user Updated.";
 		}
 	};
 

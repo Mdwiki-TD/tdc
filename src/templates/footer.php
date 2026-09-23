@@ -1,16 +1,16 @@
 <?php
 
 // Calculate and display page load time
-if (isset($GLOBALS['time_start'])) {
-	$time_start = (float)$GLOBALS['time_start'];
-	$time_end = microtime(true);
-	$time_diff = round($time_end - $time_start, 3);
+if (isset($GLOBALS['timeStart'])) {
+	$timeStart = (float)$GLOBALS['timeStart'];
+	$timeEnd = microtime(true);
+	$timeDiff = round($timeEnd - $timeStart, 3);
 
-	$line = "Load Time: {$time_diff} seconds";
+	$line = "Load Time: {$timeDiff} seconds";
 
 	// Escape for JavaScript
-	$escaped_line = addslashes($line);
-	$script = "$('.tool_title').attr('title', '{$escaped_line}');";
+	$escapedLine = addslashes($line);
+	$script = "$('.tool_title').attr('title', '{$escapedLine}');";
 
 	echo "\n<script>\n\t{$script}</script>";
 }

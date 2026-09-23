@@ -19,7 +19,7 @@ use function App\Utils\Html\make_target_url;
 use function App\Emails\Sugust\get_sugust;
 use function App\csrf\generate_csrf_token;
 
-$global_username = CurrentUser::getInstance()->getUsername();
+$globalUsername = CurrentUser::getInstance()->getUsername();
 
 echo "</div>";
 
@@ -47,10 +47,10 @@ $target = $_GET['target'] ?? $_POST['target'] ?? '';
 
 $views  = get_views($target, $lang, $date);
 
-$sugust_tab = get_sugust($title, $lang);
-$sugust = $sugust_tab['sugust'] ?? '';
+$sugustTab = get_sugust($title, $lang);
+$sugust = $sugustTab['sugust'] ?? '';
 
-$here_params = array(
+$hereParams = array(
     // 'username' => rawurlencode($user),
     'code' => $lang,
     'cat' => 'RTT',
@@ -58,32 +58,32 @@ $here_params = array(
     'title' => $sugust
 );
 
-$here_url = "https://mdwiki.toolforge.org/Translation_Dashboard/translate_med/index.php?" . http_build_query($here_params);
+$hereUrl = "https://mdwiki.toolforge.org/Translation_Dashboard/translate_med/index.php?" . http_build_query($hereParams);
 
-$HERE = "<a target='_blank' href='$here_url'><b>HERE</b></a>";
+$HERE = "<a target='_blank' href='$hereUrl'><b>HERE</b></a>";
 
 
-$Emails_array = [];
+$EmailsArray = [];
 
 
 foreach (fetch_query("select username, email from users;") as $Key => $ta) {
-    $Emails_array[$ta['username']] = $ta['email'];
+    $EmailsArray[$ta['username']] = $ta['email'];
 };
 
-$email_to = $Emails_array[$user] ?? '';
-$cc_to    = $Emails_array[$global_username] ?? '';
+$emailTo = $EmailsArray[$user] ?? '';
+$ccTo    = $EmailsArray[$globalUsername] ?? '';
 
 $title2  =    make_mdwiki_title($title);
 $sugust2 = make_mdwiki_title($sugust);
 
 
-$url_views_2 = 'https://'
+$urlViews_2 = 'https://'
     . 'pageviews.wmcloud.org/?project=' . $lang . '.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&range=all-time&pages=' . rawurlEncode($target);
 
 $start = !empty($date) ? $date : '2019-01-01';
 $end = date("Y-m-d", strtotime("yesterday"));
 
-$url_views_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
+$urlViews_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
     'project' => "$lang.wikipedia.org",
     'platform' => 'all-access',
     'agent' => 'all-agents',
@@ -94,9 +94,9 @@ $url_views_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
 ));
 
 // $views2 = "<font color='#0000ff'>$views people</font>";
-$views2 = "<a target='_blank' href='$url_views_3'><font color='#0000ff'>$views people</font></a>";
+$views2 = "<a target='_blank' href='$urlViews_3'><font color='#0000ff'>$views people</font></a>";
 
-$lang2 = MainTables::$x_Langs_table[$lang]['name'] ?? $lang;
+$lang2 = MainTables::$xLangsTable[$lang]['name'] ?? $lang;
 $lang2 = make_target_url($target, $lang, $name = $lang2);
 
 // print tabs values
@@ -191,14 +191,14 @@ $mag = <<<HTML
 
     HTML;
 
-$post_php = "/gmail1/index.php";
+$postPhp = "/gmail1/index.php";
 
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
 echo <<<HTML
     <div class1='container-fluid'>
-        <form action='$post_php' method="POST">
-          <input name='csrf_token' value="$csrf_token" type="hidden"/>
+        <form action='$postPhp' method="POST">
+          <input name='csrf_token' value="$csrfToken" type="hidden"/>
             <input type='hidden' name='test' value='$test'/>
             <input type='hidden' name='lang' value='$lang'/>
             <input type='hidden' name='nonav' value='1'/>
@@ -210,7 +210,7 @@ echo <<<HTML
                                 <label class='mr-sm-2' for='email_to'>To:</label>
                             </span>
                         </div>
-                        <input class='form-control' type='text' name='email_to' value='$email_to' required/>
+                        <input class='form-control' type='text' name='email_to' value='$emailTo' required/>
                     </div>
                 </div>
                 <div class='col-sm-12 col-md-7'>
@@ -220,7 +220,7 @@ echo <<<HTML
                     <input class='form-check-input' type='checkbox' name='ccme'>Send me copy</input>
                             </span>
                         </div>
-                        <input class='form-control' type='text' name='cc_to' value='$cc_to'/>
+                        <input class='form-control' type='text' name='cc_to' value='$ccTo'/>
                     </div>
                 </div>
             </div>

@@ -24,45 +24,45 @@ $user    = $_GET['user'] ?? '';
 $wiki    = $_GET['wiki'] ?? '';
 $project = $_GET['project'] ?? '';
 $email   = $_GET['email'] ?? '';
-$user_id = $_GET['user_id'] ?? '';
+$userId = $_GET['user_id'] ?? '';
 
-$header_title = (!empty($user_id)) ? "Edit User" : "Add New User";
+$headerTitle = (!empty($userId)) ? "Edit User" : "Add New User";
 
 echo <<<HTML
 <div class='card'>
     <div class='card-header'>
-        <h4>$header_title</h4>
+        <h4>$headerTitle</h4>
     </div>
     <div class='card-body'>
 HTML;
 
-function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
+function edit_user_echo_form($user, $wiki, $project, $email, $userId)
 {
 
-    $project_line = make_project_to_user($project);
+    $projectLine = make_project_to_user($project);
 
-    $csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+    $csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
-    $id_row = <<<HTML
+    $idRow = <<<HTML
         <div class='col-md-3'>
             <div class='input-group mb-3'>
                 <div class='input-group-prepend'>
                     <span class='input-group-text'>User id</span>
                 </div>
-                <input class='form-control' type='text' name='emails[1][user_id]' value='$user_id' readonly/>
+                <input class='form-control' type='text' name='emails[1][user_id]' value='$userId' readonly/>
             </div>
         </div>
     HTML;
 
-    if (empty($user_id)) $id_row = "";
+    if (empty($userId)) $idRow = "";
 
     echo <<<HTML
         <form action='index.php?ty=Emails/post&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" type="hidden"/>
+            <input name='csrf_token' value="$csrfToken" type="hidden"/>
             <input name='edit' value="1" type="hidden"/>
             <div class='container'>
                 <div class='row'>
-                    $id_row
+                    $idRow
                     <div class='col-md-3'>
                         <div class='input-group mb-3'>
                             <div class='input-group-prepend'>
@@ -92,7 +92,7 @@ function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
                             <div class='input-group-prepend'>
                                 <span class='input-group-text'>project</span>
                             </div>
-                            <select name='emails[1][project]' class='form-select options'>$project_line</select>
+                            <select name='emails[1][project]' class='form-select options'>$projectLine</select>
                         </div>
                     </div>
                     <div class='col-md-2'>
@@ -104,7 +104,7 @@ function edit_user_echo_form($user, $wiki, $project, $email, $user_id)
     HTML;
 }
 
-edit_user_echo_form($user, $wiki, $project, $email, $user_id);
+edit_user_echo_form($user, $wiki, $project, $email, $userId);
 
 echo <<<HTML
     </div>

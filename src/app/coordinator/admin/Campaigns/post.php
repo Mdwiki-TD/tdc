@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	exit;
 }
 
-$close_btn = <<<HTML
+$closeBtn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
@@ -26,11 +26,11 @@ HTML;
 
 if (!verify_csrf_token()) {
 	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $close_btn;
+	echo $closeBtn;
 	return;
 }
 
-$default_cat = $_POST['default_cat'] ?? '';
+$defaultCat = $_POST['default_cat'] ?? '';
 
 foreach ($_POST['rows'] ?? [] as $key => $table) {
 
@@ -53,7 +53,7 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 	$cat2 = $table['cat2'];
 	$dep  = $table['dep'];
 
-	$is_default = ($default_cat == $ido) ? 1 : 0;
+	$isDefault = ($defaultCat == $ido) ? 1 : 0;
 
 	$qua = "UPDATE categories
 		SET
@@ -66,7 +66,7 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 			id = ?
 	";
 
-	$params = [$camp, $cat1, $cat2, $dep, $is_default, $ido];
+	$params = [$camp, $cat1, $cat2, $dep, $isDefault, $ido];
 
 	execute_query($qua, $params);
 }
@@ -83,10 +83,10 @@ if (isset($_POST['new'])) {
 		$cat2 = $table['cat2'];
 		$dep  = $table['dep'];
 
-		$is_default = ($default_cat == $ido) ? 1 : 0;
+		$isDefault = ($defaultCat == $ido) ? 1 : 0;
 
 		$qua = "INSERT INTO categories (category, campaign, depth, is_default, category2) SELECT ?, ?, ?, ?, ?";
-		$params = [$cat1, $camp, $dep, $is_default, $cat2];
+		$params = [$cat1, $camp, $dep, $isDefault, $cat2];
 
 		execute_query($qua, $params);
 	};

@@ -61,7 +61,7 @@ class HtmlTest extends TestCase
 
     public function testMakeProjectToUser()
     {
-        TablesSql::$s_projects_title_to_id = [
+        TablesSql::$sProjectsTitleToId = [
             'Project Alpha' => 1,
             'Project Beta' => 2
         ];

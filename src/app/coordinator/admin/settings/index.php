@@ -51,13 +51,13 @@ function make_settings_tab($tabe)
 
         $type     = $v['type'] ?? $v['Type'] ?? "";
 
-        $value_line = <<<HTML
+        $valueLine = <<<HTML
             <input class='form-control' size='4' name='rows[$nn][value]' value='$value'/>
         HTML;
 
         if ($type == 'check') {
             $checked = ($value == 1 || $value == "1") ? 'checked' : '';
-            $value_line = <<<HTML
+            $valueLine = <<<HTML
                 <div class='form-check form-switch'>
                     <input type='hidden' name='rows[$nn][value]' value='0'>
                     <input class='form-check-input' type='checkbox' name='rows[$nn][value]' value='1' $checked>
@@ -80,7 +80,7 @@ function make_settings_tab($tabe)
                     <input class='form-control' name='rows[$nn][displayed]' value='$displayed' type="hidden"/> -->
                 </td>
                 <td data-content='Value'>
-                    $value_line
+                    $valueLine
                     <!-- <input class='form-control' name='rows[$nn][type]' value='$type' type="hidden"/> -->
                 </td>
             </tr>
@@ -104,7 +104,7 @@ $qq = get_td_or_sql_settings();
 
 $text = make_settings_tab($qq);
 
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
 echo <<<HTML
 	<div class='card'>
@@ -114,7 +114,7 @@ echo <<<HTML
         <div class='card-body'>
             <div class='row'>
                 <form action='index.php' method="POST">
-                    <input name='csrf_token' value="$csrf_token" type="hidden"/>
+                    <input name='csrf_token' value="$csrfToken" type="hidden"/>
                     <input name='ty' value='settings' type="hidden"/>
                 $text
                 <button type='submit' class='btn btn-outline-primary'>Save</button>

@@ -9,8 +9,8 @@ class EditQidTest extends TestCase
     public function testHeaderTitleWithId()
     {
         $_GET['id'] = '123';
-        $header_title = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
-        $this->assertEquals("Edit Qid", $header_title);
+        $headerTitle = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
+        $this->assertEquals("Edit Qid", $headerTitle);
 
         unset($_GET['id']);
     }
@@ -18,8 +18,8 @@ class EditQidTest extends TestCase
     public function testHeaderTitleWithoutId()
     {
         unset($_GET['id']);
-        $header_title = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
-        $this->assertEquals("Add New Qid", $header_title);
+        $headerTitle = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
+        $this->assertEquals("Add New Qid", $headerTitle);
     }
 
     public function testHtmlSpecialCharsEscaping()
@@ -34,15 +34,15 @@ class EditQidTest extends TestCase
     public function testIdRowGenerationWithId()
     {
         $id = '456';
-        $id_row_exists = (!empty($id));
-        $this->assertTrue($id_row_exists);
+        $idRowExists = (!empty($id));
+        $this->assertTrue($idRowExists);
     }
 
     public function testIdRowGenerationWithoutId()
     {
         $id = '';
-        $id_row_exists = (!empty($id));
-        $this->assertFalse($id_row_exists);
+        $idRowExists = (!empty($id));
+        $this->assertFalse($idRowExists);
     }
 
     public function testQidTableValidation()
@@ -64,36 +64,36 @@ class EditQidTest extends TestCase
 
     public function testFormActionUrl()
     {
-        $qid_table = 'qids';
-        $action = "index.php?ty=qids/post&qid_table=$qid_table&nonav=120";
+        $qidTable = 'qids';
+        $action = "index.php?ty=qids/post&qid_table=$qidTable&nonav=120";
         $this->assertEquals('index.php?ty=qids/post&qid_table=qids&nonav=120', $action);
     }
 
     public function testHiddenInputs()
     {
-        $qid_table = 'qids_others';
+        $qidTable = 'qids_others';
         $edit = '1';
 
-        $this->assertEquals('qids_others', $qid_table);
+        $this->assertEquals('qids_others', $qidTable);
         $this->assertEquals('1', $edit);
     }
 
     public function testInputNamePattern()
     {
-        $name_id = 'rows[1][id]';
-        $name_title = 'rows[1][title]';
-        $name_qid = 'rows[1][qid]';
+        $nameId = 'rows[1][id]';
+        $nameTitle = 'rows[1][title]';
+        $nameQid = 'rows[1][qid]';
 
-        $this->assertEquals('rows[1][id]', $name_id);
-        $this->assertEquals('rows[1][title]', $name_title);
-        $this->assertEquals('rows[1][qid]', $name_qid);
+        $this->assertEquals('rows[1][id]', $nameId);
+        $this->assertEquals('rows[1][title]', $nameTitle);
+        $this->assertEquals('rows[1][qid]', $nameQid);
     }
 
     public function testRequiredFields()
     {
-        $required_fields = ['title', 'qid'];
-        $this->assertContains('title', $required_fields);
-        $this->assertContains('qid', $required_fields);
+        $requiredFields = ['title', 'qid'];
+        $this->assertContains('title', $requiredFields);
+        $this->assertContains('qid', $requiredFields);
     }
 
     public function testReadonlyAttribute()
@@ -152,36 +152,36 @@ class EditQidTest extends TestCase
 
     public function testColumnClasses()
     {
-        $col_classes = ['col-md-3', 'col-md-2'];
+        $colClasses = ['col-md-3', 'col-md-2'];
 
-        $this->assertContains('col-md-3', $col_classes);
-        $this->assertContains('col-md-2', $col_classes);
+        $this->assertContains('col-md-3', $colClasses);
+        $this->assertContains('col-md-2', $colClasses);
     }
 
     public function testFormControlClass()
     {
-        $input_class = 'form-control';
-        $this->assertEquals('form-control', $input_class);
+        $inputClass = 'form-control';
+        $this->assertEquals('form-control', $inputClass);
     }
 
     public function testSubmitButtonValue()
     {
-        $button_value = 'send';
-        $this->assertEquals('send', $button_value);
+        $buttonValue = 'send';
+        $this->assertEquals('send', $buttonValue);
     }
 
     public function testButtonClass()
     {
-        $button_class = 'btn btn-outline-primary';
-        $this->assertStringContainsString('btn', $button_class);
-        $this->assertStringContainsString('btn-outline-primary', $button_class);
+        $buttonClass = 'btn btn-outline-primary';
+        $this->assertStringContainsString('btn', $buttonClass);
+        $this->assertStringContainsString('btn-outline-primary', $buttonClass);
     }
 
     public function testCardStructure()
     {
-        $card_classes = ['card', 'card-header', 'card-body'];
+        $cardClasses = ['card', 'card-header', 'card-body'];
 
-        foreach ($card_classes as $class) {
+        foreach ($cardClasses as $class) {
             $this->assertIsString($class);
             $this->assertNotEmpty($class);
         }
@@ -189,8 +189,8 @@ class EditQidTest extends TestCase
 
     public function testContainerClass()
     {
-        $container_class = 'container-fluid';
-        $this->assertEquals('container-fluid', $container_class);
+        $containerClass = 'container-fluid';
+        $this->assertEquals('container-fluid', $containerClass);
     }
 
     public function testDisParameter()

@@ -46,55 +46,55 @@ class IndexTest extends TestCase
     public function testQidComparison()
     {
         $qid = 'Q123';
-        $new_qid = 'Q123';
+        $newQid = 'Q123';
 
-        $same_qid = ($qid == $new_qid) ? "" : "bg-danger-subtle";
-        $this->assertEquals('', $same_qid);
+        $sameQid = ($qid == $newQid) ? "" : "bg-danger-subtle";
+        $this->assertEquals('', $sameQid);
 
-        $new_qid = 'Q456';
-        $same_qid = ($qid == $new_qid) ? "" : "bg-danger-subtle";
-        $this->assertEquals('bg-danger-subtle', $same_qid);
+        $newQid = 'Q456';
+        $sameQid = ($qid == $newQid) ? "" : "bg-danger-subtle";
+        $this->assertEquals('bg-danger-subtle', $sameQid);
     }
 
     public function testQidEmptyCheck()
     {
         $qid = 'Q123';
-        $new_qid = '';
+        $newQid = '';
 
-        $isEmpty = (!empty($qid) && empty($new_qid));
+        $isEmpty = (!empty($qid) && empty($newQid));
         $this->assertTrue($isEmpty);
 
-        $new_qid = 'Q456';
-        $isEmpty = (!empty($qid) && empty($new_qid));
+        $newQid = 'Q456';
+        $isEmpty = (!empty($qid) && empty($newQid));
         $this->assertFalse($isEmpty);
     }
 
     public function testQidMatchingLogic()
     {
         $qid = 'Q123';
-        $new_qid = 'Q123';
+        $newQid = 'Q123';
 
-        if (!empty($qid) && $new_qid == $qid) {
-            $same_qid = "";
+        if (!empty($qid) && $newQid == $qid) {
+            $sameQid = "";
         } else {
-            $same_qid = "bg-info-subtle";
+            $sameQid = "bg-info-subtle";
         }
 
-        $this->assertEquals('', $same_qid);
+        $this->assertEquals('', $sameQid);
     }
 
     public function testQidDifferenceHighlight()
     {
         $qid = 'Q123';
-        $new_qid = 'Q456';
+        $newQid = 'Q456';
 
-        if (!empty($qid) && empty($new_qid)) {
-            $same_qid = "bg-info-subtle";
+        if (!empty($qid) && empty($newQid)) {
+            $sameQid = "bg-info-subtle";
         } else {
-            $same_qid = ($qid == $new_qid) ? "bg-info-subtle" : "bg-danger-subtle";
+            $sameQid = ($qid == $newQid) ? "bg-info-subtle" : "bg-danger-subtle";
         }
 
-        $this->assertEquals('bg-danger-subtle', $same_qid);
+        $this->assertEquals('bg-danger-subtle', $sameQid);
     }
 
     public function testWikidataUrlConstruction()
@@ -110,10 +110,10 @@ class IndexTest extends TestCase
     {
         $qid = 'Q123';
         $lang = 'ar';
-        $new_target = 'TestPage';
-        $new_target2 = htmlspecialchars($new_target, ENT_QUOTES);
+        $newTarget = 'TestPage';
+        $newTarget2 = htmlspecialchars($newTarget, ENT_QUOTES);
 
-        $url = "https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$new_target2";
+        $url = "https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$newTarget2";
 
         $this->assertStringContainsString('SetSiteLink', $url);
         $this->assertStringContainsString('Q123', $url);
@@ -123,13 +123,13 @@ class IndexTest extends TestCase
 
     public function testArrayColumnExtraction()
     {
-        $sql_results = [
+        $sqlResults = [
             ['title' => 'Title1', 'lang' => 'ar'],
             ['title' => 'Title2', 'lang' => 'en'],
             ['title' => 'Title3', 'lang' => 'fr']
         ];
 
-        $titles = array_column($sql_results, "title");
+        $titles = array_column($sqlResults, "title");
 
         $this->assertCount(3, $titles);
         $this->assertEquals('Title1', $titles[0]);
@@ -144,27 +144,27 @@ class IndexTest extends TestCase
             ['title' => 'Title2', 'qid' => 'Q2']
         ];
 
-        $titles_qids = array_column($infos, "qid", "title");
+        $titlesQids = array_column($infos, "qid", "title");
 
-        $this->assertArrayHasKey('Title1', $titles_qids);
-        $this->assertArrayHasKey('Title2', $titles_qids);
-        $this->assertEquals('Q1', $titles_qids['Title1']);
-        $this->assertEquals('Q2', $titles_qids['Title2']);
+        $this->assertArrayHasKey('Title1', $titlesQids);
+        $this->assertArrayHasKey('Title2', $titlesQids);
+        $this->assertEquals('Q1', $titlesQids['Title1']);
+        $this->assertEquals('Q2', $titlesQids['Title2']);
     }
 
     public function testQidLookupFromArray()
     {
-        $titles_qids = [
+        $titlesQids = [
             'Title1' => 'Q1',
             'Title2' => 'Q2'
         ];
 
         $title = 'Title1';
-        $qid = $titles_qids[$title] ?? '';
+        $qid = $titlesQids[$title] ?? '';
         $this->assertEquals('Q1', $qid);
 
         $title = 'NonExistent';
-        $qid = $titles_qids[$title] ?? '';
+        $qid = $titlesQids[$title] ?? '';
         $this->assertEquals('', $qid);
     }
 
@@ -180,15 +180,15 @@ class IndexTest extends TestCase
 
     public function testEditParamsStructure()
     {
-        $edit_params = [
+        $editParams = [
             'id' => 123,
             'new_user' => 'newuser',
             'new_target' => 'NewTarget'
         ];
 
-        $this->assertArrayHasKey('id', $edit_params);
-        $this->assertArrayHasKey('new_user', $edit_params);
-        $this->assertArrayHasKey('new_target', $edit_params);
+        $this->assertArrayHasKey('id', $editParams);
+        $this->assertArrayHasKey('new_user', $editParams);
+        $this->assertArrayHasKey('new_target', $editParams);
     }
 
     public function testLangValidation()
@@ -253,10 +253,10 @@ class IndexTest extends TestCase
 
     public function testBootstrapClassApplication()
     {
-        $same_qid = 'bg-info-subtle';
-        $this->assertEquals('bg-info-subtle', $same_qid);
+        $sameQid = 'bg-info-subtle';
+        $this->assertEquals('bg-info-subtle', $sameQid);
 
-        $same_qid = 'bg-danger-subtle';
-        $this->assertEquals('bg-danger-subtle', $same_qid);
+        $sameQid = 'bg-danger-subtle';
+        $this->assertEquals('bg-danger-subtle', $sameQid);
     }
 }

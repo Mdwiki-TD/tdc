@@ -21,7 +21,7 @@ $("#mainnav").hide();
 $("#maindiv").hide();
 </script>';
 
-$close_btn = <<<HTML
+$closeBtn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['emails'])) {
 
 if (!verify_csrf_token()) {
 	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $close_btn;
+	echo $closeBtn;
 	return;
 }
 
@@ -52,7 +52,7 @@ foreach ($_POST['emails'] as $key => $table) {
 	$email 	 = $table['email'] ?? '';
 	$wiki 	 = $table['wiki'] ?? '';
 	$project = $table['project'] ?? '';
-	$user_id = $table['user_id'] ?? '';
+	$userId = $table['user_id'] ?? '';
 
 	if (empty($user)) {
 		$errors[] = "Username is required.";
@@ -72,28 +72,28 @@ foreach ($_POST['emails'] as $key => $table) {
 	$wiki      = trim($wiki);
 	$project   = trim($project);
 
-	$tt_tab = check_one($select = "*", $where = "username", $value = $user, $table = "users");
+	$ttTab = check_one($select = "*", $where = "username", $value = $user, $table = "users");
 
-	if ($tt_tab) {
-		$tt_username = $tt_tab['username'];
-		$tt_id = $tt_tab['user_id'];
+	if ($ttTab) {
+		$ttUsername = $ttTab['username'];
+		$ttId = $ttTab['user_id'];
 
-		if (!empty($user_id) && $tt_id != $user_id) {
-			$errors[] = "User:($user) already in database with user_id:($tt_id).";
+		if (!empty($userId) && $ttId != $userId) {
+			$errors[] = "User:($user) already in database with user_id:($ttId).";
 			continue;
 		}
 
-		if (empty($user_id) && !empty($tt_username)) {
-			$errors[] = "User:($user) already in database with user_id:($tt_id).";
+		if (empty($userId) && !empty($ttUsername)) {
+			$errors[] = "User:($user) already in database with user_id:($ttId).";
 			continue;
 		}
 	}
 
-	if (empty($user_id)) {
+	if (empty($userId)) {
 		sql_add_user($user, $email, $wiki, $project);
 		$texts[] = "User:($user) added successfully.";
 	} else {
-		sql_update_user($user, $email, $wiki, $project, $user_id);
+		sql_update_user($user, $email, $wiki, $project, $userId);
 		$texts[] = "User:($user) updated successfully.";
 	}
 }
@@ -101,4 +101,4 @@ foreach ($_POST['emails'] as $key => $table) {
 echo div_alert($texts, 'success');
 echo div_alert($errors, 'danger');
 
-echo $close_btn;
+echo $closeBtn;

@@ -38,11 +38,11 @@ use App\Tables\Main\MainTables;
 
 class LangsTables
 {
-    public static $L_change_codes = [];
-    public static $L_code_to_lang = [];
+    public static $LChangeCodes = [];
+    public static $LCodeToLang = [];
 }
 
-LangsTables::$L_change_codes = [
+LangsTables::$LChangeCodes = [
     "gsw" => "als",
     "sgs" => "bat-smg",
     "nb"    =>    "no",
@@ -61,16 +61,16 @@ LangsTables::$L_change_codes = [
     "yue"    =>    "zh-yue",
 ];
 
-foreach (MainTables::$x_Langs_table as $_ => $lang_tab) {
-    $lang_code = $lang_tab['code'] ?? "";
-    $lang_name = $lang_tab['autonym'] ?? "";
+foreach (MainTables::$xLangsTable as $_ => $langTab) {
+    $langCode = $langTab['code'] ?? "";
+    $langName = $langTab['autonym'] ?? "";
 
-    if (empty($lang_code)) continue;
-    if (isset(LangsTables::$L_change_codes[$lang_code]) && isset(LangsTables::$L_code_to_lang[LangsTables::$L_change_codes[$lang_code]])) {
+    if (empty($langCode)) continue;
+    if (isset(LangsTables::$LChangeCodes[$langCode]) && isset(LangsTables::$LCodeToLang[LangsTables::$LChangeCodes[$langCode]])) {
         continue;
     }
 
-    $lang_title = "($lang_code) $lang_name";
+    $langTitle = "($langCode) $langName";
 
-    LangsTables::$L_code_to_lang[$lang_code] = $lang_title;
+    LangsTables::$LCodeToLang[$langCode] = $langTitle;
 };

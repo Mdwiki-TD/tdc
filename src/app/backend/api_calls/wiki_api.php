@@ -4,12 +4,12 @@ namespace App\APICalls\WikiApi;
 
 function get_url_result_curl(string $url): string
 {
-    $usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
+    $usrAgent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
 
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_USERAGENT => $usr_agent,
+        CURLOPT_USERAGENT => $usrAgent,
         CURLOPT_CONNECTTIMEOUT => 5,
         CURLOPT_TIMEOUT => 5,
         // لإضافة ملفات الكوكيز لاحقًا فقط أزل علامة التعليق:

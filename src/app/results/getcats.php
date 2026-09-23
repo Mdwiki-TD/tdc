@@ -4,19 +4,18 @@ namespace App\Results\GetCats;
 
 use function App\Utils\Functions\test_print;
 use function App\APICalls\MdwikiApi\get_mdwiki_url_with_params;
-use function App\Utils\Functions\start_with;
 use function App\Utils\TablesDir\open_td_tables_file;
 
 function get_category_from_cache(string $category): array
 {
-    $tables_path = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
+    $tablesPath = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
 
-    $file_path = "$tables_path/cats_cash/$category.json";
+    $filePath = "$tablesPath/cats_cash/$category.json";
 
-    $data = open_td_tables_file($file_path);
+    $data = open_td_tables_file($filePath);
 
     if (!isset($data['list']) || !is_array($data['list'])) {
-        test_print("Invalid format in JSON file: $file_path");
+        test_print("Invalid format in JSON file: $filePath");
         return [];
     }
 
@@ -30,7 +29,7 @@ function get_category_from_cache(string $category): array
 
 function fetch_category_members(string $category): array
 {
-    if (!start_with($category, 'Category:')) {
+    if (!str_starts_with($category, 'Category:')) {
         $category = "Category:$category";
     }
 
@@ -66,55 +65,55 @@ function fetch_category_members(string $category): array
     return $items;
 }
 
-function get_category_members(string $category, bool $use_cache = true): array
+function get_category_members(string $category, bool $useCache = true): array
 {
-    if ($use_cache) {
-        $cached_members = get_category_from_cache($category);
-        if (!empty($cached_members)) {
-            return $cached_members;
+    if ($useCache) {
+        $cachedMembers = get_category_from_cache($category);
+        if (!empty($cachedMembers)) {
+            return $cachedMembers;
         }
     }
 
     $all = fetch_category_members($category);
 
-    if (empty($all) && !$use_cache) {
+    if (empty($all) && !$useCache) {
         $all = get_category_from_cache($category);
     }
     return $all;
 }
 
-function get_mdwiki_cat_members(string $category, bool $use_cache = true, int $depth = 0): array
+function get_mdwiki_cat_members(string $category, bool $useCache = true, int $depth = 0): array
 {
     $titles = [];
-    $categories_to_process = [$category];
-    $current_depth = 0;
+    $categoriesToProcess = [$category];
+    $currentDepth = 0;
 
-    while (!empty($categories_to_process) && $current_depth <= $depth) {
-        $next_categories = [];
+    while (!empty($categoriesToProcess) && $currentDepth <= $depth) {
+        $nextCategories = [];
 
-        foreach ($categories_to_process as $current_category) {
-            $members = get_category_members($current_category, $use_cache);
+        foreach ($categoriesToProcess as $currentCategory) {
+            $members = get_category_members($currentCategory, $useCache);
 
             foreach ($members as $member) {
-                if (start_with($member, 'Category:')) {
-                    $next_categories[] = $member;
+                if (str_starts_with($member, 'Category:')) {
+                    $nextCategories[] = $member;
                 } else {
                     $titles[] = $member;
                 }
             }
         }
 
-        $categories_to_process = array_unique($next_categories);
-        $current_depth++;
+        $categoriesToProcess = array_unique($nextCategories);
+        $currentDepth++;
     }
 
     // تصفية النتائج النهائية
-    $filtered_titles = array_filter($titles, function ($title) {
+    $filteredTitles = array_filter($titles, function ($title) {
         return !preg_match('/^(File|Template|User):/', $title) && !preg_match('/\(disambiguation\)$/', $title);
     });
 
-    $unique_titles = array_unique($filtered_titles);
-    test_print("Final titles count: " . count($unique_titles));
+    $uniqueTitles = array_unique($filteredTitles);
+    test_print("Final titles count: " . count($uniqueTitles));
     test_print("End of get_mdwiki_cat_members <br>===============================");
-    return $unique_titles;
+    return $uniqueTitles;
 }

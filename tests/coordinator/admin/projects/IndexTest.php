@@ -67,13 +67,13 @@ class IndexTest extends TestCase
         $gid = 10;
         $gtitle = 'Project Title';
 
-        $hidden_input = "rows[$numb][g_id]";
-        $text_input = "rows[$numb][g_title]";
-        $checkbox_input = "rows[$numb][del]";
+        $hiddenInput = "rows[$numb][g_id]";
+        $textInput = "rows[$numb][g_title]";
+        $checkboxInput = "rows[$numb][del]";
 
-        $this->assertEquals('rows[1][g_id]', $hidden_input);
-        $this->assertEquals('rows[1][g_title]', $text_input);
-        $this->assertEquals('rows[1][del]', $checkbox_input);
+        $this->assertEquals('rows[1][g_id]', $hiddenInput);
+        $this->assertEquals('rows[1][g_title]', $textInput);
+        $this->assertEquals('rows[1][del]', $checkboxInput);
     }
 
     public function testNumberIncrement()
@@ -89,8 +89,8 @@ class IndexTest extends TestCase
     public function testJavaScriptLengthCalculation()
     {
         // Simulating $('#g_tab >tr').length + 1
-        $existing_rows = 3;
-        $ii = $existing_rows + 1;
+        $existingRows = 3;
+        $ii = $existingRows + 1;
         $this->assertEquals(4, $ii);
     }
 
@@ -134,8 +134,8 @@ class IndexTest extends TestCase
     public function testCheckboxValue()
     {
         $gid = 15;
-        $checkbox_value = $gid;
-        $this->assertEquals(15, $checkbox_value);
+        $checkboxValue = $gid;
+        $this->assertEquals(15, $checkboxValue);
     }
 
     public function testDeleteLabel()
@@ -146,9 +146,9 @@ class IndexTest extends TestCase
 
     public function testCardStructure()
     {
-        $card_classes = ['card', 'card-header', 'card-body'];
+        $cardClasses = ['card', 'card-header', 'card-body'];
 
-        foreach ($card_classes as $class) {
+        foreach ($cardClasses as $class) {
             $this->assertIsString($class);
             $this->assertNotEmpty($class);
         }
@@ -162,10 +162,10 @@ class IndexTest extends TestCase
 
     public function testBootstrapGridColumns()
     {
-        $col_classes = ['col-md-6', 'col-sm-12'];
+        $colClasses = ['col-md-6', 'col-sm-12'];
 
-        $this->assertContains('col-md-6', $col_classes);
-        $this->assertContains('col-sm-12', $col_classes);
+        $this->assertContains('col-md-6', $colClasses);
+        $this->assertContains('col-sm-12', $colClasses);
     }
 
     public function testTableClasses()
@@ -179,10 +179,10 @@ class IndexTest extends TestCase
 
     public function testButtonClasses()
     {
-        $button_class = 'btn btn-outline-primary';
+        $buttonClass = 'btn btn-outline-primary';
 
-        $this->assertStringContainsString('btn', $button_class);
-        $this->assertStringContainsString('btn-outline-primary', $button_class);
+        $this->assertStringContainsString('btn', $buttonClass);
+        $this->assertStringContainsString('btn-outline-primary', $buttonClass);
     }
 
     public function testFormGroupClass()
@@ -196,8 +196,8 @@ class IndexTest extends TestCase
 
     public function testTableBodyId()
     {
-        $tbody_id = 'g_tab';
-        $this->assertEquals('g_tab', $tbody_id);
+        $tbodyId = 'g_tab';
+        $this->assertEquals('g_tab', $tbodyId);
     }
 
     public function testProjectTitleHeader()
@@ -208,13 +208,13 @@ class IndexTest extends TestCase
 
     public function testNewRowButton()
     {
-        $button_text = 'New row';
-        $this->assertEquals('New row', $button_text);
+        $buttonText = 'New row';
+        $this->assertEquals('New row', $buttonText);
     }
 
     public function testSaveButton()
     {
-        $button_text = 'Save';
-        $this->assertEquals('Save', $button_text);
+        $buttonText = 'Save';
+        $this->assertEquals('Save', $buttonText);
     }
 }

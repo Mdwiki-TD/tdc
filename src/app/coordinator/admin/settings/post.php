@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$close_btn = <<<HTML
+$closeBtn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
@@ -24,7 +24,7 @@ HTML;
 
 if (!verify_csrf_token()) {
     echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-    echo $close_btn;
+    echo $closeBtn;
     return;
 }
 foreach ($_POST['rows'] ?? [] as $key => $table) {

@@ -10,7 +10,7 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
     exit;
 };
 
-$form_options = [];
+$formOptions = [];
 
 $keys = [
     'year' => false,
@@ -20,7 +20,7 @@ $keys = [
     'result' => true,
 ];
 
-function make_select($id, $data, $use_select_picker)
+function make_select($id, $data, $useSelectPicker)
 {
     $options = '<option value="">All</option>';
 
@@ -28,7 +28,7 @@ function make_select($id, $data, $use_select_picker)
         $options .= "<option value='" . $value . "'>" . $value . "</option>\n";
     }
 
-    if (!$use_select_picker) {
+    if (!$useSelectPicker) {
         return <<<HTML
             <select id="$id" name="$id" class="form-select" data-bs-theme="auto">
                 $options
@@ -55,20 +55,20 @@ function make_select($id, $data, $use_select_picker)
 // $data = get_publish_reports_stats();
 $data = [];
 
-foreach ($keys as $key => $use_select_picker) {
+foreach ($keys as $key => $useSelectPicker) {
 
-    $data_new = array_unique(array_column($data, $key));
+    $dataNew = array_unique(array_column($data, $key));
 
-    $form_options[$key] = make_select($key, $data_new, $use_select_picker);
+    $formOptions[$key] = make_select($key, $dataNew, $useSelectPicker);
 
-    // echo "$key: <textarea>" . $form_options[$key] . "</textarea>";
+    // echo "$key: <textarea>" . $formOptions[$key] . "</textarea>";
 }
 
-$year_options = $form_options["year"] ?? "";
-$month_options = $form_options["month"] ?? "";
-$lang_options = $form_options["lang"] ?? "";
-$user_options = $form_options["user"] ?? "";
-$result_options = $form_options["result"] ?? "";
+$yearOptions = $formOptions["year"] ?? "";
+$monthOptions = $formOptions["month"] ?? "";
+$langOptions = $formOptions["lang"] ?? "";
+$userOptions = $formOptions["user"] ?? "";
+$resultOptions = $formOptions["result"] ?? "";
 
 echo <<<HTML
     <style>
@@ -86,8 +86,8 @@ echo <<<HTML
             <div class="row">
                 <div class="col-md-3">
                     <div class="d-flex justify-content-betweenx justify-content-center">
-                        $year_options
-                        $month_options
+                        $yearOptions
+                        $monthOptions
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -95,19 +95,19 @@ echo <<<HTML
                         <div class="col-md-4">
                             <div class="input-group">
                                 <label class="input-group-text" for="lang">Lang.</label>
-                                    $lang_options
+                                    $langOptions
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="input-group">
                                 <label class="input-group-text" for="user">User</label>
-                                    $user_options
+                                    $userOptions
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="input-group">
                                 <label class="input-group-text" for="result">Result</label>
-                                    $result_options
+                                    $resultOptions
                             </div>
                         </div>
                     </div>
