@@ -3,14 +3,7 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-
 use App\User\CurrentUser;
-
-if (!CurrentUser::getInstance()->isCoordinator()) {
-    header('Location: /index.php');
-    exit;
-}
-
 use App\Tables\Main\MainTables;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\APICalls\WikiApi\get_views;
@@ -18,6 +11,12 @@ use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Emails\Sugust\get_sugust;
 use function App\csrf\generate_csrf_token;
+
+if (!CurrentUser::getInstance()->isCoordinator()) {
+    header('Location: /index.php');
+    exit;
+}
+
 
 $globalUsername = CurrentUser::getInstance()->getUsername();
 
@@ -83,7 +82,7 @@ $urlViews_2 = 'https://'
 $start = !empty($date) ? $date : '2019-01-01';
 $end = date("Y-m-d", strtotime("yesterday"));
 
-$urlViews_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
+$urlViews3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
     'project' => "$lang.wikipedia.org",
     'platform' => 'all-access',
     'agent' => 'all-agents',
@@ -94,7 +93,7 @@ $urlViews_3  = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query(array(
 ));
 
 // $views2 = "<font color='#0000ff'>$views people</font>";
-$views2 = "<a target='_blank' href='$urlViews_3'><font color='#0000ff'>$views people</font></a>";
+$views2 = "<a target='_blank' href='$urlViews3'><font color='#0000ff'>$views people</font></a>";
 
 $lang2 = MainTables::$xLangsTable[$lang]['name'] ?? $lang;
 $lang2 = make_target_url($target, $lang, $name = $lang2);
