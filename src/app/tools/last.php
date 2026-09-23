@@ -83,7 +83,7 @@ function last_make_td($tabg, $nnnn, $lastTable)
 
     $flags = "";
 
-    $laly = <<<HTML
+    return <<<HTML
         <tr>
             <td>
                 $nnnn
@@ -116,8 +116,6 @@ function last_make_td($tabg, $nnnn, $lastTable)
             </td>
         </tr>
     HTML;
-
-    return $laly;
 }
 
 function filter_recent($lang, $data)
