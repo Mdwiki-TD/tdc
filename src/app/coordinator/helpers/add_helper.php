@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/helpers/add_helper.php
 
 namespace Add\AddPost;
 
