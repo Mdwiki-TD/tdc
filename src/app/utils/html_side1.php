@@ -112,16 +112,16 @@ function menu_data(): array
  */
 function generateListItem(string $href, string $title, ?string $icon, ?string $target): string
 {
-    $icon_tag = (!empty($icon)) ? "<i class='bi {$icon} me-1'></i>" : "";
-    $target_attr = (!empty($target)) ? "target='_blank'" : '';
+    $iconTag = (!empty($icon)) ? "<i class='bi {$icon} me-1'></i>" : "";
+    $targetAttr = (!empty($target)) ? "target='_blank'" : '';
 
-    $escaped_href = htmlspecialchars($href, ENT_QUOTES, 'UTF-8');
-    $escaped_title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $escapedHref = htmlspecialchars($href, ENT_QUOTES, 'UTF-8');
+    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
     return <<<HTML
-        <a {$target_attr} class='linknave rounded' href='{$escaped_href}' title='{$escaped_title}' data-bs-toggle='tooltip' data-bs-placement='right'>
-            {$icon_tag}
-            <span class='hide-on-collapse-inline'>{$escaped_title}</span>
+        <a {$targetAttr} class='linknave rounded' href='{$escapedHref}' title='{$escapedTitle}' data-bs-toggle='tooltip' data-bs-placement='right'>
+            {$iconTag}
+            <span class='hide-on-collapse-inline'>{$escapedTitle}</span>
         </a>
     HTML;
 }
@@ -134,7 +134,7 @@ function generateListItem(string $href, string $title, ?string $icon, ?string $t
  *
  * @param string $filename             Current script filename (for building URLs)
  * @param string $ty                   Current tool type (for active state highlighting)
- * @param bool   $user_is_coordinator Whether the current user is a coordinator
+ * @param bool   $userIsCoordinator Whether the current user is a coordinator
  *
  * @return string Complete HTML for the sidebar navigation
  *
@@ -144,7 +144,7 @@ function generateListItem(string $href, string $title, ?string $icon, ?string $t
  * // Returns HTML with 'last' menu item marked as active
  * ```
  */
-function create_side(string $filename, string $ty, bool $user_is_coordinator): string
+function create_side(string $filename, string $ty, bool $userIsCoordinator): string
 {
     [$mainMenuIcons, $mainMenu] = menu_data();
 
@@ -154,38 +154,38 @@ function create_side(string $filename, string $ty, bool $user_is_coordinator): s
 
     foreach ($mainMenu as $groupKey => $items) {
         $lis = '';
-        $group_is_active = false;
+        $groupIsActive = false;
 
         foreach ($items as $item) {
             $href = isset($item['href']) && is_string($item['href']) ? $item['href'] : '';
 
             // Check if this item is active
             if ($href === $ty) {
-                $group_is_active = true;
+                $groupIsActive = true;
             }
 
             $icon = isset($item['icon']) && is_string($item['icon']) ? $item['icon'] : null;
             $target = isset($item['target']) && is_string($item['target']) ? $item['target'] : null;
             $admin = (int)($item['admin'] ?? 0);
-            $no_admin = (int)($item['no_admin'] ?? 0);
+            $noAdmin = (int)($item['no_admin'] ?? 0);
 
             // Skip non-admin items for coordinators
-            if ($no_admin === 1 && $user_is_coordinator) {
+            if ($noAdmin === 1 && $userIsCoordinator) {
                 continue;
             }
             // Skip admin items for non-coordinators
-            if ($admin === 1 && !$user_is_coordinator) {
+            if ($admin === 1 && !$userIsCoordinator) {
                 continue;
             }
 
             $class = ($ty === $href) ? 'active' : '';
 
             // Build full URL (unless external link)
-            $href_full = ($target !== null && $target !== '') ? $href : "{$filename}?ty={$href}";
+            $hrefFull = ($target !== null && $target !== '') ? $href : "{$filename}?ty={$href}";
 
             $id = isset($item['id']) && is_string($item['id']) ? $item['id'] : '';
             $title = isset($item['title']) && is_string($item['title']) ? $item['title'] : '';
-            $link = generateListItem($href_full, $title, $icon, $target);
+            $link = generateListItem($hrefFull, $title, $icon, $target);
 
             $lis .= <<<HTML
                 <li id='{$id}' class='{$class}'>
@@ -196,22 +196,22 @@ function create_side(string $filename, string $ty, bool $user_is_coordinator): s
 
         // Only render group if it has visible items
         if (!empty($lis)) {
-            $show = $group_is_active ? 'show' : '';
-            $expanded = $group_is_active ? 'true' : 'false';
+            $show = $groupIsActive ? 'show' : '';
+            $expanded = $groupIsActive ? 'true' : 'false';
 
-            $icon_class = $mainMenuIcons[$groupKey] ?? '';
-            $icon_html = (!empty($icon_class)) ? "<i class='bi {$icon_class} me-1'></i>" : '';
+            $iconClass = $mainMenuIcons[$groupKey] ?? '';
+            $iconHtml = (!empty($iconClass)) ? "<i class='bi {$iconClass} me-1'></i>" : '';
 
-            $escaped_key = htmlspecialchars((string)$groupKey, ENT_QUOTES, 'UTF-8');
+            $escapedKey = htmlspecialchars((string)$groupKey, ENT_QUOTES, 'UTF-8');
 
             $sidebar .= <<<HTML
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
-                        data-bs-target="#{$escaped_key}-collapse" aria-expanded="{$expanded}">
-                        {$icon_html}
-                        <span class='hide-on-collapse-inline'>{$escaped_key}</span>
+                        data-bs-target="#{$escapedKey}-collapse" aria-expanded="{$expanded}">
+                        {$iconHtml}
+                        <span class='hide-on-collapse-inline'>{$escapedKey}</span>
                     </button>
-                    <div class="collapse {$show}" id="{$escaped_key}-collapse">
+                    <div class="collapse {$show}" id="{$escapedKey}-collapse">
                         <div class="d-none d-md-inline">
                             <!-- desktop -->
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">

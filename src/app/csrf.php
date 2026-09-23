@@ -127,15 +127,15 @@ function verify_csrf_token(): bool
     }
 
     // Get the submitted token from POST data
-    $submitted_token = $_POST['csrf_token'] ?? null;
+    $submittedToken = $_POST['csrf_token'] ?? null;
 
     // Reject if no token was submitted
-    if (!$submitted_token || !is_string($submitted_token)) {
+    if (!$submittedToken || !is_string($submittedToken)) {
         error_log('CSRF: No token submitted in POST request');
         return false;
     }
     foreach ($_SESSION['csrf_tokens'] as $key => $token) {
-        if (hash_equals($token, $submitted_token)) {
+        if (hash_equals($token, $submittedToken)) {
             // Token is valid - remove it to prevent reuse
             unset($_SESSION['csrf_tokens'][$key]);
 

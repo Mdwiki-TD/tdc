@@ -15,15 +15,10 @@
  * Usage Example:
  * ```php
  * use function App\Utils\Functions\test_print;
- * use function App\Utils\Functions\start_with;
  *
  * // Debug output (only visible in test mode)
  * test_print("Debug message: " . $variable);
  *
- * // Check if string starts with prefix
- * if (start_with($url, 'https://')) {
- *     // Handle secure URL
- * }
  * ```
  *
  * Environment Variables:
@@ -55,22 +50,4 @@ function test_print($s)
         print_r($s);
         echo "</pre>";
     }
-}
-
-function start_with($haystack, $needle)
-{
-    return strpos($haystack, $needle) === 0;
-};
-
-/**
- * Check if current environment is development/localhost
- *
- * @return bool True if running in development environment
- */
-function is_development(): bool
-{
-    $serverName = $_SERVER['SERVER_NAME'] ?? '';
-    return $serverName === 'localhost'
-        || str_starts_with($serverName, '127.')
-        || str_starts_with($serverName, '192.168.');
 }

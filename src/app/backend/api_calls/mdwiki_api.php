@@ -105,8 +105,8 @@ function post_url_mdwiki(string $endPoint, array $params = []): string
     ]);
 
     $output = curl_exec($ch);
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $curl_error = curl_error($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
     // Build URL for debug logging
     $url = "{$endPoint}?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
@@ -115,18 +115,18 @@ function post_url_mdwiki(string $endPoint, array $params = []): string
     $url2 = '<a target="_blank" href="' . htmlspecialchars($url2, ENT_QUOTES, 'UTF-8') . '">'
         . htmlspecialchars($url2, ENT_QUOTES, 'UTF-8') . '</a>';
 
-    if ($http_code !== 200) {
-        test_print('post_url_mdwiki: Error: API request failed with status code ' . $http_code);
+    if ($httpCode !== 200) {
+        test_print('post_url_mdwiki: Error: API request failed with status code ' . $httpCode);
     }
 
-    test_print("post_url_mdwiki: (http_code: $http_code) $url2");
+    test_print("post_url_mdwiki: (http_code: $httpCode) $url2");
 
     if ($output === false) {
-        test_print("post_url_mdwiki: cURL Error: " . ($curl_error ?: 'Unknown error'));
+        test_print("post_url_mdwiki: cURL Error: " . ($curlError ?: 'Unknown error'));
     }
 
     if (curl_errno($ch)) {
-        test_print('post_url_mdwiki: Error: ' . $curl_error);
+        test_print('post_url_mdwiki: Error: ' . $curlError);
     }
 
     curl_close($ch);

@@ -17,38 +17,38 @@ function get_sugust($title, $lang)
         return array('sugust' => '', 'time' => 0);
     };
 
-    $time_start = microtime(true);
+    $timeStart = microtime(true);
 
     $sugust = '';
 
-    $items = get_cat_exists_and_missing('RTT', '1', $lang, $use_cache = true);
+    $items = get_cat_exists_and_missing('RTT', '1', $lang, $useCache = true);
 
-    $items_missing = $items['missing'] ?? [];
+    $itemsMissing = $items['missing'] ?? [];
 
     $data = get_lang_in_process_new($lang);
 
     $res = array_column($data, 'title');
 
-    $inprocess = array_intersect($res, $items_missing);
+    $inprocess = array_intersect($res, $itemsMissing);
 
-    // delete $in_process keys from $missing
+    // delete $inProcess keys from $missing
     if (!empty($inprocess)) {
-        $items_missing = array_diff($items_missing, $inprocess);
+        $itemsMissing = array_diff($itemsMissing, $inprocess);
     }
 
-    if (empty($items_missing)) {
+    if (empty($itemsMissing)) {
         return array('sugust' => '', 'time' => 0, 'error' => 'No suggestions available');
     }
 
     $dd = [];
-    foreach ($items_missing as $t) {
+    foreach ($itemsMissing as $t) {
         $key = str_replace('_', ' ', $t);
-        $dd[$key] = MainTables::$x_enwiki_pageviews_table[$key] ?? 0;
+        $dd[$key] = MainTables::$xEnwikiPageviewsTable[$key] ?? 0;
     }
 
     arsort($dd);
 
-    // $sugust = array_rand($items_missing);
+    // $sugust = array_rand($itemsMissing);
 
     foreach ($dd as $v => $gt) {
         if ($v != $title) {
@@ -57,7 +57,7 @@ function get_sugust($title, $lang)
         }
     }
 
-    $tab = array('sugust' => $sugust, 'time' => microtime(true) - $time_start);
+    $tab = array('sugust' => $sugust, 'time' => microtime(true) - $timeStart);
 
     return $tab;
 }

@@ -49,13 +49,13 @@ $scripts = [
     "/Translation_Dashboard/js/theme.js",
 ];
 
-$scripts_module = [
+$scriptsModule = [
     "/Translation_Dashboard/js/color-modes.js",
 ];
 
 function head(): string
 {
-    global $stylesheets, $scripts, $scripts_module;
+    global $stylesheets, $scripts, $scriptsModule;
 
     $text = "";
 
@@ -65,7 +65,7 @@ function head(): string
     foreach ($scripts as $js) {
         $text .= "\n\t<script src='" . $js . "'></script>";
     }
-    foreach ($scripts_module as $js) {
+    foreach ($scriptsModule as $js) {
         $text .= "\n\t<script type='module' src='" . $js . "'></script>";
     }
     $text .= "\n";
@@ -79,9 +79,9 @@ function head(): string
  */
 function print_full_head(): string
 {
-    $head_text = (isset($_GET["noboot"])) ? "" : head();
+    $headText = (isset($_GET["noboot"])) ? "" : head();
 
-    $full_head = <<<HTML
+    $fullHead = <<<HTML
         <html lang="en" dir="ltr" data-bs-theme="light" xmlns="http://www.w3.org/1999/xhtml">
 
         <head>
@@ -95,7 +95,7 @@ function print_full_head(): string
             <meta name="theme-color" content="#111111" media="(prefers-color-scheme: light)">
             <meta name="theme-color" content="#eeeeee" media="(prefers-color-scheme: dark)">
             <title>Wiki Project Med Translation Dashboard</title>
-            $head_text
+            $headText
             <style>
                 .table_text_left>tbody>tr>th,
                 .table_text_left>tbody>tr>td,
@@ -129,23 +129,23 @@ function print_full_head(): string
         </head>
     HTML;
 
-    return $full_head;
+    return $fullHead;
 }
 
 
 function is_active($url)
 {
-    $file_name = basename($_SERVER['PHP_SELF']);
-    // echo "file_name: $file_name <br>";
+    $fileName = basename($_SERVER['PHP_SELF']);
+    // echo "file_name: $fileName <br>";
 
-    if ($file_name == $url) {
+    if ($fileName == $url) {
         return 'active';
     }
 
     return '';
 }
 
-function write_body(string $coord_tools, string $li_user): string
+function write_body(string $coordTools, string $liUser): string
 {
     return <<<HTML
         <header class="mb-3 border-bottom">
@@ -188,7 +188,7 @@ function write_body(string $coord_tools, string $li_user): string
                                 </a>
                             </li>
                             <li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="coord">
-                                $coord_tools
+                                $coordTools
                             </li>
 
                             <li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
@@ -204,7 +204,7 @@ function write_body(string $coord_tools, string $li_user): string
                         </ul>
                         <hr class="d-lg-none text-dark-subtle text-50">
                         <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav ms-lg-auto">
-                            $li_user
+                            $liUser
                         </ul>
                     </div>
                 </div>
