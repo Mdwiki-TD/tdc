@@ -2,6 +2,8 @@
 
 use function APICalls\TDApi\get_td_api;
 
+$global_username = CurrentUser::getInstance()->getUsername();
+
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {
     // remove spaces and tab characters
@@ -53,7 +55,7 @@ function make_mail_icon_url(array $tab): string
 
     return $escaped_url;
 }
-function last_make_td($tabg, $nnnn, $last_table)
+function last_make_td($tabg, $nnnn, $last_table, $global_username)
 {
     $user     = $tabg['user'] ?? "";
 
@@ -108,7 +110,7 @@ function last_make_td($tabg, $nnnn, $last_table)
     ];
 
     $excludedUsers = ['Mr. Ibrahem']; // TODO: This should ideally be moved to a configuration file.
-    if (!in_array($GLOBALS['global_username'], $excludedUsers)) {
+    if (!in_array($global_username, $excludedUsers)) {
         $params['save'] = 1;
     };
 
@@ -210,9 +212,10 @@ $recent_rows = "";
 
 $noo = 0;
 
+
 foreach ($qsl_results as $tat => $tabe) {
     $noo = $noo + 1;
-    $recent_rows .= last_make_td($tabe, $noo, $last_table);
+    $recent_rows .= last_make_td($tabe, $noo, $last_table, $global_username);
 };
 
 $Campaign_number = 4;

@@ -11,11 +11,13 @@ use function SQLorAPI\Funcs\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
 use function Tools\RecentHelps\filter_recent2;
 
+$global_username = CurrentUser::getInstance()->getUsername();
+
 $lang = $_GET['lang'] ?? 'All';
 
 $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
 
-if (!isset($_GET['table']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $table = "pages_users";
+if (!isset($_GET['table']) && $global_username == "Mr. Ibrahem") $table = "pages_users";
 
 if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
     $lang = 'All';
