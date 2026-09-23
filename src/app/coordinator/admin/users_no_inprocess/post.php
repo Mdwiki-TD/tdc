@@ -3,91 +3,118 @@
 
 namespace App\Coordinator\Admin\UsersNoInprocess;
 
+use App\User\CurrentUser;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\Utils\Html\div_alert;
 use function App\csrf\verify_csrf_token;
-use App\User\CurrentUser;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-	exit;
-}
+/**
+ * Class UsersNoInprocessPostProcessor
+ * Handles add/update/delete of users excluded from the "in process" table.
+ */
+class UsersNoInprocessPostProcessor
+{
+	private const TABLE_NAME = 'users_no_inprocess';
 
-$close_btn = <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
+	private array $texts = [];
+	private array $errors = [];
 
-if (!verify_csrf_token()) {
-	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $close_btn;
-	return;
-}
-$errors = [];
-$texts = [];
-
-$table_name = "users_no_inprocess";
-
-foreach ($_POST['rows'] ?? [] as $key => $table) {
-	// { "id": "1", "user": "" }
-	// { "id": "4", "user": "Dr3939", "del": "4" }
-
-	$u_id  	= $table['id'] ?? '';
-	$del  	= $table['del'] ?? '';
-
-	$user  	= $table['user'] ?? '';
-
-	if (!empty($del) && !empty($u_id)) {
-		$qua2 = "DELETE FROM $table_name WHERE id = ?";
-
-		$result = execute_query($qua2, $params = [$u_id]);
-
-		if ($result === false) {
-			$errors[] = "Failed to delete user $user.";
-			continue;
+	/**
+	 * Validates and processes the incoming submission.
+	 */
+	public function handle(): void
+	{
+		// Check user authorization
+		if (!CurrentUser::getInstance()->isCoordinator()) {
+			header('Location: /index.php');
+			exit;
 		}
 
-		$texts[] = "User $user deleted.";
-
-		continue;
-	};
-
-	// $is_new = $table['is_new'] ?? '';
-
-	$user = trim($user);
-
-	$is_active = $table['is_active'] ?? '';
-	$active_orginal_value = $table['active_orginal_value'] ?? '';
-
-	if ($is_active == $active_orginal_value && !empty($u_id)) {
-		continue;
-	};
-
-	if (!empty($user)) { // && empty($u_id) && $is_new == 'yes'
-
-		// $qua = "INSERT INTO $table_name (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $table_name WHERE user = ?)";
-
-		$qua = <<<SQL
-			INSERT INTO $table_name (user, is_active)
-			VALUES (?, ?)
-			ON DUPLICATE KEY UPDATE
-				is_active = VALUES(is_active)
-		SQL;
-
-		$result = execute_query($qua, $params = [$user, $is_active]);
-
-		if ($result === false) {
-			$errors[] = "Failed to add user $user.";
-		} else {
-			$texts[] = (empty($u_id)) ? "User $user Added." : "User $user Updated.";
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			exit;
 		}
-	};
 
+		$closeBtn = $this->getCloseButtonHtml();
+
+		if (!verify_csrf_token()) {
+			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			echo $closeBtn;
+			return;
+		}
+
+		$this->processRows($_POST['rows'] ?? []);
+
+		echo div_alert($this->texts, 'success');
+		echo div_alert($this->errors, 'danger');
+	}
+
+	/**
+	 * Processes each submitted user row: delete, add, or update.
+	 */
+	private function processRows(array $rows): void
+	{
+		foreach ($rows as $key => $table) {
+			// { "id": "1", "user": "" }
+			// { "id": "4", "user": "Dr3939", "del": "4" }
+			$uId = $table['id'] ?? '';
+			$del = $table['del'] ?? '';
+			$user = $table['user'] ?? '';
+
+			if (!empty($del) && !empty($uId)) {
+				$qua2 = "DELETE FROM " . self::TABLE_NAME . " WHERE id = ?";
+
+				$result = execute_query($qua2, [$uId]);
+
+				if ($result === false) {
+					$this->errors[] = "Failed to delete user $user.";
+					continue;
+				}
+
+				$this->texts[] = "User $user deleted.";
+				continue;
+			}
+			// $is_new = $table['is_new'] ?? '';
+
+			$user = trim($user);
+
+			$isActive = $table['is_active'] ?? '';
+			$activeOriginalValue = $table['active_orginal_value'] ?? '';
+
+			if ($isActive == $activeOriginalValue && !empty($uId)) {
+				continue;
+			}
+
+			if (!empty($user)) { // && empty($u_id) && $is_new == 'yes'
+				$tableName = self::TABLE_NAME;
+				// $qua = "INSERT INTO $table_name (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $table_name WHERE user = ?)";
+
+				$qua = <<<SQL
+                    INSERT INTO $tableName (user, is_active)
+                    VALUES (?, ?)
+                    ON DUPLICATE KEY UPDATE
+                        is_active = VALUES(is_active)
+                SQL;
+
+				$result = execute_query($qua, [$user, $isActive]);
+
+				if ($result === false) {
+					$this->errors[] = "Failed to add user $user.";
+				} else {
+					$this->texts[] = (empty($uId)) ? "User $user Added." : "User $user Updated.";
+				}
+			}
+		}
+	}
+
+	/**
+	 * Generates a close button HTML block.
+	 */
+	private function getCloseButtonHtml(): string
+	{
+		return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
+	}
 }
-
-echo div_alert($texts, 'success');
-echo div_alert($errors, 'danger');
