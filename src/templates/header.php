@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <?php
 
-// Track page load time for performance monitoring
-$time_start = microtime(true);
-
+use User\CurrentUser;
 use OAuth\Settings\Settings;
 use function TDC\Head\print_full_head;
 use function TDC\Head\write_body;
 
 include_once __DIR__ . '/head.php';
+
+function ba_alert(string $text): string
+{
+    return <<<HTML
+	<div class='container'>
+		<div class="alert alert-danger" role="alert">
+			<i class="bi bi-exclamation-triangle"></i> $text
+		</div>
+	</div>
+	HTML;
+}
+
+// Track page load time for performance monitoring
+$time_start = microtime(true);
 
 echo print_full_head();
 

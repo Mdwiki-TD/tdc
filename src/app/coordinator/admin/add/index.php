@@ -1,9 +1,6 @@
 <?php
 
-/*
-name=(["'])(\w+)\[\](\$\{*\w+\}*)["']
-name=$1rows[$3][$2]$1
-*/
+use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
@@ -12,8 +9,6 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
 
 use function SQLorAPI\Funcs\get_td_or_sql_categories;
 use function TDWIKI\csrf\generate_csrf_token;
-
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';

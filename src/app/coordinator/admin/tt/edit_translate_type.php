@@ -1,5 +1,7 @@
 <?php
 
+use User\CurrentUser;
+
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
@@ -12,8 +14,6 @@ echo '</div><script>
     $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
-
-;
 
 $title  = (isset($_GET['title'])) ? rawurldecode($_GET['title']) : "";
 $lead   = $_GET['lead'] ?? '';

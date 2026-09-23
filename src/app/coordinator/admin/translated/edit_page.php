@@ -1,5 +1,7 @@
 <?php
 
+use User\CurrentUser;
+
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
@@ -15,8 +17,6 @@ echo '</div><script>
     $("#maindiv").hide();
 </script>
 <div class="container-fluid">';
-
-;
 
 $id         = $_GET['id'] ?? $_POST['id'] ?? '';
 $table      = $_GET['table'] ?? $_POST['table'] ?? 'pages';

@@ -1,6 +1,12 @@
 <?php
 
 use function APICalls\TDApi\get_td_api;
+use User\CurrentUser;
+
+if (!CurrentUser::getInstance()->isCoordinator()) {
+	header('Location: /index.php');
+	exit;
+};
 
 $global_username = CurrentUser::getInstance()->getUsername();
 

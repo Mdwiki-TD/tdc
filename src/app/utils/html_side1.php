@@ -25,7 +25,7 @@
  * ```php
  * use function Utils\HtmlSide\create_side;
  *
- * $sidebar = create_side($_SERVER['SCRIPT_NAME'], 'last');
+ * $sidebar = create_side($_SERVER['SCRIPT_NAME'], 'last', true);
  * echo $sidebar;
  * ```
  *
@@ -105,15 +105,15 @@ function menu_data(): array
  *
  * @param string      $href   Link URL
  * @param string      $title  Link title/tooltip
- * @param string      $icon   Bootstrap icon class
- * @param string $target Link target attribute
+ * @param string|null $icon   Bootstrap icon class
+ * @param string|null $target Link target attribute
  *
  * @return string HTML for the navigation item
  */
 function generateListItem(string $href, string $title, ?string $icon, ?string $target): string
 {
     $icon_tag = (!empty($icon)) ? "<i class='bi {$icon} me-1'></i>" : "";
-    $target_attr = ($target) ? "target='_blank'" : '';
+    $target_attr = (!empty($target)) ? "target='_blank'" : '';
 
     $escaped_href = htmlspecialchars($href, ENT_QUOTES, 'UTF-8');
     $escaped_title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
@@ -132,18 +132,19 @@ function generateListItem(string $href, string $title, ?string $icon, ?string $t
  * Generates a hierarchical sidebar menu with proper styling, icons,
  * and access control. Admin items are hidden from non-coordinator users.
  *
- * @param string $filename Current script filename (for building URLs)
- * @param string $ty       Current tool type (for active state highlighting)
+ * @param string $filename             Current script filename (for building URLs)
+ * @param string $ty                   Current tool type (for active state highlighting)
+ * @param bool   $user_is_coordinator Whether the current user is a coordinator
  *
  * @return string Complete HTML for the sidebar navigation
  *
  * @example
  * ```php
- * $sidebar = create_side('/index.php', 'last');
+ * $sidebar = create_side('/index.php', 'last', true);
  * // Returns HTML with 'last' menu item marked as active
  * ```
  */
-function create_side(string $filename, string $ty, $user_is_coordinator): string
+function create_side(string $filename, string $ty, bool $user_is_coordinator): string
 {
     [$mainMenuIcons, $mainMenu] = menu_data();
 
@@ -156,19 +157,19 @@ function create_side(string $filename, string $ty, $user_is_coordinator): string
         $group_is_active = false;
 
         foreach ($items as $item) {
-            $href = $item['href'] ?? '';
+            $href = isset($item['href']) && is_string($item['href']) ? $item['href'] : '';
 
             // Check if this item is active
             if ($href === $ty) {
                 $group_is_active = true;
             }
 
-            $icon = $item['icon'] ?? '';
-            $target = $item['target'] ?? '';
-            $admin = $item['admin'] ?? 0;
-            $no_admin = $item['no_admin'] ?? 0;
+            $icon = isset($item['icon']) && is_string($item['icon']) ? $item['icon'] : null;
+            $target = isset($item['target']) && is_string($item['target']) ? $item['target'] : null;
+            $admin = (int)($item['admin'] ?? 0);
+            $no_admin = (int)($item['no_admin'] ?? 0);
 
-            // Skip non admin items for coordinators
+            // Skip non-admin items for coordinators
             if ($no_admin === 1 && $user_is_coordinator) {
                 continue;
             }
@@ -180,10 +181,11 @@ function create_side(string $filename, string $ty, $user_is_coordinator): string
             $class = ($ty === $href) ? 'active' : '';
 
             // Build full URL (unless external link)
-            $href_full = ($target) ? $href : "{$filename}?ty={$href}";
+            $href_full = ($target !== null && $target !== '') ? $href : "{$filename}?ty={$href}";
 
-            $id = $item['id'] ?? '';
-            $link = generateListItem($href_full, $item['title'] ?? '', $icon, $target);
+            $id = isset($item['id']) && is_string($item['id']) ? $item['id'] : '';
+            $title = isset($item['title']) && is_string($item['title']) ? $item['title'] : '';
+            $link = generateListItem($href_full, $title, $icon, $target);
 
             $lis .= <<<HTML
                 <li id='{$id}' class='{$class}'>
@@ -200,7 +202,7 @@ function create_side(string $filename, string $ty, $user_is_coordinator): string
             $icon_class = $mainMenuIcons[$groupKey] ?? '';
             $icon_html = (!empty($icon_class)) ? "<i class='bi {$icon_class} me-1'></i>" : '';
 
-            $escaped_key = htmlspecialchars($groupKey, ENT_QUOTES, 'UTF-8');
+            $escaped_key = htmlspecialchars((string)$groupKey, ENT_QUOTES, 'UTF-8');
 
             $sidebar .= <<<HTML
                 <li class="mb-1">

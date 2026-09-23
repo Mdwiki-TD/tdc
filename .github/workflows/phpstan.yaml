@@ -4,17 +4,19 @@ on:
     pull_request:
         branches:
             - main
-        types: [opened, synchronize, reopened]
+
+permissions:
+    contents: read
 
 jobs:
     phpstan:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v6
 
-            - name: Setup PHP
+            - name: Set up PHP
               uses: shivammathur/setup-php@v2
               with:
                   php-version: "8.2"
@@ -34,7 +36,7 @@ jobs:
                       ${{ runner.os }}-composer-
 
             - name: Install dependencies
-              run: composer install --prefer-dist --no-progress
+              run: composer install --prefer-dist --no-progress --optimize-autoloader
 
             - name: Run PHPStan
               run: vendor/bin/phpstan analyse --error-format=github

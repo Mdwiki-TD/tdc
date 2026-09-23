@@ -1,13 +1,5 @@
 <?php
 
-/*
-
-INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT DISTINCT q.title, 1, 0 from qids q
-	WHERE q.title not in (SELECT tt_title FROM translate_type)
-
-*/
-
-
 use Tables\SqlTables\TablesSql;
 use function Utils\Html\makeDropdown;
 use function Utils\Html\make_mdwiki_title;
@@ -15,7 +7,12 @@ use function Utils\Html\make_edit_icon_new;
 use function Results\GetCats\get_mdwiki_cat_members;
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
+use User\CurrentUser;
 
+if (!CurrentUser::getInstance()->isCoordinator()) {
+	header('Location: /index.php');
+	exit;
+};
 $cat = $_GET['cat'] ?? 'All';
 $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
 

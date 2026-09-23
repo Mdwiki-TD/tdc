@@ -1,11 +1,6 @@
 <?php
 
 namespace Emails\Sugust;
-/*
-Usage:
-use function Emails\Sugust\get_sugust;
-*/
-
 
 use Tables\Main\MainTables;
 use function Results\GetResults\get_cat_exists_and_missing;

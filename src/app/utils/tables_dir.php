@@ -1,13 +1,6 @@
 <?php
 
 namespace Utils\TablesDir;
-/*
-
-use function Utils\TablesDir\open_td_tables_file;
-
-*/
-
-;
 
 use function Utils\Functions\test_print;
 

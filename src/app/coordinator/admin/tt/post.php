@@ -3,9 +3,12 @@
 use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\insert_to_translate_type;
 use function TDWIKI\csrf\verify_csrf_token;
+use User\CurrentUser;
 
-// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-
+if (!CurrentUser::getInstance()->isCoordinator()) {
+	header('Location: /index.php');
+	exit;
+};
 echo '</div><script>
 $("#mainnav").hide();
 $("#maindiv").hide();

@@ -1,5 +1,7 @@
 <?php
 
+use User\CurrentUser;
+
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
@@ -9,7 +11,6 @@ use function Utils\Html\make_mdwiki_title;
 use function Utils\Html\make_edit_icon_new;
 use function SQLorAPI\Funcs\get_td_or_sql_qids;
 use function SQLorAPI\Funcs\get_td_or_sql_qids_others;
-use function TDWIKI\csrf\generate_csrf_token;
 
 $global_username = CurrentUser::getInstance()->getUsername();
 
@@ -48,9 +49,8 @@ function filter_qids_table($data, $vav, $id)
 	return $uuu;
 }
 
-function qids_make_row($id, $title, $qid, $numb)
+function qids_make_row($id, $title, $qid, $numb, $qid_table)
 {
-	global $qid_table;
 
 	$edit_params = array(
 		'id'   => $id,
@@ -113,7 +113,7 @@ foreach ($qq1 as $Key => $table) {
 		$done[] = $id;
 
 		$numb += 1;
-		$form_rows .= qids_make_row($id, $title, $qid, $numb);
+		$form_rows .= qids_make_row($id, $title, $qid, $numb, $qid_table);
 	}
 
 	if ($dis == 'duplicate') {
@@ -125,10 +125,9 @@ foreach ($qq1 as $Key => $table) {
 			$done[] = $id2;
 
 			$numb += 1;
-			$form_rows .= qids_make_row($id2, $title2, $qid2, $numb);
+			$form_rows .= qids_make_row($id2, $title2, $qid2, $numb, $qid_table);
 		}
 	};
-
 };
 
 $data = [

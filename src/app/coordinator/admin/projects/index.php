@@ -1,11 +1,11 @@
 <?php
 
+use User\CurrentUser;
+
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
-
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';

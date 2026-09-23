@@ -1,11 +1,11 @@
 <?php
 
+use User\CurrentUser;
+
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 };
-
-;
 
 use function SQLorAPI\Funcs\get_td_or_sql_language_settings;
 use function SQLorAPI\Funcs\get_pages_langs;

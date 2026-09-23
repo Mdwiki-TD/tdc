@@ -1,5 +1,7 @@
 <?php
 
+use User\CurrentUser;
+
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
@@ -16,17 +18,6 @@ echo '</div><script>
 </script>
 <div class="container-fluid">';
 
-;
-
-/*
-$edit_params = [
-    'id'   => $id,
-    'lang_code'  => $lang,
-    'expend'  => $tabg['expend'],
-    'move_dots'  => $tabg['move_dots'],
-    'add_en_lang'  => $tabg['add_en_lang']
-];
-*/
 
 function echo_form()
 {

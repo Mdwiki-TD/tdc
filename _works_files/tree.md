@@ -18,10 +18,10 @@ src/
 │   │   │   └── tables.php
 │   │   ├── td_api_wrap/
 │   │   │   └── td_api.php
+│   │   ├── CurrentUser.php
 │   │   ├── include.php
 │   │   ├── README.md
-│   │   ├── settings.php
-│   │   └── userinfos_wrap.php
+│   │   └── settings.php
 │   ├── coordinator/
 │   │   ├── admin/
 │   │   │   ├── add/
@@ -57,8 +57,8 @@ src/
 │   │   │   │   ├── index.php
 │   │   │   │   └── post.php
 │   │   │   ├── reports/
-│   │   │   │   ├── index copy.php
-│   │   │   │   └── index.php
+│   │   │   │   ├── index.php
+│   │   │   │   └── index2.php
 │   │   │   ├── settings/
 │   │   │   │   ├── index.php
 │   │   │   │   └── post.php
@@ -111,12 +111,6 @@ src/
 │   ├── fix_u_targets.js
 │   ├── reports-script.js
 │   └── sidebar.js
-├── post_test/
-│   ├── index.php
-│   ├── post.php
-│   ├── README.md
-│   ├── u.php
-│   └── upost.php
 ├── templates/
 │   ├── footer.php
 │   ├── head.php
