@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\Utils\Html\make_project_to_user;
 use function App\csrf\generate_csrf_token;
 
@@ -12,7 +12,7 @@ use function App\csrf\generate_csrf_token;
  * Renders the add/edit form for a single user's email/wiki/project
  * data (GET request only; submission is handled by EmailsPostProcessor).
  */
-class EditUserController
+class EditUserController extends AbstractController
 {
     private string $user;
     private string $wiki;
@@ -34,11 +34,7 @@ class EditUserController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $this->renderHeaderScripts();
         $this->renderFormCard();

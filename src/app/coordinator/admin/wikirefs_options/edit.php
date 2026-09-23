@@ -21,18 +21,14 @@ class WikiRefsOptionsEditController extends AbstractController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postHandler = new WikiRefsOptionsEditPostHandler();
-            $result = $postHandler->handle($_POST);
-            $postHandler->RenderMesseges($result);
+            $postProcessor = new WikiRefsOptionsEditPostHandler();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
         } else {
             $this->renderForm();
         }

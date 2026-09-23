@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\settings;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_settings;
 use function App\csrf\generate_csrf_token;
 
@@ -15,18 +15,14 @@ require_once __DIR__ . '/post.php';
  * SettingsPostProcessor first, then always renders the current state
  * of the form below it.
  */
-class SettingsIndexController
+class SettingsIndexController extends AbstractController
 {
     /**
      * Handles authentication and executes controller output.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postProcessor = new SettingsPostProcessor();

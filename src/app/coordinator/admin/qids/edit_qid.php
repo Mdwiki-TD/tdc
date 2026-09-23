@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Qids;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\csrf\generate_csrf_token;
 
 /**
@@ -11,7 +12,7 @@ use function App\csrf\generate_csrf_token;
  * Renders the add/edit form for a single qid entry (GET request only;
  * submission is handled by QidsPostController).
  */
-class EditQidController
+class EditQidController extends AbstractController
 {
     private string $id;
     private string $title;
@@ -35,11 +36,7 @@ class EditQidController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $this->renderHeaderScripts();
         $this->renderFormCard();

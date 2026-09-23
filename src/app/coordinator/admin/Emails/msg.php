@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Emails;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use App\Tables\Main\MainTables;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\APICalls\WikiApi\get_views;
@@ -18,7 +19,7 @@ use function App\csrf\generate_csrf_token;
  * with the translated title, view counts, and a translation suggestion.
  * Submission is posted to the external /gmail1/index.php endpoint.
  */
-class MsgController
+class MsgController extends AbstractController
 {
     private string $globalUsername;
     private string $test;
@@ -45,11 +46,7 @@ class MsgController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $this->renderHeaderScripts();
 

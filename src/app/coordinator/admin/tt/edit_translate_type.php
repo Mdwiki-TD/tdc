@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\csrf\generate_csrf_token;
 
 /**
@@ -11,7 +11,7 @@ use function App\csrf\generate_csrf_token;
  * Renders the add/edit form for a single translate_type entry (GET
  * request only; submission is handled by TtPostController).
  */
-class EditTranslateTypeController
+class EditTranslateTypeController extends AbstractController
 {
     private string $title;
     private string $lead;
@@ -31,11 +31,7 @@ class EditTranslateTypeController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $this->renderHeaderScripts();
         $this->renderFormCard();

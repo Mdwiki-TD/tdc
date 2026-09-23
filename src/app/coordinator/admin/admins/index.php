@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Admins;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_coordinators;
 use function App\csrf\generate_csrf_token;
 
@@ -15,7 +16,7 @@ require_once __DIR__ . '/post.php';
  * to AdminsPostProcessor first, then always renders the current state
  * of the list/form below it.
  */
-class AdminsIndexController
+class AdminsIndexController extends AbstractController
 {
 	private const TY_NAME = 'admins';
 
@@ -24,15 +25,12 @@ class AdminsIndexController
 	 */
 	public function handleRequest(): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+		$this->validateCoordinator();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$postProcessor = new AdminsPostProcessor();
-			$postProcessor->handle();
+            $postProcessor = new AdminsPostProcessor();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
 		}
 
 		$coordinators = get_coordinators();

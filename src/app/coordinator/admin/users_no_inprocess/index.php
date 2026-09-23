@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\UsersNoInprocess;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
 use function App\csrf\generate_csrf_token;
 
@@ -15,7 +15,7 @@ require_once __DIR__ . '/post.php';
  * POST, delegates to UsersNoInprocessPostProcessor first, then always
  * renders the current state of the list/form below it.
  */
-class UsersNoInprocessIndexController
+class UsersNoInprocessIndexController extends AbstractController
 {
     private const TY_NAME = 'users_no_inprocess';
 
@@ -24,11 +24,7 @@ class UsersNoInprocessIndexController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postProcessor = new UsersNoInprocessPostProcessor();

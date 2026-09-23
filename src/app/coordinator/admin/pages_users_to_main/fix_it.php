@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\csrf\generate_csrf_token;
 
@@ -13,7 +14,7 @@ require_once __DIR__ . '/fix_it_post.php';
  * Class FixItController
  * Handles displaying the page edit form and duplicate entry checks (GET requests).
  */
-class FixItController
+class FixItController extends AbstractController
 {
     /**
      * Executes authorization check and handles the incoming request.
@@ -30,8 +31,8 @@ class FixItController
 
         // Delegate POST requests to the POST processor
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postHandler = new FixItPostProcessor();
-            $postHandler->handle();
+            $postProcessor = new FixItPostProcessor();
+            $postProcessor->handle();
             return;
         }
 

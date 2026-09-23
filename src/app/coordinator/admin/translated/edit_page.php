@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Translated;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\csrf\generate_csrf_token;
 
@@ -14,7 +14,7 @@ require_once __DIR__ . '/EditPagePostHandler.php';
  * Handles editing and deleting translated pages (GET renders the form,
  * POST is delegated to EditPagePostHandler).
  */
-class EditPageController
+class EditPageController extends AbstractController
 {
     private string $id;
     private string $table;
@@ -31,11 +31,7 @@ class EditPageController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $this->renderHeaderScripts();
 
@@ -166,10 +162,10 @@ class EditPageController
      */
     private function handlePostRequest(): void
     {
-        $postHandler = new EditPagePostHandler($this->id, $this->table);
-        $result = $postHandler->handle($_POST);
+        $postProcessor = new EditPagePostHandler($this->id, $this->table);
+        $result = $postProcessor->handle($_POST);
 
-        $postHandler->RenderMesseges($result);
+        $postProcessor->RenderMesseges($result);
 
         echo <<<HTML
             <div class='alert alert-success' role='alert'>Page updated<br>

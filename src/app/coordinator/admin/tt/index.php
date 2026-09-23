@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use App\Tables\SqlTables\TablesSql;
 use function App\Utils\Html\makeDropdown;
 use function App\Utils\Html\make_mdwiki_title;
@@ -18,7 +18,7 @@ use function App\APICalls\MdwikiSql\fetch_query;
  * of known titles (translate_type + qids not yet classified), each with
  * its lead/full translation flags and an edit link.
  */
-class TtIndexController
+class TtIndexController extends AbstractController
 {
     private string $cat;
     private array $fullTranslatesTab = [];
@@ -34,11 +34,7 @@ class TtIndexController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $filterHtml = $this->renderFilterSelect($this->cat);
 

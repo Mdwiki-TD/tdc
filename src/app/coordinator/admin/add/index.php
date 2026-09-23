@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Add;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
 use function App\csrf\generate_csrf_token;
 
@@ -15,18 +16,14 @@ require_once __DIR__ . '/post.php';
  * options and a single starter row. On POST, delegates to
  * AddPostProcessor first, then always renders the form below it.
  */
-class AddIndexController
+class AddIndexController extends AbstractController
 {
 	/**
 	 * Handles authentication and executes controller output.
 	 */
 	public function handleRequest(): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+		$this->validateCoordinator();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$postProcessor = new AddPostProcessor();
