@@ -4,7 +4,6 @@ namespace App\Results\GetCats;
 
 use function App\Utils\Functions\test_print;
 use function App\APICalls\MdwikiApi\get_mdwiki_url_with_params;
-use function App\Utils\Functions\start_with;
 use function App\Utils\TablesDir\open_td_tables_file;
 
 function get_category_from_cache(string $category): array
@@ -30,7 +29,7 @@ function get_category_from_cache(string $category): array
 
 function fetch_category_members(string $category): array
 {
-    if (!start_with($category, 'Category:')) {
+    if (!str_starts_with($category, 'Category:')) {
         $category = "Category:$category";
     }
 
@@ -96,7 +95,7 @@ function get_mdwiki_cat_members(string $category, bool $useCache = true, int $de
             $members = get_category_members($currentCategory, $useCache);
 
             foreach ($members as $member) {
-                if (start_with($member, 'Category:')) {
+                if (str_starts_with($member, 'Category:')) {
                     $nextCategories[] = $member;
                 } else {
                     $titles[] = $member;
