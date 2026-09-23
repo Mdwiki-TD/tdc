@@ -62,6 +62,19 @@ class AppRouter
 		$defaultTy = $this->isCoordinator ? "last_coord" : "last";
 		$rawTy = $_GET['ty'] ?? $_POST['ty'] ?? $defaultTy;
 
+		$preDefinedTy = [
+			"translated/edit_page",
+			"Emails/post",
+			"Campaigns/post",
+			"Emails/msg",
+			"qids/post",
+			"tt/post",
+			"wikirefs_options/edit",
+			"pages_users_to_main/fix_it",
+		];
+		if (in_array($rawTy, $preDefinedTy)) {
+			return $rawTy;
+		}
 		// Map route aliases
 		if ($rawTy === 'translate_type') {
 			$rawTy = 'tt';
