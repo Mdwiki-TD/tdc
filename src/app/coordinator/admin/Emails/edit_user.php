@@ -7,105 +7,151 @@ use App\User\CurrentUser;
 use function App\Utils\Html\make_project_to_user;
 use function App\csrf\generate_csrf_token;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-    header('Location: /index.php');
-    exit;
-};
-
-
-echo '</div><script>
-    $("#mainnav").hide();
-    $("#maindiv").hide();
-</script>
-<div class="container-fluid">';
-
-$user    = $_GET['user'] ?? '';
-$wiki    = $_GET['wiki'] ?? '';
-$project = $_GET['project'] ?? '';
-$email   = $_GET['email'] ?? '';
-$userId = $_GET['user_id'] ?? '';
-
-$headerTitle = (!empty($userId)) ? "Edit User" : "Add New User";
-
-echo <<<HTML
-<div class='card'>
-    <div class='card-header'>
-        <h4>$headerTitle</h4>
-    </div>
-    <div class='card-body'>
-HTML;
-
-function edit_user_echo_form($user, $wiki, $project, $email, $userId)
+/**
+ * Class EditUserController
+ * Renders the add/edit form for a single user's email/wiki/project
+ * data (GET request only; submission is handled by EmailsPostProcessor).
+ */
+class EditUserController
 {
+    private string $user;
+    private string $wiki;
+    private string $project;
+    private string $email;
+    private string $userId;
 
-    $projectLine = make_project_to_user($project);
+    public function __construct()
+    {
+        $this->user    = $_GET['user'] ?? '';
+        $this->wiki    = $_GET['wiki'] ?? '';
+        $this->project = $_GET['project'] ?? '';
+        $this->email   = $_GET['email'] ?? '';
+        $this->userId  = $_GET['user_id'] ?? '';
+    }
 
-    $csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
+    /**
+     * Executes authorization check and renders the form view.
+     */
+    public function handleRequest(): void
+    {
+        // Check user authorization
+        if (!CurrentUser::getInstance()->isCoordinator()) {
+            header('Location: /index.php');
+            exit;
+        }
 
-    $idRow = <<<HTML
-        <div class='col-md-3'>
-            <div class='input-group mb-3'>
-                <div class='input-group-prepend'>
-                    <span class='input-group-text'>User id</span>
+        $this->renderHeaderScripts();
+        $this->renderFormCard();
+    }
+
+    /**
+     * Renders UI scripts to isolate the modal/page layout.
+     */
+    private function renderHeaderScripts(): void
+    {
+        echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>
+        <div class="container-fluid">';
+    }
+
+    /**
+     * Builds the user/email/wiki/project edit-or-add form markup.
+     */
+    private function buildFormHtml(string $user, string $wiki, string $project, string $email, string $userId): string
+    {
+        $projectLine = make_project_to_user($project);
+
+        $csrfToken = generate_csrf_token();
+
+        $idRow = <<<HTML
+            <div class='col-md-3'>
+                <div class='input-group mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='input-group-text'>User id</span>
+                    </div>
+                    <input class='form-control' type='text' name='emails[1][user_id]' value='$userId' readonly/>
                 </div>
-                <input class='form-control' type='text' name='emails[1][user_id]' value='$userId' readonly/>
+            </div>
+        HTML;
+
+        if (empty($userId)) {
+            $idRow = "";
+        }
+
+        return <<<HTML
+            <form action='index.php?ty=Emails/post&nonav=120' method="POST">
+                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                <input name='edit' value="1" type="hidden"/>
+                <div class='container'>
+                    <div class='row'>
+                        $idRow
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>User</span>
+                                </div>
+                                <input class='form-control' type='text' name='emails[1][username]' value='$user' required/>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>email</span>
+                                </div>
+                                <input class='form-control' type='text' name='emails[1][email]' value='$email'/>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>wiki</span>
+                                </div>
+                                <input class='form-control' type='text' name='emails[1][wiki]' value='$wiki'/>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>project</span>
+                                </div>
+                                <select name='emails[1][project]' class='form-select options'>$projectLine</select>
+                            </div>
+                        </div>
+                        <div class='col-md-2'>
+                            <input class='btn btn-outline-primary' type='submit' value='send'/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        HTML;
+    }
+
+    /**
+     * Renders the card wrapping the form.
+     */
+    private function renderFormCard(): void
+    {
+        $headerTitle = (!empty($this->userId)) ? 'Edit User' : 'Add New User';
+
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <h4>$headerTitle</h4>
+                </div>
+                <div class='card-body'>
+        HTML;
+
+        echo $this->buildFormHtml($this->user, $this->wiki, $this->project, $this->email, $this->userId);
+
+        echo <<<HTML
             </div>
         </div>
-    HTML;
-
-    if (empty($userId)) $idRow = "";
-
-    echo <<<HTML
-        <form action='index.php?ty=Emails/post&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrfToken" type="hidden"/>
-            <input name='edit' value="1" type="hidden"/>
-            <div class='container'>
-                <div class='row'>
-                    $idRow
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>User</span>
-                            </div>
-                            <input class='form-control' type='text' name='emails[1][username]' value='$user' required/>
-                        </div>
-                    </div>
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>email</span>
-                            </div>
-                            <input class='form-control' type='text' name='emails[1][email]' value='$email'/>
-                        </div>
-                    </div>
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>wiki</span>
-                            </div>
-                            <input class='form-control' type='text' name='emails[1][wiki]' value='$wiki'/>
-                        </div>
-                    </div>
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>project</span>
-                            </div>
-                            <select name='emails[1][project]' class='form-select options'>$projectLine</select>
-                        </div>
-                    </div>
-                    <div class='col-md-2'>
-                        <input class='btn btn-outline-primary' type='submit' value='send'/>
-                    </div>
-                </div>
-            </div>
-        </form>
-    HTML;
+        HTML;
+    }
 }
 
-edit_user_echo_form($user, $wiki, $project, $email, $userId);
-
-echo <<<HTML
-    </div>
-</div>
-HTML;
+// Instantiate and execute controller
+$controller = new EditUserController();
+$controller->handleRequest();
