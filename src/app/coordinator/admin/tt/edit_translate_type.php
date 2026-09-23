@@ -6,105 +6,150 @@ namespace App\Coordinator\Admin\TranslateType;
 use App\User\CurrentUser;
 use function App\csrf\generate_csrf_token;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-    header('Location: /index.php');
-    exit;
-};
-
-
-echo '</div><script>
-    $("#mainnav").hide();
-    $("#maindiv").hide();
-</script>
-<div class="container-fluid">';
-
-$title  = (isset($_GET['title'])) ? rawurldecode($_GET['title']) : "";
-$lead   = $_GET['lead'] ?? '';
-$full   = $_GET['full'] ?? '';
-$id     = $_GET['id'] ?? '';
-
-$header_title = (!empty($id)) ? "Edit Translate type" : "Add Translate type";
-
-function tt_edit_echo_form($title, $lead, $full, $id)
+/**
+ * Class EditTranslateTypeController
+ * Renders the add/edit form for a single translate_type entry (GET
+ * request only; submission is handled by TtPostController).
+ */
+class EditTranslateTypeController
 {
-    $lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
-    $full_checked = ($full == 1 || $full == "1") ? 'checked' : '';
+    private string $title;
+    private string $lead;
+    private string $full;
+    private string $id;
 
-    $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    public function __construct()
+    {
+        $this->title = isset($_GET['title']) ? rawurldecode($_GET['title']) : '';
+        $this->lead  = $_GET['lead'] ?? '';
+        $this->full  = $_GET['full'] ?? '';
+        $this->id    = $_GET['id'] ?? '';
+    }
 
-    $csrf_token = generate_csrf_token();
+    /**
+     * Executes authorization check and renders the form view.
+     */
+    public function handleRequest(): void
+    {
+        // Check user authorization
+        if (!CurrentUser::getInstance()->isCoordinator()) {
+            header('Location: /index.php');
+            exit;
+        }
 
-    $id_row = <<<HTML
-        <div class='col-md-3'>
-            <div class='input-group mb-3'>
-                <div class='input-group-prepend'>
-                    <span class='input-group-text'>Id</span>
-                </div>
-                <input class='form-control' type='text' value='$id' name='rows[1][id]' readonly/>
-            </div>
-        </div>
-    HTML;
+        $this->renderHeaderScripts();
+        $this->renderFormCard();
+    }
 
-    if (empty($id)) $id_row = "";
+    /**
+     * Renders UI scripts to isolate the modal/page layout.
+     */
+    private function renderHeaderScripts(): void
+    {
+        echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>
+        <div class="container-fluid">';
+    }
 
-    return <<<HTML
-        <form action='index.php?ty=tt/post&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" type="hidden"/>
-            <input name='edit' value="1" type="hidden"/>
-            <div class='container'>
-                <div class='row'>
-                    $id_row
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>Title</span>
-                            </div>
-                            <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
-                        </div>
+    /**
+     * Builds the id/title/lead/full edit-or-add form markup.
+     */
+    private function buildFormHtml(string $title, string $lead, string $full, string $id): string
+    {
+        $leadChecked = ($lead == 1 || $lead == "1") ? 'checked' : '';
+        $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
+
+        $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
+        $csrfToken = generate_csrf_token();
+
+        $idRow = <<<HTML
+            <div class='col-md-3'>
+                <div class='input-group mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='input-group-text'>Id</span>
                     </div>
-                    <div class='col-md-3'>
-                        <div class='row'>
-                            <div class='col'>
-                                <div class='input-group form-control mb-3'>
-                                    <div class='input-group-prepend'>
-                                        <span class='me-3'>Lead:</span>
+                    <input class='form-control' type='text' value='$id' name='rows[1][id]' readonly/>
+                </div>
+            </div>
+        HTML;
+
+        if (empty($id)) {
+            $idRow = "";
+        }
+
+        return <<<HTML
+            <form action='index.php?ty=tt/post&nonav=120' method="POST">
+                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                <input name='edit' value="1" type="hidden"/>
+                <div class='container'>
+                    <div class='row'>
+                        $idRow
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Title</span>
+                                </div>
+                                <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='row'>
+                                <div class='col'>
+                                    <div class='input-group form-control mb-3'>
+                                        <div class='input-group-prepend'>
+                                            <span class='me-3'>Lead:</span>
+                                        </div>
+                                        <div class="form-check form-switch form-inline">
+                                            <input class='form-check-input' type='checkbox' name='rows[1][lead]' value='1' $leadChecked>
+                                        </div>
                                     </div>
-                                    <div class="form-check form-switch form-inline">
-                                        <input class='form-check-input' type='checkbox' name='rows[1][lead]' value='1' $lead_checked>
+                                </div>
+                                <div class='col'>
+                                    <div class='input-group form-control mb-3'>
+                                        <div class='input-group-prepend'>
+                                            <span class='me-3'>Full:</span>
+                                        </div>
+                                        <div class="form-check form-switch form-inline">
+                                            <input class='form-check-input' type='checkbox' name='rows[1][full]' value='1' $fullChecked>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class='col'>
-                                <div class='input-group form-control mb-3'>
-                                    <div class='input-group-prepend'>
-                                        <span class='me-3'>Full:</span>
-                                    </div>
-                                    <div class="form-check form-switch form-inline">
-                                        <input class='form-check-input' type='checkbox' name='rows[1][full]' value='1' $full_checked>
-                                    </div>
-                                </div>
-                            </div>
+                        </div>
+                        <div class='col-md-2'>
+                            <input class='btn btn-outline-primary' type='submit' value='Save'/>
                         </div>
                     </div>
-                    <div class='col-md-2'>
-                        <input class='btn btn-outline-primary' type='submit' value='Save'/>
-                    </div>
+                </div>
+            </form>
+        HTML;
+    }
+
+    /**
+     * Renders the card wrapping the form.
+     */
+    private function renderFormCard(): void
+    {
+        $headerTitle = (!empty($this->id)) ? 'Edit Translate type' : 'Add Translate type';
+
+        $form = $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
+
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <h4>$headerTitle</h4>
+                </div>
+                <div class='card-body'>
+                    $form
                 </div>
             </div>
-        </form>
-    HTML;
+        HTML;
+    }
 }
 
-$form = tt_edit_echo_form($title, $lead, $full, $id);
-
-echo <<<HTML
-    <div class='card'>
-        <div class='card-header'>
-            <h4>$header_title</h4>
-        </div>
-        <div class='card-body'>
-            $form
-        </div>
-    </div>
-HTML;
-
+// Instantiate and execute controller
+$controller = new EditTranslateTypeController();
+$controller->handleRequest();

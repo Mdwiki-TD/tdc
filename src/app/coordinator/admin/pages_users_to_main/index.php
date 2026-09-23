@@ -19,7 +19,7 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
 };
 $lang = $_GET['lang'] ?? 'All';
 
-if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
+if ($lang !== 'All' && !isset(LangsTables::$LCodeToLang[$lang])) {
     $lang = 'All';
 };
 
@@ -48,7 +48,7 @@ function get_languages()
     return $tabes;
 }
 
-$Toggle_column = <<<HTML
+$ToggleColumn = <<<HTML
     <div>
         <span class="toggle-vis btn" data-column="0">Toggle columns:</span>
         <a class="toggle-vis btn btn-outline-primary" data-column="0" type="button">#</a>
@@ -59,8 +59,8 @@ $Toggle_column = <<<HTML
     </div>
 HTML;
 
-$recent_table = <<<HTML
-    $Toggle_column
+$recentTable = <<<HTML
+    $ToggleColumn
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="pages_table" style="font-size:90%;">
 		<thead>
 			<tr>
@@ -87,45 +87,45 @@ function page_users_make_td($tabg, $nnnn)
 
     $user      = $tabg['user'] ?? "";
     $lang      = $tabg['lang'] ?? "";
-    $md_title = trim($tabg['title'] ?? '');
+    $mdTitle = trim($tabg['title'] ?? '');
     $target      = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
 
-    $mdwiki_title = make_mdwiki_title($md_title);
+    $mdwikiTitle = make_mdwiki_title($mdTitle);
     $targe33 = make_target_url($target, $lang);
 
-    $new_user   = $tabg['new_user'] ?? "";
-    $new_target = $tabg['new_target'] ?? "";
+    $newUser   = $tabg['new_user'] ?? "";
+    $newTarget = $tabg['new_target'] ?? "";
 
-    $targe44 = make_target_url($new_target, $lang);
+    $targe44 = make_target_url($newTarget, $lang);
 
-    $edit_params = array(
+    $editParams = array(
         'id'   => $id,
-        'new_user'   => $new_user,
-        'new_target'   => $new_target
+        'new_user'   => $newUser,
+        'new_target'   => $newTarget
 
     );
 
-    $edit_icon = make_edit_icon_new("pages_users_to_main/fix_it", $edit_params);
+    $editIcon = make_edit_icon_new("pages_users_to_main/fix_it", $editParams);
 
     $qid          = $tabg['qid'] ?? "";
-    $new_qid      = $tabg['new_qid'] ?? "";
+    $newQid      = $tabg['new_qid'] ?? "";
 
-    $qid_link = (!empty($qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$qid'>$qid</a>" : "";
-    $new_qid_link = (!empty($new_qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$new_qid'>$new_qid</a>" : "";
+    $qidLink = (!empty($qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$qid'>$qid</a>" : "";
+    $newQidLink = (!empty($newQid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$newQid'>$newQid</a>" : "";
 
-    $new_target2 = htmlspecialchars($new_target, ENT_QUOTES);
+    $newTarget2 = htmlspecialchars($newTarget, ENT_QUOTES);
 
-    if (!empty($qid) && empty($new_qid)) {
-        $same_qid = "bg-info-subtle";
-        $new_qid_link = "<a class='fw-bold' target='_blank' href='https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$new_target2' u-lang='$lang' u-qid='$qid' u-target='$new_target2'>Link it!</a>";
+    if (!empty($qid) && empty($newQid)) {
+        $sameQid = "bg-info-subtle";
+        $newQidLink = "<a class='fw-bold' target='_blank' href='https://www.wikidata.org/wiki/Special:SetSiteLink/$qid/{$lang}wiki?page=$newTarget2' u-lang='$lang' u-qid='$qid' u-target='$newTarget2'>Link it!</a>";
     } else {
-        $same_qid = ($qid == $new_qid) ? "bg-info-subtle" : "bg-danger-subtle";
+        $sameQid = ($qid == $newQid) ? "bg-info-subtle" : "bg-danger-subtle";
     }
 
-    if (!empty($qid) && $new_qid == $qid) {
-        $same_qid = "";
-        $new_qid_link = "<a target='_blank' href='https://wikidata.org/wiki/$new_qid'>Same</a>";
+    if (!empty($qid) && $newQid == $qid) {
+        $sameQid = "";
+        $newQidLink = "<a target='_blank' href='https://wikidata.org/wiki/$newQid'>Same</a>";
     }
 
     $laly = <<<HTML
@@ -137,15 +137,15 @@ function page_users_make_td($tabg, $nnnn)
                 <a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
             </td>
             <td data-content='Title'>
-                $mdwiki_title
+                $mdwikiTitle
             </td>
-            <td data-content='Qid'> $qid_link </td>
+            <td data-content='Qid'> $qidLink </td>
             <td data-content='Publication'> $pupdate </td>
             <td data-content='Old User'>
                 <a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
             </td>
             <td data-content='New User'>
-                <a href='/Translation_Dashboard/leaderboard.php?user=$new_user'>$new_user</a>
+                <a href='/Translation_Dashboard/leaderboard.php?user=$newUser'>$newUser</a>
             </td>
             <td data-content='Old target'>
                 $targe33
@@ -153,11 +153,11 @@ function page_users_make_td($tabg, $nnnn)
             <td data-content='New target'>
                 $targe44
             </td>
-            <td data-content='New Qid' class="$same_qid">
-                $new_qid_link
+            <td data-content='New Qid' class="$sameQid">
+                $newQidLink
             </td>
             <td data-content='Fix it'>
-                $edit_icon
+                $editIcon
             </td>
         </tr>
     HTML;
@@ -165,41 +165,41 @@ function page_users_make_td($tabg, $nnnn)
     return $laly;
 };
 
-$sql_results = get_pages_users_to_main($lang);
+$sqlResults = get_pages_users_to_main($lang);
 
-$titles = array_column($sql_results, "title");
+$titles = array_column($sqlResults, "title");
 
 // Only attempt to fetch QIDs if we have titles
-$titles_qids = [];
+$titlesQids = [];
 
 if (!empty($titles)) {
     $infos = td_or_sql_titles_infos($titles);
 
-    $titles_qids = array_column($infos, "qid", "title");
+    $titlesQids = array_column($infos, "qid", "title");
 
-    // var_export($titles_qids);
+    // var_export($titlesQids);
 }
 
 $noo = 0;
-foreach ($sql_results as $tat => $tabe) {
+foreach ($sqlResults as $tat => $tabe) {
 
-    $tabe["qid"] = $titles_qids[$tabe["title"]] ?? "";
+    $tabe["qid"] = $titlesQids[$tabe["title"]] ?? "";
 
     $noo = $noo + 1;
 
-    $recent_table .= page_users_make_td($tabe, $noo);
+    $recentTable .= page_users_make_td($tabe, $noo);
 
 };
 
-$recent_table .= <<<HTML
+$recentTable .= <<<HTML
 		</tbody>
 	</table>
 HTML;
 
-$lang_table = get_languages();
-$filter_la = filter_recent2($lang, $lang_table);
+$langTable = get_languages();
+$filterLa = filter_recent2($lang, $langTable);
 
-$count_result = count($sql_results);
+$countResult = count($sqlResults);
 
 echo <<<HTML
     <div class='card'>
@@ -208,7 +208,7 @@ echo <<<HTML
                 <input name='ty' value='pages_users_to_main' type='hidden'/>
                 <div class='row'>
                     <div class='col-md-7'>
-                        <h4>Userpages need to be moved to main pages: ($count_result)</h4>
+                        <h4>Userpages need to be moved to main pages: ($countResult)</h4>
                     </div>
                     <div class='col-md-3'>
                         <div class="input-group">
@@ -225,7 +225,7 @@ echo <<<HTML
                                 data-style='btn active'
                                 data-width="90%"
                                 >
-                                $filter_la
+                                $filterLa
                             </select>
                         </div>
                     </div>
@@ -236,7 +236,7 @@ echo <<<HTML
             </form>
         </div>
         <div class='card-body'>
-            $recent_table
+            $recentTable
         </div>
     </div>
 HTML;

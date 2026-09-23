@@ -25,7 +25,7 @@ $qq = get_td_or_sql_categories();
 
 $numb = 0;
 
-$table_rows = "";
+$tableRows = "";
 
 foreach ($qq as $Key => $table) {
 	$numb += 1;
@@ -37,7 +37,7 @@ foreach ($qq as $Key => $table) {
 
 	$checked    = ($table['is_default'] == 1) ? 'checked' : '';
 
-	$table_rows .= <<<HTML
+	$tableRows .= <<<HTML
 	<tr>
 		<div class='form-group'>
 			<th data-content="#">
@@ -67,7 +67,7 @@ foreach ($qq as $Key => $table) {
 	HTML;
 };
 
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
 echo <<<HTML
 	<div class='card'>
@@ -76,7 +76,7 @@ echo <<<HTML
 		</div>
 		<div class='card-body'>
 			<form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
-				<input name='csrf_token' value="$csrf_token" type="hidden"/>
+				<input name='csrf_token' value="$csrfToken" type="hidden"/>
 				<input name='ty' value="Campaigns" type="hidden"/>
 				<div class="form-group">
 					<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
@@ -92,7 +92,7 @@ echo <<<HTML
 							</tr>
 						</thead>
 						<tbody id="tab_logic">
-							$table_rows
+							$tableRows
 						</tbody>
 					</table>
 				</div>

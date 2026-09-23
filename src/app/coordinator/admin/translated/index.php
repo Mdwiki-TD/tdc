@@ -35,7 +35,7 @@ class TranslatedIndexController
             $this->table = "pages_users";
         }
 
-        if ($this->lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$this->lang])) {
+        if ($this->lang !== 'All' && !isset(LangsTables::$LCodeToLang[$this->lang])) {
             $this->lang = 'All';
         }
     }

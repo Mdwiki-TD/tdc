@@ -20,16 +20,16 @@ echo '</div><script>
 
 
 
-$header_title = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
+$headerTitle = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
 
-function echo_form_post($id, $title, $qid, $qid_table)
+function echo_form_post($id, $title, $qid, $qidTable)
 {
 
 	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
-	$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+	$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
-	$id_row = <<<HTML
+	$idRow = <<<HTML
 		<div class='col-md-3'>
 			<div class='input-group mb-3'>
 				<div class='input-group-prepend'>
@@ -41,19 +41,19 @@ function echo_form_post($id, $title, $qid, $qid_table)
 	HTML;
 
 	if (empty($id)) {
-		$id_row = "";
+		$idRow = "";
 	}
 
 	$dis = $_GET['dis'] ?? 'all';
 
 	return <<<HTML
-        <form action='index.php?ty=qids/post&qid_table=$qid_table&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" type="hidden"/>
-            <input name='qid_table' value="$qid_table" type="hidden"/>
+        <form action='index.php?ty=qids/post&qid_table=$qidTable&nonav=120' method="POST">
+            <input name='csrf_token' value="$csrfToken" type="hidden"/>
+            <input name='qid_table' value="$qidTable" type="hidden"/>
             <input name='edit' value="1" type="hidden"/>
             <div class='container'>
                 <div class='row'>
-                    $id_row
+                    $idRow
                     <div class='col-md-3'>
                         <div class='input-group mb-3'>
                             <div class='input-group-prepend'>
@@ -91,7 +91,7 @@ $form = echo_form_post($id, $title, $qid, $table);
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
-            <h4>$header_title</h4>
+            <h4>$headerTitle</h4>
         </div>
         <div class='card-body'>
             $form

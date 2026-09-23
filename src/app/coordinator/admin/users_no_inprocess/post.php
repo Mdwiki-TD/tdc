@@ -73,7 +73,7 @@ class UsersNoInprocessPostProcessor
 				$this->texts[] = "User $user deleted.";
 				continue;
 			}
-			// $is_new = $table['is_new'] ?? '';
+			// $isNew = $table['is_new'] ?? '';
 
 			$user = trim($user);
 
@@ -84,9 +84,9 @@ class UsersNoInprocessPostProcessor
 				continue;
 			}
 
-			if (!empty($user)) { // && empty($u_id) && $is_new == 'yes'
+			if (!empty($user)) { // && empty($uId) && $isNew == 'yes'
 				$tableName = self::TABLE_NAME;
-				// $qua = "INSERT INTO $table_name (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $table_name WHERE user = ?)";
+				// $qua = "INSERT INTO $tableName (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $tableName WHERE user = ?)";
 
 				$qua = <<<SQL
                     INSERT INTO $tableName (user, is_active)

@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	exit;
 }
 
-$close_btn = <<<HTML
+$closeBtn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
@@ -31,7 +31,7 @@ HTML;
 
 if (!verify_csrf_token()) {
 	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $close_btn;
+	echo $closeBtn;
 	return;
 }
 
@@ -51,7 +51,7 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 		continue;
 	}
 
-	$result = insert_to_translate_type($title, $lead, $full, $tt_id = $id);
+	$result = insert_to_translate_type($title, $lead, $full, $ttId = $id);
 
 	if ($result === false) {
 		$errors[] = "Failed to add translate type, title: $title.";
@@ -62,4 +62,4 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 
 echo div_alert($texts, 'success');
 echo div_alert($errors, 'danger');
-echo $close_btn;
+echo $closeBtn;

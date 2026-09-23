@@ -19,21 +19,21 @@ echo '</div><script>
     $("#maindiv").hide();
 </script>';
 
-$qid_table = $_GET["qid_table"] ?? '';
+$qidTable = $_GET["qid_table"] ?? '';
 
-if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
+if ($qidTable != 'qids' && $qidTable != 'qids_others') $qidTable = 'qids';
 
 $texts = [];
 $errors = [];
 
-function add_it($id, $title, $qid, $qid_table)
+function add_it($id, $title, $qid, $qidTable)
 {
-	$qua = "INSERT INTO $qid_table (title, qid) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM $qid_table WHERE (title = ? OR qid = ?))";
+	$qua = "INSERT INTO $qidTable (title, qid) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM $qidTable WHERE (title = ? OR qid = ?))";
 
 	$params = [$title, $qid, $title, $qid];
 
 	if (!empty($id)) {
-		$qua = "UPDATE $qid_table SET title = ?, qid = ? WHERE id = ? ";
+		$qua = "UPDATE $qidTable SET title = ?, qid = ? WHERE id = ? ";
 		$params = [$title, $qid, $id];
 	}
 
@@ -41,7 +41,7 @@ function add_it($id, $title, $qid, $qid_table)
 
 	if (!empty($qid)) {
 		$qua2 = <<<SQL
-			UPDATE $qid_table SET qid = ?
+			UPDATE $qidTable SET qid = ?
 			WHERE title = ? and (qid = '' OR qid IS NULL);
 		SQL;
 
@@ -49,35 +49,35 @@ function add_it($id, $title, $qid, $qid_table)
 	}
 }
 
-function work_one_rows($qid, $id, $title, $qid_table, &$texts, &$errors)
+function work_one_rows($qid, $id, $title, $qidTable, &$texts, &$errors)
 {
 
-	add_it($id, $title, $qid, $qid_table);
+	add_it($id, $title, $qid, $qidTable);
 
-	$qid_of_title = check_one($select = "qid", $where = "title", $value = $title, $table = $qid_table);
+	$qidOfTitle = check_one($select = "qid", $where = "title", $value = $title, $table = $qidTable);
 
-	if (!empty($qid_of_title) && $qid_of_title == $qid) {
+	if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
 		$texts[] = "Data Changes successfully of title: $title, Qid: $qid";
 	} else {
-		$errors[] = "Failed to chanhe data of title: $title, Qid: $qid. Found: qid in db:$qid_of_title";
+		$errors[] = "Failed to chanhe data of title: $title, Qid: $qid. Found: qid in db:$qidOfTitle";
 	}
 }
 
-function work_one_rows_add_new($qid, $title, $qid_table, &$texts, &$errors)
+function work_one_rows_add_new($qid, $title, $qidTable, &$texts, &$errors)
 {
 
-	add_it("", $title, $qid, $qid_table);
+	add_it("", $title, $qid, $qidTable);
 
-	$qid_of_title = check_one($select = "qid", $where = "title", $value = $title, $table = $qid_table);
+	$qidOfTitle = check_one($select = "qid", $where = "title", $value = $title, $table = $qidTable);
 
-	if (!empty($qid_of_title) && $qid_of_title == $qid) {
+	if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
 		$texts[] = "Qid added successfully for title: $title.";
 	} else {
-		$errors[] = "Failed to add Qid for title: $title. qid_of_title:$qid_of_title";
+		$errors[] = "Failed to add Qid for title: $title. qid_of_title:$qidOfTitle";
 	}
 }
 
-$close_btn = <<<HTML
+$closeBtn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 if (!verify_csrf_token()) {
 	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $close_btn;
+	echo $closeBtn;
 	return;
 }
 
@@ -113,55 +113,55 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 		continue;
 	}
 
-	$tx_tab = check_one($select = "*", $where = "qid", $value = $qid, $table = $qid_table);
+	$txTab = check_one($select = "*", $where = "qid", $value = $qid, $table = $qidTable);
 
-	if ($tx_tab) {
-		$tx_id = $tx_tab['id'];
-		$title_of_qid = $tx_tab['title'];
+	if ($txTab) {
+		$txId = $txTab['id'];
+		$titleOfQid = $txTab['title'];
 
-		if (!empty($id) && $tx_id != $id) {
-			$errors[] = "Qid:($qid) already used in database with with id:($tx_id).";
+		if (!empty($id) && $txId != $id) {
+			$errors[] = "Qid:($qid) already used in database with with id:($txId).";
 			continue;
 		}
 
-		if (!empty($title_of_qid) && empty($id) && $title_of_qid != $title) {
-			$errors[] = "Qid:($qid) already used in database with title:($title_of_qid).";
+		if (!empty($titleOfQid) && empty($id) && $titleOfQid != $title) {
+			$errors[] = "Qid:($qid) already used in database with title:($titleOfQid).";
 			continue;
 		}
 	}
 
-	$tt_tab = check_one($select = "*", $where = "title", $value = $title, $table = $qid_table);
+	$ttTab = check_one($select = "*", $where = "title", $value = $title, $table = $qidTable);
 
-	if ($tt_tab) {
-		$qid_of_title5 = $tt_tab['qid'];
-		$tt_id = $tt_tab['id'];
+	if ($ttTab) {
+		$qidOfTitle5 = $ttTab['qid'];
+		$ttId = $ttTab['id'];
 
-		if (!empty($id) && $tt_id != $id) {
-			$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
+		if (!empty($id) && $ttId != $id) {
+			$errors[] = "Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)";
 			continue;
 		}
 
-		if (empty($id) && !empty($qid_of_title5) && $qid_of_title5 != $qid) {
-			$errors[] = "Title:($title) already used in database with qid:($qid_of_title5), new qid:($qid)";
+		if (empty($id) && !empty($qidOfTitle5) && $qidOfTitle5 != $qid) {
+			$errors[] = "Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)";
 			continue;
 		}
 
 	}
 
 	if (empty($id)) {
-		work_one_rows_add_new($qid, $title, $qid_table, $texts, $errors);
+		work_one_rows_add_new($qid, $title, $qidTable, $texts, $errors);
 	} else {
-		work_one_rows($qid, $id, $title, $qid_table, $texts, $errors);
+		work_one_rows($qid, $id, $title, $qidTable, $texts, $errors);
 	}
 }
 
 if (!empty($texts)) {
-	$texts[] = "table:($qid_table)";
+	$texts[] = "table:($qidTable)";
 } elseif (!empty($errors)) {
-	$errors[] = "table:($qid_table)";
+	$errors[] = "table:($qidTable)";
 }
 
 echo div_alert($texts, 'success');
 echo div_alert($errors, 'danger');
 
-echo $close_btn;
+echo $closeBtn;

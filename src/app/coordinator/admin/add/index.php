@@ -37,13 +37,13 @@ $table = "";
 
 foreach (range(1, 1) as $numb) {
 
-	$cats_line = <<<HTML
+	$catsLine = <<<HTML
 		<select class='form-select catsoptions' name='rows[$numb][cat]' data-bs-theme="auto">
 			$cats
 		</select>
 	HTML;
 
-	$type_line = sprintf($typies, $numb, $numb);
+	$typeLine = sprintf($typies, $numb, $numb);
 
 	$table .= <<<HTML
 	<tr id="row_$numb">
@@ -54,10 +54,10 @@ foreach (range(1, 1) as $numb) {
 			<input class="form-control mdtitles" size='15' name='rows[$numb][mdtitle]' required/>
 		</td>
 		<td data-content='Campaign'>
-			$cats_line
+			$catsLine
 		</td>
 		<td data-content='Type'>
-			$type_line
+			$typeLine
 		</td>
 		<td data-content='User'>
 			<input class="form-control td_user_input" size='10' name='rows[$numb][user]' required/>
@@ -82,7 +82,7 @@ foreach (range(1, 1) as $numb) {
 
 $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
 
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
 echo <<<HTML
 	<div class='card'>
@@ -92,7 +92,7 @@ echo <<<HTML
 		</div>
 		<div class='cardbody p-2'>
 			<form action="index.php?ty=add" method="POST">
-				<input name='csrf_token' value="$csrf_token" type="hidden"/>
+				<input name='csrf_token' value="$csrfToken" type="hidden"/>
 				$testin
 				<input name='ty' value="add" type="hidden"/>
 				<div class="form-group">

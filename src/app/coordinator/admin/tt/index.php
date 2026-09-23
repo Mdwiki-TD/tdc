@@ -59,7 +59,7 @@ class TtIndexController
 	 */
 	private function renderFilterSelect(string $cat): string
 	{
-		$catsTitles = array_keys(TablesSql::$s_cat_to_camp);
+		$catsTitles = array_keys(TablesSql::$sCatToCamp);
 
 		$template = <<<HTML
             <div class="input-group">
@@ -93,13 +93,13 @@ class TtIndexController
 	}
 
 	/**
-	 * Populates TablesSql::$s_cat_titles either from the full set of
+	 * Populates TablesSql::$sCatTitles either from the full set of
 	 * known/unclassified titles ("All") or from a Wikipedia category's
 	 * members.
 	 */
 	private function loadCategoryTitles(): void
 	{
-		TablesSql::$s_cat_titles = [];
+		TablesSql::$sCatTitles = [];
 
 		if ($this->cat === 'All') {
 			$rows = fetch_query('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)');
@@ -110,9 +110,9 @@ class TtIndexController
 				}
 			}
 
-			TablesSql::$s_cat_titles = array_keys($this->fullTranslatesTab);
+			TablesSql::$sCatTitles = array_keys($this->fullTranslatesTab);
 		} else {
-			TablesSql::$s_cat_titles = get_mdwiki_cat_members($this->cat, true, 1);
+			TablesSql::$sCatTitles = get_mdwiki_cat_members($this->cat, true, 1);
 		}
 	}
 
@@ -124,7 +124,7 @@ class TtIndexController
 		$tableRows = '';
 		$ttCount = 0;
 
-		foreach (TablesSql::$s_cat_titles as $title) {
+		foreach (TablesSql::$sCatTitles as $title) {
 			if (in_array($title, $this->newTitles)) {
 				continue;
 			}
