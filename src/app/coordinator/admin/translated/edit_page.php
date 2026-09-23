@@ -4,14 +4,15 @@
 namespace App\Coordinator\Admin\Translated;
 
 use App\User\CurrentUser;
-use function App\APICalls\MdwikiSql\execute_query;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\csrf\generate_csrf_token;
-use function App\csrf\verify_csrf_token;
+
+require_once __DIR__ . '/edit_page_post.php';
 
 /**
  * Class EditPageController
- * Handles editing and deleting translated pages (GET and POST requests).
+ * Handles editing and deleting translated pages (GET renders the form,
+ * POST is delegated to EditPagePostHandler).
  */
 class EditPageController
 {
@@ -64,39 +65,6 @@ class EditPageController
             $("#maindiv").hide();
         </script>
         <div class="container-fluid">';
-    }
-
-    /**
-     * Deletes a page record from the given database table.
-     */
-    private function deletePage(string $id, string $table): void
-    {
-        $query = "DELETE FROM {$table} WHERE id = ?";
-        execute_query($query, [$id]);
-    }
-
-    /**
-     * Updates page information in the database.
-     */
-    private function editPage(string $id, string $table, string $title, string $target, string $lang, string $user, string $pupdate): void
-    {
-        $query = "UPDATE {$table}
-            SET
-                title = ?,
-                target = ?,
-                lang = ?,
-                user = ?,
-                pupdate = ?
-            WHERE
-                id = ?
-        ";
-        $params = [$title, $target, $lang, $user, $pupdate, $id];
-
-        execute_query($query, $params);
-
-        if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-            echo "<pre>{$query}</pre>";
-        }
     }
 
     /**
@@ -196,22 +164,12 @@ class EditPageController
     {
         $closeBtn = $this->getCloseButtonHtml();
 
-        if (!verify_csrf_token()) {
+        $result = (new EditPagePostHandler())->handle($_POST, $this->id, $this->table);
+
+        if ($result['csrfError']) {
             echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
             echo $closeBtn;
             return;
-        }
-
-        if (isset($_POST['delete'])) {
-            $this->deletePage($_POST['delete'], $this->table);
-        } elseif (isset($_POST['edit'])) {
-            $title   = $_POST['title'] ?? '';
-            $target  = $_POST['target'] ?? '';
-            $lang    = $_POST['lang'] ?? '';
-            $user    = $_POST['user'] ?? '';
-            $pupdate = $_POST['pupdate'] ?? '';
-
-            $this->editPage($this->id, $this->table, $title, $target, $lang, $user, $pupdate);
         }
 
         echo <<<HTML
