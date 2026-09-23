@@ -1,11 +1,9 @@
 <?php
 
-if ($GLOBALS['user_is_coordinator'] == false) {
+if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 }
-
-
 
 include_once __DIR__ . '/sugust.php';
 
@@ -17,56 +15,13 @@ use function Utils\Html\make_target_url;
 use function Emails\Sugust\get_sugust;
 use function TDWIKI\csrf\generate_csrf_token;
 
+$global_username = CurrentUser::getInstance()->getUsername();
+
 echo "</div>";
 
-function get_host1()
-{
-    // $hoste = get_host1();
-
-    static $cached_host = null;
-
-    if ($cached_host !== null) {
-        return $cached_host; // استخدم القيمة المحفوظة
-    }
-
-    $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
-        ? "https://cdnjs.cloudflare.com"
-        : "https://tools-static.wmflabs.org/cdnjs";
-
-    if ($hoste == "https://tools-static.wmflabs.org/cdnjs") {
-        $url = "https://tools-static.wmflabs.org";
-        $ch = curl_init($url);
-        curl_setopt_array($ch, [
-            CURLOPT_HEADER => true,
-            CURLOPT_NOBODY => true, // لا نريد تحميل الجسم
-            CURLOPT_RETURNTRANSFER => true, // لمنع الطباعة
-            CURLOPT_TIMEOUT => 3, // المهلة القصوى للاتصال
-            CURLOPT_CONNECTTIMEOUT => 2,
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; CDN-Checker)',
-            CURLOPT_FOLLOWLOCATION => false,
-        ]);
-
-        $result = curl_exec($ch);
-        $curlError = curl_error($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        curl_close($ch);
-
-        // إذا فشل الاتصال أو لم تكن الاستجابة ضمن 200–399، نستخدم cdnjs
-        if ($result === false || !empty($curlError) || $httpCode < 200 || $httpCode >= 400) {
-            $hoste = "https://cdnjs.cloudflare.com";
-        }
-    }
-
-    $cached_host = $hoste;
-
-    return $hoste;
-}
-
-$hoste = get_host1();
-
+$hoste = ($_SERVER["SERVER_NAME"] == "localhost")
+    ? "https://cdnjs.cloudflare.com"
+    : "https://tools-static.wmflabs.org/cdnjs";
 
 echo <<<HTML
     <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
@@ -108,12 +63,11 @@ $Emails_array = [];
 
 
 foreach (fetch_query("select username, email from users;") as $Key => $ta) {
-
     $Emails_array[$ta['username']] = $ta['email'];
 };
 
 $email_to = $Emails_array[$user] ?? '';
-$cc_to    = $Emails_array[$GLOBALS['global_username']] ?? '';
+$cc_to    = $Emails_array[$global_username] ?? '';
 
 $title2  =    make_mdwiki_title($title);
 $sugust2 = make_mdwiki_title($sugust);

@@ -2,6 +2,24 @@
 
 use function APICalls\TDApi\get_td_api;
 
+$global_username = CurrentUser::getInstance()->getUsername();
+
+function make_mail_icon_url(array $tab): string
+{
+    $mail_params = [
+        'user' => $tab['user'] ?? '',
+        'lang' => $tab['lang'] ?? '',
+        'target' => $tab['target'] ?? '',
+        'date' => $tab['pupdate'] ?? '',
+        'title' => $tab['title'] ?? '',
+        'nonav' => '1'
+    ];
+
+    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params, '', '&', PHP_QUERY_RFC3986);
+    $escaped_url = htmlspecialchars($mail_url, ENT_QUOTES, 'UTF-8');
+
+    return $escaped_url;
+}
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {
     // remove spaces and tab characters
@@ -37,23 +55,7 @@ function make_view_by_number($target, $numb, $lang, $pupdate)
     return $link;
 };
 
-function make_mail_icon_url(array $tab): string
-{
-    $mail_params = [
-        'user' => $tab['user'] ?? '',
-        'lang' => $tab['lang'] ?? '',
-        'target' => $tab['target'] ?? '',
-        'date' => $tab['pupdate'] ?? '',
-        'title' => $tab['title'] ?? '',
-        'nonav' => '1'
-    ];
-
-    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params, '', '&', PHP_QUERY_RFC3986);
-    $escaped_url = htmlspecialchars($mail_url, ENT_QUOTES, 'UTF-8');
-
-    return $escaped_url;
-}
-function last_make_td($tabg, $nnnn, $last_table)
+function create_last_table_data($tabg, $nnnn, $last_table, $global_username)
 {
     $user     = $tabg['user'] ?? "";
 
@@ -108,7 +110,7 @@ function last_make_td($tabg, $nnnn, $last_table)
     ];
 
     $excludedUsers = ['Mr. Ibrahem']; // TODO: This should ideally be moved to a configuration file.
-    if (!in_array($GLOBALS['global_username'], $excludedUsers)) {
+    if (!in_array($global_username, $excludedUsers)) {
         $params['save'] = 1;
     };
 
@@ -212,7 +214,7 @@ $noo = 0;
 
 foreach ($qsl_results as $tat => $tabe) {
     $noo = $noo + 1;
-    $recent_rows .= last_make_td($tabe, $noo, $last_table);
+    $recent_rows .= create_last_table_data($tabe, $noo, $last_table, $global_username);
 };
 
 $Campaign_number = 4;

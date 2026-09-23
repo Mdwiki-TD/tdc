@@ -1,6 +1,6 @@
 <?php
 
-if ($GLOBALS['user_is_coordinator'] == false) {
+if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
@@ -10,6 +10,8 @@ use function Utils\Html\make_edit_icon_new;
 use function SQLorAPI\Funcs\get_td_or_sql_qids;
 use function SQLorAPI\Funcs\get_td_or_sql_qids_others;
 use function TDWIKI\csrf\generate_csrf_token;
+
+$global_username = CurrentUser::getInstance()->getUsername();
 
 $qid_table = $_GET['qid_table'] ?? 'qids';
 
@@ -86,7 +88,7 @@ $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" valu
 
 $dis = $_GET['dis'] ?? 'all';
 
-if (!isset($_GET['dis']) && $GLOBALS['global_username'] == "Mr. Ibrahem") $dis = "empty";
+if (!isset($_GET['dis']) && $global_username == "Mr. Ibrahem") $dis = "empty";
 
 $Qids_title = ($qid_table == "qids") ? "TD Qids" : "Qids Others";
 

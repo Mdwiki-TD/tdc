@@ -9,9 +9,12 @@ echo <<<HTML
 	<!-- <div id="maindiv" class="container-fluid"> -->
 HTML;
 
-function echo_card_start($file_name, $ty)
+$currentUser = CurrentUser::getInstance();
+$user_is_coordinator = $currentUser->isCoordinator();
+
+function echo_card_start($file_name, $ty, $user_is_coordinator)
 {
-	$sidebar = create_side($file_name, $ty, $GLOBALS['user_is_coordinator']);
+	$sidebar = create_side($file_name, $ty, $user_is_coordinator);
 	echo <<<HTML
 		<div class='row content'>
 			<!-- <div class='col-md-2 px-0' style="width: 10.66666667%;"> -->
@@ -53,7 +56,7 @@ function echo_card_start($file_name, $ty)
 	HTML;
 }
 
-$default_ty = $GLOBALS['user_is_coordinator'] ? "last_coord" : "last";
+$default_ty = $user_is_coordinator ? "last_coord" : "last";
 
 $ty = $_GET['ty'] ?? $_POST['ty'] ?? $default_ty;
 
@@ -62,7 +65,7 @@ if ($ty == 'translate_type') $ty = 'tt';
 $filename = $_SERVER['SCRIPT_NAME'];
 
 if (!isset($_GET['nonav'])) {
-	echo_card_start($filename, $ty);
+	echo_card_start($filename, $ty, $user_is_coordinator);
 };
 
 // list of folders in coordinator
@@ -85,13 +88,13 @@ if (in_array($ty, $tools_files)) {
 	include_once __DIR__ . "/coordinator/tools/$ty.php";
 	//
 } elseif ($ty == "sidebar") {
-	$sidebar = create_side($filename, $ty, $GLOBALS['user_is_coordinator']);
+	$sidebar = create_side($filename, $ty, $user_is_coordinator);
 	echo $sidebar;
 	//
-} elseif (in_array($ty, $corrd_folders) && $GLOBALS['user_is_coordinator']) {
+} elseif (in_array($ty, $corrd_folders) && $user_is_coordinator) {
 	include_once __DIR__ . "/coordinator/admin/$ty/index.php";
 	//
-} elseif (is_file($adminfile) && $GLOBALS['user_is_coordinator']) {
+} elseif (is_file($adminfile) && $user_is_coordinator) {
 	include_once $adminfile;
 } else {
 	test_print("can't find $adminfile");
