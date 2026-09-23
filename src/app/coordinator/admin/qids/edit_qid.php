@@ -4,98 +4,138 @@
 namespace App\Coordinator\Admin\Qids;
 
 use App\User\CurrentUser;
-
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
-
 use function App\csrf\generate_csrf_token;
 
-echo '</div><script>
-    $("#mainnav").hide();
-    $("#maindiv").hide();
-</script>
-<div class="container-fluid">';
-
-
-
-$headerTitle = (($_GET['id'] ?? "") != "") ? "Edit Qid" : "Add New Qid";
-
-function echo_form_post($id, $title, $qid, $qidTable)
+/**
+ * Class EditQidController
+ * Renders the add/edit form for a single qid entry (GET request only;
+ * submission is handled by QidsPostController).
+ */
+class EditQidController
 {
+    private string $id;
+    private string $title;
+    private string $qid;
+    private string $qidTable;
 
-	$title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    public function __construct()
+    {
+        $this->id       = $_GET['id'] ?? '';
+        $this->title    = $_GET['title'] ?? '';
+        $this->qid      = $_GET['qid'] ?? '';
+        $this->qidTable = $_GET['qid_table'] ?? '';
 
-	$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
+        if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {
+            $this->qidTable = 'qids';
+        }
+    }
 
-	$idRow = <<<HTML
-		<div class='col-md-3'>
-			<div class='input-group mb-3'>
-				<div class='input-group-prepend'>
-					<span class='input-group-text'>Id</span>
-				</div>
-				<input class='form-control' type='text' name='rows[1][id]' value='$id' readonly/>
-			</div>
-		</div>
-	HTML;
+    /**
+     * Executes authorization check and renders the form view.
+     */
+    public function handleRequest(): void
+    {
+        // Check user authorization
+        if (!CurrentUser::getInstance()->isCoordinator()) {
+            header('Location: /index.php');
+            exit;
+        }
 
-	if (empty($id)) {
-		$idRow = "";
-	}
+        $this->renderHeaderScripts();
+        $this->renderFormCard();
+    }
 
-	$dis = $_GET['dis'] ?? 'all';
+    /**
+     * Renders UI scripts to isolate the modal/page layout.
+     */
+    private function renderHeaderScripts(): void
+    {
+        echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>
+        <div class="container-fluid">';
+    }
 
-	return <<<HTML
-        <form action='index.php?ty=qids/post&qid_table=$qidTable&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrfToken" type="hidden"/>
-            <input name='qid_table' value="$qidTable" type="hidden"/>
-            <input name='edit' value="1" type="hidden"/>
-            <div class='container'>
-                <div class='row'>
-                    $idRow
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>Title</span>
-                            </div>
-                            <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
-                        </div>
+    /**
+     * Builds the id/title/qid edit-or-add form markup.
+     */
+    private function buildFormHtml(string $id, string $title, string $qid, string $qidTable): string
+    {
+        $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
+        $csrfToken = generate_csrf_token();
+
+        $idRow = <<<HTML
+            <div class='col-md-3'>
+                <div class='input-group mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='input-group-text'>Id</span>
                     </div>
-                    <div class='col-md-3'>
-                        <div class='input-group mb-3'>
-                            <div class='input-group-prepend'>
-                                <span class='input-group-text'>Qid</span>
-                            </div>
-                            <input class='form-control' type='text' name='rows[1][qid]' value='$qid' required/>
-                        </div>
-                    </div>
-                    <div class='col-md-2'>
-                        <input class='btn btn-outline-primary' type='submit' value='send'/>
-                    </div>
+                    <input class='form-control' type='text' name='rows[1][id]' value='$id' readonly/>
                 </div>
             </div>
-        </form>
-    HTML;
+        HTML;
+
+        if (empty($id)) {
+            $idRow = "";
+        }
+
+        return <<<HTML
+            <form action='index.php?ty=qids/post&qid_table=$qidTable&nonav=120' method="POST">
+                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                <input name='qid_table' value="$qidTable" type="hidden"/>
+                <input name='edit' value="1" type="hidden"/>
+                <div class='container'>
+                    <div class='row'>
+                        $idRow
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Title</span>
+                                </div>
+                                <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Qid</span>
+                                </div>
+                                <input class='form-control' type='text' name='rows[1][qid]' value='$qid' required/>
+                            </div>
+                        </div>
+                        <div class='col-md-2'>
+                            <input class='btn btn-outline-primary' type='submit' value='send'/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        HTML;
+    }
+
+    /**
+     * Renders the card wrapping the form.
+     */
+    private function renderFormCard(): void
+    {
+        $headerTitle = ($this->id !== '') ? 'Edit Qid' : 'Add New Qid';
+
+        $form = $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
+
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <h4>$headerTitle</h4>
+                </div>
+                <div class='card-body'>
+                    $form
+                </div>
+            </div>
+        HTML;
+    }
 }
 
-$title  = $_GET['title'] ?? '';
-$qid    = $_GET['qid'] ?? '';
-$id     = $_GET['id'] ?? '';
-$table  = $_GET['qid_table'] ?? '';
-
-if ($table != 'qids' && $table != 'qids_others') $table = 'qids';
-
-$form = echo_form_post($id, $title, $qid, $table);
-
-echo <<<HTML
-    <div class='card'>
-        <div class='card-header'>
-            <h4>$headerTitle</h4>
-        </div>
-        <div class='card-body'>
-            $form
-        </div>
-    </div>
-HTML;
-
+// Instantiate and execute controller
+$controller = new EditQidController();
+$controller->handleRequest();
