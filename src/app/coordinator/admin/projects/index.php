@@ -26,7 +26,7 @@ uasort($projs, function ($a, $b) {
 	return $a['g_id'] <=> $b['g_id'];
 });
 
-$form_text = '';
+$formText = '';
 
 foreach ($projs as $gtitle => $tab) {
 	$numb += 1;
@@ -34,7 +34,7 @@ foreach ($projs as $gtitle => $tab) {
 	$gid = $tab['g_id'] ?? "";
 	$gtitle = $tab['g_title'] ?? "";
 
-	$form_text .= <<<HTML
+	$formText .= <<<HTML
 	<tr>
 		<td data-content='id'>
 			<span><b>$gid</b></span>
@@ -52,7 +52,7 @@ foreach ($projs as $gtitle => $tab) {
 
 $numb += 1;
 
-$form_text_plus = <<<HTML
+$formTextPlus = <<<HTML
 	<tr>
 		<td data-content="id">
 			<span><b>Add:</b></span>
@@ -65,7 +65,7 @@ $form_text_plus = <<<HTML
 	</tr>
 HTML;
 
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
 echo <<<HTML
 	<div class='card'>
@@ -74,7 +74,7 @@ echo <<<HTML
 		</div>
 		<div class='card-body'>
 			<form action="index.php?ty=projects" method="POST">
-				<input name='csrf_token' value="$csrf_token" type="hidden"/>
+				<input name='csrf_token' value="$csrfToken" type="hidden"/>
 				<input name='ty' value="projects" type="hidden"/>
 				<div class="row">
 					<div class="col-md-6 col-sm-12">
@@ -87,8 +87,8 @@ echo <<<HTML
 								</tr>
 							</thead>
 							<tbody id="g_tab">
-								$form_text
-								$form_text_plus
+								$formText
+								$formTextPlus
 							</tbody>
 						</table>
 					</div>

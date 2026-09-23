@@ -11,11 +11,11 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
 	exit;
 };
 
-$global_username = CurrentUser::getInstance()->getUsername();
+$globalUsername = CurrentUser::getInstance()->getUsername();
 
 function make_mail_icon_url(array $tab): string
 {
-    $mail_params = [
+    $mailParams = [
         'user' => $tab['user'] ?? '',
         'lang' => $tab['lang'] ?? '',
         'target' => $tab['target'] ?? '',
@@ -24,10 +24,10 @@ function make_mail_icon_url(array $tab): string
         'nonav' => '1'
     ];
 
-    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params, '', '&', PHP_QUERY_RFC3986);
-    $escaped_url = htmlspecialchars($mail_url, ENT_QUOTES, 'UTF-8');
+    $mailUrl = "index.php?ty=Emails/msg&" . http_build_query($mailParams, '', '&', PHP_QUERY_RFC3986);
+    $escapedUrl = htmlspecialchars($mailUrl, ENT_QUOTES, 'UTF-8');
 
-    return $escaped_url;
+    return $escapedUrl;
 }
 function make_view_by_number($target, $numb, $lang, $pupdate)
 {
@@ -64,68 +64,68 @@ function make_view_by_number($target, $numb, $lang, $pupdate)
     return $link;
 };
 
-function create_last_table_data($tabg, $nnnn, $last_table, $global_username)
+function create_last_table_data($tabg, $nnnn, $lastTable, $globalUsername)
 {
     $user     = $tabg['user'] ?? "";
 
     $llang    = $tabg['lang'] ?? "";
-    $md_title = trim($tabg['title'] ?? '');
+    $mdTitle = trim($tabg['title'] ?? '');
     $target   = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
-    $add_date = $tabg['add_date'] ?? '';
+    $addDate = $tabg['add_date'] ?? '';
     $campaign = $tabg['campaign'] ?? '';
 
-    $mdwiki_revid = $tabg['mdwiki_revid'] ?? '';
+    $mdwikiRevid = $tabg['mdwiki_revid'] ?? '';
 
-    // if $add_date has : then split before first space
-    if (strpos($add_date, ':') !== false) {
-        $add_date = explode(' ', $add_date)[0];
+    // if $addDate has : then split before first space
+    if (strpos($addDate, ':') !== false) {
+        $addDate = explode(' ', $addDate)[0];
     };
 
-    $max_username_display_length = 15;
-    $user_name = $user;
-    // $user_name is the first word of the user if length > 15
-    if (strlen($user) > $max_username_display_length) {
-        $user_name = explode(' ', $user);
-        $user_name = $user_name[0];
+    $maxUsernameDisplayLength = 15;
+    $userName = $user;
+    // $userName is the first word of the user if length > 15
+    if (strlen($user) > $maxUsernameDisplayLength) {
+        $userName = explode(' ', $user);
+        $userName = $userName[0];
     }
 
     $view = "";
 
-    if ($last_table == "pages") {
-        $views_number = $tabg['views'] ?? '?';
+    if ($lastTable == "pages") {
+        $viewsNumber = $tabg['views'] ?? '?';
 
-        $view = make_view_by_number($target, $views_number, $llang, $pupdate);
+        $view = make_view_by_number($target, $viewsNumber, $llang, $pupdate);
     }
 
-    $encoded_title = rawurlencode(str_replace(' ', '_', $md_title));
-    $escaped_title = htmlspecialchars($md_title, ENT_QUOTES, 'UTF-8');
+    $encodedTitle = rawurlencode(str_replace(' ', '_', $mdTitle));
+    $escapedTitle = htmlspecialchars($mdTitle, ENT_QUOTES, 'UTF-8');
 
-    $encoded_target = rawurlencode(str_replace(' ', '_', $target));
-    $escaped_display = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+    $encodedTarget = rawurlencode(str_replace(' ', '_', $target));
+    $escapedDisplay = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
-    $target_link = "<a target='_blank' href='https://{$llang}.wikipedia.org/wiki/{$encoded_target}'>{$escaped_display}</a>";
+    $targetLink = "<a target='_blank' href='https://{$llang}.wikipedia.org/wiki/{$encodedTarget}'>{$escapedDisplay}</a>";
 
 
-    $mail_icon = make_mail_icon_url($tabg);
+    $mailIcon = make_mail_icon_url($tabg);
 
-    $escaped_user = rawurlencode($user);
+    $escapedUser = rawurlencode($user);
 
     $params = [
         "title" => $target,
         "lang" => $llang,
-        "sourcetitle" => $md_title,
-        "mdwiki_revid" => $mdwiki_revid,
+        "sourcetitle" => $mdTitle,
+        "mdwiki_revid" => $mdwikiRevid,
     ];
 
     $excludedUsers = ['Mr. Ibrahem']; // TODO: This should ideally be moved to a configuration file.
-    if (!in_array($global_username, $excludedUsers)) {
+    if (!in_array($globalUsername, $excludedUsers)) {
         $params['save'] = 1;
     };
 
     $fixwikirefs = "/fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
-    $md_title_encoded = rawurlencode($md_title);
+    $mdTitleEncoded = rawurlencode($mdTitle);
 
     $flags = "";
 
@@ -136,20 +136,20 @@ function create_last_table_data($tabg, $nnnn, $last_table, $global_username)
             </td>
             <td>
                 <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
-                    $user_name
-                </a> (<a target='_blank' href='//{$llang}.wikipedia.org/w/index.php?title=User_talk:{$escaped_user}'>talk</a>)
+                    $userName
+                </a> (<a target='_blank' href='//{$llang}.wikipedia.org/w/index.php?title=User_talk:{$escapedUser}'>talk</a>)
             </td>
             <td>
-    	        <a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$mail_icon}' onclick='pup_window_new(this)'>@</a>
+    	        <a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$mailIcon}' onclick='pup_window_new(this)'>@</a>
             </td>
             <td>
-                <a target='_blank' href='https://mdwiki.org/wiki/{$encoded_title}'>{$escaped_title}</a>
+                <a target='_blank' href='https://mdwiki.org/wiki/{$encodedTitle}'>{$escapedTitle}</a>
             </td>
             <td>
                 $campaign
             </td>
             <td class="link_container">
-                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$llang</a>: $target_link
+                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$llang</a>: $targetLink
             </td>
             <td>
                 $pupdate
@@ -161,7 +161,7 @@ function create_last_table_data($tabg, $nnnn, $last_table, $global_username)
                 <a target='_blank' href="$fixwikirefs">Fix</a>
             </td>
             <td>
-                <a href="//mdwikicx.toolforge.org/wiki/$llang/$md_title_encoded" target="_blank">$add_date</a>
+                <a href="//mdwikicx.toolforge.org/wiki/$llang/$mdTitleEncoded" target="_blank">$addDate</a>
             </td>
             <td>
                 $flags
@@ -176,7 +176,7 @@ function filter_recent($lang, $data)
 {
 
     ksort($data);
-    $lang_list = "<option data-tokens='All' value='All'>All</option>";
+    $langList = "<option data-tokens='All' value='All'>All</option>";
 
     foreach ($data as $codr) {
         $code    = $codr["lang"] ?? "";
@@ -184,18 +184,18 @@ function filter_recent($lang, $data)
         if (empty($code)) continue;
 
         $selected = ($code == $lang) ? 'selected' : '';
-        $lang_list .= <<<HTML
+        $langList .= <<<HTML
             <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
             HTML;
     };
-    return $lang_list;
+    return $langList;
 }
 
 $lang = $_GET['lang'] ?? 'All';
 
 if (empty($lang)) $lang = "All";
 
-$api_params_users = [
+$apiParamsUsers = [
     'get' => 'pages_users',
     'target' => 'not_empty',
     "lang" => $lang,
@@ -203,7 +203,7 @@ $api_params_users = [
     'limit' => '100',
 ];
 
-$api_params_pages = [
+$apiParamsPages = [
     'get' => 'pages_with_views',
     'target' => 'not_empty',
     "lang" => $lang,
@@ -211,56 +211,56 @@ $api_params_pages = [
     'limit' => '250',
 ];
 
-$last_table = $_GET['last_table'] ?? 'pages';
-$last_table = in_array($last_table, ['pages', 'pages_users']) ? $last_table : 'pages';
+$lastTable = $_GET['last_table'] ?? 'pages';
+$lastTable = in_array($lastTable, ['pages', 'pages_users']) ? $lastTable : 'pages';
 
-$api_results = ($last_table == 'pages') ? get_td_api($api_params_pages) : get_td_api($api_params_users);
-$qsl_results = $api_results['results'] ?? [];
+$apiResults = ($lastTable == 'pages') ? get_td_api($apiParamsPages) : get_td_api($apiParamsUsers);
+$qslResults = $apiResults['results'] ?? [];
 
-$recent_rows = "";
+$recentRows = "";
 
 $noo = 0;
 
-foreach ($qsl_results as $tat => $tabe) {
+foreach ($qslResults as $tat => $tabe) {
     $noo = $noo + 1;
-    $recent_rows .= create_last_table_data($tabe, $noo, $last_table, $global_username);
+    $recentRows .= create_last_table_data($tabe, $noo, $lastTable, $globalUsername);
 };
 
-$Campaign_number = 4;
-$flags_number = 10;
-$fix_number = 8;
+$CampaignNumber = 4;
+$flagsNumber = 10;
+$fixNumber = 8;
 
-$table_id = ($last_table == 'pages') ? 'last_table' : 'last_users_table';
+$tableId = ($lastTable == 'pages') ? 'last_table' : 'last_users_table';
 
-$api_params_langs = [
-    'get' => ($last_table == 'pages') ? 'pages_langs' : 'pages_users_langs',
+$apiParamsLangs = [
+    'get' => ($lastTable == 'pages') ? 'pages_langs' : 'pages_users_langs',
 ];
 
-$api_results = get_td_api($api_params_langs);
-$result = $api_results['results'] ?? [];
+$apiResults = get_td_api($apiParamsLangs);
+$result = $apiResults['results'] ?? [];
 
-$filter_by_lang = filter_recent($lang, $result);
+$filterByLang = filter_recent($lang, $result);
 
-$count_result = count($result);
+$countResult = count($result);
 
 $data = [
     "pages" => 'Main',
     "pages_users" => 'User',
 ];
 
-$filter_ta = "";
+$filterTa = "";
 
-foreach ($data as $table_name => $label) {
-    $checked = ($table_name == $last_table) ? "checked" : "";
-    $filter_ta .= <<<HTML
+foreach ($data as $tableName => $label) {
+    $checked = ($tableName == $lastTable) ? "checked" : "";
+    $filterTa .= <<<HTML
         <div class="form-check form-check-inline">
             <input class="form-check-input"
                 type="radio"
                 name="last_table"
-                id="radio_$table_name"
-                value="$table_name"
+                id="radio_$tableName"
+                value="$tableName"
                 $checked>
-            <label class="form-check-label" for="radio_$table_name">$label</label>
+            <label class="form-check-label" for="radio_$tableName">$label</label>
         </div>
     HTML;
 }
@@ -272,13 +272,13 @@ echo <<<HTML
                 <input name='ty' value='last_coord' type='hidden'/>
                 <div class='row'>
                     <div class='col-md-4'>
-                        <h4>Recent translations ($count_result):</h4>
+                        <h4>Recent translations ($countResult):</h4>
                     </div>
                     <div class='col-md-4'>
                         <div class="input-group">
                             <span class="input-group-text">Namespace:</span>
                             <div class="form-control">
-                                $filter_ta
+                                $filterTa
                             </div>
                         </div>
                     </div>
@@ -297,7 +297,7 @@ echo <<<HTML
                                 data-style='btn active'
                                 data-width="90%"
                                 >
-                                $filter_by_lang
+                                $filterByLang
                             </select>
                         </div>
                     </div>
@@ -310,11 +310,11 @@ echo <<<HTML
         <div class='card-body'>
             <div class="d-none d-md-inline">
                 <span class="" data-column="0">Toggle columns:</span>
-                <a class="toggle-vis btn btn-outline-primary" data-column="$Campaign_number" type="button">Campaign</a>
-                <a class="toggle-vis btn btn-outline-primary" data-column="$fix_number" type="button">Fixref</a>
-                <a class="toggle-vis btn btn-outline-primary" data-column="$flags_number" type="button">Flags</a>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$CampaignNumber" type="button">Campaign</a>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$fixNumber" type="button">Fixref</a>
+                <a class="toggle-vis btn btn-outline-primary" data-column="$flagsNumber" type="button">Flags</a>
             </div>
-            <table class="table table-sm table-striped table_text_left" id="$table_id" style="font-size:90%;">
+            <table class="table table-sm table-striped table_text_left" id="$tableId" style="font-size:90%;">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -331,7 +331,7 @@ echo <<<HTML
                     </tr>
                 </thead>
                 <tbody>
-                    $recent_rows
+                    $recentRows
                 </tbody>
             </table>
         </div>

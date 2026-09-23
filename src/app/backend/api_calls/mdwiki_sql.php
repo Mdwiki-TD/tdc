@@ -74,9 +74,9 @@ class Database
     private $dbname;
     private $groupByModeDisabled = false;
 
-    public function __construct(string $dbname_var = 'DB_NAME')
+    public function __construct(string $dbnameVar = 'DB_NAME')
     {
-        $this->set_db($dbname_var);
+        $this->set_db($dbnameVar);
     }
 
     private function envVar(string $key)
@@ -92,10 +92,10 @@ class Database
 
         return "";
     }
-    private function set_db(string $dbname_var)
+    private function set_db(string $dbnameVar)
     {
         $this->host = $this->envVar('DB_HOST_TOOLS') ?: 'tools.db.svc.wikimedia.cloud';
-        $this->dbname = $this->envVar($dbname_var);
+        $this->dbname = $this->envVar($dbnameVar);
         $this->user = $this->envVar('TOOL_TOOLSDB_USER');
         $this->password = $this->envVar('TOOL_TOOLSDB_PASSWORD');
 
@@ -128,10 +128,10 @@ class Database
         }
     }
 
-    public function disableFullGroupByMode($sql_query)
+    public function disableFullGroupByMode($sqlQuery)
     {
         // if the query contains "GROUP BY", disable ONLY_FULL_GROUP_BY, strtoupper() is for case insensitive
-        if (strpos(strtoupper($sql_query), 'GROUP BY') !== false && !$this->groupByModeDisabled) {
+        if (strpos(strtoupper($sqlQuery), 'GROUP BY') !== false && !$this->groupByModeDisabled) {
             try {
                 // More precise SQL mode modification
                 $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
@@ -143,12 +143,12 @@ class Database
         }
     }
 
-    public function executequery($sql_query, $params = null)
+    public function executequery($sqlQuery, $params = null)
     {
         try {
-            $this->disableFullGroupByMode($sql_query);
+            $this->disableFullGroupByMode($sqlQuery);
 
-            $q = $this->db->prepare($sql_query);
+            $q = $this->db->prepare($sqlQuery);
             if ($params) {
                 $q->execute($params);
             } else {
@@ -156,8 +156,8 @@ class Database
             }
 
             // Check if the query starts with "SELECT"
-            $query_type = strtoupper(substr(trim((string) $sql_query), 0, 6));
-            if ($query_type === 'SELECT') {
+            $queryType = strtoupper(substr(trim((string) $sqlQuery), 0, 6));
+            if ($queryType === 'SELECT') {
                 // Fetch the results if it's a SELECT query
                 $result = $q->fetchAll(PDO::FETCH_ASSOC);
                 return $result;
@@ -166,17 +166,17 @@ class Database
                 return [];
             }
         } catch (PDOException $e) {
-            echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
+            echo "sql error:" . $e->getMessage() . "<br>" . $sqlQuery;
             return false;
         }
     }
 
-    public function fetchquery($sql_query, $params = null)
+    public function fetchquery($sqlQuery, $params = null)
     {
         try {
-            $this->disableFullGroupByMode($sql_query);
+            $this->disableFullGroupByMode($sqlQuery);
 
-            $q = $this->db->prepare($sql_query);
+            $q = $this->db->prepare($sqlQuery);
             if ($params) {
                 $q->execute($params);
             } else {
@@ -187,8 +187,8 @@ class Database
             $result = $q->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (PDOException $e) {
-            echo "SQL Error:" . $e->getMessage() . "<br>" . $sql_query;
-            // error_log("SQL Error: " . $e->getMessage() . " | Query: " . $sql_query);
+            echo "SQL Error:" . $e->getMessage() . "<br>" . $sqlQuery;
+            // error_log("SQL Error: " . $e->getMessage() . " | Query: " . $sqlQuery);
             return [];
         }
     }
@@ -199,16 +199,16 @@ class Database
     }
 }
 
-function execute_query(string $sql_query, $params = null)
+function execute_query(string $sqlQuery, $params = null)
 {
     // Create a new database object
     $db = new Database('DB_NAME');
 
     // Execute a SQL query
     if ($params) {
-        $results = $db->executequery($sql_query, $params);
+        $results = $db->executequery($sqlQuery, $params);
     } else {
-        $results = $db->executequery($sql_query);
+        $results = $db->executequery($sqlQuery);
     }
 
     // Print the results
@@ -220,20 +220,20 @@ function execute_query(string $sql_query, $params = null)
 
     return $results;
 };
-function fetch_query(string $sql_query, $params = null, $noprint = false)
+function fetch_query(string $sqlQuery, $params = null, $noprint = false)
 {
     // Create a new database object
     $db = new Database('DB_NAME');
 
     if ($noprint == false) {
-        $db->test_print($sql_query);
+        $db->test_print($sqlQuery);
     }
 
     // Execute a SQL query
     if ($params) {
-        $results = $db->fetchquery($sql_query, $params);
+        $results = $db->fetchquery($sqlQuery, $params);
     } else {
-        $results = $db->fetchquery($sql_query, null);
+        $results = $db->fetchquery($sqlQuery, null);
     }
 
     // Print the results
@@ -246,7 +246,7 @@ function fetch_query(string $sql_query, $params = null, $noprint = false)
     return $results;
 };
 
-function sql_add_user($user_name, $email, $wiki, $project)
+function sql_add_user($userName, $email, $wiki, $project)
 {
     // Create a new database object
     // Use a prepared statement for INSERT
@@ -254,7 +254,7 @@ function sql_add_user($user_name, $email, $wiki, $project)
         INSERT INTO users (username, email, wiki, user_group) SELECT ?, ?, ?, ?
         WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = ?)
     SQL;
-    $params = [$user_name, $email, $wiki, $project, $user_name];
+    $params = [$userName, $email, $wiki, $project, $userName];
 
     // Prepare and execute the SQL query with parameter binding
     $results = execute_query($qua, $params);
@@ -262,10 +262,10 @@ function sql_add_user($user_name, $email, $wiki, $project)
     return $results;
 }
 
-function sql_update_user($user_name, $email, $wiki, $project, $user_id)
+function sql_update_user($userName, $email, $wiki, $project, $userId)
 {
-    // Check if $user_id is set and not empty
-    if (empty($user_id) || $user_id == 0 || $user_id == "0") {
+    // Check if $userId is set and not empty
+    if (empty($userId) || $userId == 0 || $userId == "0") {
         return;
     }
     // Use a prepared statement for UPDATE
@@ -277,7 +277,7 @@ function sql_update_user($user_name, $email, $wiki, $project, $user_id)
             wiki = ?
         WHERE user_id = ?
     SQL;
-    $params = [$user_name, $email, $project, $wiki, $user_id];
+    $params = [$userName, $email, $project, $wiki, $userId];
 
     // Prepare and execute the SQL query with parameter binding
     $results = execute_query($qua, $params);
@@ -324,15 +324,15 @@ function update_settings_value($id, $value)
     return $results;
 }
 
-function insert_to_translate_type($tt_title, $tt_lead, $tt_full, $tt_id = 0)
+function insert_to_translate_type($ttTitle, $ttLead, $ttFull, $ttId = 0)
 {
 
     $query = "UPDATE translate_type SET tt_lead = ?, tt_full = ? WHERE tt_id = ?";
-    $params = [$tt_lead, $tt_full, $tt_id];
+    $params = [$ttLead, $ttFull, $ttId];
 
-    if ($tt_id == 0 || $tt_id == '0' || empty($tt_id)) {
+    if ($ttId == 0 || $ttId == '0' || empty($ttId)) {
         $query = "INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT ?, ?, ?";
-        $params = [$tt_title, $tt_lead, $tt_full];
+        $params = [$ttTitle, $ttLead, $ttFull];
     };
 
     $result = execute_query($query, $params);
@@ -340,14 +340,14 @@ function insert_to_translate_type($tt_title, $tt_lead, $tt_full, $tt_id = 0)
     return $result;
 }
 
-function insert_to_projects($g_title, $g_id)
+function insert_to_projects($gTitle, $gId)
 {
     $query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
-    $params = [$g_title, $g_id];
+    $params = [$gTitle, $gId];
 
-    if ($g_id == 0 || $g_id == '0' || empty($g_id)) {
+    if ($gId == 0 || $gId == '0' || empty($gId)) {
         $query = "INSERT INTO projects (g_title) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM projects WHERE g_title = ?)";
-        $params = [$g_title, $g_title];
+        $params = [$gTitle, $gTitle];
     };
 
     $result = execute_query($query, $params);
@@ -358,23 +358,23 @@ function insert_to_projects($g_title, $g_id)
 function check_one($select = "*", $where = "", $value = "", $table = "")
 {
     // Whitelist of allowed tables
-    $allowed_tables = ['users', 'qids', 'qids_others'];
+    $allowedTables = ['users', 'qids', 'qids_others'];
 
     // Whitelist of allowed columns for each table
-    $allowed_columns = [
+    $allowedColumns = [
         'users' => ['*', 'username'],
         'qids' => ['*', 'qid', 'title'],
         'qids_others' => ['*', 'qid', 'title'],
     ];
 
     // Validate table name
-    if (!in_array($table, $allowed_tables)) {
+    if (!in_array($table, $allowedTables)) {
         error_log("check_one: Invalid table name: $table");
         // return false;
     }
 
     // Validate select and where columns
-    if (!in_array($select, $allowed_columns[$table]) || !in_array($where, $allowed_columns[$table])) {
+    if (!in_array($select, $allowedColumns[$table]) || !in_array($where, $allowedColumns[$table])) {
         error_log("check_one: Invalid column name for table $table");
         // return false;
     }

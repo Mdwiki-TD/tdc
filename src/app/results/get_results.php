@@ -6,22 +6,22 @@ use function App\Results\GetCats\get_mdwiki_cat_members;
 use function App\Utils\Functions\test_print;
 use function App\Utils\TablesDir\open_td_tables_file;
 
-function get_cat_exists_and_missing($cat, $depth, $code, $use_cache = true)
+function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
 {
-    $members_to = get_mdwiki_cat_members($cat, $use_cache, $depth);
-    // z("<br>members_to size:" . count($members_to));
+    $membersTo = get_mdwiki_cat_members($cat, $useCache, $depth);
+    // z("<br>members_to size:" . count($membersTo));
     $members = [];
-    foreach ($members_to as $mr) {
+    foreach ($membersTo as $mr) {
         $members[] = $mr;
     };
     test_print("members size:" . count($members));
 
-    $tables_path = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
+    $tablesPath = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
 
-    $json_file = "$tables_path/cash_exists/$code.json";
-    $exists = open_td_tables_file($json_file);
+    $jsonFile = "$tablesPath/cash_exists/$code.json";
+    $exists = open_td_tables_file($jsonFile);
 
-    test_print("$json_file: exists size:" . count($exists));
+    test_print("$jsonFile: exists size:" . count($exists));
 
     // Find missing elements
     // $missing = array_diff($members, $exists);
@@ -34,10 +34,10 @@ function get_cat_exists_and_missing($cat, $depth, $code, $use_cache = true)
     $missing = array_unique($missing);
 
     // Calculate length of exists
-    $exs_len = count($members) - count($missing);
+    $exsLen = count($members) - count($missing);
 
     $results = array(
-        "len_of_exists" => $exs_len,
+        "len_of_exists" => $exsLen,
         "missing" => $missing
     );
     test_print("end of get_cat_exists_and_missing <br>===============================");

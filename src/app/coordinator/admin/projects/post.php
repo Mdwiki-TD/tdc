@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	exit;
 }
 
-$close_btn = <<<HTML
+$closeBtn = <<<HTML
 	<div class="aligncenter">
 		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
 	</div>
@@ -26,7 +26,7 @@ HTML;
 
 if (!verify_csrf_token()) {
 	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $close_btn;
+	echo $closeBtn;
 	return;
 }
 $texts = [];
@@ -35,33 +35,33 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 	// { "rows": { "1": { "g_id": "6", "g_title": "Benevity" } }
 	// { "g_id": "5", "g_title": "Wiki", "del": "5" }
 
-	$g_id  	= $table['g_id'] ?? '';
+	$gId  	= $table['g_id'] ?? '';
 	$del  	= $table['del'] ?? '';
 
-	$g_title  	= $table['g_title'] ?? '';
+	$gTitle  	= $table['g_title'] ?? '';
 
-	if (!empty($del) && !empty($g_id)) {
+	if (!empty($del) && !empty($gId)) {
 		$qua2 = "DELETE FROM projects WHERE g_id = ?";
 
-		execute_query($qua2, $params = [$g_id]);
+		execute_query($qua2, $params = [$gId]);
 
-		$texts[] = "Project $g_title deleted.";
+		$texts[] = "Project $gTitle deleted.";
 
 		continue;
 	};
 
-	$g_title = trim($g_title);
+	$gTitle = trim($gTitle);
 
-	if (empty($g_title)) {
+	if (empty($gTitle)) {
 		continue;
 	}
 
-	insert_to_projects($g_title, $g_id);
+	insert_to_projects($gTitle, $gId);
 
-	if (empty($g_id)) {
-		$texts[] = "Project $g_title Added.";
+	if (empty($gId)) {
+		$texts[] = "Project $gTitle Added.";
 	} else {
-		$texts[] = "Project $g_title Updated.";
+		$texts[] = "Project $gTitle Updated.";
 	}
 
 }

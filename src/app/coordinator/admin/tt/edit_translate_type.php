@@ -23,18 +23,18 @@ $lead   = $_GET['lead'] ?? '';
 $full   = $_GET['full'] ?? '';
 $id     = $_GET['id'] ?? '';
 
-$header_title = (!empty($id)) ? "Edit Translate type" : "Add Translate type";
+$headerTitle = (!empty($id)) ? "Edit Translate type" : "Add Translate type";
 
 function tt_edit_echo_form($title, $lead, $full, $id)
 {
-    $lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
-    $full_checked = ($full == 1 || $full == "1") ? 'checked' : '';
+    $leadChecked = ($lead == 1 || $lead == "1") ? 'checked' : '';
+    $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
 
     $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
-    $csrf_token = generate_csrf_token();
+    $csrfToken = generate_csrf_token();
 
-    $id_row = <<<HTML
+    $idRow = <<<HTML
         <div class='col-md-3'>
             <div class='input-group mb-3'>
                 <div class='input-group-prepend'>
@@ -45,15 +45,15 @@ function tt_edit_echo_form($title, $lead, $full, $id)
         </div>
     HTML;
 
-    if (empty($id)) $id_row = "";
+    if (empty($id)) $idRow = "";
 
     return <<<HTML
         <form action='index.php?ty=tt/post&nonav=120' method="POST">
-            <input name='csrf_token' value="$csrf_token" type="hidden"/>
+            <input name='csrf_token' value="$csrfToken" type="hidden"/>
             <input name='edit' value="1" type="hidden"/>
             <div class='container'>
                 <div class='row'>
-                    $id_row
+                    $idRow
                     <div class='col-md-3'>
                         <div class='input-group mb-3'>
                             <div class='input-group-prepend'>
@@ -70,7 +70,7 @@ function tt_edit_echo_form($title, $lead, $full, $id)
                                         <span class='me-3'>Lead:</span>
                                     </div>
                                     <div class="form-check form-switch form-inline">
-                                        <input class='form-check-input' type='checkbox' name='rows[1][lead]' value='1' $lead_checked>
+                                        <input class='form-check-input' type='checkbox' name='rows[1][lead]' value='1' $leadChecked>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@ function tt_edit_echo_form($title, $lead, $full, $id)
                                         <span class='me-3'>Full:</span>
                                     </div>
                                     <div class="form-check form-switch form-inline">
-                                        <input class='form-check-input' type='checkbox' name='rows[1][full]' value='1' $full_checked>
+                                        <input class='form-check-input' type='checkbox' name='rows[1][full]' value='1' $fullChecked>
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@ $form = tt_edit_echo_form($title, $lead, $full, $id);
 echo <<<HTML
     <div class='card'>
         <div class='card-header'>
-            <h4>$header_title</h4>
+            <h4>$headerTitle</h4>
         </div>
         <div class='card-body'>
             $form

@@ -13,11 +13,11 @@ function get_recent_sql($lang): array
         return $cache[$lang];
     }
 
-    $lang_line = '';
+    $langLine = '';
 
-    $sql_params = [];
+    $sqlParams = [];
 
-    $api_params = [
+    $apiParams = [
         'get' => 'pages_with_views',
         'target' => 'not_empty',
         "order" => 'pupdate_or_add_date',
@@ -25,13 +25,13 @@ function get_recent_sql($lang): array
     ];
 
     if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and p.lang = ?";
-        $sql_params[] = $lang;
+        $langLine = "and p.lang = ?";
+        $sqlParams[] = $lang;
 
-        $api_params['lang'] = $lang;
+        $apiParams['lang'] = $lang;
     }
 
-    $sql_query = <<<SQL
+    $sqlQuery = <<<SQL
         select distinct
             p.id, p.title, p.word, p.translate_type, p.cat,
             p.lang, p.user, p.target, p.date, p.pupdate,
@@ -39,12 +39,12 @@ function get_recent_sql($lang): array
             (select v.views from views_new_all v where p.target = v.target AND p.lang = v.lang LIMIT 1) as views
         from pages p
         where p.target != ''
-        $lang_line
+        $langLine
         ORDER BY GREATEST(UNIX_TIMESTAMP(p.pupdate), UNIX_TIMESTAMP(p.add_date)) DESC
         limit 250
     SQL;
 
-    $tab = super_function($api_params, $sql_params, $sql_query);
+    $tab = super_function($apiParams, $sqlParams, $sqlQuery);
 
     // merage the two arrays without duplicates
     // $tab = array_unique(array_merge($dd0, $dd1), SORT_REGULAR);
@@ -68,21 +68,21 @@ function get_recent_pages_users($lang): array
         return $cache[$lang];
     }
 
-    $sql_params = [];
+    $sqlParams = [];
 
-    $api_params = [
+    $apiParams = [
         'get' => 'pages_users',
         'target' => 'not_empty',
         "order" => 'pupdate',
         'limit' => '100'
     ];
 
-    $lang_line = '';
+    $langLine = '';
 
     if (!empty($lang) && $lang != 'All') {
-        $lang_line = "and lang = ?";
-        $sql_params[] = $lang;
-        $api_params['lang'] = $lang;
+        $langLine = "and lang = ?";
+        $sqlParams[] = $lang;
+        $apiParams['lang'] = $lang;
     };
 
     $qua = <<<SQL
@@ -91,12 +91,12 @@ function get_recent_pages_users($lang): array
         where
             target != ''
         # and title not in ( select p.title from pages p where p.lang = lang and p.target != '' )
-        $lang_line
+        $langLine
         ORDER BY pupdate DESC
         limit 100
     SQL;
 
-    $tab = super_function($api_params, $sql_params, $qua);
+    $tab = super_function($apiParams, $sqlParams, $qua);
 
     // sort the table by add_date
     usort($tab, function ($a, $b) {
@@ -111,33 +111,33 @@ function get_recent_pages_users($lang): array
 function get_recent_translated($lang, $table, $limit, $offset): array
 {
 
-    $sql_params = [];
-    $api_params = array('get' => $table, "order" => 'pupdate', 'limit' => $limit, 'offset' => $offset);
+    $sqlParams = [];
+    $apiParams = array('get' => $table, "order" => 'pupdate', 'limit' => $limit, 'offset' => $offset);
 
     $query = "SELECT * FROM $table WHERE target != ''";
 
     if (!empty($lang) && $lang != 'All') {
         $query .= " AND lang = ?";
-        $sql_params[] = $lang;
-        $api_params['lang'] = $lang;
+        $sqlParams[] = $lang;
+        $apiParams['lang'] = $lang;
     }
 
     $query .= " ORDER BY pupdate DESC ";
 
-    // add limit and offset to $sql_line
+    // add limit and offset to $sqlLine
     if ($limit > 0) {
         $query .= " \n LIMIT $limit ";
         // $query .= " \n LIMIT ? ";
-        // $sql_params[] = $limit;
+        // $sqlParams[] = $limit;
     }
 
     if ($offset > 0) {
         $query .= " OFFSET $offset ";
         // $query .= " OFFSET ? ";
-        // $sql_params[] = $offset;
+        // $sqlParams[] = $offset;
     }
 
-    $dd = super_function($api_params, $sql_params, $query);
+    $dd = super_function($apiParams, $sqlParams, $query);
 
     // sort the table by add_date
     usort($dd, function ($a, $b) {
@@ -150,18 +150,18 @@ function get_recent_translated($lang, $table, $limit, $offset): array
 function get_total_translations_count($lang, $table): int
 {
 
-    $sql_params = [];
-    $api_params = ['get' => $table, 'select' => 'count(*)'];
+    $sqlParams = [];
+    $apiParams = ['get' => $table, 'select' => 'count(*)'];
 
     $query = "select COUNT(*) AS count from $table where target != ''";
 
     if (!empty($lang) && $lang != 'All') {
         $query .= " AND lang = ?";
-        $sql_params[] = $lang;
-        $api_params['lang'] = $lang;
+        $sqlParams[] = $lang;
+        $apiParams['lang'] = $lang;
     }
 
-    $dd = super_function($api_params, $sql_params, $query);
+    $dd = super_function($apiParams, $sqlParams, $query);
 
     $result = (int)($dd[0]['count'] ?? 0);
 
@@ -178,16 +178,16 @@ function get_pages_users_to_main($lang): array
 
     $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
 
-    $sql_params = [];
-    $api_params = array('get' => "pages_users_to_main");
+    $sqlParams = [];
+    $apiParams = array('get' => "pages_users_to_main");
 
     if (!empty($lang) && $lang != 'All') {
         $query .= " AND pu.lang = ?";
-        $sql_params[] = $lang;
-        $api_params['lang'] = $lang;
+        $sqlParams[] = $lang;
+        $apiParams['lang'] = $lang;
     }
 
-    $dd = super_function($api_params, $sql_params, $query);
+    $dd = super_function($apiParams, $sqlParams, $query);
 
     $cache[$lang] = $dd;
 

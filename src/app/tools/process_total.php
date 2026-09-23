@@ -22,14 +22,14 @@ SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and 
 
 $text = "";
 
-$user_process_tab = get_users_process_new();
+$userProcessTab = get_users_process_new();
 
 // sort user_process_tab by value
-arsort($user_process_tab);
+arsort($userProcessTab);
 
 $n = 0;
 
-foreach ($user_process_tab as $user => $count) {
+foreach ($userProcessTab as $user => $count) {
     if ($user != 'test' && !empty($user) && $count > 0) {
         $n++;
 

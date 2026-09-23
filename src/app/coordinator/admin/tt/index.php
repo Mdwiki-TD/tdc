@@ -22,7 +22,7 @@ $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" valu
 function filter_stat($cat)
 {
 	// array keys
-	$cats_titles = array_keys(TablesSql::$s_cat_to_camp);
+	$catsTitles = array_keys(TablesSql::$sCatToCamp);
 
 	$d33 = <<<HTML
 		<div class="input-group">
@@ -31,7 +31,7 @@ function filter_stat($cat)
 		</div>
 	HTML;
 
-	$y1 = makeDropdown($cats_titles, $cat, 'cat', 'All');
+	$y1 = makeDropdown($catsTitles, $cat, 'cat', 'All');
 	$uuu = sprintf($d33, 'Category:', $y1);
 
 	return $uuu;
@@ -39,47 +39,47 @@ function filter_stat($cat)
 
 $uuu = filter_stat($cat);
 
-$new_titles = [];
-$full_translates_tab = [];
+$newTitles = [];
+$fullTranslatesTab = [];
 
-$translate_type_sql = <<<SQL
+$translateTypeSql = <<<SQL
     SELECT tt_id, tt_title, tt_lead, tt_full
 	FROM translate_type
 SQL;
 
-foreach (fetch_query($translate_type_sql) as $k => $tab) {
-	$full_translates_tab[$tab['tt_title']] = ['id' => $tab['tt_id'], 'lead' => $tab['tt_lead'], 'full' => $tab['tt_full']];
+foreach (fetch_query($translateTypeSql) as $k => $tab) {
+	$fullTranslatesTab[$tab['tt_title']] = ['id' => $tab['tt_id'], 'lead' => $tab['tt_lead'], 'full' => $tab['tt_full']];
 }
 
-TablesSql::$s_cat_titles = [];
+TablesSql::$sCatTitles = [];
 
 if ($cat == 'All') {
 	foreach (fetch_query('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)') as $Key => $gg) {
-		if (!in_array($gg['title'], $full_translates_tab)) {
-			$new_titles[] = $gg['title'];
+		if (!in_array($gg['title'], $fullTranslatesTab)) {
+			$newTitles[] = $gg['title'];
 		}
 	};
-	TablesSql::$s_cat_titles = array_keys($full_translates_tab);
+	TablesSql::$sCatTitles = array_keys($fullTranslatesTab);
 } else {
-	TablesSql::$s_cat_titles = get_mdwiki_cat_members($cat, $use_cache = true, $depth = 1);
+	TablesSql::$sCatTitles = get_mdwiki_cat_members($cat, $useCache = true, $depth = 1);
 }
 
 function make_row($id, $title, $lead, $full, $numb)
 {
 
-	$edit_params = array(
+	$editParams = array(
 		'id'   => $id,
 		'title'  => $title,
 		'lead'  => $lead,
 		'full'  => $full
 	);
 
-	$edit_icon = make_edit_icon_new("tt/edit_translate_type", $edit_params);
+	$editIcon = make_edit_icon_new("tt/edit_translate_type", $editParams);
 
-	$md_title = make_mdwiki_title($title);
+	$mdTitle = make_mdwiki_title($title);
 
-	$lead_checked = ($lead == 1 || $lead == "1") ? 'checked' : '';
-	$full_checked = ($full == 1 || $full == "1") ? 'checked' : '';
+	$leadChecked = ($lead == 1 || $lead == "1") ? 'checked' : '';
+	$fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
 
 	return <<<HTML
 	<tr>
@@ -88,50 +88,50 @@ function make_row($id, $title, $lead, $full, $numb)
 		</th>
 		<!-- <th data-sort="$id"> $id </th> -->
 		<td data-sort="$title">
-			$md_title
+			$mdTitle
 		</td>
 		<td data-sort='$lead'>
 			<div class='form-check form-switch'>
-				<input class='form-check-input' type='checkbox' name='lead_$numb' value='1' $lead_checked disabled>
+				<input class='form-check-input' type='checkbox' name='lead_$numb' value='1' $leadChecked disabled>
 			</div>
 		</td>
 		<td data-sort='$full'>
 			<div class='form-check form-switch'>
-				<input class='form-check-input' type='checkbox' name='full_$numb' value='1' $full_checked disabled>
+				<input class='form-check-input' type='checkbox' name='full_$numb' value='1' $fullChecked disabled>
 			</div>
 		</td>
 		<td>
-			$edit_icon
+			$editIcon
 		</td>
 	</tr>
 	HTML;
 }
 
-$table_rows = "";
+$tableRows = "";
 
-// $tt_count = count(TablesSql::$s_cat_titles);
+// $ttCount = count(TablesSql::$sCatTitles);
 
-$tt_count = 0;
+$ttCount = 0;
 
-foreach (TablesSql::$s_cat_titles as $title) {
+foreach (TablesSql::$sCatTitles as $title) {
 
-	if (in_array($title, $new_titles)) continue;
+	if (in_array($title, $newTitles)) continue;
 
-	$tt_count += 1;
+	$ttCount += 1;
 
-	$table = $full_translates_tab[$title] ?? [];
+	$table = $fullTranslatesTab[$title] ?? [];
 
 	$id			= $table['id'] ?? '';
 	$lead 		= $table['lead'] ?? 1;
 	$full		= $table['full'] ?? 0;
 
-	$table_rows .= make_row($id, $title, $lead, $full, $tt_count);
+	$tableRows .= make_row($id, $title, $lead, $full, $ttCount);
 
 };
 
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
-$new_row = make_edit_icon_new("tt/edit_translate_type", ["new" => 1], $text = "Add one!");
+$newRow = make_edit_icon_new("tt/edit_translate_type", ["new" => 1], $text = "Add one!");
 
 echo <<<HTML
     <div class='card'>
@@ -141,7 +141,7 @@ echo <<<HTML
 				<input name='ty' value="tt" type="hidden"/>
 				<div class='row'>
 					<div class='col-md-6'>
-						<h4>Translate Type ($tt_count):</h4>
+						<h4>Translate Type ($ttCount):</h4>
 					</div>
 					<div class='col-md-4'>
 						$uuu
@@ -163,7 +163,7 @@ echo <<<HTML
 					</tr>
 				</thead>
 				<tbody id="tab_ma">
-					$table_rows
+					$tableRows
 				</tbody>
 			</table>
 		</div>
@@ -173,7 +173,7 @@ HTML;
 echo <<<HTML
 	<div class='card mt-1'>
 		<div class='card-body'>
-			$new_row
+			$newRow
 		</div>
 	</div>
 HTML;

@@ -12,11 +12,11 @@ $cat = $_GET['cat'] ?? 'RTT';
 
 function filter_stat($cat)
 {
-	$cats_titles = [];
+	$catsTitles = [];
 
 	$categories = get_td_or_sql_categories();
 
-	foreach ($categories as $k => $tab) $cats_titles[] = $tab['category'] ?? "";
+	foreach ($categories as $k => $tab) $catsTitles[] = $tab['category'] ?? "";
 
 	$d33 = <<<HTML
 		<div class="input-group">
@@ -25,7 +25,7 @@ function filter_stat($cat)
 		</div>
 	HTML;
 
-	$y1 = makeDropdown($cats_titles, $cat, 'cat', '');
+	$y1 = makeDropdown($catsTitles, $cat, 'cat', '');
 	$uuu = sprintf($d33, 'Category:', $y1);
 
 	return $uuu;
@@ -33,7 +33,7 @@ function filter_stat($cat)
 
 $uuu = filter_stat($cat);
 
-$table_html = <<<HTML
+$tableHtml = <<<HTML
 	<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
 		<thead>
 			<tr>
@@ -51,50 +51,50 @@ $table_html = <<<HTML
 		<tbody>
 	HTML;
 
-$titles = get_mdwiki_cat_members($cat, $use_cache = true, $depth = 1);
+$titles = get_mdwiki_cat_members($cat, $useCache = true, $depth = 1);
 
-$no_qid = 0;
-$no_word = 0;
-$no_allword = 0;
-$no_ref = 0;
-$no_allref = 0;
-$no_Importance = 0;
-$no_pv = 0;
+$noQid = 0;
+$noWord = 0;
+$noAllword = 0;
+$noRef = 0;
+$noAllref = 0;
+$noImportance = 0;
+$noPv = 0;
 $i = 0;
 
 $qids_t = get_td_or_sql_qids('all');
 
-$sql_qids = array_column($qids_t, 'qid', 'title');
+$sqlQids = array_column($qids_t, 'qid', 'title');
 
 foreach ($titles as $title) {
 	$i = $i + 1;
 
-	$qid = $sql_qids[$title] ?? "";
+	$qid = $sqlQids[$title] ?? "";
 
-	if (empty($qid)) $no_qid += 1;
+	if (empty($qid)) $noQid += 1;
 
 	$qidurl = (!empty($qid)) ? "<a href='https://wikidata.org/wiki/$qid'>$qid</a>" : '';
 
-	$word = MainTables::$x_Words_table[$title] ?? 0;
+	$word = MainTables::$xWordsTable[$title] ?? 0;
 
-	$allword = MainTables::$x_All_Words_table[$title] ?? 0;
-	if ($word == 0) $no_word += 1;
-	if ($allword == 0) $no_allword += 1;
+	$allword = MainTables::$xAllWordsTable[$title] ?? 0;
+	if ($word == 0) $noWord += 1;
+	if ($allword == 0) $noAllword += 1;
 
-	$refs = MainTables::$x_Lead_Refs_table[$title] ?? 0;
+	$refs = MainTables::$xLeadRefsTable[$title] ?? 0;
 
-	$all_refs = MainTables::$x_All_Refs_table[$title] ?? 0;
+	$allRefs = MainTables::$xAllRefsTable[$title] ?? 0;
 
-	if ($refs == 0) $no_ref += 1;
-	if ($all_refs == 0) $no_allref += 1;
+	if ($refs == 0) $noRef += 1;
+	if ($allRefs == 0) $noAllref += 1;
 
-	$asse = MainTables::$x_Assessments_table[$title] ?? '';
-	if (!isset(MainTables::$x_Assessments_table[$title])) $no_Importance += 1;
+	$asse = MainTables::$xAssessmentsTable[$title] ?? '';
+	if (!isset(MainTables::$xAssessmentsTable[$title])) $noImportance += 1;
 
-	$pv = MainTables::$x_enwiki_pageviews_table[$title] ?? 0;
-	if (!isset(MainTables::$x_enwiki_pageviews_table[$title])) $no_pv += 1;
+	$pv = MainTables::$xEnwikiPageviewsTable[$title] ?? 0;
+	if (!isset(MainTables::$xEnwikiPageviewsTable[$title])) $noPv += 1;
 
-	$table_html .= <<<HTML
+	$tableHtml .= <<<HTML
 	<tr>
 		<td data-content='#'>
 			$i</td>
@@ -109,7 +109,7 @@ foreach ($titles as $title) {
 		<td data-content='Ref'>
 			$refs</td>
 		<td data-content='All Ref'>
-			$all_refs</td>
+			$allRefs</td>
 		<td data-content='Importance'>
 			$asse</td>
 		<td data-content='enwiki views'>
@@ -118,24 +118,24 @@ foreach ($titles as $title) {
 	HTML;
 }
 
-$table_html .= "</table>";
+$tableHtml .= "</table>";
 
-$with_q = $i - $no_qid;
-$with_word = $i - $no_word;
-$with_allword = $i - $no_allword;
-$with_ref = $i - $no_ref;
-$with_allref = $i - $no_allref;
-$with_Importance = $i - $no_Importance;
-$with_pv = $i - $no_pv;
+$with_q = $i - $noQid;
+$withWord = $i - $noWord;
+$withAllword = $i - $noAllword;
+$withRef = $i - $noRef;
+$withAllref = $i - $noAllref;
+$withImportance = $i - $noImportance;
+$withPv = $i - $noPv;
 
 $lilo = [
-	'qid' => ['with' => $with_q, 'without' => $no_qid],
-	'enwiki views' => ['with' => $with_pv, 'without' => $no_pv],
-	'Importance' => ['with' => $with_Importance, 'without' => $no_Importance],
-	'word' => ['with' => $with_word, 'without' => $no_word],
-	'allword' => ['with' => $with_allword, 'without' => $no_allword],
-	'ref' => ['with' => $with_ref, 'without' => $no_ref],
-	'allref' => ['with' => $with_allref, 'without' => $no_allref],
+	'qid' => ['with' => $with_q, 'without' => $noQid],
+	'enwiki views' => ['with' => $withPv, 'without' => $noPv],
+	'Importance' => ['with' => $withImportance, 'without' => $noImportance],
+	'word' => ['with' => $withWord, 'without' => $noWord],
+	'allword' => ['with' => $withAllword, 'without' => $noAllword],
+	'ref' => ['with' => $withRef, 'without' => $noRef],
+	'allref' => ['with' => $withAllref, 'without' => $noAllref],
 ];
 
 $ths = '';
@@ -185,7 +185,7 @@ echo <<<HTML
 			</table>
 		</div>
 		<div class='card-body'>
-			$table_html
+			$tableHtml
 		</div>
 	</div>
 HTML;

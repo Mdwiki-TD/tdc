@@ -7,8 +7,8 @@ function process_make_td($tab, $nnnn)
     // { "id": 3284, "title": "Triquetral fracture", "user": "SeaTub", "lang": "es", "cat": "RTT", "translate_type": "all", "word": 198, "add_date": "2026-02-17 03:00:00", "campaign": "Main", "autonym": "español" }
 
     $user      = $tab['user'] ?? "";
-    $lang_code = $tab['lang'] ?? "";
-    $md_title  = $tab['title'] ?? "";
+    $langCode = $tab['lang'] ?? "";
+    $mdTitle  = $tab['title'] ?? "";
     $autonym   = $tab['autonym'] ?? "";
     $campaign  = $tab['campaign'] ?? "";
 
@@ -17,11 +17,11 @@ function process_make_td($tab, $nnnn)
     if (strpos($date, ':') !== false) {
         $date = explode(' ', $date)[0];
     };
-    $lang_title = "($lang_code) $autonym";
+    $langTitle = "($langCode) $autonym";
 
-    $talk_url = "//$lang_code.wikipedia.org/w/index.php?title=User_talk:$user&action=edit&section=new";
+    $talkUrl = "//$langCode.wikipedia.org/w/index.php?title=User_talk:$user&action=edit&section=new";
 
-    $md_title_encoded = rawurlencode($md_title);
+    $mdTitleEncoded = rawurlencode($mdTitle);
 
     $laly = <<<HTML
         <tr>
@@ -29,19 +29,19 @@ function process_make_td($tab, $nnnn)
                 $nnnn
             </td>
             <td data-content="User">
-                <a target='' href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a> (<a target="_blank" href="$talk_url">talk</a>)
+                <a target='' href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a> (<a target="_blank" href="$talkUrl">talk</a>)
             </td>
             <td data-content="Lang.">
-                <a target='' href='/Translation_Dashboard/leaderboard.php?langcode=$lang_code'>$lang_title</a>
+                <a target='' href='/Translation_Dashboard/leaderboard.php?langcode=$langCode'>$langTitle</a>
             </td>
             <td data-content="Title">
-                <a href="//mdwiki.org/wiki/$md_title_encoded" target="_blank">$md_title</a>
+                <a href="//mdwiki.org/wiki/$mdTitleEncoded" target="_blank">$mdTitle</a>
             </td>
             <td data-content="Campaign">
                 $campaign
             </td>
             <td data-content="Draft">
-                <a href="//mdwikicx.toolforge.org/wiki/$lang_code/$md_title_encoded" target="_blank">$date</a>
+                <a href="//mdwikicx.toolforge.org/wiki/$langCode/$mdTitleEncoded" target="_blank">$date</a>
             </td>
         </tr>
         HTML;
@@ -49,14 +49,14 @@ function process_make_td($tab, $nnnn)
     return $laly;
 };
 
-$api_results = get_td_api(['get' => 'in_process', 'limit' => "100", "order" => 'add_date']);
-$data = $api_results['results'] ?? [];
+$apiResults = get_td_api(['get' => 'in_process', 'limit' => "100", "order" => 'add_date']);
+$data = $apiResults['results'] ?? [];
 
-$tbody_html = "";
+$tbodyHtml = "";
 $noo = 0;
 foreach ($data as $tat => $tabe) {
     $noo = $noo + 1;
-    $tbody_html .= process_make_td($tabe, $noo);
+    $tbodyHtml .= process_make_td($tabe, $noo);
 };
 
 
@@ -78,7 +78,7 @@ echo <<<HTML
                     </tr>
                 </thead>
                 <tbody>
-                    $tbody_html
+                    $tbodyHtml
                 </tbody>
             </table>
         </div>

@@ -10,18 +10,18 @@ class IndexTest extends TestCase
     public function testGetSortedArrayLogic()
     {
         // Test the sorting logic used in get_sorted_array
-        $test_array = [
+        $testArray = [
             'user1' => ['live' => 10],
             'user2' => ['live' => 50],
             'user3' => ['live' => 25]
         ];
 
         // Sort descending by live
-        uasort($test_array, function ($a, $b) {
+        uasort($testArray, function ($a, $b) {
             return $b['live'] <=> $a['live'];
         });
 
-        $keys = array_keys($test_array);
+        $keys = array_keys($testArray);
         $this->assertEquals('user2', $keys[0]);
         $this->assertEquals('user3', $keys[1]);
         $this->assertEquals('user1', $keys[2]);
@@ -29,96 +29,96 @@ class IndexTest extends TestCase
 
     public function testGetSortedArrayWithZeroLive()
     {
-        $test_array = [
+        $testArray = [
             'user1' => ['live' => 0],
             'user2' => ['live' => 5],
             'user3' => ['live' => 0]
         ];
 
-        uasort($test_array, function ($a, $b) {
+        uasort($testArray, function ($a, $b) {
             return $b['live'] <=> $a['live'];
         });
 
-        $keys = array_keys($test_array);
+        $keys = array_keys($testArray);
         $this->assertEquals('user2', $keys[0]);
     }
 
     public function testEmailsFilterTableProjectMapping()
     {
         // Test that TablesSql projects get "empty" added
-        TablesSql::$s_projects_title_to_id = [
+        TablesSql::$sProjectsTitleToId = [
             'Project1' => 1,
             'Project2' => 2
         ];
 
-        TablesSql::$s_projects_title_to_id["empty"] = "empty";
+        TablesSql::$sProjectsTitleToId["empty"] = "empty";
 
-        $this->assertArrayHasKey("empty", TablesSql::$s_projects_title_to_id);
-        $this->assertEquals("empty", TablesSql::$s_projects_title_to_id["empty"]);
+        $this->assertArrayHasKey("empty", TablesSql::$sProjectsTitleToId);
+        $this->assertEquals("empty", TablesSql::$sProjectsTitleToId["empty"]);
     }
 
     public function testEmailsFilterTableSelectedOption()
     {
-        $project_name = 'TestProject';
-        $test_project = 'TestProject';
+        $projectName = 'TestProject';
+        $testProject = 'TestProject';
 
-        $is_selected = ($project_name == $test_project);
-        $this->assertTrue($is_selected);
+        $isSelected = ($projectName == $testProject);
+        $this->assertTrue($isSelected);
 
-        $is_not_selected = ($project_name == 'OtherProject');
-        $this->assertFalse($is_not_selected);
+        $isNotSelected = ($projectName == 'OtherProject');
+        $this->assertFalse($isNotSelected);
     }
 
     public function testEmailsFilterTableAllOption()
     {
-        $main_project = 'All';
-        $user_group = 'SomeProject';
+        $mainProject = 'All';
+        $userGroup = 'SomeProject';
 
         // When main_project is "All", should not filter
-        $should_continue = (!empty($main_project) && $main_project != "All" && $user_group != $main_project);
-        $this->assertFalse($should_continue);
+        $shouldContinue = (!empty($mainProject) && $mainProject != "All" && $userGroup != $mainProject);
+        $this->assertFalse($shouldContinue);
     }
 
     public function testUserGroupUncategorizedMapping()
     {
-        $user_group = '';
-        $user_group2 = $user_group;
+        $userGroup = '';
+        $userGroup2 = $userGroup;
 
-        if (empty($user_group2)) {
-            $user_group2 = 'Uncategorized';
+        if (empty($userGroup2)) {
+            $userGroup2 = 'Uncategorized';
         }
 
-        $this->assertEquals('Uncategorized', $user_group2);
+        $this->assertEquals('Uncategorized', $userGroup2);
     }
 
     public function testUserGroupWithValue()
     {
-        $user_group = 'MyProject';
-        $user_group2 = $user_group;
+        $userGroup = 'MyProject';
+        $userGroup2 = $userGroup;
 
-        if (empty($user_group2)) {
-            $user_group2 = 'Uncategorized';
+        if (empty($userGroup2)) {
+            $userGroup2 = 'Uncategorized';
         }
 
-        $this->assertEquals('MyProject', $user_group2);
+        $this->assertEquals('MyProject', $userGroup2);
     }
 
     public function testProjectFilterLogic()
     {
-        $main_project = 'ProjectA';
-        $user_group2 = 'ProjectB';
+        $mainProject = 'ProjectA';
+        $userGroup2 = 'ProjectB';
 
-        $should_skip = (!empty($main_project) && $main_project != "All" && $user_group2 != $main_project);
-        $this->assertTrue($should_skip);
+        $shouldSkip = (!empty($mainProject) && $mainProject != "All" && $userGroup2 != $mainProject);
+        $this->assertTrue($shouldSkip);
     }
 
     public function testProjectFilterWithMatch()
     {
-        $main_project = 'ProjectA';
-        $user_group2 = 'ProjectA';
+        $mainProject = 'ProjectA';
+        $userGroup2 = 'ProjectA';
 
-        $should_skip = (!empty($main_project) && $main_project != "All" && $user_group2 != $main_project);
-        $this->assertFalse($should_skip);
+        $shouldSkip = (!empty($mainProject) && $mainProject != "All" && $userGroup2 != $mainProject);
+        $this->assertFalse($shouldSkip);
     }
 
     public function testLimitApplication()
@@ -126,8 +126,8 @@ class IndexTest extends TestCase
         $limit = 10;
         $numb = 11;
 
-        $should_break = ($limit > 0 && $numb > $limit);
-        $this->assertTrue($should_break);
+        $shouldBreak = ($limit > 0 && $numb > $limit);
+        $this->assertTrue($shouldBreak);
     }
 
     public function testLimitZeroNoBreak()
@@ -135,8 +135,8 @@ class IndexTest extends TestCase
         $limit = 0;
         $numb = 100;
 
-        $should_break = ($limit > 0 && $numb > $limit);
-        $this->assertFalse($should_break);
+        $shouldBreak = ($limit > 0 && $numb > $limit);
+        $this->assertFalse($shouldBreak);
     }
 
     public function testLimitParameter()
@@ -166,15 +166,15 @@ class IndexTest extends TestCase
         $origGet = $_GET;
         unset($_GET['project']);
 
-        $main_project = (isset($_GET['project'])) ? $_GET['project'] : 'All';
-        $this->assertEquals('All', $main_project);
+        $mainProject = (isset($_GET['project'])) ? $_GET['project'] : 'All';
+        $this->assertEquals('All', $mainProject);
 
         $_GET = $origGet;
     }
 
     public function testEditParamsArrayStructure()
     {
-        $edit_params = [
+        $editParams = [
             'user_id'   => 123,
             'user'  => 'testuser',
             'email'  => 'test@example.com',
@@ -182,22 +182,22 @@ class IndexTest extends TestCase
             'project'  => 'TestProject'
         ];
 
-        $this->assertArrayHasKey('user_id', $edit_params);
-        $this->assertArrayHasKey('user', $edit_params);
-        $this->assertArrayHasKey('email', $edit_params);
-        $this->assertArrayHasKey('wiki', $edit_params);
-        $this->assertArrayHasKey('project', $edit_params);
+        $this->assertArrayHasKey('user_id', $editParams);
+        $this->assertArrayHasKey('user', $editParams);
+        $this->assertArrayHasKey('email', $editParams);
+        $this->assertArrayHasKey('wiki', $editParams);
+        $this->assertArrayHasKey('project', $editParams);
     }
 
     public function testTableRowDataAttributes()
     {
         $numb = 5;
-        $user_name = 'testuser';
+        $userName = 'testuser';
         $email = 'test@example.com';
 
         // Test data attribute values
         $this->assertIsInt($numb);
-        $this->assertIsString($user_name);
+        $this->assertIsString($userName);
         $this->assertIsString($email);
     }
 }

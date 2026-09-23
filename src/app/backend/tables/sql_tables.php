@@ -18,42 +18,42 @@ use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
 
 class TablesSql
 {
-    public static $s_full_translates = [];
-    public static $s_no_lead_translates = [];
+    public static $sFullTranslates = [];
+    public static $sNoLeadTranslates = [];
 
-    public static $s_cat_titles = [];
-    public static $s_cat_to_camp = [];
+    public static $sCatTitles = [];
+    public static $sCatToCamp = [];
 
-    public static $s_main_cat = ''; # RTT
-    public static $s_main_camp = ''; # Main
+    public static $sMainCat = ''; # RTT
+    public static $sMainCamp = ''; # Main
 
-    public static $s_camp_input_depth = [];
-    // public static $catinput_depth = [];
+    public static $sCampInputDepth = [];
+    // public static $catinputDepth = [];
 
-    public static $s_campaign_input_list = [];
-    public static $s_projects_title_to_id = [];
+    public static $sCampaignInputList = [];
+    public static $sProjectsTitleToId = [];
 }
 
-$categories_tab = get_td_or_sql_categories();
+$categoriesTab = get_td_or_sql_categories();
 
-foreach ($categories_tab as $k => $tab) {
+foreach ($categoriesTab as $k => $tab) {
     if (!empty($tab['category']) && !empty($tab['campaign'])) {
 
-        TablesSql::$s_cat_titles[] = $tab['campaign'];
+        TablesSql::$sCatTitles[] = $tab['campaign'];
 
-        TablesSql::$s_cat_to_camp[$tab['category']] = $tab['campaign'];
+        TablesSql::$sCatToCamp[$tab['category']] = $tab['campaign'];
 
-        TablesSql::$s_campaign_input_list[$tab['campaign']] = $tab['campaign'];
+        TablesSql::$sCampaignInputList[$tab['campaign']] = $tab['campaign'];
 
-        // $catinput_depth[$tab['category']] = $tab['depth'];
-        TablesSql::$s_camp_input_depth[$tab['campaign']] = $tab['depth'];
+        // $catinputDepth[$tab['category']] = $tab['depth'];
+        TablesSql::$sCampInputDepth[$tab['campaign']] = $tab['depth'];
 
-        $is_default = $tab['is_default'];
-        if ($is_default == 1 || $is_default == '1') TablesSql::$s_main_cat = $tab['category'];
-        if ($is_default == 1 || $is_default == '1') TablesSql::$s_main_camp = $tab['campaign'];
+        $isDefault = $tab['is_default'];
+        if ($isDefault == 1 || $isDefault == '1') TablesSql::$sMainCat = $tab['category'];
+        if ($isDefault == 1 || $isDefault == '1') TablesSql::$sMainCamp = $tab['campaign'];
     };
 };
 
-$projects_tab = get_td_or_sql_projects();
+$projectsTab = get_td_or_sql_projects();
 
-TablesSql::$s_projects_title_to_id = array_column($projects_tab, 'g_id', 'g_title');
+TablesSql::$sProjectsTitleToId = array_column($projectsTab, 'g_id', 'g_title');

@@ -15,28 +15,28 @@ use function App\Utils\Html\make_edit_icon_new;
 use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
 use function App\SQLorAPI\Funcs\get_td_or_sql_qids_others;
 
-$global_username = CurrentUser::getInstance()->getUsername();
+$globalUsername = CurrentUser::getInstance()->getUsername();
 
-$qid_table = $_GET['qid_table'] ?? 'qids';
+$qidTable = $_GET['qid_table'] ?? 'qids';
 
-if ($qid_table != 'qids' && $qid_table != 'qids_others') $qid_table = 'qids';
+if ($qidTable != 'qids' && $qidTable != 'qids_others') $qidTable = 'qids';
 
 function filter_qids_table($data, $vav, $id)
 {
 
-	$l_list = "";
+	$lList = "";
 
-	foreach ($data as $table_name => $label) {
-		$checked = ($table_name == $vav) ? "checked" : "";
-		$l_list .= <<<HTML
+	foreach ($data as $tableName => $label) {
+		$checked = ($tableName == $vav) ? "checked" : "";
+		$lList .= <<<HTML
 			<div class="form-check form-check-inline">
 				<input class="form-check-input"
 					type="radio"
 					name="$id"
-					id="radio_$table_name"
-					value="$table_name"
+					id="radio_$tableName"
+					value="$tableName"
 					$checked>
-				<label class="form-check-label" for="radio_$table_name">$label</label>
+				<label class="form-check-label" for="radio_$tableName">$label</label>
 			</div>
 		HTML;
 	}
@@ -44,7 +44,7 @@ function filter_qids_table($data, $vav, $id)
 	$uuu = <<<HTML
 		<div class="input-group">
 			<div class="form-control" style="background-color: transparent; border: none;">
-				$l_list
+				$lList
 			</div>
 		</div>
 	HTML;
@@ -52,19 +52,19 @@ function filter_qids_table($data, $vav, $id)
 	return $uuu;
 }
 
-function qids_make_row($id, $title, $qid, $numb, $qid_table)
+function qids_make_row($id, $title, $qid, $numb, $qidTable)
 {
 
-	$edit_params = array(
+	$editParams = array(
 		'id'   => $id,
-		'qid_table'  => $qid_table,
+		'qid_table'  => $qidTable,
 		'title'  => $title,
 		'qid'  => $qid
 	);
 
-	$edit_icon = make_edit_icon_new("qids/edit_qid", $edit_params);
+	$editIcon = make_edit_icon_new("qids/edit_qid", $editParams);
 
-	$md_title = make_mdwiki_title($title);
+	$mdTitle = make_mdwiki_title($title);
 
 	return <<<HTML
 	<tr>
@@ -75,13 +75,13 @@ function qids_make_row($id, $title, $qid, $numb, $qid_table)
 			$id
 		</th>
 		<td data-content="title" data-sort="$title">
-			$md_title
+			$mdTitle
 		</td>
 		<td data-content="qid" data-sort="$qid">
 			<a target='_blank' href='https://wikidata.org/wiki/$qid'>$qid</a>
 		</td>
 		<td data-content="Edit">
-			$edit_icon
+			$editIcon
 		</td>
 	</tr>
 	HTML;
@@ -91,11 +91,11 @@ $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" valu
 
 $dis = $_GET['dis'] ?? 'all';
 
-if (!isset($_GET['dis']) && $global_username == "Mr. Ibrahem") $dis = "empty";
+if (!isset($_GET['dis']) && $globalUsername == "Mr. Ibrahem") $dis = "empty";
 
-$Qids_title = ($qid_table == "qids") ? "TD Qids" : "Qids Others";
+$QidsTitle = ($qidTable == "qids") ? "TD Qids" : "Qids Others";
 
-if ($qid_table == "qids") {
+if ($qidTable == "qids") {
 	$qq1 = get_td_or_sql_qids($dis);
 } else {
 	$qq1 = get_td_or_sql_qids_others($dis);
@@ -105,7 +105,7 @@ $numb = 0;
 
 $done = [];
 
-$form_rows = "";
+$formRows = "";
 
 foreach ($qq1 as $Key => $table) {
 	$id 	= $table['id'] ?? "";
@@ -116,7 +116,7 @@ foreach ($qq1 as $Key => $table) {
 		$done[] = $id;
 
 		$numb += 1;
-		$form_rows .= qids_make_row($id, $title, $qid, $numb, $qid_table);
+		$formRows .= qids_make_row($id, $title, $qid, $numb, $qidTable);
 	}
 
 	if ($dis == 'duplicate') {
@@ -128,7 +128,7 @@ foreach ($qq1 as $Key => $table) {
 			$done[] = $id2;
 
 			$numb += 1;
-			$form_rows .= qids_make_row($id2, $title2, $qid2, $numb, $qid_table);
+			$formRows .= qids_make_row($id2, $title2, $qid2, $numb, $qidTable);
 		}
 	};
 };
@@ -138,15 +138,15 @@ $data = [
 	"qids_others" => 'Qids Others',
 ];
 
-$filter_ta = filter_qids_table($data, $qid_table, 'qid_table');
+$filterTa = filter_qids_table($data, $qidTable, 'qid_table');
 
-$dis_data = [
+$disData = [
 	"empty" => 'Empty',
 	"all" => 'All',
 	"duplicate" => 'Duplicate',
 ];
 
-$filter_dis = filter_qids_table($dis_data, $dis, 'dis');
+$filterDis = filter_qids_table($disData, $dis, 'dis');
 
 echo <<<HTML
 	<div class='card'>
@@ -155,13 +155,13 @@ echo <<<HTML
 				<input name='ty' value='qids' type='hidden'/>
 				<div class='row'>
 					<div class='col-md-4'>
-						<h4>$Qids_title: ($dis:<span>$numb</span>)</h4>
+						<h4>$QidsTitle: ($dis:<span>$numb</span>)</h4>
 					</div>
 					<div class='col-md-2'>
-						$filter_ta
+						$filterTa
 					</div>
 					<div class='col-md-4'>
-						$filter_dis
+						$filterDis
 					</div>
 					<div class='aligncenter col-md-2'>
 						<input class='btn btn-outline-primary' type='submit' value='Filter' />
@@ -181,19 +181,19 @@ echo <<<HTML
 					</tr>
 				</thead>
 				<tbody id="tab_logic">
-					$form_rows
+					$formRows
 				</tbody>
 			</table>
 		</div>
 	</div>
 HTML;
 
-$new_row = make_edit_icon_new("qids/edit_qid", ["new" => 1, "qid_table" => $qid_table], $text = "Add one!");
+$newRow = make_edit_icon_new("qids/edit_qid", ["new" => 1, "qid_table" => $qidTable], $text = "Add one!");
 
 echo <<<HTML
 	<div class='card mt-1'>
 		<div class='card-body'>
-			$new_row
+			$newRow
 		</div>
 	</div>
 HTML;

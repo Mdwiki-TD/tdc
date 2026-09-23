@@ -50,8 +50,8 @@ class IndexTest extends TestCase
     public function testTableRowIdGeneration()
     {
         $numb = 3;
-        $row_id = "row_$numb";
-        $this->assertEquals('row_3', $row_id);
+        $rowId = "row_$numb";
+        $this->assertEquals('row_3', $rowId);
     }
 
     public function testInputRequiredAttribute()
@@ -83,11 +83,11 @@ class IndexTest extends TestCase
     {
         // Test JavaScript template literal variable interpolation pattern
         $ii = 5;
-        $expected_pattern = '${ii}';
+        $expectedPattern = '${ii}';
 
         // In PHP, we'd construct it like:
-        $js_var = '${' . 'ii' . '}';
-        $this->assertEquals('${ii}', $js_var);
+        $jsVar = '${' . 'ii' . '}';
+        $this->assertEquals('${ii}', $jsVar);
     }
 
     public function testFormActionUrl()

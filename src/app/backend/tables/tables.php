@@ -18,13 +18,13 @@ use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
 
 class MainTables
 {
-	public static $x_enwiki_pageviews_table = [];
-	public static $x_Words_table = [];
-	public static $x_All_Words_table = [];
-	public static $x_All_Refs_table = [];
-	public static $x_Lead_Refs_table = [];
-	public static $x_Assessments_table = [];
-	public static $x_Langs_table = [];
+	public static $xEnwikiPageviewsTable = [];
+	public static $xWordsTable = [];
+	public static $xAllWordsTable = [];
+	public static $xAllRefsTable = [];
+	public static $xLeadRefsTable = [];
+	public static $xAssessmentsTable = [];
+	public static $xLangsTable = [];
 }
 $_titles_infos = td_or_sql_titles_infos();
 
@@ -34,15 +34,15 @@ $_titles_infos = td_or_sql_titles_infos();
 foreach ($_titles_infos as $k => $tab) {
 	$title = $tab['title'];
 
-	MainTables::$x_enwiki_pageviews_table[$title] = $tab['en_views'];
+	MainTables::$xEnwikiPageviewsTable[$title] = $tab['en_views'];
 
-	MainTables::$x_Words_table[$title] = $tab['w_lead_words'];
-	MainTables::$x_All_Words_table[$title] = $tab['w_all_words'];
+	MainTables::$xWordsTable[$title] = $tab['w_lead_words'];
+	MainTables::$xAllWordsTable[$title] = $tab['w_all_words'];
 
-	MainTables::$x_All_Refs_table[$title] = $tab['r_all_refs'];
-	MainTables::$x_Lead_Refs_table[$title] = $tab['r_lead_refs'];
+	MainTables::$xAllRefsTable[$title] = $tab['r_all_refs'];
+	MainTables::$xLeadRefsTable[$title] = $tab['r_lead_refs'];
 
-	MainTables::$x_Assessments_table[$title] = $tab['importance'];
+	MainTables::$xAssessmentsTable[$title] = $tab['importance'];
 };
 
 if (file_exists(__DIR__ . '/lang_names.json')) {
@@ -52,8 +52,8 @@ if (file_exists(__DIR__ . '/lang_names.json')) {
 	} else {
 		$data = json_decode($contents, true);
 		if (is_array($data)) {
-			MainTables::$x_Langs_table = $data;
-			ksort(MainTables::$x_Langs_table);
+			MainTables::$xLangsTable = $data;
+			ksort(MainTables::$xLangsTable);
 		}
 	}
 }

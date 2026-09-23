@@ -22,12 +22,12 @@ function make_td($tabg, $numb)
     $id             = $tabg['id'] ?? 0;
     $lang           = $tabg['lang_code'] ?? "";
     $expend2        = ($tabg['expend'] == 1) ? 'checked' : '';
-    $move_dots      = ($tabg['move_dots'] == 1) ? 'checked' : '';
-    $add_en_lang    = ($tabg['add_en_lang'] == 1) ? 'checked' : '';
+    $moveDots      = ($tabg['move_dots'] == 1) ? 'checked' : '';
+    $addEnLang    = ($tabg['add_en_lang'] == 1) ? 'checked' : '';
 
     $lang = strtolower($lang);
 
-    $edit_params = [
+    $editParams = [
         'id'   => $id,
         'lang_code'  => $lang,
         'expend'  => $tabg['expend'],
@@ -35,7 +35,7 @@ function make_td($tabg, $numb)
         'add_en_lang'  => $tabg['add_en_lang']
     ];
 
-    $edit_icon = make_edit_icon_new("wikirefs_options/edit", $edit_params);
+    $editIcon = make_edit_icon_new("wikirefs_options/edit", $editParams);
 
     $laly = <<<HTML
         <tr>
@@ -45,9 +45,9 @@ function make_td($tabg, $numb)
             <td data-content='#'>
                 <span>$lang</span>
             </td>
-            <td data-content='Move dots' data-order='$move_dots'>
+            <td data-content='Move dots' data-order='$moveDots'>
                 <div class='form-check form-switch'>
-                    <input class='form-check-input' type='checkbox' name='rows[$numb][move_dots]' value='1' $move_dots disabled/>
+                    <input class='form-check-input' type='checkbox' name='rows[$numb][move_dots]' value='1' $moveDots disabled/>
                 </div>
             </td>
             <td data-content='Expend infobox' data-order='$expend2'>
@@ -55,13 +55,13 @@ function make_td($tabg, $numb)
                     <input class='form-check-input' type='checkbox' name='rows[$numb][expend]' value='1' $expend2 disabled/>
                 </div>
             </td>
-            <td data-content='Add |language=en' data-order='$add_en_lang'>
+            <td data-content='Add |language=en' data-order='$addEnLang'>
                 <div class='form-check form-switch'>
-                    <input class='form-check-input' type='checkbox' name='rows[$numb][add_en_lang]' value='1' $add_en_lang disabled/>
+                    <input class='form-check-input' type='checkbox' name='rows[$numb][add_en_lang]' value='1' $addEnLang disabled/>
                 </div>
             </td>
             <td data-content="Edit">
-                $edit_icon
+                $editIcon
             </td>
         </tr>
         HTML;
@@ -71,14 +71,14 @@ function make_td($tabg, $numb)
 
 $tabes = get_td_or_sql_language_settings();
 
-$tabes_codes = array_column($tabes, 'lang_code');
+$tabesCodes = array_column($tabes, 'lang_code');
 
 $langs_d = get_pages_langs();
 
 foreach ($langs_d as $tat) {
     $lal = strtolower($tat);
 
-    if (!in_array($lal, $tabes_codes)) {
+    if (!in_array($lal, $tabesCodes)) {
         $tabes[] = ['lang_code' => $lal, 'expend' => 0, 'move_dots' => 0, 'add_en_lang' => 0];
     }
 }
@@ -124,12 +124,12 @@ echo <<<HTML
     </div>
 HTML;
 
-$new_row = make_edit_icon_new("wikirefs_options/edit", ["new" => 1], $text = "Add one!");
+$newRow = make_edit_icon_new("wikirefs_options/edit", ["new" => 1], $text = "Add one!");
 
 echo <<<HTML
 	<div class='card mt-2 mb-2'>
 		<div class='card-body'>
-			$new_row
+			$newRow
 		</div>
 	</div>
 HTML;

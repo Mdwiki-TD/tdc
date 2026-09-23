@@ -106,17 +106,17 @@ function make_modal_fade(string $label, string $text, string $id, string $button
  * Generate an email icon button for messaging users
  *
  * @param array<string,mixed> $tab       Translation record with user/lang/target info
- * @param string              $func_name JavaScript function to call on click
+ * @param string              $funcName JavaScript function to call on click
  *
  * @return string HTML for the email button
  */
-function make_mail_icon_new(array $tab, string $func_name = "pup_window_new"): string
+function make_mail_icon_new(array $tab, string $funcName = "pup_window_new"): string
 {
-    if (empty($func_name)) {
-        $func_name = "pup_window_new";
+    if (empty($funcName)) {
+        $funcName = "pup_window_new";
     }
 
-    $mail_params = [
+    $mailParams = [
         'user' => $tab['user'] ?? '',
         'lang' => $tab['lang'] ?? '',
         'target' => $tab['target'] ?? '',
@@ -125,11 +125,11 @@ function make_mail_icon_new(array $tab, string $func_name = "pup_window_new"): s
         'nonav' => '1'
     ];
 
-    $mail_url = "index.php?ty=Emails/msg&" . http_build_query($mail_params, '', '&', PHP_QUERY_RFC3986);
-    $escaped_url = htmlspecialchars($mail_url, ENT_QUOTES, 'UTF-8');
+    $mailUrl = "index.php?ty=Emails/msg&" . http_build_query($mailParams, '', '&', PHP_QUERY_RFC3986);
+    $escapedUrl = htmlspecialchars($mailUrl, ENT_QUOTES, 'UTF-8');
 
     return <<<HTML
-    	<a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$escaped_url}' onclick='{$func_name}(this)'>@</a>
+    	<a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$escapedUrl}' onclick='{$funcName}(this)'>@</a>
     HTML;
 }
 
@@ -144,9 +144,9 @@ function make_project_to_user(string $project): string
 {
     $str = "<option value='Uncategorized'>Uncategorized</option>";
 
-    foreach (TablesSql::$s_projects_title_to_id as $p_title => $p_id) {
-        $selected = ($project === $p_title) ? "selected" : "";
-        $escaped = htmlspecialchars($p_title, ENT_QUOTES, 'UTF-8');
+    foreach (TablesSql::$sProjectsTitleToId as $pTitle => $pId) {
+        $selected = ($project === $pTitle) ? "selected" : "";
+        $escaped = htmlspecialchars($pTitle, ENT_QUOTES, 'UTF-8');
         $str .= "<option value='{$escaped}' {$selected}>{$escaped}</option>";
     }
 
@@ -220,20 +220,20 @@ function makeDropdown(array $tab, string $cat, string $id, string $add): string
         $options .= "<option value='{$escaped}' {$se}>{$escaped}</option>";
     }
 
-    $sel_line = "";
+    $selLine = "";
     if (!empty($add)) {
         $add2 = ($add === 'all') ? 'All' : $add;
         $sel = ($cat === $add) ? "selected" : "";
-        $escaped_add = htmlspecialchars($add, ENT_QUOTES, 'UTF-8');
-        $escaped_add2 = htmlspecialchars($add2, ENT_QUOTES, 'UTF-8');
-        $sel_line = "<option value='{$escaped_add}' {$sel}>{$escaped_add2}</option>";
+        $escapedAdd = htmlspecialchars($add, ENT_QUOTES, 'UTF-8');
+        $escapedAdd2 = htmlspecialchars($add2, ENT_QUOTES, 'UTF-8');
+        $selLine = "<option value='{$escapedAdd}' {$sel}>{$escapedAdd2}</option>";
     }
 
 
 
     return <<<HTML
         <select dir="ltr" id="{$id}" name="{$id}" class="form-select" data-bs-theme="auto">
-            {$sel_line}
+            {$selLine}
             {$options}
         </select>
     HTML;
@@ -249,12 +249,12 @@ function makeDropdown(array $tab, string $cat, string $id, string $add): string
  */
 function makeCard(string $title, string $table): string
 {
-    $escaped_title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
     return <<<HTML
     <div class="card">
         <div class="card-header aligncenter" style="font-weight:bold;">
-            {$escaped_title}
+            {$escapedTitle}
         </div>
         <div class="card-body1 card2">
             {$table}
@@ -277,14 +277,14 @@ function makeCard(string $title, string $table): string
  */
 function makeColSm4(string $title, string $table, int $numb = 4, string $table2 = '', string $title2 = ''): string
 {
-    $escaped_title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
     return <<<HTML
     <div class="col-md-{$numb}">
         <div class="card card2 mb-3">
             <div class="card-header">
                 <span class="card-title" style="font-weight:bold;">
-                    {$escaped_title}
+                    {$escapedTitle}
                 </span>
                 <div style='float: right'>
                     {$title2}
@@ -315,14 +315,14 @@ function makeColSm4(string $title, string $table, int $numb = 4, string $table2 
  */
 function make_col_sm_body(string $title, string $subtitle, string $table, int $numb = 4): string
 {
-    $escaped_title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-    $escaped_subtitle = htmlspecialchars($subtitle, ENT_QUOTES, 'UTF-8');
+    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $escapedSubtitle = htmlspecialchars($subtitle, ENT_QUOTES, 'UTF-8');
 
     return <<<HTML
     <div class="col-md-{$numb}">
         <div class="card">
             <div class="card-header aligncenter1">
-                <span style="font-weight:bold;">{$escaped_title}</span> {$escaped_subtitle}
+                <span style="font-weight:bold;">{$escapedTitle}</span> {$escapedSubtitle}
             </div>
             <div class="card-body card2">
                 {$table}
@@ -347,9 +347,9 @@ function make_drop(array $uxutable, string $code): string
 
     foreach ($uxutable as $name => $cod) {
         $selected = ($code === $cod) ? "selected" : "";
-        $escaped_name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-        $escaped_cod = htmlspecialchars($cod, ENT_QUOTES, 'UTF-8');
-        $options .= "<option value='{$escaped_cod}' {$selected}>{$escaped_name}</option>";
+        $escapedName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        $escapedCod = htmlspecialchars($cod, ENT_QUOTES, 'UTF-8');
+        $options .= "<option value='{$escapedCod}' {$selected}>{$escapedName}</option>";
     }
 
     return $options;
@@ -366,9 +366,9 @@ function make_datalist_options(array $hyh): string
 {
     $options = '';
     foreach ($hyh as $language => $code) {
-        $escaped_lang = htmlspecialchars($language, ENT_QUOTES, 'UTF-8');
-        $escaped_code = htmlspecialchars($code, ENT_QUOTES, 'UTF-8');
-        $options .= "<option value='{$escaped_code}'>{$escaped_lang}</option>";
+        $escapedLang = htmlspecialchars($language, ENT_QUOTES, 'UTF-8');
+        $escapedCode = htmlspecialchars($code, ENT_QUOTES, 'UTF-8');
+        $options .= "<option value='{$escapedCode}'>{$escapedLang}</option>";
     }
     return $options;
 }
@@ -383,9 +383,9 @@ function make_datalist_options(array $hyh): string
 function make_mdwiki_title(string $title): string
 {
     if (!empty($title)) {
-        $encoded_title = rawurlencode(str_replace(' ', '_', $title));
-        $escaped_title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-        return "<a target='_blank' href='https://mdwiki.org/wiki/{$encoded_title}'>{$escaped_title}</a>";
+        $encodedTitle = rawurlencode(str_replace(' ', '_', $title));
+        $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+        return "<a target='_blank' href='https://mdwiki.org/wiki/{$encodedTitle}'>{$escapedTitle}</a>";
     }
     return $title;
 }
@@ -400,9 +400,9 @@ function make_mdwiki_title(string $title): string
 function make_cat_url(string $category): string
 {
     if (!empty($category)) {
-        $encoded_category = rawurlencode(str_replace(' ', '_', $category));
-        $escaped_category = htmlspecialchars($category, ENT_QUOTES, 'UTF-8');
-        return "<a target='_blank' href='https://mdwiki.org/wiki/Category:{$encoded_category}'>{$escaped_category}</a>";
+        $encodedCategory = rawurlencode(str_replace(' ', '_', $category));
+        $escapedCategory = htmlspecialchars($category, ENT_QUOTES, 'UTF-8');
+        return "<a target='_blank' href='https://mdwiki.org/wiki/Category:{$encodedCategory}'>{$escapedCategory}</a>";
     }
     return $category;
 }
@@ -417,9 +417,9 @@ function make_cat_url(string $category): string
  */
 function make_talk_url(string $lang, string $user): string
 {
-    $escaped_lang = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
-    $escaped_user = rawurlencode($user);
-    return "<a target='_blank' href='//{$escaped_lang}.wikipedia.org/w/index.php?title=User_talk:{$escaped_user}'>talk</a>";
+    $escapedLang = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
+    $escapedUser = rawurlencode($user);
+    return "<a target='_blank' href='//{$escapedLang}.wikipedia.org/w/index.php?title=User_talk:{$escapedUser}'>talk</a>";
 }
 
 /**
@@ -432,9 +432,9 @@ function make_talk_url(string $lang, string $user): string
 function make_mdwiki_user_url(string $user): string
 {
     if (!empty($user)) {
-        $encoded_user = rawurlencode(str_replace(' ', '_', $user));
-        $escaped_user = htmlspecialchars($user, ENT_QUOTES, 'UTF-8');
-        return "<a href='https://mdwiki.org/wiki/User:{$encoded_user}'>{$escaped_user}</a>";
+        $encodedUser = rawurlencode(str_replace(' ', '_', $user));
+        $escapedUser = htmlspecialchars($user, ENT_QUOTES, 'UTF-8');
+        return "<a href='https://mdwiki.org/wiki/User:{$encodedUser}'>{$escapedUser}</a>";
     }
     return $user;
 }
@@ -451,14 +451,14 @@ function make_mdwiki_user_url(string $user): string
  */
 function make_target_url(string $target, string $lang, string $name = '', bool $deleted = false): string
 {
-    $display_name = (!empty($name)) ? $name : $target;
+    $displayName = (!empty($name)) ? $name : $target;
 
     if (!empty($target)) {
-        $encoded_target = rawurlencode(str_replace(' ', '_', $target));
-        $escaped_display = htmlspecialchars($display_name, ENT_QUOTES, 'UTF-8');
-        $escaped_lang = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
+        $encodedTarget = rawurlencode(str_replace(' ', '_', $target));
+        $escapedDisplay = htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8');
+        $escapedLang = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
 
-        $link = "<a target='_blank' href='https://{$escaped_lang}.wikipedia.org/wiki/{$encoded_target}'>{$escaped_display}</a>";
+        $link = "<a target='_blank' href='https://{$escapedLang}.wikipedia.org/wiki/{$encodedTarget}'>{$escapedDisplay}</a>";
 
         if ($deleted) {
             $link .= ' <span class="text-danger">(DELETED)</span>';
@@ -486,8 +486,8 @@ function div_alert(array $texts, string $type = "secondary"): string
         $type = "secondary";
     }
 
-    $allowed_types = ['success', 'danger', 'warning', 'info', 'secondary', 'primary', 'light', 'dark'];
-    if (!in_array($type, $allowed_types, true)) {
+    $allowedTypes = ['success', 'danger', 'warning', 'info', 'secondary', 'primary', 'light', 'dark'];
+    if (!in_array($type, $allowedTypes, true)) {
         $type = "secondary";
     }
 
@@ -502,30 +502,30 @@ function div_alert(array $texts, string $type = "secondary"): string
  * Generate an edit icon button
  *
  * @param string              $target       Edit target route
- * @param array<string,mixed> $edit_params  Parameters for the edit URL
+ * @param array<string,mixed> $editParams  Parameters for the edit URL
  * @param string              $text         Button text
  *
  * @return string HTML for the edit button
  */
-function make_edit_icon_new(string $target, array $edit_params, string $text = "Edit"): string
+function make_edit_icon_new(string $target, array $editParams, string $text = "Edit"): string
 {
     if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
-        $edit_params['test'] = 1;
+        $editParams['test'] = 1;
     }
 
-    $edit_params['nonav'] = 1;
+    $editParams['nonav'] = 1;
 
-    $edit_url = "index.php?ty={$target}&" . http_build_query($edit_params, '', '&', PHP_QUERY_RFC3986);
+    $editUrl = "index.php?ty={$target}&" . http_build_query($editParams, '', '&', PHP_QUERY_RFC3986);
 
     if (empty($text)) {
         $text = "Edit";
     }
 
-    $class_sm = ($text === "Edit") ? "btn-sm" : "";
-    $escaped_url = htmlspecialchars($edit_url, ENT_QUOTES, 'UTF-8');
+    $classSm = ($text === "Edit") ? "btn-sm" : "";
+    $escapedUrl = htmlspecialchars($editUrl, ENT_QUOTES, 'UTF-8');
     $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 
     return <<<HTML
-		<a class='btn btn-outline-primary {$class_sm}' pup-target='{$escaped_url}' onclick='pup_window_new(this)'>{$text}</a>
+		<a class='btn btn-outline-primary {$classSm}' pup-target='{$escapedUrl}' onclick='pup_window_new(this)'>{$text}</a>
 	HTML;
 }

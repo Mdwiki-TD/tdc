@@ -25,22 +25,22 @@ sort($qq);
 
 $numb = 0;
 
-$form_text = '';
+$formText = '';
 
 foreach ($qq as $Key => $table) {
 	$numb += 1;
 
-	$user_id = $table['id'] ?? "";
+	$userId = $table['id'] ?? "";
 	$usere	 = $table['username'] ?? "";
-	$is_active	 = $table['is_active'] ?? "";
+	$isActive	 = $table['is_active'] ?? "";
 
-	$active_checked = ($is_active == 1 || $is_active == "1") ? 'checked' : '';
+	$activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
 
-	$form_text .= <<<HTML
+	$formText .= <<<HTML
 		<tr>
 			<td data-content="id">
-				<input class="form-control" size="20" name="rows[$numb][id]" value="$user_id" type="hidden"/>
-				<span><b>$user_id</b></span>
+				<input class="form-control" size="20" name="rows[$numb][id]" value="$userId" type="hidden"/>
+				<span><b>$userId</b></span>
 			</td>
 			<td data-content="user">
 				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
@@ -48,13 +48,13 @@ foreach ($qq as $Key => $table) {
 			</td>
 			<td data-content="active">
 				<div class='form-check form-switch'>
-					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$is_active'>
+					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$isActive'>
 					<input type='hidden' name='rows[$numb][is_active]' value='0'>
-					<input class='form-check-input' type='checkbox' name='rows[$numb][is_active]' value='1' $active_checked>
+					<input class='form-check-input' type='checkbox' name='rows[$numb][is_active]' value='1' $activeChecked>
 				</div>
 			</td>
 			<td data-content="delete">
-				<input type='checkbox' name='rows[$numb][del]' value='$user_id'/> <label> delete</label>
+				<input type='checkbox' name='rows[$numb][del]' value='$userId'/> <label> delete</label>
 			</td>
 		</tr>
 	HTML;
@@ -62,7 +62,7 @@ foreach ($qq as $Key => $table) {
 
 $numb += 1;
 
-$form_text_plus = <<<HTML
+$formTextPlus = <<<HTML
 	<tr>
 		<td data-content="id">
 			<span><b>Add:</b></span>
@@ -83,9 +83,9 @@ $form_text_plus = <<<HTML
 	</tr>
 HTML;
 
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
+$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
 
-$ty_name = "admins";
+$tyName = "admins";
 
 echo <<<HTML
 	<div class='card'>
@@ -93,9 +93,9 @@ echo <<<HTML
 			<h4>Coordinators:</h4>
 		</div>
 		<div class='card-body'>
-			<form action="index.php?ty=$ty_name" method="POST">
-				<input name='csrf_token' value="$csrf_token" type="hidden"/>
-				<input name='ty' value="$ty_name" type="hidden"/>
+			<form action="index.php?ty=$tyName" method="POST">
+				<input name='csrf_token' value="$csrfToken" type="hidden"/>
+				<input name='ty' value="$tyName" type="hidden"/>
 				<div class="row">
 					<div class="col-md-6 col-sm-12">
 						<table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
@@ -108,8 +108,8 @@ echo <<<HTML
 								</tr>
 							</thead>
 							<tbody id="full_tab">
-								$form_text
-								$form_text_plus
+								$formText
+								$formTextPlus
 							</tbody>
 						</table>
 					</div>

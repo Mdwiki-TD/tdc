@@ -20,15 +20,15 @@ if (!$CurrentUser->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
-$global_username = $CurrentUser->getUsername();
+$globalUsername = $CurrentUser->getUsername();
 
 $lang = $_GET['lang'] ?? 'All';
 
 $table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
 
-if (!isset($_GET['table']) && $global_username == "Mr. Ibrahem") $table = "pages_users";
+if (!isset($_GET['table']) && $globalUsername == "Mr. Ibrahem") $table = "pages_users";
 
-if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
+if ($lang !== 'All' && !isset(LangsTables::$LCodeToLang[$lang])) {
     $lang = 'All';
 };
 
@@ -61,20 +61,20 @@ function translated_make_td($tabg, $nnnn, $table)
 
     $user = $tabg['user'] ?? "";
     $lang = $tabg['lang'] ?? "";
-    $md_title = trim($tabg['title'] ?? '');
+    $mdTitle = trim($tabg['title'] ?? '');
     $target = trim($tabg['target'] ?? '');
     $pupdate  = $tabg['pupdate'] ?? '';
 
-    $mdwiki_title = make_mdwiki_title($md_title);
+    $mdwikiTitle = make_mdwiki_title($mdTitle);
 
     $targe33 = make_target_url($target, $lang);
 
-    $edit_params = array(
+    $editParams = array(
         'id'   => $id,
         'table' => $table
     );
 
-    $edit_icon = make_edit_icon_new("translated/edit_page", $edit_params);
+    $editIcon = make_edit_icon_new("translated/edit_page", $editParams);
 
     $laly = <<<HTML
 		<tr>
@@ -88,7 +88,7 @@ function translated_make_td($tabg, $nnnn, $table)
 				<a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
 			</td>
 			<td data-content='Title'>
-				$mdwiki_title
+				$mdwikiTitle
 			</td>
 			<td data-content='Translated'>
 				$targe33
@@ -97,7 +97,7 @@ function translated_make_td($tabg, $nnnn, $table)
 				$pupdate
 			</td>
 			<td data-content='Edit'>
-				$edit_icon
+				$editIcon
 			</td>
 		</tr>
 	HTML;
@@ -105,44 +105,44 @@ function translated_make_td($tabg, $nnnn, $table)
     return $laly;
 };
 
-function pagination_links($limit, $page, $table, $lang, $total_count)
+function pagination_links($limit, $page, $table, $lang, $totalCount)
 {
 
-    $total_pages = ceil($total_count / $limit);
+    $totalPages = ceil($totalCount / $limit);
 
-    $base_url = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
+    $baseUrl = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
 
     $links = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
-    $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . '1">&laquo;</a></li>';
-    $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . ($page - 1) . '"><</a></li>';
+    $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . '1">&laquo;</a></li>';
+    $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . ($page - 1) . '"><</a></li>';
 
-    for ($i = max(1, $page - 3); $i <= min($total_pages, $page + 3); $i++) {
+    for ($i = max(1, $page - 3); $i <= min($totalPages, $page + 3); $i++) {
         $active = $i == $page ? ' active' : '';
-        $links .= "<li class=\"page-item$active\"><a class=\"page-link\" href=\"$base_url$i\">$i</a></li>";
+        $links .= "<li class=\"page-item$active\"><a class=\"page-link\" href=\"$baseUrl$i\">$i</a></li>";
     }
 
-    $links .= '<li class="page-item' . ($page >= $total_pages ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . ($page + 1) . '">></a></li>';
-    $links .= '<li class="page-item' . ($page >= $total_pages ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . $total_pages . '">&raquo;</a></li>';
+    $links .= '<li class="page-item' . ($page >= $totalPages ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . ($page + 1) . '">></a></li>';
+    $links .= '<li class="page-item' . ($page >= $totalPages ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . $totalPages . '">&raquo;</a></li>';
     $links .= '</ul></nav>';
 
     $offset = ($page - 1) * $limit;
 
     // احسب رقم أول عنصر في الصفحة الحالية
-    $start_item = $offset + 1;
+    $startItem = $offset + 1;
 
     // احسب آخر عنصر في الصفحة الحالية
-    $end_item = min($offset + $limit, $total_count);
+    $endItem = min($offset + $limit, $totalCount);
 
     // إنشاء النص التوضيحي للصفحة
     $summary = "<p class=\"text-center\">";
-    $summary .= "Page " . ($offset / $limit + 1) . " from $total_pages ";
-    $summary .= "($start_item - $end_item from total " . number_format($total_count) . " logs)";
+    $summary .= "Page " . ($offset / $limit + 1) . " from $totalPages ";
+    $summary .= "($startItem - $endItem from total " . number_format($totalCount) . " logs)";
     $summary .= "</p>";
 
     return $summary . $links;
 }
 
-$recent_table = <<<HTML
+$recentTable = <<<HTML
 	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="pages_table" style="font-size:90%;">
 		<thead>
 			<tr>
@@ -162,40 +162,40 @@ $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
 $page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
-$sql_results = get_recent_translated($lang, $table, $limit, $offset);
+$sqlResults = get_recent_translated($lang, $table, $limit, $offset);
 
-$total_count = get_total_translations_count($lang, $table);
+$totalCount = get_total_translations_count($lang, $table);
 
 $pagination = "";
 
-if ($total_count > $limit) {
-    $pagination = pagination_links($limit, $page, $table, $lang, $total_count);
+if ($totalCount > $limit) {
+    $pagination = pagination_links($limit, $page, $table, $lang, $totalCount);
 }
 
 $noo = 0;
-foreach ($sql_results as $tat => $tabe) {
+foreach ($sqlResults as $tat => $tabe) {
 
     $noo = $noo + 1;
-    $recent_table .= translated_make_td($tabe, $noo, $table);
+    $recentTable .= translated_make_td($tabe, $noo, $table);
 
 };
 
-$recent_table .= <<<HTML
+$recentTable .= <<<HTML
 		</tbody>
 	</table>
 HTML;
 
-$lang_table = get_languages();
-$filter_lang = filter_recent2($lang, $lang_table);
+$langTable = get_languages();
+$filterLang = filter_recent2($lang, $langTable);
 
 $data = [
     "pages" => 'Main',
     "pages_users" => 'User',
 ];
 
-$filter_ns = filter_table($data, $table, 'table');
+$filterNs = filter_table($data, $table, 'table');
 
-$count_result = count($sql_results);
+$countResult = count($sqlResults);
 
 echo <<<HTML
     <div class='card'>
@@ -204,13 +204,13 @@ echo <<<HTML
                 <input name='ty' value='translated' type='hidden'/>
                 <div class='row'>
                     <div class='col-md-4'>
-                        <h4>Translated Pages ($count_result):</h4>
+                        <h4>Translated Pages ($countResult):</h4>
                     </div>
                     <div class='col-md-4'>
                         <div class="input-group">
                             <span class="input-group-text">Namespace:</span>
                             <div class="form-control">
-                                $filter_ns
+                                $filterNs
                             </div>
                         </div>
                     </div>
@@ -228,7 +228,7 @@ echo <<<HTML
                             data-style='btn active'
                             data-width="90%"
                             >
-                            $filter_lang
+                            $filterLang
                         </select>
                     </div>
                     <div class='aligncenter col-md-1'>
@@ -243,7 +243,7 @@ echo <<<HTML
     </div>
 HTML;
 
-echo $recent_table;
+echo $recentTable;
 
 ?>
 <script>
