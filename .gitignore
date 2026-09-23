@@ -19,4 +19,3 @@ load_env.php
 /build/coverage-html
 /.commandcode
 _works_files/tree.py
-src/app/backend/userinfos_wrap.php
