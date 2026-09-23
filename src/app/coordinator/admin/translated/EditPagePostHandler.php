@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/translated/edit_page_post.php
+// src/app/coordinator/admin/translated/EditPagePostHandler.php
 
 namespace App\Coordinator\Admin\Translated;
 

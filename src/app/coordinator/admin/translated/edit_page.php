@@ -7,7 +7,7 @@ use App\User\CurrentUser;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\csrf\generate_csrf_token;
 
-require_once __DIR__ . '/edit_page_post.php';
+require_once __DIR__ . '/EditPagePostHandler.php';
 
 /**
  * Class EditPageController
