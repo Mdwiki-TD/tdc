@@ -7,8 +7,6 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
     exit;
 };
 
-;
-
 use function SQLorAPI\Funcs\get_td_or_sql_settings;
 use function TDWIKI\csrf\generate_csrf_token;
 
@@ -16,15 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require __DIR__ . '/post.php';
 }
 
-$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
-
-$nn = 0;
-
 function make_settings_tab($tabe)
 {
 
-    global $nn;
-
+    $nn = 0;
     $tab = <<<HTML
             <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
                 <thead>
@@ -51,7 +44,7 @@ function make_settings_tab($tabe)
         $displayed = $v['displayed'] ?? "";
         $value    = $v['value'] ?? "";
 
-        $nn += 1;
+        $nn++;
 
         $type     = $v['type'] ?? $v['Type'] ?? "";
 
@@ -91,7 +84,6 @@ function make_settings_tab($tabe)
         HTML;
 
         $tab .= $tr;
-
     };
 
     $result = <<<HTML
@@ -103,12 +95,13 @@ function make_settings_tab($tabe)
     HTML;
 
     return $result;
-
 };
 
 $qq = get_td_or_sql_settings();
 
 $text = make_settings_tab($qq);
+
+$csrf_token = generate_csrf_token(); // <input name='csrf_token' value="$csrf_token" type="hidden"/>
 
 echo <<<HTML
 	<div class='card'>
@@ -126,4 +119,3 @@ echo <<<HTML
         </div>
     </div>
 HTML;
-
