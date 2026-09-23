@@ -8,58 +8,99 @@ use function App\Utils\Html\div_alert;
 use function App\APICalls\MdwikiSql\insert_to_translate_type;
 use function App\csrf\verify_csrf_token;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
-echo '</div><script>
-$("#mainnav").hide();
-$("#maindiv").hide();
-</script>';
+/**
+ * Class TtPostController
+ * Handles add/update submissions for translate_type rows (GET "cat" is
+ * accepted but unused downstream, preserved for parity with legacy code).
+ */
+class TtPostController
+{
+	private array $texts = [];
+	private array $errors = [];
 
-$cat = $_GET['cat'] ?? '';
+	/**
+	 * Executes authorization check and processes the POST submission.
+	 */
+	public function handleRequest(): void
+	{
+		// Check user authorization
+		if (!CurrentUser::getInstance()->isCoordinator()) {
+			header('Location: /index.php');
+			exit;
+		}
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-	exit;
-}
+		$this->renderHeaderScripts();
 
-$closeBtn = <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			exit;
+		}
 
-if (!verify_csrf_token()) {
-	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $closeBtn;
-	return;
-}
+		$closeBtn = $this->getCloseButtonHtml();
 
-$texts = [];
-$errors = [];
+		if (!verify_csrf_token()) {
+			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			echo $closeBtn;
+			return;
+		}
 
-foreach ($_POST['rows'] ?? [] as $key => $table) {
-	// '{ "ty": "tt/post", "rows": { "1": { "add": "", "title": "111111111111", "lead": "100000", "full": "10000" } } }'
+		$this->processRows($_POST['rows'] ?? []);
 
-	$title 	= trim($table['title'] ?? '');
-	$lead 	= $table['lead'] ?? 0;
-	$full 	= $table['full'] ?? 0;
-	$id  	= $table['id'] ?? "";
-
-	if (empty($title)) {
-		$errors[] = "Title is required.";
-		continue;
+		echo div_alert($this->texts, 'success');
+		echo div_alert($this->errors, 'danger');
+		echo $closeBtn;
 	}
 
-	$result = insert_to_translate_type($title, $lead, $full, $ttId = $id);
+	/**
+	 * Renders UI scripts to isolate the modal/page layout.
+	 */
+	private function renderHeaderScripts(): void
+	{
+		echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>';
+	}
 
-	if ($result === false) {
-		$errors[] = "Failed to add translate type, title: $title.";
-	} else {
-		$texts[] = "Translate type added successfully, title: $title.";
+	/**
+	 * Validates and inserts/updates each submitted translate-type row.
+	 */
+	private function processRows(array $rows): void
+	{
+		foreach ($rows as $key => $table) {
+			// '{ "ty": "tt/post", "rows": { "1": { "add": "", "title": "111111111111", "lead": "100000", "full": "10000" } } }'
+			$title = trim($table['title'] ?? '');
+			$lead  = $table['lead'] ?? 0;
+			$full  = $table['full'] ?? 0;
+			$id    = $table['id'] ?? '';
+
+			if (empty($title)) {
+				$this->errors[] = "Title is required.";
+				continue;
+			}
+
+			$result = insert_to_translate_type($title, $lead, $full, $id);
+
+			if ($result === false) {
+				$this->errors[] = "Failed to add translate type, title: $title.";
+			} else {
+				$this->texts[] = "Translate type added successfully, title: $title.";
+			}
+		}
+	}
+
+	/**
+	 * Generates a close button HTML block.
+	 */
+	private function getCloseButtonHtml(): string
+	{
+		return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
 	}
 }
 
-echo div_alert($texts, 'success');
-echo div_alert($errors, 'danger');
-echo $closeBtn;
+// Instantiate and execute controller
+$controller = new TtPostController();
+$controller->handleRequest();
