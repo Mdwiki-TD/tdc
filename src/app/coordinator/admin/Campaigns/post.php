@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Campaigns;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\csrf\verify_csrf_token;
 
@@ -12,7 +12,7 @@ use function App\csrf\verify_csrf_token;
  * Handles update/delete of existing campaign categories and insertion
  * of newly added rows.
  */
-class CampaignsPostProcessor
+class CampaignsPostProcessor extends AbstractSubPostHandler
 {
 	private string $defaultCat;
 
@@ -35,7 +35,7 @@ class CampaignsPostProcessor
 		$closeBtn = $this->getCloseButtonHtml();
 
 		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			$this->DisplayCsrfAlert();
 			echo $closeBtn;
 			return;
 		}
@@ -112,15 +112,4 @@ class CampaignsPostProcessor
 		}
 	}
 
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-	}
 }

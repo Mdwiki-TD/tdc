@@ -30,6 +30,42 @@ abstract class AbstractSubPostHandler
     {
         $this->texts[] = $message;
     }
+
+	/**
+	 * Generates a close button HTML block.
+	 */
+	public function getCloseButtonHtml(): string
+	{
+		return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
+	}
+
+    /**
+     * Renders UI scripts to isolate the modal/page layout.
+     */
+    public function renderHeaderScripts(): void
+    {
+        echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>
+        <div class="container-fluid">';
+    }
+
+    public function DisplayCsrfAlert(): void
+    {
+        echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+    }
+
+    public function divAlerts(): void
+    {
+        echo div_alert($this->errors, 'danger');
+        echo div_alert($this->texts, 'success');
+    }
+
 }
 
 /**
@@ -92,30 +128,16 @@ abstract class AbstractPostHandler extends AbstractSubPostHandler
             'texts'     => $this->texts,
         ];
     }
-    public function DisplayCsrfAlert(): void
-    {
-        echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-    }
     public function RenderMesseges(array $result): void
     {
         echo div_alert($result['errors'], 'danger');
 
         if ($result['csrfError']) {
             $this->DisplayCsrfAlert();
-            return;
         }
 
         echo div_alert($result['texts'], 'success');
-    }
-    /**
-     * Generates a close button HTML block.
-     */
-    public function getCloseButtonHtml(): string
-    {
-        return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
+
+        echo $this->getCloseButtonHtml();
     }
 }

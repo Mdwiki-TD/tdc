@@ -6,10 +6,12 @@ namespace App\Coordinator\Admin\Qids;
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\csrf\generate_csrf_token;
 
+require_once __DIR__ . '/post.php';
+
 /**
  * Class EditQidController
  * Renders the add/edit form for a single qid entry (GET request only;
- * submission is handled by QidsPostController).
+ * submission is handled by QidsPostProcessor).
  */
 class EditQidController extends AbstractController
 {
@@ -36,21 +38,16 @@ class EditQidController extends AbstractController
     public function handleRequest(): void
     {
         $this->validateCoordinator();
-
         $this->renderHeaderScripts();
-        $this->renderFormCard();
-    }
 
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Instantiate and execute processor
+            $postProcessor = new QidsPostProcessor($_GET['qid_table'] ?? '');
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
+        } else {
+            $this->renderFormCard();
+        }
     }
 
     /**
@@ -78,8 +75,8 @@ class EditQidController extends AbstractController
         }
 
         return <<<HTML
-            <form action='index.php?ty=qids/post&qid_table=$qidTable&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+            <form action='index.php?ty=qids/edit_qid&qid_table=$qidTable&nonav=120' method="POST">
+                <input name='csrf_token' value="$csrfToken zz" type="hidden"/>
                 <input name='qid_table' value="$qidTable" type="hidden"/>
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>

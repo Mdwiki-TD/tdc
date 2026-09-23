@@ -3,58 +3,23 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
-use function App\Utils\Html\div_alert;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\insert_to_translate_type;
-use function App\csrf\verify_csrf_token;
 
 /**
- * Class TtPostController
+ * Class TtPostProcessor
  * Handles add/update submissions for translate_type rows (GET "cat" is
  * accepted but unused downstream, preserved for parity with legacy code).
  */
-class TtPostController extends AbstractSubPostHandler
+class TtPostProcessor extends AbstractPostHandler
 {
-
 
 	/**
 	 * Executes authorization check and processes the POST submission.
 	 */
-	public function handleRequest(): void
+	public function process(array $post): void
 	{
-		$this->validateCoordinator();
-
-		$this->renderHeaderScripts();
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
-
-		echo div_alert($this->texts, 'success');
-		echo div_alert($this->errors, 'danger');
-		echo $closeBtn;
-	}
-
-	/**
-	 * Renders UI scripts to isolate the modal/page layout.
-	 */
-	private function renderHeaderScripts(): void
-	{
-		echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>';
+		$this->processRows($post['rows'] ?? []);
 	}
 
 	/**
@@ -63,7 +28,7 @@ class TtPostController extends AbstractSubPostHandler
 	private function processRows(array $rows): void
 	{
 		foreach ($rows as $key => $table) {
-			// '{ "ty": "tt/post", "rows": { "1": { "add": "", "title": "111111111111", "lead": "100000", "full": "10000" } } }'
+			// '{ "rows": { "1": { "add": "", "title": "111111111111", "lead": "100000", "full": "10000" } } }'
 			$title = trim($table['title'] ?? '');
 			$lead  = $table['lead'] ?? 0;
 			$full  = $table['full'] ?? 0;
@@ -83,20 +48,4 @@ class TtPostController extends AbstractSubPostHandler
 			}
 		}
 	}
-
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-	}
 }
-
-// Instantiate and execute controller
-$controller = new TtPostController();
-$controller->handleRequest();

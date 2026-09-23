@@ -3,25 +3,23 @@
 
 namespace App\Coordinator\Admin\Qids;
 
-use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
-use function App\Utils\Html\div_alert;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\APICalls\MdwikiSql\check_one;
 use function App\csrf\verify_csrf_token;
 
 /**
- * Class QidsPostController
+ * Class QidsPostProcessor
  * Handles bulk add/update submissions of title/qid rows, validating
  * uniqueness constraints against both the qid and title columns.
  */
-class QidsPostController extends AbstractSubPostHandler
+class QidsPostProcessor extends AbstractPostHandler
 {
 	private string $qidTable;
 
-	public function __construct()
+	public function __construct(string $qidTable = 'qids')
 	{
-		$this->qidTable = $_GET['qid_table'] ?? '';
+		$this->qidTable = $qidTable;
 
 		if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {
 			$this->qidTable = 'qids';
@@ -31,25 +29,15 @@ class QidsPostController extends AbstractSubPostHandler
 	/**
 	 * Executes authorization check and processes the POST submission.
 	 */
-	public function handleRequest(): void
+    public function process(array $post): void
 	{
 		$this->validateCoordinator();
 
 		$this->renderHeaderScripts();
 
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
 		$closeBtn = $this->getCloseButtonHtml();
 
-		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
+		$this->processRows($post['rows'] ?? []);
 
 		if (!empty($this->texts)) {
 			$this->addText("table:({$this->qidTable})");
@@ -57,21 +45,9 @@ class QidsPostController extends AbstractSubPostHandler
 			$this->addError("table:({$this->qidTable})");
 		}
 
-		echo div_alert($this->texts, 'success');
-		echo div_alert($this->errors, 'danger');
+		$this->divAlerts();
 
 		echo $closeBtn;
-	}
-
-	/**
-	 * Renders UI scripts to isolate the modal/page layout.
-	 */
-	private function renderHeaderScripts(): void
-	{
-		echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>';
 	}
 
 	/**
@@ -192,20 +168,6 @@ class QidsPostController extends AbstractSubPostHandler
 			$this->addError("Failed to add Qid for title: $title. qid_of_title:$qidOfTitle");
 		}
 	}
-
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-	}
 }
 
-// Instantiate and execute controller
-$controller = new QidsPostController();
-$controller->handleRequest();
+

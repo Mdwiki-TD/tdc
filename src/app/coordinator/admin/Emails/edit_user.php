@@ -39,19 +39,6 @@ class EditUserController extends AbstractController
         $this->renderHeaderScripts();
         $this->renderFormCard();
     }
-
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
-    }
-
     /**
      * Builds the user/email/wiki/project edit-or-add form markup.
      */
@@ -77,7 +64,7 @@ class EditUserController extends AbstractController
         }
 
         return <<<HTML
-            <form action='index.php?ty=Emails/post&nonav=120' method="POST">
+            <form action='index.php?ty=Emails/edit_user&nonav=120' method="POST">
                 <input name='csrf_token' value="$csrfToken" type="hidden"/>
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>

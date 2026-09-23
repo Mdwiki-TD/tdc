@@ -4,7 +4,6 @@
 namespace App\Coordinator\Admin\Emails;
 
 use App\Coordinator\Admin\Common\AbstractSubPostHandler;
-use function App\Utils\Html\div_alert;
 use function App\APICalls\MdwikiSql\sql_update_user;
 use function App\APICalls\MdwikiSql\sql_add_user;
 use function App\APICalls\MdwikiSql\check_one;
@@ -36,15 +35,14 @@ class EmailsPostProcessor extends AbstractSubPostHandler
 		}
 
 		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			$this->DisplayCsrfAlert();
 			echo $closeBtn;
 			return;
 		}
 
 		$this->processRows($_POST['emails']);
 
-		echo div_alert($this->texts, 'success');
-		echo div_alert($this->errors, 'danger');
+		$this->divAlerts();
 
 		echo $closeBtn;
 	}
@@ -106,20 +104,8 @@ class EmailsPostProcessor extends AbstractSubPostHandler
 			}
 		}
 	}
-
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-	}
 }
 
-// Instantiate and execute controller
-$controller = new EmailsPostProcessor();
-$controller->handle();
+// Instantiate and execute processor
+$postProcessor = new EmailsPostProcessor();
+$postProcessor->handle();

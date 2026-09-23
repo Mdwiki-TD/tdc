@@ -56,18 +56,6 @@ class EditPageController extends AbstractController
     }
 
     /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
-    }
-
-    /**
      * Displays the edit page form.
      */
     private function renderEditForm(string $id, string $table): void
@@ -178,18 +166,6 @@ class EditPageController extends AbstractController
                     window.close();
                 }, 3000);
             </script>
-        HTML;
-    }
-
-    /**
-     * Returns HTML string for the window close button.
-     */
-    private function getCloseButtonHtml(): string
-    {
-        return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
         HTML;
     }
 }

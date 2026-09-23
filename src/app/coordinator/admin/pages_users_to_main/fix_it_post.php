@@ -30,7 +30,7 @@ class FixItPostProcessor extends AbstractSubPostHandler
 
         // CSRF Token validation
         if (!verify_csrf_token()) {
-            echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+            $this->DisplayCsrfAlert();
             echo $this->renderCloseButton();
             return;
         }

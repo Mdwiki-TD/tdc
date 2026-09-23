@@ -33,7 +33,7 @@ class ProjectsPostProcessor extends AbstractSubPostHandler
 		$closeBtn = $this->getCloseButtonHtml();
 
 		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			$this->DisplayCsrfAlert();
 			echo $closeBtn;
 			return;
 		}
@@ -77,15 +77,4 @@ class ProjectsPostProcessor extends AbstractSubPostHandler
 		}
 	}
 
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-	}
 }

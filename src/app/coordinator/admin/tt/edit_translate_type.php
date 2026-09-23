@@ -6,10 +6,12 @@ namespace App\Coordinator\Admin\TranslateType;
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\csrf\generate_csrf_token;
 
+require_once __DIR__ . '/post.php';
+
 /**
  * Class EditTranslateTypeController
  * Renders the add/edit form for a single translate_type entry (GET
- * request only; submission is handled by TtPostController).
+ * request only; submission is handled by TtPostProcessor).
  */
 class EditTranslateTypeController extends AbstractController
 {
@@ -32,21 +34,16 @@ class EditTranslateTypeController extends AbstractController
     public function handleRequest(): void
     {
         $this->validateCoordinator();
-
         $this->renderHeaderScripts();
-        $this->renderFormCard();
-    }
 
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Instantiate and execute processor
+            $postProcessor = new TtPostProcessor();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
+        } else {
+            $this->renderFormCard();
+        }
     }
 
     /**
@@ -77,7 +74,7 @@ class EditTranslateTypeController extends AbstractController
         }
 
         return <<<HTML
-            <form action='index.php?ty=tt/post&nonav=120' method="POST">
+            <form action='index.php?ty=tt/edit_translate_type&nonav=120' method="POST">
                 <input name='csrf_token' value="$csrfToken" type="hidden"/>
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>

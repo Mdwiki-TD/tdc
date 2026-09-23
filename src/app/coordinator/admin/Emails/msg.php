@@ -48,7 +48,7 @@ class MsgController extends AbstractController
     {
         $this->validateCoordinator();
 
-        $this->renderHeaderScripts();
+        $this->renderHeaderAndScripts();
 
         $views = get_views($this->target, $this->lang, $this->date);
 
@@ -71,22 +71,18 @@ class MsgController extends AbstractController
     /**
      * Renders UI scripts and includes the Summernote WYSIWYG editor assets.
      */
-    private function renderHeaderScripts(): void
+    private function renderHeaderAndScripts(): void
     {
-        echo "</div>";
+		$this->renderHeaderScripts();
 
         $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
             ? "https://cdnjs.cloudflare.com"
             : "https://tools-static.wmflabs.org/cdnjs";
 
+
         echo <<<HTML
             <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
             <link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
-            <script>
-                $('#mainnav').hide();
-                $('#maindiv').hide();
-            </script>
-            <div id='yeye' class='container-fluid'>
         HTML;
     }
 

@@ -37,18 +37,6 @@ class WikiRefsOptionsEditController extends AbstractController
     }
 
     /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
-    }
-
-    /**
      * Renders the add/edit form for the language settings row.
      */
     private function renderForm(): void

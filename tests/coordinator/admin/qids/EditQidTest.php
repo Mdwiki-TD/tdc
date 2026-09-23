@@ -65,8 +65,8 @@ class EditQidTest extends TestCase
     public function testFormActionUrl()
     {
         $qidTable = 'qids';
-        $action = "index.php?ty=qids/post&qid_table=$qidTable&nonav=120";
-        $this->assertEquals('index.php?ty=qids/post&qid_table=qids&nonav=120', $action);
+        $action = "index.php?ty=qids/edit_qid&qid_table=$qidTable&nonav=120";
+        $this->assertEquals('index.php?ty=qids/edit_qid&qid_table=qids&nonav=120', $action);
     }
 
     public function testHiddenInputs()

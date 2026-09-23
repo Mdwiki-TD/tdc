@@ -21,4 +21,27 @@ abstract class AbstractController
             exit;
         }
     }
+    /**
+     * Generates a close button HTML block.
+     */
+    public function getCloseButtonHtml(): string
+    {
+        return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
+    }
+
+    /**
+     * Renders UI scripts to isolate the modal/page layout.
+     */
+    public function renderHeaderScripts(): void
+    {
+        echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>
+        <div class="container-fluid">';
+    }
 }

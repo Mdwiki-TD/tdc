@@ -3,10 +3,8 @@
 
 namespace App\Coordinator\Admin\UsersNoInprocess;
 
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\Utils\Html\div_alert;
 use function App\csrf\verify_csrf_token;
 
 /**
@@ -16,8 +14,6 @@ use function App\csrf\verify_csrf_token;
 class UsersNoInprocessPostProcessor extends AbstractSubPostHandler
 {
 	private const TABLE_NAME = 'users_no_inprocess';
-
-
 
 	/**
 	 * Validates and processes the incoming submission.
@@ -33,15 +29,14 @@ class UsersNoInprocessPostProcessor extends AbstractSubPostHandler
 		$closeBtn = $this->getCloseButtonHtml();
 
 		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			$this->DisplayCsrfAlert();
 			echo $closeBtn;
 			return;
 		}
 
 		$this->processRows($_POST['rows'] ?? []);
 
-		echo div_alert($this->texts, 'success');
-		echo div_alert($this->errors, 'danger');
+		$this->divAlerts();
 	}
 
 	/**
@@ -100,17 +95,5 @@ class UsersNoInprocessPostProcessor extends AbstractSubPostHandler
 				}
 			}
 		}
-	}
-
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
 	}
 }
