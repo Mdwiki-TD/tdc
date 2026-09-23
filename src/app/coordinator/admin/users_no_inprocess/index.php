@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\UsersNoInprocess;
 
-use User\CurrentUser;
+use App\User\CurrentUser;
 use function App\SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
 use function App\csrf\generate_csrf_token;
 
