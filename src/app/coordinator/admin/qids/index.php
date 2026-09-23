@@ -3,17 +3,17 @@
 
 namespace App\Coordinator\Admin\Qids;
 
-use User\CurrentUser;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
 
-use function Utils\Html\make_mdwiki_title;
-use function Utils\Html\make_edit_icon_new;
-use function SQLorAPI\Funcs\get_td_or_sql_qids;
-use function SQLorAPI\Funcs\get_td_or_sql_qids_others;
+use function App\Utils\Html\make_mdwiki_title;
+use function App\Utils\Html\make_edit_icon_new;
+use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
+use function App\SQLorAPI\Funcs\get_td_or_sql_qids_others;
 
 $global_username = CurrentUser::getInstance()->getUsername();
 

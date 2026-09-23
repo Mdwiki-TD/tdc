@@ -4,20 +4,20 @@
 namespace App\Coordinator\Admin\Emails;
 
 
-use User\CurrentUser;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 }
 
-use Tables\Main\MainTables;
-use function APICalls\MdwikiSql\fetch_query;
-use function APICalls\WikiApi\get_views;
-use function Utils\Html\make_mdwiki_title;
-use function Utils\Html\make_target_url;
-use function Emails\Sugust\get_sugust;
-use function TDWIKI\csrf\generate_csrf_token;
+use App\Tables\Main\MainTables;
+use function App\APICalls\MdwikiSql\fetch_query;
+use function App\APICalls\WikiApi\get_views;
+use function App\Utils\Html\make_mdwiki_title;
+use function App\Utils\Html\make_target_url;
+use function App\Emails\Sugust\get_sugust;
+use function App\csrf\generate_csrf_token;
 
 $global_username = CurrentUser::getInstance()->getUsername();
 

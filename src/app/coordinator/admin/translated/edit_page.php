@@ -3,11 +3,11 @@
 
 namespace App\Coordinator\Admin\Translated;
 
-use User\CurrentUser;
-use function APICalls\MdwikiSql\execute_query;
-use function APICalls\MdwikiSql\fetch_query;
-use function TDWIKI\csrf\generate_csrf_token;
-use function TDWIKI\csrf\verify_csrf_token;
+use App\User\CurrentUser;
+use function App\APICalls\MdwikiSql\execute_query;
+use function App\APICalls\MdwikiSql\fetch_query;
+use function App\csrf\generate_csrf_token;
+use function App\csrf\verify_csrf_token;
 
 /**
  * Class EditPageController

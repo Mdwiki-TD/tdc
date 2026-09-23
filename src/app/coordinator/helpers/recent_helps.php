@@ -3,8 +3,8 @@
 
 namespace Tools\RecentHelps;
 
-use Tables\Langs\LangsTables;
-use function Utils\Functions\test_print;
+use App\Tables\Langs\LangsTables;
+use function App\Utils\Functions\test_print;
 
 function filter_recent2($lang, $result)
 {

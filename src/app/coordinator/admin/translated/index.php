@@ -3,14 +3,14 @@
 
 namespace App\Coordinator\Admin\Translated;
 
-use User\CurrentUser;
-use Tables\Langs\LangsTables;
-use function Utils\Html\make_mdwiki_title;
-use function Utils\Html\make_target_url;
-use function Utils\Html\make_edit_icon_new;
-use function SQLorAPI\Recent\get_recent_translated;
-use function SQLorAPI\Recent\get_total_translations_count;
-use function SQLorAPI\Funcs\get_pages_langs;
+use App\User\CurrentUser;
+use App\Tables\Langs\LangsTables;
+use function App\Utils\Html\make_mdwiki_title;
+use function App\Utils\Html\make_target_url;
+use function App\Utils\Html\make_edit_icon_new;
+use function App\SQLorAPI\Recent\get_recent_translated;
+use function App\SQLorAPI\Recent\get_total_translations_count;
+use function App\SQLorAPI\Funcs\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
 use function Tools\RecentHelps\filter_recent2;
 

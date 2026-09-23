@@ -22,9 +22,9 @@
  *
  * Usage Example:
  * ```php
- * use function Utils\Html\make_mdwiki_title;
- * use function Utils\Html\make_target_url;
- * use function Utils\Html\div_alert;
+ * use function App\Utils\Html\make_mdwiki_title;
+ * use function App\Utils\Html\make_target_url;
+ * use function App\Utils\Html\div_alert;
  *
  * // Generate MDWiki link
  * echo make_mdwiki_title('COVID-19');
@@ -44,9 +44,9 @@
  * @license    GPL-3.0-or-later
  */
 
-namespace Utils\Html;
+namespace App\Utils\Html;
 
-use Tables\SqlTables\TablesSql;
+use App\Tables\SqlTables\TablesSql;
 
 /**
  * Generate a banner alert with danger styling

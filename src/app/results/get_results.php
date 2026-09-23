@@ -1,10 +1,10 @@
 <?php
 
-namespace Results\GetResults;
+namespace App\Results\GetResults;
 
-use function Results\GetCats\get_mdwiki_cat_members;
-use function Utils\Functions\test_print;
-use function Utils\TablesDir\open_td_tables_file;
+use function App\Results\GetCats\get_mdwiki_cat_members;
+use function App\Utils\Functions\test_print;
+use function App\Utils\TablesDir\open_td_tables_file;
 
 function get_cat_exists_and_missing($cat, $depth, $code, $use_cache = true)
 {

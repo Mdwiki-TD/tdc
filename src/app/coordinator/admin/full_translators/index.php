@@ -3,15 +3,15 @@
 
 namespace App\Coordinator\Admin\FullTranslators;
 
-use User\CurrentUser;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
 
-use function SQLorAPI\Funcs\get_td_or_sql_full_translators;
-use function TDWIKI\csrf\generate_csrf_token;
+use function App\SQLorAPI\Funcs\get_td_or_sql_full_translators;
+use function App\csrf\generate_csrf_token;
 
 
 

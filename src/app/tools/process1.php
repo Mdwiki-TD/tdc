@@ -1,6 +1,6 @@
 <?php
 
-use function APICalls\TDApi\get_td_api;
+use function App\APICalls\TDApi\get_td_api;
 
 function process_make_td($tab, $nnnn)
 {

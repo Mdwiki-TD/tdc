@@ -4,15 +4,15 @@
 namespace App\Coordinator\Admin\Emails;
 
 
-use User\CurrentUser;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 };
 
-use function Utils\Html\make_project_to_user;
-use function TDWIKI\csrf\generate_csrf_token;
+use function App\Utils\Html\make_project_to_user;
+use function App\csrf\generate_csrf_token;
 
 echo '</div><script>
     $("#mainnav").hide();

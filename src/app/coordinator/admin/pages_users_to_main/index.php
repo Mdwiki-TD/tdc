@@ -3,15 +3,15 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use User\CurrentUser;
-use Tables\Langs\LangsTables;
-use function Utils\Html\make_mdwiki_title;
-use function Utils\Html\make_target_url;
-use function Utils\Html\make_edit_icon_new;
-use function SQLorAPI\Recent\get_pages_users_to_main;
-use function SQLorAPI\Funcs\get_pages_users_langs;
+use App\User\CurrentUser;
+use App\Tables\Langs\LangsTables;
+use function App\Utils\Html\make_mdwiki_title;
+use function App\Utils\Html\make_target_url;
+use function App\Utils\Html\make_edit_icon_new;
+use function App\SQLorAPI\Recent\get_pages_users_to_main;
+use function App\SQLorAPI\Funcs\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent2;
-use function SQLorAPI\Funcs\td_or_sql_titles_infos;
+use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');

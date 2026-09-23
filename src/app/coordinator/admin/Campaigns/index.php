@@ -3,15 +3,15 @@
 
 namespace App\Coordinator\Admin\Campaigns;
 
-use User\CurrentUser;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
 	exit;
 };
 
-use function SQLorAPI\Funcs\get_td_or_sql_categories;
-use function TDWIKI\csrf\generate_csrf_token;
+use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
+use function App\csrf\generate_csrf_token;
 
 
 

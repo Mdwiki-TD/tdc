@@ -3,27 +3,27 @@
 namespace Tests\Utils\Html;
 
 use PHPUnit\Framework\TestCase;
-use Tables\SqlTables\TablesSql;
+use App\Tables\SqlTables\TablesSql;
 
-use function Utils\Html\banner_alert;
-use function Utils\Html\make_modal_fade;
-use function Utils\Html\make_mail_icon_new;
-use function Utils\Html\make_project_to_user;
-use function Utils\Html\make_input_group;
-use function Utils\Html\make_input_group_no_col;
-use function Utils\Html\makeDropdown;
-use function Utils\Html\makeCard;
-use function Utils\Html\makeColSm4;
-use function Utils\Html\make_col_sm_body;
-use function Utils\Html\make_drop;
-use function Utils\Html\make_datalist_options;
-use function Utils\Html\make_mdwiki_title;
-use function Utils\Html\make_cat_url;
-use function Utils\Html\make_talk_url;
-use function Utils\Html\make_mdwiki_user_url;
-use function Utils\Html\make_target_url;
-use function Utils\Html\div_alert;
-use function Utils\Html\make_edit_icon_new;
+use function App\Utils\Html\banner_alert;
+use function App\Utils\Html\make_modal_fade;
+use function App\Utils\Html\make_mail_icon_new;
+use function App\Utils\Html\make_project_to_user;
+use function App\Utils\Html\make_input_group;
+use function App\Utils\Html\make_input_group_no_col;
+use function App\Utils\Html\makeDropdown;
+use function App\Utils\Html\makeCard;
+use function App\Utils\Html\makeColSm4;
+use function App\Utils\Html\make_col_sm_body;
+use function App\Utils\Html\make_drop;
+use function App\Utils\Html\make_datalist_options;
+use function App\Utils\Html\make_mdwiki_title;
+use function App\Utils\Html\make_cat_url;
+use function App\Utils\Html\make_talk_url;
+use function App\Utils\Html\make_mdwiki_user_url;
+use function App\Utils\Html\make_target_url;
+use function App\Utils\Html\div_alert;
+use function App\Utils\Html\make_edit_icon_new;
 
 class HtmlTest extends TestCase
 {

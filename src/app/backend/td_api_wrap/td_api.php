@@ -1,8 +1,8 @@
 <?php
 
-namespace APICalls\TDApi;
+namespace App\APICalls\TDApi;
 
-use OAuth\Settings\Settings;
+use App\Settings\Settings;
 
 function test_print_z($s): void
 {

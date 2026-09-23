@@ -1,6 +1,6 @@
 <?php
 
-namespace Tables\Langs;
+namespace App\Tables\Langs;
 
 
 /*
@@ -34,7 +34,7 @@ https://db-names.toolforge.org/
 "zh-yue" : "yue"
 */
 
-use Tables\Main\MainTables;
+use App\Tables\Main\MainTables;
 
 class LangsTables
 {

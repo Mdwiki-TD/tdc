@@ -1,11 +1,11 @@
 <?php
 
-namespace Results\GetCats;
+namespace App\Results\GetCats;
 
-use function Utils\Functions\test_print;
-use function APICalls\MdwikiApi\get_mdwiki_url_with_params;
-use function Utils\Functions\start_with;
-use function Utils\TablesDir\open_td_tables_file;
+use function App\Utils\Functions\test_print;
+use function App\APICalls\MdwikiApi\get_mdwiki_url_with_params;
+use function App\Utils\Functions\start_with;
+use function App\Utils\TablesDir\open_td_tables_file;
 
 function get_category_from_cache(string $category): array
 {

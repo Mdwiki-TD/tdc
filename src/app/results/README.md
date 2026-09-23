@@ -221,7 +221,7 @@ $TABLES_PATH/
 ### Usage Example
 
 ```php
-use Results\GetResults\get_cat_exists_and_missing;
+use App\Results\GetResults\get_cat_exists_and_missing;
 
 // Get missing translations for "Diseases" category in Arabic
 $result = get_cat_exists_and_missing('Diseases', 2, 'ar');

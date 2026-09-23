@@ -1,6 +1,6 @@
 <?php
 
-namespace APICalls\WikiApi;
+namespace App\APICalls\WikiApi;
 
 function get_url_result_curl(string $url): string
 {

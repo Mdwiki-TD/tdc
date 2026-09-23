@@ -18,7 +18,7 @@
  *
  * Usage Example:
  * ```php
- * use function APICalls\MdwikiApi\get_mdwiki_url_with_params;
+ * use function App\APICalls\MdwikiApi\get_mdwiki_url_with_params;
  *
  * // Get page content
  * $result = get_mdwiki_url_with_params([
@@ -41,9 +41,9 @@
  * @see https://mdwiki.org/w/api.php
  */
 
-namespace APICalls\MdwikiApi;
+namespace App\APICalls\MdwikiApi;
 
-use function Utils\Functions\test_print;
+use function App\Utils\Functions\test_print;
 
 /**
  * User agent string for API requests

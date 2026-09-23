@@ -3,14 +3,14 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use Tables\SqlTables\TablesSql;
-use function Utils\Html\makeDropdown;
-use function Utils\Html\make_mdwiki_title;
-use function Utils\Html\make_edit_icon_new;
-use function Results\GetCats\get_mdwiki_cat_members;
-use function APICalls\MdwikiSql\fetch_query;
-use function TDWIKI\csrf\generate_csrf_token;
-use User\CurrentUser;
+use App\Tables\SqlTables\TablesSql;
+use function App\Utils\Html\makeDropdown;
+use function App\Utils\Html\make_mdwiki_title;
+use function App\Utils\Html\make_edit_icon_new;
+use function App\Results\GetCats\get_mdwiki_cat_members;
+use function App\APICalls\MdwikiSql\fetch_query;
+use function App\csrf\generate_csrf_token;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');

@@ -3,10 +3,10 @@
 
 namespace App\Coordinator\Admin\Add;
 
-use function Utils\Html\div_alert;
-use function TDWIKI\csrf\verify_csrf_token;
+use function App\Utils\Html\div_alert;
+use function App\csrf\verify_csrf_token;
 use function Add\AddPost\add_pages_to_db;
-use User\CurrentUser;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');

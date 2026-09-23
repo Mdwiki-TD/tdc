@@ -3,11 +3,11 @@
 
 namespace App\Coordinator\Admin\Projects;
 
-use function APICalls\MdwikiSql\insert_to_projects;
-use function APICalls\MdwikiSql\execute_query;
-use function Utils\Html\div_alert;
-use function TDWIKI\csrf\verify_csrf_token;
-use User\CurrentUser;
+use function App\APICalls\MdwikiSql\insert_to_projects;
+use function App\APICalls\MdwikiSql\execute_query;
+use function App\Utils\Html\div_alert;
+use function App\csrf\verify_csrf_token;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');

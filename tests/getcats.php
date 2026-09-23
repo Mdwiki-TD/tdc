@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 
 include_once __DIR__ . '/../include.php';
 
-use function Results\GetCats\get_mdwiki_cat_members;
+use function App\Results\GetCats\get_mdwiki_cat_members;
 
 $cat  = $_REQUEST['cat'] ?? 'RTT';
 

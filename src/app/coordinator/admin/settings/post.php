@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\settings;
 
-use function APICalls\MdwikiSql\update_settings_value;
-use function TDWIKI\csrf\verify_csrf_token;
-use User\CurrentUser;
+use function App\APICalls\MdwikiSql\update_settings_value;
+use function App\csrf\verify_csrf_token;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');

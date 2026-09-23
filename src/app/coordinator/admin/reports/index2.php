@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Reports;
 
-use User\CurrentUser;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');

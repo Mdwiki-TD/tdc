@@ -3,11 +3,11 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use User\CurrentUser;
-use function APICalls\MdwikiSql\execute_query;
-use function APICalls\MdwikiSql\fetch_query;
-use function TDWIKI\csrf\verify_csrf_token;
-use function Utils\Html\div_alert;
+use App\User\CurrentUser;
+use function App\APICalls\MdwikiSql\execute_query;
+use function App\APICalls\MdwikiSql\fetch_query;
+use function App\csrf\verify_csrf_token;
+use function App\Utils\Html\div_alert;
 use function Add\AddPost\add_pages_to_db;
 
 /**

@@ -3,8 +3,8 @@
 
 namespace App\Coordinator\Admin\LastCoord;
 
-use function APICalls\TDApi\get_td_api;
-use User\CurrentUser;
+use function App\APICalls\TDApi\get_td_api;
+use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');

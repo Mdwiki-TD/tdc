@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 include_once __DIR__ . '/include.php';
 include_once __DIR__ . '/app/coordinator/admin/Emails/sugust.php';
 
-use function Emails\Sugust\get_sugust;
+use function App\Emails\Sugust\get_sugust;
 
 $title  = $_GET['title'] ?? $_POST['title'] ?? '';
 $lang  = $_GET['lang'] ?? $_POST['lang'] ?? '';

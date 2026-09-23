@@ -1,6 +1,6 @@
 <?php
 
-namespace TDC\Head;
+namespace App\Head;
 
 $hoste = (getenv('APP_ENV') === 'production')
     ? "https://tools-static.wmflabs.org/cdnjs"

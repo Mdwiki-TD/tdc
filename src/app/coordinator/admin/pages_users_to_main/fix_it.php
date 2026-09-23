@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use User\CurrentUser;
-use function APICalls\MdwikiSql\fetch_query;
-use function TDWIKI\csrf\generate_csrf_token;
+use App\User\CurrentUser;
+use function App\APICalls\MdwikiSql\fetch_query;
+use function App\csrf\generate_csrf_token;
 
 require_once __DIR__ . '/fix_it_post.php';
 
