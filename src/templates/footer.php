@@ -1,8 +1,8 @@
 <?php
 
 // Calculate and display page load time
-if (isset($GLOBALS['time_start'])) {
-	$timeStart = (float)$GLOBALS['time_start'];
+if (isset($GLOBALS['timeStart'])) {
+	$timeStart = (float)$GLOBALS['timeStart'];
 	$timeEnd = microtime(true);
 	$timeDiff = round($timeEnd - $timeStart, 3);
 
