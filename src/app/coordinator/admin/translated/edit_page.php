@@ -22,7 +22,8 @@ class EditPageController
     public function __construct()
     {
         $this->id = $_GET['id'] ?? $_POST['id'] ?? '';
-        $this->table = $_GET['table'] ?? $_POST['table'] ?? 'pages';
+        $cand = $_GET['table'] ?? $_POST['table'] ?? '';
+        $this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
     }
 
     /**

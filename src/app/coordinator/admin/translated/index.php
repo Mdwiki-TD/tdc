@@ -28,7 +28,8 @@ class TranslatedIndexController
     {
         $this->currentUser = CurrentUser::getInstance();
         $this->lang  = $_GET['lang'] ?? 'All';
-        $this->table = $_GET['table'] ?? 'pages';
+        $cand = $_GET['table'] ?? 'pages';
+        $this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
 
         $globalUsername = $this->currentUser->getUsername();
         if (!isset($_GET['table']) && $globalUsername === "Mr. Ibrahem") {
