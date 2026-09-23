@@ -3,10 +3,10 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
+use App\User\CurrentUser;
 use function App\Utils\Html\div_alert;
 use function App\APICalls\MdwikiSql\insert_to_translate_type;
 use function App\csrf\verify_csrf_token;
-use App\User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');
