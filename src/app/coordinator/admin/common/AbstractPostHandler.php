@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Common;
 
 use function App\csrf\verify_csrf_token;
+use function App\Utils\Html\div_alert;
 
 /**
  * Class AbstractPostHandler
@@ -72,5 +73,20 @@ abstract class AbstractPostHandler
             'errors'    => $this->errors,
             'texts'     => $this->texts,
         ];
+    }
+    public function DisplayCsrfAlert(): void
+    {
+        echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+    }
+    public function RenderMesseges(array $result): void
+    {
+        echo div_alert($result['errors'], 'danger');
+
+        if ($result['csrfError']) {
+            $this->DisplayCsrfAlert();
+            return;
+        }
+
+        echo div_alert($result['texts'], 'success');
     }
 }

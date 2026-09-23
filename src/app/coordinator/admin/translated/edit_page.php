@@ -166,13 +166,10 @@ class EditPageController
      */
     private function handlePostRequest(): void
     {
+        $postHandler = new EditPagePostHandler($this->id, $this->table);
+        $result = $postHandler->handle($_POST);
 
-        $result = (new EditPagePostHandler($this->id, $this->table))->handle($_POST);
-
-        if ($result['csrfError']) {
-            echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-            return;
-        }
+        $postHandler->RenderMesseges($result);
 
         echo <<<HTML
             <div class='alert alert-success' role='alert'>Page updated<br>

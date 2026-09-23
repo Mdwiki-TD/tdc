@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\User\CurrentUser;
 use function App\csrf\generate_csrf_token;
-use function App\Utils\Html\div_alert;
+use App\Coordinator\Admin\Common\AbstractController;
 
 require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
 
@@ -14,7 +14,7 @@ require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
  * Handles add/edit/delete of a single language_settings row (GET
  * renders the form, POST persists the change via WikiRefsOptionsEditPostHandler).
  */
-class WikiRefsOptionsEditController
+class WikiRefsOptionsEditController extends AbstractController
 {
     /**
      * Executes authorization check and handles the incoming request.
@@ -30,12 +30,9 @@ class WikiRefsOptionsEditController
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $result = (new WikiRefsOptionsEditPostHandler())->handle($_POST);
-            if ($result['csrfError']) {
-                echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-            }
-            echo div_alert($result['texts'], 'success');
-            echo div_alert($result['errors'], 'danger');
+            $postHandler = new WikiRefsOptionsEditPostHandler();
+            $result = $postHandler->handle($_POST);
+            $postHandler->RenderMesseges($result);
         } else {
             $this->renderForm();
         }
