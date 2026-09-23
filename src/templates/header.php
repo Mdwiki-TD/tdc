@@ -10,6 +10,17 @@ use function TDC\Head\write_body;
 
 include_once __DIR__ . '/head.php';
 
+function ba_alert(string $text): string
+{
+    return <<<HTML
+	<div class='container'>
+		<div class="alert alert-danger" role="alert">
+			<i class="bi bi-exclamation-triangle"></i> $text
+		</div>
+	</div>
+	HTML;
+}
+
 echo print_full_head();
 
 $settings = Settings::getInstance();
