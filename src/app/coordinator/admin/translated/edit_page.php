@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/translated/edit_page.php
 
 use User\CurrentUser;
 
