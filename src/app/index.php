@@ -105,4 +105,6 @@ if (in_array($ty, $tools_files)) {
 	include_once __DIR__ . "/coordinator/404.php";
 };
 
-echo_card_end();
+if (!isset($_GET['nonav'])) {
+	echo_card_end();
+}
