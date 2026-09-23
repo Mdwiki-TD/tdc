@@ -7,8 +7,6 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
     exit;
 }
 
-include_once __DIR__ . '/sugust.php';
-
 use Tables\Main\MainTables;
 use function APICalls\MdwikiSql\fetch_query;
 use function APICalls\WikiApi\get_views;
