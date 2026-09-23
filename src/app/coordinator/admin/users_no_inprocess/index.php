@@ -4,145 +4,195 @@
 namespace App\Coordinator\Admin\UsersNoInprocess;
 
 use App\User\CurrentUser;
-
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
-
 use function App\SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
 use function App\csrf\generate_csrf_token;
 
+require_once __DIR__ . '/post.php';
 
+/**
+ * Class UsersNoInprocessIndexController
+ * Renders the editable "users not added to in-process table" list. On
+ * POST, delegates to UsersNoInprocessPostProcessor first, then always
+ * renders the current state of the list/form below it.
+ */
+class UsersNoInprocessIndexController
+{
+    private const TY_NAME = 'users_no_inprocess';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	require __DIR__ . '/post.php';
+    /**
+     * Handles authentication and executes controller output.
+     */
+    public function handleRequest(): void
+    {
+        // Check user authorization
+        if (!CurrentUser::getInstance()->isCoordinator()) {
+            header('Location: /index.php');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $postProcessor = new UsersNoInprocessPostProcessor();
+            $postProcessor->handle();
+        }
+
+        $users = get_td_or_sql_users_no_inprocess();
+
+        $formText = $this->buildUserRows($users);
+        $numb = count($users) + 1;
+        $formText .= $this->buildAddRowMarkup($numb);
+
+        $this->renderCard($formText);
+        $this->renderAddRowScript();
+    }
+
+    /**
+     * Builds the editable table rows for each existing excluded user.
+     */
+    private function buildUserRows(array $users): string
+    {
+        $formText = '';
+        $numb = 0;
+
+        foreach ($users as $key => $table) {
+            $numb++;
+
+            $userId   = $table['id'] ?? '';
+            $usere    = $table['user'] ?? '';
+            $isActive = $table['is_active'] ?? '';
+
+            $activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
+
+            $formText .= <<<HTML
+                <tr>
+                    <td data-content="id">
+                        <input class="form-control" size="20" name="rows[$numb][id]" value="$userId" type="hidden"/>
+                        <span><b>$userId</b></span>
+                    </td>
+                    <td data-content="user">
+                        <span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
+                        <input name='rows[$numb][user]' value='$usere' type='hidden'/>
+                    </td>
+                    <td data-content="Active" data-order='$isActive'>
+                        <div class='form-check form-switch'>
+                            <input type='hidden' name='rows[$numb][active_orginal_value]' value='$isActive'>
+                            <input type='hidden' name='rows[$numb][is_active]' value='0'>
+                            <input class='form-check-input' type='checkbox' name='rows[$numb][is_active]' value='1' $activeChecked>
+                        </div>
+                    </td>
+                    <td data-content="delete">
+                        <input type='checkbox' name='rows[$numb][del]' value='$userId'/> <label> delete</label>
+                    </td>
+                </tr>
+            HTML;
+        }
+
+        return $formText;
+    }
+
+    /**
+     * Builds the trailing empty row used to add a new excluded user.
+     */
+    private function buildAddRowMarkup(int $numb): string
+    {
+        return <<<HTML
+            <tr>
+                <td data-content="id">
+                    <span><b>Add:</b></span>
+                </td>
+                <td data-content="User">
+                    <input class='form-control' name='rows[$numb][is_new]' value='yes' type='hidden'/>
+                    <input class='form-control td_user_input' name='rows[$numb][user]' />
+                </td>
+                <td data-content="Active">
+                    <div class="form-check form-switch">
+                        <input type="hidden" name="rows[$numb][is_active]" value="1">
+                        -
+                    </div>
+                </td>
+                <td data-content="delete">
+                    -
+                </td>
+            </tr>
+        HTML;
+    }
+
+    /**
+     * Renders the users card with the editable table form.
+     */
+    private function renderCard(string $formText): void
+    {
+        $csrfToken = generate_csrf_token();
+        $tyName = self::TY_NAME;
+
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <h4>Users Not to be added to "in process" table:</h4>
+                </div>
+                <div class='card-body'>
+                    <form action="index.php?ty=$tyName" method="POST">
+                        <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                        <input name='ty' value="$tyName" type="hidden"/>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <table class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>User</th>
+                                            <th>Active</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="full_tab">
+                                        $formText
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-between">
+                            <button type="submit" class="btn btn-outline-primary">Save</button>
+                            <!-- <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row_v()'>New row</span> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        HTML;
+    }
+
+    /**
+     * Renders the client-side script for dynamically adding new rows
+     * (currently unused since the "New row" button is disabled above,
+     * kept for parity with the legacy behaviour).
+     */
+    private function renderAddRowScript(): void
+    {
+        echo <<<'HTML'
+            <script type="text/javascript">
+                function add_row_v() {
+                    var ii = $('#full_tab >tr').length + 1;
+
+                    var e = `
+                        <tr>
+                            <td>
+                                <b>${ii}</b>
+                            </td>
+                            <td>
+                                <input class='form-control' name='rows[${ii}][is_new]' value='yes' type='hidden'/>
+                                <input class='form-control' name='rows[${ii}][is_active]' value='1' type='hidden'/>
+                                <input class='form-control td_user_input' name='rows[${ii}][user]'/>
+                            </td>
+                            <td>-</td>
+                        </tr>
+                    `;
+
+                    $('#full_tab').append(e);
+                };
+            </script>
+        HTML;
+    }
 }
 
-$qq = get_td_or_sql_users_no_inprocess();
-
-$numb = 0;
-
-$formText = '';
-
-foreach ($qq as $Key => $table) {
-	$numb += 1;
-
-	$userId = $table['id'] ?? "";
-	$usere	 = $table['user'] ?? "";
-	$isActive	 = $table['is_active'] ?? "";
-
-	$activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
-
-	$formText .= <<<HTML
-		<tr>
-			<td data-content="id">
-				<input class="form-control" size="20" name="rows[$numb][id]" value="$userId" type="hidden"/>
-				<span><b>$userId</b></span>
-			</td>
-			<td data-content="user">
-				<span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
-				<input name='rows[$numb][user]' value='$usere' type='hidden'/>
-			</td>
-			<td data-content="Active" data-order='$isActive'>
-				<div class='form-check form-switch'>
-					<input type='hidden' name='rows[$numb][active_orginal_value]' value='$isActive'>
-					<input type='hidden' name='rows[$numb][is_active]' value='0'>
-					<input class='form-check-input' type='checkbox' name='rows[$numb][is_active]' value='1' $activeChecked>
-				</div>
-			</td>
-			<td data-content="delete">
-				<input type='checkbox' name='rows[$numb][del]' value='$userId'/> <label> delete</label>
-			</td>
-		</tr>
-	HTML;
-};
-
-$numb += 1;
-
-$formTextPlus = <<<HTML
-	<tr>
-		<td data-content="id">
-			<span><b>Add:</b></span>
-		</td>
-		<td data-content="User">
-			<input class='form-control' name='rows[$numb][is_new]' value='yes' type='hidden'/>
-			<input class='form-control td_user_input' name='rows[$numb][user]' />
-		</td>
-		<td data-content="Active">
-			<div class="form-check form-switch">
-				<input type="hidden" name="rows[$numb][is_active]" value="1">
-				-
-			</div>
-		</td>
-		<td data-content="delete">
-			-
-		</td>
-	</tr>
-HTML;
-
-$csrfToken = generate_csrf_token(); // <input name='csrf_token' value="$csrfToken" type="hidden"/>
-
-$tyName = "users_no_inprocess";
-
-echo <<<HTML
-    <div class='card'>
-		<div class='card-header'>
-			<h4>Users Not to be added to "in process" table:</h4>
-		</div>
-		<div class='card-body'>
-			<form action="index.php?ty=$tyName" method="POST">
-				<input name='csrf_token' value="$csrfToken" type="hidden"/>
-				<input name='ty' value="$tyName" type="hidden"/>
-				<div class="row">
-					<div class="col-md-6 col-sm-12">
-						<table class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>User</th>
-									<th>Active</th>
-									<th>Delete</th>
-								</tr>
-							</thead>
-							<tbody id="full_tab">
-								$formText
-								$formTextPlus
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="form-group d-flex justify-content-between">
-					<button type="submit" class="btn btn-outline-primary">Save</button>
-					<!-- <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row_v()'>New row</span> -->
-				</div>
-			</form>
-		</div>
-	</div>
-HTML;
-?>
-<script type="text/javascript">
-	// $(document).ready(function() {
-
-	function add_row_v() {
-		var ii = $('#full_tab >tr').length + 1;
-
-		var e = `
-			<tr>
-				<td>
-					<b>${ii}</b>
-				</td>
-				<td>
-					<input class='form-control' name='rows[${ii}][is_new]' value='yes' type='hidden'/>
-					<input class='form-control' name='rows[${ii}][is_active]' value='1' type='hidden'/>
-					<input class='form-control td_user_input' name='rows[${ii}][user]'/>
-				</td>
-				<td>-</td>
-			</tr>
-		`;
-
-		$('#full_tab').append(e);
-	};
-	// });
-</script>
-</div>
+// Instantiate and execute controller
+$controller = new UsersNoInprocessIndexController();
+$controller->handleRequest();

@@ -3,91 +3,128 @@
 
 namespace App\Coordinator\Admin\Campaigns;
 
+use App\User\CurrentUser;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\csrf\verify_csrf_token;
-use App\User\CurrentUser;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
-// var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+/**
+ * Class CampaignsPostProcessor
+ * Handles update/delete of existing campaign categories and insertion
+ * of newly added rows.
+ */
+class CampaignsPostProcessor
+{
+	private string $defaultCat;
 
+	public function __construct()
+	{
+		$this->defaultCat = $_POST['default_cat'] ?? '';
+	}
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-	exit;
-}
+	/**
+	 * Validates and processes the incoming submission.
+	 */
+	public function handle(): void
+	{
+		// Check user authorization
+		if (!CurrentUser::getInstance()->isCoordinator()) {
+			header('Location: /index.php');
+			exit;
+		}
 
-$closeBtn = <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			exit;
+		}
 
-if (!verify_csrf_token()) {
-	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $closeBtn;
-	return;
-}
+		$closeBtn = $this->getCloseButtonHtml();
 
-$defaultCat = $_POST['default_cat'] ?? '';
+		if (!verify_csrf_token()) {
+			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			echo $closeBtn;
+			return;
+		}
 
-foreach ($_POST['rows'] ?? [] as $key => $table) {
+		$this->processExistingRows($_POST['rows'] ?? []);
 
-	// { "1": { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }, ... }
+		if (isset($_POST['new'])) {
+			$this->processNewRows($_POST['new']);
+		}
+	}
 
-	$ido  = $table['id'] ?? '';
+	/**
+	 * Updates or deletes existing category rows.
+	 */
+	private function processExistingRows(array $rows): void
+	{
+		foreach ($rows as $key => $table) {
+			$ido = $table['id'] ?? '';
 
-	if (empty($ido)) continue;
+			if (empty($ido)) {
+				continue;
+			}
 
-	$del  = $table['del'] ?? '';
+			$del = $table['del'] ?? '';
 
-	if (!empty($del) && $del != "0") {
-		$qua2 = "DELETE FROM categories WHERE id = ?";
-		execute_query($qua2, [$del]);
-		continue;
-	};
+			if (!empty($del) && $del != "0") {
+				$qua2 = "DELETE FROM categories WHERE id = ?";
+				execute_query($qua2, [$del]);
+				continue;
+			}
 
-	$camp = $table['camp'];
-	$cat1 = $table['cat1'];
-	$cat2 = $table['cat2'];
-	$dep  = $table['dep'];
+			$camp = $table['camp'];
+			$cat1 = $table['cat1'];
+			$cat2 = $table['cat2'];
+			$dep  = $table['dep'];
 
-	$isDefault = ($defaultCat == $ido) ? 1 : 0;
+			$isDefault = ($this->defaultCat == $ido) ? 1 : 0;
 
-	$qua = "UPDATE categories
-		SET
-			campaign = ?,
-			category = ?,
-			category2 = ?,
-			depth = ?,
-			is_default = ?
-		WHERE
-			id = ?
-	";
+			$qua = "UPDATE categories
+                SET
+                    campaign = ?,
+                    category = ?,
+                    category2 = ?,
+                    depth = ?,
+                    is_default = ?
+                WHERE
+                    id = ?
+            ";
 
-	$params = [$camp, $cat1, $cat2, $dep, $isDefault, $ido];
+			$params = [$camp, $cat1, $cat2, $dep, $isDefault, $ido];
 
-	execute_query($qua, $params);
-}
+			execute_query($qua, $params);
+		}
+	}
 
-if (isset($_POST['new'])) {
-	// { "2": { "camp": "2", "cat1": "", "cat2": "", "dep": "0" }, "3": ... }
+	/**
+	 * Inserts newly submitted category rows.
+	 */
+	private function processNewRows(array $newRows): void
+	{
+		foreach ($newRows as $key => $table) {
+			$ido  = $table['id'] ?? '';
+			$camp = $table['camp'];
+			$cat1 = $table['cat1'];
+			$cat2 = $table['cat2'];
+			$dep  = $table['dep'];
 
-	foreach ($_POST['new'] as $key => $table) {
-		// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
+			$isDefault = ($this->defaultCat == $ido) ? 1 : 0;
 
-		$ido  = $table['id'] ?? '';
-		$camp = $table['camp'];
-		$cat1 = $table['cat1'];
-		$cat2 = $table['cat2'];
-		$dep  = $table['dep'];
+			$qua = "INSERT INTO categories (category, campaign, depth, is_default, category2) SELECT ?, ?, ?, ?, ?";
+			$params = [$cat1, $camp, $dep, $isDefault, $cat2];
 
-		$isDefault = ($defaultCat == $ido) ? 1 : 0;
+			execute_query($qua, $params);
+		}
+	}
 
-		$qua = "INSERT INTO categories (category, campaign, depth, is_default, category2) SELECT ?, ?, ?, ?, ?";
-		$params = [$cat1, $camp, $dep, $isDefault, $cat2];
-
-		execute_query($qua, $params);
-	};
+	/**
+	 * Generates a close button HTML block.
+	 */
+	private function getCloseButtonHtml(): string
+	{
+		return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
+	}
 }

@@ -3,67 +3,93 @@
 
 namespace App\Coordinator\Admin\Projects;
 
+use App\User\CurrentUser;
 use function App\APICalls\MdwikiSql\insert_to_projects;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\Utils\Html\div_alert;
 use function App\csrf\verify_csrf_token;
-use App\User\CurrentUser;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
+/**
+ * Class ProjectsPostProcessor
+ * Handles add/update/delete submissions of project rows.
+ * Can run standalone (direct request) or be delegated to from
+ * ProjectsIndexController when the index form is submitted.
+ */
+class ProjectsPostProcessor
+{
+	private array $texts = [];
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-	exit;
-}
+	/**
+	 * Validates and processes the incoming submission.
+	 */
+	public function handle(): void
+	{
+		// Check user authorization
+		if (!CurrentUser::getInstance()->isCoordinator()) {
+			header('Location: /index.php');
+			exit;
+		}
 
-$closeBtn = <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			exit;
+		}
 
-if (!verify_csrf_token()) {
-	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $closeBtn;
-	return;
-}
-$texts = [];
+		$closeBtn = $this->getCloseButtonHtml();
 
-foreach ($_POST['rows'] ?? [] as $key => $table) {
-	// { "rows": { "1": { "g_id": "6", "g_title": "Benevity" } }
-	// { "g_id": "5", "g_title": "Wiki", "del": "5" }
+		if (!verify_csrf_token()) {
+			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			echo $closeBtn;
+			return;
+		}
 
-	$gId  	= $table['g_id'] ?? '';
-	$del  	= $table['del'] ?? '';
+		$this->processRows($_POST['rows'] ?? []);
 
-	$gTitle  	= $table['g_title'] ?? '';
-
-	if (!empty($del) && !empty($gId)) {
-		$qua2 = "DELETE FROM projects WHERE g_id = ?";
-
-		execute_query($qua2, $params = [$gId]);
-
-		$texts[] = "Project $gTitle deleted.";
-
-		continue;
-	};
-
-	$gTitle = trim($gTitle);
-
-	if (empty($gTitle)) {
-		continue;
+		echo div_alert($this->texts, 'success');
 	}
 
-	insert_to_projects($gTitle, $gId);
+	/**
+	 * Processes each submitted project row: delete, add, or update.
+	 */
+	private function processRows(array $rows): void
+	{
+		foreach ($rows as $key => $table) {
+			$gId  = $table['g_id'] ?? '';
+			$del  = $table['del'] ?? '';
+			$gTitle = $table['g_title'] ?? '';
 
-	if (empty($gId)) {
-		$texts[] = "Project $gTitle Added.";
-	} else {
-		$texts[] = "Project $gTitle Updated.";
+			if (!empty($del) && !empty($gId)) {
+				$qua2 = "DELETE FROM projects WHERE g_id = ?";
+				execute_query($qua2, [$gId]);
+
+				$this->texts[] = "Project $gTitle deleted.";
+				continue;
+			}
+
+			$gTitle = trim($gTitle);
+
+			if (empty($gTitle)) {
+				continue;
+			}
+
+			insert_to_projects($gTitle, $gId);
+
+			if (empty($gId)) {
+				$this->texts[] = "Project $gTitle Added.";
+			} else {
+				$this->texts[] = "Project $gTitle Updated.";
+			}
+		}
 	}
 
+	/**
+	 * Generates a close button HTML block.
+	 */
+	private function getCloseButtonHtml(): string
+	{
+		return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
+	}
 }
-
-echo div_alert($texts, 'success');

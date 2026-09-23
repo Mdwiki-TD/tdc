@@ -5,121 +5,169 @@ namespace App\Coordinator\Admin\Reports;
 
 use App\User\CurrentUser;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-    header('Location: /index.php');
-    exit;
-};
+/**
+ * Class ReportsIndexController
+ * Renders the client-side "Publish Reports Viewer" shell. All filtering,
+ * data loading, and results rendering is handled by /tdc/js/reports-script.js.
+ */
+class ReportsIndexController
+{
+    /**
+     * Handles authentication and executes controller output.
+     */
+    public function handleRequest(): void
+    {
+        // Check user authorization
+        if (!CurrentUser::getInstance()->isCoordinator()) {
+            header('Location: /index.php');
+            exit;
+        }
 
-?>
-<style>
-    pre.json-data {
-        background-color: #f8f9fa;
-        padding: 10px;
-        border-radius: 5px;
-        max-height: 300px;
-        overflow: auto;
+        $this->renderStyles();
+        $this->renderCard();
+        $this->renderInitScript();
     }
-</style>
 
-<div class='card'>
-    <div class='card-header'>
-        <h4 class="card-title mb-4">Publish Reports Viewer (<span id="count_result">0</span>):</h4>
-        <form id="filterForm" class="row g-3">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="d-flex justify-content-betweenx justify-content-center">
+    /**
+     * Renders the page-local styles.
+     */
+    private function renderStyles(): void
+    {
+        echo <<<HTML
+            <style>
+                pre.json-data {
+                    background-color: #f8f9fa;
+                    padding: 10px;
+                    border-radius: 5px;
+                    max-height: 300px;
+                    overflow: auto;
+                }
+            </style>
+        HTML;
+    }
 
-                        <select class="form-select" name="year" id="year"></select>
-                        <select class="form-select" name="month" id="month"></select>
-                    </div>
+    /**
+     * Renders the filter form and results table card. The filter
+     * <select> options and table rows are populated client-side.
+     */
+    private function renderCard(): void
+    {
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <h4 class="card-title mb-4">Publish Reports Viewer (<span id="count_result">0</span>):</h4>
+                    <form id="filterForm" class="row g-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="d-flex justify-content-betweenx justify-content-center">
+
+                                    <select class="form-select" name="year" id="year"></select>
+                                    <select class="form-select" name="month" id="month"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="lang">Lang.</label>
+                                            <select class="form-select1 selectpicker w-50" name="lang" id="lang" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="user">User</label>
+                                            <select class="form-select1 selectpicker w-50" name="user" id="user" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="result">Result</label>
+                                            <select class="form-select1 selectpicker w-50" name="result" id="result" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="d-flex justify-content-between justify-content-center">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        Search
+                                    </button>
+                                    <div><i id="loadingIndicator" class="fa fa-spinner fa-spin" style="display:none;"></i></div>
+                                    <button type="button" class="btn btn-outline-secondary" id="resetBtn">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-7">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <label class="input-group-text" for="lang">Lang.</label>
-                                <select class="form-select1 selectpicker w-50" name="lang" id="lang" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <label class="input-group-text" for="user">User</label>
-                                <select class="form-select1 selectpicker w-50" name="user" id="user" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <label class="input-group-text" for="result">Result</label>
-                                <select class="form-select1 selectpicker w-50" name="result" id="result" data-live-search="true" data-style='btn active' data-bs-theme="auto"></select>
-                            </div>
+
+                <div class='card-body p-1'>
+                    <div id="loading" class="text-center my-0" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="d-flex justify-content-between justify-content-center">
-                        <button type="submit" class="btn btn-outline-primary">
-                            Search
-                        </button>
-                        <div><i id="loadingIndicator" class="fa fa-spinner fa-spin" style="display:none;"></i></div>
-                        <button type="button" class="btn btn-outline-secondary" id="resetBtn">Reset</button>
+
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="resultsTable" style="width:100%">
+                            <thead class="">
+                                <tr>
+                                    <th style="display:none">ID</th>
+                                    <th>Date</th>
+                                    <th>Language</th>
+                                    <th>Title</th>
+                                    <th>User</th>
+                                    <th>Source Title</th>
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="detailsModalLabel">Data Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <pre class="json-data" id="modalData"></pre>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+            <script src="/tdc/js/reports-script.js"></script>
+        HTML;
+    }
 
-    <div class='card-body p-1'>
-        <div id="loading" class="text-center my-0" style="display: none;">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
+    /**
+     * Renders the client-side initialization script for the reports table.
+     */
+    private function renderInitScript(): void
+    {
+        echo <<<HTML
+            <script>
+                $(document).ready(async function() {
+                    // Load filters once only
+                    await load_form();
 
-        <div class="table-responsive">
-            <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="resultsTable" style="width:100%">
-                <thead class="">
-                    <tr>
-                        <th style="display:none">ID</th>
-                        <th>Date</th>
-                        <th>Language</th>
-                        <th>Title</th>
-                        <th>User</th>
-                        <th>Source Title</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+                    let table = await newDataTable();
 
-        <!-- Modal -->
-        <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="detailsModalLabel">Data Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <pre class="json-data" id="modalData"></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="/tdc/js/reports-script.js"></script>
-<script>
-    $(document).ready(async function() {
-        // Load filters once only
-        await load_form();
+                    $('#count_result').text(allResults.length);
 
-        let table = await newDataTable();
+                    // Handle the form submit event
+                    setupEventHandlers(table);
 
-        $('#count_result').text(allResults.length);
+                });
+            </script>
+        HTML;
+    }
+}
 
-        // حدث إرسال الفورم
-        setupEventHandlers(table);
-
-    });
-</script>
+// Instantiate and execute controller
+$controller = new ReportsIndexController();
+$controller->handleRequest();

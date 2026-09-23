@@ -3,60 +3,87 @@
 
 namespace App\Coordinator\Admin\Add;
 
+use App\User\CurrentUser;
 use function App\Utils\Html\div_alert;
 use function App\csrf\verify_csrf_token;
 use function Add\AddPost\add_pages_to_db;
-use App\User\CurrentUser;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
+/**
+ * Class AddPostProcessor
+ * Handles submission of new translation rows via add_pages_to_db().
+ */
+class AddPostProcessor
+{
+	private array $texts = [];
+	private array $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-	exit;
-}
-
-$closeBtn = <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
-
-if (!verify_csrf_token()) {
-	echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-	echo $closeBtn;
-	return;
-}
-
-$texts = [];
-$errors = [];
-
-foreach ($_POST['rows'] ?? [] as $key => $table) {
-	// { "id": "1", "camp": "Main", "cat1": "RTT", "cat2": "", "dep": "1" }
-
-	$mdtitle	= $table['mdtitle'] ?? '';
-	$cat		= rawurldecode($table['cat'] ?? '');
-	$type		= $table['type'] ?? '';
-	$user		= rawurldecode($table['user'] ?? '');
-	$lang		= $table['lang'] ?? '';
-	$target		= $table['target'] ?? '';
-	$pupdate	= $table['pupdate'] ?? '';
-	$word     	= $table['word'] ?? '';
-
-	if (!empty($mdtitle) && !empty($lang) && !empty($user)) { // && !empty($target)
-
-		$result = add_pages_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate, $word);
-
-		if ($result === false) {
-			$errors[] = "Failed to add translations.";
-		} else {
-			$texts[] = "Translations added successfully.";
+	/**
+	 * Validates and processes the incoming submission.
+	 */
+	public function handle(): void
+	{
+		// Check user authorization
+		if (!CurrentUser::getInstance()->isCoordinator()) {
+			header('Location: /index.php');
+			exit;
 		}
-	} else {
-		$errors[] = "Failed to add translations. Missing required fields.";
+
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			exit;
+		}
+
+		$closeBtn = $this->getCloseButtonHtml();
+
+		if (!verify_csrf_token()) {
+			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+			echo $closeBtn;
+			return;
+		}
+
+		$this->processRows($_POST['rows'] ?? []);
+
+		echo div_alert($this->texts, 'success');
+		echo div_alert($this->errors, 'danger');
+	}
+
+	/**
+	 * Validates and inserts each submitted translation row.
+	 */
+	private function processRows(array $rows): void
+	{
+		foreach ($rows as $key => $table) {
+			$mdtitle = $table['mdtitle'] ?? '';
+			$cat     = rawurldecode($table['cat'] ?? '');
+			$type    = $table['type'] ?? '';
+			$user    = rawurldecode($table['user'] ?? '');
+			$lang    = $table['lang'] ?? '';
+			$target  = $table['target'] ?? '';
+			$pupdate = $table['pupdate'] ?? '';
+			$word    = $table['word'] ?? '';
+
+			if (!empty($mdtitle) && !empty($lang) && !empty($user)) {
+				$result = add_pages_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate, $word);
+
+				if ($result === false) {
+					$this->errors[] = "Failed to add translations.";
+				} else {
+					$this->texts[] = "Translations added successfully.";
+				}
+			} else {
+				$this->errors[] = "Failed to add translations. Missing required fields.";
+			}
+		}
+	}
+
+	/**
+	 * Generates a close button HTML block.
+	 */
+	private function getCloseButtonHtml(): string
+	{
+		return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
 	}
 }
-
-echo div_alert($texts, 'success');
-echo div_alert($errors, 'danger');

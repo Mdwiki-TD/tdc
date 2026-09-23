@@ -23,7 +23,7 @@ function process_make_td($tab, $nnnn)
 
     $mdTitleEncoded = rawurlencode($mdTitle);
 
-    $laly = <<<HTML
+    return <<<HTML
         <tr>
             <td data-content="#">
                 $nnnn
@@ -45,8 +45,6 @@ function process_make_td($tab, $nnnn)
             </td>
         </tr>
         HTML;
-
-    return $laly;
 };
 
 $apiResults = get_td_api(['get' => 'in_process', 'limit' => "100", "order" => 'add_date']);
