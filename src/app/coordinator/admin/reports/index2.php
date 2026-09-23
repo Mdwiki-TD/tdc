@@ -63,13 +63,13 @@ foreach ($keys as $key => $use_select_picker) {
 
     // echo "$key: <textarea>" . $form_options[$key] . "</textarea>";
 }
-// ----
+
 $year_options = $form_options["year"] ?? "";
 $month_options = $form_options["month"] ?? "";
 $lang_options = $form_options["lang"] ?? "";
 $user_options = $form_options["user"] ?? "";
 $result_options = $form_options["result"] ?? "";
-// ----
+
 echo <<<HTML
     <style>
         pre.json-data {
