@@ -14,249 +14,265 @@ use function App\SQLorAPI\Funcs\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
 use function Tools\RecentHelps\filter_recent2;
 
-$CurrentUser = CurrentUser::getInstance();
-
-if (!$CurrentUser->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
-$global_username = $CurrentUser->getUsername();
-
-$lang = $_GET['lang'] ?? 'All';
-
-$table = (isset($_GET['table'])) ? $_GET['table'] : "pages";
-
-if (!isset($_GET['table']) && $global_username == "Mr. Ibrahem") $table = "pages_users";
-
-if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {
-    $lang = 'All';
-};
-
-function get_languages()
+/**
+ * Class TranslatedIndexController
+ * Manages rendering the translated pages dashboard with pagination and filtering.
+ */
+class TranslatedIndexController
 {
+    private CurrentUser $currentUser;
+    private string $lang;
+    private string $table;
 
-    $tabes = [];
+    public function __construct()
+    {
+        $this->currentUser = CurrentUser::getInstance();
+        $this->lang  = $_GET['lang'] ?? 'All';
+        $this->table = $_GET['table'] ?? 'pages';
 
-    $llangs = get_pages_langs();
-
-    foreach ($llangs as $tat) {
-
-        if (gettype($tat) !== 'string') {
-            echo "<br>tat: $tat";
-            continue;
+        $globalUsername = $this->currentUser->getUsername();
+        if (!isset($_GET['table']) && $globalUsername === "Mr. Ibrahem") {
+            $this->table = "pages_users";
         }
 
-        $tabes[] = strtolower($tat);
-    };
-
-    ksort($tabes);
-
-    return $tabes;
-}
-
-function translated_make_td($tabg, $nnnn, $table)
-{
-
-    $id = $tabg['id'] ?? "";
-
-    $user = $tabg['user'] ?? "";
-    $lang = $tabg['lang'] ?? "";
-    $md_title = trim($tabg['title'] ?? '');
-    $target = trim($tabg['target'] ?? '');
-    $pupdate  = $tabg['pupdate'] ?? '';
-
-    $mdwiki_title = make_mdwiki_title($md_title);
-
-    $targe33 = make_target_url($target, $lang);
-
-    $edit_params = array(
-        'id'   => $id,
-        'table' => $table
-    );
-
-    $edit_icon = make_edit_icon_new("translated/edit_page", $edit_params);
-
-    $laly = <<<HTML
-		<tr>
-			<td data-content='#'>
-				$nnnn
-			</td>
-			<td data-content='User'>
-				<a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
-			</td>
-			<td data-content='Lang.'>
-				<a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
-			</td>
-			<td data-content='Title'>
-				$mdwiki_title
-			</td>
-			<td data-content='Translated'>
-				$targe33
-			</td>
-			<td data-content='Published'>
-				$pupdate
-			</td>
-			<td data-content='Edit'>
-				$edit_icon
-			</td>
-		</tr>
-	HTML;
-
-    return $laly;
-};
-
-function pagination_links($limit, $page, $table, $lang, $total_count)
-{
-
-    $total_pages = ceil($total_count / $limit);
-
-    $base_url = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
-
-    $links = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
-    $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . '1">&laquo;</a></li>';
-    $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . ($page - 1) . '"><</a></li>';
-
-    for ($i = max(1, $page - 3); $i <= min($total_pages, $page + 3); $i++) {
-        $active = $i == $page ? ' active' : '';
-        $links .= "<li class=\"page-item$active\"><a class=\"page-link\" href=\"$base_url$i\">$i</a></li>";
+        if ($this->lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$this->lang])) {
+            $this->lang = 'All';
+        }
     }
 
-    $links .= '<li class="page-item' . ($page >= $total_pages ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . ($page + 1) . '">></a></li>';
-    $links .= '<li class="page-item' . ($page >= $total_pages ? ' disabled' : '') . '"><a class="page-link" href="' . $base_url . $total_pages . '">&raquo;</a></li>';
-    $links .= '</ul></nav>';
+    /**
+     * Handles authentication and executes controller output.
+     */
+    public function handleRequest(): void
+    {
+        if (!$this->currentUser->isCoordinator()) {
+            header('Location: /index.php');
+            exit;
+        }
 
-    $offset = ($page - 1) * $limit;
+        $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
+        $page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($page - 1) * $limit;
 
-    // احسب رقم أول عنصر في الصفحة الحالية
-    $start_item = $offset + 1;
+        $sqlResults = get_recent_translated($this->lang, $this->table, $limit, $offset);
+        $totalCount = get_total_translations_count($this->lang, $this->table);
 
-    // احسب آخر عنصر في الصفحة الحالية
-    $end_item = min($offset + $limit, $total_count);
+        $pagination = "";
+        if ($totalCount > $limit) {
+            $pagination = $this->renderPaginationLinks($limit, $page, $this->table, $this->lang, $totalCount);
+        }
 
-    // إنشاء النص التوضيحي للصفحة
-    $summary = "<p class=\"text-center\">";
-    $summary .= "Page " . ($offset / $limit + 1) . " from $total_pages ";
-    $summary .= "($start_item - $end_item from total " . number_format($total_count) . " logs)";
-    $summary .= "</p>";
+        $recentTable = $this->buildTableHead();
 
-    return $summary . $links;
-}
+        $noo = 0;
+        foreach ($sqlResults as $tat => $tabe) {
+            $noo++;
+            $recentTable .= $this->renderTableRow($tabe, $noo, $this->table);
+        }
 
-$recent_table = <<<HTML
-	<table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="pages_table" style="font-size:90%;">
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>User</th>
-				<th>Lang.</th>
-				<th>Title</th>
-				<th>Translated</th>
-				<th>Published</th>
-				<th>Edit</th>
-			</tr>
-		</thead>
-		<tbody>
-HTML;
+        $recentTable .= "</tbody></table>";
 
-$limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
-$page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $limit;
+        $this->renderFilterCard(count($sqlResults), $pagination);
+        echo $recentTable;
+        $this->renderDataTableScript();
+    }
 
-$sql_results = get_recent_translated($lang, $table, $limit, $offset);
+    /**
+     * Fetches and formats available target language codes.
+     */
+    private function getLanguages(): array
+    {
+        $tabes = [];
+        $llangs = get_pages_langs();
 
-$total_count = get_total_translations_count($lang, $table);
+        foreach ($llangs as $tat) {
+            if (gettype($tat) !== 'string') {
+                echo "<br>tat: $tat";
+                continue;
+            }
+            $tabes[] = strtolower($tat);
+        }
 
-$pagination = "";
+        ksort($tabes);
+        return $tabes;
+    }
 
-if ($total_count > $limit) {
-    $pagination = pagination_links($limit, $page, $table, $lang, $total_count);
-}
+    /**
+     * Generates HTML table row for a translated page item.
+     */
+    private function renderTableRow(array $tabg, int $index, string $table): string
+    {
+        $id      = $tabg['id'] ?? "";
+        $user    = $tabg['user'] ?? "";
+        $lang    = $tabg['lang'] ?? "";
+        $mdTitle = trim($tabg['title'] ?? '');
+        $target  = trim($tabg['target'] ?? '');
+        $pupdate = $tabg['pupdate'] ?? '';
 
-$noo = 0;
-foreach ($sql_results as $tat => $tabe) {
+        $mdwikiTitle = make_mdwiki_title($mdTitle);
+        $targe33     = make_target_url($target, $lang);
 
-    $noo = $noo + 1;
-    $recent_table .= translated_make_td($tabe, $noo, $table);
+        $editParams = [
+            'id'    => $id,
+            'table' => $table
+        ];
 
-};
+        $editIcon = make_edit_icon_new("translated/edit_page", $editParams);
 
-$recent_table .= <<<HTML
-		</tbody>
-	</table>
-HTML;
+        return <<<HTML
+            <tr>
+                <td data-content='#'>$index</td>
+                <td data-content='User'>
+                    <a href='/Translation_Dashboard/leaderboard.php?user=$user'>$user</a>
+                </td>
+                <td data-content='Lang.'>
+                    <a href='/Translation_Dashboard/leaderboard.php?langcode=$lang'>$lang</a>
+                </td>
+                <td data-content='Title'>$mdwikiTitle</td>
+                <td data-content='Translated'>$targe33</td>
+                <td data-content='Published'>$pupdate</td>
+                <td data-content='Edit'>$editIcon</td>
+            </tr>
+        HTML;
+    }
 
-$lang_table = get_languages();
-$filter_lang = filter_recent2($lang, $lang_table);
+    /**
+     * Generates pagination UI links and summary text.
+     */
+    private function renderPaginationLinks(int $limit, int $page, string $table, string $lang, int $totalCount): string
+    {
+        $totalPages = (int)ceil($totalCount / $limit);
+        $baseUrl   = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
 
-$data = [
-    "pages" => 'Main',
-    "pages_users" => 'User',
-];
+        $links = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
+        $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . '1">&laquo;</a></li>';
+        $links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . ($page - 1) . '"><</a></li>';
 
-$filter_ns = filter_table($data, $table, 'table');
+        for ($i = max(1, $page - 3); $i <= min($totalPages, $page + 3); $i++) {
+            $active = ($i == $page) ? ' active' : '';
+            $links .= "<li class=\"page-item$active\"><a class=\"page-link\" href=\"{$baseUrl}{$i}\">$i</a></li>";
+        }
 
-$count_result = count($sql_results);
+        $links .= '<li class="page-item' . ($page >= $totalPages ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . ($page + 1) . '">></a></li>';
+        $links .= '<li class="page-item' . ($page >= $totalPages ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . $totalPages . '">&raquo;</a></li>';
+        $links .= '</ul></nav>';
 
-echo <<<HTML
-    <div class='card'>
-        <div class='card-header'>
-            <form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-                <input name='ty' value='translated' type='hidden'/>
-                <div class='row'>
-                    <div class='col-md-4'>
-                        <h4>Translated Pages ($count_result):</h4>
-                    </div>
-                    <div class='col-md-4'>
-                        <div class="input-group">
-                            <span class="input-group-text">Namespace:</span>
-                            <div class="form-control">
-                                $filter_ns
+        $offset    = ($page - 1) * $limit;
+        $startItem = $offset + 1;
+        $endItem   = min($offset + $limit, $totalCount);
+
+        $summary  = "<p class=\"text-center\">";
+        $summary .= "Page " . ($offset / $limit + 1) . " from $totalPages ";
+        $summary .= "($startItem - $endItem from total " . number_format($totalCount) . " logs)";
+        $summary .= "</p>";
+
+        return $summary . $links;
+    }
+
+    /**
+     * Constructs opening table tags.
+     */
+    private function buildTableHead(): string
+    {
+        return <<<HTML
+            <table class="table table-sm table-striped table-mobile-responsive table-mobile-sided table_text_left" id="pages_table" style="font-size:90%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Lang.</th>
+                        <th>Title</th>
+                        <th>Translated</th>
+                        <th>Published</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+        HTML;
+    }
+
+    /**
+     * Renders filter controls card header.
+     */
+    private function renderFilterCard(int $countResult, string $paginationHtml): void
+    {
+        $langTable  = $this->getLanguages();
+        $filterLang = filter_recent2($this->lang, $langTable);
+
+        $data = [
+            "pages"       => 'Main',
+            "pages_users" => 'User',
+        ];
+
+        $filterNs = filter_table($data, $this->table, 'table');
+
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
+                        <input name='ty' value='translated' type='hidden'/>
+                        <div class='row'>
+                            <div class='col-md-4'>
+                                <h4>Translated Pages ($countResult):</h4>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class="input-group">
+                                    <span class="input-group-text">Namespace:</span>
+                                    <div class="form-control">
+                                        $filterNs
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-3'>
+                                <select aria-label="Language code"
+                                    class="selectpicker"
+                                    id='lang'
+                                    name='lang'
+                                    placeholder='Language code'
+                                    data-live-search="true"
+                                    data-container="body"
+                                    data-live-search-style="begins"
+                                    data-bs-theme="auto"
+                                    data-style='btn active'
+                                    data-width="90%"
+                                    >
+                                    $filterLang
+                                </select>
+                            </div>
+                            <div class='aligncenter col-md-1'>
+                                <input class='btn btn-outline-primary' type='submit' value='Filter' />
                             </div>
                         </div>
-                    </div>
-                    <div class='col-md-3'>
-                        <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
-                        <select aria-label="Language code"
-                            class="selectpicker"
-                            id='lang'
-                            name='lang'
-                            placeholder='Language code'
-                            data-live-search="true"
-                            data-container="body"
-                            data-live-search-style="begins"
-                            data-bs-theme="auto"
-                            data-style='btn active'
-                            data-width="90%"
-                            >
-                            $filter_lang
-                        </select>
-                    </div>
-                    <div class='aligncenter col-md-1'>
-                        <input class='btn btn-outline-primary' type='submit' value='Filter' />
-                    </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        <div class='card-body'>
-            $pagination
-        </div>
-    </div>
-HTML;
+                <div class='card-body'>
+                    $paginationHtml
+                </div>
+            </div>
+        HTML;
+    }
 
-echo $recent_table;
+    /**
+     * Renders DataTables initialization script.
+     */
+    private function renderDataTableScript(): void
+    {
+        echo <<<HTML
+            <script>
+                $(document).ready(function() {
+                    var t = $('#pages_table').DataTable({
+                        stateSave: true,
+                        lengthMenu: [
+                            [50, 100, 150],
+                            [50, 100, 150]
+                        ],
+                    });
+                });
+            </script>
+        HTML;
+    }
+}
 
-?>
-<script>
-    $(document).ready(function() {
-        var t = $('#pages_table').DataTable({
-            stateSave: true,
-            // order: [[10	, 'desc']],
-            // paging: false,
-            lengthMenu: [
-                [50, 100, 150],
-                [50, 100, 150]
-            ],
-            // scrollY: 800
-        });
-    });
-</script>
+// Instantiate and execute controller
+$controller = new TranslatedIndexController();
+$controller->handleRequest();
