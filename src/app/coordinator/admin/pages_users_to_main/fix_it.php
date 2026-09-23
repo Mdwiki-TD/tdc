@@ -26,6 +26,8 @@ class FixItController
             exit;
         }
 
+        $this->renderHeaderScripts();
+
         // Delegate POST requests to the POST processor
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postHandler = new FixItPostProcessor();
@@ -38,15 +40,22 @@ class FixItController
     }
 
     /**
+     * Renders UI scripts to isolate the modal/page layout.
+     */
+    private function renderHeaderScripts(): void
+    {
+        echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>
+        <div class="container-fluid">';
+    }
+
+    /**
      * Renders the HTML structure and form.
      */
     private function renderFormView(): void
     {
-        echo '</div><script>
-        $("#mainnav").hide();
-        $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
 
         $id        = $_GET['id'] ?? '';
         $newTarget = $_GET['new_target'] ?? '';
