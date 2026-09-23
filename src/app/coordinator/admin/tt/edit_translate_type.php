@@ -4,13 +4,13 @@
 namespace App\Coordinator\Admin\TranslateType;
 
 use App\User\CurrentUser;
+use function App\csrf\generate_csrf_token;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 };
 
-use function App\csrf\generate_csrf_token;
 
 echo '</div><script>
     $("#mainnav").hide();
