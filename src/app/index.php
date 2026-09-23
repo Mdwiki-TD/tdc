@@ -63,14 +63,14 @@ class AppRouter
 		$rawTy = $_GET['ty'] ?? $_POST['ty'] ?? $defaultTy;
 
 		$preDefinedTy = [
-			"translated/edit_page",
-			"Emails/post",
 			"Campaigns/post",
 			"Emails/msg",
+			"Emails/post",
+			"pages_users_to_main/fix_it",
 			"qids/post",
+			"translated/edit_page",
 			"tt/post",
 			"wikirefs_options/edit",
-			"pages_users_to_main/fix_it",
 		];
 		if (in_array($rawTy, $preDefinedTy)) {
 			return $rawTy;
