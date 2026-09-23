@@ -1,8 +1,11 @@
 <?php
+// src/app/index.php
 
+namespace App;
+
+use User\CurrentUser;
 use function Utils\Functions\test_print;
 use function Utils\HtmlSide\create_side;
-use User\CurrentUser;
 
 $currentUser = CurrentUser::getInstance();
 $user_is_coordinator = $currentUser->isCoordinator();
@@ -12,13 +15,9 @@ function echo_card_start($file_name, $ty, $user_is_coordinator)
 	$sidebar = create_side($file_name, $ty, $user_is_coordinator);
 	echo <<<HTML
 		<div class='row content'>
-			<!-- <div class='col-md-2 px-0' style="width: 10.66666667%;"> -->
 			<div class='col-md-2 px-0 colmd2 border'>
 				<div class="d-none d-md-block p-2 mt-3 position-relative d-flex align-items-center">
 					<div class="">
-						<!-- <button class="border rounded-3 p-1 text-decoration-none" onclick="toggleSidebar()">
-							<i class="bi bi-list bi-lg py-2 p-1"></i>
-						</button> -->
 						<span class="logo-text">
 							<span class="hide-on-collapse-inline fw-bold mb-0 h5">
 								Coordinator Tools
