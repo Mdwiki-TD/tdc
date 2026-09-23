@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Add;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\Utils\Html\div_alert;
 use function App\csrf\verify_csrf_token;
 use function Add\AddPost\add_pages_to_db;
@@ -12,10 +13,8 @@ use function Add\AddPost\add_pages_to_db;
  * Class AddPostProcessor
  * Handles submission of new translation rows via add_pages_to_db().
  */
-class AddPostProcessor
+class AddPostProcessor extends AbstractSubPostHandler
 {
-	private array $texts = [];
-	private array $errors = [];
 
 	/**
 	 * Validates and processes the incoming submission.
@@ -65,12 +64,12 @@ class AddPostProcessor
 				$result = add_pages_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate, $word);
 
 				if ($result === false) {
-					$this->errors[] = "Failed to add translations.";
+					$this->addError("Failed to add translations.");
 				} else {
-					$this->texts[] = "Translations added successfully.";
+					$this->addText("Translations added successfully.");
 				}
 			} else {
-				$this->errors[] = "Failed to add translations. Missing required fields.";
+				$this->addError("Failed to add translations. Missing required fields.");
 			}
 		}
 	}

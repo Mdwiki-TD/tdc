@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Qids;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\Utils\Html\div_alert;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\APICalls\MdwikiSql\check_one;
@@ -14,11 +15,9 @@ use function App\csrf\verify_csrf_token;
  * Handles bulk add/update submissions of title/qid rows, validating
  * uniqueness constraints against both the qid and title columns.
  */
-class QidsPostController
+class QidsPostController extends AbstractSubPostHandler
 {
 	private string $qidTable;
-	private array $texts = [];
-	private array $errors = [];
 
 	public function __construct()
 	{
@@ -57,9 +56,9 @@ class QidsPostController
 		$this->processRows($_POST['rows'] ?? []);
 
 		if (!empty($this->texts)) {
-			$this->texts[] = "table:({$this->qidTable})";
+			$this->addText("table:({$this->qidTable})");
 		} elseif (!empty($this->errors)) {
-			$this->errors[] = "table:({$this->qidTable})";
+			$this->addError("table:({$this->qidTable})");
 		}
 
 		echo div_alert($this->texts, 'success');
@@ -90,12 +89,12 @@ class QidsPostController
 			$id    = $table['id'] ?? '';
 
 			if (empty($title)) {
-				$this->errors[] = "Title is required. qid=($qid)";
+				$this->addError("Title is required. qid=($qid)");
 				continue;
 			}
 
 			if (empty($qid)) {
-				$this->errors[] = "Qid is required. title=($title)";
+				$this->addError("Qid is required. title=($title)");
 				continue;
 			}
 
@@ -106,12 +105,12 @@ class QidsPostController
 				$titleOfQid = $txTab['title'];
 
 				if (!empty($id) && $txId != $id) {
-					$this->errors[] = "Qid:($qid) already used in database with with id:($txId).";
+					$this->addError("Qid:($qid) already used in database with with id:($txId).");
 					continue;
 				}
 
 				if (!empty($titleOfQid) && empty($id) && $titleOfQid != $title) {
-					$this->errors[] = "Qid:($qid) already used in database with title:($titleOfQid).";
+					$this->addError("Qid:($qid) already used in database with title:($titleOfQid).");
 					continue;
 				}
 			}
@@ -123,12 +122,12 @@ class QidsPostController
 				$ttId = $ttTab['id'];
 
 				if (!empty($id) && $ttId != $id) {
-					$this->errors[] = "Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)";
+					$this->addError("Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)");
 					continue;
 				}
 
 				if (empty($id) && !empty($qidOfTitle5) && $qidOfTitle5 != $qid) {
-					$this->errors[] = "Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)";
+					$this->addError("Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)");
 					continue;
 				}
 			}
@@ -176,9 +175,9 @@ class QidsPostController
 		$qidOfTitle = check_one('qid', 'title', $title, $this->qidTable);
 
 		if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
-			$this->texts[] = "Data Changes successfully of title: $title, Qid: $qid";
+			$this->addText("Data Changes successfully of title: $title, Qid: $qid");
 		} else {
-			$this->errors[] = "Failed to chanhe data of title: $title, Qid: $qid. Found: qid in db:$qidOfTitle";
+			$this->addError("Failed to chanhe data of title: $title, Qid: $qid. Found: qid in db:$qidOfTitle");
 		}
 	}
 
@@ -192,9 +191,9 @@ class QidsPostController
 		$qidOfTitle = check_one('qid', 'title', $title, $this->qidTable);
 
 		if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
-			$this->texts[] = "Qid added successfully for title: $title.";
+			$this->addText("Qid added successfully for title: $title.");
 		} else {
-			$this->errors[] = "Failed to add Qid for title: $title. qid_of_title:$qidOfTitle";
+			$this->addError("Failed to add Qid for title: $title. qid_of_title:$qidOfTitle");
 		}
 	}
 

@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\TranslateType;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\Utils\Html\div_alert;
 use function App\APICalls\MdwikiSql\insert_to_translate_type;
 use function App\csrf\verify_csrf_token;
@@ -13,10 +14,9 @@ use function App\csrf\verify_csrf_token;
  * Handles add/update submissions for translate_type rows (GET "cat" is
  * accepted but unused downstream, preserved for parity with legacy code).
  */
-class TtPostController
+class TtPostController extends AbstractSubPostHandler
 {
-	private array $texts = [];
-	private array $errors = [];
+
 
 	/**
 	 * Executes authorization check and processes the POST submission.
@@ -74,16 +74,16 @@ class TtPostController
 			$id    = $table['id'] ?? '';
 
 			if (empty($title)) {
-				$this->errors[] = "Title is required.";
+				$this->addError("Title is required.");
 				continue;
 			}
 
 			$result = insert_to_translate_type($title, $lead, $full, $id);
 
 			if ($result === false) {
-				$this->errors[] = "Failed to add translate type, title: $title.";
+				$this->addError("Failed to add translate type, title: $title.");
 			} else {
-				$this->texts[] = "Translate type added successfully, title: $title.";
+				$this->addText("Translate type added successfully, title: $title.");
 			}
 		}
 	}

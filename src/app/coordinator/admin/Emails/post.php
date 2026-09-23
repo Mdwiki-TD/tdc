@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Emails;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\Utils\Html\div_alert;
 use function App\APICalls\MdwikiSql\sql_update_user;
 use function App\APICalls\MdwikiSql\sql_add_user;
@@ -14,10 +15,8 @@ use function App\csrf\verify_csrf_token;
  * Class EmailsPostProcessor
  * Handles add/update submissions of user email/wiki/project rows.
  */
-class EmailsPostProcessor
+class EmailsPostProcessor extends AbstractSubPostHandler
 {
-	private array $texts = [];
-	private array $errors = [];
 
 	/**
 	 * Validates and processes the incoming submission.
@@ -69,7 +68,7 @@ class EmailsPostProcessor
 			$userId  = $table['user_id'] ?? '';
 
 			if (empty($user)) {
-				$this->errors[] = "Username is required.";
+				$this->addError("Username is required.");
 				continue;
 			}
 
@@ -79,7 +78,7 @@ class EmailsPostProcessor
 			// Validate email format if not empty
 			if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				// Handle invalid email - either log, set to empty, or return error
-				$this->errors[] = "Invalid Email format";
+				$this->addError("Invalid Email format");
 				$email = '';
 			}
 
@@ -93,22 +92,22 @@ class EmailsPostProcessor
 				$ttId = $ttTab['user_id'];
 
 				if (!empty($userId) && $ttId != $userId) {
-					$this->errors[] = "User:($user) already in database with user_id:($ttId).";
+					$this->addError("User:($user) already in database with user_id:($ttId).");
 					continue;
 				}
 
 				if (empty($userId) && !empty($ttUsername)) {
-					$this->errors[] = "User:($user) already in database with user_id:($ttId).";
+					$this->addError("User:($user) already in database with user_id:($ttId).");
 					continue;
 				}
 			}
 
 			if (empty($userId)) {
 				sql_add_user($user, $email, $wiki, $project);
-				$this->texts[] = "User:($user) added successfully.";
+				$this->addText("User:($user) added successfully.");
 			} else {
 				sql_update_user($user, $email, $wiki, $project, $userId);
-				$this->texts[] = "User:($user) updated successfully.";
+				$this->addText("User:($user) updated successfully.");
 			}
 		}
 	}

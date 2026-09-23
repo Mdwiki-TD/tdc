@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\FullTranslators;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\Utils\Html\div_alert;
 use function App\csrf\verify_csrf_token;
@@ -12,12 +13,10 @@ use function App\csrf\verify_csrf_token;
  * Class FullTranslatorsPostProcessor
  * Handles add/update/delete of "full article translator" users.
  */
-class FullTranslatorsPostProcessor
+class FullTranslatorsPostProcessor extends AbstractSubPostHandler
 {
 	private const TABLE_NAME = 'full_translators';
 
-	private array $texts = [];
-	private array $errors = [];
 
 	/**
 	 * Validates and processes the incoming submission.
@@ -66,11 +65,11 @@ class FullTranslatorsPostProcessor
 				$result = execute_query($qua2, [$uId]);
 
 				if ($result === false) {
-					$this->errors[] = "Failed to delete user $user.";
+					$this->addError("Failed to delete user $user.");
 					continue;
 				}
 
-				$this->texts[] = "User $user deleted.";
+				$this->addText("User $user deleted.");
 				continue;
 			}
 
@@ -97,9 +96,9 @@ class FullTranslatorsPostProcessor
 				$result = execute_query($qua, [$user, $isActive]);
 
 				if ($result === false) {
-					$this->errors[] = "Failed to add user $user.";
+					$this->addError("Failed to add user $user.");
 				} else {
-					$this->texts[] = (empty($uId)) ? "User $user Added." : "User $user Updated.";
+					$this->addText((empty($uId)) ? "User $user Added." : "User $user Updated.");
 				}
 			}
 		}

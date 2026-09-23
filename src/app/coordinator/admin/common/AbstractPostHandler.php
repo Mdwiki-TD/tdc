@@ -3,8 +3,34 @@
 
 namespace App\Coordinator\Admin\Common;
 
+use App\User\CurrentUser;
 use function App\csrf\verify_csrf_token;
 use function App\Utils\Html\div_alert;
+
+abstract class AbstractSubPostHandler
+{
+    protected array $errors = [];
+    protected array $texts = [];
+
+    public function validateCoordinator(): void
+    {
+        // Validate user authorization
+        if (!CurrentUser::getInstance()->isCoordinator()) {
+            // return to home page
+            exit;
+        }
+    }
+
+    protected function addError(string $message): void
+    {
+        $this->errors[] = $message;
+    }
+
+    protected function addText(string $message): void
+    {
+        $this->texts[] = $message;
+    }
+}
 
 /**
  * Class AbstractPostHandler
@@ -14,12 +40,18 @@ use function App\Utils\Html\div_alert;
  * small helper for parsing checkbox-style 0/1 ints. Subclasses only
  * need to implement process() with their own delete/update/insert logic.
  */
-abstract class AbstractPostHandler
+abstract class AbstractPostHandler extends AbstractSubPostHandler
 {
-    protected array $errors = [];
-    protected array $texts = [];
     protected bool $csrfError = false;
 
+    public function validateCoordinator(): void
+    {
+        // Validate user authorization
+        if (!CurrentUser::getInstance()->isCoordinator()) {
+            // return to home page
+            exit;
+        }
+    }
     /**
      * Verifies CSRF, then delegates to process() if valid.
      *
@@ -30,6 +62,10 @@ abstract class AbstractPostHandler
         if (!verify_csrf_token()) {
             $this->csrfError = true;
             return $this->result();
+        }
+        // TODO: Check if this needed
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            exit;
         }
 
         $this->process($post);
@@ -55,16 +91,6 @@ abstract class AbstractPostHandler
         ) ?: 0;
     }
 
-    protected function addError(string $message): void
-    {
-        $this->errors[] = $message;
-    }
-
-    protected function addText(string $message): void
-    {
-        $this->texts[] = $message;
-    }
-
     private function result(): array
     {
         return [
@@ -88,5 +114,16 @@ abstract class AbstractPostHandler
         }
 
         echo div_alert($result['texts'], 'success');
+    }
+    /**
+     * Generates a close button HTML block.
+     */
+    public function getCloseButtonHtml(): string
+    {
+        return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
     }
 }

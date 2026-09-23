@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\settings;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractSubPostHandler;
 use function App\APICalls\MdwikiSql\update_settings_value;
 use function App\csrf\verify_csrf_token;
 
@@ -11,18 +11,14 @@ use function App\csrf\verify_csrf_token;
  * Class SettingsPostProcessor
  * Handles bulk update of settings values.
  */
-class SettingsPostProcessor
+class SettingsPostProcessor extends AbstractSubPostHandler
 {
     /**
      * Validates and processes the incoming submission.
      */
     public function handle(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             exit;
