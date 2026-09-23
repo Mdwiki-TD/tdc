@@ -9,6 +9,9 @@ echo <<<HTML
 	<!-- <div id="maindiv" class="container-fluid"> -->
 HTML;
 
+$currentUser = CurrentUser::getInstance();
+$user_is_coordinator = $currentUser->isCoordinator();
+
 function echo_card_start($file_name, $ty, $user_is_coordinator)
 {
 	$sidebar = create_side($file_name, $ty, $user_is_coordinator);
@@ -52,10 +55,6 @@ function echo_card_start($file_name, $ty, $user_is_coordinator)
 					<div class='card'>
 	HTML;
 }
-
-$currentUser = CurrentUser::getInstance();
-
-$user_is_coordinator = $currentUser->isCoordinator();
 
 $default_ty = $user_is_coordinator ? "last_coord" : "last";
 
