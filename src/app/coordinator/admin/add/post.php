@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/add/post.php
 
 use function Utils\Html\div_alert;
 use function TDWIKI\csrf\verify_csrf_token;
@@ -50,7 +51,6 @@ foreach ($_POST['rows'] ?? [] as $key => $table) {
 		} else {
 			$texts[] = "Translations added successfully.";
 		}
-
 	} else {
 		$errors[] = "Failed to add translations. Missing required fields.";
 	}

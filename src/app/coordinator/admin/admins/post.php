@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/admins/post.php
 
 use function APICalls\MdwikiSql\execute_query;
 use function Utils\Html\div_alert;

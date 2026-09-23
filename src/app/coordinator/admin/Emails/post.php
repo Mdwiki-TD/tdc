@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/Emails/post.php
 
 use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\sql_update_user;

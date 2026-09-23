@@ -1,4 +1,5 @@
 <?php
+// src/app/coordinator/admin/Campaigns/post.php
 
 use function APICalls\MdwikiSql\execute_query;
 use function TDWIKI\csrf\verify_csrf_token;
