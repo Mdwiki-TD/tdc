@@ -7,9 +7,6 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
     exit;
 };
 
-;
-
-use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\generate_csrf_token;
 

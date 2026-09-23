@@ -16,9 +16,6 @@ echo '</div><script>
 </script>
 <div class="container-fluid">';
 
-
-;
-
 $user    = $_GET['user'] ?? '';
 $wiki    = $_GET['wiki'] ?? '';
 $project = $_GET['project'] ?? '';

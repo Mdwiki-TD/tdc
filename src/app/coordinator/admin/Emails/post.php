@@ -5,7 +5,12 @@ use function APICalls\MdwikiSql\sql_update_user;
 use function APICalls\MdwikiSql\sql_add_user;
 use function APICalls\MdwikiSql\check_one;
 use function TDWIKI\csrf\verify_csrf_token;
+use User\CurrentUser;
 
+if (!CurrentUser::getInstance()->isCoordinator()) {
+	header('Location: /index.php');
+	exit;
+};
 // var_export(json_encode($_POST ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
 echo '</div><script>

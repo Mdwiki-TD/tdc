@@ -1,15 +1,16 @@
 <?php
 
 namespace Emails\Sugust;
-/*
-Usage:
-use function Emails\Sugust\get_sugust;
-*/
-
-
+use User\CurrentUser;
 use Tables\Main\MainTables;
 use function Results\GetResults\get_cat_exists_and_missing;
 use function SQLorAPI\Process\get_lang_in_process_new;
+
+if (!CurrentUser::getInstance()->isCoordinator()) {
+	header('Location: /index.php');
+	exit;
+};
+
 
 function get_sugust($title, $lang)
 {

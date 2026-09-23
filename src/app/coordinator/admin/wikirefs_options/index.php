@@ -7,8 +7,6 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
     exit;
 };
 
-;
-
 use function SQLorAPI\Funcs\get_td_or_sql_language_settings;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function Utils\Html\make_edit_icon_new;

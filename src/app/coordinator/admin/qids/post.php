@@ -2,10 +2,14 @@
 
 use function Utils\Html\div_alert;
 use function APICalls\MdwikiSql\execute_query;
-use function APICalls\MdwikiSql\fetch_query;
 use function APICalls\MdwikiSql\check_one;
 use function TDWIKI\csrf\verify_csrf_token;
+use User\CurrentUser;
 
+if (!CurrentUser::getInstance()->isCoordinator()) {
+	header('Location: /index.php');
+	exit;
+};
 
 echo '</div><script>
     $("#mainnav").hide();

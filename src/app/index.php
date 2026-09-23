@@ -86,7 +86,7 @@ $tools_files = [
 $adminfile = __DIR__ . "/coordinator/admin/$ty.php";
 
 if (in_array($ty, $tools_files)) {
-	include_once __DIR__ . "/coordinator/tools/$ty.php";
+	include_once __DIR__ . "/tools/$ty.php";
 	//
 } elseif ($ty == "sidebar") {
 	$sidebar = create_side($filename, $ty, $user_is_coordinator);

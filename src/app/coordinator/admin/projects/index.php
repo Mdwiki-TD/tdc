@@ -7,8 +7,6 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
 	exit;
 };
 
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require __DIR__ . '/post.php';
 }

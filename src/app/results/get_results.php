@@ -2,14 +2,6 @@
 
 namespace Results\GetResults;
 
-/*
-Usage:
-
-use function Results\GetResults\get_results;
-use function Results\GetResults\get_cat_exists_and_missing;
-
-*/
-
 use function Results\GetCats\get_mdwiki_cat_members;
 use function Utils\Functions\test_print;
 use function Utils\TablesDir\open_td_tables_file;

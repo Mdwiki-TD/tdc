@@ -2,16 +2,6 @@
 
 namespace Results\GetCats;
 
-/*
-Usage:
-use function Results\GetCats\get_category_from_cache;
-use function Results\GetCats\fetch_category_members;
-use function Results\GetCats\get_category_members;
-use function Results\GetCats\get_mdwiki_cat_members;
-*/
-
-;
-
 use function Utils\Functions\test_print;
 use function APICalls\MdwikiApi\get_mdwiki_url_with_params;
 use function Utils\Functions\start_with;

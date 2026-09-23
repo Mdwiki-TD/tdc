@@ -3,7 +3,6 @@
 use User\CurrentUser;
 use Tables\Langs\LangsTables;
 use function Utils\Html\make_mdwiki_title;
-use function Utils\Html\make_talk_url;
 use function Utils\Html\make_target_url;
 use function Utils\Html\make_edit_icon_new;
 use function SQLorAPI\Recent\get_recent_translated;
@@ -11,7 +10,12 @@ use function SQLorAPI\Recent\get_total_translations_count;
 use function SQLorAPI\Funcs\get_pages_langs;
 use function Tools\RecentHelps\filter_table;
 use function Tools\RecentHelps\filter_recent2;
+use User\CurrentUser;
 
+if (!CurrentUser::getInstance()->isCoordinator()) {
+	header('Location: /index.php');
+	exit;
+};
 $global_username = CurrentUser::getInstance()->getUsername();
 
 $lang = $_GET['lang'] ?? 'All';

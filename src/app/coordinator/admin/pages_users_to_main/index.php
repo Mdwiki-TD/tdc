@@ -8,7 +8,12 @@ use function SQLorAPI\Recent\get_pages_users_to_main;
 use function SQLorAPI\Funcs\get_pages_users_langs;
 use function Tools\RecentHelps\filter_recent2;
 use function SQLorAPI\Funcs\td_or_sql_titles_infos;
+use User\CurrentUser;
 
+if (!CurrentUser::getInstance()->isCoordinator()) {
+	header('Location: /index.php');
+	exit;
+};
 $lang = $_GET['lang'] ?? 'All';
 
 if ($lang !== 'All' && !isset(LangsTables::$L_code_to_lang[$lang])) {

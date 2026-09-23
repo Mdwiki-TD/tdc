@@ -18,8 +18,6 @@ echo '</div><script>
 </script>
 <div class="container-fluid">';
 
-;
-
 $id         = $_GET['id'] ?? $_POST['id'] ?? '';
 $table      = $_GET['table'] ?? $_POST['table'] ?? 'pages';
 

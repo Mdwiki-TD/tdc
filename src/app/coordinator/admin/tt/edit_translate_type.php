@@ -15,8 +15,6 @@ echo '</div><script>
 </script>
 <div class="container-fluid">';
 
-;
-
 $title  = (isset($_GET['title'])) ? rawurldecode($_GET['title']) : "";
 $lead   = $_GET['lead'] ?? '';
 $full   = $_GET['full'] ?? '';
