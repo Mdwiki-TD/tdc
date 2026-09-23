@@ -76,7 +76,7 @@ class Database
 
     public function __construct(string $dbnameVar = 'DB_NAME')
     {
-        $this->set_db($dbnameVar);
+        $this->setDb($dbnameVar);
     }
 
     private function envVar(string $key)
@@ -92,7 +92,7 @@ class Database
 
         return "";
     }
-    private function set_db(string $dbnameVar)
+    private function setDb(string $dbnameVar)
     {
         $this->host = $this->envVar('DB_HOST_TOOLS') ?: 'tools.db.svc.wikimedia.cloud';
         $this->dbname = $this->envVar($dbnameVar);
@@ -387,7 +387,7 @@ function check_one($select = "*", $where = "", $value = "", $table = "")
     if (count($result) > 0) {
         foreach ($result as $key => $tab) {
 
-            // echo "<br>check_one: $where: $tab[$select]<br>";
+            // echo "<br>checkOne: $where: $tab[$select]<br>";
 
             return $tab[$select] ?? $tab;
         }
