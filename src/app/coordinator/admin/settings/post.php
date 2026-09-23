@@ -3,44 +3,75 @@
 
 namespace App\Coordinator\Admin\settings;
 
+use App\User\CurrentUser;
 use function App\APICalls\MdwikiSql\update_settings_value;
 use function App\csrf\verify_csrf_token;
-use App\User\CurrentUser;
 
-if (!CurrentUser::getInstance()->isCoordinator()) {
-	header('Location: /index.php');
-	exit;
-};
+/**
+ * Class SettingsPostProcessor
+ * Handles bulk update of settings values.
+ */
+class SettingsPostProcessor
+{
+    /**
+     * Validates and processes the incoming submission.
+     */
+    public function handle(): void
+    {
+        // Check user authorization
+        if (!CurrentUser::getInstance()->isCoordinator()) {
+            header('Location: /index.php');
+            exit;
+        }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    exit;
-}
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            exit;
+        }
 
-$closeBtn = <<<HTML
-	<div class="aligncenter">
-		<a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-	</div>
-HTML;
+        $closeBtn = $this->getCloseButtonHtml();
 
-if (!verify_csrf_token()) {
-    echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-    echo $closeBtn;
-    return;
-}
-foreach ($_POST['rows'] ?? [] as $key => $table) {
-    // { "id": "2", "title": "translation_button_in_progress_table", "displayed": "Display translation button in progress table?", "value": "1", "type": "check" }
+        if (!verify_csrf_token()) {
+            echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
+            echo $closeBtn;
+            return;
+        }
 
-    $id        = $table["id"] ?? '';
-    $title     = $table["title"] ?? '';
-    $displayed = $table["displayed"] ?? '';
-    $value     = $table["value"] ?? '';
-    $type      = $table["type"] ?? '';
+        $this->processRows($_POST['rows'] ?? []);
+    }
 
-    // if (empty($title) || empty($displayed) || empty($type)) continue;
-    // $re = update_settings($id, $title, $displayed, $value, $type);
+    /**
+     * Updates each submitted setting's value.
+     */
+    private function processRows(array $rows): void
+    {
+        foreach ($rows as $key => $table) {
+            $id    = $table['id'] ?? '';
+            $value = $table['value'] ?? '';
+            $title     = $table["title"] ?? '';
+            $displayed = $table["displayed"] ?? '';
+            $type      = $table["type"] ?? '';
 
-    // dont use empty for value because it can be 0 or "0" which is valid, but empty will treat it as empty
-    if (empty($id) || $value === "") continue;
+            // if (empty($title) || empty($displayed) || empty($type)) continue;
+            // $re = update_settings($id, $title, $displayed, $value, $type);
+            // Don't use empty() for value because it can be 0 or "0" which is valid,
+            // but empty() would treat it as empty.
+            if (empty($id) || $value === "") {
+                continue;
+            }
 
-    $re = update_settings_value($id, $value);
+            $re = update_settings_value($id, $value);
+        }
+    }
+
+    /**
+     * Generates a close button HTML block.
+     */
+    private function getCloseButtonHtml(): string
+    {
+        return <<<HTML
+            <div class="aligncenter">
+                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
+            </div>
+        HTML;
+    }
 }
