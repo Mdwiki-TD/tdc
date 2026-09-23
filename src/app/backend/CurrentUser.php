@@ -172,11 +172,11 @@ class CurrentUser
         $cookieKey = $this->getKey("cookie");
         $username   = $this->getFromCookies("username", $cookieKey);
 
-        if ($this->settings->is_development()) {
+        if ($this->settings->isDevelopment()) {
             $username = $_SESSION["username"] ?? $username;
         }
 
-        if ($this->settings->is_production() && $username !== "") {
+        if ($this->settings->isProduction() && $username !== "") {
             $decryptKey = $this->getKey("decrypt");
             $access      = $this->getAccessFromDb($username, $decryptKey);
 
