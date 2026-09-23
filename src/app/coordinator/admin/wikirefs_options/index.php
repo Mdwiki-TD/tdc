@@ -12,7 +12,7 @@ use function App\Utils\Html\make_edit_icon_new;
  * Class WikiRefsOptionsIndexController
  * Renders the wikirefs per-language options table (language_settings:
  * lang_code, move_dots, expend, add_en_lang), merging in any languages
- * that don"t have a settings row yet with default (off) values.
+ * that don't have a settings row yet with default (off) values.
  */
 class WikiRefsOptionsIndexController
 {
@@ -47,7 +47,7 @@ class WikiRefsOptionsIndexController
 
     /**
      * Loads persisted language settings and merges in any languages
-     * that don"t yet have a row, sorted by lang_code.
+     * that don't yet have a row, sorted by lang_code.
      */
     private function buildMergedLanguageSettings(): array
     {
