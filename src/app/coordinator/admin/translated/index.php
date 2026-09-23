@@ -1,5 +1,6 @@
 <?php
 
+use User\CurrentUser;
 use Tables\Langs\LangsTables;
 use function Utils\Html\make_mdwiki_title;
 use function Utils\Html\make_talk_url;

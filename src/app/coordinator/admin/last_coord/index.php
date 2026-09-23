@@ -1,6 +1,7 @@
 <?php
 
 use function APICalls\TDApi\get_td_api;
+use User\CurrentUser;
 
 $global_username = CurrentUser::getInstance()->getUsername();
 

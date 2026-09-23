@@ -4,6 +4,7 @@
 name=(["'])(\w+)\[\](\$\{*\w+\}*)["']
 name=$1rows[$3][$2]$1
 */
+use User\CurrentUser;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
 	header('Location: /index.php');

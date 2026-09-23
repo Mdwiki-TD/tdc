@@ -2,6 +2,7 @@
 
 use function Utils\Functions\test_print;
 use function Utils\HtmlSide\create_side;
+use User\CurrentUser;
 
 echo <<<HTML
 	<!-- </div> -->

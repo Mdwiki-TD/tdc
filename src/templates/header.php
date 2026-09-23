@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <?php
 
-// Track page load time for performance monitoring
-$time_start = microtime(true);
-
+use User\CurrentUser;
 use OAuth\Settings\Settings;
 use function TDC\Head\print_full_head;
 use function TDC\Head\write_body;
@@ -20,6 +18,9 @@ function ba_alert(string $text): string
 	</div>
 	HTML;
 }
+
+// Track page load time for performance monitoring
+$time_start = microtime(true);
 
 echo print_full_head();
 
