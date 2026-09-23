@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\Admins;
 
-use User\CurrentUser;
-use function SQLorAPI\Funcs\get_coordinators;
-use function TDWIKI\csrf\generate_csrf_token;
+use App\User\CurrentUser;
+use function App\SQLorAPI\Funcs\get_coordinators;
+use function App\csrf\generate_csrf_token;
 
 require_once __DIR__ . '/post.php';
 
