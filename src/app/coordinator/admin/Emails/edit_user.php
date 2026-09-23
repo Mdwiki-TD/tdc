@@ -3,16 +3,15 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-
 use App\User\CurrentUser;
+use function App\Utils\Html\make_project_to_user;
+use function App\csrf\generate_csrf_token;
 
 if (!CurrentUser::getInstance()->isCoordinator()) {
     header('Location: /index.php');
     exit;
 };
 
-use function App\Utils\Html\make_project_to_user;
-use function App\csrf\generate_csrf_token;
 
 echo '</div><script>
     $("#mainnav").hide();
@@ -110,4 +109,3 @@ echo <<<HTML
     </div>
 </div>
 HTML;
-
