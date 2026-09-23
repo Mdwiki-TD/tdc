@@ -2,15 +2,6 @@
 
 namespace Tools\RecentHelps;
 
-/*
-require_once __DIR__ . '/recent_helps.php';
-
-use function Tools\RecentHelps\filter_recent;
-use function Tools\RecentHelps\do_add_date;
-use function Tools\RecentHelps\filter_table;
-
-*/
-
 use Tables\Langs\LangsTables;
 use function Utils\Functions\test_print;
 

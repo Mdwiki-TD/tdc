@@ -7,8 +7,6 @@ if (!CurrentUser::getInstance()->isCoordinator()) {
     exit;
 };
 
-require_once __DIR__ . '/../add/add_post.php';
-
 use function APICalls\MdwikiSql\execute_query;
 use function APICalls\MdwikiSql\fetch_query;
 use function TDWIKI\csrf\verify_csrf_token;
