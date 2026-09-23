@@ -81,4 +81,5 @@ include_once __DIR__ . '/backend/include.php';
 include_once __DIR__ . '/results/get_results.php';
 include_once __DIR__ . '/results/getcats.php';
 
+require_once __DIR__ . '/coordinator/admin/common/AbstractPostHandler.php';
 require_once __DIR__ . '/coordinator/helpers/include.php';
