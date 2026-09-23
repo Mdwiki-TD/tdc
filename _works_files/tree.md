@@ -25,7 +25,6 @@ src/
 │   ├── coordinator/
 │   │   ├── admin/
 │   │   │   ├── add/
-│   │   │   │   ├── add_post.php
 │   │   │   │   ├── index.php
 │   │   │   │   └── post.php
 │   │   │   ├── admins/
@@ -38,8 +37,7 @@ src/
 │   │   │   │   ├── edit_user.php
 │   │   │   │   ├── index.php
 │   │   │   │   ├── msg.php
-│   │   │   │   ├── post.php
-│   │   │   │   └── sugust.php
+│   │   │   │   └── post.php
 │   │   │   ├── full_translators/
 │   │   │   │   ├── index.php
 │   │   │   │   └── post.php
@@ -76,15 +74,12 @@ src/
 │   │   │   │   ├── edit.php
 │   │   │   │   └── index.php
 │   │   │   └── index.php
-│   │   ├── tools/
-│   │   │   ├── categories.php
+│   │   ├── helpers/
+│   │   │   ├── add_helper.php
+│   │   │   ├── include.php
 │   │   │   ├── index.php
-│   │   │   ├── last.php
-│   │   │   ├── process.php
-│   │   │   ├── process1.php
-│   │   │   ├── process_total.php
 │   │   │   ├── recent_helps.php
-│   │   │   └── stat.php
+│   │   │   └── sugust_helper.php
 │   │   ├── 404.php
 │   │   ├── index.php
 │   │   └── README.md
@@ -92,6 +87,14 @@ src/
 │   │   ├── get_results.php
 │   │   ├── getcats.php
 │   │   └── README.md
+│   ├── tools/
+│   │   ├── categories.php
+│   │   ├── index.php
+│   │   ├── last.php
+│   │   ├── process.php
+│   │   ├── process1.php
+│   │   ├── process_total.php
+│   │   └── stat.php
 │   ├── utils/
 │   │   ├── functions.php
 │   │   ├── html.php
