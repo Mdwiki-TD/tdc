@@ -50,6 +50,16 @@ function echo_card_start($file_name, $ty, $user_is_coordinator)
 	HTML;
 }
 
+function echo_card_end()
+{
+	echo <<<HTML
+				</div>
+			</div>
+		</div>
+	</div>
+	HTML;
+}
+
 $default_ty = $user_is_coordinator ? "last_coord" : "last";
 
 $ty = $_GET['ty'] ?? $_POST['ty'] ?? $default_ty;
@@ -94,3 +104,5 @@ if (in_array($ty, $tools_files)) {
 	test_print("can't find $adminfile");
 	include_once __DIR__ . "/coordinator/404.php";
 };
+
+echo_card_end();

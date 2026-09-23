@@ -11,12 +11,6 @@ HTML;
 
 include_once __DIR__ . '/app/index.php';
 
-echo <<<HTML
-			</div>
-		</div>
-	</div>
-</div>
-HTML;
 
 echo "<script src='/tdc/js/autocomplate.js'></script>";
 
