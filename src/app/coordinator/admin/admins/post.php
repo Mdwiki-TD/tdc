@@ -20,12 +20,8 @@ class AdminsPostProcessor extends AbstractPostHandler
     protected function process(array $post): void
     {
         $this->validateCoordinator();
-
-        $closeBtn = $this->getCloseButtonHtml();
-
         $this->processRows($post['rows'] ?? []);
 
-        echo $closeBtn;
     }
 
     /**
@@ -85,4 +81,3 @@ class AdminsPostProcessor extends AbstractPostHandler
     }
 
 }
-// \$this->errors\[\] = (.*?);

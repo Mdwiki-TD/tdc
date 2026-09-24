@@ -21,7 +21,7 @@ class SettingsIndexController extends AbstractController
     {
         $postProcessor = new SettingsPostProcessor();
         $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
+        $postProcessor->RenderIndexMesseges($result);
     }
     /**
      * Handles authentication and executes controller output.

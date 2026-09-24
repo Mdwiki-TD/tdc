@@ -22,7 +22,7 @@ class AdminsIndexController extends AbstractController
     {
         $postProcessor = new AdminsPostProcessor();
         $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
+        $postProcessor->RenderIndexMesseges($result);
     }
 	/**
 	 * Handles authentication and executes controller output.

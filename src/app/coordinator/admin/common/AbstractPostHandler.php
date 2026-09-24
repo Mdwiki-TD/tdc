@@ -123,7 +123,7 @@ abstract class AbstractPostHandler extends AbstractSubPostHandler
             'texts'     => $this->texts,
         ];
     }
-    public function RenderMesseges(array $result): void
+    public function RenderIndexMesseges(array $result): void
     {
         echo div_alert($result['errors'], 'danger');
 
@@ -132,6 +132,10 @@ abstract class AbstractPostHandler extends AbstractSubPostHandler
         }
 
         echo div_alert($result['texts'], 'success');
+    }
+    public function RenderMesseges(array $result): void
+    {
+        $this->RenderIndexMesseges($result);
 
         if (!$this->shouldShowForm()) {
             echo $this->getCloseButtonHtml();

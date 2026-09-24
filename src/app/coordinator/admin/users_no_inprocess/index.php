@@ -23,7 +23,7 @@ class UsersNoInprocessIndexController extends AbstractController
     {
         $postProcessor = new UsersNoInprocessPostProcessor();
         $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
+        $postProcessor->RenderIndexMesseges($result);
     }
     /**
      * Handles authentication and executes controller output.
