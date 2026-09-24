@@ -22,12 +22,12 @@ use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
  */
 class PagesUsersToMainIndexController extends AbstractControllerNoPost
 {
-    private CurrentUser $currentUser;
+    // private CurrentUser $currentUser;
     private string $lang;
 
     public function __construct()
     {
-        $this->currentUser = CurrentUser::getInstance();
+        // $this->currentUser = CurrentUser::getInstance();
         $this->lang = $_GET['lang'] ?? 'All';
 
         if ($this->lang !== 'All' && !isset(LangsTables::$LCodeToLang[$this->lang])) {

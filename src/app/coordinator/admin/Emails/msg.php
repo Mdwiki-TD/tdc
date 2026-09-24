@@ -3,15 +3,15 @@
 
 namespace App\Coordinator\Admin\Emails;
 
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractEditController;
 use App\Tables\Main\MainTables;
+use function App\csrf\generate_csrf_token;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\APICalls\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Emails\Sugust\get_sugust;
-
 
 /**
  * Class MsgController
@@ -19,7 +19,7 @@ use function App\Emails\Sugust\get_sugust;
  * with the translated title, view counts, and a translation suggestion.
  * Submission is posted to the external /gmail1/index.php endpoint.
  */
-class MsgController extends AbstractEditController
+class MsgController extends AbstractControllerNoPost
 {
     private string $globalUsername;
     private string $test;
@@ -48,7 +48,7 @@ class MsgController extends AbstractEditController
     {
         $this->validateCoordinator();
 
-        $this->renderHeaderAndScripts();
+        $this->renderHeaderScripts();
 
         $views = get_views($this->target, $this->lang, $this->date);
 
@@ -71,9 +71,13 @@ class MsgController extends AbstractEditController
     /**
      * Renders UI scripts and includes the Summernote WYSIWYG editor assets.
      */
-    private function renderHeaderAndScripts(): void
+    public function renderHeaderScripts(): void
     {
-		$this->renderHeaderScripts();
+        echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>
+        <div class="container-fluid">';
 
         $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
             ? "https://cdnjs.cloudflare.com"
@@ -320,6 +324,15 @@ class MsgController extends AbstractEditController
             </script>
         HTML;
     }
+    public function createCsrfTokenField(): string
+    {
+        $csrfToken = generate_csrf_token();
+
+        return <<<HTML
+            <input name='csrf_token' value="$csrfToken" type="hidden"/>
+        HTML;
+    }
+
 }
 
 // Instantiate and execute controller
