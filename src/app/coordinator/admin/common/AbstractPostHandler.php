@@ -17,6 +17,7 @@ abstract class AbstractSubPostHandler
         // Validate user authorization
         if (!CurrentUser::getInstance()->isCoordinator()) {
             // return to home page
+            header('Location: /index.php');
             exit;
         }
     }

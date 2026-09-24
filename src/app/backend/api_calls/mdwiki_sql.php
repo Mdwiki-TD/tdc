@@ -362,7 +362,7 @@ function check_one($select = "*", $where = "", $value = "", $table = "")
 
     // Whitelist of allowed columns for each table
     $allowedColumns = [
-        'users' => ['*', 'username'],
+        'users' => ['*', 'username', 'user_id'],
         'qids' => ['*', 'qid', 'title'],
         'qids_others' => ['*', 'qid', 'title'],
     ];

@@ -54,11 +54,11 @@ class EditUserController extends AbstractController
      */
     private function buildFormHtml(string $userId): string
     {
-        $userInfo = check_one('*', 'user_id', $userId, 'users');
-        $user = $userInfo["username"];
-        $wiki = $userInfo["wiki"];
-        $user_group = $userInfo["user_group"];
-        $email = $userInfo["email"];
+        $userInfo  = check_one('*', 'user_id', $userId, 'users');
+        $user      = $userInfo['username'] ?? '';
+        $wiki      = $userInfo['wiki'] ?? '';
+        $user_group = $userInfo['user_group'] ?? '';
+        $email     = $userInfo['email'] ?? '';
 
         $projectLine = make_project_to_user($user_group);
 
