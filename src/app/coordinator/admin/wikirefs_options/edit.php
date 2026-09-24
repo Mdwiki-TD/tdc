@@ -3,59 +3,46 @@
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
-use App\User\CurrentUser;
-use function App\csrf\generate_csrf_token;
-use function App\Utils\Html\div_alert;
+use App\Coordinator\Admin\Common\AbstractController;
 
-require_once __DIR__ . '/edit_post.php';
+require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
 
 /**
  * Class WikiRefsOptionsEditController
  * Handles add/edit/delete of a single language_settings row (GET
  * renders the form, POST persists the change via WikiRefsOptionsEditPostHandler).
  */
-class WikiRefsOptionsEditController
+class WikiRefsOptionsEditController extends AbstractController
 {
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new WikiRefsOptionsEditPostHandler();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and handles the incoming request.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->validateCoordinator();
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $result = (new WikiRefsOptionsEditPostHandler())->handle($_POST);
-            echo div_alert($result['texts'], 'success');
-            echo div_alert($result['errors'], 'danger');
+            $this->handlePostRequest();
         } else {
-            $this->renderForm();
+            $this->renderFormCard();
         }
-
-        echo "</div></div>";
-    }
-
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
     }
 
     /**
      * Renders the add/edit form for the language settings row.
      */
-    private function renderForm(): void
+    private function renderFormCard(): void
     {
         $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $langCode   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');
@@ -64,14 +51,6 @@ class WikiRefsOptionsEditController
         $addEnLang  = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
 
         $headerTitle = (!empty($id)) ? 'Edit language settings' : 'Add language settings';
-
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-        HTML;
 
         $idRow = <<<HTML
             <input class='form-control' value='$id' name='id' type='hidden'/>
@@ -120,11 +99,9 @@ class WikiRefsOptionsEditController
             HTML;
         }
 
-        $csrfToken = generate_csrf_token();
-
-        echo <<<HTML
+        $form = <<<HTML
             <form action='index.php?ty=wikirefs_options/edit&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
                     <div class='row'>
@@ -150,6 +127,8 @@ class WikiRefsOptionsEditController
                 </div>
             </form>
         HTML;
+
+        $this->echoCard($headerTitle, $form);
     }
 }
 

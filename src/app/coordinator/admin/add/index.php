@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\Add;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -15,74 +15,75 @@ require_once __DIR__ . '/post.php';
  * options and a single starter row. On POST, delegates to
  * AddPostProcessor first, then always renders the form below it.
  */
-class AddIndexController
+class AddIndexController extends AbstractController
 {
-	/**
-	 * Handles authentication and executes controller output.
-	 */
-	public function handleRequest(): void
-	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new AddPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderIndexMesseges($result);
+    }
+    /**
+     * Handles authentication and executes controller output.
+     */
+    public function handleRequest(): void
+    {
+        $this->validateCoordinator();
 
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$postProcessor = new AddPostProcessor();
-			$postProcessor->handle();
-		}
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handlePostRequest();
+        }
 
-		$cats = $this->buildCategoryOptions();
-		$table = $this->buildStarterRows($cats);
+        $cats = $this->buildCategoryOptions();
+        $table = $this->buildStarterRows($cats);
 
-		$this->renderCard($cats, $table);
-		$this->renderUrlSearchBlock();
-	}
+        $this->renderCard($cats, $table);
+        $this->renderUrlSearchBlock();
+    }
 
-	/**
-	 * Builds <option> markup for every campaign category.
-	 */
-	private function buildCategoryOptions(): string
-	{
-		$cats = '';
-		$categories = get_td_or_sql_categories();
+    /**
+     * Builds <option> markup for every campaign category.
+     */
+    private function buildCategoryOptions(): string
+    {
+        $cats = '';
+        $categories = get_td_or_sql_categories();
 
-		foreach ($categories as $key => $ta) {
-			$ca = $ta['category'] ?? '';
-			$ds = $ta['campaign'] ?? '';
+        foreach ($categories as $key => $ta) {
+            $ca = $ta['category'] ?? '';
+            $ds = $ta['campaign'] ?? '';
 
-			if (!empty($ca)) {
-				$cats .= "<option value='$ca'>$ds</option>";
-			}
-		}
+            if (!empty($ca)) {
+                $cats .= "<option value='$ca'>$ds</option>";
+            }
+        }
 
-		return $cats;
-	}
+        return $cats;
+    }
 
-	/**
-	 * Builds the initial table row(s) of the add-translations form.
-	 */
-	private function buildStarterRows(string $cats): string
-	{
-		$typiesTemplate = <<<HTML
+    /**
+     * Builds the initial table row(s) of the add-translations form.
+     */
+    private function buildStarterRows(string $cats): string
+    {
+        $typiesTemplate = <<<HTML
             <select name='rows[%s][type]' id='rows[%s][type]' class='form-select w-100' data-bs-theme="auto">
                 <option value='lead'>Lead</option><option value='all'>All</option>
             </select>
         HTML;
 
-		$table = '';
+        $table = '';
 
-		foreach (range(1, 1) as $numb) {
-			$catsLine = <<<HTML
+        foreach (range(1, 1) as $numb) {
+            $catsLine = <<<HTML
                 <select class='form-select catsoptions' name='rows[$numb][cat]' data-bs-theme="auto">
                     $cats
                 </select>
             HTML;
 
-			$typeLine = sprintf($typiesTemplate, $numb, $numb);
+            $typeLine = sprintf($typiesTemplate, $numb, $numb);
 
-			$table .= <<<HTML
+            $table .= <<<HTML
                 <tr id="row_$numb">
                     <td data-order='$numb' data-content='#'>
                         $numb
@@ -115,21 +116,19 @@ class AddIndexController
                     </td>
                 </tr>
             HTML;
-		}
+        }
 
-		return $table;
-	}
+        return $table;
+    }
 
-	/**
-	 * Renders the main "Add translations" card with the form and table.
-	 */
-	private function renderCard(string $cats, string $table): void
-	{
-		$testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
+    /**
+     * Renders the main "Add translations" card with the form and table.
+     */
+    private function renderCard(string $cats, string $table): void
+    {
+        $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
 
-		$csrfToken = generate_csrf_token();
-
-		echo <<<HTML
+        echo <<<HTML
             <div class='card'>
                 <select class='catsoptions' data-bs-theme="auto" hidden>$cats</select>
                 <div class='card-header'>
@@ -137,7 +136,7 @@ class AddIndexController
                 </div>
                 <div class='cardbody p-2'>
                     <form action="index.php?ty=add" method="POST">
-                        <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                        {$this->createCsrfTokenField()}
                         $testin
                         <input name='ty' value="add" type="hidden"/>
                         <div class="form-group">
@@ -167,14 +166,14 @@ class AddIndexController
                 </div>
             </div>
         HTML;
-	}
+    }
 
-	/**
-	 * Renders the "search by URL" helper block and its supporting script.
-	 */
-	private function renderUrlSearchBlock(): void
-	{
-		echo <<<HTML
+    /**
+     * Renders the "search by URL" helper block and its supporting script.
+     */
+    private function renderUrlSearchBlock(): void
+    {
+        echo <<<HTML
             <div class='cardbody p-3'>
 
                 <div class='container'>
@@ -191,7 +190,7 @@ class AddIndexController
 
             <script src='/tdc/js/add_by_url.js'></script>
         HTML;
-	}
+    }
 }
 
 // Instantiate and execute controller

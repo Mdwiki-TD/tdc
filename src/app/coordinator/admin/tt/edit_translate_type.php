@@ -3,15 +3,17 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use App\User\CurrentUser;
-use function App\csrf\generate_csrf_token;
+use App\Coordinator\Admin\Common\AbstractController;
+
+
+require_once __DIR__ . '/post.php';
 
 /**
  * Class EditTranslateTypeController
  * Renders the add/edit form for a single translate_type entry (GET
- * request only; submission is handled by TtPostController).
+ * request only; submission is handled by TtPostProcessor).
  */
-class EditTranslateTypeController
+class EditTranslateTypeController extends AbstractController
 {
     private string $title;
     private string $lead;
@@ -26,31 +28,30 @@ class EditTranslateTypeController
         $this->id    = $_GET['id'] ?? '';
     }
 
+    public function handlePostRequest(): void
+    {
+        // Instantiate and execute processor
+        $postProcessor = new TtPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and renders the form view.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->validateCoordinator();
         $this->renderHeaderScripts();
-        $this->renderFormCard();
-    }
 
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handlePostRequest();
+        } else {
+            $this->renderFormCard();
+        }
     }
 
     /**
@@ -62,8 +63,6 @@ class EditTranslateTypeController
         $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
 
         $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-
-        $csrfToken = generate_csrf_token();
 
         $idRow = <<<HTML
             <div class='col-md-3'>
@@ -81,8 +80,8 @@ class EditTranslateTypeController
         }
 
         return <<<HTML
-            <form action='index.php?ty=tt/post&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+            <form action='index.php?ty=tt/edit_translate_type&nonav=120' method="POST">
+                {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
                     <div class='row'>
@@ -134,19 +133,9 @@ class EditTranslateTypeController
     private function renderFormCard(): void
     {
         $headerTitle = (!empty($this->id)) ? 'Edit Translate type' : 'Add Translate type';
-
         $form = $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-                    $form
-                </div>
-            </div>
-        HTML;
+        $this->echoCard($headerTitle, $form);
     }
 }
 

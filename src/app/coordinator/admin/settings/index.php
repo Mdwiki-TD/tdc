@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\settings;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_settings;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -15,22 +15,23 @@ require_once __DIR__ . '/post.php';
  * SettingsPostProcessor first, then always renders the current state
  * of the form below it.
  */
-class SettingsIndexController
+class SettingsIndexController extends AbstractController
 {
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new SettingsPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderIndexMesseges($result);
+    }
     /**
      * Handles authentication and executes controller output.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new SettingsPostProcessor();
-            $postProcessor->handle();
+            $this->handlePostRequest();
         }
 
         $settings = get_td_or_sql_settings();
@@ -128,24 +129,19 @@ class SettingsIndexController
      */
     private function renderCard(string $text): void
     {
-        $csrfToken = generate_csrf_token();
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Settings:</h4>
-                </div>
-                <div class='card-body'>
-                    <div class='row'>
-                        <form action='index.php' method="POST">
-                            <input name='csrf_token' value="$csrfToken" type="hidden"/>
-                            <input name='ty' value='settings' type="hidden"/>
-                        $text
-                        <button type='submit' class='btn btn-outline-primary'>Save</button>
-                    </form>
-                </div>
+        $body = <<<HTML
+            <div class='row'>
+                <form action='index.php' method="POST">
+                    {$this->createCsrfTokenField()}
+                    <input name='ty' value='settings' type="hidden"/>
+                    $text
+                    <button type='submit' class='btn btn-outline-primary'>Save</button>
+                </form>
             </div>
         HTML;
+
+        $this->echoCard("Settings:", $body);
     }
 }
 

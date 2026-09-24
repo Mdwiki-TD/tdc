@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\settings;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\update_settings_value;
 use function App\csrf\verify_csrf_token;
 
@@ -11,33 +11,12 @@ use function App\csrf\verify_csrf_token;
  * Class SettingsPostProcessor
  * Handles bulk update of settings values.
  */
-class SettingsPostProcessor
+class SettingsPostProcessor extends AbstractPostHandler
 {
-    /**
-     * Validates and processes the incoming submission.
-     */
-    public function handle(): void
-    {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            exit;
-        }
-
-        $closeBtn = $this->getCloseButtonHtml();
-
-        if (!verify_csrf_token()) {
-            echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-            echo $closeBtn;
-            return;
-        }
-
-        $this->processRows($_POST['rows'] ?? []);
-    }
+	public function process(array $post): void
+	{
+        $this->processRows($post['rows'] ?? []);
+	}
 
     /**
      * Updates each submitted setting's value.
@@ -61,17 +40,5 @@ class SettingsPostProcessor
 
             $re = update_settings_value($id, $value);
         }
-    }
-
-    /**
-     * Generates a close button HTML block.
-     */
-    private function getCloseButtonHtml(): string
-    {
-        return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
     }
 }

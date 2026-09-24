@@ -3,67 +3,64 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\Utils\Html\make_project_to_user;
-use function App\csrf\generate_csrf_token;
+use function App\APICalls\MdwikiSql\get_user_by_id;
+
+
+require_once __DIR__ . '/post.php';
 
 /**
  * Class EditUserController
  * Renders the add/edit form for a single user's email/wiki/project
  * data (GET request only; submission is handled by EmailsPostProcessor).
  */
-class EditUserController
+class EditUserController extends AbstractController
 {
-    private string $user;
-    private string $wiki;
-    private string $project;
-    private string $email;
     private string $userId;
 
     public function __construct()
     {
-        $this->user    = $_GET['user'] ?? '';
-        $this->wiki    = $_GET['wiki'] ?? '';
-        $this->project = $_GET['project'] ?? '';
-        $this->email   = $_GET['email'] ?? '';
-        $this->userId  = $_GET['user_id'] ?? '';
+        $this->userId  = $_GET['user_id'] ?? $_POST['user_id'] ?? '';
     }
 
+    public function handlePostRequest(): void
+    {
+        // Instantiate and execute processor
+        $postProcessor = new EmailsPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and renders the form view.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->validateCoordinator();
         $this->renderHeaderScripts();
-        $this->renderFormCard();
-    }
 
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handlePostRequest();
+        } else {
+            $this->renderFormCard();
+        }
     }
-
     /**
      * Builds the user/email/wiki/project edit-or-add form markup.
      */
-    private function buildFormHtml(string $user, string $wiki, string $project, string $email, string $userId): string
+    private function buildFormHtml(string $userId): string
     {
-        $projectLine = make_project_to_user($project);
+        $userInfo  = get_user_by_id($userId);
+        $user      = $userInfo['username'] ?? '';
+        $wiki      = $userInfo['wiki'] ?? '';
+        $user_group = $userInfo['user_group'] ?? '';
+        $email     = $userInfo['email'] ?? '';
 
-        $csrfToken = generate_csrf_token();
+        $projectLine = make_project_to_user($user_group);
 
         $idRow = <<<HTML
             <div class='col-md-3'>
@@ -81,8 +78,8 @@ class EditUserController
         }
 
         return <<<HTML
-            <form action='index.php?ty=Emails/post&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+            <form action='index.php?ty=Emails/edit_user&nonav=120&user_id={$this->userId}' method="POST">
+                {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
                     <div class='row'>
@@ -134,18 +131,9 @@ class EditUserController
     private function renderFormCard(): void
     {
         $headerTitle = (!empty($this->userId)) ? 'Edit User' : 'Add New User';
+        $form = $this->buildFormHtml($this->userId);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-        HTML;
-
-        echo $this->buildFormHtml($this->user, $this->wiki, $this->project, $this->email, $this->userId);
-
-        echo "</div></div>";
+        $this->echoCard($headerTitle, $form);
     }
 }
 

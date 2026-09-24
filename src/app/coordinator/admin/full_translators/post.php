@@ -3,49 +3,21 @@
 
 namespace App\Coordinator\Admin\FullTranslators;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\Utils\Html\div_alert;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class FullTranslatorsPostProcessor
  * Handles add/update/delete of "full article translator" users.
  */
-class FullTranslatorsPostProcessor
+class FullTranslatorsPostProcessor extends AbstractPostHandler
 {
 	private const TABLE_NAME = 'full_translators';
 
-	private array $texts = [];
-	private array $errors = [];
 
-	/**
-	 * Validates and processes the incoming submission.
-	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
-
-		echo div_alert($this->texts, 'success');
-		echo div_alert($this->errors, 'danger');
+		$this->processRows($post['rows'] ?? []);
 	}
 
 	/**
@@ -66,11 +38,11 @@ class FullTranslatorsPostProcessor
 				$result = execute_query($qua2, [$uId]);
 
 				if ($result === false) {
-					$this->errors[] = "Failed to delete user $user.";
+					$this->addError("Failed to delete user $user.");
 					continue;
 				}
 
-				$this->texts[] = "User $user deleted.";
+				$this->addText("User $user deleted.");
 				continue;
 			}
 
@@ -97,23 +69,11 @@ class FullTranslatorsPostProcessor
 				$result = execute_query($qua, [$user, $isActive]);
 
 				if ($result === false) {
-					$this->errors[] = "Failed to add user $user.";
+					$this->addError("Failed to add user $user.");
 				} else {
-					$this->texts[] = (empty($uId)) ? "User $user Added." : "User $user Updated.";
+					$this->addText((empty($uId)) ? "User $user Added." : "User $user Updated.");
 				}
 			}
 		}
-	}
-
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
 	}
 }

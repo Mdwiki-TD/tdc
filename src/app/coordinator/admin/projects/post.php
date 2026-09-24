@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Projects;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\insert_to_projects;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\Utils\Html\div_alert;
@@ -15,36 +16,11 @@ use function App\csrf\verify_csrf_token;
  * Can run standalone (direct request) or be delegated to from
  * ProjectsIndexController when the index form is submitted.
  */
-class ProjectsPostProcessor
+class ProjectsPostProcessor extends AbstractPostHandler
 {
-	private array $texts = [];
-
-	/**
-	 * Validates and processes the incoming submission.
-	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
-
-		echo div_alert($this->texts, 'success');
+        $this->processRows($post['rows'] ?? []);
 	}
 
 	/**
@@ -61,7 +37,7 @@ class ProjectsPostProcessor
 				$qua2 = "DELETE FROM projects WHERE g_id = ?";
 				execute_query($qua2, [$gId]);
 
-				$this->texts[] = "Project $gTitle deleted.";
+				$this->addText("Project $gTitle deleted.");
 				continue;
 			}
 
@@ -74,22 +50,11 @@ class ProjectsPostProcessor
 			insert_to_projects($gTitle, $gId);
 
 			if (empty($gId)) {
-				$this->texts[] = "Project $gTitle Added.";
+				$this->addText("Project $gTitle Added.");
 			} else {
-				$this->texts[] = "Project $gTitle Updated.";
+				$this->addText("Project $gTitle Updated.");
 			}
 		}
 	}
 
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-	}
 }

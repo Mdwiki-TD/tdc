@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Translated;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
@@ -18,7 +19,7 @@ use function App\Tools\RecentHelps\filter_recent2;
  * Class TranslatedIndexController
  * Manages rendering the translated pages dashboard with pagination and filtering.
  */
-class TranslatedIndexController
+class TranslatedIndexController extends AbstractController
 {
     private CurrentUser $currentUser;
     private string $lang;

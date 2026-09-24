@@ -3,56 +3,29 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\User\CurrentUser;
-use function App\Utils\Html\div_alert;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\sql_update_user;
 use function App\APICalls\MdwikiSql\sql_add_user;
-use function App\APICalls\MdwikiSql\check_one;
-use function App\csrf\verify_csrf_token;
+use function App\APICalls\MdwikiSql\get_user_by_username;
 
 /**
  * Class EmailsPostProcessor
  * Handles add/update submissions of user email/wiki/project rows.
  */
-class EmailsPostProcessor
+class EmailsPostProcessor extends AbstractPostHandler
 {
-	private array $texts = [];
-	private array $errors = [];
 
 	/**
 	 * Validates and processes the incoming submission.
 	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
-
-		echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>';
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['emails'])) {
-			exit;
-		}
-
-		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-			echo $closeBtn;
+		if (!isset($post['emails'])) {
+			$this->addError("Invalid submission.");
+			$this->returnToFormPage = true;
 			return;
 		}
-
-		$this->processRows($_POST['emails']);
-
-		echo div_alert($this->texts, 'success');
-		echo div_alert($this->errors, 'danger');
-
-		echo $closeBtn;
+		$this->processRows($post['emails']);
 	}
 
 	/**
@@ -69,7 +42,7 @@ class EmailsPostProcessor
 			$userId  = $table['user_id'] ?? '';
 
 			if (empty($user)) {
-				$this->errors[] = "Username is required.";
+				$this->addError("Username is required.");
 				continue;
 			}
 
@@ -79,53 +52,39 @@ class EmailsPostProcessor
 			// Validate email format if not empty
 			if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				// Handle invalid email - either log, set to empty, or return error
-				$this->errors[] = "Invalid Email format";
-				$email = '';
+				$this->addError("Invalid Email format");
+				$this->returnToFormPage = true;
+				// $email = '';
+				continue;
 			}
 
 			$wiki = trim($wiki);
 			$project = trim($project);
 
-			$ttTab = check_one('*', 'username', $user, 'users');
+			$ttTab = get_user_by_username($user);
 
 			if ($ttTab) {
 				$ttUsername = $ttTab['username'];
 				$ttId = $ttTab['user_id'];
 
 				if (!empty($userId) && $ttId != $userId) {
-					$this->errors[] = "User:($user) already in database with user_id:($ttId).";
+					$this->addError("User:($user) already in database with user_id:($ttId).");
 					continue;
 				}
 
 				if (empty($userId) && !empty($ttUsername)) {
-					$this->errors[] = "User:($user) already in database with user_id:($ttId).";
+					$this->addError("User:($user) already in database with user_id:($ttId).");
 					continue;
 				}
 			}
 
 			if (empty($userId)) {
 				sql_add_user($user, $email, $wiki, $project);
-				$this->texts[] = "User:($user) added successfully.";
+				$this->addText("User:($user) added successfully.");
 			} else {
 				sql_update_user($user, $email, $wiki, $project, $userId);
-				$this->texts[] = "User:($user) updated successfully.";
+				$this->addText("User:($user) updated successfully.");
 			}
 		}
 	}
-
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-	}
 }
-
-// Instantiate and execute controller
-$controller = new EmailsPostProcessor();
-$controller->handle();

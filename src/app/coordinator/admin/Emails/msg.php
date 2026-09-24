@@ -4,13 +4,14 @@
 namespace App\Coordinator\Admin\Emails;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use App\Tables\Main\MainTables;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\APICalls\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Emails\Sugust\get_sugust;
-use function App\csrf\generate_csrf_token;
+
 
 /**
  * Class MsgController
@@ -18,7 +19,7 @@ use function App\csrf\generate_csrf_token;
  * with the translated title, view counts, and a translation suggestion.
  * Submission is posted to the external /gmail1/index.php endpoint.
  */
-class MsgController
+class MsgController extends AbstractController
 {
     private string $globalUsername;
     private string $test;
@@ -45,13 +46,9 @@ class MsgController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
-        $this->renderHeaderScripts();
+        $this->renderHeaderAndScripts();
 
         $views = get_views($this->target, $this->lang, $this->date);
 
@@ -74,22 +71,18 @@ class MsgController
     /**
      * Renders UI scripts and includes the Summernote WYSIWYG editor assets.
      */
-    private function renderHeaderScripts(): void
+    private function renderHeaderAndScripts(): void
     {
-        echo "</div>";
+		$this->renderHeaderScripts();
 
         $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
             ? "https://cdnjs.cloudflare.com"
             : "https://tools-static.wmflabs.org/cdnjs";
 
+
         echo <<<HTML
             <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
             <link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
-            <script>
-                $('#mainnav').hide();
-                $('#maindiv').hide();
-            </script>
-            <div id='yeye' class='container-fluid'>
         HTML;
     }
 
@@ -255,14 +248,14 @@ class MsgController
     private function renderComposeForm(string $emailTo, string $ccTo, string $mag): void
     {
         $postPhp = "/gmail1/index.php";
-        $csrfToken = generate_csrf_token();
+
         $test = $this->test;
         $lang = $this->lang;
 
         echo <<<HTML
             <div class1='container-fluid'>
                 <form action='$postPhp' method="POST">
-                  <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                  {$this->createCsrfTokenField()}
                     <input type='hidden' name='test' value='$test'/>
                     <input type='hidden' name='lang' value='$lang'/>
                     <input type='hidden' name='nonav' value='1'/>

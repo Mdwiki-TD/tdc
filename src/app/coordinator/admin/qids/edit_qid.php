@@ -3,15 +3,17 @@
 
 namespace App\Coordinator\Admin\Qids;
 
-use App\User\CurrentUser;
-use function App\csrf\generate_csrf_token;
+use App\Coordinator\Admin\Common\AbstractController;
+
+
+require_once __DIR__ . '/post.php';
 
 /**
  * Class EditQidController
  * Renders the add/edit form for a single qid entry (GET request only;
- * submission is handled by QidsPostController).
+ * submission is handled by QidsPostProcessor).
  */
-class EditQidController
+class EditQidController extends AbstractController
 {
     private string $id;
     private string $title;
@@ -30,31 +32,30 @@ class EditQidController
         }
     }
 
+    public function handlePostRequest(): void
+    {
+        // Instantiate and execute processor
+        $postProcessor = new QidsPostProcessor($_GET['qid_table'] ?? '');
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and renders the form view.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->validateCoordinator();
         $this->renderHeaderScripts();
-        $this->renderFormCard();
-    }
 
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handlePostRequest();
+        } else {
+            $this->renderFormCard();
+        }
     }
 
     /**
@@ -63,8 +64,6 @@ class EditQidController
     private function buildFormHtml(string $id, string $title, string $qid, string $qidTable): string
     {
         $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-
-        $csrfToken = generate_csrf_token();
 
         $idRow = <<<HTML
             <div class='col-md-3'>
@@ -82,8 +81,8 @@ class EditQidController
         }
 
         return <<<HTML
-            <form action='index.php?ty=qids/post&qid_table=$qidTable&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+            <form action='index.php?ty=qids/edit_qid&qid_table=$qidTable&nonav=120' method="POST">
+                {$this->createCsrfTokenField()}
                 <input name='qid_table' value="$qidTable" type="hidden"/>
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
@@ -120,19 +119,9 @@ class EditQidController
     private function renderFormCard(): void
     {
         $headerTitle = ($this->id !== '') ? 'Edit Qid' : 'Add New Qid';
-
         $form = $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-                    $form
-                </div>
-            </div>
-        HTML;
+        $this->echoCard($headerTitle, $form);
     }
 }
 

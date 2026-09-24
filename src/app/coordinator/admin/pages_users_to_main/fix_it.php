@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/fix_it_post.php';
 
@@ -13,48 +13,39 @@ require_once __DIR__ . '/fix_it_post.php';
  * Class FixItController
  * Handles displaying the page edit form and duplicate entry checks (GET requests).
  */
-class FixItController
+class FixItController extends AbstractController
 {
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new FixItPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and handles the incoming request.
      */
     public function handleRequest(): void
     {
-        // Check coordinator authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->validateCoordinator();
         $this->renderHeaderScripts();
 
         // Delegate POST requests to the POST processor
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postHandler = new FixItPostProcessor();
-            $postHandler->handle();
-            return;
+            $this->handlePostRequest();
+        } else {
+            // Handle GET request and render view
+            $this->renderFormCard();
         }
-
-        // Handle GET request and render view
-        $this->renderFormView();
-    }
-
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
     }
 
     /**
      * Renders the HTML structure and form.
      */
-    private function renderFormView(): void
+    private function renderFormCard(): void
     {
 
         $id        = $_GET['id'] ?? '';
@@ -78,16 +69,8 @@ class FixItController
 
         $formHtml = $this->buildFormHtml($id, $title, $newTarget, $lang, $newUser, $pupdate);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Edit Page ($oldTarget)</h4>
-                </div>
-                <div class='card-body'>
-                    $formHtml
-                </div>
-            </div>
-        HTML;
+
+        $this->echoCard("Edit Page ({$oldTarget})", $formHtml);
     }
 
     /**
@@ -135,11 +118,11 @@ class FixItController
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($newTarget, ENT_QUOTES, 'UTF-8');
 
-        $csrfToken = generate_csrf_token();
+
 
         return <<<HTML
             <form action='index.php?ty=pages_users_to_main/fix_it&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='$id' type='hidden'/>
                 <input name='edit' value="1" type="hidden"/>
                 $testLine

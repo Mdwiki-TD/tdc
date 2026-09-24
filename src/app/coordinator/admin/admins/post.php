@@ -3,51 +3,25 @@
 
 namespace App\Coordinator\Admin\Admins;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\Utils\Html\div_alert;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class AdminsPostProcessor
  * Handles add/update/delete of coordinator (admin) users.
  */
-class AdminsPostProcessor
+class AdminsPostProcessor extends AbstractPostHandler
 {
     private const TABLE_NAME = 'coordinators';
-
-    private array $texts = [];
-    private array $errors = [];
 
     /**
      * Validates and processes the incoming submission.
      */
-    public function handle(): void
+    protected function process(array $post): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
+        $this->processRows($post['rows'] ?? []);
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            exit;
-        }
-
-        $closeBtn = $this->getCloseButtonHtml();
-
-        if (!verify_csrf_token()) {
-            echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-            echo $closeBtn;
-            return;
-        }
-
-        $this->processRows($_POST['rows'] ?? []);
-
-        echo div_alert($this->texts, 'success');
-        echo div_alert($this->errors, 'danger');
-
-        echo $closeBtn;
     }
 
     /**
@@ -68,11 +42,11 @@ class AdminsPostProcessor
                 $result = execute_query($qua2, [$uId]);
 
                 if ($result === false) {
-                    $this->errors[] = "Failed to delete user $username.";
+                    $this->addError("Failed to delete user $username.");
                     continue;
                 }
 
-                $this->texts[] = "User $username deleted.";
+                $this->addText("User $username deleted.");
                 continue;
             }
 
@@ -98,23 +72,12 @@ class AdminsPostProcessor
                 $result = execute_query($qua, [$username, $isActive]);
 
                 if ($result === false) {
-                    $this->errors[] = "Failed to add user $username.";
+                    $this->addError("Failed to add user $username.");
                 } else {
-                    $this->texts[] = (empty($uId)) ? "User $username Added." : "User $username Updated.";
+                    $this->addText((empty($uId)) ? "User $username Added." : "User $username Updated.");
                 }
             }
         }
     }
 
-    /**
-     * Generates a close button HTML block.
-     */
-    private function getCloseButtonHtml(): string
-    {
-        return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-    }
 }

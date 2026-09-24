@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\LastCoord;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\TDApi\get_td_api;
 
 /**
@@ -12,7 +13,7 @@ use function App\APICalls\TDApi\get_td_api;
  * (either the "pages" or "pages_users" endpoint), with language and
  * namespace filters and per-row mail/fixref/draft links.
  */
-class LastCoordIndexController
+class LastCoordIndexController extends AbstractController
 {
     private string $globalUsername;
     private string $lang;
@@ -36,11 +37,7 @@ class LastCoordIndexController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $qslResults = $this->fetchResults();
 

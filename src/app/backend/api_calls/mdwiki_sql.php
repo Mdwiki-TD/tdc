@@ -340,6 +340,70 @@ function insert_to_translate_type($ttTitle, $ttLead, $ttFull, $ttId = 0)
     return $result;
 }
 
+/**
+ * Fetches a single user record by user_id.
+ *
+ * @param string $userId
+ * @return array<string, mixed>|null
+ */
+function get_user_by_id(string $userId): ?array
+{
+    if (empty($userId)) {
+        return null;
+    }
+    $result = fetch_query("SELECT * FROM users WHERE user_id = ?", [$userId]);
+    return $result[0] ?? null;
+}
+
+/**
+ * Fetches a single user record by username.
+ *
+ * @param string $username
+ * @return array<string, mixed>|null
+ */
+function get_user_by_username(string $username): ?array
+{
+    if (empty($username)) {
+        return null;
+    }
+    $result = fetch_query("SELECT * FROM users WHERE username = ?", [$username]);
+    return $result[0] ?? null;
+}
+
+/**
+ * Fetches a single qid row by column ('qid' or 'title') from 'qids' or 'qids_others'.
+ *
+ * @param string $column 'qid' or 'title'
+ * @param string $value
+ * @param string $table 'qids' or 'qids_others'
+ * @return array<string, mixed>|null
+ */
+function get_qid_row(string $column, string $value, string $table = 'qids'): ?array
+{
+    $allowedColumns = ['qid', 'title'];
+    $allowedTables = ['qids', 'qids_others'];
+
+    if (!in_array($column, $allowedColumns, true) || !in_array($table, $allowedTables, true) || empty($value)) {
+        return null;
+    }
+
+    $result = fetch_query("SELECT * FROM {$table} WHERE {$column} = ?", [$value]);
+    return $result[0] ?? null;
+}
+
+/**
+ * Fetches qid string value by title from 'qids' or 'qids_others'.
+ *
+ * @param string $title
+ * @param string $table 'qids' or 'qids_others'
+ * @return string|null
+ */
+function get_qid_by_title(string $title, string $table = 'qids'): ?string
+{
+    $row = get_qid_row('title', $title, $table);
+    return isset($row['qid']) ? (string) $row['qid'] : null;
+}
+
 function insert_to_projects($gTitle, $gId)
 {
     $query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
@@ -355,43 +419,3 @@ function insert_to_projects($gTitle, $gId)
     return $result;
 }
 
-function check_one($select = "*", $where = "", $value = "", $table = "")
-{
-    // Whitelist of allowed tables
-    $allowedTables = ['users', 'qids', 'qids_others'];
-
-    // Whitelist of allowed columns for each table
-    $allowedColumns = [
-        'users' => ['*', 'username'],
-        'qids' => ['*', 'qid', 'title'],
-        'qids_others' => ['*', 'qid', 'title'],
-    ];
-
-    // Validate table name
-    if (!in_array($table, $allowedTables)) {
-        error_log("check_one: Invalid table name: $table");
-        // return false;
-    }
-
-    // Validate select and where columns
-    if (!in_array($select, $allowedColumns[$table]) || !in_array($where, $allowedColumns[$table])) {
-        error_log("check_one: Invalid column name for table $table");
-        // return false;
-    }
-
-    // check if it's already in table
-    $query = "SELECT $select FROM $table WHERE $where = ?";
-
-    $result = fetch_query($query, [$value]);
-
-    if (count($result) > 0) {
-        foreach ($result as $key => $tab) {
-
-            // echo "<br>checkOne: $where: $tab[$select]<br>";
-
-            return $tab[$select] ?? $tab;
-        }
-    }
-
-    return false;
-}

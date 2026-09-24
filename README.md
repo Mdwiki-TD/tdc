@@ -111,7 +111,6 @@ The project is open-source and available on GitHub: [Mdwiki-TD/tdc](https://gith
 | `?ty=translated/edit_page`   | GET/POST | Edit or delete a translated page       |
 | `?ty=tt`                     | GET      | List articles by translate type        |
 | `?ty=tt/edit_translate_type` | GET/POST | Edit or add translate type             |
-| `?ty=tt/post`                | POST     | Save translate type changes            |
 | `?ty=add`                    | GET/POST | Add new translation entries            |
 | `?ty=add/post`               | POST     | Save new translation rows              |
 
@@ -121,14 +120,13 @@ The project is open-source and available on GitHub: [Mdwiki-TD/tdc](https://gith
 | ------------------- | -------- | ----------------------- |
 | `?ty=qids`          | GET      | List Wikidata QIDs      |
 | `?ty=qids/edit_qid` | GET/POST | Edit or add a QID entry |
-| `?ty=qids/post`     | POST     | Save QID changes        |
 
 ## Users
 
 | Endpoint                      | Method   | Description                                |
 | ----------------------------- | -------- | ------------------------------------------ |
 | `?ty=Emails`                  | GET/POST | List users with emails and project filters |
-| `?ty=Emails/post`             | POST     | Save user email/wiki/project edits         |
+| `?ty=Emails/edit_user`        | POST     | Save user email/wiki/project edits         |
 | `?ty=Emails/msg`              | GET/POST | Compose and send email to translator       |
 | `?ty=Emails/edit_user`        | GET      | Edit or add a single user                  |
 | `?ty=users_no_inprocess`      | GET/POST | Manage users excluded from "in process"    |

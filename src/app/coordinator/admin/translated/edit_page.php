@@ -3,18 +3,18 @@
 
 namespace App\Coordinator\Admin\Translated;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
-use function App\csrf\generate_csrf_token;
 
-require_once __DIR__ . '/edit_page_post.php';
+
+require_once __DIR__ . '/EditPagePostHandler.php';
 
 /**
  * Class EditPageController
  * Handles editing and deleting translated pages (GET renders the form,
  * POST is delegated to EditPagePostHandler).
  */
-class EditPageController
+class EditPageController extends AbstractController
 {
     private string $id;
     private string $table;
@@ -26,49 +26,25 @@ class EditPageController
         $this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
     }
 
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new EditPagePostHandler($this->id, $this->table);
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+    }
     /**
      * Entry point to handle request workflow.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->validateCoordinator();
         $this->renderHeaderScripts();
-
-        echo <<<HTML
-        <div class='card'>
-            <div class='card-header'>
-                <h4>Edit Page (id: {$this->id}, table: {$this->table})</h4>
-            </div>
-            <div class='card-body'>
-        HTML;
-
-        $closeBtn = $this->getCloseButtonHtml();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->handlePostRequest();
-            echo $closeBtn;
         } else {
             $this->renderEditForm($this->id, $this->table);
         }
-
-        echo "</div></div>";
-    }
-
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
     }
 
     /**
@@ -89,11 +65,9 @@ class EditPageController
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
-        $csrfToken = generate_csrf_token();
-
-        echo <<<HTML
+        $form = <<<HTML
             <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='$id' type='hidden'/>
                 <input name='edit' value="1" type="hidden"/>
                 <input name='table' value="$table" type="hidden"/>
@@ -159,45 +133,10 @@ class EditPageController
                 </div>
             </form>
         HTML;
-    }
 
-    /**
-     * Handles POST data submission for editing or deleting records.
-     */
-    private function handlePostRequest(): void
-    {
+        $headerTitle = "Edit Page (id: {$this->id}, table: {$this->table})";
 
-        $result = (new EditPagePostHandler())->handle($_POST, $this->id, $this->table);
-
-        if ($result['csrfError']) {
-            echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-            return;
-        }
-
-        echo <<<HTML
-            <div class='alert alert-success' role='alert'>Page updated<br>
-                window will close in 3 seconds
-            </div>
-        HTML;
-        echo <<<HTML
-            <script>
-                setTimeout(function() {
-                    window.close();
-                }, 3000);
-            </script>
-        HTML;
-    }
-
-    /**
-     * Returns HTML string for the window close button.
-     */
-    private function getCloseButtonHtml(): string
-    {
-        return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
+        $this->echoCard($headerTitle, $form);
     }
 }
 
