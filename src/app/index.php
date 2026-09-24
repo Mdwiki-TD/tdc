@@ -66,6 +66,7 @@ class AppRouter
 			"add",
 			"admins",
 			"Campaigns",
+			"Emails",
 			"full_translators",
 			"last_coord",
 			"pages_users_to_main",
