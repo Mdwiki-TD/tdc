@@ -5,7 +5,8 @@ namespace App\Coordinator\Admin\Qids;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\APICalls\MdwikiSql\check_one;
+use function App\APICalls\MdwikiSql\get_qid_row;
+use function App\APICalls\MdwikiSql\get_qid_by_title;
 use function App\csrf\verify_csrf_token;
 
 /**
@@ -62,7 +63,7 @@ class QidsPostProcessor extends AbstractPostHandler
 				continue;
 			}
 
-			$txTab = check_one('*', 'qid', $qid, $this->qidTable);
+			$txTab = get_qid_row('qid', $qid, $this->qidTable);
 
 			if ($txTab) {
 				$txId = $txTab['id'];
@@ -79,7 +80,7 @@ class QidsPostProcessor extends AbstractPostHandler
 				}
 			}
 
-			$ttTab = check_one('*', 'title', $title, $this->qidTable);
+			$ttTab = get_qid_row('title', $title, $this->qidTable);
 
 			if ($ttTab) {
 				$qidOfTitle5 = $ttTab['qid'];
@@ -136,7 +137,7 @@ class QidsPostProcessor extends AbstractPostHandler
 	{
 		$this->addIt($id, $title, $qid);
 
-		$qidOfTitle = check_one('qid', 'title', $title, $this->qidTable);
+		$qidOfTitle = get_qid_by_title($title, $this->qidTable);
 
 		if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
 			$this->addText("Data Changes successfully of title: $title, Qid: $qid");
@@ -152,7 +153,7 @@ class QidsPostProcessor extends AbstractPostHandler
 	{
 		$this->addIt('', $title, $qid);
 
-		$qidOfTitle = check_one('qid', 'title', $title, $this->qidTable);
+		$qidOfTitle = get_qid_by_title($title, $this->qidTable);
 
 		if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
 			$this->addText("Qid added successfully for title: $title.");

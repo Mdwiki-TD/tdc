@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Emails;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\sql_update_user;
 use function App\APICalls\MdwikiSql\sql_add_user;
-use function App\APICalls\MdwikiSql\check_one;
+use function App\APICalls\MdwikiSql\get_user_by_username;
 
 /**
  * Class EmailsPostProcessor
@@ -61,7 +61,7 @@ class EmailsPostProcessor extends AbstractPostHandler
 			$wiki = trim($wiki);
 			$project = trim($project);
 
-			$ttTab = check_one('*', 'username', $user, 'users');
+			$ttTab = get_user_by_username($user);
 
 			if ($ttTab) {
 				$ttUsername = $ttTab['username'];
