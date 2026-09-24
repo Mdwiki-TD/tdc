@@ -5,7 +5,6 @@ namespace App\Coordinator\Admin\TranslateType;
 
 use App\Coordinator\Admin\Common\AbstractController;
 
-
 require_once __DIR__ . '/post.php';
 
 /**
@@ -15,17 +14,17 @@ require_once __DIR__ . '/post.php';
  */
 class EditTranslateTypeController extends AbstractController
 {
+    private string $id;
     private string $title;
     private string $lead;
     private string $full;
-    private string $id;
 
     public function __construct()
     {
+        $this->id    = $_GET['id'] ?? '';
         $this->title = isset($_GET['title']) ? rawurldecode($_GET['title']) : '';
         $this->lead  = $_GET['lead'] ?? '';
         $this->full  = $_GET['full'] ?? '';
-        $this->id    = $_GET['id'] ?? '';
     }
 
     public function handlePostRequest(): void

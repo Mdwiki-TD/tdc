@@ -6,7 +6,6 @@ namespace App\Coordinator\Admin\Translated;
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
 
-
 require_once __DIR__ . '/EditPagePostHandler.php';
 
 /**
@@ -21,8 +20,8 @@ class EditPageController extends AbstractController
 
     public function __construct()
     {
-        $this->id = $_GET['id'] ?? $_POST['id'] ?? '';
-        $cand = $_GET['table'] ?? $_POST['table'] ?? '';
+        $this->id    = $_GET['id'] ?? $_POST['id'] ?? '';
+        $cand        = $_GET['table'] ?? $_POST['table'] ?? '';
         $this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
     }
 

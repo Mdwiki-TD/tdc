@@ -14,6 +14,8 @@ require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
  */
 class WikiRefsOptionsEditController extends AbstractController
 {
+    private const FLAGS = ['move_dots', 'expend', 'add_en_lang'];
+
     public function handlePostRequest(): void
     {
         $postProcessor = new WikiRefsOptionsEditPostHandler();

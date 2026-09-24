@@ -7,7 +7,6 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\Utils\Html\make_project_to_user;
 use function App\APICalls\MdwikiSql\get_user_by_id;
 
-
 require_once __DIR__ . '/post.php';
 
 /**
@@ -21,7 +20,7 @@ class EditUserController extends AbstractController
 
     public function __construct()
     {
-        $this->userId  = $_GET['user_id'] ?? $_POST['user_id'] ?? '';
+        $this->userId = $_GET['user_id'] ?? $_POST['user_id'] ?? '';
     }
 
     public function handlePostRequest(): void

@@ -5,7 +5,6 @@ namespace App\Coordinator\Admin\Qids;
 
 use App\Coordinator\Admin\Common\AbstractController;
 
-
 require_once __DIR__ . '/post.php';
 
 /**
@@ -25,11 +24,8 @@ class EditQidController extends AbstractController
         $this->id       = $_GET['id'] ?? '';
         $this->title    = $_GET['title'] ?? '';
         $this->qid      = $_GET['qid'] ?? '';
-        $this->qidTable = $_GET['qid_table'] ?? '';
-
-        if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {
-            $this->qidTable = 'qids';
-        }
+        $table          = $_GET['qid_table'] ?? '';
+        $this->qidTable = in_array($table, ['qids', 'qids_others'], true) ? $table : 'qids';
     }
 
     public function handlePostRequest(): void
