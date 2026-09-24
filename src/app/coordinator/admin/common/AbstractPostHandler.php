@@ -60,12 +60,6 @@ abstract class AbstractSubPostHandler
         echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
     }
 
-    public function divAlerts(): void
-    {
-        echo div_alert($this->errors, 'danger');
-        echo div_alert($this->texts, 'success');
-    }
-
 }
 
 /**

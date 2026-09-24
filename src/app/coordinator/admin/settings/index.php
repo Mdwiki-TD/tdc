@@ -26,7 +26,8 @@ class SettingsIndexController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postProcessor = new SettingsPostProcessor();
-            $postProcessor->handle();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
         }
 
         $settings = get_td_or_sql_settings();
@@ -125,23 +126,18 @@ class SettingsIndexController extends AbstractController
     private function renderCard(string $text): void
     {
 
-
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Settings:</h4>
-                </div>
-                <div class='card-body'>
-                    <div class='row'>
-                        <form action='index.php' method="POST">
-                            {$this->createCsrfTokenField()}
-                            <input name='ty' value='settings' type="hidden"/>
-                        $text
-                        <button type='submit' class='btn btn-outline-primary'>Save</button>
-                    </form>
-                </div>
+        $body = <<<HTML
+            <div class='row'>
+                <form action='index.php' method="POST">
+                    {$this->createCsrfTokenField()}
+                    <input name='ty' value='settings' type="hidden"/>
+                    $text
+                    <button type='submit' class='btn btn-outline-primary'>Save</button>
+                </form>
             </div>
         HTML;
+
+        $this->echoCard("Settings:", $body);
     }
 }
 

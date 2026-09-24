@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Campaigns;
 
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\csrf\verify_csrf_token;
 
@@ -12,7 +12,7 @@ use function App\csrf\verify_csrf_token;
  * Handles update/delete of existing campaign categories and insertion
  * of newly added rows.
  */
-class CampaignsPostProcessor extends AbstractSubPostHandler
+class CampaignsPostProcessor extends AbstractPostHandler
 {
 	private string $defaultCat;
 
@@ -21,32 +21,14 @@ class CampaignsPostProcessor extends AbstractSubPostHandler
 		$this->defaultCat = $_POST['default_cat'] ?? '';
 	}
 
-	/**
-	 * Validates and processes the incoming submission.
-	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		$this->validateCoordinator();
+		$this->processExistingRows($post['rows'] ?? []);
 
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			$this->DisplayCsrfAlert();
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processExistingRows($_POST['rows'] ?? []);
-
-		if (isset($_POST['new'])) {
-			$this->processNewRows($_POST['new']);
+		if (isset($post['new'])) {
+			$this->processNewRows($post['new']);
 		}
 	}
-
 	/**
 	 * Updates or deletes existing category rows.
 	 */

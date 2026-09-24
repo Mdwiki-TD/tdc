@@ -26,7 +26,8 @@ class CampaignsIndexController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postProcessor = new CampaignsPostProcessor();
-            $postProcessor->handle();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
         }
 
         $categories = get_td_or_sql_categories();
@@ -95,42 +96,36 @@ class CampaignsIndexController extends AbstractController
     private function renderCard(string $tableRows): void
     {
 
-
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Campaigns:</h4>
+        $form = <<<HTML
+            <form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
+                {$this->createCsrfTokenField()}
+                <input name='ty' value="Campaigns" type="hidden"/>
+                <div class="form-group">
+                    <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Campaign</th>
+                                <th>Category1</th>
+                                <th>Category2</th>
+                                <th>Depth</th>
+                                <th>Default</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tab_logic">
+                            $tableRows
+                        </tbody>
+                    </table>
                 </div>
-                <div class='card-body'>
-                    <form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
-                        {$this->createCsrfTokenField()}
-                        <input name='ty' value="Campaigns" type="hidden"/>
-                        <div class="form-group">
-                            <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Campaign</th>
-                                        <th>Category1</th>
-                                        <th>Category2</th>
-                                        <th>Depth</th>
-                                        <th>Default</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tab_logic">
-                                    $tableRows
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-group d-flex justify-content-between">
-                            <button type="submit" class="btn btn-outline-primary">Save</button>
-                            <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
-                        </div>
-                    </form>
+                <div class="form-group d-flex justify-content-between">
+                    <button type="submit" class="btn btn-outline-primary">Save</button>
+                    <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
                 </div>
-            </div>
+            </form>
         HTML;
+
+        $this->echoCard("Campaigns:", $form);
     }
 
     /**

@@ -32,27 +32,15 @@ class EditPageController extends AbstractController
     public function handleRequest(): void
     {
         $this->validateCoordinator();
-
         $this->renderHeaderScripts();
 
-        echo <<<HTML
-        <div class='card'>
-            <div class='card-header'>
-                <h4>Edit Page (id: {$this->id}, table: {$this->table})</h4>
-            </div>
-            <div class='card-body'>
-        HTML;
-
-        $closeBtn = $this->getCloseButtonHtml();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-            echo $closeBtn;
+            $postProcessor = new EditPagePostHandler($this->id, $this->table);
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
         } else {
             $this->renderEditForm($this->id, $this->table);
         }
-
-        echo "</div></div>";
     }
 
     /**
@@ -73,9 +61,7 @@ class EditPageController extends AbstractController
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
-
-
-        echo <<<HTML
+        $form = <<<HTML
             <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='$id' type='hidden'/>
@@ -143,30 +129,10 @@ class EditPageController extends AbstractController
                 </div>
             </form>
         HTML;
-    }
 
-    /**
-     * Handles POST data submission for editing or deleting records.
-     */
-    private function handlePostRequest(): void
-    {
-        $postProcessor = new EditPagePostHandler($this->id, $this->table);
-        $result = $postProcessor->handle($_POST);
+        $headerTitle = "Edit Page (id: {$this->id}, table: {$this->table})";
 
-        $postProcessor->RenderMesseges($result);
-
-        echo <<<HTML
-            <div class='alert alert-success' role='alert'>Page updated<br>
-                window will close in 3 seconds
-            </div>
-        HTML;
-        echo <<<HTML
-            <script>
-                setTimeout(function() {
-                    window.close();
-                }, 3000);
-            </script>
-        HTML;
+        $this->echoCard($headerTitle, $form);
     }
 }
 

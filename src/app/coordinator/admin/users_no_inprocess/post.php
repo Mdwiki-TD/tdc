@@ -3,42 +3,21 @@
 
 namespace App\Coordinator\Admin\UsersNoInprocess;
 
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class UsersNoInprocessPostProcessor
  * Handles add/update/delete of users excluded from the "in process" table.
  */
-class UsersNoInprocessPostProcessor extends AbstractSubPostHandler
+class UsersNoInprocessPostProcessor extends AbstractPostHandler
 {
 	private const TABLE_NAME = 'users_no_inprocess';
 
-	/**
-	 * Validates and processes the incoming submission.
-	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		$this->validateCoordinator();
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			$this->DisplayCsrfAlert();
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
-
-		$this->divAlerts();
+		$this->processRows($post['rows'] ?? []);
 	}
-
 	/**
 	 * Processes each submitted user row: delete, add, or update.
 	 */

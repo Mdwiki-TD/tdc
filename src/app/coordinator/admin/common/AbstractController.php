@@ -52,4 +52,20 @@ abstract class AbstractController
         </script>
         <div class="container-fluid">';
     }
+    /**
+     * Renders the card wrapping the form.
+     */
+    public function echoCard(string $headerTitle, string $body): void
+    {
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <h4>$headerTitle</h4>
+                </div>
+                <div class='card-body'>
+                    $body
+                </div>
+            </div>
+        HTML;
+    }
 }

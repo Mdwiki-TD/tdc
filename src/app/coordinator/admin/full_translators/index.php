@@ -28,7 +28,8 @@ class FullTranslatorsIndexController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postProcessor = new FullTranslatorsPostProcessor();
-            $postProcessor->handle();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
         }
 
         $translators = get_td_or_sql_full_translators();
@@ -120,40 +121,35 @@ class FullTranslatorsIndexController extends AbstractController
 
         $tyName = self::TY_NAME;
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Full article translators:</h4>
+        $form = <<<HTML
+            <form action="index.php?ty=$tyName" method="POST">
+                {$this->createCsrfTokenField()}
+                <input name='ty' value="$tyName" type="hidden"/>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Active</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="full_tab">
+                                $formText
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class='card-body'>
-                    <form action="index.php?ty=$tyName" method="POST">
-                        {$this->createCsrfTokenField()}
-                        <input name='ty' value="$tyName" type="hidden"/>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>User</th>
-                                            <th>Active</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="full_tab">
-                                        $formText
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-group d-flex justify-content-between">
-                            <button type="submit" class="btn btn-outline-primary">Save</button>
-                            <!-- <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row_v()'>New row</span> -->
-                        </div>
-                    </form>
+                <div class="form-group d-flex justify-content-between">
+                    <button type="submit" class="btn btn-outline-primary">Save</button>
+                    <!-- <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row_v()'>New row</span> -->
                 </div>
-            </div>
+            </form>
         HTML;
+
+        $this->echoCard("Full article translators:", $form);
     }
 
     /**

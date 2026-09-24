@@ -39,7 +39,6 @@ class EditUserController extends AbstractController
             $postProcessor->RenderMesseges($result);
 
             if ($postProcessor->shouldShowForm()) {
-                // user_id=192&user=Dr3939&email=&wiki=zh&project=Wiki
                 $this->renderFormCard();
             }
         } else {
@@ -128,18 +127,9 @@ class EditUserController extends AbstractController
     private function renderFormCard(): void
     {
         $headerTitle = (!empty($this->userId)) ? 'Edit User' : 'Add New User';
+        $form = $this->buildFormHtml($this->userId);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-        HTML;
-
-        echo $this->buildFormHtml($this->userId);
-
-        echo "</div></div>";
+        $this->echoCard($headerTitle, $form);
     }
 }
 

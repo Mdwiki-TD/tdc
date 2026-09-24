@@ -33,10 +33,6 @@ class QidsPostProcessor extends AbstractPostHandler
 	{
 		$this->validateCoordinator();
 
-		$this->renderHeaderScripts();
-
-		$closeBtn = $this->getCloseButtonHtml();
-
 		$this->processRows($post['rows'] ?? []);
 
 		if (!empty($this->texts)) {
@@ -44,10 +40,6 @@ class QidsPostProcessor extends AbstractPostHandler
 		} elseif (!empty($this->errors)) {
 			$this->addError("table:({$this->qidTable})");
 		}
-
-		$this->divAlerts();
-
-		echo $closeBtn;
 	}
 
 	/**

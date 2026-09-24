@@ -3,40 +3,19 @@
 
 namespace App\Coordinator\Admin\Add;
 
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
-use function App\Utils\Html\div_alert;
-use function App\csrf\verify_csrf_token;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function Add\AddPost\add_pages_to_db;
 
 /**
  * Class AddPostProcessor
  * Handles submission of new translation rows via add_pages_to_db().
  */
-class AddPostProcessor extends AbstractSubPostHandler
+class AddPostProcessor extends AbstractPostHandler
 {
 
-	/**
-	 * Validates and processes the incoming submission.
-	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		$this->validateCoordinator();
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			$this->DisplayCsrfAlert();
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
-
-		$this->divAlerts();
+		$this->processRows($post['rows'] ?? []);
 	}
 
 	/**

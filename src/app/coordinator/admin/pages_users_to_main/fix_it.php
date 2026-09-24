@@ -27,7 +27,8 @@ class FixItController extends AbstractController
         // Delegate POST requests to the POST processor
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postProcessor = new FixItPostProcessor();
-            $postProcessor->handle();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
             return;
         }
 
@@ -62,16 +63,8 @@ class FixItController extends AbstractController
 
         $formHtml = $this->buildFormHtml($id, $title, $newTarget, $lang, $newUser, $pupdate);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Edit Page ($oldTarget)</h4>
-                </div>
-                <div class='card-body'>
-                    $formHtml
-                </div>
-            </div>
-        HTML;
+
+        $this->echoCard("Edit Page ({$oldTarget})", $formHtml);
     }
 
     /**

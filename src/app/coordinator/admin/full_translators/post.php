@@ -3,43 +3,21 @@
 
 namespace App\Coordinator\Admin\FullTranslators;
 
-use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\Utils\Html\div_alert;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class FullTranslatorsPostProcessor
  * Handles add/update/delete of "full article translator" users.
  */
-class FullTranslatorsPostProcessor extends AbstractSubPostHandler
+class FullTranslatorsPostProcessor extends AbstractPostHandler
 {
 	private const TABLE_NAME = 'full_translators';
 
 
-	/**
-	 * Validates and processes the incoming submission.
-	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		$this->validateCoordinator();
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			$this->DisplayCsrfAlert();
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
-
-		$this->divAlerts();
+		$this->processRows($post['rows'] ?? []);
 	}
 
 	/**

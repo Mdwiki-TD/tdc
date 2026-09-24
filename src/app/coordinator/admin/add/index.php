@@ -26,7 +26,8 @@ class AddIndexController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postProcessor = new AddPostProcessor();
-            $postProcessor->handle();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
         }
 
         $cats = $this->buildCategoryOptions();

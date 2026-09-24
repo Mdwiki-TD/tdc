@@ -26,7 +26,8 @@ class ProjectsIndexController extends AbstractController
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$postProcessor = new ProjectsPostProcessor();
-			$postProcessor->handle();
+			$result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
 		}
 
 		$projects = get_td_or_sql_projects();

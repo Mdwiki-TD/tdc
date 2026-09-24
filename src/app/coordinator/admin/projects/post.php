@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Projects;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\insert_to_projects;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\Utils\Html\div_alert;
@@ -16,31 +16,11 @@ use function App\csrf\verify_csrf_token;
  * Can run standalone (direct request) or be delegated to from
  * ProjectsIndexController when the index form is submitted.
  */
-class ProjectsPostProcessor extends AbstractSubPostHandler
+class ProjectsPostProcessor extends AbstractPostHandler
 {
-
-	/**
-	 * Validates and processes the incoming submission.
-	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		$this->validateCoordinator();
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			$this->DisplayCsrfAlert();
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
-
-		echo div_alert($this->texts, 'success');
+        $this->processRows($post['rows'] ?? []);
 	}
 
 	/**

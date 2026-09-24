@@ -41,6 +41,10 @@ class EditTranslateTypeController extends AbstractController
             $postProcessor = new TtPostProcessor();
             $result = $postProcessor->handle($_POST);
             $postProcessor->RenderMesseges($result);
+
+            if ($postProcessor->shouldShowForm()) {
+                $this->renderFormCard();
+            }
         } else {
             $this->renderFormCard();
         }
@@ -55,8 +59,6 @@ class EditTranslateTypeController extends AbstractController
         $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
 
         $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-
-
 
         $idRow = <<<HTML
             <div class='col-md-3'>
@@ -127,19 +129,9 @@ class EditTranslateTypeController extends AbstractController
     private function renderFormCard(): void
     {
         $headerTitle = (!empty($this->id)) ? 'Edit Translate type' : 'Add Translate type';
-
         $form = $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-                    $form
-                </div>
-            </div>
-        HTML;
+        $this->echoCard($headerTitle, $form);
     }
 }
 

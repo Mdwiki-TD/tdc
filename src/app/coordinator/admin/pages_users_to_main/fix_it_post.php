@@ -3,10 +3,9 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\APICalls\MdwikiSql\fetch_query;
-use function App\csrf\verify_csrf_token;
 use function App\Utils\Html\div_alert;
 use function Add\AddPost\add_pages_to_db;
 
@@ -14,53 +13,33 @@ use function Add\AddPost\add_pages_to_db;
  * Class FixItPostProcessor
  * Handles input validation, database inserts, and table cleaning for POST submissions.
  */
-class FixItPostProcessor extends AbstractSubPostHandler
+class FixItPostProcessor extends AbstractPostHandler
 {
-    /**
-     * Validates and triggers the submission handling.
-     */
-    public function handle(): void
-    {
-        $this->validateCoordinator();
-
-        // Verify POST method and form trigger flag
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['edit'])) {
-            exit;
-        }
-
-        // CSRF Token validation
-        if (!verify_csrf_token()) {
-            $this->DisplayCsrfAlert();
-            echo $this->renderCloseButton();
-            return;
-        }
-
-        $this->processFormData();
-    }
+	public function process(array $post): void
+	{
+        $this->processFormData($post);
+	}
 
     /**
      * Processes submission inputs and executes database changes.
      */
-    private function processFormData(): void
+    private function processFormData(array $post): void
     {
-        $texts  = [];
-        $errors = [];
-
-        $title     = $_POST['title'] ?? '';
-        $lang      = $_POST['lang'] ?? '';
-        $newTarget = $_POST['new_target'] ?? '';
-        $newUser   = $_POST['new_user'] ?? '';
-        $pupdate   = $_POST['pupdate'] ?? '';
-        $id        = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+        $title     = $post['title'] ?? '';
+        $lang      = $post['lang'] ?? '';
+        $newTarget = $post['new_target'] ?? '';
+        $newUser   = $post['new_user'] ?? '';
+        $pupdate   = $post['pupdate'] ?? '';
+        $id        = isset($post['id']) ? (int)$post['id'] : 0;
 
         if ($id <= 0) {
-            $errors[] = "Invalid id supplied.";
+            $this->addError("Invalid id supplied.");
         }
 
         $pageData = fetch_query("SELECT * FROM pages_users WHERE id = ?", [$id]);
 
         if (empty($pageData)) {
-            $errors[] = "Page with id:($id) not found.";
+            $this->addError("Page with id:($id) not found.");
         } else {
             $tType = $pageData[0]['translate_type'] ?? '';
             $cat   = $pageData[0]['cat'] ?? '';
@@ -69,23 +48,19 @@ class FixItPostProcessor extends AbstractSubPostHandler
             $result = add_pages_to_db($title, $tType, $cat, $lang, $newUser, $newTarget, $pupdate, $word);
 
             if ($result === false) {
-                $errors[] = "Failed to add translations.";
+                $this->addError("Failed to add translations.");
             } else {
-                $texts[] = "Translations added successfully.";
+                $this->addText("Translations added successfully.");
 
                 $deleted = $this->deleteUserPage($id);
 
                 if ($deleted) {
-                    $texts[] = "Page with id:($id) deleted from pages_users.";
+                    $this->addText("Page with id:($id) deleted from pages_users.");
                 } else {
-                    $errors[] = "Failed to delete page with id:($id).";
+                    $this->addError("Failed to delete page with id:($id).");
                 }
             }
         }
-
-        echo div_alert($texts, 'success');
-        echo div_alert($errors, 'danger');
-        echo $this->renderCloseButton();
     }
 
     /**
@@ -102,15 +77,4 @@ class FixItPostProcessor extends AbstractSubPostHandler
         return empty($findIt1) && empty($findIt2);
     }
 
-    /**
-     * Generates a close button HTML block.
-     */
-    private function renderCloseButton(): string
-    {
-        return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-    }
 }

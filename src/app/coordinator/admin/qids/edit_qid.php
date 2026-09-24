@@ -45,6 +45,10 @@ class EditQidController extends AbstractController
             $postProcessor = new QidsPostProcessor($_GET['qid_table'] ?? '');
             $result = $postProcessor->handle($_POST);
             $postProcessor->RenderMesseges($result);
+
+            if ($postProcessor->shouldShowForm()) {
+                $this->renderFormCard();
+            }
         } else {
             $this->renderFormCard();
         }
@@ -111,19 +115,9 @@ class EditQidController extends AbstractController
     private function renderFormCard(): void
     {
         $headerTitle = ($this->id !== '') ? 'Edit Qid' : 'Add New Qid';
-
         $form = $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-                    $form
-                </div>
-            </div>
-        HTML;
+        $this->echoCard($headerTitle, $form);
     }
 }
 
