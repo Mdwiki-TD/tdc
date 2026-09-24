@@ -71,7 +71,7 @@ class MsgController extends AbstractControllerNoPost
     /**
      * Renders UI scripts and includes the Summernote WYSIWYG editor assets.
      */
-    public function renderHeaderScripts(): void
+    private function renderHeaderScripts(): void
     {
         echo '</div><script>
             $("#mainnav").hide();
