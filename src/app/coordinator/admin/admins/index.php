@@ -22,12 +22,6 @@ class AdminsIndexController extends AbstractController
     {
         return new AdminsPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
-    }
 	/**
 	 * Handles authentication and executes controller output.
 	 */
@@ -39,6 +33,10 @@ class AdminsIndexController extends AbstractController
             $this->handlePostRequest();
 		}
 
+        $this->renderFormCard();
+	}
+
+    public function renderFormCard(): void {
 		$coordinators = get_coordinators();
 		sort($coordinators);
 
@@ -48,8 +46,7 @@ class AdminsIndexController extends AbstractController
 
 		$this->renderCard($formText);
 		$this->renderAddRowScript();
-	}
-
+    }
 	/**
 	 * Builds the editable table rows for each existing coordinator.
 	 */

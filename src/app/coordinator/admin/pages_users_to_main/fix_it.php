@@ -18,16 +18,6 @@ class FixItController extends AbstractController
     {
         return new FixItPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
-
-        if ($postProcessor->shouldShowForm()) {
-            $this->renderFormCard();
-        }
-    }
     /**
      * Executes authorization check and handles the incoming request.
      */
@@ -48,7 +38,7 @@ class FixItController extends AbstractController
     /**
      * Renders the HTML structure and form.
      */
-    private function renderFormCard(): void
+    public function renderFormCard(): void
     {
 
         $id        = $_GET['id'] ?? '';

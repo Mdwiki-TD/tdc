@@ -21,12 +21,6 @@ class SettingsIndexController extends AbstractController
     {
         return new SettingsPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
-    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -38,13 +32,17 @@ class SettingsIndexController extends AbstractController
             $this->handlePostRequest();
         }
 
+        $this->renderFormCard();
+    }
+
+    public function renderFormCard(): void {
         $settings = get_td_or_sql_settings();
 
         $text = $this->buildSettingsTable($settings);
 
         $this->renderCard($text);
-    }
 
+    }
     /**
      * Builds the settings table markup, skipping ignored rows and
      * rendering a checkbox or a text input depending on the setting type.

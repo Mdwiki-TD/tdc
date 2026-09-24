@@ -26,17 +26,6 @@ class EditUserController extends AbstractController
     {
         return new EmailsPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        // Instantiate and execute processor
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
-
-        if ($postProcessor->shouldShowForm()) {
-            $this->renderFormCard();
-        }
-    }
     /**
      * Executes authorization check and renders the form view.
      */
@@ -130,7 +119,7 @@ class EditUserController extends AbstractController
     /**
      * Renders the card wrapping the form.
      */
-    private function renderFormCard(): void
+    public function renderFormCard(): void
     {
         $headerTitle = (!empty($this->userId)) ? 'Edit User' : 'Add New User';
         $form = $this->buildFormHtml($this->userId);

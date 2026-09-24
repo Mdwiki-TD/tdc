@@ -21,12 +21,6 @@ class AddIndexController extends AbstractController
     {
         return new AddPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
-    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -38,13 +32,15 @@ class AddIndexController extends AbstractController
             $this->handlePostRequest();
         }
 
+        $this->renderFormCard();
+    }
+    public function renderFormCard(): void {
         $cats = $this->buildCategoryOptions();
         $table = $this->buildStarterRows($cats);
 
         $this->renderCard($cats, $table);
         $this->renderUrlSearchBlock();
     }
-
     /**
      * Builds <option> markup for every campaign category.
      */

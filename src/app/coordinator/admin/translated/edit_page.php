@@ -29,12 +29,7 @@ class EditPageController extends AbstractController
     {
         return new EditPagePostHandler($this->id, $this->table);
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
-    }
+
     /**
      * Entry point to handle request workflow.
      */
@@ -46,10 +41,13 @@ class EditPageController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->handlePostRequest();
         } else {
-            $this->renderEditForm($this->id, $this->table);
+            $this->renderFormCard();
         }
     }
 
+    public function renderFormCard(): void {
+        $this->renderEditForm($this->id, $this->table);
+    }
     /**
      * Displays the edit page form.
      */

@@ -14,21 +14,11 @@ require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
  */
 class WikiRefsOptionsEditController extends AbstractController
 {
-    private const FLAGS = ['move_dots', 'expend', 'add_en_lang'];
+    // private const FLAGS = ['move_dots', 'expend', 'add_en_lang'];
 
     protected function createPostProcessor(): object
     {
         return new WikiRefsOptionsEditPostHandler();
-    }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
-
-        if ($postProcessor->shouldShowForm()) {
-            $this->renderFormCard();
-        }
     }
     /**
      * Executes authorization check and handles the incoming request.
@@ -48,7 +38,7 @@ class WikiRefsOptionsEditController extends AbstractController
     /**
      * Renders the add/edit form for the language settings row.
      */
-    private function renderFormCard(): void
+    public function renderFormCard(): void
     {
         $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $langCode   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');

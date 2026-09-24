@@ -31,17 +31,6 @@ class EditTranslateTypeController extends AbstractController
     {
         return new TtPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        // Instantiate and execute processor
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
-
-        if ($postProcessor->shouldShowForm()) {
-            $this->renderFormCard();
-        }
-    }
     /**
      * Executes authorization check and renders the form view.
      */
@@ -133,7 +122,7 @@ class EditTranslateTypeController extends AbstractController
     /**
      * Renders the card wrapping the form.
      */
-    private function renderFormCard(): void
+    public function renderFormCard(): void
     {
         $headerTitle = (!empty($this->id)) ? 'Edit Translate type' : 'Add Translate type';
         $form = $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);

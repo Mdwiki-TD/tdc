@@ -23,12 +23,6 @@ class FullTranslatorsIndexController extends AbstractController
     {
         return new FullTranslatorsPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
-    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -40,6 +34,10 @@ class FullTranslatorsIndexController extends AbstractController
             $this->handlePostRequest();
         }
 
+        $this->renderFormCard();
+    }
+
+    public function renderFormCard(): void {
         $translators = get_td_or_sql_full_translators();
 
         $formText = $this->buildTranslatorRows($translators);
@@ -49,7 +47,6 @@ class FullTranslatorsIndexController extends AbstractController
         $this->renderCard($formText);
         $this->renderAddRowScript();
     }
-
     /**
      * Builds the editable table rows for each existing full translator.
      */

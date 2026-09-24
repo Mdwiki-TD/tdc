@@ -21,12 +21,6 @@ class CampaignsIndexController extends AbstractController
     {
         return new CampaignsPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
-    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -38,14 +32,18 @@ class CampaignsIndexController extends AbstractController
             $this->handlePostRequest();
         }
 
+        $this->renderFormCard();
+    }
+
+    public function renderFormCard(): void {
         $categories = get_td_or_sql_categories();
 
         $tableRows = $this->buildTableRows($categories);
 
         $this->renderCard($tableRows);
         $this->renderAddRowScript();
-    }
 
+    }
     /**
      * Builds the editable table rows for each existing campaign category.
      */

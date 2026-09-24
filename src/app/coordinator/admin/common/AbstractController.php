@@ -22,6 +22,23 @@ abstract class AbstractController
             exit;
         }
     }
+
+    abstract protected function createPostProcessor(): object;
+
+    abstract protected function renderFormCard(): void;
+
+    public function handlePostRequest(): void
+    {
+        // Instantiate and execute processor
+        $postProcessor = $this->createPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
+
     /**
      * Generates a close button HTML block.
      */

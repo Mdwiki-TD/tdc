@@ -21,12 +21,6 @@ class ProjectsIndexController extends AbstractController
     {
         return new ProjectsPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
-    }
 	/**
 	 * Handles authentication and executes controller output.
 	 */
@@ -38,6 +32,10 @@ class ProjectsIndexController extends AbstractController
             $this->handlePostRequest();
 		}
 
+        $this->renderFormCard();
+	}
+
+    public function renderFormCard(): void {
 		$projects = get_td_or_sql_projects();
 
 		// Sort projects by g_id
@@ -51,8 +49,8 @@ class ProjectsIndexController extends AbstractController
 
 		$this->renderCard($formText);
 		$this->renderAddRowScript();
-	}
 
+    }
 	/**
 	 * Builds the editable table rows for each existing project.
 	 */

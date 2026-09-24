@@ -23,12 +23,6 @@ class UsersNoInprocessIndexController extends AbstractController
     {
         return new UsersNoInprocessPostProcessor();
     }
-    public function handlePostRequest(): void
-    {
-        $postProcessor = $this->createPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
-    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -40,6 +34,10 @@ class UsersNoInprocessIndexController extends AbstractController
             $this->handlePostRequest();
         }
 
+        $this->renderFormCard();
+    }
+
+    public function renderFormCard(): void {
         $users = get_td_or_sql_users_no_inprocess();
 
         $formText = $this->buildUserRows($users);
@@ -49,7 +47,6 @@ class UsersNoInprocessIndexController extends AbstractController
         $this->renderCard($formText);
         $this->renderAddRowScript();
     }
-
     /**
      * Builds the editable table rows for each existing excluded user.
      */
