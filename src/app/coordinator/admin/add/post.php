@@ -3,47 +3,19 @@
 
 namespace App\Coordinator\Admin\Add;
 
-use App\User\CurrentUser;
-use function App\Utils\Html\div_alert;
-use function App\csrf\verify_csrf_token;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function Add\AddPost\add_pages_to_db;
 
 /**
  * Class AddPostProcessor
  * Handles submission of new translation rows via add_pages_to_db().
  */
-class AddPostProcessor
+class AddPostProcessor extends AbstractPostHandler
 {
-	private array $texts = [];
-	private array $errors = [];
 
-	/**
-	 * Validates and processes the incoming submission.
-	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
-
-		echo div_alert($this->texts, 'success');
-		echo div_alert($this->errors, 'danger');
+		$this->processRows($post['rows'] ?? []);
 	}
 
 	/**
@@ -65,25 +37,14 @@ class AddPostProcessor
 				$result = add_pages_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate, $word);
 
 				if ($result === false) {
-					$this->errors[] = "Failed to add translations.";
+					$this->addError("Failed to add translations.");
 				} else {
-					$this->texts[] = "Translations added successfully.";
+					$this->addText("Translations added successfully.");
 				}
 			} else {
-				$this->errors[] = "Failed to add translations. Missing required fields.";
+				$this->addError("Failed to add translations. Missing required fields.");
 			}
 		}
 	}
 
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
-	}
 }

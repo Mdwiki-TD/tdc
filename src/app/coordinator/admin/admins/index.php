@@ -3,9 +3,8 @@
 
 namespace App\Coordinator\Admin\Admins;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_coordinators;
-use function App\csrf\generate_csrf_token;
 
 require_once __DIR__ . '/post.php';
 
@@ -15,24 +14,25 @@ require_once __DIR__ . '/post.php';
  * to AdminsPostProcessor first, then always renders the current state
  * of the list/form below it.
  */
-class AdminsIndexController
+class AdminsIndexController extends AbstractController
 {
 	private const TY_NAME = 'admins';
 
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new AdminsPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderIndexMesseges($result);
+    }
 	/**
 	 * Handles authentication and executes controller output.
 	 */
 	public function handleRequest(): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+		$this->validateCoordinator();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$postProcessor = new AdminsPostProcessor();
-			$postProcessor->handle();
+            $this->handlePostRequest();
 		}
 
 		$coordinators = get_coordinators();
@@ -122,7 +122,6 @@ class AdminsIndexController
 	 */
 	private function renderCard(string $formText): void
 	{
-		$csrfToken = generate_csrf_token();
 		$tyName = self::TY_NAME;
 
 		echo <<<HTML
@@ -132,7 +131,7 @@ class AdminsIndexController
                 </div>
                 <div class='card-body'>
                     <form action="index.php?ty=$tyName" method="POST">
-                        <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                        {$this->createCsrfTokenField()}
                         <input name='ty' value="$tyName" type="hidden"/>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">

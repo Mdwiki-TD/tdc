@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Reports;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 
 /**
  * Class ReportsIndex2Controller
@@ -11,18 +11,14 @@ use App\User\CurrentUser;
  * filter <select> options (currently backed by an empty dataset, kept
  * for parity with the legacy behaviour) instead of client-populated ones.
  */
-class ReportsIndex2Controller
+class ReportsIndex2Controller extends AbstractController
 {
     /**
      * Handles authentication and executes controller output.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $formOptions = $this->buildFormOptions();
 

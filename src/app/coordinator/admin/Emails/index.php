@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use App\Tables\SqlTables\TablesSql;
 use function App\Utils\Html\make_mail_icon_new;
 use function App\Utils\Html\make_edit_icon_new;
@@ -18,7 +18,7 @@ use function App\SQLorAPI\Funcs\get_td_or_sql_page_user_not_in_users;
  * live-page count, and per-row send-email / edit actions, with a
  * project filter.
  */
-class EmailsIndexController
+class EmailsIndexController extends AbstractController
 {
 	private int $limit;
 	private string $mainProject;
@@ -34,15 +34,7 @@ class EmailsIndexController
 	 */
 	public function handleRequest(): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
-
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			require __DIR__ . '/post.php';
-		}
+		$this->validateCoordinator();
 
 		$lastUserToTab = get_users_by_last_pupdate();
 		$usersDone = $this->getSortedArray();
@@ -182,13 +174,7 @@ class EmailsIndexController
 				$mailIcon = make_mail_icon_new($lastUserToTab[$userName], 'pup_window_email');
 			}
 
-			$editParams = [
-				'user_id' => $userId,
-				'user'    => $user,
-				'email'   => $email,
-				'wiki'    => $wiki,
-				'project' => $userGroup,
-			];
+			$editParams = [ 'user_id' => $userId];
 
 			$editIcon = make_edit_icon_new("Emails/edit_user", $editParams);
 

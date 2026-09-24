@@ -3,26 +3,24 @@
 
 namespace App\Coordinator\Admin\Qids;
 
-use App\User\CurrentUser;
-use function App\Utils\Html\div_alert;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\APICalls\MdwikiSql\check_one;
+use function App\APICalls\MdwikiSql\get_qid_row;
+use function App\APICalls\MdwikiSql\get_qid_by_title;
 use function App\csrf\verify_csrf_token;
 
 /**
- * Class QidsPostController
+ * Class QidsPostProcessor
  * Handles bulk add/update submissions of title/qid rows, validating
  * uniqueness constraints against both the qid and title columns.
  */
-class QidsPostController
+class QidsPostProcessor extends AbstractPostHandler
 {
 	private string $qidTable;
-	private array $texts = [];
-	private array $errors = [];
 
-	public function __construct()
+	public function __construct(string $qidTable = 'qids')
 	{
-		$this->qidTable = $_GET['qid_table'] ?? '';
+		$this->qidTable = $qidTable;
 
 		if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {
 			$this->qidTable = 'qids';
@@ -32,51 +30,17 @@ class QidsPostController
 	/**
 	 * Executes authorization check and processes the POST submission.
 	 */
-	public function handleRequest(): void
+    public function process(array $post): void
 	{
-		// Check user authorization
-		if (!CurrentUser::getInstance()->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+		$this->validateCoordinator();
 
-		$this->renderHeaderScripts();
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-			exit;
-		}
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if (!verify_csrf_token()) {
-			echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-			echo $closeBtn;
-			return;
-		}
-
-		$this->processRows($_POST['rows'] ?? []);
+		$this->processRows($post['rows'] ?? []);
 
 		if (!empty($this->texts)) {
-			$this->texts[] = "table:({$this->qidTable})";
+			$this->addText("table:({$this->qidTable})");
 		} elseif (!empty($this->errors)) {
-			$this->errors[] = "table:({$this->qidTable})";
+			$this->addError("table:({$this->qidTable})");
 		}
-
-		echo div_alert($this->texts, 'success');
-		echo div_alert($this->errors, 'danger');
-
-		echo $closeBtn;
-	}
-
-	/**
-	 * Renders UI scripts to isolate the modal/page layout.
-	 */
-	private function renderHeaderScripts(): void
-	{
-		echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>';
 	}
 
 	/**
@@ -90,45 +54,45 @@ class QidsPostController
 			$id    = $table['id'] ?? '';
 
 			if (empty($title)) {
-				$this->errors[] = "Title is required. qid=($qid)";
+				$this->addError("Title is required. qid=($qid)");
 				continue;
 			}
 
 			if (empty($qid)) {
-				$this->errors[] = "Qid is required. title=($title)";
+				$this->addError("Qid is required. title=($title)");
 				continue;
 			}
 
-			$txTab = check_one('*', 'qid', $qid, $this->qidTable);
+			$txTab = get_qid_row('qid', $qid, $this->qidTable);
 
 			if ($txTab) {
 				$txId = $txTab['id'];
 				$titleOfQid = $txTab['title'];
 
 				if (!empty($id) && $txId != $id) {
-					$this->errors[] = "Qid:($qid) already used in database with with id:($txId).";
+					$this->addError("Qid:($qid) already used in database with with id:($txId).");
 					continue;
 				}
 
 				if (!empty($titleOfQid) && empty($id) && $titleOfQid != $title) {
-					$this->errors[] = "Qid:($qid) already used in database with title:($titleOfQid).";
+					$this->addError("Qid:($qid) already used in database with title:($titleOfQid).");
 					continue;
 				}
 			}
 
-			$ttTab = check_one('*', 'title', $title, $this->qidTable);
+			$ttTab = get_qid_row('title', $title, $this->qidTable);
 
 			if ($ttTab) {
 				$qidOfTitle5 = $ttTab['qid'];
 				$ttId = $ttTab['id'];
 
 				if (!empty($id) && $ttId != $id) {
-					$this->errors[] = "Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)";
+					$this->addError("Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)");
 					continue;
 				}
 
 				if (empty($id) && !empty($qidOfTitle5) && $qidOfTitle5 != $qid) {
-					$this->errors[] = "Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)";
+					$this->addError("Title:($title) already used in database with qid:($qidOfTitle5), new qid:($qid)");
 					continue;
 				}
 			}
@@ -173,12 +137,12 @@ class QidsPostController
 	{
 		$this->addIt($id, $title, $qid);
 
-		$qidOfTitle = check_one('qid', 'title', $title, $this->qidTable);
+		$qidOfTitle = get_qid_by_title($title, $this->qidTable);
 
 		if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
-			$this->texts[] = "Data Changes successfully of title: $title, Qid: $qid";
+			$this->addText("Data Changes successfully of title: $title, Qid: $qid");
 		} else {
-			$this->errors[] = "Failed to chanhe data of title: $title, Qid: $qid. Found: qid in db:$qidOfTitle";
+			$this->addError("Failed to chanhe data of title: $title, Qid: $qid. Found: qid in db:$qidOfTitle");
 		}
 	}
 
@@ -189,28 +153,14 @@ class QidsPostController
 	{
 		$this->addIt('', $title, $qid);
 
-		$qidOfTitle = check_one('qid', 'title', $title, $this->qidTable);
+		$qidOfTitle = get_qid_by_title($title, $this->qidTable);
 
 		if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
-			$this->texts[] = "Qid added successfully for title: $title.";
+			$this->addText("Qid added successfully for title: $title.");
 		} else {
-			$this->errors[] = "Failed to add Qid for title: $title. qid_of_title:$qidOfTitle";
+			$this->addError("Failed to add Qid for title: $title. qid_of_title:$qidOfTitle");
 		}
-	}
-
-	/**
-	 * Generates a close button HTML block.
-	 */
-	private function getCloseButtonHtml(): string
-	{
-		return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
 	}
 }
 
-// Instantiate and execute controller
-$controller = new QidsPostController();
-$controller->handleRequest();
+

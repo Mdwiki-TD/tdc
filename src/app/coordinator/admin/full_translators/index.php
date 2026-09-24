@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\FullTranslators;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_full_translators;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -15,24 +15,25 @@ require_once __DIR__ . '/post.php';
  * delegates to FullTranslatorsPostProcessor first, then always renders
  * the current state of the list/form below it.
  */
-class FullTranslatorsIndexController
+class FullTranslatorsIndexController extends AbstractController
 {
     private const TY_NAME = 'full_translators';
 
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new FullTranslatorsPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderIndexMesseges($result);
+    }
     /**
      * Handles authentication and executes controller output.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new FullTranslatorsPostProcessor();
-            $postProcessor->handle();
+            $this->handlePostRequest();
         }
 
         $translators = get_td_or_sql_full_translators();
@@ -121,43 +122,38 @@ class FullTranslatorsIndexController
      */
     private function renderCard(string $formText): void
     {
-        $csrfToken = generate_csrf_token();
+
         $tyName = self::TY_NAME;
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Full article translators:</h4>
+        $form = <<<HTML
+            <form action="index.php?ty=$tyName" method="POST">
+                {$this->createCsrfTokenField()}
+                <input name='ty' value="$tyName" type="hidden"/>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Active</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="full_tab">
+                                $formText
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class='card-body'>
-                    <form action="index.php?ty=$tyName" method="POST">
-                        <input name='csrf_token' value="$csrfToken" type="hidden"/>
-                        <input name='ty' value="$tyName" type="hidden"/>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>User</th>
-                                            <th>Active</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="full_tab">
-                                        $formText
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-group d-flex justify-content-between">
-                            <button type="submit" class="btn btn-outline-primary">Save</button>
-                            <!-- <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row_v()'>New row</span> -->
-                        </div>
-                    </form>
+                <div class="form-group d-flex justify-content-between">
+                    <button type="submit" class="btn btn-outline-primary">Save</button>
+                    <!-- <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row_v()'>New row</span> -->
                 </div>
-            </div>
+            </form>
         HTML;
+
+        $this->echoCard("Full article translators:", $form);
     }
 
     /**

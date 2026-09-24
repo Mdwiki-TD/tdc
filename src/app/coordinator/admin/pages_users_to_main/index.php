@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
@@ -19,7 +20,7 @@ use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
  * moved/fixed into the main pages table, with language filtering and a
  * "fix it" action per row.
  */
-class PagesUsersToMainIndexController
+class PagesUsersToMainIndexController extends AbstractController
 {
     private CurrentUser $currentUser;
     private string $lang;

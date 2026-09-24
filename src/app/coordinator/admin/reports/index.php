@@ -3,25 +3,21 @@
 
 namespace App\Coordinator\Admin\Reports;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\AbstractController;
 
 /**
  * Class ReportsIndexController
  * Renders the client-side "Publish Reports Viewer" shell. All filtering,
  * data loading, and results rendering is handled by /tdc/js/reports-script.js.
  */
-class ReportsIndexController
+class ReportsIndexController extends AbstractController
 {
     /**
      * Handles authentication and executes controller output.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $this->renderStyles();
         $this->renderCard();
