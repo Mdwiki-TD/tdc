@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\Coordinator\Admin\Common\AbstractController;
+use function App\Utils\Html\make_form_input_col;
 
 require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
 
@@ -29,14 +30,10 @@ class WikiRefsOptionsEditController extends AbstractController
      */
     public function handleRequest(): void
     {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
+        $this->handlePopupRequest(
+            fn() => $this->renderFormCard(),
+            fn() => $this->handlePostRequest()
+        );
     }
 
     /**
@@ -99,6 +96,8 @@ class WikiRefsOptionsEditController extends AbstractController
             HTML;
         }
 
+        $langCodeCol = make_form_input_col('Lang code', 'lang_code', $langCode, 'col-md-12', 'required');
+
         $form = <<<HTML
             <form action='index.php?ty=wikirefs_options/edit&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
@@ -106,14 +105,7 @@ class WikiRefsOptionsEditController extends AbstractController
                 <div class='container'>
                     <div class='row'>
                         $idRow
-                        <div class='col-md-12'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Lang code</span>
-                                </div>
-                                <input class='form-control' type='text' name='lang_code' value='$langCode' required/>
-                            </div>
-                        </div>
+                        $langCodeCol
                         <div class='col-md-12'>
                             <div class='row'>
                                 $uRows

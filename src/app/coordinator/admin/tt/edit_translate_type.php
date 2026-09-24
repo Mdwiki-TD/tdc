@@ -4,7 +4,8 @@
 namespace App\Coordinator\Admin\TranslateType;
 
 use App\Coordinator\Admin\Common\AbstractController;
-
+use function App\Utils\Html\make_form_input_col;
+use function App\Utils\Html\make_form_switch_col;
 
 require_once __DIR__ . '/post.php';
 
@@ -44,14 +45,10 @@ class EditTranslateTypeController extends AbstractController
      */
     public function handleRequest(): void
     {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
+        $this->handlePopupRequest(
+            fn() => $this->renderFormCard(),
+            fn() => $this->handlePostRequest()
+        );
     }
 
     /**
@@ -59,25 +56,13 @@ class EditTranslateTypeController extends AbstractController
      */
     private function buildFormHtml(string $title, string $lead, string $full, string $id): string
     {
-        $leadChecked = ($lead == 1 || $lead == "1") ? 'checked' : '';
-        $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
+        $idRow = !empty($id)
+            ? make_form_input_col('Id', 'rows[1][id]', $id, 'col-md-3', '', true)
+            : '';
 
-        $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-
-        $idRow = <<<HTML
-            <div class='col-md-3'>
-                <div class='input-group mb-3'>
-                    <div class='input-group-prepend'>
-                        <span class='input-group-text'>Id</span>
-                    </div>
-                    <input class='form-control' type='text' value='$id' name='rows[1][id]' readonly/>
-                </div>
-            </div>
-        HTML;
-
-        if (empty($id)) {
-            $idRow = "";
-        }
+        $titleCol = make_form_input_col('Title', 'rows[1][title]', $title, 'col-md-3', 'required');
+        $leadSwitch = make_form_switch_col('Lead:', 'rows[1][lead]', ($lead == 1 || $lead == "1"), 'col');
+        $fullSwitch = make_form_switch_col('Full:', 'rows[1][full]', ($full == 1 || $full == "1"), 'col');
 
         return <<<HTML
             <form action='index.php?ty=tt/edit_translate_type&nonav=120' method="POST">
@@ -86,36 +71,11 @@ class EditTranslateTypeController extends AbstractController
                 <div class='container'>
                     <div class='row'>
                         $idRow
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Title</span>
-                                </div>
-                                <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
-                            </div>
-                        </div>
+                        $titleCol
                         <div class='col-md-3'>
                             <div class='row'>
-                                <div class='col'>
-                                    <div class='input-group form-control mb-3'>
-                                        <div class='input-group-prepend'>
-                                            <span class='me-3'>Lead:</span>
-                                        </div>
-                                        <div class="form-check form-switch form-inline">
-                                            <input class='form-check-input' type='checkbox' name='rows[1][lead]' value='1' $leadChecked>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class='col'>
-                                    <div class='input-group form-control mb-3'>
-                                        <div class='input-group-prepend'>
-                                            <span class='me-3'>Full:</span>
-                                        </div>
-                                        <div class="form-check form-switch form-inline">
-                                            <input class='form-check-input' type='checkbox' name='rows[1][full]' value='1' $fullChecked>
-                                        </div>
-                                    </div>
-                                </div>
+                                $leadSwitch
+                                $fullSwitch
                             </div>
                         </div>
                         <div class='col-md-2'>

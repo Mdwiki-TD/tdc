@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Translated;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
-
+use function App\Utils\Html\make_form_input_col;
 
 require_once __DIR__ . '/EditPagePostHandler.php';
 
@@ -37,14 +37,10 @@ class EditPageController extends AbstractController
      */
     public function handleRequest(): void
     {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderEditForm($this->id, $this->table);
-        }
+        $this->handlePopupRequest(
+            fn() => $this->renderEditForm($this->id, $this->table),
+            fn() => $this->handlePostRequest()
+        );
     }
 
     /**
@@ -62,8 +58,11 @@ class EditPageController extends AbstractController
 
         $testLine = isset($_REQUEST['test']) ? '<input type="hidden" name="test" value="1" />' : "";
 
-        $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-        $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+        $titleCol  = make_form_input_col('Title', 'title', $title, 'col-md-3', 'required', false, 'title');
+        $langEsc   = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
+        $targetCol = make_form_input_col('target', 'target', $target, 'col-md-3', 'required', false, 'target');
+        $userCol   = make_form_input_col('user', 'user', $user, 'col-md-3', 'required', false, 'user');
+        $pupdateEsc = htmlspecialchars($pupdate, ENT_QUOTES, 'UTF-8');
 
         $form = <<<HTML
             <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
@@ -74,44 +73,23 @@ class EditPageController extends AbstractController
                 $testLine
                 <div class='container'>
                     <div class='row'>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Title</span>
-                                </div>
-                                <input class='form-control' type='text' id='title' name='title' value='$title2' required/>
-                            </div>
-                        </div>
+                        $titleCol
                         <div class='col-md-3'>
                             <div class='input-group mb-3'>
                                 <div class='input-group-prepend'>
                                     <span class='input-group-text'>lang</span>
                                 </div>
-                                <input class='form-control lang_input' type='text' id='lang' name='lang' value='$lang' required/>
+                                <input class='form-control lang_input' type='text' id='lang' name='lang' value='$langEsc' required/>
                             </div>
                         </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>target</span>
-                                </div>
-                                <input class='form-control' type='text' id='target' name='target' value='$target2' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>user</span>
-                                </div>
-                                <input class='form-control' type='text' id='user' name='user' value='$user' required/>
-                            </div>
-                        </div>
+                        $targetCol
+                        $userCol
                         <div class='col-md-3'>
                             <div class='input-group mb-3'>
                                 <div class='input-group-prepend'>
                                     <span class='input-group-text'>Published</span>
                                 </div>
-                                <input class='form-control' type='text' id='pupdate' name='pupdate' value='$pupdate' placeholder='YYYY-MM-DD' required/>
+                                <input class='form-control' type='text' id='pupdate' name='pupdate' value='$pupdateEsc' placeholder='YYYY-MM-DD' required/>
                             </div>
                         </div>
                         <div class='col-md-3'>

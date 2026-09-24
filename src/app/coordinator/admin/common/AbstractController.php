@@ -53,6 +53,22 @@ abstract class AbstractController
         <div class="container-fluid">';
     }
     /**
+     * Standardized template method for popup window controllers.
+     * Validates authorization, renders header scripts, and handles POST/GET routing.
+     */
+    public function handlePopupRequest(callable $formRenderer, ?callable $postHandler = null): void
+    {
+        $this->validateCoordinator();
+        $this->renderHeaderScripts();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $postHandler !== null) {
+            $postHandler();
+        } else {
+            $formRenderer();
+        }
+    }
+
+    /**
      * Renders the card wrapping the form.
      */
     public function echoCard(string $headerTitle, string $body): void

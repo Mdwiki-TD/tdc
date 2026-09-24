@@ -46,45 +46,35 @@ class MsgController extends AbstractController
      */
     public function handleRequest(): void
     {
-        $this->validateCoordinator();
+        $this->handlePopupRequest(function () {
+            $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
+                ? "https://cdnjs.cloudflare.com"
+                : "https://tools-static.wmflabs.org/cdnjs";
 
-        $this->renderHeaderAndScripts();
+            echo <<<HTML
+                <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
+                <link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
+            HTML;
 
-        $views = get_views($this->target, $this->lang, $this->date);
+            $views = get_views($this->target, $this->lang, $this->date);
 
-        $sugustTab = get_sugust($this->title, $this->lang);
-        $sugust = $sugustTab['sugust'] ?? '';
+            $sugustTab = get_sugust($this->title, $this->lang);
+            $sugust = $sugustTab['sugust'] ?? '';
 
-        $here = $this->buildHereLink($sugust);
+            $here = $this->buildHereLink($sugust);
 
-        $emails = $this->loadUserEmails();
-        $emailTo = $emails[$this->user] ?? '';
-        $ccTo = $emails[$this->globalUsername] ?? '';
+            $emails = $this->loadUserEmails();
+            $emailTo = $emails[$this->user] ?? '';
+            $ccTo = $emails[$this->globalUsername] ?? '';
 
-        $msg = $this->buildMessageBody($views, $sugust, $here);
-        $mag = $this->buildMessageWrapper($msg);
+            $msg = $this->buildMessageBody($views, $sugust, $here);
+            $mag = $this->buildMessageWrapper($msg);
 
-        $this->renderComposeForm($emailTo, $ccTo, $mag);
-        $this->renderEditorInitScript();
+            $this->renderComposeForm($emailTo, $ccTo, $mag);
+            $this->renderEditorInitScript();
+        });
     }
 
-    /**
-     * Renders UI scripts and includes the Summernote WYSIWYG editor assets.
-     */
-    private function renderHeaderAndScripts(): void
-    {
-		$this->renderHeaderScripts();
-
-        $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
-            ? "https://cdnjs.cloudflare.com"
-            : "https://tools-static.wmflabs.org/cdnjs";
-
-
-        echo <<<HTML
-            <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
-            <link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
-        HTML;
-    }
 
     /**
      * Builds the "HERE" link pointing to the translation dashboard,

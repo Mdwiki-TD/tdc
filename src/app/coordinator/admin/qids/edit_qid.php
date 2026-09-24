@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Qids;
 
 use App\Coordinator\Admin\Common\AbstractController;
-
+use function App\Utils\Html\make_form_input_col;
 
 require_once __DIR__ . '/post.php';
 
@@ -48,14 +48,10 @@ class EditQidController extends AbstractController
      */
     public function handleRequest(): void
     {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
+        $this->handlePopupRequest(
+            fn() => $this->renderFormCard(),
+            fn() => $this->handlePostRequest()
+        );
     }
 
     /**
@@ -63,22 +59,12 @@ class EditQidController extends AbstractController
      */
     private function buildFormHtml(string $id, string $title, string $qid, string $qidTable): string
     {
-        $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+        $idRow = !empty($id)
+            ? make_form_input_col('Id', 'rows[1][id]', $id, 'col-md-3', '', true)
+            : '';
 
-        $idRow = <<<HTML
-            <div class='col-md-3'>
-                <div class='input-group mb-3'>
-                    <div class='input-group-prepend'>
-                        <span class='input-group-text'>Id</span>
-                    </div>
-                    <input class='form-control' type='text' name='rows[1][id]' value='$id' readonly/>
-                </div>
-            </div>
-        HTML;
-
-        if (empty($id)) {
-            $idRow = "";
-        }
+        $titleCol = make_form_input_col('Title', 'rows[1][title]', $title, 'col-md-3', 'required');
+        $qidCol = make_form_input_col('Qid', 'rows[1][qid]', $qid, 'col-md-3', 'required');
 
         return <<<HTML
             <form action='index.php?ty=qids/edit_qid&qid_table=$qidTable&nonav=120' method="POST">
@@ -88,22 +74,8 @@ class EditQidController extends AbstractController
                 <div class='container'>
                     <div class='row'>
                         $idRow
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Title</span>
-                                </div>
-                                <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Qid</span>
-                                </div>
-                                <input class='form-control' type='text' name='rows[1][qid]' value='$qid' required/>
-                            </div>
-                        </div>
+                        $titleCol
+                        $qidCol
                         <div class='col-md-2'>
                             <input class='btn btn-outline-primary' type='submit' value='send'/>
                         </div>

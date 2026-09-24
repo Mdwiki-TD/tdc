@@ -529,3 +529,80 @@ function make_edit_icon_new(string $target, array $editParams, string $text = "E
 		<a class='btn btn-outline-primary {$classSm}' pup-target='{$escapedUrl}' onclick='pup_window_new(this)'>{$text}</a>
 	HTML;
 }
+
+/**
+ * Generate a form input group wrapped in a Bootstrap column.
+ *
+ * @param string $label    Input label
+ * @param string $name     Input field name
+ * @param string $value    Input field value
+ * @param string $col      Bootstrap column class (default: 'col-md-3')
+ * @param string $required 'required' attribute string or empty
+ * @param bool   $readonly Whether the field is read-only
+ * @param string $id       Optional HTML element ID (defaults to name)
+ *
+ * @return string HTML for input column
+ */
+function make_form_input_col(
+    string $label,
+    string $name,
+    string $value,
+    string $col = 'col-md-3',
+    string $required = '',
+    bool $readonly = false,
+    string $id = ''
+): string {
+    $escapedLabel = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+    $escapedName  = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+    $escapedValue = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $readonlyAttr = $readonly ? 'readonly' : '';
+    $idAttr       = !empty($id) ? "id='" . htmlspecialchars($id, ENT_QUOTES, 'UTF-8') . "'" : '';
+
+    return <<<HTML
+    <div class='{$col}'>
+        <div class='input-group mb-3'>
+            <div class='input-group-prepend'>
+                <span class='input-group-text'>{$escapedLabel}</span>
+            </div>
+            <input class='form-control' type='text' {$idAttr} name='{$escapedName}' value='{$escapedValue}' {$required} {$readonlyAttr}/>
+        </div>
+    </div>
+    HTML;
+}
+
+/**
+ * Generate a Bootstrap switch checkbox wrapped in a column.
+ *
+ * @param string $label   Switch label
+ * @param string $name    Checkbox input name
+ * @param bool   $checked Whether the switch is checked
+ * @param string $col     Bootstrap column class (default: 'col-6')
+ * @param string $value   Checkbox input value (default: '1')
+ *
+ * @return string HTML for switch column
+ */
+function make_form_switch_col(
+    string $label,
+    string $name,
+    bool $checked,
+    string $col = 'col-6',
+    string $value = '1'
+): string {
+    $escapedLabel = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+    $escapedName  = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+    $escapedValue = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $checkedAttr  = $checked ? 'checked' : '';
+
+    return <<<HTML
+    <div class='{$col}'>
+        <div class='input-group form-control mb-3'>
+            <div class='input-group-prepend'>
+                <span class='me-3'>{$escapedLabel}</span>
+            </div>
+            <div class="form-check form-switch form-inline">
+                <input class='form-check-input' type='checkbox' name='{$escapedName}' value='{$escapedValue}' {$checkedAttr}>
+            </div>
+        </div>
+    </div>
+    HTML;
+}

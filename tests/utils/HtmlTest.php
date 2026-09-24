@@ -24,6 +24,8 @@ use function App\Utils\Html\make_mdwiki_user_url;
 use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\div_alert;
 use function App\Utils\Html\make_edit_icon_new;
+use function App\Utils\Html\make_form_input_col;
+use function App\Utils\Html\make_form_switch_col;
 
 class HtmlTest extends TestCase
 {
@@ -224,5 +226,28 @@ class HtmlTest extends TestCase
         // Restore state
         $_REQUEST = $origReq;
         $_COOKIE = $origCookie;
+    }
+
+    public function testMakeFormInputCol()
+    {
+        $result = make_form_input_col("User ID", "emails[1][user_id]", "123", "col-md-3", "required", true, "uid_field");
+        $this->assertStringContainsString("col-md-3", $result);
+        $this->assertStringContainsString("User ID", $result);
+        $this->assertStringContainsString("name='emails[1][user_id]'", $result);
+        $this->assertStringContainsString("value='123'", $result);
+        $this->assertStringContainsString("required", $result);
+        $this->assertStringContainsString("readonly", $result);
+        $this->assertStringContainsString("id='uid_field'", $result);
+    }
+
+    public function testMakeFormSwitchCol()
+    {
+        $result = make_form_switch_col("Lead:", "rows[1][lead]", true, "col-6", "1");
+        $this->assertStringContainsString("col-6", $result);
+        $this->assertStringContainsString("Lead:", $result);
+        $this->assertStringContainsString("name='rows[1][lead]'", $result);
+        $this->assertStringContainsString("type='checkbox'", $result);
+        $this->assertStringContainsString("checked", $result);
+        $this->assertStringContainsString("value='1'", $result);
     }
 }
