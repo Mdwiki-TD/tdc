@@ -3,6 +3,7 @@
 
 namespace App\Coordinator\Admin\Emails;
 
+use App\Coordinator\Admin\BasePopupController;
 use App\User\CurrentUser;
 use App\Tables\Main\MainTables;
 use function App\APICalls\MdwikiSql\fetch_query;
@@ -18,7 +19,7 @@ use function App\csrf\generate_csrf_token;
  * with the translated title, view counts, and a translation suggestion.
  * Submission is posted to the external /gmail1/index.php endpoint.
  */
-class MsgController
+class MsgController extends BasePopupController
 {
     private string $globalUsername;
     private string $test;
@@ -45,13 +46,18 @@ class MsgController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->checkAuthorization();
 
-        $this->renderHeaderScripts();
+        $hoste = (($_SERVER["SERVER_NAME"] ?? '') === "localhost")
+            ? "https://cdnjs.cloudflare.com"
+            : "https://tools-static.wmflabs.org/cdnjs";
+
+        $extraAssets = <<<HTML
+            <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
+            <link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
+        HTML;
+
+        $this->renderHeaderScripts($extraAssets, 'yeye');
 
         $views = get_views($this->target, $this->lang, $this->date);
 
@@ -69,28 +75,6 @@ class MsgController
 
         $this->renderComposeForm($emailTo, $ccTo, $mag);
         $this->renderEditorInitScript();
-    }
-
-    /**
-     * Renders UI scripts and includes the Summernote WYSIWYG editor assets.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo "</div>";
-
-        $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
-            ? "https://cdnjs.cloudflare.com"
-            : "https://tools-static.wmflabs.org/cdnjs";
-
-        echo <<<HTML
-            <script src='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.js'></script>
-            <link rel='stylesheet' href='$hoste/ajax/libs/summernote/0.8.20/summernote-lite.min.css' type='text/css' media='screen' charset='utf-8'>
-            <script>
-                $('#mainnav').hide();
-                $('#maindiv').hide();
-            </script>
-            <div id='yeye' class='container-fluid'>
-        HTML;
     }
 
     /**

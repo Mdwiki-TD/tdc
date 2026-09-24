@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\BasePopupController;
 use function App\Utils\Html\make_project_to_user;
 use function App\csrf\generate_csrf_token;
 
@@ -12,7 +12,7 @@ use function App\csrf\generate_csrf_token;
  * Renders the add/edit form for a single user's email/wiki/project
  * data (GET request only; submission is handled by EmailsPostProcessor).
  */
-class EditUserController
+class EditUserController extends BasePopupController
 {
     private string $user;
     private string $wiki;
@@ -34,26 +34,9 @@ class EditUserController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->checkAuthorization();
         $this->renderHeaderScripts();
         $this->renderFormCard();
-    }
-
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
     }
 
     /**
@@ -134,18 +117,9 @@ class EditUserController
     private function renderFormCard(): void
     {
         $headerTitle = (!empty($this->userId)) ? 'Edit User' : 'Add New User';
+        $formHtml = $this->buildFormHtml($this->user, $this->wiki, $this->project, $this->email, $this->userId);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-        HTML;
-
-        echo $this->buildFormHtml($this->user, $this->wiki, $this->project, $this->email, $this->userId);
-
-        echo "</div></div>";
+        $this->renderCard($headerTitle, $formHtml);
     }
 }
 

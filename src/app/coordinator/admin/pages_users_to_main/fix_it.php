@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\BasePopupController;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\csrf\generate_csrf_token;
 
@@ -13,19 +13,14 @@ require_once __DIR__ . '/fix_it_post.php';
  * Class FixItController
  * Handles displaying the page edit form and duplicate entry checks (GET requests).
  */
-class FixItController
+class FixItController extends BasePopupController
 {
     /**
      * Executes authorization check and handles the incoming request.
      */
     public function handleRequest(): void
     {
-        // Check coordinator authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->checkAuthorization();
         $this->renderHeaderScripts();
 
         // Delegate POST requests to the POST processor
@@ -37,18 +32,6 @@ class FixItController
 
         // Handle GET request and render view
         $this->renderFormView();
-    }
-
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
     }
 
     /**
@@ -78,16 +61,7 @@ class FixItController
 
         $formHtml = $this->buildFormHtml($id, $title, $newTarget, $lang, $newUser, $pupdate);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Edit Page ($oldTarget)</h4>
-                </div>
-                <div class='card-body'>
-                    $formHtml
-                </div>
-            </div>
-        HTML;
+        $this->renderCard("Edit Page ($oldTarget)", $formHtml);
     }
 
     /**

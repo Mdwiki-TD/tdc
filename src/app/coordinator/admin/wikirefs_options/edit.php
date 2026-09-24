@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\BasePopupController;
 use function App\csrf\generate_csrf_token;
 use function App\Utils\Html\div_alert;
 
@@ -14,64 +14,39 @@ require_once __DIR__ . '/edit_post.php';
  * Handles add/edit/delete of a single language_settings row (GET
  * renders the form, POST persists the change via WikiRefsOptionsEditPostHandler).
  */
-class WikiRefsOptionsEditController
+class WikiRefsOptionsEditController extends BasePopupController
 {
     /**
      * Executes authorization check and handles the incoming request.
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->checkAuthorization();
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = (new WikiRefsOptionsEditPostHandler())->handle($_POST);
-            echo div_alert($result['texts'], 'success');
-            echo div_alert($result['errors'], 'danger');
+            $bodyContent = div_alert($result['texts'], 'success') . div_alert($result['errors'], 'danger');
+            $headerTitle = "Language settings updated";
         } else {
-            $this->renderForm();
+            $id = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
+            $headerTitle = (!empty($id)) ? 'Edit language settings' : 'Add language settings';
+            $bodyContent = $this->buildFormHtml();
         }
 
-        echo "</div></div>";
+        $this->renderCard($headerTitle, $bodyContent);
     }
 
     /**
-     * Renders UI scripts to isolate the modal/page layout.
+     * Builds and returns the add/edit form HTML string for language settings.
      */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
-    }
-
-    /**
-     * Renders the add/edit form for the language settings row.
-     */
-    private function renderForm(): void
+    private function buildFormHtml(): string
     {
         $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $langCode   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');
         $expend     = filter_var($_GET['expend'] ?? '', FILTER_VALIDATE_INT) ?: '';
         $moveDots   = filter_var($_GET['move_dots'] ?? '', FILTER_VALIDATE_INT) ?: '';
         $addEnLang  = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
-
-        $headerTitle = (!empty($id)) ? 'Edit language settings' : 'Add language settings';
-
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-        HTML;
 
         $idRow = <<<HTML
             <input class='form-control' value='$id' name='id' type='hidden'/>
@@ -122,7 +97,7 @@ class WikiRefsOptionsEditController
 
         $csrfToken = generate_csrf_token();
 
-        echo <<<HTML
+        return <<<HTML
             <form action='index.php?ty=wikirefs_options/edit&nonav=120' method="POST">
                 <input name='csrf_token' value="$csrfToken" type="hidden"/>
                 <input name='edit' value="1" type="hidden"/>

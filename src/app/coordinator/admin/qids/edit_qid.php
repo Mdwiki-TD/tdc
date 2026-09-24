@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Qids;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\BasePopupController;
 use function App\csrf\generate_csrf_token;
 
 /**
@@ -11,7 +11,7 @@ use function App\csrf\generate_csrf_token;
  * Renders the add/edit form for a single qid entry (GET request only;
  * submission is handled by QidsPostController).
  */
-class EditQidController
+class EditQidController extends BasePopupController
 {
     private string $id;
     private string $title;
@@ -35,26 +35,9 @@ class EditQidController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->checkAuthorization();
         $this->renderHeaderScripts();
         $this->renderFormCard();
-    }
-
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
     }
 
     /**
@@ -120,19 +103,9 @@ class EditQidController
     private function renderFormCard(): void
     {
         $headerTitle = ($this->id !== '') ? 'Edit Qid' : 'Add New Qid';
-
         $form = $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>$headerTitle</h4>
-                </div>
-                <div class='card-body'>
-                    $form
-                </div>
-            </div>
-        HTML;
+        $this->renderCard($headerTitle, $form);
     }
 }
 

@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Translated;
 
-use App\User\CurrentUser;
+use App\Coordinator\Admin\BasePopupController;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\csrf\generate_csrf_token;
 
@@ -14,7 +14,7 @@ require_once __DIR__ . '/edit_page_post.php';
  * Handles editing and deleting translated pages (GET renders the form,
  * POST is delegated to EditPagePostHandler).
  */
-class EditPageController
+class EditPageController extends BasePopupController
 {
     private string $id;
     private string $table;
@@ -31,50 +31,28 @@ class EditPageController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
-
+        $this->checkAuthorization();
         $this->renderHeaderScripts();
 
-        echo <<<HTML
-        <div class='card'>
-            <div class='card-header'>
-                <h4>Edit Page (id: {$this->id}, table: {$this->table})</h4>
-            </div>
-            <div class='card-body'>
-        HTML;
-
         $closeBtn = $this->getCloseButtonHtml();
+        $bodyContent = "";
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            ob_start();
             $this->handlePostRequest();
             echo $closeBtn;
+            $bodyContent = ob_get_clean();
         } else {
-            $this->renderEditForm($this->id, $this->table);
+            $bodyContent = $this->buildEditFormHtml($this->id, $this->table);
         }
 
-        echo "</div></div>";
+        $this->renderCard("Edit Page (id: {$this->id}, table: {$this->table})", $bodyContent);
     }
 
     /**
-     * Renders UI scripts to isolate the modal/page layout.
+     * Builds and returns the edit page form HTML string.
      */
-    private function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
-    }
-
-    /**
-     * Displays the edit page form.
-     */
-    private function renderEditForm(string $id, string $table): void
+    private function buildEditFormHtml(string $id, string $table): string
     {
         $pageData = fetch_query("SELECT * FROM {$table} WHERE id = ?", [$id]);
 
@@ -91,7 +69,7 @@ class EditPageController
 
         $csrfToken = generate_csrf_token();
 
-        echo <<<HTML
+        return <<<HTML
             <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
                 <input name='csrf_token' value="$csrfToken" type="hidden"/>
                 <input id='id' name='id' value='$id' type='hidden'/>
