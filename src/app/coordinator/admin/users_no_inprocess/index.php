@@ -23,20 +23,6 @@ class UsersNoInprocessIndexController extends AbstractController
     {
         return new UsersNoInprocessPostProcessor();
     }
-    /**
-     * Handles authentication and executes controller output.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        }
-
-        $this->renderFormCard();
-    }
-
     public function renderFormCard(): void {
         $users = get_td_or_sql_users_no_inprocess();
 

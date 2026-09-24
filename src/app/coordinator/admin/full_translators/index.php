@@ -23,20 +23,6 @@ class FullTranslatorsIndexController extends AbstractController
     {
         return new FullTranslatorsPostProcessor();
     }
-    /**
-     * Handles authentication and executes controller output.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        }
-
-        $this->renderFormCard();
-    }
-
     public function renderFormCard(): void {
         $translators = get_td_or_sql_full_translators();
 

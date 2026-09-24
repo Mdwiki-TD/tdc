@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\LastCoord;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\APICalls\TDApi\get_td_api;
 
 /**
@@ -13,7 +13,7 @@ use function App\APICalls\TDApi\get_td_api;
  * (either the "pages" or "pages_users" endpoint), with language and
  * namespace filters and per-row mail/fixref/draft links.
  */
-class LastCoordIndexController extends AbstractController
+class LastCoordIndexController extends AbstractControllerNoPost
 {
     private string $globalUsername;
     private string $lang;

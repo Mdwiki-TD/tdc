@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Translated;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
@@ -19,7 +19,7 @@ use function App\Tools\RecentHelps\filter_recent2;
  * Class TranslatedIndexController
  * Manages rendering the translated pages dashboard with pagination and filtering.
  */
-class TranslatedIndexController extends AbstractController
+class TranslatedIndexController extends AbstractControllerNoPost
 {
     private CurrentUser $currentUser;
     private string $lang;
@@ -47,10 +47,7 @@ class TranslatedIndexController extends AbstractController
      */
     public function handleRequest(): void
     {
-        if (!$this->currentUser->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
         $page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;

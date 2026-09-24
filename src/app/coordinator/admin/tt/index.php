@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\SqlTables\TablesSql;
 use function App\Utils\Html\makeDropdown;
 use function App\Utils\Html\make_mdwiki_title;
@@ -18,7 +18,7 @@ use function App\APICalls\MdwikiSql\fetch_query;
  * of known titles (translate_type + qids not yet classified), each with
  * its lead/full translation flags and an edit link.
  */
-class TtIndexController extends AbstractController
+class TtIndexController extends AbstractControllerNoPost
 {
     private string $cat;
     private array $fullTranslatesTab = [];

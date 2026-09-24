@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
@@ -20,7 +20,7 @@ use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
  * moved/fixed into the main pages table, with language filtering and a
  * "fix it" action per row.
  */
-class PagesUsersToMainIndexController extends AbstractController
+class PagesUsersToMainIndexController extends AbstractControllerNoPost
 {
     private CurrentUser $currentUser;
     private string $lang;
@@ -40,11 +40,7 @@ class PagesUsersToMainIndexController extends AbstractController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!$this->currentUser->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $sqlResults = get_pages_users_to_main($this->lang);
 

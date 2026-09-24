@@ -21,20 +21,6 @@ class SettingsIndexController extends AbstractController
     {
         return new SettingsPostProcessor();
     }
-    /**
-     * Handles authentication and executes controller output.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        }
-
-        $this->renderFormCard();
-    }
-
     public function renderFormCard(): void {
         $settings = get_td_or_sql_settings();
 

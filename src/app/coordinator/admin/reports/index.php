@@ -3,14 +3,14 @@
 
 namespace App\Coordinator\Admin\Reports;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 
 /**
  * Class ReportsIndexController
  * Renders the client-side "Publish Reports Viewer" shell. All filtering,
  * data loading, and results rendering is handled by /tdc/js/reports-script.js.
  */
-class ReportsIndexController extends AbstractController
+class ReportsIndexController extends AbstractControllerNoPost
 {
     /**
      * Handles authentication and executes controller output.

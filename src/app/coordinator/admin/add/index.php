@@ -21,19 +21,6 @@ class AddIndexController extends AbstractController
     {
         return new AddPostProcessor();
     }
-    /**
-     * Handles authentication and executes controller output.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        }
-
-        $this->renderFormCard();
-    }
     public function renderFormCard(): void {
         $cats = $this->buildCategoryOptions();
         $table = $this->buildStarterRows($cats);

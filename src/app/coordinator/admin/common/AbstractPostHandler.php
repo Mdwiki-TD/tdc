@@ -7,8 +7,19 @@ use App\User\CurrentUser;
 use function App\csrf\verify_csrf_token;
 use function App\Utils\Html\div_alert;
 
-abstract class AbstractSubPostHandler
+/**
+ * Class AbstractPostHandler
+ *
+ * Base class for controllers' POST handlers. Centralizes the common
+ * bits: CSRF verification, error/success message collection, and a
+ * small helper for parsing checkbox-style 0/1 ints. Subclasses only
+ * need to implement process() with their own delete/update/insert logic.
+ */
+abstract class AbstractPostHandler
 {
+    protected bool $returnToFormPage = false;
+    protected bool $csrfError = false;
+
     protected array $errors = [];
     protected array $texts = [];
 
@@ -44,37 +55,10 @@ abstract class AbstractSubPostHandler
         HTML;
 	}
 
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    public function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
-    }
-
     public function DisplayCsrfAlert(): void
     {
         echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
     }
-
-}
-
-/**
- * Class AbstractPostHandler
- *
- * Base class for controllers' POST handlers. Centralizes the common
- * bits: CSRF verification, error/success message collection, and a
- * small helper for parsing checkbox-style 0/1 ints. Subclasses only
- * need to implement process() with their own delete/update/insert logic.
- */
-abstract class AbstractPostHandler extends AbstractSubPostHandler
-{
-    protected bool $returnToFormPage = false;
-    protected bool $csrfError = false;
 
     /**
      * Verifies CSRF, then delegates to process() if valid.

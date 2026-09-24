@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
 use function App\SQLorAPI\Funcs\get_td_or_sql_language_settings;
 use function App\SQLorAPI\Funcs\get_pages_langs;
@@ -15,7 +15,7 @@ use function App\Utils\Html\make_edit_icon_new;
  * lang_code, move_dots, expend, add_en_lang), merging in any languages
  * that don't have a settings row yet with default (off) values.
  */
-class WikiRefsOptionsIndexController extends AbstractController
+class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 {
     /**
      * Handles authentication and executes controller output.

@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Emails;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 use App\Tables\Main\MainTables;
 use function App\APICalls\MdwikiSql\fetch_query;
 use function App\APICalls\WikiApi\get_views;
@@ -19,7 +19,7 @@ use function App\Emails\Sugust\get_sugust;
  * with the translated title, view counts, and a translation suggestion.
  * Submission is posted to the external /gmail1/index.php endpoint.
  */
-class MsgController extends AbstractController
+class MsgController extends AbstractEditController
 {
     private string $globalUsername;
     private string $test;

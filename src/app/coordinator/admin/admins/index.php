@@ -22,19 +22,6 @@ class AdminsIndexController extends AbstractController
     {
         return new AdminsPostProcessor();
     }
-	/**
-	 * Handles authentication and executes controller output.
-	 */
-	public function handleRequest(): void
-	{
-		$this->validateCoordinator();
-
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-		}
-
-        $this->renderFormCard();
-	}
 
     public function renderFormCard(): void {
 		$coordinators = get_coordinators();

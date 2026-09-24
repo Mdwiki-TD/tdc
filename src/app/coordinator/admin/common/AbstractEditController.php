@@ -11,6 +11,17 @@ namespace App\Coordinator\Admin\Common;
 abstract class AbstractEditController extends AbstractController
 {
 
+    /**
+     * Renders UI scripts to isolate the modal/page layout.
+     */
+    public function renderHeaderScripts(): void
+    {
+        echo '</div><script>
+            $("#mainnav").hide();
+            $("#maindiv").hide();
+        </script>
+        <div class="container-fluid">';
+    }
     // ---------- template method ----------
     /**
      * Executes authorization check and handles the incoming request.

@@ -21,20 +21,6 @@ class ProjectsIndexController extends AbstractController
     {
         return new ProjectsPostProcessor();
     }
-	/**
-	 * Handles authentication and executes controller output.
-	 */
-	public function handleRequest(): void
-	{
-		$this->validateCoordinator();
-
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-		}
-
-        $this->renderFormCard();
-	}
-
     public function renderFormCard(): void {
 		$projects = get_td_or_sql_projects();
 
