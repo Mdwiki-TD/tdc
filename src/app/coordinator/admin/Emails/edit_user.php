@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Emails;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\Utils\Html\make_project_to_user;
-use function App\APICalls\MdwikiSql\check_one;
+use function App\APICalls\MdwikiSql\get_user_by_id;
 
 
 require_once __DIR__ . '/post.php';
@@ -54,11 +54,11 @@ class EditUserController extends AbstractController
      */
     private function buildFormHtml(string $userId): string
     {
-        $userInfo = check_one('*', 'user_id', $userId, 'users');
-        $user = $userInfo["username"];
-        $wiki = $userInfo["wiki"];
-        $user_group = $userInfo["user_group"];
-        $email = $userInfo["email"];
+        $userInfo  = get_user_by_id($userId);
+        $user      = $userInfo['username'] ?? '';
+        $wiki      = $userInfo['wiki'] ?? '';
+        $user_group = $userInfo['user_group'] ?? '';
+        $email     = $userInfo['email'] ?? '';
 
         $projectLine = make_project_to_user($user_group);
 
