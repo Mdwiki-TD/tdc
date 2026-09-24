@@ -14,6 +14,16 @@ require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
  */
 class WikiRefsOptionsEditController extends AbstractController
 {
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new WikiRefsOptionsEditPostHandler();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and handles the incoming request.
      */
@@ -23,18 +33,16 @@ class WikiRefsOptionsEditController extends AbstractController
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new WikiRefsOptionsEditPostHandler();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
+            $this->handlePostRequest();
         } else {
-            $this->renderForm();
+            $this->renderFormCard();
         }
     }
 
     /**
      * Renders the add/edit form for the language settings row.
      */
-    private function renderForm(): void
+    private function renderFormCard(): void
     {
         $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $langCode   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');

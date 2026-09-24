@@ -28,6 +28,17 @@ class EditTranslateTypeController extends AbstractController
         $this->id    = $_GET['id'] ?? '';
     }
 
+    public function handlePostRequest(): void
+    {
+        // Instantiate and execute processor
+        $postProcessor = new TtPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and renders the form view.
      */
@@ -37,14 +48,7 @@ class EditTranslateTypeController extends AbstractController
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Instantiate and execute processor
-            $postProcessor = new TtPostProcessor();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
-
-            if ($postProcessor->shouldShowForm()) {
-                $this->renderFormCard();
-            }
+            $this->handlePostRequest();
         } else {
             $this->renderFormCard();
         }

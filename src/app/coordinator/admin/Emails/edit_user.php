@@ -24,6 +24,17 @@ class EditUserController extends AbstractController
         $this->userId  = $_GET['user_id'] ?? $_POST['user_id'] ?? '';
     }
 
+    public function handlePostRequest(): void
+    {
+        // Instantiate and execute processor
+        $postProcessor = new EmailsPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and renders the form view.
      */
@@ -33,14 +44,7 @@ class EditUserController extends AbstractController
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Instantiate and execute processor
-            $postProcessor = new EmailsPostProcessor();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
-
-            if ($postProcessor->shouldShowForm()) {
-                $this->renderFormCard();
-            }
+            $this->handlePostRequest();
         } else {
             $this->renderFormCard();
         }

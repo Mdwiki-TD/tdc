@@ -26,6 +26,12 @@ class EditPageController extends AbstractController
         $this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
     }
 
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new EditPagePostHandler($this->id, $this->table);
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+    }
     /**
      * Entry point to handle request workflow.
      */
@@ -35,9 +41,7 @@ class EditPageController extends AbstractController
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new EditPagePostHandler($this->id, $this->table);
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
+            $this->handlePostRequest();
         } else {
             $this->renderEditForm($this->id, $this->table);
         }

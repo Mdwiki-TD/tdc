@@ -17,6 +17,12 @@ require_once __DIR__ . '/post.php';
  */
 class CampaignsIndexController extends AbstractController
 {
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new CampaignsPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -25,9 +31,7 @@ class CampaignsIndexController extends AbstractController
         $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new CampaignsPostProcessor();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
+            $this->handlePostRequest();
         }
 
         $categories = get_td_or_sql_categories();

@@ -18,6 +18,12 @@ class AdminsIndexController extends AbstractController
 {
 	private const TY_NAME = 'admins';
 
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new AdminsPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+    }
 	/**
 	 * Handles authentication and executes controller output.
 	 */
@@ -26,9 +32,7 @@ class AdminsIndexController extends AbstractController
 		$this->validateCoordinator();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new AdminsPostProcessor();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
+            $this->handlePostRequest();
 		}
 
 		$coordinators = get_coordinators();

@@ -19,6 +19,12 @@ class FullTranslatorsIndexController extends AbstractController
 {
     private const TY_NAME = 'full_translators';
 
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new FullTranslatorsPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -27,9 +33,7 @@ class FullTranslatorsIndexController extends AbstractController
         $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new FullTranslatorsPostProcessor();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
+            $this->handlePostRequest();
         }
 
         $translators = get_td_or_sql_full_translators();

@@ -17,6 +17,12 @@ require_once __DIR__ . '/post.php';
  */
 class AddIndexController extends AbstractController
 {
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new AddPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -25,9 +31,7 @@ class AddIndexController extends AbstractController
         $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new AddPostProcessor();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
+            $this->handlePostRequest();
         }
 
         $cats = $this->buildCategoryOptions();

@@ -36,10 +36,6 @@ class EmailsIndexController extends AbstractController
 	{
 		$this->validateCoordinator();
 
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			require __DIR__ . '/post.php';
-		}
-
 		$lastUserToTab = get_users_by_last_pupdate();
 		$usersDone = $this->getSortedArray();
 

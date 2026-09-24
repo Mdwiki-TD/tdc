@@ -32,6 +32,17 @@ class EditQidController extends AbstractController
         }
     }
 
+    public function handlePostRequest(): void
+    {
+        // Instantiate and execute processor
+        $postProcessor = new QidsPostProcessor($_GET['qid_table'] ?? '');
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and renders the form view.
      */
@@ -41,14 +52,7 @@ class EditQidController extends AbstractController
         $this->renderHeaderScripts();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Instantiate and execute processor
-            $postProcessor = new QidsPostProcessor($_GET['qid_table'] ?? '');
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
-
-            if ($postProcessor->shouldShowForm()) {
-                $this->renderFormCard();
-            }
+            $this->handlePostRequest();
         } else {
             $this->renderFormCard();
         }

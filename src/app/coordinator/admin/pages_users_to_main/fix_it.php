@@ -15,31 +15,37 @@ require_once __DIR__ . '/fix_it_post.php';
  */
 class FixItController extends AbstractController
 {
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new FixItPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
     /**
      * Executes authorization check and handles the incoming request.
      */
     public function handleRequest(): void
     {
         $this->validateCoordinator();
-
         $this->renderHeaderScripts();
 
         // Delegate POST requests to the POST processor
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new FixItPostProcessor();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
-            return;
+            $this->handlePostRequest();
+        } else {
+            // Handle GET request and render view
+            $this->renderFormCard();
         }
-
-        // Handle GET request and render view
-        $this->renderFormView();
     }
 
     /**
      * Renders the HTML structure and form.
      */
-    private function renderFormView(): void
+    private function renderFormCard(): void
     {
 
         $id        = $_GET['id'] ?? '';

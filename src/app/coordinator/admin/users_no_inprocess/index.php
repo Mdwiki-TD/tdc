@@ -19,6 +19,12 @@ class UsersNoInprocessIndexController extends AbstractController
 {
     private const TY_NAME = 'users_no_inprocess';
 
+    public function handlePostRequest(): void
+    {
+        $postProcessor = new UsersNoInprocessPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -27,9 +33,7 @@ class UsersNoInprocessIndexController extends AbstractController
         $this->validateCoordinator();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $postProcessor = new UsersNoInprocessPostProcessor();
-            $result = $postProcessor->handle($_POST);
-            $postProcessor->RenderMesseges($result);
+            $this->handlePostRequest();
         }
 
         $users = get_td_or_sql_users_no_inprocess();
