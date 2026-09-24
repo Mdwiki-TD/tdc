@@ -16,9 +16,13 @@ class WikiRefsOptionsEditController extends AbstractController
 {
     private const FLAGS = ['move_dots', 'expend', 'add_en_lang'];
 
+    protected function createPostProcessor(): object
+    {
+        return new WikiRefsOptionsEditPostHandler();
+    }
     public function handlePostRequest(): void
     {
-        $postProcessor = new WikiRefsOptionsEditPostHandler();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderMesseges($result);
 

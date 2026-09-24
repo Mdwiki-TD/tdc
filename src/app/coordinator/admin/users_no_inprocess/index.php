@@ -19,9 +19,13 @@ class UsersNoInprocessIndexController extends AbstractController
 {
     private const TY_NAME = 'users_no_inprocess';
 
+    protected function createPostProcessor(): object
+    {
+        return new UsersNoInprocessPostProcessor();
+    }
     public function handlePostRequest(): void
     {
-        $postProcessor = new UsersNoInprocessPostProcessor();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderIndexMesseges($result);
     }

@@ -28,10 +28,14 @@ class EditQidController extends AbstractController
         $this->qidTable = in_array($table, ['qids', 'qids_others'], true) ? $table : 'qids';
     }
 
+    protected function createPostProcessor(): object
+    {
+        return new QidsPostProcessor($_GET['qid_table'] ?? '');
+    }
     public function handlePostRequest(): void
     {
         // Instantiate and execute processor
-        $postProcessor = new QidsPostProcessor($_GET['qid_table'] ?? '');
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderMesseges($result);
 

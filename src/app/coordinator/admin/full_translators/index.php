@@ -19,9 +19,13 @@ class FullTranslatorsIndexController extends AbstractController
 {
     private const TY_NAME = 'full_translators';
 
+    protected function createPostProcessor(): object
+    {
+        return new FullTranslatorsPostProcessor();
+    }
     public function handlePostRequest(): void
     {
-        $postProcessor = new FullTranslatorsPostProcessor();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderIndexMesseges($result);
     }

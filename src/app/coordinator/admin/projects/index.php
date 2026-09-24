@@ -17,9 +17,13 @@ require_once __DIR__ . '/post.php';
  */
 class ProjectsIndexController extends AbstractController
 {
+    protected function createPostProcessor(): object
+    {
+        return new ProjectsPostProcessor();
+    }
     public function handlePostRequest(): void
     {
-        $postProcessor = new ProjectsPostProcessor();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderIndexMesseges($result);
     }

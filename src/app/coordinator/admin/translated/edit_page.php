@@ -25,9 +25,13 @@ class EditPageController extends AbstractController
         $this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
     }
 
+    protected function createPostProcessor(): object
+    {
+        return new EditPagePostHandler($this->id, $this->table);
+    }
     public function handlePostRequest(): void
     {
-        $postProcessor = new EditPagePostHandler($this->id, $this->table);
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderMesseges($result);
     }

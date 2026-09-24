@@ -18,9 +18,13 @@ class AdminsIndexController extends AbstractController
 {
 	private const TY_NAME = 'admins';
 
+    protected function createPostProcessor(): object
+    {
+        return new AdminsPostProcessor();
+    }
     public function handlePostRequest(): void
     {
-        $postProcessor = new AdminsPostProcessor();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderIndexMesseges($result);
     }

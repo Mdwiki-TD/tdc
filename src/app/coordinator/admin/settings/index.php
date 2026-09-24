@@ -17,9 +17,13 @@ require_once __DIR__ . '/post.php';
  */
 class SettingsIndexController extends AbstractController
 {
+    protected function createPostProcessor(): object
+    {
+        return new SettingsPostProcessor();
+    }
     public function handlePostRequest(): void
     {
-        $postProcessor = new SettingsPostProcessor();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderIndexMesseges($result);
     }

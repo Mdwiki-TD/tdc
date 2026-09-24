@@ -22,11 +22,14 @@ class EditUserController extends AbstractController
     {
         $this->userId = $_GET['user_id'] ?? $_POST['user_id'] ?? '';
     }
-
+    protected function createPostProcessor(): object
+    {
+        return new EmailsPostProcessor();
+    }
     public function handlePostRequest(): void
     {
         // Instantiate and execute processor
-        $postProcessor = new EmailsPostProcessor();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderMesseges($result);
 

@@ -14,9 +14,13 @@ require_once __DIR__ . '/fix_it_post.php';
  */
 class FixItController extends AbstractController
 {
+    protected function createPostProcessor(): object
+    {
+        return new FixItPostProcessor();
+    }
     public function handlePostRequest(): void
     {
-        $postProcessor = new FixItPostProcessor();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderMesseges($result);
 

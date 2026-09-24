@@ -27,10 +27,14 @@ class EditTranslateTypeController extends AbstractController
         $this->full  = $_GET['full'] ?? '';
     }
 
+    protected function createPostProcessor(): object
+    {
+        return new TtPostProcessor();
+    }
     public function handlePostRequest(): void
     {
         // Instantiate and execute processor
-        $postProcessor = new TtPostProcessor();
+        $postProcessor = $this->createPostProcessor();
         $result = $postProcessor->handle($_POST);
         $postProcessor->RenderMesseges($result);
 
