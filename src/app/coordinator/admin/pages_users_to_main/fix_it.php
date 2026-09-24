@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/fix_it_post.php';
 
@@ -119,11 +119,11 @@ class FixItController extends AbstractController
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($newTarget, ENT_QUOTES, 'UTF-8');
 
-        $csrfToken = generate_csrf_token();
+
 
         return <<<HTML
             <form action='index.php?ty=pages_users_to_main/fix_it&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='$id' type='hidden'/>
                 <input name='edit' value="1" type="hidden"/>
                 $testLine

@@ -3,8 +3,6 @@
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
-use App\User\CurrentUser;
-use function App\csrf\generate_csrf_token;
 use App\Coordinator\Admin\Common\AbstractController;
 
 require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
@@ -104,11 +102,11 @@ class WikiRefsOptionsEditController extends AbstractController
             HTML;
         }
 
-        $csrfToken = generate_csrf_token();
+
 
         echo <<<HTML
             <form action='index.php?ty=wikirefs_options/edit&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
                     <div class='row'>

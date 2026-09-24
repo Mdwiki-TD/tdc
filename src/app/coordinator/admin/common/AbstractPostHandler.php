@@ -78,6 +78,7 @@ abstract class AbstractSubPostHandler
  */
 abstract class AbstractPostHandler extends AbstractSubPostHandler
 {
+    protected bool $returnToFormPage = false;
     protected bool $csrfError = false;
 
     /**
@@ -138,6 +139,12 @@ abstract class AbstractPostHandler extends AbstractSubPostHandler
 
         echo div_alert($result['texts'], 'success');
 
-        echo $this->getCloseButtonHtml();
+        if (!$this->shouldShowForm()) {
+            echo $this->getCloseButtonHtml();
+        }
+    }
+    public function shouldShowForm(): bool
+    {
+        return $this->returnToFormPage;
     }
 }

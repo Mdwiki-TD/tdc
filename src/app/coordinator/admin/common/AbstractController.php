@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Common;
 
 use App\User\CurrentUser;
-use function App\Utils\Html\div_alert;
+use function App\csrf\generate_csrf_token;
 
 /**
  * Class AbstractController
@@ -30,6 +30,14 @@ abstract class AbstractController
             <div class="aligncenter">
                 <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
             </div>
+        HTML;
+    }
+    public function createCsrfTokenField(): string
+    {
+		$csrfToken = generate_csrf_token();
+
+        return <<<HTML
+            <input name='csrf_token' value="$csrfToken" type="hidden"/>
         HTML;
     }
 

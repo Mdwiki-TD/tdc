@@ -3,48 +3,29 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\Coordinator\Admin\Common\AbstractSubPostHandler;
+use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\sql_update_user;
 use function App\APICalls\MdwikiSql\sql_add_user;
 use function App\APICalls\MdwikiSql\check_one;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class EmailsPostProcessor
  * Handles add/update submissions of user email/wiki/project rows.
  */
-class EmailsPostProcessor extends AbstractSubPostHandler
+class EmailsPostProcessor extends AbstractPostHandler
 {
 
 	/**
 	 * Validates and processes the incoming submission.
 	 */
-	public function handle(): void
+	public function process(array $post): void
 	{
-		$this->validateCoordinator();
-
-		echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>';
-
-		$closeBtn = $this->getCloseButtonHtml();
-
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['emails'])) {
-			exit;
-		}
-
-		if (!verify_csrf_token()) {
-			$this->DisplayCsrfAlert();
-			echo $closeBtn;
+		if (!isset($post['emails'])) {
+			$this->addError("Invalid submission.");
+			$this->returnToFormPage = true;
 			return;
 		}
-
-		$this->processRows($_POST['emails']);
-
-		$this->divAlerts();
-
-		echo $closeBtn;
+		$this->processRows($post['emails']);
 	}
 
 	/**
@@ -72,7 +53,9 @@ class EmailsPostProcessor extends AbstractSubPostHandler
 			if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				// Handle invalid email - either log, set to empty, or return error
 				$this->addError("Invalid Email format");
-				$email = '';
+				$this->returnToFormPage = true;
+				// $email = '';
+				continue;
 			}
 
 			$wiki = trim($wiki);
@@ -105,7 +88,3 @@ class EmailsPostProcessor extends AbstractSubPostHandler
 		}
 	}
 }
-
-// Instantiate and execute processor
-$postProcessor = new EmailsPostProcessor();
-$postProcessor->handle();

@@ -11,7 +11,7 @@ use function App\APICalls\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Emails\Sugust\get_sugust;
-use function App\csrf\generate_csrf_token;
+
 
 /**
  * Class MsgController
@@ -248,14 +248,14 @@ class MsgController extends AbstractController
     private function renderComposeForm(string $emailTo, string $ccTo, string $mag): void
     {
         $postPhp = "/gmail1/index.php";
-        $csrfToken = generate_csrf_token();
+
         $test = $this->test;
         $lang = $this->lang;
 
         echo <<<HTML
             <div class1='container-fluid'>
                 <form action='$postPhp' method="POST">
-                  <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                  {$this->createCsrfTokenField()}
                     <input type='hidden' name='test' value='$test'/>
                     <input type='hidden' name='lang' value='$lang'/>
                     <input type='hidden' name='nonav' value='1'/>

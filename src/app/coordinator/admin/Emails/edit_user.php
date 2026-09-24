@@ -5,7 +5,9 @@ namespace App\Coordinator\Admin\Emails;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\Utils\Html\make_project_to_user;
-use function App\csrf\generate_csrf_token;
+
+
+require_once __DIR__ . '/post.php';
 
 /**
  * Class EditUserController
@@ -26,7 +28,7 @@ class EditUserController extends AbstractController
         $this->wiki    = $_GET['wiki'] ?? '';
         $this->project = $_GET['project'] ?? '';
         $this->email   = $_GET['email'] ?? '';
-        $this->userId  = $_GET['user_id'] ?? '';
+        $this->userId  = $_GET['user_id'] ?? $_POST['user_id'] ?? '';
     }
 
     /**
@@ -35,9 +37,21 @@ class EditUserController extends AbstractController
     public function handleRequest(): void
     {
         $this->validateCoordinator();
-
         $this->renderHeaderScripts();
-        $this->renderFormCard();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Instantiate and execute processor
+            $postProcessor = new EmailsPostProcessor();
+            $result = $postProcessor->handle($_POST);
+            $postProcessor->RenderMesseges($result);
+
+            if ($postProcessor->shouldShowForm()) {
+                // user_id=192&user=Dr3939&email=&wiki=zh&project=Wiki
+                $this->renderFormCard();
+            }
+        } else {
+            $this->renderFormCard();
+        }
     }
     /**
      * Builds the user/email/wiki/project edit-or-add form markup.
@@ -46,7 +60,7 @@ class EditUserController extends AbstractController
     {
         $projectLine = make_project_to_user($project);
 
-        $csrfToken = generate_csrf_token();
+
 
         $idRow = <<<HTML
             <div class='col-md-3'>
@@ -65,7 +79,7 @@ class EditUserController extends AbstractController
 
         return <<<HTML
             <form action='index.php?ty=Emails/edit_user&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
                     <div class='row'>

@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Projects;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -101,7 +101,7 @@ class ProjectsIndexController extends AbstractController
 	 */
 	private function renderCard(string $formText): void
 	{
-		$csrfToken = generate_csrf_token();
+
 
 		echo <<<HTML
             <div class='card'>
@@ -110,7 +110,7 @@ class ProjectsIndexController extends AbstractController
                 </div>
                 <div class='card-body'>
                     <form action="index.php?ty=projects" method="POST">
-                        <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                        {$this->createCsrfTokenField()}
                         <input name='ty' value="projects" type="hidden"/>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">

@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\settings;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_settings;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -124,7 +124,7 @@ class SettingsIndexController extends AbstractController
      */
     private function renderCard(string $text): void
     {
-        $csrfToken = generate_csrf_token();
+
 
         echo <<<HTML
             <div class='card'>
@@ -134,7 +134,7 @@ class SettingsIndexController extends AbstractController
                 <div class='card-body'>
                     <div class='row'>
                         <form action='index.php' method="POST">
-                            <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                            {$this->createCsrfTokenField()}
                             <input name='ty' value='settings' type="hidden"/>
                         $text
                         <button type='submit' class='btn btn-outline-primary'>Save</button>

@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\TranslateType;
 
 use App\Coordinator\Admin\Common\AbstractController;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -56,7 +56,7 @@ class EditTranslateTypeController extends AbstractController
 
         $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
-        $csrfToken = generate_csrf_token();
+
 
         $idRow = <<<HTML
             <div class='col-md-3'>
@@ -75,7 +75,7 @@ class EditTranslateTypeController extends AbstractController
 
         return <<<HTML
             <form action='index.php?ty=tt/edit_translate_type&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
                     <div class='row'>

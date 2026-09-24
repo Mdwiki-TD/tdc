@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\UsersNoInprocess;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -117,7 +117,7 @@ class UsersNoInprocessIndexController extends AbstractController
      */
     private function renderCard(string $formText): void
     {
-        $csrfToken = generate_csrf_token();
+
         $tyName = self::TY_NAME;
 
         echo <<<HTML
@@ -127,7 +127,7 @@ class UsersNoInprocessIndexController extends AbstractController
                 </div>
                 <div class='card-body'>
                     <form action="index.php?ty=$tyName" method="POST">
-                        <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                        {$this->createCsrfTokenField()}
                         <input name='ty' value="$tyName" type="hidden"/>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">

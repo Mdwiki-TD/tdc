@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Qids;
 
 use App\Coordinator\Admin\Common\AbstractController;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -57,8 +57,6 @@ class EditQidController extends AbstractController
     {
         $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
-        $csrfToken = generate_csrf_token();
-
         $idRow = <<<HTML
             <div class='col-md-3'>
                 <div class='input-group mb-3'>
@@ -76,7 +74,7 @@ class EditQidController extends AbstractController
 
         return <<<HTML
             <form action='index.php?ty=qids/edit_qid&qid_table=$qidTable&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken zz" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input name='qid_table' value="$qidTable" type="hidden"/>
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>

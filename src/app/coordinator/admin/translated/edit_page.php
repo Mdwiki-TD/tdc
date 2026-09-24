@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Translated;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\APICalls\MdwikiSql\fetch_query;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/EditPagePostHandler.php';
 
@@ -73,11 +73,11 @@ class EditPageController extends AbstractController
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
-        $csrfToken = generate_csrf_token();
+
 
         echo <<<HTML
             <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
-                <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='$id' type='hidden'/>
                 <input name='edit' value="1" type="hidden"/>
                 <input name='table' value="$table" type="hidden"/>

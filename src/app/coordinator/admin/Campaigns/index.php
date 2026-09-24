@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Campaigns;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
-use function App\csrf\generate_csrf_token;
+
 
 require_once __DIR__ . '/post.php';
 
@@ -94,7 +94,7 @@ class CampaignsIndexController extends AbstractController
      */
     private function renderCard(string $tableRows): void
     {
-        $csrfToken = generate_csrf_token();
+
 
         echo <<<HTML
             <div class='card'>
@@ -103,7 +103,7 @@ class CampaignsIndexController extends AbstractController
                 </div>
                 <div class='card-body'>
                     <form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
-                        <input name='csrf_token' value="$csrfToken" type="hidden"/>
+                        {$this->createCsrfTokenField()}
                         <input name='ty' value="Campaigns" type="hidden"/>
                         <div class="form-group">
                             <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
