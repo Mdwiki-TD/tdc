@@ -5,6 +5,7 @@ namespace App\Coordinator\Admin\Emails;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\Utils\Html\make_project_to_user;
+use function App\APICalls\MdwikiSql\check_one;
 
 
 require_once __DIR__ . '/post.php';
@@ -16,18 +17,10 @@ require_once __DIR__ . '/post.php';
  */
 class EditUserController extends AbstractController
 {
-    private string $user;
-    private string $wiki;
-    private string $project;
-    private string $email;
     private string $userId;
 
     public function __construct()
     {
-        $this->user    = $_GET['user'] ?? '';
-        $this->wiki    = $_GET['wiki'] ?? '';
-        $this->project = $_GET['project'] ?? '';
-        $this->email   = $_GET['email'] ?? '';
         $this->userId  = $_GET['user_id'] ?? $_POST['user_id'] ?? '';
     }
 
@@ -56,11 +49,15 @@ class EditUserController extends AbstractController
     /**
      * Builds the user/email/wiki/project edit-or-add form markup.
      */
-    private function buildFormHtml(string $user, string $wiki, string $project, string $email, string $userId): string
+    private function buildFormHtml(string $userId): string
     {
-        $projectLine = make_project_to_user($project);
+        $userInfo = check_one('*', 'user_id', $userId, 'users');
+        $user = $userInfo["username"];
+        $wiki = $userInfo["wiki"];
+        $user_group = $userInfo["user_group"];
+        $email = $userInfo["email"];
 
-
+        $projectLine = make_project_to_user($user_group);
 
         $idRow = <<<HTML
             <div class='col-md-3'>
@@ -78,7 +75,7 @@ class EditUserController extends AbstractController
         }
 
         return <<<HTML
-            <form action='index.php?ty=Emails/edit_user&nonav=120' method="POST">
+            <form action='index.php?ty=Emails/edit_user&nonav=120&user_id={$this->userId}' method="POST">
                 {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
@@ -140,7 +137,7 @@ class EditUserController extends AbstractController
                 <div class='card-body'>
         HTML;
 
-        echo $this->buildFormHtml($this->user, $this->wiki, $this->project, $this->email, $this->userId);
+        echo $this->buildFormHtml($this->userId);
 
         echo "</div></div>";
     }

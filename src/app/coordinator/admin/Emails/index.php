@@ -178,13 +178,7 @@ class EmailsIndexController extends AbstractController
 				$mailIcon = make_mail_icon_new($lastUserToTab[$userName], 'pup_window_email');
 			}
 
-			$editParams = [
-				'user_id' => $userId,
-				'user'    => $user,
-				'email'   => $email,
-				'wiki'    => $wiki,
-				'project' => $userGroup,
-			];
+			$editParams = [ 'user_id' => $userId];
 
 			$editIcon = make_edit_icon_new("Emails/edit_user", $editParams);
 
