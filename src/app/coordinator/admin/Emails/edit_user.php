@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Emails;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\Utils\Html\make_project_to_user;
 use function App\APICalls\MdwikiSql\get_user_by_id;
 
@@ -14,7 +14,7 @@ require_once __DIR__ . '/post.php';
  * Renders the add/edit form for a single user's email/wiki/project
  * data (GET request only; submission is handled by EmailsPostProcessor).
  */
-class EditUserController extends AbstractController
+class EditUserController extends AbstractEditController
 {
     private string $userId;
 
@@ -25,20 +25,6 @@ class EditUserController extends AbstractController
     protected function createPostProcessor(): object
     {
         return new EmailsPostProcessor();
-    }
-    /**
-     * Executes authorization check and renders the form view.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
     }
     /**
      * Builds the user/email/wiki/project edit-or-add form markup.

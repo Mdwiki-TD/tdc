@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Translated;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\APICalls\MdwikiSql\fetch_query;
 
 require_once __DIR__ . '/EditPagePostHandler.php';
@@ -13,7 +13,7 @@ require_once __DIR__ . '/EditPagePostHandler.php';
  * Handles editing and deleting translated pages (GET renders the form,
  * POST is delegated to EditPagePostHandler).
  */
-class EditPageController extends AbstractController
+class EditPageController extends AbstractEditController
 {
     private string $id;
     private string $table;
@@ -28,21 +28,6 @@ class EditPageController extends AbstractController
     protected function createPostProcessor(): object
     {
         return new EditPagePostHandler($this->id, $this->table);
-    }
-
-    /**
-     * Entry point to handle request workflow.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
     }
 
     public function renderFormCard(): void {

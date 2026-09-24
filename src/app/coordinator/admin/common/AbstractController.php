@@ -52,7 +52,7 @@ abstract class AbstractController
     }
     public function createCsrfTokenField(): string
     {
-		$csrfToken = generate_csrf_token();
+        $csrfToken = generate_csrf_token();
 
         return <<<HTML
             <input name='csrf_token' value="$csrfToken" type="hidden"/>

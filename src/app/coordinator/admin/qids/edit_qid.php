@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Qids;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 
 require_once __DIR__ . '/post.php';
 
@@ -12,7 +12,7 @@ require_once __DIR__ . '/post.php';
  * Renders the add/edit form for a single qid entry (GET request only;
  * submission is handled by QidsPostProcessor).
  */
-class EditQidController extends AbstractController
+class EditQidController extends AbstractEditController
 {
     private string $id;
     private string $title;
@@ -31,20 +31,6 @@ class EditQidController extends AbstractController
     protected function createPostProcessor(): object
     {
         return new QidsPostProcessor($_GET['qid_table'] ?? '');
-    }
-    /**
-     * Executes authorization check and renders the form view.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
     }
 
     /**

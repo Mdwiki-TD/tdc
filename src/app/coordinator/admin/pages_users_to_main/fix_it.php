@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\APICalls\MdwikiSql\fetch_query;
 
 require_once __DIR__ . '/fix_it_post.php';
@@ -12,27 +12,11 @@ require_once __DIR__ . '/fix_it_post.php';
  * Class FixItController
  * Handles displaying the page edit form and duplicate entry checks (GET requests).
  */
-class FixItController extends AbstractController
+class FixItController extends AbstractEditController
 {
     protected function createPostProcessor(): object
     {
         return new FixItPostProcessor();
-    }
-    /**
-     * Executes authorization check and handles the incoming request.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        // Delegate POST requests to the POST processor
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            // Handle GET request and render view
-            $this->renderFormCard();
-        }
     }
 
     /**

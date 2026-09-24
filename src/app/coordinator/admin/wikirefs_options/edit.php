@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 
 require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
 
@@ -12,7 +12,7 @@ require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
  * Handles add/edit/delete of a single language_settings row (GET
  * renders the form, POST persists the change via WikiRefsOptionsEditPostHandler).
  */
-class WikiRefsOptionsEditController extends AbstractController
+class WikiRefsOptionsEditController extends AbstractEditController
 {
     // private const FLAGS = ['move_dots', 'expend', 'add_en_lang'];
 
@@ -20,21 +20,6 @@ class WikiRefsOptionsEditController extends AbstractController
     {
         return new WikiRefsOptionsEditPostHandler();
     }
-    /**
-     * Executes authorization check and handles the incoming request.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
-    }
-
     /**
      * Renders the add/edit form for the language settings row.
      */
