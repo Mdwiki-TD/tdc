@@ -24,7 +24,7 @@ function insert_to_pages(array $pageData)
 	SQL;
 
 	$checkParams = [$pageData['user'], $pageData['title'], $pageData['lang']];
-	$exists = execute_query($checkQuery, $checkParams);
+	$exists = fetch_query($checkQuery, $checkParams);
 
 	// If record exists, UPDATE it
 	if ($exists && count($exists) > 0) {
@@ -98,7 +98,7 @@ function add_pages_to_db($title, $translateType, $cat, $lang, $user, $target, $p
 		'word'		=> $word
 	];
 
-	insert_to_pages($t);
+	$insert_result = insert_to_pages($t);
 
 	$findIt = fetch_query("SELECT * FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?", [$title, $lang, $user, $target]);
 

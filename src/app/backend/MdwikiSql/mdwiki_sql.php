@@ -64,7 +64,6 @@ function execute_query(string $sqlQuery, $params = null)
     // Destroy the database object
     $db = null;
 
-
     return $results;
 };
 function fetch_query(string $sqlQuery, $params = null, $noprint = false)
@@ -250,7 +249,7 @@ function get_qid_by_title(string $title, string $table = 'qids'): ?string
     return isset($row['qid']) ? (string) $row['qid'] : null;
 }
 
-function insert_to_projects($gTitle, $gId)
+function insert_to_projects($gTitle, $gId): bool
 {
     $query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
     $params = [$gTitle, $gId];

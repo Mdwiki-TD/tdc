@@ -109,17 +109,7 @@ class Database
             } else {
                 $q->execute();
             }
-
-            // Check if the query starts with "SELECT"
-            $queryType = strtoupper(substr(trim((string) $sqlQuery), 0, 6));
-            if ($queryType === 'SELECT') {
-                // Fetch the results if it's a SELECT query
-                $result = $q->fetchAll(PDO::FETCH_ASSOC);
-                return $result;
-            } else {
-                // Otherwise, return null
-                return [];
-            }
+            return true;
         } catch (PDOException $e) {
             echo "sql error:" . $e->getMessage() . "<br>" . $sqlQuery;
             return false;
