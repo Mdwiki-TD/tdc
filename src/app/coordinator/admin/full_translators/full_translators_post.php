@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/full_translators/post.php
+// src/app/coordinator/admin/full_translators/full_translators_post.php
 
 namespace App\Coordinator\Admin\FullTranslators;
 
@@ -12,7 +12,7 @@ use function App\APICalls\MdwikiSql\execute_query;
  */
 class FullTranslatorsPostProcessor extends AbstractPostHandler
 {
-	private const TABLE_NAME = 'full_translators';
+	private const DB_TABLE_NAME = 'full_translators';
 
 
 	public function process(array $post): void
@@ -33,7 +33,7 @@ class FullTranslatorsPostProcessor extends AbstractPostHandler
 			$user = $table['user'] ?? '';
 
 			if (!empty($del) && !empty($uId)) {
-				$qua2 = "DELETE FROM " . self::TABLE_NAME . " WHERE id = ?";
+				$qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
 
 				$result = execute_query($qua2, [$uId]);
 
@@ -57,7 +57,7 @@ class FullTranslatorsPostProcessor extends AbstractPostHandler
 
 			if (!empty($user)) {
 				// $qua = "INSERT INTO $tableName (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $tableName WHERE user = ?)";
-				$tableName = self::TABLE_NAME;
+				$tableName = self::DB_TABLE_NAME;
 
 				$qua = <<<SQL
                     INSERT INTO $tableName (user, is_active)

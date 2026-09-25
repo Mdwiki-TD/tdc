@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/users/post.php
+// src/app/coordinator/admin/users/edit_user_post.php
 
 namespace App\Coordinator\Admin\Users;
 
@@ -9,10 +9,10 @@ use function App\APICalls\MdwikiSql\sql_add_user;
 use function App\APICalls\MdwikiSql\get_user_by_username;
 
 /**
- * Class EmailsPostProcessor
+ * Class EditUserPostProcessor
  * Handles add/update submissions of user email/wiki/project rows.
  */
-class EmailsPostProcessor extends AbstractPostHandler
+class EditUserPostProcessor extends AbstractPostHandler
 {
 
 	/**

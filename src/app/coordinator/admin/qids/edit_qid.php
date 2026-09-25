@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Qids;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/edit_qid_post.php';
 
 /**
  * Class EditQidController

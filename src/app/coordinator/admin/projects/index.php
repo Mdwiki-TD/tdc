@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
 
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/projects_post.php';
 
 /**
  * Class ProjectsIndexController

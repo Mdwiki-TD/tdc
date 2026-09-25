@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Admins;
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_coordinators;
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/admins_post.php';
 
 /**
  * Class AdminsIndexController

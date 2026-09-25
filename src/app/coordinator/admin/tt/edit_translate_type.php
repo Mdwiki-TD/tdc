@@ -5,9 +5,9 @@ namespace App\Coordinator\Admin\TranslateType;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 
-require_once __DIR__ . '/post.php';
-
+require_once __DIR__ . '/edit_tt_post.php';
 /**
+ *
  * Class EditTranslateTypeController
  * Renders the add/edit form for a single translate_type entry (GET
  * request only; submission is handled by TtPostProcessor).

@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Translated;
 use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\APICalls\MdwikiSql\fetch_query;
 
-require_once __DIR__ . '/EditPagePostHandler.php';
+require_once __DIR__ . '/edit_page_post.php';
 
 /**
  * Class EditPageController
@@ -49,7 +49,7 @@ class EditPageController extends AbstractEditController
         $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
         return <<<HTML
-            <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
+            <form action='index.php?ty=edit_page&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='$id' type='hidden'/>
                 <input name='edit' value="1" type="hidden"/>

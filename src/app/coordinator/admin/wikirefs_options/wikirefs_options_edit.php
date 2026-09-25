@@ -1,11 +1,11 @@
 <?php
-// src/app/coordinator/admin/wikirefs_options/edit.php
+// src/app/coordinator/admin/wikirefs_options/wikirefs_options_edit.php
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 
-require_once __DIR__ . '/WikiRefsOptionsEditPostHandler.php';
+require_once __DIR__ . '/wikirefs_options_edit_post.php';
 
 /**
  * Class WikiRefsOptionsEditController
@@ -87,7 +87,7 @@ class WikiRefsOptionsEditController extends AbstractEditController
         }
 
         return <<<HTML
-            <form action='index.php?ty=wikirefs_options/edit&nonav=120' method="POST">
+            <form action='index.php?ty=wikirefs_options_edit&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>

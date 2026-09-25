@@ -43,7 +43,7 @@ class TtIndexController extends AbstractControllerNoPost
 
         [$tableRows, $ttCount] = $this->buildTableRows();
 
-        $newRow = make_edit_icon_new('tt/edit_translate_type', ['new' => 1], 'Add one!');
+        $newRow = make_edit_icon_new('edit_translate_type', ['new' => 1], 'Add one!');
 
         $this->renderMainCard($filterHtml, $ttCount, $tableRows);
         $this->renderAddNewCard($newRow);
@@ -151,7 +151,7 @@ class TtIndexController extends AbstractControllerNoPost
             'full'  => $full,
         ];
 
-        $editIcon = make_edit_icon_new('tt/edit_translate_type', $editParams);
+        $editIcon = make_edit_icon_new('edit_translate_type', $editParams);
 
         $mdTitle = make_mdwiki_title($title);
 

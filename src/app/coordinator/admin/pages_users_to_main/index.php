@@ -169,7 +169,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
             'new_target' => $newTarget,
         ];
 
-        $editIcon = make_edit_icon_new("pages_users_to_main/fix_it", $editParams);
+        $editIcon = make_edit_icon_new("fix_page", $editParams);
 
         $qid    = $tabg['qid'] ?? "";
         $newQid = $tabg['new_qid'] ?? "";

@@ -18,7 +18,7 @@ use function App\SQLorAPI\Funcs\get_td_or_sql_page_user_not_in_users;
  * live-page count, and per-row send-email / edit actions, with a
  * project filter.
  */
-class EmailsIndexController extends AbstractControllerNoPost
+class UsersIndexController extends AbstractControllerNoPost
 {
 	private int $limit;
 	private string $mainProject;
@@ -45,7 +45,7 @@ class EmailsIndexController extends AbstractControllerNoPost
 
 		$this->renderMainCard($numb, $projectFilter, $formRows);
 
-		$newRow = make_edit_icon_new('emails/edit_user', ['new' => 1], 'Add one!');
+		$newRow = make_edit_icon_new('edit_user', ['new' => 1], 'Add one!');
 		$this->renderAddNewCard($newRow);
 
 		$this->renderDataTableAssets();
@@ -176,7 +176,7 @@ class EmailsIndexController extends AbstractControllerNoPost
 
 			$editParams = [ 'user_id' => $userId];
 
-			$editIcon = make_edit_icon_new("v/edit_user", $editParams);
+			$editIcon = make_edit_icon_new("edit_user", $editParams);
 
 			$formRows .= <<<HTML
                 <tr>
@@ -328,5 +328,5 @@ class EmailsIndexController extends AbstractControllerNoPost
 }
 
 // Instantiate and execute controller
-$controller = new EmailsIndexController();
+$controller = new UsersIndexController();
 $controller->handleRequest();

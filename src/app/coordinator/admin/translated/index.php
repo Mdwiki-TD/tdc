@@ -116,7 +116,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
             'table' => $table
         ];
 
-        $editIcon = make_edit_icon_new("translated/edit_page", $editParams);
+        $editIcon = make_edit_icon_new("edit_page", $editParams);
 
         return <<<HTML
             <tr>

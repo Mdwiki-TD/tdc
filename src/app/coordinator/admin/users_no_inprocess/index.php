@@ -1,7 +1,7 @@
 <?php
-// src/app/coordinator/admin/users_no_inprocess/index.php
+// src/app/coordinator/admin/users_not_inprocess/index.php
 
-namespace App\Coordinator\Admin\UsersNoInprocess;
+namespace App\Coordinator\Admin\UsersNotInprocess;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
@@ -10,18 +10,18 @@ use function App\SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
 require_once __DIR__ . '/post.php';
 
 /**
- * Class UsersNoInprocessIndexController
+ * Class UsersNotInprocessIndexController
  * Renders the editable "users not added to in-process table" list. On
- * POST, delegates to UsersNoInprocessPostProcessor first, then always
+ * POST, delegates to UsersNotInprocessPostProcessor first, then always
  * renders the current state of the list/form below it.
  */
-class UsersNoInprocessIndexController extends AbstractController
+class UsersNotInprocessIndexController extends AbstractController
 {
-    private const TY_NAME = 'users_no_inprocess';
+    private const TY_NAME = 'users_not_inprocess';
 
     protected function createPostProcessor(): object
     {
-        return new UsersNoInprocessPostProcessor();
+        return new UsersNotInprocessPostProcessor();
     }
     public function renderFormCard(): void {
         $users = get_td_or_sql_users_no_inprocess();
@@ -177,5 +177,5 @@ class UsersNoInprocessIndexController extends AbstractController
 }
 
 // Instantiate and execute controller
-$controller = new UsersNoInprocessIndexController();
+$controller = new UsersNotInprocessIndexController();
 $controller->handleRequest();

@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
 
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/add_post.php';
 
 /**
  * Class AddIndexController

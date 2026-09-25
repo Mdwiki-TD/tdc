@@ -1,18 +1,18 @@
 <?php
-// src/app/coordinator/admin/users_no_inprocess/post.php
+// src/app/coordinator/admin/users_not_inprocess/post.php
 
-namespace App\Coordinator\Admin\UsersNoInprocess;
+namespace App\Coordinator\Admin\UsersNotInprocess;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 
 /**
- * Class UsersNoInprocessPostProcessor
+ * Class UsersNotInprocessPostProcessor
  * Handles add/update/delete of users excluded from the "in process" table.
  */
-class UsersNoInprocessPostProcessor extends AbstractPostHandler
+class UsersNotInprocessPostProcessor extends AbstractPostHandler
 {
-	private const TABLE_NAME = 'users_no_inprocess';
+	private const DB_TABLE_NAME = 'users_no_inprocess';
 
 	public function process(array $post): void
 	{
@@ -31,7 +31,7 @@ class UsersNoInprocessPostProcessor extends AbstractPostHandler
 			$user = $table['user'] ?? '';
 
 			if (!empty($del) && !empty($uId)) {
-				$qua2 = "DELETE FROM " . self::TABLE_NAME . " WHERE id = ?";
+				$qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
 
 				$result = execute_query($qua2, [$uId]);
 
@@ -55,7 +55,7 @@ class UsersNoInprocessPostProcessor extends AbstractPostHandler
 			}
 
 			if (!empty($user)) { // && empty($uId) && $isNew == 'yes'
-				$tableName = self::TABLE_NAME;
+				$tableName = self::DB_TABLE_NAME;
 				// $qua = "INSERT INTO $tableName (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $tableName WHERE user = ?)";
 
 				$qua = <<<SQL

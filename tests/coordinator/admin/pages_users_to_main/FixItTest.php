@@ -50,11 +50,11 @@ class FixItTest extends TestCase
 
     public function testFormActionUrl()
     {
-        $ty = 'pages_users_to_main/fix_it';
+        $ty = 'fix_page';
         $nonav = '120';
         $action = "index.php?ty=$ty&nonav=$nonav";
 
-        $this->assertEquals('index.php?ty=pages_users_to_main/fix_it&nonav=120', $action);
+        $this->assertEquals('index.php?ty=fix_page&nonav=120', $action);
     }
 
     public function testPageAlreadyExistDataExtraction()

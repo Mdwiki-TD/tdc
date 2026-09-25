@@ -79,14 +79,14 @@ class AppRouter
 			"settings",
 			"translated",
 			"tt",
-			"users_no_inprocess",
+			"users_not_inprocess",
 			"wikirefs_options",
 
 			"pages_users_to_main/fix_it",
 			"qids/edit_qid",
 			"translated/edit_page",
 			"tt/edit_translate_type",
-			"wikirefs_options/edit",
+			"wikirefs_options/wikirefs_options_edit",
 		];
 		if (in_array($rawTy, $preDefinedTy)) {
 			return $rawTy;
@@ -94,10 +94,19 @@ class AppRouter
 		// Map route aliases
 		$aliasesMap = [
 			"translate_type" => "tt",
+			"users_no_inprocess" => "users_not_inprocess",							// new
 			"Campaigns" => "campaigns",
 			"Emails" => "users",
+			"fix_page" => "pages_users_to_main/fix_it",								// new
+
+			"edit_page" => "translated/edit_page",									// new
+			"edit_user" => "users/edit_user",										// new
 			"Emails/edit_user" => "users/edit_user",
+
 			"Emails/msg" => "users/msg",
+			"wikirefs_options_edit" => "wikirefs_options/wikirefs_options_edit",	// new
+			"wikirefs_options/edit" => "wikirefs_options/wikirefs_options_edit",
+			"edit_translate_type" => "tt/edit_translate_type",						// new
 		];
 		if (isset($aliasesMap[$rawTy])) {
 			$rawTy = $aliasesMap[$rawTy];

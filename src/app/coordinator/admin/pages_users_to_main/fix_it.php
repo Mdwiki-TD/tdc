@@ -96,7 +96,7 @@ class FixItController extends AbstractEditController
         $target2 = htmlspecialchars($this->newTarget, ENT_QUOTES, 'UTF-8');
 
         return <<<HTML
-            <form action='index.php?ty=pages_users_to_main/fix_it&nonav=120' method="POST">
+            <form action='index.php?ty=fix_page&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='{$this->id}' type='hidden'/>
                 <input name='edit' value="1" type="hidden"/>

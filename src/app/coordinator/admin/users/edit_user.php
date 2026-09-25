@@ -7,12 +7,12 @@ use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\Utils\Html\make_project_to_user;
 use function App\APICalls\MdwikiSql\get_user_by_id;
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/edit_user_post.php';
 
 /**
  * Class EditUserController
  * Renders the add/edit form for a single user's email/wiki/project
- * data (GET request only; submission is handled by EmailsPostProcessor).
+ * data (GET request only; submission is handled by EditUserPostProcessor).
  */
 class EditUserController extends AbstractEditController
 {
@@ -24,7 +24,7 @@ class EditUserController extends AbstractEditController
     }
     protected function createPostProcessor(): object
     {
-        return new EmailsPostProcessor();
+        return new EditUserPostProcessor();
     }
     /**
      * Builds the user/email/wiki/project edit-or-add form markup.
@@ -55,7 +55,7 @@ class EditUserController extends AbstractEditController
         }
 
         return <<<HTML
-            <form action='index.php?ty=emails/edit_user&nonav=120&user_id={$this->userId}' method="POST">
+            <form action='index.php?ty=edit_user&nonav=120&user_id={$this->userId}' method="POST">
                 {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>

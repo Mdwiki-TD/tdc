@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/qids/post.php
+// src/app/coordinator/admin/qids/edit_qid_post.php
 
 namespace App\Coordinator\Admin\Qids;
 
@@ -7,7 +7,6 @@ use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\APICalls\MdwikiSql\get_qid_row;
 use function App\APICalls\MdwikiSql\get_qid_by_title;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class QidsPostProcessor

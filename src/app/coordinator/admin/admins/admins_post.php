@@ -12,7 +12,7 @@ use function App\APICalls\MdwikiSql\execute_query;
  */
 class AdminsPostProcessor extends AbstractPostHandler
 {
-    private const TABLE_NAME = 'coordinators';
+    private const DB_TABLE_NAME = 'coordinators';
 
     /**
      * Validates and processes the incoming submission.
@@ -37,7 +37,7 @@ class AdminsPostProcessor extends AbstractPostHandler
             $username = $table['username'] ?? '';
 
             if (!empty($del) && !empty($uId)) {
-                $qua2 = "DELETE FROM " . self::TABLE_NAME . " WHERE id = ?";
+                $qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
 
                 $result = execute_query($qua2, [$uId]);
 
@@ -60,7 +60,7 @@ class AdminsPostProcessor extends AbstractPostHandler
             }
 
             if (!empty($username)) {
-                $tableName = self::TABLE_NAME;
+                $tableName = self::DB_TABLE_NAME;
 
                 $qua = <<<SQL
                     INSERT INTO $tableName (username, is_active)

@@ -36,7 +36,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 
         $this->renderMainCard($sato);
 
-        $newRow = make_edit_icon_new("wikirefs_options/edit", ["new" => 1], "Add one!");
+        $newRow = make_edit_icon_new("wikirefs_options_edit", ["new" => 1], "Add one!");
         $this->renderAddNewCard($newRow);
 
         $this->renderDataTableScript();
@@ -91,7 +91,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
             "add_en_lang" => $tabg["add_en_lang"],
         ];
 
-        $editIcon = make_edit_icon_new("wikirefs_options/edit", $editParams);
+        $editIcon = make_edit_icon_new("wikirefs_options_edit", $editParams);
 
         return <<<HTML
             <tr>

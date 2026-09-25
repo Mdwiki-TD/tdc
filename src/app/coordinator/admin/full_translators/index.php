@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_full_translators;
 
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/full_translators_post.php';
 
 /**
  * Class FullTranslatorsIndexController

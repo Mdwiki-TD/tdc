@@ -1,14 +1,11 @@
 <?php
-// src/app/coordinator/admin/projects/post.php
+// src/app/coordinator/admin/projects/projects_post.php
 
 namespace App\Coordinator\Admin\Projects;
 
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\insert_to_projects;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\Utils\Html\div_alert;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class ProjectsPostProcessor
