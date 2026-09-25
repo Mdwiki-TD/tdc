@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
 
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/users_not_inprocess_post.php';
 
 /**
  * Class UsersNotInprocessIndexController
