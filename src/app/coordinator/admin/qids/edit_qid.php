@@ -97,7 +97,3 @@ class EditQidController extends AbstractEditController
         return $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
     }
 }
-
-// Instantiate and execute controller
-$controller = new EditQidController();
-$controller->handleRequest();

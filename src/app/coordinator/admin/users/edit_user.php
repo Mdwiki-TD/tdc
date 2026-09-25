@@ -112,7 +112,3 @@ class EditUserController extends AbstractEditController
         return $this->buildFormHtml($this->userId);
     }
 }
-
-// Instantiate and execute controller
-$controller = new EditUserController();
-$controller->handleRequest();

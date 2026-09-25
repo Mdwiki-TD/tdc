@@ -329,7 +329,3 @@ class MsgController extends AbstractControllerNoPost
         HTML;
     }
 }
-
-// Instantiate and execute controller
-$controller = new MsgController();
-$controller->handleRequest();

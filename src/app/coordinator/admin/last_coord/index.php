@@ -147,7 +147,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
             'nonav'  => '1',
         ];
 
-        $mailUrl = "index.php?ty=users/msg&" . http_build_query($mailParams, "", '&', PHP_QUERY_RFC3986);
+        $mailUrl = "index.php?ty=msg&" . http_build_query($mailParams, "", '&', PHP_QUERY_RFC3986);
 
         return htmlspecialchars($mailUrl, ENT_QUOTES, 'UTF-8');
     }
