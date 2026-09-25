@@ -90,9 +90,9 @@ class EditQidController extends AbstractEditController
 
     protected function getCardTitle(): string
     {
-        return ($this->id !== '') ? 'Edit Qid' : 'Add New Qid';
+        return $this->id !== '' ? 'Edit Qid' : 'Add New Qid';
     }
-    public function buildForm(): string
+    protected function buildForm(): string
     {
         return $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
     }

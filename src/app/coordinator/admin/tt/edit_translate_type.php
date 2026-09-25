@@ -106,9 +106,10 @@ class EditTranslateTypeController extends AbstractEditController
 
     protected function getCardTitle(): string
     {
-        return (!empty($this->id)) ? 'Edit Translate type' : 'Add Translate type';
+        return $this->id !== '' ? 'Edit Translate type' : 'Add Translate type';
     }
-    public function buildForm(): string
+
+    protected function buildForm(): string
     {
         return $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
     }

@@ -20,16 +20,18 @@ class WikiRefsOptionsEditController extends AbstractEditController
     {
         return new WikiRefsOptionsEditPostHandler();
     }
+
     protected function getCardTitle(): string
     {
         $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $headerTitle = (!empty($id)) ? 'Edit language settings' : 'Add language settings';
         return $headerTitle;
     }
+
     /**
      * Renders the add/edit form for the language settings row.
      */
-    public function buildForm(): string
+    protected function buildForm(): string
     {
         $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $langCode   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');

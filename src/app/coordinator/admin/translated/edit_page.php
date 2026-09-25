@@ -117,11 +117,13 @@ class EditPageController extends AbstractEditController
             </form>
         HTML;
     }
+
     protected function getCardTitle(): string
     {
         return "Edit Page (id: {$this->id}, table: {$this->table})";
     }
-    public function buildForm(): string
+
+    protected function buildForm(): string
     {
         return $this->renderEditForm($this->id, $this->table);
     }
