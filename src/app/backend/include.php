@@ -5,6 +5,7 @@ include_once __DIR__ . '/settings.php';
 
 # api_calls
 include_once __DIR__ . '/api_calls/mdwiki_api.php';
+include_once __DIR__ . '/api_calls/Database.php';
 include_once __DIR__ . '/api_calls/mdwiki_sql.php';
 include_once __DIR__ . '/api_calls/wiki_api.php';
 
