@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Translated;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
@@ -12,14 +12,14 @@ use function App\Utils\Html\make_edit_icon_new;
 use function App\SQLorAPI\Recent\get_recent_translated;
 use function App\SQLorAPI\Recent\get_total_translations_count;
 use function App\SQLorAPI\Funcs\get_pages_langs;
-use function App\Tools\RecentHelps\filter_table;
-use function App\Tools\RecentHelps\filter_recent2;
+use function App\Coordinator\Helps\RecentHelps\filter_table;
+use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
 /**
  * Class TranslatedIndexController
  * Manages rendering the translated pages dashboard with pagination and filtering.
  */
-class TranslatedIndexController extends AbstractController
+class TranslatedIndexController extends AbstractControllerNoPost
 {
     private CurrentUser $currentUser;
     private string $lang;
@@ -47,10 +47,7 @@ class TranslatedIndexController extends AbstractController
      */
     public function handleRequest(): void
     {
-        if (!$this->currentUser->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
         $page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -119,7 +116,7 @@ class TranslatedIndexController extends AbstractController
             'table' => $table
         ];
 
-        $editIcon = make_edit_icon_new("translated/edit_page", $editParams);
+        $editIcon = make_edit_icon_new("edit_page", $editParams);
 
         return <<<HTML
             <tr>

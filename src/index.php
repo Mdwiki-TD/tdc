@@ -1,17 +1,33 @@
 <?php
+// src/index.php
+
+use App\Templates\PageHeader;
+use App\Templates\PageFooter;
+use App\Settings\Settings;
+
+use App\User\CurrentUser;
+use App\AppRouter;
 
 include_once __DIR__ . '/app/include_all.php';
-include_once __DIR__ . '/templates/header.php';
+include_once __DIR__ . '/app/index.php'; // AppRouter
 
-echo <<<HTML
-	<!-- </div> -->
-	<script>$("#coord").addClass("active");</script>
-	<!-- <div id="maindiv" class="container-fluid"> -->
-HTML;
+require_once __DIR__ . '/templates/PageHead.php';
+include_once __DIR__ . '/templates/PageHeader.php';
+include_once __DIR__ . '/templates/PageFooter.php';
 
-include_once __DIR__ . '/app/index.php';
+$hideNav = isset($_GET['nonav']);
 
+$settings    = Settings::getInstance();
+$currentUser = CurrentUser::getInstance($settings);
 
-echo "<script src='/tdc/js/autocomplate.js'></script>";
+$pageHeader = new PageHeader($currentUser);
+$pageHeader->render($hideNav);
 
-include_once __DIR__ . '/templates/footer.php';
+// Instantiate and execute application router
+$router = new AppRouter($currentUser);
+$router->handleRequest();
+
+$timeStart = $pageHeader->getLoadStartTime();
+
+$pageFooter = new PageFooter($timeStart);
+$pageFooter->render();

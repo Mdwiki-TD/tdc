@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Qids;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_edit_icon_new;
 use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
@@ -15,7 +15,7 @@ use function App\SQLorAPI\Funcs\get_td_or_sql_qids_others;
  * Lists TD Qids / Qids Others records with duplicate/empty filtering
  * and per-row edit access.
  */
-class QidsIndexController extends AbstractController
+class QidsIndexController extends AbstractControllerNoPost
 {
 	private CurrentUser $currentUser;
 	private string $qidTable;
@@ -41,11 +41,7 @@ class QidsIndexController extends AbstractController
 	 */
 	public function handleRequest(): void
 	{
-		// Check user authorization
-		if (!$this->currentUser->isCoordinator()) {
-			header('Location: /index.php');
-			exit;
-		}
+        $this->validateCoordinator();
 
 		$qidsTitle = ($this->qidTable === 'qids') ? 'TD Qids' : 'Qids Others';
 

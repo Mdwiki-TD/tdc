@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_settings;
 
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/settings_post.php';
 
 /**
  * Class SettingsIndexController
@@ -17,30 +17,18 @@ require_once __DIR__ . '/post.php';
  */
 class SettingsIndexController extends AbstractController
 {
-    public function handlePostRequest(): void
+    protected function createPostProcessor(): object
     {
-        $postProcessor = new SettingsPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
+        return new SettingsPostProcessor();
     }
-    /**
-     * Handles authentication and executes controller output.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        }
-
+    public function renderFormCard(): void {
         $settings = get_td_or_sql_settings();
 
         $text = $this->buildSettingsTable($settings);
 
         $this->renderCard($text);
-    }
 
+    }
     /**
      * Builds the settings table markup, skipping ignored rows and
      * rendering a checkbox or a text input depending on the setting type.

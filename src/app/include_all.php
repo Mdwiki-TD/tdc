@@ -71,8 +71,8 @@ if (file_exists($vendorAutoload)) {
 // Load security module first
 include_once __DIR__ . '/csrf.php';
 
-include_once __DIR__ . '/utils/functions.php';
-include_once __DIR__ . '/utils/html_side1.php';
+include_once __DIR__ . '/utils/TestPrinter.php';
+include_once __DIR__ . '/utils/SidebarMenu.php';
 include_once __DIR__ . '/utils/html.php';
 include_once __DIR__ . '/utils/tables_dir.php';
 

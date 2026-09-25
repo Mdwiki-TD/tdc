@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
 
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/add_post.php';
 
 /**
  * Class AddIndexController
@@ -17,30 +17,17 @@ require_once __DIR__ . '/post.php';
  */
 class AddIndexController extends AbstractController
 {
-    public function handlePostRequest(): void
+    protected function createPostProcessor(): object
     {
-        $postProcessor = new AddPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
+        return new AddPostProcessor();
     }
-    /**
-     * Handles authentication and executes controller output.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        }
-
+    public function renderFormCard(): void {
         $cats = $this->buildCategoryOptions();
         $table = $this->buildStarterRows($cats);
 
         $this->renderCard($cats, $table);
         $this->renderUrlSearchBlock();
     }
-
     /**
      * Builds <option> markup for every campaign category.
      */

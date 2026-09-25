@@ -3,17 +3,16 @@
 
 namespace App\Coordinator\Admin\Qids;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 
-
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/edit_qid_post.php';
 
 /**
  * Class EditQidController
  * Renders the add/edit form for a single qid entry (GET request only;
  * submission is handled by QidsPostProcessor).
  */
-class EditQidController extends AbstractController
+class EditQidController extends AbstractEditController
 {
     private string $id;
     private string $title;
@@ -25,37 +24,13 @@ class EditQidController extends AbstractController
         $this->id       = $_GET['id'] ?? '';
         $this->title    = $_GET['title'] ?? '';
         $this->qid      = $_GET['qid'] ?? '';
-        $this->qidTable = $_GET['qid_table'] ?? '';
-
-        if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {
-            $this->qidTable = 'qids';
-        }
+        $table          = $_GET['qid_table'] ?? '';
+        $this->qidTable = in_array($table, ['qids', 'qids_others'], true) ? $table : 'qids';
     }
 
-    public function handlePostRequest(): void
+    protected function createPostProcessor(): object
     {
-        // Instantiate and execute processor
-        $postProcessor = new QidsPostProcessor($_GET['qid_table'] ?? '');
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
-
-        if ($postProcessor->shouldShowForm()) {
-            $this->renderFormCard();
-        }
-    }
-    /**
-     * Executes authorization check and renders the form view.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
+        return new QidsPostProcessor($_GET['qid_table'] ?? '');
     }
 
     /**
@@ -113,15 +88,13 @@ class EditQidController extends AbstractController
         HTML;
     }
 
-    /**
-     * Renders the card wrapping the form.
-     */
-    private function renderFormCard(): void
+    protected function getCardTitle(): string
     {
-        $headerTitle = ($this->id !== '') ? 'Edit Qid' : 'Add New Qid';
-        $form = $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
-
-        $this->echoCard($headerTitle, $form);
+        return $this->id !== '' ? 'Edit Qid' : 'Add New Qid';
+    }
+    protected function buildForm(): string
+    {
+        return $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
     }
 }
 

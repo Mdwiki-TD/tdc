@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\Reports;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 
 /**
  * Class ReportsIndex2Controller
@@ -11,7 +11,7 @@ use App\Coordinator\Admin\Common\AbstractController;
  * filter <select> options (currently backed by an empty dataset, kept
  * for parity with the legacy behaviour) instead of client-populated ones.
  */
-class ReportsIndex2Controller extends AbstractController
+class ReportsIndex2Controller extends AbstractControllerNoPost
 {
     /**
      * Handles authentication and executes controller output.

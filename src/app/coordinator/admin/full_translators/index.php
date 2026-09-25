@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_full_translators;
 
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/full_translators_post.php';
 
 /**
  * Class FullTranslatorsIndexController
@@ -19,23 +19,11 @@ class FullTranslatorsIndexController extends AbstractController
 {
     private const TY_NAME = 'full_translators';
 
-    public function handlePostRequest(): void
+    protected function createPostProcessor(): object
     {
-        $postProcessor = new FullTranslatorsPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
+        return new FullTranslatorsPostProcessor();
     }
-    /**
-     * Handles authentication and executes controller output.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        }
-
+    public function renderFormCard(): void {
         $translators = get_td_or_sql_full_translators();
 
         $formText = $this->buildTranslatorRows($translators);
@@ -45,7 +33,6 @@ class FullTranslatorsIndexController extends AbstractController
         $this->renderCard($formText);
         $this->renderAddRowScript();
     }
-
     /**
      * Builds the editable table rows for each existing full translator.
      */

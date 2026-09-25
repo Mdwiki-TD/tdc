@@ -6,31 +6,31 @@ The `coordinator/` module is the **admin panel and management interface** for th
 
 ### Main Features
 
-- **Translation monitoring**: View recent translations, in-process translations, and translation statistics per category
-- **CRUD management**: Full create/read/update/delete interfaces for pages, users, campaigns, projects, QIDs, coordinators, translate types, and settings
-- **Email system**: Rich-text email composition using Summernote WYSIWYG editor for sending follow-up suggestions to translators
-- **Translation gap analysis**: View which articles in a category are translated vs. missing, with Wikidata sitelink cross-referencing
-- **Namespace migration**: Tools to move translations from user namespace to main namespace
-- **Publish reports**: Filterable reports with DataTables showing translation publishing activity
-- **WikiRefs options**: Per-language configuration for reference fixing tools
-- **Role-based access control**: Coordinator-only sections with redirect for unauthorized users
-- **CSRF protection**: All POST handlers verify CSRF tokens
+-   **Translation monitoring**: View recent translations, in-process translations, and translation statistics per category
+-   **CRUD management**: Full create/read/update/delete interfaces for pages, users, campaigns, projects, QIDs, coordinators, translate types, and settings
+-   **Email system**: Rich-text email composition using Summernote WYSIWYG editor for sending follow-up suggestions to translators
+-   **Translation gap analysis**: View which articles in a category are translated vs. missing, with Wikidata sitelink cross-referencing
+-   **Namespace migration**: Tools to move translations from user namespace to main namespace
+-   **Publish reports**: Filterable reports with DataTables showing translation publishing activity
+-   **WikiRefs options**: Per-language configuration for reference fixing tools
+-   **Role-based access control**: Coordinator-only sections with redirect for unauthorized users
+-   **CSRF protection**: All POST handlers verify CSRF tokens
 
 ### Frameworks and Technologies
 
-| Technology | Version | Purpose |
-|---|---|---|
-| PHP | ^8.2 | Runtime (vanilla, no framework) |
-| MySQL/MariaDB | - | Database via PDO (Toolforge ToolsDB) |
-| Bootstrap 5 | 5.3.7 | CSS framework (cards, forms, modals, responsive grid) |
-| jQuery | 3.7.0 | DOM manipulation and AJAX |
-| DataTables | 2.3.4 | Sortable, searchable, paginated tables |
-| Bootstrap Selectpicker | - | Searchable dropdown selectors |
-| Summernote | - | WYSIWYG email editor |
-| Font Awesome / Bootstrap Icons | - | Icon sets |
-| cURL | - | HTTP client for internal API and Wikimedia APIs |
-| Wikidata REST API | - | Sitelink queries |
-| Wikimedia Pageviews API | - | Page view statistics |
+| Technology                     | Version | Purpose                                               |
+| ------------------------------ | ------- | ----------------------------------------------------- |
+| PHP                            | ^8.2    | Runtime (vanilla, no framework)                       |
+| MySQL/MariaDB                  | -       | Database via PDO (Toolforge ToolsDB)                  |
+| Bootstrap 5                    | 5.3.7   | CSS framework (cards, forms, modals, responsive grid) |
+| jQuery                         | 3.7.0   | DOM manipulation and AJAX                             |
+| DataTables                     | 2.3.4   | Sortable, searchable, paginated tables                |
+| Bootstrap Selectpicker         | -       | Searchable dropdown selectors                         |
+| Summernote                     | -       | WYSIWYG email editor                                  |
+| Font Awesome / Bootstrap Icons | -       | Icon sets                                             |
+| cURL                           | -       | HTTP client for internal API and Wikimedia APIs       |
+| Wikidata REST API              | -       | Sitelink queries                                      |
+| Wikimedia Pageviews API        | -       | Page view statistics                                  |
 
 ### PHP Version Requirement
 
@@ -111,22 +111,22 @@ coordinator/
 
 ### Module Categories
 
-| Category | Directories | Purpose |
-|---|---|---|
-| **Views** | `tools/` | Read-only views: recent translations, in-process, statistics, categories |
-| **CRUD Admin** | `admin/add/`, `admin/admins/`, `admin/Campaigns/`, `admin/projects/`, `admin/settings/` | Create/Read/Update/Delete for core entities |
-| **Content Management** | `admin/translated/`, `admin/qids/`, `admin/tt/`, `admin/wikirefs_options/` | Manage translated pages, QIDs, translate types, WikiRefs options |
-| **User Management** | `admin/Emails/`, `admin/full_translators/`, `admin/users_no_inprocess/` | Manage users, email lists, translator permissions |
-| **Migration** | `admin/pages_users_to_main/` | Move translations from user namespace to main namespace |
-| **Reporting** | `admin/reports/` | Publish reports with filtering and export |
+| Category               | Directories                                                                             | Purpose                                                                  |
+| ---------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **Views**              | `tools/`                                                                                | Read-only views: recent translations, in-process, statistics, categories |
+| **CRUD Admin**         | `admin/add/`, `admin/admins/`, `admin/Campaigns/`, `admin/projects/`, `admin/settings/` | Create/Read/Update/Delete for core entities                              |
+| **Content Management** | `admin/translated/`, `admin/qids/`, `admin/tt/`, `admin/wikirefs_options/`              | Manage translated pages, QIDs, translate types, WikiRefs options         |
+| **User Management**    | `admin/Emails/`, `admin/full_translators/`, `admin/users_no_inprocess/`                 | Manage users, email lists, translator permissions                        |
+| **Migration**          | `admin/pages_users_to_main/`                                                            | Move translations from user namespace to main namespace                  |
+| **Reporting**          | `admin/reports/`                                                                        | Publish reports with filtering and export                                |
 
 ### Key Namespaces
 
-| Namespace | Files | Responsibility |
-|---|---|---|
-| `Tools\RecentHelps` | `tools/recent_helps.php` | Helper functions for recent views |
-| `Add\AddPost` | `admin/add/add_post.php` | Database insert logic for new pages |
-| `Emails\Sugust` | `admin/Emails/sugust.php` | Article suggestion engine |
+| Namespace           | Files                     | Responsibility                      |
+| ------------------- | ------------------------- | ----------------------------------- |
+| `Tools\RecentHelps` | `tools/recent_helps.php`  | Helper functions for recent views   |
+| `Add\AddPost`       | `admin/add/add_post.php`  | Database insert logic for new pages |
+| `Emails\Sugust`     | `admin/Emails/sugust.php` | Article suggestion engine           |
 
 ---
 
@@ -134,12 +134,12 @@ coordinator/
 
 ### Design Patterns
 
-- **Front Controller**: `index.php` at the root routes to sub-modules based on the `ty` GET parameter
-- **Template Composition**: Pages are assembled by including `header.php` (HTML + nav), adding content, then `footer.php` (JS init)
-- **POST-Redirect-GET**: All `post.php` handlers process form submissions and redirect back to the listing page
-- **CRUD Pattern**: Each admin module follows a consistent structure: `index.php` (list/form), `post.php` (handler), optional `edit_*.php` (edit form)
-- **Role-Based Access Control**: `$GLOBALS['user_is_coordinator']` is checked at the top of every admin file
-- **CSRF Protection**: All POST handlers use `generate_csrf_token()` and `verify_csrf_token()` from `App\csrf`
+-   **Front Controller**: `index.php` at the root routes to sub-modules based on the `ty` GET parameter
+-   **Template Composition**: Pages are assembled by including `header.php` (HTML + nav), adding content, then `footer.php` (JS init)
+-   **POST-Redirect-GET**: All `post.php` handlers process form submissions and redirect back to the listing page
+-   **CRUD Pattern**: Each admin module follows a consistent structure: `index.php` (list/form), `post.php` (handler), optional `edit_*.php` (edit form)
+-   **Role-Based Access Control**: `$GLOBALS['user_is_coordinator']` is checked at the top of every admin file
+-   **CSRF Protection**: All POST handlers use `generate_csrf_token()` and `verify_csrf_token()` from `App\csrf`
 
 ### Code Organization
 
@@ -147,11 +147,11 @@ coordinator/
 
 ### SOLID Principles Compliance
 
-- **Single Responsibility**: Mostly adhered to -- each file handles one view or one form handler
-- **Open/Closed**: New modules can be added by creating a new directory, but the routing in `index.php` requires modification
-- **Liskov Substitution**: Not directly applicable (procedural)
-- **Interface Segregation**: No interfaces; functions are loosely coupled
-- **Dependency Inversion**: The module depends on concrete implementations from `backend/` and `utils/`
+-   **Single Responsibility**: Mostly adhered to -- each file handles one view or one form handler
+-   **Open/Closed**: New modules can be added by creating a new directory, but the routing in `index.php` requires modification
+-   **Liskov Substitution**: Not directly applicable (procedural)
+-   **Interface Segregation**: No interfaces; functions are loosely coupled
+-   **Dependency Inversion**: The module depends on concrete implementations from `backend/` and `utils/`
 
 ### Maintainability
 
@@ -163,33 +163,33 @@ coordinator/
 
 ### Scalability Considerations
 
-- **DataTables with stateSave**: Client-side table state persistence reduces server load
-- **AJAX loading**: `process.php` loads data via AJAX, reducing initial page load time
-- **No pagination in some views**: Some listing pages load all records at once, which could be slow with large datasets
+-   **DataTables with stateSave**: Client-side table state persistence reduces server load
+-   **AJAX loading**: `process.php` loads data via AJAX, reducing initial page load time
+-   **No pagination in some views**: Some listing pages load all records at once, which could be slow with large datasets
 
 ---
 
 ## Strengths
 
-- **Consistent CSRF protection**: All POST handlers verify tokens, preventing cross-site request forgery
-- **Role-based access control**: Coordinator-only sections are properly gated with redirect for unauthorized users
-- **Comprehensive CRUD coverage**: Full management interface for all database entities
-- **Bootstrap 5 responsive UI**: Mobile-friendly layout with responsive tables and sidebar
-- **DataTables integration**: Sorting, searching, pagination, column toggling, and state persistence
-- **Summernote email editor**: Rich-text email composition for translator follow-up
-- **Dual data access**: Supports both SQL-based and API-based data retrieval
-- **Dark mode support**: `data-bs-theme="auto"` enables automatic dark mode detection
-- **Wikidata integration**: QID management with sitelink cross-referencing
+-   **Consistent CSRF protection**: All POST handlers verify tokens, preventing cross-site request forgery
+-   **Role-based access control**: Coordinator-only sections are properly gated with redirect for unauthorized users
+-   **Comprehensive CRUD coverage**: Full management interface for all database entities
+-   **Bootstrap 5 responsive UI**: Mobile-friendly layout with responsive tables and sidebar
+-   **DataTables integration**: Sorting, searching, pagination, column toggling, and state persistence
+-   **Summernote email editor**: Rich-text email composition for translator follow-up
+-   **Dual data access**: Supports both SQL-based and API-based data retrieval
+-   **Dark mode support**: `data-bs-theme="auto"` enables automatic dark mode detection
+-   **Wikidata integration**: QID management with sitelink cross-referencing
 
 ## Weaknesses
 
-- **Significant code duplication**: `last.php`/`last1.php` and `process.php`/`process1.php` contain near-identical logic
-- **No template engine**: HTML is generated inline in PHP, mixing logic and presentation
-- **Inconsistent escaping**: Some views use `htmlspecialchars()`, others do not
-- **Global state dependency**: Authorization relies on `$GLOBALS['user_is_coordinator']`
-- **Backup file in codebase**: `admin/reports/index copy.php` is a code smell
-- **Hardcoded excluded user**: `$excludedUsers = ['Mr. Ibrahem']` in `last_coord/index.php` should be configurable
-- **No unit tests**: No automated tests for any of the 47 files
+-   **Significant code duplication**: `last.php`/`last1.php` and `process.php`/`process1.php` contain near-identical logic
+-   **No template engine**: HTML is generated inline in PHP, mixing logic and presentation
+-   **Inconsistent escaping**: Some views use `htmlspecialchars()`, others do not
+-   **Global state dependency**: Authorization relies on `$GLOBALS['user_is_coordinator']`
+-   **Backup file in codebase**: `admin/reports/index copy.php` is a code smell
+-   **Hardcoded excluded user**: `$excludedUsers = ['Mr. Ibrahem']` in `last_coord/index.php` should be configurable
+-   **No unit tests**: No automated tests for any of the 47 files
 
 ---
 
@@ -198,18 +198,21 @@ coordinator/
 ### SQL Injection via `$_GET['table']` (HIGH)
 
 In `admin/translated/edit_page.php`, the `$table` variable from `$_GET['table']` is interpolated directly into SQL:
+
 ```php
 "DELETE FROM $table WHERE id = ?"
 "SELECT * FROM $table WHERE id = ?"
 ```
+
 While the calling code may validate this, the file itself does not sanitize the input.
 
 ### XSS in Multiple Views (HIGH)
 
 Several views output user-supplied values without `htmlspecialchars()`:
-- `tools/last.php`: `$user`, `$llang`, `$md_title` interpolated into HTML
-- `admin/Emails/msg.php`: User values embedded in HTML email content
-- Multiple admin forms: Form values echoed back without escaping on error
+
+-   `tools/last.php`: `$user`, `$llang`, `$md_title` interpolated into HTML
+-   `admin/Emails/msg.php`: User values embedded in HTML email content
+-   Multiple admin forms: Form values echoed back without escaping on error
 
 ### Debug Mode Exposes SQL Queries (MEDIUM)
 
@@ -217,6 +220,7 @@ Several views output user-supplied values without `htmlspecialchars()`:
 // admin/add/add_post.php line 36
 if (isset($_REQUEST['test'])) echo "$query1<br/>$query2";
 ```
+
 Full SQL queries are displayed to anyone who adds `?test=1` to the URL.
 
 ### Authorization Relies Solely on Global Variable (MEDIUM)
@@ -231,14 +235,14 @@ Authorization is checked via `$GLOBALS['user_is_coordinator']`. If this global i
 
 ## Areas That Need Attention
 
-- **Input validation**: Add `htmlspecialchars()` to all user-supplied output in views
-- **Table name validation**: Add whitelist check for `$_GET['table']` in `edit_page.php`
-- **Remove duplicate files**: Consolidate `last.php`/`last1.php` and `process.php`/`process1.php`
-- **Remove backup files**: Delete `admin/reports/index copy.php`
-- **Externalize configuration**: Move hardcoded excluded user to database settings
-- **Add unit tests**: Test CRUD operations, form handlers, and authorization logic
-- **Template engine**: Consider migrating to a template engine (Twig, Plates) to separate logic from presentation
-- **Rate limiting**: Add rate limiting to POST endpoints to prevent abuse
+-   **Input validation**: Add `htmlspecialchars()` to all user-supplied output in views
+-   **Table name validation**: Add whitelist check for `$_GET['table']` in `edit_page.php`
+-   **Remove duplicate files**: Consolidate `last.php`/`last1.php` and `process.php`/`process1.php`
+-   **Remove backup files**: Delete `admin/reports/index copy.php`
+-   **Externalize configuration**: Move hardcoded excluded user to database settings
+-   **Add unit tests**: Test CRUD operations, form handlers, and authorization logic
+-   **Template engine**: Consider migrating to a template engine (Twig, Plates) to separate logic from presentation
+-   **Rate limiting**: Add rate limiting to POST endpoints to prevent abuse
 
 ---
 
@@ -270,32 +274,32 @@ Authorization is checked via `$GLOBALS['user_is_coordinator']`. If this global i
 
 ### Security Hardening
 
-- Add `Content-Security-Policy` headers to all pages
-- Implement rate limiting on POST endpoints
-- Add per-page authorization checks (not just global variable)
-- Sanitize all email content before sending
-- Add audit logging for admin actions
-- Implement session timeout and re-authentication for sensitive operations
+-   Add `Content-Security-Policy` headers to all pages
+-   Implement rate limiting on POST endpoints
+-   Add per-page authorization checks (not just global variable)
+-   Sanitize all email content before sending
+-   Add audit logging for admin actions
+-   Implement session timeout and re-authentication for sensitive operations
 
 ### Performance Optimization
 
-- Add database query caching for frequently-accessed data
-- Implement pagination for all listing pages
-- Use AJAX loading for large DataTables to reduce initial page load
-- Add database indexes for commonly-queried columns
+-   Add database query caching for frequently-accessed data
+-   Implement pagination for all listing pages
+-   Use AJAX loading for large DataTables to reduce initial page load
+-   Add database indexes for commonly-queried columns
 
 ---
 
 ## Comprehensive Review
 
-| Metric | Score | Notes |
-|---|---|---|
-| **Overall Rating** | 6/10 | Functional admin panel with good coverage, but security gaps |
+| Metric                   | Score   | Notes                                                           |
+| ------------------------ | ------- | --------------------------------------------------------------- |
+| **Overall Rating**       | 6/10    | Functional admin panel with good coverage, but security gaps    |
 | **Production Readiness** | Partial | Works in production but XSS and SQL injection risks need fixing |
-| **Security Score** | 5/10 | CSRF is good, but XSS and SQL injection issues exist |
-| **Technical Debt** | Medium | Code duplication, no tests, inline HTML generation |
-| **Maintainability** | 6/10 | Consistent patterns but duplication and no tests |
-| **Risk Assessment** | Medium | SQL injection and XSS are the primary risks |
+| **Security Score**       | 5/10    | CSRF is good, but XSS and SQL injection issues exist            |
+| **Technical Debt**       | Medium  | Code duplication, no tests, inline HTML generation              |
+| **Maintainability**      | 6/10    | Consistent patterns but duplication and no tests                |
+| **Risk Assessment**      | Medium  | SQL injection and XSS are the primary risks                     |
 
 ---
 
@@ -303,10 +307,10 @@ Authorization is checked via `$GLOBALS['user_is_coordinator']`. If this global i
 
 ### Prerequisites
 
-- PHP 8.2+ with PDO MySQL extension
-- MySQL/MariaDB database (Toolforge ToolsDB or local equivalent)
-- Composer (for dependencies)
-- Web server (Apache/Nginx)
+-   PHP 8.2+ with PDO MySQL extension
+-   MySQL/MariaDB database (Toolforge ToolsDB or local equivalent)
+-   Composer (for dependencies)
+-   Web server (Apache/Nginx)
 
 ### Installation
 
@@ -349,31 +353,31 @@ The module requires the following database tables:
 
 ### Access Control
 
-- **Regular users**: Can view recent translations, in-process translations, and statistics
-- **Coordinators**: Have access to all admin sections (CRUD, email, reports, settings)
-- Authorization is determined by the `coordinators` database table
+-   **Regular users**: Can view recent translations, in-process translations, and statistics
+-   **Coordinators**: Have access to all admin sections (CRUD, email, reports, settings)
+-   Authorization is determined by the `coordinators` database table
 
 ### Available Routes (`?ty=` parameter)
 
-| Route | Access | Description |
-|---|---|---|
-| `last` | All users | Recent translations |
-| `last_coord` | Coordinators | Recent translations with admin columns |
-| `process` | All users | In-process translations |
-| `process_total` | All users | In-process summary |
-| `stat` | All users | Category statistics |
-| `categories` | All users | Translation categories |
-| `add` | Coordinators | Add translation records |
-| `Campaigns` | Coordinators | Manage campaigns |
-| `admins` | Coordinators | Manage coordinators |
-| `Emails` | Coordinators | User management and email |
-| `projects` | Coordinators | Manage projects |
-| `qids` | Coordinators | Manage Wikidata QIDs |
-| `reports` | Coordinators | Publish reports |
-| `settings` | Coordinators | Application settings |
-| `translated` | Coordinators | Manage translated pages |
-| `tt` | Coordinators | Manage translate types |
-| `wikirefs_options` | Coordinators | WikiRefs fix options |
-| `full_translators` | Coordinators | Manage full translators |
-| `users_no_inprocess` | Coordinators | Manage excluded users |
-| `pages_users_to_main` | Coordinators | Namespace migration |
+| Route                 | Access       | Description                            |
+| --------------------- | ------------ | -------------------------------------- |
+| `last`                | All users    | Recent translations                    |
+| `last_coord`          | Coordinators | Recent translations with admin columns |
+| `process`             | All users    | In-process translations                |
+| `process_total`       | All users    | In-process summary                     |
+| `stat`                | All users    | Category statistics                    |
+| `categories`          | All users    | Translation categories                 |
+| `add`                 | Coordinators | Add translation records                |
+| `Campaigns`           | Coordinators | Manage campaigns                       |
+| `admins`              | Coordinators | Manage coordinators                    |
+| `Emails`              | Coordinators | User management and email              |
+| `projects`            | Coordinators | Manage projects                        |
+| `qids`                | Coordinators | Manage Wikidata QIDs                   |
+| `reports`             | Coordinators | Publish reports                        |
+| `settings`            | Coordinators | Application settings                   |
+| `translated`          | Coordinators | Manage translated pages                |
+| `tt`                  | Coordinators | Manage translate types                 |
+| `wikirefs_options`    | Coordinators | WikiRefs fix options                   |
+| `full_translators`    | Coordinators | Manage full translators                |
+| `users_no_inprocess`  | Coordinators | Manage excluded users                  |
+| `pages_users_to_main` | Coordinators | Namespace migration                    |

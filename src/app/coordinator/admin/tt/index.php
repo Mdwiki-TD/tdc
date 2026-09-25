@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\SqlTables\TablesSql;
 use function App\Utils\Html\makeDropdown;
 use function App\Utils\Html\make_mdwiki_title;
@@ -18,7 +18,7 @@ use function App\APICalls\MdwikiSql\fetch_query;
  * of known titles (translate_type + qids not yet classified), each with
  * its lead/full translation flags and an edit link.
  */
-class TtIndexController extends AbstractController
+class TtIndexController extends AbstractControllerNoPost
 {
     private string $cat;
     private array $fullTranslatesTab = [];
@@ -43,7 +43,7 @@ class TtIndexController extends AbstractController
 
         [$tableRows, $ttCount] = $this->buildTableRows();
 
-        $newRow = make_edit_icon_new('tt/edit_translate_type', ['new' => 1], 'Add one!');
+        $newRow = make_edit_icon_new('edit_translate_type', ['new' => 1], 'Add one!');
 
         $this->renderMainCard($filterHtml, $ttCount, $tableRows);
         $this->renderAddNewCard($newRow);
@@ -151,7 +151,7 @@ class TtIndexController extends AbstractController
             'full'  => $full,
         ];
 
-        $editIcon = make_edit_icon_new('tt/edit_translate_type', $editParams);
+        $editIcon = make_edit_icon_new('edit_translate_type', $editParams);
 
         $mdTitle = make_mdwiki_title($title);
 

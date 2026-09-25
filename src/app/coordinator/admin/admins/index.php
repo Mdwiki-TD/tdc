@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Admins;
 use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_coordinators;
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/admins_post.php';
 
 /**
  * Class AdminsIndexController
@@ -18,23 +18,12 @@ class AdminsIndexController extends AbstractController
 {
 	private const TY_NAME = 'admins';
 
-    public function handlePostRequest(): void
+    protected function createPostProcessor(): object
     {
-        $postProcessor = new AdminsPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
+        return new AdminsPostProcessor();
     }
-	/**
-	 * Handles authentication and executes controller output.
-	 */
-	public function handleRequest(): void
-	{
-		$this->validateCoordinator();
 
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-		}
-
+    public function renderFormCard(): void {
 		$coordinators = get_coordinators();
 		sort($coordinators);
 
@@ -44,8 +33,7 @@ class AdminsIndexController extends AbstractController
 
 		$this->renderCard($formText);
 		$this->renderAddRowScript();
-	}
-
+    }
 	/**
 	 * Builds the editable table rows for each existing coordinator.
 	 */

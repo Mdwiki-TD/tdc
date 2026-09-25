@@ -1,7 +1,7 @@
 <?php
 // src/app/coordinator/helpers/sugust_helper.php
 
-namespace App\Emails\Sugust;
+namespace App\Coordinator\Helps\Sugust;
 
 use App\Tables\Main\MainTables;
 use function App\Results\GetResults\get_cat_exists_and_missing;

@@ -4,14 +4,14 @@
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\make_edit_icon_new;
 use function App\SQLorAPI\Recent\get_pages_users_to_main;
 use function App\SQLorAPI\Funcs\get_pages_users_langs;
-use function App\Tools\RecentHelps\filter_recent2;
+use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
 
 /**
@@ -20,14 +20,14 @@ use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
  * moved/fixed into the main pages table, with language filtering and a
  * "fix it" action per row.
  */
-class PagesUsersToMainIndexController extends AbstractController
+class PagesUsersToMainIndexController extends AbstractControllerNoPost
 {
-    private CurrentUser $currentUser;
+    // private CurrentUser $currentUser;
     private string $lang;
 
     public function __construct()
     {
-        $this->currentUser = CurrentUser::getInstance();
+        // $this->currentUser = CurrentUser::getInstance();
         $this->lang = $_GET['lang'] ?? 'All';
 
         if ($this->lang !== 'All' && !isset(LangsTables::$LCodeToLang[$this->lang])) {
@@ -40,11 +40,7 @@ class PagesUsersToMainIndexController extends AbstractController
      */
     public function handleRequest(): void
     {
-        // Check user authorization
-        if (!$this->currentUser->isCoordinator()) {
-            header('Location: /index.php');
-            exit;
-        }
+        $this->validateCoordinator();
 
         $sqlResults = get_pages_users_to_main($this->lang);
 
@@ -173,7 +169,7 @@ class PagesUsersToMainIndexController extends AbstractController
             'new_target' => $newTarget,
         ];
 
-        $editIcon = make_edit_icon_new("pages_users_to_main/fix_it", $editParams);
+        $editIcon = make_edit_icon_new("fix_page", $editParams);
 
         $qid    = $tabg['qid'] ?? "";
         $newQid = $tabg['new_qid'] ?? "";

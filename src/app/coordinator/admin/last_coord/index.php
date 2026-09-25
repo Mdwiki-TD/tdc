@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\LastCoord;
 
 use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\APICalls\TDApi\get_td_api;
 
 /**
@@ -13,7 +13,7 @@ use function App\APICalls\TDApi\get_td_api;
  * (either the "pages" or "pages_users" endpoint), with language and
  * namespace filters and per-row mail/fixref/draft links.
  */
-class LastCoordIndexController extends AbstractController
+class LastCoordIndexController extends AbstractControllerNoPost
 {
     private string $globalUsername;
     private string $lang;
@@ -147,7 +147,7 @@ class LastCoordIndexController extends AbstractController
             'nonav'  => '1',
         ];
 
-        $mailUrl = "index.php?ty=Emails/msg&" . http_build_query($mailParams, "", '&', PHP_QUERY_RFC3986);
+        $mailUrl = "index.php?ty=users/msg&" . http_build_query($mailParams, "", '&', PHP_QUERY_RFC3986);
 
         return htmlspecialchars($mailUrl, ENT_QUOTES, 'UTF-8');
     }

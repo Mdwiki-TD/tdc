@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
 use function App\SQLorAPI\Funcs\get_td_or_sql_language_settings;
 use function App\SQLorAPI\Funcs\get_pages_langs;
@@ -15,7 +15,7 @@ use function App\Utils\Html\make_edit_icon_new;
  * lang_code, move_dots, expend, add_en_lang), merging in any languages
  * that don't have a settings row yet with default (off) values.
  */
-class WikiRefsOptionsIndexController extends AbstractController
+class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 {
     /**
      * Handles authentication and executes controller output.
@@ -36,7 +36,7 @@ class WikiRefsOptionsIndexController extends AbstractController
 
         $this->renderMainCard($sato);
 
-        $newRow = make_edit_icon_new("wikirefs_options/edit", ["new" => 1], "Add one!");
+        $newRow = make_edit_icon_new("wikirefs_options_edit", ["new" => 1], "Add one!");
         $this->renderAddNewCard($newRow);
 
         $this->renderDataTableScript();
@@ -91,7 +91,7 @@ class WikiRefsOptionsIndexController extends AbstractController
             "add_en_lang" => $tabg["add_en_lang"],
         ];
 
-        $editIcon = make_edit_icon_new("wikirefs_options/edit", $editParams);
+        $editIcon = make_edit_icon_new("wikirefs_options_edit", $editParams);
 
         return <<<HTML
             <tr>

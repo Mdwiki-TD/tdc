@@ -3,57 +3,34 @@
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 
-
-require_once __DIR__ . '/post.php';
-
+require_once __DIR__ . '/edit_tt_post.php';
 /**
+ *
  * Class EditTranslateTypeController
  * Renders the add/edit form for a single translate_type entry (GET
  * request only; submission is handled by TtPostProcessor).
  */
-class EditTranslateTypeController extends AbstractController
+class EditTranslateTypeController extends AbstractEditController
 {
+    private string $id;
     private string $title;
     private string $lead;
     private string $full;
-    private string $id;
 
     public function __construct()
     {
+        $this->id    = $_GET['id'] ?? '';
         $this->title = isset($_GET['title']) ? rawurldecode($_GET['title']) : '';
         $this->lead  = $_GET['lead'] ?? '';
         $this->full  = $_GET['full'] ?? '';
-        $this->id    = $_GET['id'] ?? '';
     }
 
-    public function handlePostRequest(): void
+    protected function createPostProcessor(): object
     {
-        // Instantiate and execute processor
-        $postProcessor = new TtPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
-
-        if ($postProcessor->shouldShowForm()) {
-            $this->renderFormCard();
-        }
+        return new TtPostProcessor();
     }
-    /**
-     * Executes authorization check and renders the form view.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderFormCard();
-        }
-    }
-
     /**
      * Builds the id/title/lead/full edit-or-add form markup.
      */
@@ -127,15 +104,14 @@ class EditTranslateTypeController extends AbstractController
         HTML;
     }
 
-    /**
-     * Renders the card wrapping the form.
-     */
-    private function renderFormCard(): void
+    protected function getCardTitle(): string
     {
-        $headerTitle = (!empty($this->id)) ? 'Edit Translate type' : 'Add Translate type';
-        $form = $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
+        return $this->id !== '' ? 'Edit Translate type' : 'Add Translate type';
+    }
 
-        $this->echoCard($headerTitle, $form);
+    protected function buildForm(): string
+    {
+        return $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
     }
 }
 

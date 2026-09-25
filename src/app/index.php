@@ -4,8 +4,8 @@
 namespace App;
 
 use App\User\CurrentUser;
-use function App\Utils\Functions\test_print;
-use function App\Utils\HtmlSide\create_side;
+use App\Utils\SidebarMenu;
+use App\Utils\TestPrinter;
 
 /**
  * Class AppRouter
@@ -30,9 +30,10 @@ class AppRouter
 		"stat",
 	];
 
-	public function __construct()
+
+	public function __construct(CurrentUser $currentUser)
 	{
-		$this->currentUser = CurrentUser::getInstance();
+		$this->currentUser = $currentUser;
 		$this->isCoordinator = $this->currentUser->isCoordinator();
 		$this->scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 		$this->ty = $this->resolveTy();
@@ -44,13 +45,13 @@ class AppRouter
 	public function handleRequest(): void
 	{
 		if (!$this->shouldHideNav()) {
-			$this->renderHeader();
+			$this->renderSidebarStart();
 		}
 
 		$this->dispatch();
 
 		if (!$this->shouldHideNav()) {
-			$this->renderFooter();
+			$this->renderSidebarEnd();
 		}
 	}
 
@@ -65,8 +66,10 @@ class AppRouter
 		$preDefinedTy = [
 			"add",
 			"admins",
-			"Campaigns",
-			"Emails",
+			"campaigns",
+			"users",
+			"users/edit_user",
+			"users/msg",
 			"full_translators",
 			"last_coord",
 			"pages_users_to_main",
@@ -76,23 +79,38 @@ class AppRouter
 			"settings",
 			"translated",
 			"tt",
-			"users_no_inprocess",
+			"users_not_inprocess",
 			"wikirefs_options",
 
-			"Emails/edit_user",
-			"Emails/msg",
-			"pages_users_to_main/fix_it",
+			"pages_users_to_main/fix_page",
 			"qids/edit_qid",
 			"translated/edit_page",
 			"tt/edit_translate_type",
-			"wikirefs_options/edit",
+			"wikirefs_options/wikirefs_options_edit",
 		];
 		if (in_array($rawTy, $preDefinedTy)) {
 			return $rawTy;
 		}
 		// Map route aliases
-		if ($rawTy === 'translate_type') {
-			$rawTy = 'tt';
+		$aliasesMap = [
+			"translate_type" => "tt",
+			"users_no_inprocess" => "users_not_inprocess",							// new
+			"Campaigns" => "campaigns",
+			"Emails" => "users",
+			"pages_users_to_main/fix_it" => "pages_users_to_main/fix_page",								// new
+			"fix_page" => "pages_users_to_main/fix_page",								// new
+
+			"edit_page" => "translated/edit_page",									// new
+			"edit_user" => "users/edit_user",										// new
+			"Emails/edit_user" => "users/edit_user",
+
+			"Emails/msg" => "users/msg",
+			"wikirefs_options_edit" => "wikirefs_options/wikirefs_options_edit",	// new
+			"wikirefs_options/edit" => "wikirefs_options/wikirefs_options_edit",
+			"edit_translate_type" => "tt/edit_translate_type",						// new
+		];
+		if (isset($aliasesMap[$rawTy])) {
+			return $aliasesMap[$rawTy];
 		}
 
 		// Sanitize parameter to prevent directory traversal
@@ -110,9 +128,10 @@ class AppRouter
 	/**
 	 * Renders the sidebar and opening HTML wrapper structure.
 	 */
-	private function renderHeader(): void
+	private function renderSidebarStart(): void
 	{
-		$sidebar = create_side($this->scriptName, $this->ty, $this->isCoordinator);
+		$sidebar = new SidebarMenu($this->scriptName, $this->ty, $this->isCoordinator);
+		$sidebar = $sidebar->render();
 
 		echo <<<HTML
         <div class='row content'>
@@ -147,7 +166,7 @@ class AppRouter
         HTML;
 	}
 
-	private function renderFooter(): void
+	private function renderSidebarEnd(): void
 	{
 		echo <<<HTML
                     </div>
@@ -170,7 +189,8 @@ class AppRouter
 		}
 
 		if ($this->ty === "sidebar") {
-			echo create_side($this->scriptName, $this->ty, $this->isCoordinator);
+			$sidebar = new SidebarMenu($this->scriptName, $this->ty, $this->isCoordinator);
+			echo $sidebar->render();
 			return;
 		}
 
@@ -185,8 +205,8 @@ class AppRouter
 		}
 
 		// Fallback for missing or unauthorized routes
-		test_print("can't find {$adminFile}");
-		include_once __DIR__ . "/coordinator/404.php";
+		TestPrinter::testPrint("can't find {$adminFile}");
+		include_once __DIR__ . "/404.php";
 	}
 
 	/**
@@ -202,7 +222,3 @@ class AppRouter
 		return array_map('basename', $directories);
 	}
 }
-
-// Instantiate and execute application router
-$router = new AppRouter();
-$router->handleRequest();

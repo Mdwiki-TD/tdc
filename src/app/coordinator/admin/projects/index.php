@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractController;
 use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
 
 
-require_once __DIR__ . '/post.php';
+require_once __DIR__ . '/projects_post.php';
 
 /**
  * Class ProjectsIndexController
@@ -17,23 +17,11 @@ require_once __DIR__ . '/post.php';
  */
 class ProjectsIndexController extends AbstractController
 {
-    public function handlePostRequest(): void
+    protected function createPostProcessor(): object
     {
-        $postProcessor = new ProjectsPostProcessor();
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderIndexMesseges($result);
+        return new ProjectsPostProcessor();
     }
-	/**
-	 * Handles authentication and executes controller output.
-	 */
-	public function handleRequest(): void
-	{
-		$this->validateCoordinator();
-
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-		}
-
+    public function renderFormCard(): void {
 		$projects = get_td_or_sql_projects();
 
 		// Sort projects by g_id
@@ -47,8 +35,8 @@ class ProjectsIndexController extends AbstractController
 
 		$this->renderCard($formText);
 		$this->renderAddRowScript();
-	}
 
+    }
 	/**
 	 * Builds the editable table rows for each existing project.
 	 */

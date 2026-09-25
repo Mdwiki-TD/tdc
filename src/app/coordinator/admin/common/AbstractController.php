@@ -23,36 +23,44 @@ abstract class AbstractController
         }
     }
     /**
-     * Generates a close button HTML block.
+     * Handles authentication and executes controller output.
      */
-    public function getCloseButtonHtml(): string
+
+    public function handleRequest(): void
     {
-        return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
+        $this->validateCoordinator();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handlePostRequest();
+        }
+
+        $this->renderFormCard();
     }
+    abstract protected function createPostProcessor(): object;
+
+    abstract protected function renderFormCard(): void;
+
+    public function handlePostRequest(): void
+    {
+        // Instantiate and execute processor
+        $postProcessor = $this->createPostProcessor();
+        $result = $postProcessor->handle($_POST);
+        $postProcessor->RenderMesseges($result);
+
+        if ($postProcessor->shouldShowForm()) {
+            $this->renderFormCard();
+        }
+    }
+
     public function createCsrfTokenField(): string
     {
-		$csrfToken = generate_csrf_token();
+        $csrfToken = generate_csrf_token();
 
         return <<<HTML
             <input name='csrf_token' value="$csrfToken" type="hidden"/>
         HTML;
     }
 
-    /**
-     * Renders UI scripts to isolate the modal/page layout.
-     */
-    public function renderHeaderScripts(): void
-    {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
-    }
     /**
      * Renders the card wrapping the form.
      */

@@ -2,7 +2,7 @@
 
 namespace App\Utils\TablesDir;
 
-use function App\Utils\Functions\test_print;
+use function App\Utils\test_print;
 
 function open_td_tables_file($filePath)
 {

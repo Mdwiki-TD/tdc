@@ -43,7 +43,7 @@
 
 namespace App\APICalls\MdwikiApi;
 
-use function App\Utils\Functions\test_print;
+use function App\Utils\test_print;
 
 /**
  * User agent string for API requests

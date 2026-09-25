@@ -3,54 +3,37 @@
 
 namespace App\Coordinator\Admin\Translated;
 
-use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\APICalls\MdwikiSql\fetch_query;
 
-
-require_once __DIR__ . '/EditPagePostHandler.php';
+require_once __DIR__ . '/edit_page_post.php';
 
 /**
  * Class EditPageController
  * Handles editing and deleting translated pages (GET renders the form,
  * POST is delegated to EditPagePostHandler).
  */
-class EditPageController extends AbstractController
+class EditPageController extends AbstractEditController
 {
     private string $id;
     private string $table;
 
     public function __construct()
     {
-        $this->id = $_GET['id'] ?? $_POST['id'] ?? '';
-        $cand = $_GET['table'] ?? $_POST['table'] ?? '';
+        $this->id    = $_GET['id'] ?? $_POST['id'] ?? '';
+        $cand        = $_GET['table'] ?? $_POST['table'] ?? '';
         $this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
     }
 
-    public function handlePostRequest(): void
+    protected function createPostProcessor(): object
     {
-        $postProcessor = new EditPagePostHandler($this->id, $this->table);
-        $result = $postProcessor->handle($_POST);
-        $postProcessor->RenderMesseges($result);
-    }
-    /**
-     * Entry point to handle request workflow.
-     */
-    public function handleRequest(): void
-    {
-        $this->validateCoordinator();
-        $this->renderHeaderScripts();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->renderEditForm($this->id, $this->table);
-        }
+        return new EditPagePostHandler($this->id, $this->table);
     }
 
     /**
      * Displays the edit page form.
      */
-    private function renderEditForm(string $id, string $table): void
+    private function renderEditForm(string $id, string $table): string
     {
         $pageData = fetch_query("SELECT * FROM {$table} WHERE id = ?", [$id]);
 
@@ -65,8 +48,8 @@ class EditPageController extends AbstractController
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
-        $form = <<<HTML
-            <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
+        return <<<HTML
+            <form action='index.php?ty=edit_page&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='$id' type='hidden'/>
                 <input name='edit' value="1" type="hidden"/>
@@ -133,10 +116,16 @@ class EditPageController extends AbstractController
                 </div>
             </form>
         HTML;
+    }
 
-        $headerTitle = "Edit Page (id: {$this->id}, table: {$this->table})";
+    protected function getCardTitle(): string
+    {
+        return "Edit Page (id: {$this->id}, table: {$this->table})";
+    }
 
-        $this->echoCard($headerTitle, $form);
+    protected function buildForm(): string
+    {
+        return $this->renderEditForm($this->id, $this->table);
     }
 }
 
