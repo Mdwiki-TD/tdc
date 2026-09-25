@@ -1,286 +1,320 @@
 <?php
 
+namespace App\Tools;
+
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\APICalls\TDApi\get_td_api;
 
-function make_view_by_number($target, $numb, $lang, $pupdate)
+/**
+ * Class LastController
+ * Renders recent translations for non-admin/general tools view.
+ */
+class LastController extends AbstractControllerNoPost
 {
-    // remove spaces and tab characters
-    $target = trim($target);
-    $numb2 = (!empty($numb)) ? $numb : "?";
-    $start = !empty($pupdate) ? $pupdate : '2019-01-01';
-    $end = date("Y-m-d", strtotime("yesterday"));
+    private string $lang;
+    private string $lastTable;
 
-    $url = 'https://pageviews.wmcloud.org/?' . http_build_query(array(
-        'project' => "$lang.wikipedia.org",
-        'platform' => 'all-access',
-        'agent' => 'all-agents',
-        'start' => $start,
-        'end' => $end,
-        // 'range' => 'all-time',
-        'redirects' => '0',
-        'pages' => $target,
-    ), '', '&', PHP_QUERY_RFC3986);
+    public function __construct()
+    {
+        $this->lang = $_GET['lang'] ?? 'All';
+        if (empty($this->lang)) {
+            $this->lang = 'All';
+        }
 
-    $numb3 = (is_numeric($numb2)) ? number_format($numb2) : $numb2;
-    $link = "<a target='_blank' href='$url'>$numb3</a>";
-
-    if (is_numeric($numb2) && intval($numb2) > 0) {
-        return $link;
+        $this->lastTable = $_GET['last_table'] ?? 'pages';
+        $this->lastTable = in_array($this->lastTable, ['pages', 'pages_users'], true) ? $this->lastTable : 'pages';
     }
 
-    $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
+    private function makeViewByNumber(string $target, $numb, string $lang, string $pupdate): string
+    {
 
-    $url2 = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
+        // TODO: remove makeViewByNumber, and use make_view_by_number from wiki_api.php
+        // remove spaces and tab characters
+        $target = trim($target);
+        $numb2 = (!empty($numb)) ? $numb : "?";
+        $start = !empty($pupdate) ? $pupdate : '2019-01-01';
+        $end = date("Y-m-d", strtotime("yesterday"));
 
-    $link = "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
+        $url = 'https://pageviews.wmcloud.org/?' . http_build_query([
+            'project'   => "$lang.wikipedia.org",
+            'platform'  => 'all-access',
+            'agent'     => 'all-agents',
+            'start'     => $start,
+            'end'       => $end,
+            // 'range'  => 'all-time',
+            'redirects' => '0',
+            'pages'     => $target,
+        ], '', '&', PHP_QUERY_RFC3986);
 
-    return $link;
-};
+        $numb3 = (is_numeric($numb2)) ? number_format((float)$numb2) : $numb2;
+        $link = "<a target='_blank' href='$url'>$numb3</a>";
 
-function last_make_td($tabg, $nnnn, $lastTable)
-{
-    $user     = $tabg['user'] ?? "";
+        if (is_numeric($numb2) && intval($numb2) > 0) {
+            return $link;
+        }
 
-    $llang    = $tabg['lang'] ?? "";
-    $mdTitle = trim($tabg['title'] ?? '');
-    $target   = trim($tabg['target'] ?? '');
-    $pupdate  = $tabg['pupdate'] ?? '';
-    $addDate = $tabg['add_date'] ?? '';
-    $campaign = $tabg['campaign'] ?? '';
+        $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
 
-    $mdwikiRevid = $tabg['mdwiki_revid'] ?? '';
+        $url2 = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
 
-    // if $addDate has : then split before first space
-    if (strpos($addDate, ':') !== false) {
-        $addDate = explode(' ', $addDate)[0];
-    };
-
-    $maxUsernameDisplayLength = 15;
-    $userName = $user;
-    // $userName is the first word of the user if length > 15
-    if (strlen($user) > $maxUsernameDisplayLength) {
-        $userName = explode(' ', $user);
-        $userName = $userName[0];
+        return "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
     }
 
-    $view = "";
+    private function createLastTableData(array $tabg, int $nnnn): string
+    {
+        $user     = $tabg['user'] ?? "";
+        $llang    = $tabg['lang'] ?? "";
+        $mdTitle  = trim($tabg['title'] ?? '');
+        $target   = trim($tabg['target'] ?? '');
+        $pupdate  = $tabg['pupdate'] ?? '';
+        $addDate  = $tabg['add_date'] ?? '';
+        $campaign = $tabg['campaign'] ?? '';
 
-    if ($lastTable == "pages") {
-        $viewsNumber = $tabg['views'] ?? '?';
+        $mdwikiRevid = $tabg['mdwiki_revid'] ?? '';
 
-        $view = make_view_by_number($target, $viewsNumber, $llang, $pupdate);
+        // if $addDate has : then split before first space
+        if (strpos($addDate, ':') !== false) {
+            $addDate = explode(' ', $addDate)[0];
+        }
+
+        $maxUsernameDisplayLength = 15;
+        $userName = $user;
+        // $userName is the first word of the user if length > 15
+        if (strlen($user) > $maxUsernameDisplayLength) {
+            $parts = explode(' ', $user);
+            $userName = $parts[0];
+        }
+
+        $view = "";
+
+        if ($this->lastTable === "pages") {
+            $viewsNumber = $tabg['views'] ?? '?';
+            $view = $this->makeViewByNumber($target, $viewsNumber, $llang, $pupdate);
+        }
+
+        $encodedTitle = rawurlencode(str_replace(' ', '_', $mdTitle));
+        $escapedTitle = htmlspecialchars($mdTitle, ENT_QUOTES, 'UTF-8');
+
+        $encodedTarget = rawurlencode(str_replace(' ', '_', $target));
+        $escapedDisplay = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+
+        $targetLink = "<a target='_blank' href='https://{$llang}.wikipedia.org/wiki/{$encodedTarget}'>{$escapedDisplay}</a>";
+
+        $mdTitleEncoded = rawurlencode($mdTitle);
+
+        $flags = "";
+
+        return <<<HTML
+            <tr>
+                <td>
+                    $nnnn
+                </td>
+                <td>
+                    <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
+                        $userName
+                    </a>
+                </td>
+                <td>
+                    <a target='_blank' href='https://mdwiki.org/wiki/{$encodedTitle}'>{$escapedTitle}</a>
+                </td>
+                <td>
+                    $campaign
+                </td>
+                <td class="link_container">
+                    <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$llang</a>: $targetLink
+                </td>
+                <td>
+                    $pupdate
+                </td>
+                <td>
+                    $view
+                </td>
+                <td>
+                    <a href="//mdwikicx.toolforge.org/wiki/$llang/$mdTitleEncoded" target="_blank">$addDate</a>
+                </td>
+                <td>
+                    $flags
+                </td>
+            </tr>
+        HTML;
     }
 
-    $encodedTitle = rawurlencode(str_replace(' ', '_', $mdTitle));
-    $escapedTitle = htmlspecialchars($mdTitle, ENT_QUOTES, 'UTF-8');
+    private function filterRecent(string $lang, array $data): string
+    {
+        ksort($data);
+        $langList = "<option data-tokens='All' value='All'>All</option>";
 
-    $encodedTarget = rawurlencode(str_replace(' ', '_', $target));
-    $escapedDisplay = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+        foreach ($data as $codr) {
+            $code    = $codr["lang"] ?? "";
+            $autonym = $codr["autonym"] ?? "";
+            if (empty($code)) {
+                continue;
+            }
 
-    $targetLink = "<a target='_blank' href='https://{$llang}.wikipedia.org/wiki/{$encodedTarget}'>{$escapedDisplay}</a>";
-
-    $mdTitleEncoded = rawurlencode($mdTitle);
-
-    $flags = "";
-
-    return <<<HTML
-        <tr>
-            <td>
-                $nnnn
-            </td>
-            <td>
-                <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
-                    $userName
-                </a>
-            </td>
-            <td>
-                <a target='_blank' href='https://mdwiki.org/wiki/{$encodedTitle}'>{$escapedTitle}</a>
-            </td>
-            <td>
-                $campaign
-            </td>
-            <td class="link_container">
-                <a href='/Translation_Dashboard/leaderboard.php?langcode=$llang'>$llang</a>: $targetLink
-            </td>
-            <td>
-                $pupdate
-            </td>
-            <td>
-                $view
-            </td>
-            <td>
-                <a href="//mdwikicx.toolforge.org/wiki/$llang/$mdTitleEncoded" target="_blank">$addDate</a>
-            </td>
-            <td>
-                $flags
-            </td>
-        </tr>
-    HTML;
-}
-
-function filter_recent($lang, $data)
-{
-
-    ksort($data);
-    $langList = "<option data-tokens='All' value='All'>All</option>";
-
-    foreach ($data as $codr) {
-        $code    = $codr["lang"] ?? "";
-        $autonym = $codr["autonym"] ?? "";
-        if (empty($code)) continue;
-
-        $selected = ($code == $lang) ? 'selected' : '';
-        $langList .= <<<HTML
-            <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
+            $selected = ($code === $lang) ? 'selected' : '';
+            $langList .= <<<HTML
+                <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
             HTML;
-    };
-    return $langList;
-}
+        }
+        return $langList;
+    }
 
-$lang = $_GET['lang'] ?? 'All';
+    /**
+     * Handles request execution.
+     */
+    public function handleRequest(): void
+    {
+        $apiParamsUsers = [
+            'get'    => 'pages_users',
+            'target' => 'not_empty',
+            'lang'   => $this->lang,
+            'order'  => 'pupdate',
+            'limit'  => '100',
+        ];
 
-if (empty($lang)) $lang = "All";
+        $apiParamsPages = [
+            'get'    => 'pages_with_views',
+            'target' => 'not_empty',
+            'lang'   => $this->lang,
+            'order'  => 'pupdate_or_add_date',
+            'limit'  => '250',
+        ];
 
-$apiParamsUsers = [
-    'get' => 'pages_users',
-    'target' => 'not_empty',
-    "lang" => $lang,
-    "order" => 'pupdate',
-    'limit' => '100',
-];
+        $apiResults = ($this->lastTable === 'pages') ? get_td_api($apiParamsPages) : get_td_api($apiParamsUsers);
+        $qslResults = $apiResults['results'] ?? [];
 
-$apiParamsPages = [
-    'get' => 'pages_with_views',
-    'target' => 'not_empty',
-    "lang" => $lang,
-    "order" => 'pupdate_or_add_date',
-    'limit' => '250',
-];
+        $recentRows = "";
+        $noo = 0;
 
-$lastTable = $_GET['last_table'] ?? 'pages';
-$lastTable = in_array($lastTable, ['pages', 'pages_users']) ? $lastTable : 'pages';
+        foreach ($qslResults as $tat => $tabe) {
+            $noo++;
+            $recentRows .= $this->createLastTableData($tabe, $noo);
+        }
 
-$apiResults = ($lastTable == 'pages') ? get_td_api($apiParamsPages) : get_td_api($apiParamsUsers);
-$qslResults = $apiResults['results'] ?? [];
+        $apiParamsLangs = [
+            'get' => ($this->lastTable === 'pages') ? 'pages_langs' : 'pages_users_langs',
+        ];
 
-$recentRows = "";
+        $langResults = get_td_api($apiParamsLangs);
+        $result = $langResults['results'] ?? [];
 
-$noo = 0;
+        $filterByLang = $this->filterRecent($this->lang, $result);
+        $countResult = count($result);
 
-foreach ($qslResults as $tat => $tabe) {
-    $noo = $noo + 1;
-    $recentRows .= last_make_td($tabe, $noo, $lastTable);
-};
+        $filterTa = $this->buildNamespaceFilter();
 
-$CampaignNumber = 3;
-$flagsNumber = 8;
+        $tableId = ($this->lastTable === 'pages') ? 'last_table' : 'last_users_table';
 
-$tableId = ($lastTable == 'pages') ? 'last_table' : 'last_users_table';
+        $this->renderCard($countResult, $filterTa, $filterByLang, $tableId, $recentRows);
+        $this->renderScript();
+    }
 
-$apiParamsLangs = [
-    'get' => ($lastTable == 'pages') ? 'pages_langs' : 'pages_users_langs',
-];
+    private function buildNamespaceFilter(): string
+    {
+        $data = [
+            "pages"       => 'Main',
+            "pages_users" => 'User',
+        ];
 
-$apiResults = get_td_api($apiParamsLangs);
-$result = $apiResults['results'] ?? [];
+        $filterTa = "";
 
-$filterByLang = filter_recent($lang, $result);
+        foreach ($data as $tableName => $label) {
+            $checked = ($tableName === $this->lastTable) ? "checked" : "";
+            $filterTa .= <<<HTML
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input"
+                        type="radio"
+                        name="last_table"
+                        id="radio_$tableName"
+                        value="$tableName"
+                        $checked>
+                    <label class="form-check-label" for="radio_$tableName">$label</label>
+                </div>
+            HTML;
+        }
 
-$countResult = count($result);
+        return $filterTa;
+    }
 
-$data = [
-    "pages" => 'Main',
-    "pages_users" => 'User',
-];
+    private function renderCard(int $countResult, string $filterTa, string $filterByLang, string $tableId, string $recentRows): void
+    {
+        $campaignNumber = 3;
+        $flagsNumber = 8;
 
-$filterTa = "";
-
-foreach ($data as $tableName => $label) {
-    $checked = ($tableName == $lastTable) ? "checked" : "";
-    $filterTa .= <<<HTML
-        <div class="form-check form-check-inline">
-            <input class="form-check-input"
-                type="radio"
-                name="last_table"
-                id="radio_$tableName"
-                value="$tableName"
-                $checked>
-            <label class="form-check-label" for="radio_$tableName">$label</label>
-        </div>
-    HTML;
-}
-
-echo <<<HTML
-    <div class='card'>
-        <div class='card-header'>
-            <form method='get' action='index.php'>
-                <input name='ty' value='last' type='hidden'/>
-                <div class='row'>
-                    <div class='col-md-4'>
-                        <h4>Recent translations ($countResult):</h4>
-                    </div>
-                    <div class='col-md-4'>
-                        <div class="input-group">
-                            <span class="input-group-text">Namespace:</span>
-                            <div class="form-control">
-                                $filterTa
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <form method='get' action='index.php'>
+                        <input name='ty' value='last' type='hidden'/>
+                        <div class='row'>
+                            <div class='col-md-4'>
+                                <h4>Recent translations ($countResult):</h4>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class="input-group">
+                                    <span class="input-group-text">Namespace:</span>
+                                    <div class="form-control">
+                                        $filterTa
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-3'>
+                                <div class="input-group">
+                                    <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
+                                    <select aria-label="Language code"
+                                        class="selectpicker"
+                                        id='lang'
+                                        name='lang'
+                                        placeholder='Language code'
+                                        data-live-search="true"
+                                        data-container="body"
+                                        data-live-search-style="begins"
+                                        data-bs-theme="auto"
+                                        data-style='btn active'
+                                        data-width="90%"
+                                        >
+                                        $filterByLang
+                                    </select>
+                                </div>
+                            </div>
+                            <div class='aligncenter col-md-1'>
+                                <input class='btn btn-outline-primary' type='submit' value='Filter' />
                             </div>
                         </div>
-                    </div>
-                    <div class='col-md-3'>
-                        <div class="input-group">
-                            <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
-                            <select aria-label="Language code"
-                                class="selectpicker"
-                                id='lang'
-                                name='lang'
-                                placeholder='Language code'
-                                data-live-search="true"
-                                data-container="body"
-                                data-live-search-style="begins"
-                                data-bs-theme="auto"
-                                data-style='btn active'
-                                data-width="90%"
-                                >
-                                $filterByLang
-                            </select>
-                        </div>
-                    </div>
-                    <div class='aligncenter col-md-1'>
-                        <input class='btn btn-outline-primary' type='submit' value='Filter' />
-                    </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        <div class='card-body'>
-            <div class="d-none d-md-inline">
-                <span class="" data-column="0">Toggle columns:</span>
-                <a class="toggle-vis btn btn-outline-primary" data-column="$CampaignNumber" type="button">Campaign</a>
-                <a class="toggle-vis btn btn-outline-primary" data-column="$flagsNumber" type="button">Flags</a>
+                <div class='card-body'>
+                    <div class="d-none d-md-inline">
+                        <span class="" data-column="0">Toggle columns:</span>
+                        <a class="toggle-vis btn btn-outline-primary" data-column="$campaignNumber" type="button">Campaign</a>
+                        <a class="toggle-vis btn btn-outline-primary" data-column="$flagsNumber" type="button">Flags</a>
+                    </div>
+                    <table class="table table-sm table-striped table_text_left" id="$tableId" style="font-size:90%;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Title</th>
+                                <th>Campaign</th>
+                                <th>Translated</th>
+                                <th>Published</th>
+                                <th>Views</th>
+                                <th>Draft</th>
+                                <th>Flags</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            $recentRows
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <table class="table table-sm table-striped table_text_left" id="$tableId" style="font-size:90%;">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>User</th>
-                        <th>Title</th>
-                        <th>Campaign</th>
-                        <th>Translated</th>
-                        <th>Published</th>
-                        <th>Views</th>
-                        <th>Draft</th>
-                        <th>Flags</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    $recentRows
-                </tbody>
-            </table>
-        </div>
-    </div>
-HTML;
+        HTML;
+    }
 
-?>
+    private function renderScript(): void
+    {
+        echo <<<HTML
 <script>
     $(document).ready(function() {
         var table;
@@ -333,3 +367,6 @@ HTML;
 
     });
 </script>
+HTML;
+    }
+}

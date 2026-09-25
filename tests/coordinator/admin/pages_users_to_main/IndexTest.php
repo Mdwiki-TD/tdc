@@ -171,10 +171,10 @@ class IndexTest extends TestCase
     public function testCounterIncrement()
     {
         $noo = 0;
-        $noo = $noo + 1;
+        $noo++;
         $this->assertEquals(1, $noo);
 
-        $noo = $noo + 1;
+        $noo++;
         $this->assertEquals(2, $noo);
     }
 

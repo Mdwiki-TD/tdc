@@ -20,7 +20,7 @@ class AppRouter
 	private string $scriptName;
 
 	/**
-	 * @var array<string> List of allowed tool scripts
+	 * @var array<string, string> Map of tool route keys to controller class names
 	 */
 	private array $toolsControllers = [
 		"categories"    => "\\App\\Tools\\CategoriesController",
@@ -140,10 +140,9 @@ class AppRouter
 		}
 
 		if (isset($this->toolsControllers[$ty])) {
-			// $className = $this->toolsControllers[$ty];
-			// $controller = new $className();
-			// $controller->handleRequest();
-			include_once __DIR__ . "/tools/{$ty}.php";
+			$className = $this->toolsControllers[$ty];
+			$controller = new $className();
+			$controller->handleRequest();
 			return;
 		}
 		$this->resolver->dispatch($ty);
