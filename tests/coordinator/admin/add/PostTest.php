@@ -11,7 +11,7 @@ class PostTest extends TestCase
         $table = [
             'mdtitle' => 'Test Title',
             'cat' => 'RTT',
-            'type' => 'lead',
+            'tr_type' => 'lead',
             'user' => 'testuser',
             'lang' => 'ar',
             'target' => 'TestTarget',
@@ -21,7 +21,7 @@ class PostTest extends TestCase
 
         $mdtitle = $table['mdtitle'] ?? '';
         $cat = rawurldecode($table['cat'] ?? '');
-        $type = $table['type'] ?? '';
+        $tr_type = $table['tr_type'] ?? '';
         $user = rawurldecode($table['user'] ?? '');
         $lang = $table['lang'] ?? '';
         $target = $table['target'] ?? '';
@@ -30,7 +30,7 @@ class PostTest extends TestCase
 
         $this->assertEquals('Test Title', $mdtitle);
         $this->assertEquals('RTT', $cat);
-        $this->assertEquals('lead', $type);
+        $this->assertEquals('lead', $tr_type);
         $this->assertEquals('testuser', $user);
         $this->assertEquals('ar', $lang);
         $this->assertEquals('TestTarget', $target);
@@ -191,11 +191,11 @@ class PostTest extends TestCase
 
         $mdtitle = $params['mdtitle'] ?? '';
         $cat = $params['cat'] ?? '';
-        $type = $params['type'] ?? '';
+        $tr_type = $params['tr_type'] ?? '';
 
         $this->assertEquals('', $mdtitle);
         $this->assertEquals('', $cat);
-        $this->assertEquals('', $type);
+        $this->assertEquals('', $tr_type);
     }
 
     public function testWordParameterOptional()

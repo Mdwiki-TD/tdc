@@ -95,7 +95,7 @@ class MsgController extends AbstractControllerNoPost
         $hereParams = [
             'code'  => $this->lang,
             'cat'   => 'RTT',
-            'type'  => 'lead',
+            'tr_type'  => 'lead',
             'title' => $sugust,
         ];
 

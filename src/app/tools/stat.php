@@ -75,15 +75,14 @@ foreach ($titles as $title) {
 
 	$qidurl = (!empty($qid)) ? "<a href='https://wikidata.org/wiki/$qid'>$qid</a>" : '';
 
-	$word = MainTables::$xWordsTable[$title] ?? 0;
+	$word = MainTables::getWord($title, 'lead');
+	$allword = MainTables::getWord($title, 'all');
 
-	$allword = MainTables::$xAllWordsTable[$title] ?? 0;
 	if ($word == 0) $noWord += 1;
 	if ($allword == 0) $noAllword += 1;
 
-	$refs = MainTables::$xLeadRefsTable[$title] ?? 0;
-
-	$allRefs = MainTables::$xAllRefsTable[$title] ?? 0;
+	$refs = MainTables::getRefCount($title, 'lead');
+	$allRefs = MainTables::getRefCount($title, 'all');
 
 	if ($refs == 0) $noRef += 1;
 	if ($allRefs == 0) $noAllref += 1;

@@ -3,6 +3,7 @@
 
 namespace App\Coordinator\Admin\Add;
 
+use App\Tables\Main\MainTables;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\MdwikiSql\AddHelper\add_pages_to_db;
 
@@ -12,7 +13,7 @@ use function App\MdwikiSql\AddHelper\add_pages_to_db;
  */
 class AddPostProcessor extends AbstractPostHandler
 {
-    protected bool $isPopUpPage = false;
+	protected bool $isPopUpPage = false;
 
 
 	public function process(array $post): void
@@ -28,15 +29,20 @@ class AddPostProcessor extends AbstractPostHandler
 		foreach ($rows as $key => $table) {
 			$mdtitle = $table['mdtitle'] ?? '';
 			$cat     = rawurldecode($table['cat'] ?? '');
-			$type    = $table['type'] ?? '';
+			$translateType = $table['translate_type'] ?? '';
 			$user    = rawurldecode($table['user'] ?? '');
 			$lang    = $table['lang'] ?? '';
 			$target  = $table['target'] ?? '';
 			$pupdate = $table['pupdate'] ?? '';
 			$word    = $table['word'] ?? '';
 
+			$translateType = (!empty($translateType)) ? $translateType : 'lead';
+
+			if (empty($word)) {
+				$word = MainTables::getWord($mdtitle, $translateType);
+			}
 			if (!empty($mdtitle) && !empty($lang) && !empty($user)) {
-				$result = add_pages_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate, $word);
+				$result = add_pages_to_db($mdtitle, $translateType, $cat, $lang, $user, $target, $pupdate, $word);
 
 				if ($result === false) {
 					$this->addError("Failed to add translations.");
@@ -48,5 +54,4 @@ class AddPostProcessor extends AbstractPostHandler
 			}
 		}
 	}
-
 }
