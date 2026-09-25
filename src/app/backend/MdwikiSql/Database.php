@@ -112,6 +112,7 @@ class Database
             return true;
         } catch (PDOException $e) {
             echo "sql error:" . $e->getMessage() . "<br>" . $sqlQuery;
+            error_log("SQL Error in executequery: " . $e->getMessage() . " | Query: " . $sqlQuery);
             return false;
         }
     }
@@ -133,7 +134,7 @@ class Database
             return $result;
         } catch (PDOException $e) {
             echo "SQL Error:" . $e->getMessage() . "<br>" . $sqlQuery;
-            // error_log("SQL Error: " . $e->getMessage() . " | Query: " . $sqlQuery);
+            error_log("SQL Error in fetchquery: " . $e->getMessage() . " | Query: " . $sqlQuery);
             return [];
         }
     }
