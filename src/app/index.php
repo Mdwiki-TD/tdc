@@ -20,15 +20,15 @@ class AppRouter
 	private string $scriptName;
 
 	/**
-	 * @var array List of allowed tool scripts
+	 * @var array<string, class-string> Map of tool route keys to controller class names
 	 */
-	private array $toolsFiles = [
-		"categories",
-		"last",
-		"process_total",
-		"process",
-		"recent_helps",
-		"stat",
+	private array $toolsControllers = [
+		"categories"    => \App\Tools\CategoriesController::class,
+		"last"          => \App\Tools\LastController::class,
+		"process"       => \App\Tools\ProcessController::class,
+		"process1"      => \App\Tools\Process1Controller::class,
+		"process_total" => \App\Tools\ProcessTotalController::class,
+		"stat"          => \App\Tools\StatController::class,
 	];
 
 
@@ -139,8 +139,15 @@ class AppRouter
 			return;
 		}
 
-		if (in_array($ty, $this->toolsFiles, true)) {
-			include_once __DIR__ . "/tools/{$ty}.php";
+		if (isset($this->toolsControllers[$ty])) {
+			$className = $this->toolsControllers[$ty];
+			$controller = new $className();
+			$controller->handleRequest();
+			return;
+		}
+
+		if ($ty === "recent_helps") {
+			include_once __DIR__ . "/tools/recent_helps.php";
 			return;
 		}
 

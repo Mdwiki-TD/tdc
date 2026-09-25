@@ -1,39 +1,35 @@
 <?php
 
+namespace App\Tools;
 
-
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Main\MainTables;
 use function App\Utils\Html\makeDropdown;
 use function App\Results\GetCats\get_mdwiki_cat_members;
 use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
 use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
 
-$cat = $_GET['cat'] ?? 'RTT';
-
-function filter_stat($cat)
+/**
+ * Class StatController
+ * Renders status and stats dashboard by category.
+ */
+class StatController extends AbstractControllerNoPost
 {
-	$catsTitles = [];
+    private string $cat;
 
-	$categories = get_td_or_sql_categories();
+    public function __construct()
+    {
+        $this->cat = $_GET['cat'] ?? 'RTT';
+    }
 
-	foreach ($categories as $k => $tab) $catsTitles[] = $tab['category'] ?? "";
+    /**
+     * Handles request execution.
+     */
+    public function handleRequest(): void
+    {
+        $uuu = $this->filterStat($this->cat);
 
-	$d33 = <<<HTML
-		<div class="input-group">
-			<span class="input-group-text">%s</span>
-			%s
-		</div>
-	HTML;
-
-	$y1 = makeDropdown($catsTitles, $cat, 'cat', '');
-	$uuu = sprintf($d33, 'Category:', $y1);
-
-	return $uuu;
-}
-
-$uuu = filter_stat($cat);
-
-$tableHtml = <<<HTML
+        $tableHtml = <<<HTML
 	<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
 		<thead>
 			<tr>
@@ -51,50 +47,63 @@ $tableHtml = <<<HTML
 		<tbody>
 	HTML;
 
-$titles = get_mdwiki_cat_members($cat, $useCache = true, $depth = 1);
+        $titles = get_mdwiki_cat_members($this->cat, true, 1);
 
-$noQid = 0;
-$noWord = 0;
-$noAllword = 0;
-$noRef = 0;
-$noAllref = 0;
-$noImportance = 0;
-$noPv = 0;
-$i = 0;
+        $noQid = 0;
+        $noWord = 0;
+        $noAllword = 0;
+        $noRef = 0;
+        $noAllref = 0;
+        $noImportance = 0;
+        $noPv = 0;
+        $i = 0;
 
-$qids_t = get_td_or_sql_qids('all');
+        $qids_t = get_td_or_sql_qids('all');
+        $sqlQids = array_column($qids_t, 'qid', 'title');
 
-$sqlQids = array_column($qids_t, 'qid', 'title');
+        foreach ($titles as $title) {
+            $i++;
 
-foreach ($titles as $title) {
-	$i = $i + 1;
+            $qid = $sqlQids[$title] ?? "";
 
-	$qid = $sqlQids[$title] ?? "";
+            if (empty($qid)) {
+                $noQid++;
+            }
 
-	if (empty($qid)) $noQid += 1;
+            $qidurl = (!empty($qid)) ? "<a href='https://wikidata.org/wiki/$qid'>$qid</a>" : '';
 
-	$qidurl = (!empty($qid)) ? "<a href='https://wikidata.org/wiki/$qid'>$qid</a>" : '';
+            $word = MainTables::$xWordsTable[$title] ?? 0;
 
-	$word = MainTables::$xWordsTable[$title] ?? 0;
+            $allword = MainTables::$xAllWordsTable[$title] ?? 0;
+            if ($word == 0) {
+                $noWord++;
+            }
+            if ($allword == 0) {
+                $noAllword++;
+            }
 
-	$allword = MainTables::$xAllWordsTable[$title] ?? 0;
-	if ($word == 0) $noWord += 1;
-	if ($allword == 0) $noAllword += 1;
+            $refs = MainTables::$xLeadRefsTable[$title] ?? 0;
 
-	$refs = MainTables::$xLeadRefsTable[$title] ?? 0;
+            $allRefs = MainTables::$xAllRefsTable[$title] ?? 0;
 
-	$allRefs = MainTables::$xAllRefsTable[$title] ?? 0;
+            if ($refs == 0) {
+                $noRef++;
+            }
+            if ($allRefs == 0) {
+                $noAllref++;
+            }
 
-	if ($refs == 0) $noRef += 1;
-	if ($allRefs == 0) $noAllref += 1;
+            $asse = MainTables::$xAssessmentsTable[$title] ?? '';
+            if (!isset(MainTables::$xAssessmentsTable[$title])) {
+                $noImportance++;
+            }
 
-	$asse = MainTables::$xAssessmentsTable[$title] ?? '';
-	if (!isset(MainTables::$xAssessmentsTable[$title])) $noImportance += 1;
+            $pv = MainTables::$xEnwikiPageviewsTable[$title] ?? 0;
+            if (!isset(MainTables::$xEnwikiPageviewsTable[$title])) {
+                $noPv++;
+            }
 
-	$pv = MainTables::$xEnwikiPageviewsTable[$title] ?? 0;
-	if (!isset(MainTables::$xEnwikiPageviewsTable[$title])) $noPv += 1;
-
-	$tableHtml .= <<<HTML
+            $tableHtml .= <<<HTML
 	<tr>
 		<td data-content='#'>
 			$i</td>
@@ -116,39 +125,39 @@ foreach ($titles as $title) {
 			<a href='https://en.wikipedia.org/w/api.php?action=query&prop=pageviews&titles=$title&redirects=1&pvipdays=30'>$pv</a></td>
 	</tr>
 	HTML;
-}
+        }
 
-$tableHtml .= "</table>";
+        $tableHtml .= "</table>";
 
-$with_q = $i - $noQid;
-$withWord = $i - $noWord;
-$withAllword = $i - $noAllword;
-$withRef = $i - $noRef;
-$withAllref = $i - $noAllref;
-$withImportance = $i - $noImportance;
-$withPv = $i - $noPv;
+        $with_q = $i - $noQid;
+        $withWord = $i - $noWord;
+        $withAllword = $i - $noAllword;
+        $withRef = $i - $noRef;
+        $withAllref = $i - $noAllref;
+        $withImportance = $i - $noImportance;
+        $withPv = $i - $noPv;
 
-$lilo = [
-	'qid' => ['with' => $with_q, 'without' => $noQid],
-	'enwiki views' => ['with' => $withPv, 'without' => $noPv],
-	'Importance' => ['with' => $withImportance, 'without' => $noImportance],
-	'word' => ['with' => $withWord, 'without' => $noWord],
-	'allword' => ['with' => $withAllword, 'without' => $noAllword],
-	'ref' => ['with' => $withRef, 'without' => $noRef],
-	'allref' => ['with' => $withAllref, 'without' => $noAllref],
-];
+        $lilo = [
+            'qid' => ['with' => $with_q, 'without' => $noQid],
+            'enwiki views' => ['with' => $withPv, 'without' => $noPv],
+            'Importance' => ['with' => $withImportance, 'without' => $noImportance],
+            'word' => ['with' => $withWord, 'without' => $noWord],
+            'allword' => ['with' => $withAllword, 'without' => $noAllword],
+            'ref' => ['with' => $withRef, 'without' => $noRef],
+            'allref' => ['with' => $withAllref, 'without' => $noAllref],
+        ];
 
-$ths = '';
-$with = '';
-$without = '';
+        $ths = '';
+        $with = '';
+        $without = '';
 
-foreach ($lilo as $k => $v) {
-	$ths .= "<th>$k</th>";
-	$with .= "<td>{$v['with']}</td>";
-	$without .= "<td>{$v['without']}</td>";
-}
+        foreach ($lilo as $k => $v) {
+            $ths .= "<th>$k</th>";
+            $with .= "<td>{$v['with']}</td>";
+            $without .= "<td>{$v['without']}</td>";
+        }
 
-echo <<<HTML
+        echo <<<HTML
 	<div class='card'>
 		<div class='card-header'>
 			<form method='get' action='index.php'>
@@ -189,3 +198,25 @@ echo <<<HTML
 		</div>
 	</div>
 HTML;
+    }
+
+    private function filterStat(string $cat): string
+    {
+        $catsTitles = [];
+        $categories = get_td_or_sql_categories();
+
+        foreach ($categories as $k => $tab) {
+            $catsTitles[] = $tab['category'] ?? "";
+        }
+
+        $d33 = <<<HTML
+		<div class="input-group">
+			<span class="input-group-text">%s</span>
+			%s
+		</div>
+	HTML;
+
+        $y1 = makeDropdown($catsTitles, $cat, 'cat', '');
+        return sprintf($d33, 'Category:', $y1);
+    }
+}

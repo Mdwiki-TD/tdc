@@ -1,42 +1,36 @@
 <?php
 
+namespace App\Tools;
+
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\SQLorAPI\Process\get_users_process_new;
 
+/**
+ * Class ProcessTotalController
+ * Renders user process article counts table.
+ */
+class ProcessTotalController extends AbstractControllerNoPost
+{
+    /**
+     * Handles request execution.
+     */
+    public function handleRequest(): void
+    {
+        $text = "";
+        $userProcessTab = get_users_process_new();
 
-/*
+        arsort($userProcessTab);
 
-صفحات مكررة
+        $n = 0;
 
-SELECT A.id as id1, A.title as title1, A.user as user1, A.target as target1,
-B.id as id2, B.title as title2, B.user as user2, B.target as target2
- from pages A, pages B
-where (A.target = '' OR A.target IS NULL)
-and A.lang = B.lang
-and A.title = B.title
-and B.target != ''
-;
+        foreach ($userProcessTab as $user => $count) {
+            if ($user !== 'test' && !empty($user) && $count > 0) {
+                $n++;
 
-للحذف:
-SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and A.lang = B.lang and A.title = B.title and B.target != '';
-*/
+                $use = rawurlencode($user);
+                $use = str_replace('+', '_', $use);
 
-$text = "";
-
-$userProcessTab = get_users_process_new();
-
-// sort user_process_tab by value
-arsort($userProcessTab);
-
-$n = 0;
-
-foreach ($userProcessTab as $user => $count) {
-    if ($user != 'test' && !empty($user) && $count > 0) {
-        $n++;
-
-        $use = rawurlEncode($user);
-        $use = str_replace('+', '_', $use);
-
-        $text .= <<<HTML
+                $text .= <<<HTML
         <tr>
             <td data-content='#'>
                 $n
@@ -49,10 +43,10 @@ foreach ($userProcessTab as $user => $count) {
             </td>
         </tr>
         HTML;
-    };
-};
+            }
+        }
 
-echo <<<HTML
+        echo <<<HTML
     <div class='card'>
         <div class='card-header'>
             <h4>Translations in process</h4>
@@ -73,3 +67,5 @@ echo <<<HTML
         </div>
     </div>
 HTML;
+    }
+}

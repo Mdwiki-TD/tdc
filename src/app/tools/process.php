@@ -1,3 +1,21 @@
+<?php
+
+namespace App\Tools;
+
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
+
+/**
+ * Class ProcessController
+ * Renders in-process translations dashboard using DataTables AJAX.
+ */
+class ProcessController extends AbstractControllerNoPost
+{
+    /**
+     * Handles request execution.
+     */
+    public function handleRequest(): void
+    {
+        echo <<<HTML
 <div class='card'>
     <div class='card-header'>
         <h4>Translations in process:</h4>
@@ -43,21 +61,21 @@
                 {
                     data: 'user',
                     render: function(data, type, row) {
-                        let talkUrl = `//${row.lang}.wikipedia.org/w/index.php?title=User_talk:${data}&action=edit&section=new`;
-                        return `<a href='/Translation_Dashboard/leaderboard.php?user=${data}'>${data}</a> (<a target="_blank" href="${talkUrl}">talk</a>)`;
+                        let talkUrl = `//\${row.lang}.wikipedia.org/w/index.php?title=User_talk:\${data}&action=edit&section=new`;
+                        return `<a href='/Translation_Dashboard/leaderboard.php?user=\${data}'>\${data}</a> (<a target="_blank" href="\${talkUrl}">talk</a>)`;
                     }
                 },
                 {
                     data: 'lang',
                     render: function(data, type, row) {
-                        return `<a href='/Translation_Dashboard/leaderboard.php?langcode=${data}'>(${data}) ${row.autonym}</a>`;
+                        return `<a href='/Translation_Dashboard/leaderboard.php?langcode=\${data}'>(\${data}) \${row.autonym}</a>`;
                     }
                 },
                 {
                     data: 'title',
                     render: function(data, type, row) {
                         let encoded = encodeURIComponent(data);
-                        return `<a href="//mdwiki.org/wiki/${encoded}" target="_blank">${data}</a>`;
+                        return `<a href="//mdwiki.org/wiki/\${encoded}" target="_blank">\${data}</a>`;
                     }
                 },
                 {
@@ -69,10 +87,13 @@
                         // Extract YYYY-MM-DD from the timestamp
                         let dateOnly = data.includes(' ') ? data.split(' ')[0] : data;
                         let encodedTitle = encodeURIComponent(row.title);
-                        return `<a href="//mdwikicx.toolforge.org/wiki/${row.lang}/${encodedTitle}" target="_blank">${dateOnly}</a>`;
+                        return `<a href="//mdwikicx.toolforge.org/wiki/\${row.lang}/\${encodedTitle}" target="_blank">\${dateOnly}</a>`;
                     }
                 }
             ]
         });
     });
 </script>
+HTML;
+    }
+}
