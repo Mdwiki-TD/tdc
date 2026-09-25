@@ -43,7 +43,16 @@ class AddPostProcessor extends AbstractPostHandler
 				$word = MainTables::getWord($mdtitle, $translateType);
 			}
 			if (!empty($mdtitle) && !empty($lang) && !empty($user)) {
-				$add = add_pages_to_db($mdtitle, $translateType, $cat, $lang, $user, $target, $pupdate, $word);
+				$add = add_pages_to_db(
+					$mdtitle,
+					$translateType,
+					$cat,
+					$lang,
+					$user,
+					$target,
+					$pupdate,
+					$word,
+				);
 				if ($add === false) {
 					$this->addError("Failed to add translations.");
 				} else {
@@ -54,8 +63,6 @@ class AddPostProcessor extends AbstractPostHandler
 
 				if ($result === false) {
 					$this->addError("checkAfterAdd: Failed to add translations.");
-				} else {
-					$this->addText("checkAfterAdd: Translations added successfully.");
 				}
 			} else {
 				$this->addError("Failed to add translations. Missing required fields.");
