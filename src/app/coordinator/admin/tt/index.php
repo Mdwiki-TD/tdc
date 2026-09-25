@@ -193,9 +193,9 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         echo <<<HTML
             <div class='card'>
                 <div class='card-header'>
-                    <form action="index.php?ty=tt" method="GET">
+                    <form action="index.php?ty=translate_type" method="GET">
                         $testin
-                        <input name='ty' value="tt" type="hidden"/>
+                        <input name='ty' value="translate_type" type="hidden"/>
                         <div class='row'>
                             <div class='col-md-6'>
                                 <h4>Translate Type ($ttCount):</h4>

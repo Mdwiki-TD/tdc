@@ -116,7 +116,3 @@ class WikiRefsOptionsEditController extends AbstractEditController
         HTML;
     }
 }
-
-// Instantiate and execute controller
-$controller = new WikiRefsOptionsEditController();
-$controller->handleRequest();

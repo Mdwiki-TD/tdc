@@ -128,7 +128,3 @@ class EditPageController extends AbstractEditController
         return $this->renderEditForm($this->id, $this->table);
     }
 }
-
-// Instantiate and execute controller
-$controller = new EditPageController();
-$controller->handleRequest();

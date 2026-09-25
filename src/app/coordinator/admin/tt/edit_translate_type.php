@@ -57,7 +57,7 @@ class EditTranslateTypeController extends AbstractEditController
         }
 
         return <<<HTML
-            <form action='index.php?ty=tt/edit_translate_type&nonav=120' method="POST">
+            <form action='index.php?ty=edit_translate_type&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>
@@ -114,7 +114,3 @@ class EditTranslateTypeController extends AbstractEditController
         return $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
     }
 }
-
-// Instantiate and execute controller
-$controller = new EditTranslateTypeController();
-$controller->handleRequest();

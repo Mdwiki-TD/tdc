@@ -14,7 +14,10 @@ include_once __DIR__ . "/admin/admins/index.php";
 include_once __DIR__ . "/admin/campaigns/index.php";
 include_once __DIR__ . "/admin/full_translators/index.php";
 include_once __DIR__ . "/admin/last_coord/index.php";
+
 include_once __DIR__ . "/admin/pages_users_to_main/index.php";
+include_once __DIR__ . "/admin/pages_users_to_main/fix_page.php";
+
 include_once __DIR__ . "/admin/projects/index.php";
 include_once __DIR__ . "/admin/qids/index.php";
 include_once __DIR__ . "/admin/reports/index.php";
@@ -24,5 +27,13 @@ include_once __DIR__ . "/admin/tt/index.php";
 include_once __DIR__ . "/admin/users/index.php";
 include_once __DIR__ . "/admin/users_not_inprocess/index.php";
 include_once __DIR__ . "/admin/wikirefs_options/index.php";
+
+
+include_once __DIR__ . "/admin/qids/edit_qid.php";
+include_once __DIR__ . "/admin/translated/edit_page.php";
+include_once __DIR__ . "/admin/tt/edit_translate_type.php";
+include_once __DIR__ . "/admin/users/edit_user.php";
+include_once __DIR__ . "/admin/users/msg.php";
+include_once __DIR__ . "/admin/wikirefs_options/wikirefs_options_edit.php";
 
 require_once __DIR__ . '/admin/index.php';

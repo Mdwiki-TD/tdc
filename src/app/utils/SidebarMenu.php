@@ -84,40 +84,164 @@ class SidebarMenu
 
         // Menu structure: [id, admin-required, href, title, icon, optional target]
         $mainMenu = [
-            'Translations' => [
-                ['id' => 'last', 'admin' => 0, 'no_admin' => 1,  'href' => 'last', 'title' => 'Recent', 'icon' => 'bi-clock-history'],
-                ['id' => 'last_coord', 'admin' => 1, 'href' => 'last_coord', 'title' => 'Recent', 'icon' => 'bi-clock-history'],
-                ['id' => 'process', 'admin' => 0, 'href' => 'process', 'title' => 'In Process', 'icon' => 'bi-hourglass'],
-                ['id' => 'process_total', 'admin' => 0, 'href' => 'process_total', 'title' => 'In Process (Total)', 'icon' => 'bi-hourglass-split'],
-                ['id' => 'reports', 'admin' => 1, 'href' => 'reports', 'title' => 'Publish Reports', 'icon' => 'bi-file-earmark-text'],
+            "Translations" => [
+                [
+                    "id" => "last",
+                    "admin" => 0,
+                    "no_admin" => 1,
+                    "href" => "last",
+                    "title" => "Recent",
+                    "icon" => "bi-clock-history"
+                ],
+                [
+                    "id" => "last_coord",
+                    "admin" => 1,
+                    "href" => "last_coord",
+                    "title" => "Recent",
+                    "icon" => "bi-clock-history"
+                ],
+                [
+                    "id" => "process",
+                    "admin" => 0,
+                    "href" => "process",
+                    "title" => "In Process",
+                    "icon" => "bi-hourglass"
+                ],
+                [
+                    "id" => "process_total",
+                    "admin" => 0,
+                    "href" => "process_total",
+                    "title" => "In Process (Total)",
+                    "icon" => "bi-hourglass-split"
+                ],
+                [
+                    "id" => "reports",
+                    "admin" => 1,
+                    "href" => "reports",
+                    "title" => "Publish Reports",
+                    "icon" => "bi-file-earmark-text"
+                ],
             ],
-            'Pages' => [
-                ['id' => 'tt_load', 'admin' => 1, 'href' => 'tt', 'title' => 'Translate Type', 'icon' => 'bi-translate'],
-                ['id' => 'translated', 'admin' => 1, 'href' => 'translated', 'title' => 'Translated Pages', 'icon' => 'bi-check2-square'],
-                ['id' => 'pages_users_to_main', 'admin' => 1, 'href' => 'pages_users_to_main', 'title' => 'Pages to check', 'icon' => 'bi-check'],
-                ['id' => 'add', 'admin' => 1, 'href' => 'add', 'title' => 'Add translations', 'icon' => 'bi-plus-square'],
-                ['id' => 'qidsload', 'admin' => 1, 'href' => 'qids', 'title' => 'Qids', 'icon' => 'bi-list-ul'],
+            "Pages" => [
+                [
+                    "id" => "tt_load",
+                    "admin" => 1,
+                    "href" => "translate_type",
+                    "title" => "Translate Type",
+                    "icon" => "bi-translate"
+                ],
+                [
+                    "id" => "translated",
+                    "admin" => 1,
+                    "href" => "translated",
+                    "title" => "Translated Pages",
+                    "icon" => "bi-check2-square"
+                ],
+                [
+                    "id" => "pages_users_to_main",
+                    "admin" => 1,
+                    "href" => "pages_users_to_main",
+                    "title" => "Pages to check",
+                    "icon" => "bi-check"
+                ],
+                [
+                    "id" => "add",
+                    "admin" => 1,
+                    "href" => "add",
+                    "title" => "Add translations",
+                    "icon" => "bi-plus-square"
+                ],
+                [
+                    "id" => "qidsload",
+                    "admin" => 1,
+                    "href" => "qids",
+                    "title" => "Qids",
+                    "icon" => "bi-list-ul"
+                ],
             ],
-            'Qids' => [
-                // Reserved for future QID-related tools
-                // ['id' => 'qids_othersload', 'admin' => 1, 'href' => 'qids&qid_table=qids_others', 'title' => 'Qids Others', 'icon' => ''],
+            "Users" => [
+                [
+                    "id" => "admins",
+                    "admin" => 1,
+                    "href" => "admins",
+                    "title" => "Coordinators",
+                    "icon" => "bi-person-gear"
+                ],
+                [
+                    "id" => "users",
+                    "admin" => 1,
+                    "href" => "users",
+                    "title" => "Emails",
+                    "icon" => "bi-envelope"
+                ],
+                [
+                    "id" => "full_tr",
+                    "admin" => 1,
+                    "href" => "full_translators",
+                    "title" => "Full translators",
+                    "icon" => "bi-person-check"
+                ],
+                [
+                    "id" => "user_inp",
+                    "admin" => 1,
+                    "href" => "users_not_inprocess",
+                    "title" => "Not in process",
+                    "icon" => "bi-hourglass"
+                ],
             ],
-            'Users' => [
-                ['id' => 'admins', 'admin' => 1, 'href' => 'admins', 'title' => 'Coordinators', 'icon' => 'bi-person-gear'],
-                ['id' => 'users', 'admin' => 1, 'href' => 'users', 'title' => 'Emails', 'icon' => 'bi-envelope'],
-                ['id' => 'full_tr', 'admin' => 1, 'href' => 'full_translators', 'title' => 'Full translators', 'icon' => 'bi-person-check'],
-                ['id' => 'user_inp', 'admin' => 1, 'href' => 'users_not_inprocess', 'title' => 'Not in process', 'icon' => 'bi-hourglass'],
+            "Others" => [
+                [
+                    "id" => "projects",
+                    "admin" => 1,
+                    "href" => "projects",
+                    "title" => "Projects",
+                    "icon" => "bi-kanban"
+                ],
+                [
+                    "id" => "campaigns",
+                    "admin" => 1,
+                    "href" => "campaigns",
+                    "title" => "Campaigns",
+                    "icon" => "bi-megaphone"
+                ],
+                [
+                    "id" => "settings",
+                    "admin" => 1,
+                    "href" => "settings",
+                    "title" => "Settings",
+                    "icon" => "bi-gear"
+                ],
+                [
+                    "id" => "categories",
+                    "admin" => 0,
+                    "href" => "categories",
+                    "title" => "Categories",
+                    "icon" => "bi-tags"
+                ],
             ],
-            'Others' => [
-                ['id' => 'projects', 'admin' => 1, 'href' => 'projects', 'title' => 'Projects', 'icon' => 'bi-kanban'],
-                ['id' => 'campaigns', 'admin' => 1, 'href' => 'campaigns', 'title' => 'Campaigns', 'icon' => 'bi-megaphone'],
-                ['id' => 'settings', 'admin' => 1, 'href' => 'settings', 'title' => 'Settings', 'icon' => 'bi-gear'],
-                ['id' => 'categories', 'admin' => 0, 'href' => 'categories', 'title' => 'Categories', 'icon' => 'bi-tags'],
-            ],
-            'Tools' => [
-                ['id' => 'stat', 'admin' => 0, 'href' => 'stat', 'title' => 'Status', 'icon' => 'bi-graph-up'],
-                ['id' => 'wikirefs_options', 'admin' => 1, 'href' => 'wikirefs_options', 'title' => 'Fix refs (Options)', 'icon' => 'bi-wrench-adjustable'],
-                ['id' => 'fixwikirefs', 'admin' => 0, 'href' => '/fixwikirefs.php', 'title' => 'Fixwikirefs', 'target' => '_blank', 'icon' => 'bi-wrench'],
+            "Tools" => [
+                [
+                    "id" => "stat",
+                    "admin" => 0,
+                    "href" => "stat",
+                    "title" => "Status",
+                    "icon" => "bi-graph-up"
+                ],
+                [
+                    "id" => "wikirefs_options",
+                    "admin" => 1,
+                    "href" => "wikirefs_options",
+                    "title" => "Fix refs (Options)",
+                    "icon" => "bi-wrench-adjustable"
+                ],
+                [
+                    "id" => "fixwikirefs",
+                    "admin" => 0,
+                    "href" => "/fixwikirefs.php",
+                    "title" => "Fixwikirefs",
+                    "target" => "_blank",
+                    "icon" => "bi-wrench"
+                ],
             ],
         ];
 

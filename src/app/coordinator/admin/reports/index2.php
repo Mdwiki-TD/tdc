@@ -221,7 +221,3 @@ class ReportsIndex2Controller extends AbstractControllerNoPost
         HTML;
     }
 }
-
-// Instantiate and execute controller
-$controller = new ReportsIndex2Controller();
-$controller->handleRequest();

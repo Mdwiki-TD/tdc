@@ -154,7 +154,3 @@ class FixItController extends AbstractEditController
         HTML;
     }
 }
-
-// Execute the controller
-$controller = new FixItController();
-$controller->handleRequest();
