@@ -161,6 +161,4 @@ class ProjectsIndexController extends AbstractController
 	}
 }
 
-// Instantiate and execute controller
-$controller = new ProjectsIndexController();
-$controller->handleRequest();
+

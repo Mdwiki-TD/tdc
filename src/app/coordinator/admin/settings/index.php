@@ -133,6 +133,4 @@ class SettingsIndexController extends AbstractController
     }
 }
 
-// Instantiate and execute controller
-$controller = new SettingsIndexController();
-$controller->handleRequest();
+

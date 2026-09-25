@@ -318,6 +318,4 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
     }
 }
 
-// Instantiate and execute controller
-$controller = new PagesUsersToMainIndexController();
-$controller->handleRequest();
+

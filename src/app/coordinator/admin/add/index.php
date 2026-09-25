@@ -180,6 +180,4 @@ class AddIndexController extends AbstractController
     }
 }
 
-// Instantiate and execute controller
-$controller = new AddIndexController();
-$controller->handleRequest();
+//

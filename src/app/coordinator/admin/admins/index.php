@@ -180,6 +180,4 @@ class AdminsIndexController extends AbstractController
 	}
 }
 
-// Instantiate and execute controller
-$controller = new AdminsIndexController();
-$controller->handleRequest();
+

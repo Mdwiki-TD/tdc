@@ -193,6 +193,4 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
     }
 }
 
-// Instantiate and execute controller
-$controller = new WikiRefsOptionsIndexController();
-$controller->handleRequest();
+

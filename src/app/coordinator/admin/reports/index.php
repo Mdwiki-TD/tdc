@@ -164,6 +164,4 @@ class ReportsIndexController extends AbstractControllerNoPost
     }
 }
 
-// Instantiate and execute controller
-$controller = new ReportsIndexController();
-$controller->handleRequest();
+

@@ -265,6 +265,4 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
     }
 }
 
-// Instantiate and execute controller
-$controller = new TranslateTypeIndexController();
-$controller->handleRequest();
+

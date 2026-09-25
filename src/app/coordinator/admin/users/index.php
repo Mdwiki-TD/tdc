@@ -327,6 +327,4 @@ class UsersIndexController extends AbstractControllerNoPost
 	}
 }
 
-// Instantiate and execute controller
-$controller = new UsersIndexController();
-$controller->handleRequest();
+

@@ -176,6 +176,4 @@ class UsersNotInprocessIndexController extends AbstractController
     }
 }
 
-// Instantiate and execute controller
-$controller = new UsersNotInprocessIndexController();
-$controller->handleRequest();
+

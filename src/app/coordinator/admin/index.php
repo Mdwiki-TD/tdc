@@ -76,7 +76,8 @@ class AdminResolver
     /**
      * Dispatches the request to the target script or view based on routes and permissions.
      */
-    public function dispatchObject(string $ty): bool {
+    public function dispatchObject(string $ty): bool
+    {
         // String mapping with fully qualified namespace
         // Array mapping string keys to fully qualified class names
         $map = [
