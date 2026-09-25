@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/Emails/msg.php
+// src/app/coordinator/admin/emails/msg.php
 
 namespace App\Coordinator\Admin\Emails;
 

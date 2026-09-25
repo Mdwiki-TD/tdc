@@ -11,7 +11,7 @@ use App\Utils\TestPrinter;
  * Class AppRouter
  * Handles layout initialization and dynamic request routing for the application.
  */
-class AppRouter extends TestPrinter
+class AppRouter
 {
 	private CurrentUser $currentUser;
 	private bool $isCoordinator;
@@ -66,8 +66,10 @@ class AppRouter extends TestPrinter
 		$preDefinedTy = [
 			"add",
 			"admins",
-			"Campaigns",
-			"Emails",
+			"campaigns",
+			"emails",
+			"emails/edit_user",
+			"emails/msg",
 			"full_translators",
 			"last_coord",
 			"pages_users_to_main",
@@ -80,8 +82,6 @@ class AppRouter extends TestPrinter
 			"users_no_inprocess",
 			"wikirefs_options",
 
-			"Emails/edit_user",
-			"Emails/msg",
 			"pages_users_to_main/fix_it",
 			"qids/edit_qid",
 			"translated/edit_page",
@@ -92,8 +92,15 @@ class AppRouter extends TestPrinter
 			return $rawTy;
 		}
 		// Map route aliases
-		if ($rawTy === 'translate_type') {
-			$rawTy = 'tt';
+		$aliasesMap = [
+			"translate_type" => "tt",
+			"Campaigns" => "campaigns",
+			"Emails" => "emails",
+			"Emails/edit_user" => "emails/edit_user",
+			"Emails/msg" => "emails/msg",
+		];
+		if (isset($aliasesMap[$rawTy])) {
+			$rawTy = $aliasesMap[$rawTy];
 		}
 
 		// Sanitize parameter to prevent directory traversal
@@ -188,7 +195,7 @@ class AppRouter extends TestPrinter
 		}
 
 		// Fallback for missing or unauthorized routes
-		$this->testPrint("can't find {$adminFile}");
+		TestPrinter::testPrint("can't find {$adminFile}");
 		include_once __DIR__ . "/coordinator/404.php";
 	}
 

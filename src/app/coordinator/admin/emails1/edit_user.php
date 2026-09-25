@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/Emails/edit_user.php
+// src/app/coordinator/admin/emails/edit_user.php
 
 namespace App\Coordinator\Admin\Emails;
 
@@ -55,7 +55,7 @@ class EditUserController extends AbstractEditController
         }
 
         return <<<HTML
-            <form action='index.php?ty=Emails/edit_user&nonav=120&user_id={$this->userId}' method="POST">
+            <form action='index.php?ty=emails/edit_user&nonav=120&user_id={$this->userId}' method="POST">
                 {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
                 <div class='container'>

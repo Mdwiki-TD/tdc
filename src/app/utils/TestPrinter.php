@@ -36,5 +36,5 @@ class TestPrinter
 
 function test_print($s)
 {
-    (new TestPrinter())->testPrint($s);
+    TestPrinter::testPrint($s);
 }

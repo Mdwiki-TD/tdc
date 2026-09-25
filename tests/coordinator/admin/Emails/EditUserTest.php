@@ -139,11 +139,11 @@ class EditUserTest extends TestCase
 
     public function testEditUserFormUrlConstruction()
     {
-        $ty = 'Emails/edit_user';
+        $ty = 'emails/edit_user';
         $nonav = '120';
         $expectedUrl = "index.php?ty=$ty&nonav=$nonav";
 
-        $this->assertEquals('index.php?ty=Emails/edit_user&nonav=120', $expectedUrl);
+        $this->assertEquals('index.php?ty=emails/edit_user&nonav=120', $expectedUrl);
     }
 
     public function testEditUserFormHiddenInputs()

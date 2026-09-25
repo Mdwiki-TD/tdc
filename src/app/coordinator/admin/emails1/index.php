@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/Emails/index.php
+// src/app/coordinator/admin/emails/index.php
 
 namespace App\Coordinator\Admin\Emails;
 
@@ -45,7 +45,7 @@ class EmailsIndexController extends AbstractControllerNoPost
 
 		$this->renderMainCard($numb, $projectFilter, $formRows);
 
-		$newRow = make_edit_icon_new('Emails/edit_user', ['new' => 1], 'Add one!');
+		$newRow = make_edit_icon_new('emails/edit_user', ['new' => 1], 'Add one!');
 		$this->renderAddNewCard($newRow);
 
 		$this->renderDataTableAssets();
@@ -176,7 +176,7 @@ class EmailsIndexController extends AbstractControllerNoPost
 
 			$editParams = [ 'user_id' => $userId];
 
-			$editIcon = make_edit_icon_new("Emails/edit_user", $editParams);
+			$editIcon = make_edit_icon_new("v/edit_user", $editParams);
 
 			$formRows .= <<<HTML
                 <tr>
