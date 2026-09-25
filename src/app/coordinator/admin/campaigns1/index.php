@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/Campaigns/index.php
+// src/app/coordinator/admin/campaigns/index.php
 
 namespace App\Coordinator\Admin\Campaigns;
 
@@ -21,14 +21,14 @@ class CampaignsIndexController extends AbstractController
     {
         return new CampaignsPostProcessor();
     }
-    public function renderFormCard(): void {
+    public function renderFormCard(): void
+    {
         $categories = get_td_or_sql_categories();
 
         $tableRows = $this->buildTableRows($categories);
 
         $this->renderCard($tableRows);
         $this->renderAddRowScript();
-
     }
     /**
      * Builds the editable table rows for each existing campaign category.
@@ -89,9 +89,9 @@ class CampaignsIndexController extends AbstractController
     {
 
         $form = <<<HTML
-            <form action="index.php?ty=Campaigns" method="POST" id="new_form_post">
+            <form action="index.php?ty=campaigns" method="POST" id="new_form_post">
                 {$this->createCsrfTokenField()}
-                <input name='ty' value="Campaigns" type="hidden"/>
+                <input name='ty' value="campaigns" type="hidden"/>
                 <div class="form-group">
                     <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
                         <thead>

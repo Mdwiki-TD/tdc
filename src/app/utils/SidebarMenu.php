@@ -104,13 +104,13 @@ class SidebarMenu
             ],
             'Users' => [
                 ['id' => 'admins', 'admin' => 1, 'href' => 'admins', 'title' => 'Coordinators', 'icon' => 'bi-person-gear'],
-                ['id' => 'Emails', 'admin' => 1, 'href' => 'Emails', 'title' => 'Emails', 'icon' => 'bi-envelope'],
+                ['id' => 'emails', 'admin' => 1, 'href' => 'emails', 'title' => 'Emails', 'icon' => 'bi-envelope'],
                 ['id' => 'full_tr', 'admin' => 1, 'href' => 'full_translators', 'title' => 'Full translators', 'icon' => 'bi-person-check'],
                 ['id' => 'user_inp', 'admin' => 1, 'href' => 'users_no_inprocess', 'title' => 'Not in process', 'icon' => 'bi-hourglass'],
             ],
             'Others' => [
                 ['id' => 'projects', 'admin' => 1, 'href' => 'projects', 'title' => 'Projects', 'icon' => 'bi-kanban'],
-                ['id' => 'Campaigns', 'admin' => 1, 'href' => 'Campaigns', 'title' => 'Campaigns', 'icon' => 'bi-megaphone'],
+                ['id' => 'campaigns', 'admin' => 1, 'href' => 'campaigns', 'title' => 'Campaigns', 'icon' => 'bi-megaphone'],
                 ['id' => 'settings', 'admin' => 1, 'href' => 'settings', 'title' => 'Settings', 'icon' => 'bi-gear'],
                 ['id' => 'categories', 'admin' => 0, 'href' => 'categories', 'title' => 'Categories', 'icon' => 'bi-tags'],
             ],

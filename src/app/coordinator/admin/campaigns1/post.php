@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/Campaigns/post.php
+// src/app/coordinator/admin/campaigns/post.php
 
 namespace App\Coordinator\Admin\Campaigns;
 
