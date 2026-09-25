@@ -5,6 +5,7 @@ namespace App\Coordinator\Admin;
 
 use App\Utils\TestPrinter;
 
+
 class AdminResolver
 {
     private bool $isCoordinator;
@@ -75,8 +76,35 @@ class AdminResolver
     /**
      * Dispatches the request to the target script or view based on routes and permissions.
      */
+    public function dispatchObject(string $ty): bool {
+        // String mapping with fully qualified namespace
+        // Array mapping string keys to fully qualified class names
+        $map = [
+            "last_coord"           => "App\\Coordinator\\Admin\\Las tCoord\\LastCoordIndexController",
+            "pages_users_to_main"  => "App\\Coordinator\\Admin\\PagesUsersToMain\\PagesUsersToMainIndexController",
+            "qids"                 => "App\\Coordinator\\Admin\\Qids\\QidsIndexController",
+            "reports"              => "App\\Coordinator\\Admin\\Reports\\ReportsIndexController",
+            "reports2"             => "App\\Coordinator\\Admin\\Reports\\ReportsIndex2Controller",
+            "translated"           => "App\\Coordinator\\Admin\\Translated\\TranslatedIndexController",
+            "tt"                   => "App\\Coordinator\\Admin\\Tt\\TtIndexController",
+            "users"                => "App\\Coordinator\\Admin\\Users\\UsersIndexController",
+            "users_msg"            => "App\\Coordinator\\Admin\\Users\\MsgController",
+            "wikirefs_options"     => "App\\Coordinator\\Admin\\WikiRefsOptions\\WikiRefsOptionsIndexController",
+        ];
+        if (isset($map[$ty])) {
+            $controller = new $map[$ty]();
+            $controller->handleRequest();
+            return true;
+        }
+        return false;
+    }
+
     public function dispatch(string $ty): void
     {
+        if ($this->dispatchObject($ty)) {
+            return;
+        }
+
         $coordFolders = $this->getCoordinatorFolders();
         $adminFile = __DIR__ . "/{$ty}.php";
 
