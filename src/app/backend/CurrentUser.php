@@ -4,9 +4,9 @@ namespace App\User;
 
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
+use App\Settings\Settings;
 use function App\MdwikiSql\fetch_query;
 use function App\SQLorAPI\Funcs\get_coordinators;
-use App\Settings\Settings;
 
 /**
  * Represents the current user: handles session initialization, reading
