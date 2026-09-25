@@ -3,6 +3,7 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
+use App\Tables\Main\MainTables;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\MdwikiSql\execute_query;
 use function App\MdwikiSql\fetch_query;
@@ -16,10 +17,10 @@ class FixItPostProcessor extends AbstractPostHandler
 {
     protected bool $isPopUpPage = true;
 
-	public function process(array $post): void
-	{
+    public function process(array $post): void
+    {
         $this->processFormData($post);
-	}
+    }
 
     /**
      * Processes submission inputs and executes database changes.
@@ -41,25 +42,32 @@ class FixItPostProcessor extends AbstractPostHandler
 
         if (empty($pageData)) {
             $this->addError("Page with id:($id) not found.");
+            return;
+        }
+
+        $translateType = $pageData[0]['translate_type'] ?? '';
+        $cat   = $pageData[0]['cat'] ?? '';
+        $word  = $pageData[0]['word'] ?? '';
+
+        $translateType = (!empty($translateType)) ? $translateType : 'lead';
+
+        if (empty($word)) {
+            $word = MainTables::getWord($title, $translateType);
+        }
+
+        $result = add_pages_to_db($title, $translateType, $cat, $lang, $newUser, $newTarget, $pupdate, $word);
+
+        if ($result === false) {
+            $this->addError("Failed to add translations.");
         } else {
-            $tType = $pageData[0]['translate_type'] ?? '';
-            $cat   = $pageData[0]['cat'] ?? '';
-            $word  = $pageData[0]['word'] ?? '';
+            $this->addText("Translations added successfully.");
 
-            $result = add_pages_to_db($title, $tType, $cat, $lang, $newUser, $newTarget, $pupdate, $word);
+            $deleted = $this->deleteUserPage($id);
 
-            if ($result === false) {
-                $this->addError("Failed to add translations.");
+            if ($deleted) {
+                $this->addText("Page with id:($id) deleted from pages_users.");
             } else {
-                $this->addText("Translations added successfully.");
-
-                $deleted = $this->deleteUserPage($id);
-
-                if ($deleted) {
-                    $this->addText("Page with id:($id) deleted from pages_users.");
-                } else {
-                    $this->addError("Failed to delete page with id:($id).");
-                }
+                $this->addError("Failed to delete page with id:($id).");
             }
         }
     }
@@ -77,5 +85,4 @@ class FixItPostProcessor extends AbstractPostHandler
 
         return empty($findIt1) && empty($findIt2);
     }
-
 }

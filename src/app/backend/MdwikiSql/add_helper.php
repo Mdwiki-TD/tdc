@@ -3,11 +3,10 @@
 
 namespace App\MdwikiSql\AddHelper;
 
-use App\Tables\Main\MainTables;
 use function App\MdwikiSql\execute_query;
 use function App\MdwikiSql\fetch_query;
 
-function insert_to_pages(array $pageData)
+function insert_to_pages(array $pageData): bool
 {
 	// Replace underscores with spaces for string values
 	foreach ($pageData as $key => $value) {
@@ -44,7 +43,7 @@ function insert_to_pages(array $pageData)
 		];
 
 		if (isset($_REQUEST['test'])) {
-			echo "$updateQuery<br/>";
+			echo "updateQuery: $updateQuery<br/>";
 		}
 
 		return execute_query($updateQuery, $updateParams);
@@ -68,41 +67,59 @@ function insert_to_pages(array $pageData)
 	];
 
 	if (isset($_REQUEST['test'])) {
-		echo "$insertQuery<br/>";
+		echo "insertQuery: $insertQuery<br/>";
 	}
 
 	return execute_query($insertQuery, $insertParams);
 }
 
-
-function add_pages_to_db($title, $translateType, $cat, $lang, $user, $target, $pupdate, $word)
-{
-
-	$translateType = (!empty($translateType)) ? $translateType : 'lead';
+/**
+ * Add pages to the database and verify insertion.
+ *
+ * @param string $title
+ * @param string $translateType
+ * @param string|null $cat
+ * @param string $lang
+ * @param string $user
+ * @param string $target
+ * @param string $pupdate
+ * @param int|string|null $word
+ * @return bool
+ */
+function add_pages_to_db(
+	string $title,
+	string $translateType,
+	?string $cat,
+	string $lang,
+	string $user,
+	string $target,
+	string $pupdate,
+	int|string|null $word = null
+): bool {
 	$cat = (!empty($cat)) ? $cat : 'RTT';
 
-	if (empty($word)) {
-		$word = MainTables::$xWordsTable[$title] ?? 0;
-		if ($translateType == 'all') $word = MainTables::$xAllWordsTable[$title] ?? 0;
-	}
-
-	// add them all to array
+	// Add them all to array
 	$t = [
-		'user'		=> trim($user),
-		'lang'		=> trim($lang),
-		'title'		=> trim($title),
-		'target'	=> trim($target),
-		'pupdate'	=> trim($pupdate),
-		'cat'		=> trim($cat),
+		'user'           => trim($user),
+		'lang'           => trim($lang),
+		'title'          => trim($title),
+		'target'         => trim($target),
+		'pupdate'        => trim($pupdate),
+		'cat'            => trim($cat),
 		'translate_type' => trim($translateType),
-		'word'		=> $word
+		'word'           => $word,
 	];
 
 	$insert_result = insert_to_pages($t);
 
-	$findIt = fetch_query("SELECT * FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?", [$title, $lang, $user, $target]);
+	if (!$insert_result) {
+		return false;
+	}
 
-	$insertDone = (!empty($findIt)) ? true : false;
+	$findIt = fetch_query(
+		"SELECT 1 FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?",
+		[$title, $lang, $user, $target]
+	);
 
-	return $insertDone;
+	return !empty($findIt);
 }
