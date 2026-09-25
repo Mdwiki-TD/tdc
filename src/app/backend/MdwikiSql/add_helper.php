@@ -7,40 +7,73 @@ use App\Tables\Main\MainTables;
 use function App\MdwikiSql\execute_query;
 use function App\MdwikiSql\fetch_query;
 
-function insert_to_pages($t)
+function insert_to_pages(array $pageData)
 {
-
-	// in all $t values find and replace "_" by " " if its string
-	foreach ($t as $key => $value) {
+	// Replace underscores with spaces for string values
+	foreach ($pageData as $key => $value) {
 		if (is_string($value)) {
-			$t[$key] = str_replace('_', ' ', $value);
+			$pageData[$key] = str_replace('_', ' ', $value);
 		}
 	}
 
-	$query1 = <<<SQL
-        UPDATE pages
-            SET target = ?, pupdate = ?, word = ?
-        WHERE user = ? AND title = ? AND lang = ? and (target = '' OR target IS NULL);
-    SQL;
+	// Check if the record already exists in the database
+	$checkQuery = <<<SQL
+		SELECT 1 FROM pages
+		WHERE user = ? AND title = ? AND lang = ?
+		LIMIT 1;
+	SQL;
 
-	$params1 = [$t['target'], $t['pupdate'], $t['word'], $t['user'], $t['title'], $t['lang']];
+	$checkParams = [$pageData['user'], $pageData['title'], $pageData['lang']];
+	$exists = execute_query($checkQuery, $checkParams);
 
-	$_result1 = execute_query($query1, $params1);
+	// If record exists, UPDATE it
+	if ($exists && count($exists) > 0) {
+		$updateQuery = <<<SQL
+			UPDATE pages
+			SET target = ?, pupdate = ?, word = ?
+			WHERE user = ? AND title = ? AND lang = ? AND (target = '' OR target IS NULL);
+		SQL;
 
-	$query2 = <<<SQL
-        INSERT INTO pages (title, word, translate_type, cat, lang, date, user, pupdate, target, add_date)
-            SELECT ?, ?, ?, ?, ?, DATE(NOW()), ?, ?, ?, now()
-        WHERE NOT EXISTS (SELECT 1 FROM pages WHERE title = ? AND lang = ? AND user = ? );
-    SQL;
+		$updateParams = [
+			$pageData['target'],
+			$pageData['pupdate'],
+			$pageData['word'],
+			$pageData['user'],
+			$pageData['title'],
+			$pageData['lang']
+		];
 
-	$params2 = [$t['title'], $t['word'], $t['translate_type'], $t['cat'], $t['lang'], $t['user'], $t['pupdate'], $t['target'], $t['title'], $t['lang'], $t['user']];
+		if (isset($_REQUEST['test'])) {
+			echo "$updateQuery<br/>";
+		}
 
-	if (isset($_REQUEST['test'])) echo "$query1<br/>$query2";
+		return execute_query($updateQuery, $updateParams);
+	}
 
-	$result2 = execute_query($query2, $params2);
+	// If record does not exist, INSERT it
+	$insertQuery = <<<SQL
+		INSERT INTO pages (title, word, translate_type, cat, lang, date, user, pupdate, target, add_date)
+		VALUES (?, ?, ?, ?, ?, DATE(NOW()), ?, ?, ?, NOW());
+	SQL;
 
-	return $result2;
+	$insertParams = [
+		$pageData['title'],
+		$pageData['word'],
+		$pageData['translate_type'],
+		$pageData['cat'],
+		$pageData['lang'],
+		$pageData['user'],
+		$pageData['pupdate'],
+		$pageData['target']
+	];
+
+	if (isset($_REQUEST['test'])) {
+		echo "$insertQuery<br/>";
+	}
+
+	return execute_query($insertQuery, $insertParams);
 }
+
 
 function add_pages_to_db($title, $translateType, $cat, $lang, $user, $target, $pupdate, $word)
 {
