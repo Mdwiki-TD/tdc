@@ -2,7 +2,7 @@
 
 namespace App\SQLorAPI\Get;
 
-use function App\APICalls\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetch_query;
 use function App\APICalls\TDApi\get_td_api;
 
 function use_td_api_or_sql(): bool

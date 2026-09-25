@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\settings;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\APICalls\MdwikiSql\update_settings_value;
+use function App\MdwikiSql\update_settings_value;
 use function App\csrf\verify_csrf_token;
 
 /**

@@ -4,9 +4,9 @@
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\APICalls\MdwikiSql\execute_query;
-use function App\APICalls\MdwikiSql\fetch_query;
-use function App\Coordinator\Helps\AddHelper\add_pages_to_db;
+use function App\MdwikiSql\execute_query;
+use function App\MdwikiSql\fetch_query;
+use function App\MdwikiSql\AddHelper\add_pages_to_db;
 
 /**
  * Class FixItPostProcessor

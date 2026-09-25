@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Users;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\Utils\Html\make_project_to_user;
-use function App\APICalls\MdwikiSql\get_user_by_id;
+use function App\MdwikiSql\get_user_by_id;
 
 require_once __DIR__ . '/edit_user_post.php';
 

@@ -5,7 +5,7 @@
  *
  */
 
-namespace App\APICalls\MdwikiSql;
+namespace App\MdwikiSql;
 
 use PDO;
 use PDOException;
@@ -17,7 +17,7 @@ use RuntimeException;
  * Encapsulates PDO database operations with automatic connection management,
  * error handling, and environment-specific configuration.
  *
- * @package APICalls\MdwikiSql
+ * @package MdwikiSql
  */
 class Database
 {

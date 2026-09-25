@@ -18,7 +18,7 @@
  *
  * Usage Example:
  * ```php
- * use function App\APICalls\MdwikiApi\get_mdwiki_url_with_params;
+ * use function App\APICalls\get_mdwiki_url_with_params;
  *
  * // Get page content
  * $result = get_mdwiki_url_with_params([
@@ -31,7 +31,6 @@
  * ```
  *
  * @package    APICalls
- * @subpackage MdwikiApi
  * @author     Translation Dashboard Team
  * @version    2.0.0
  * @since      1.0.0
@@ -41,7 +40,7 @@
  * @see https://mdwiki.org/w/api.php
  */
 
-namespace App\APICalls\MdwikiApi;
+namespace App\APICalls;
 
 use function App\Utils\test_print;
 

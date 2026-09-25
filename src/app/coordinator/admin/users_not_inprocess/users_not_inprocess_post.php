@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\UsersNotInprocess;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\APICalls\MdwikiSql\execute_query;
+use function App\MdwikiSql\execute_query;
 
 /**
  * Class UsersNotInprocessPostProcessor

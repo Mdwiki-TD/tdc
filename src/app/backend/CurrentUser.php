@@ -4,7 +4,7 @@ namespace App\User;
 
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
-use function App\APICalls\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetch_query;
 use function App\SQLorAPI\Funcs\get_coordinators;
 use App\Settings\Settings;
 

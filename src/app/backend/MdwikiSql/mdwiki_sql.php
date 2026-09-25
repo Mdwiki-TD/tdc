@@ -22,8 +22,8 @@
  *
  * Usage Example:
  * ```php
- * use function App\APICalls\MdwikiSql\fetch_query;
- * use function App\APICalls\MdwikiSql\execute_query;
+ * use function App\MdwikiSql\fetch_query;
+ * use function App\MdwikiSql\execute_query;
  *
  * // Fetch results (SELECT queries)
  * $users = fetch_query("SELECT * FROM users WHERE is_active = ?", [1]);
@@ -32,8 +32,7 @@
  * execute_query("UPDATE settings SET value = ? WHERE id = ?", ['new_value', 5]);
  * ```
  *
- * @package    APICalls
- * @subpackage MdwikiSql
+ * @package    MdwikiSql
  * @author     Translation Dashboard Team
  * @version    2.0.0
  * @since      1.0.0
@@ -43,9 +42,9 @@
  * @see https://wikitech.wikimedia.org/wiki/Help:Toolforge/Database
  */
 
-namespace App\APICalls\MdwikiSql;
+namespace App\MdwikiSql;
 
-use App\APICalls\MdwikiSql\Database;
+use App\MdwikiSql\Database;
 
 function execute_query(string $sqlQuery, $params = null)
 {

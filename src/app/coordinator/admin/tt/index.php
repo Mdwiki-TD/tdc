@@ -9,7 +9,7 @@ use function App\Utils\Html\makeDropdown;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_edit_icon_new;
 use function App\Results\GetCats\get_mdwiki_cat_members;
-use function App\APICalls\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetch_query;
 
 /**
  * Class TtIndexController
