@@ -44,13 +44,13 @@ class AppRouter
 	public function handleRequest(): void
 	{
 		if (!$this->shouldHideNav()) {
-			$this->renderHeader();
+			$this->renderSidebarStart();
 		}
 
 		$this->dispatch();
 
 		if (!$this->shouldHideNav()) {
-			$this->renderFooter();
+			$this->renderSidebarEnd();
 		}
 	}
 
@@ -110,7 +110,7 @@ class AppRouter
 	/**
 	 * Renders the sidebar and opening HTML wrapper structure.
 	 */
-	private function renderHeader(): void
+	private function renderSidebarStart(): void
 	{
 		$sidebar = create_side($this->scriptName, $this->ty, $this->isCoordinator);
 
@@ -147,7 +147,7 @@ class AppRouter
         HTML;
 	}
 
-	private function renderFooter(): void
+	private function renderSidebarEnd(): void
 	{
 		echo <<<HTML
                     </div>

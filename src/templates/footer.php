@@ -1,4 +1,5 @@
 <?php
+// src/templates/footer.php
 
 // Calculate and display page load time
 if (isset($GLOBALS['timeStart'])) {
@@ -18,6 +19,8 @@ if (isset($GLOBALS['timeStart'])) {
 
 </div>
 </main>
+
+<script src='/tdc/js/autocomplate.js'></script>
 
 <!-- Common JavaScript -->
 <script src="/Translation_Dashboard/js/c.js"></script>
