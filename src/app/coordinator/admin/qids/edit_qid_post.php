@@ -4,9 +4,9 @@
 namespace App\Coordinator\Admin\Qids;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\APICalls\MdwikiSql\execute_query;
-use function App\APICalls\MdwikiSql\get_qid_row;
-use function App\APICalls\MdwikiSql\get_qid_by_title;
+use function App\MdwikiSql\execute_query;
+use function App\MdwikiSql\get_qid_row;
+use function App\MdwikiSql\get_qid_by_title;
 
 /**
  * Class QidsPostProcessor

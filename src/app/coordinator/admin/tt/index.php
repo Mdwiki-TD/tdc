@@ -9,16 +9,16 @@ use function App\Utils\Html\makeDropdown;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_edit_icon_new;
 use function App\Results\GetCats\get_mdwiki_cat_members;
-use function App\APICalls\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetch_query;
 
 /**
- * Class TtIndexController
+ * Class TranslateTypeIndexController
  * Renders the Translate Type dashboard, listing titles either from a
  * Wikipedia category (via get_mdwiki_cat_members) or from the full set
  * of known titles (translate_type + qids not yet classified), each with
  * its lead/full translation flags and an edit link.
  */
-class TtIndexController extends AbstractControllerNoPost
+class TranslateTypeIndexController extends AbstractControllerNoPost
 {
     private string $cat;
     private array $fullTranslatesTab = [];
@@ -265,6 +265,4 @@ class TtIndexController extends AbstractControllerNoPost
     }
 }
 
-// Instantiate and execute controller
-$controller = new TtIndexController();
-$controller->handleRequest();
+

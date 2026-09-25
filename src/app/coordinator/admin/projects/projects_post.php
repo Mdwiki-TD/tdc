@@ -4,8 +4,8 @@
 namespace App\Coordinator\Admin\Projects;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\APICalls\MdwikiSql\insert_to_projects;
-use function App\APICalls\MdwikiSql\execute_query;
+use function App\MdwikiSql\insert_to_projects;
+use function App\MdwikiSql\execute_query;
 
 /**
  * Class ProjectsPostProcessor

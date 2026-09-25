@@ -467,6 +467,4 @@ class LastCoordIndexController extends AbstractControllerNoPost
     }
 }
 
-// Instantiate and execute controller
-$controller = new LastCoordIndexController();
-$controller->handleRequest();
+

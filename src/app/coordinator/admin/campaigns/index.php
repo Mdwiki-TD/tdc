@@ -150,6 +150,4 @@ class CampaignsIndexController extends AbstractController
     }
 }
 
-// Instantiate and execute controller
-$controller = new CampaignsIndexController();
-$controller->handleRequest();
+

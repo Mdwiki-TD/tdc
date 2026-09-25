@@ -5,7 +5,7 @@ namespace App;
 
 use App\User\CurrentUser;
 use App\Utils\SidebarMenu;
-use App\Utils\TestPrinter;
+use App\Coordinator\Admin\AdminResolver;
 
 /**
  * Class AppRouter
@@ -13,6 +13,7 @@ use App\Utils\TestPrinter;
  */
 class AppRouter
 {
+	private AdminResolver $resolver;
 	private CurrentUser $currentUser;
 	private bool $isCoordinator;
 	private string $ty;
@@ -33,9 +34,13 @@ class AppRouter
 
 	public function __construct(CurrentUser $currentUser)
 	{
+
 		$this->currentUser = $currentUser;
 		$this->isCoordinator = $this->currentUser->isCoordinator();
 		$this->scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+
+		$this->resolver = new AdminResolver($this->isCoordinator);
+
 		$this->ty = $this->resolveTy();
 	}
 
@@ -48,7 +53,7 @@ class AppRouter
 			$this->renderSidebarStart();
 		}
 
-		$this->dispatch();
+		$this->dispatch($this->ty);
 
 		if (!$this->shouldHideNav()) {
 			$this->renderSidebarEnd();
@@ -58,63 +63,11 @@ class AppRouter
 	/**
 	 * Determines, maps, and sanitizes the requested route key ('ty').
 	 */
-	private function resolveTy(): string
+	public function resolveTy(): string
 	{
 		$defaultTy = $this->isCoordinator ? "last_coord" : "last";
 		$rawTy = $_GET['ty'] ?? $_POST['ty'] ?? $defaultTy;
-
-		$preDefinedTy = [
-			"add",
-			"admins",
-			"campaigns",
-			"users",
-			"users/edit_user",
-			"users/msg",
-			"full_translators",
-			"last_coord",
-			"pages_users_to_main",
-			"projects",
-			"qids",
-			"reports",
-			"settings",
-			"translated",
-			"tt",
-			"users_not_inprocess",
-			"wikirefs_options",
-
-			"pages_users_to_main/fix_page",
-			"qids/edit_qid",
-			"translated/edit_page",
-			"tt/edit_translate_type",
-			"wikirefs_options/wikirefs_options_edit",
-		];
-		if (in_array($rawTy, $preDefinedTy)) {
-			return $rawTy;
-		}
-		// Map route aliases
-		$aliasesMap = [
-			"translate_type" => "tt",
-			"users_no_inprocess" => "users_not_inprocess",							// new
-			"Campaigns" => "campaigns",
-			"Emails" => "users",
-			"pages_users_to_main/fix_it" => "pages_users_to_main/fix_page",								// new
-			"fix_page" => "pages_users_to_main/fix_page",								// new
-
-			"edit_page" => "translated/edit_page",									// new
-			"edit_user" => "users/edit_user",										// new
-			"Emails/edit_user" => "users/edit_user",
-
-			"Emails/msg" => "users/msg",
-			"wikirefs_options_edit" => "wikirefs_options/wikirefs_options_edit",	// new
-			"wikirefs_options/edit" => "wikirefs_options/wikirefs_options_edit",
-			"edit_translate_type" => "tt/edit_translate_type",						// new
-		];
-		if (isset($aliasesMap[$rawTy])) {
-			return $aliasesMap[$rawTy];
-		}
-
-		// Sanitize parameter to prevent directory traversal
-		return preg_replace('/[^a-zA-Z0-9_-]/', '', $rawTy);
+		return $this->resolver->resolveTy($rawTy);
 	}
 
 	/**
@@ -178,47 +131,19 @@ class AppRouter
 	/**
 	 * Dispatches the request to the target script or view based on routes and permissions.
 	 */
-	private function dispatch(): void
+	private function dispatch(string $ty): void
 	{
-		$coordFolders = $this->getCoordinatorFolders();
-		$adminFile = __DIR__ . "/coordinator/admin/{$this->ty}.php";
-
-		if (in_array($this->ty, $this->toolsFiles, true)) {
-			include_once __DIR__ . "/tools/{$this->ty}.php";
-			return;
-		}
-
-		if ($this->ty === "sidebar") {
-			$sidebar = new SidebarMenu($this->scriptName, $this->ty, $this->isCoordinator);
+		if ($ty === "sidebar") {
+			$sidebar = new SidebarMenu($this->scriptName, $ty, $this->isCoordinator);
 			echo $sidebar->render();
 			return;
 		}
 
-		if ($this->isCoordinator && in_array($this->ty, $coordFolders, true)) {
-			include_once __DIR__ . "/coordinator/admin/{$this->ty}/index.php";
+		if (in_array($ty, $this->toolsFiles, true)) {
+			include_once __DIR__ . "/tools/{$ty}.php";
 			return;
 		}
 
-		if ($this->isCoordinator && is_file($adminFile)) {
-			include_once $adminFile;
-			return;
-		}
-
-		// Fallback for missing or unauthorized routes
-		TestPrinter::testPrint("can't find {$adminFile}");
-		include_once __DIR__ . "/404.php";
-	}
-
-	/**
-	 * Fetches existing directory names under coordinator/admin folder.
-	 */
-	private function getCoordinatorFolders(): array
-	{
-		$directories = glob(__DIR__ . '/coordinator/admin/*', GLOB_ONLYDIR);
-		if ($directories === false) {
-			return [];
-		}
-
-		return array_map('basename', $directories);
+		$this->resolver->dispatch($ty);
 	}
 }

@@ -239,6 +239,4 @@ class QidsIndexController extends AbstractControllerNoPost
 	}
 }
 
-// Instantiate and execute controller
-$controller = new QidsIndexController();
-$controller->handleRequest();
+

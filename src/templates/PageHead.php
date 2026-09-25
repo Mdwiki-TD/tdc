@@ -1,7 +1,7 @@
 <?php
 // src/templates/PageHead.php
 
-namespace App\Head;
+namespace App\Templates;
 
 class PageHead
 {
@@ -211,6 +211,6 @@ class PageHead
                 </div>
             </header>
 
-            HTML;
+        HTML;
     }
 }

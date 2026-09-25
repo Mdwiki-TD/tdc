@@ -176,6 +176,4 @@ class FullTranslatorsIndexController extends AbstractController
     }
 }
 
-// Instantiate and execute controller
-$controller = new FullTranslatorsIndexController();
-$controller->handleRequest();
+

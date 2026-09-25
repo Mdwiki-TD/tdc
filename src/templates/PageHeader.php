@@ -4,7 +4,7 @@
 namespace App\Templates;
 
 use App\User\CurrentUser;
-use App\Head\PageHead;
+use App\Templates\PageHead;
 
 class PageHeader
 {
@@ -18,7 +18,6 @@ class PageHeader
 		$this->timeStart = microtime(true);
 		$this->currentUser = $currentUser;
 		$this->pageHead    = new PageHead();
-
 	}
 
 	/**
@@ -119,7 +118,6 @@ class PageHeader
 	{
 		return $this->timeStart;
 	}
-
 }
 
 // Usage (replaces the old procedural src/templates/header.php):

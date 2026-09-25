@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\TranslateType;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\APICalls\MdwikiSql\insert_to_translate_type;
+use function App\MdwikiSql\insert_to_translate_type;
 
 /**
  * Class TtPostProcessor

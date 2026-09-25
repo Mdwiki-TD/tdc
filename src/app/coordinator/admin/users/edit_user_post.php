@@ -4,9 +4,9 @@
 namespace App\Coordinator\Admin\Users;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\APICalls\MdwikiSql\sql_update_user;
-use function App\APICalls\MdwikiSql\sql_add_user;
-use function App\APICalls\MdwikiSql\get_user_by_username;
+use function App\MdwikiSql\sql_update_user;
+use function App\MdwikiSql\sql_add_user;
+use function App\MdwikiSql\get_user_by_username;
 
 /**
  * Class EditUserPostProcessor

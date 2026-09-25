@@ -4,8 +4,12 @@ include_once __DIR__ . '/CurrentUser.php';
 include_once __DIR__ . '/settings.php';
 
 # api_calls
+include_once __DIR__ . '/MdwikiSql/Database.php';
+include_once __DIR__ . '/MdwikiSql/add_helper.php';
+include_once __DIR__ . '/MdwikiSql/mdwiki_sql.php';
+
+# api_calls
 include_once __DIR__ . '/api_calls/mdwiki_api.php';
-include_once __DIR__ . '/api_calls/mdwiki_sql.php';
 include_once __DIR__ . '/api_calls/wiki_api.php';
 
 # td_api_wrap

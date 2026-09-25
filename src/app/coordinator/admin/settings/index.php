@@ -1,9 +1,10 @@
 <?php
 // src/app/coordinator/admin/settings/index.php
 
-namespace App\Coordinator\Admin\settings;
+namespace App\Coordinator\Admin\Settings;
 
 use App\Coordinator\Admin\Common\AbstractController;
+use App\Coordinator\Admin\Settings\SettingsPostProcessor;
 use function App\SQLorAPI\Funcs\get_td_or_sql_settings;
 
 
@@ -133,6 +134,4 @@ class SettingsIndexController extends AbstractController
     }
 }
 
-// Instantiate and execute controller
-$controller = new SettingsIndexController();
-$controller->handleRequest();
+
