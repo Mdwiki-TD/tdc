@@ -202,7 +202,3 @@ class AppRouter
 		return array_map('basename', $directories);
 	}
 }
-
-// Instantiate and execute application router
-$router = new AppRouter();
-$router->handleRequest();

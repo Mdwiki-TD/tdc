@@ -1,19 +1,25 @@
 <?php
-
-include_once __DIR__ . '/app/include_all.php';
-include_once __DIR__ . '/templates/PageHeader.php';
+// src/index.php
 
 use App\Templates\PageHeader;
+use App\Templates\PageFooter;
+use App\AppRouter;
+
+include_once __DIR__ . '/app/include_all.php';
+include_once __DIR__ . '/app/index.php'; // AppRouter
+
+require_once __DIR__ . '/templates/PageHead.php';
+include_once __DIR__ . '/templates/PageHeader.php';
+include_once __DIR__ . '/templates/PageFooter.php';
 
 $pageHeader = new PageHeader();
 $pageHeader->render();
 
-echo <<<HTML
-	<script>$("#coord").addClass("active");</script>
-HTML;
-
-include_once __DIR__ . '/app/index.php';
+// Instantiate and execute application router
+$router = new AppRouter();
+$router->handleRequest();
 
 $timeStart = $pageHeader->getLoadStartTime();
 
-include_once __DIR__ . '/templates/footer.php';
+$pageFooter = new PageFooter($timeStart);
+$pageFooter->render();

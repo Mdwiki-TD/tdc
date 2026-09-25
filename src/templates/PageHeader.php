@@ -7,8 +7,6 @@ use App\User\CurrentUser;
 use App\Settings\Settings;
 use App\Head\PageHead;
 
-require_once __DIR__ . '/PageHead.php';
-
 class PageHeader
 {
 	private Settings $settings;

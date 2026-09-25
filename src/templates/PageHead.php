@@ -200,7 +200,7 @@ class PageHead
                                         </span>
                                     </a>
                                 </li>
-                                <li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6" id="coord">
+                                <li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6 active" id="coord">
                                     $coordTools
                                 </li>
 
