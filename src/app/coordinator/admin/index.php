@@ -86,7 +86,7 @@ class AdminResolver
             "reports"              => "App\\Coordinator\\Admin\\Reports\\ReportsIndexController",
             "reports2"             => "App\\Coordinator\\Admin\\Reports\\ReportsIndex2Controller",
             "translated"           => "App\\Coordinator\\Admin\\Translated\\TranslatedIndexController",
-            "tt"                   => "App\\Coordinator\\Admin\\Tt\\TtIndexController",
+            "tt"                   => "App\\Coordinator\\Admin\\Tt\\TranslateTypeIndexController",
             "users"                => "App\\Coordinator\\Admin\\Users\\UsersIndexController",
             "users_msg"            => "App\\Coordinator\\Admin\\Users\\MsgController",
             "wikirefs_options"     => "App\\Coordinator\\Admin\\WikiRefsOptions\\WikiRefsOptionsIndexController",
