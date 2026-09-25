@@ -6,7 +6,7 @@ namespace App\MdwikiSql\AddHelper;
 use function App\MdwikiSql\execute_query;
 use function App\MdwikiSql\fetch_query;
 
-function insert_to_pages(array $pageData): bool
+function insert_to_pages(array $pageData, bool $overwrite): bool
 {
 	// Replace underscores with spaces for string values
 	foreach ($pageData as $key => $value) {
@@ -32,19 +32,28 @@ function insert_to_pages(array $pageData): bool
 		$recordId = $row['id'];
 		$recordTarget = $row['target'];
 
+		// Allow update if target is empty/NULL, or equals the incoming target value
+		$canUpdate = empty($recordTarget) || $recordTarget === $pageData['target'];
+
+		if (!$canUpdate && !$overwrite) {
+			// Target already set to something else — do not overwrite, don't pretend success
+			if (isset($_REQUEST['test'])) {
+				echo "skip update: target already set to '$recordTarget' for id:$recordId<br/>";
+			}
+			return false;
+		}
+
 		$updateQuery = <<<SQL
 			UPDATE pages
 			SET target = ?, pupdate = ?, word = ?
-			WHERE user = ? AND title = ? AND lang = ? AND (target = '' OR target IS NULL);
+			WHERE id = ?;
 		SQL;
 
 		$updateParams = [
 			$pageData['target'],
 			$pageData['pupdate'],
 			$pageData['word'],
-			$pageData['user'],
-			$pageData['title'],
-			$pageData['lang']
+			$recordId
 		];
 
 		if (isset($_REQUEST['test'])) {
@@ -89,6 +98,7 @@ function insert_to_pages(array $pageData): bool
  * @param string $target
  * @param string $pupdate
  * @param int|string|null $word
+ * @param bool $overwrite
  * @return bool
  */
 function add_pages_to_db(
@@ -99,12 +109,14 @@ function add_pages_to_db(
 	string $user,
 	string $target,
 	string $pupdate,
-	int|string|null $word = null
+	int|string|null $word = null,
+	bool $overwrite = false,
 ): bool {
+
 	$cat = (!empty($cat)) ? $cat : 'RTT';
 
 	// Add them all to array
-	$t = [
+	$pageData = [
 		'user'           => trim($user),
 		'lang'           => trim($lang),
 		'title'          => trim($title),
@@ -115,7 +127,7 @@ function add_pages_to_db(
 		'word'           => $word,
 	];
 
-	return insert_to_pages($t);
+	return insert_to_pages($pageData, $overwrite);
 }
 
 function checkAfterAdd(
