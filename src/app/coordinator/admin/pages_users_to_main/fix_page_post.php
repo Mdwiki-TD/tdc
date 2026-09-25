@@ -28,6 +28,7 @@ class FixItPostProcessor extends AbstractPostHandler
      */
     private function processFormData(array $post): void
     {
+        $overwrite = (int)($post['overwrite'] ?? "0") == 1;
         $title     = $post['title'] ?? '';
         $lang      = $post['lang'] ?? '';
         $newTarget = $post['new_target'] ?? '';
@@ -56,7 +57,17 @@ class FixItPostProcessor extends AbstractPostHandler
             $word = MainTables::getWord($title, $translateType);
         }
 
-        $add = add_pages_to_db($title, $translateType, $cat, $lang, $newUser, $newTarget, $pupdate, $word);
+        $add = add_pages_to_db(
+            $title,
+            $translateType,
+            $cat,
+            $lang,
+            $newUser,
+            $newTarget,
+            $pupdate,
+            $word,
+            $overwrite,
+        );
         if ($add === false) {
             $this->addError("Failed to add translations.");
         } else {
@@ -68,8 +79,6 @@ class FixItPostProcessor extends AbstractPostHandler
         if ($result === false) {
             $this->addError("checkAfterAdd: Failed to add translations.");
         } else {
-            $this->addText("checkAfterAdd: Translations added successfully.");
-
             $deleted = $this->deleteUserPage($id);
 
             if ($deleted) {
