@@ -54,7 +54,7 @@ class AddIndexController extends AbstractController
     private function buildStarterRows(string $cats): string
     {
         $typiesTemplate = <<<HTML
-            <select name='rows[%s][type]' id='rows[%s][type]' class='form-select w-100' data-bs-theme="auto">
+            <select name='rows[%s][translate_type]' id='rows[%s][translate_type]' class='form-select w-100' data-bs-theme="auto">
                 <option value='lead'>Lead</option><option value='all'>All</option>
             </select>
         HTML;

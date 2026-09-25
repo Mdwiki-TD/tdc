@@ -14,6 +14,7 @@ require_once __DIR__ . '/fix_page_post.php';
  */
 class FixItController extends AbstractEditController
 {
+    private bool $showOverWriteBtn = false;
     private string $id;
     private string $newTarget;
     private string $newUser;
@@ -25,6 +26,8 @@ class FixItController extends AbstractEditController
         $this->id        = $_GET['id'] ?? '';
         $this->newTarget = $_GET['new_target'] ?? '';
         $this->newUser   = $_GET['new_user'] ?? '';
+
+        $this->showOverWriteBtn = false;
     }
 
     protected function createPostProcessor(): object
@@ -51,7 +54,12 @@ class FixItController extends AbstractEditController
             [$title, $lang]
         );
         if (!empty($dup)) {
-            echo $this->renderDuplicatePageAlert($dup[0]);
+            $row = $dup[0];
+            $target  = $row['target'] ?? '';
+            if ($target !== $this->newTarget) {
+                echo $this->renderDuplicatePageAlert($row);
+                $this->showOverWriteBtn = true;
+            }
         }
     }
     protected function getCardTitle(): string
@@ -60,23 +68,29 @@ class FixItController extends AbstractEditController
         return "Edit Page ($oldTarget)";
     }
 
-    private function renderDuplicatePageAlert(array $dup): string
+    private function renderDuplicatePageAlert(array $row): string
     {
-        $lang    = $dup['lang'] ?? '';
-        $target  = $dup['target'] ?? '';
+        $lang    = $row['lang'] ?? '';
+        $target  = $row['target'] ?? '';
         $href    = 'https://' . $lang . '.wikipedia.org/wiki/' . rawurlencode($target);
-        $user    = $dup['user'] ?? '';
-        $pupd    = $dup['pupdate'] ?? '';
+        $user    = $row['user'] ?? '';
+        $pupd    = $row['pupdate'] ?? '';
 
         return <<<HTML
             <div class='card mb-3'>
                 <div class='card-header alert alert-danger'><h4>Duplicate page already exists in DB:</h4></div>
                 <div class='card-body p-1'>
                     <ul class='list-group'>
-                        <li class='list-group-item'><span class='fw-bold'>Target:</span>
-                            <a target='_blank' rel='noopener' href='$href'>$target</a></li>
-                        <li class='list-group-item'><span class='fw-bold'>User:</span> $user</li>
-                        <li class='list-group-item'><span class='fw-bold'>Published:</span> $pupd</li>
+                        <li class='list-group-item'>
+                            <span class='fw-bold'>Target:</span>
+                            <a target='_blank' rel='noopener' href='$href'>$target</a>
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='fw-bold'>User:</span> $user
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='fw-bold'>Published:</span> $pupd
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -94,6 +108,21 @@ class FixItController extends AbstractEditController
 
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($this->newTarget, ENT_QUOTES, 'UTF-8');
+        $overWriteBtn = $this->showOverWriteBtn
+            ? <<<HTML
+                <div class='col-6'>
+                    <div class='input-group form-control mb-3'>
+                        <div class='input-group-prepend'>
+                            <span class='me-3'>OverWrite:</span>
+                        </div>
+                        <div class="form-check form-switch form-inline">
+                            <input type='text' name='overwrite' value='0' hidden>
+                            <input class='form-check-input' type='checkbox' name='overwrite' value='1'>
+                        </div>
+                    </div>
+                </div>
+            HTML
+            : "";
 
         return <<<HTML
             <form action='index.php?ty=fix_page&nonav=120' method="POST">
@@ -145,9 +174,10 @@ class FixItController extends AbstractEditController
                         </div>
                     </div>
                     <div class='row'>
-                        <div class='col-12'>
+                        <div class='col-6'>
                             <input class='btn btn-outline-primary' type='submit' value='send'/>
                         </div>
+                        {$overWriteBtn}
                     </div>
                 </div>
             </form>

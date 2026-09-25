@@ -77,8 +77,4 @@ include_once __DIR__ . '/utils/html.php';
 include_once __DIR__ . '/utils/tables_dir.php';
 
 include_once __DIR__ . '/backend/include.php';
-
-include_once __DIR__ . '/results/get_results.php';
-include_once __DIR__ . '/results/getcats.php';
-
 require_once __DIR__ . '/coordinator/include.php';

@@ -3,73 +3,144 @@
 
 namespace App\MdwikiSql\AddHelper;
 
-use App\Tables\Main\MainTables;
 use function App\MdwikiSql\execute_query;
 use function App\MdwikiSql\fetch_query;
 
-function insert_to_pages($t)
+function insert_to_pages(array $pageData, bool $overwrite): bool
 {
-
-	// in all $t values find and replace "_" by " " if its string
-	foreach ($t as $key => $value) {
+	// Replace underscores with spaces for string values
+	foreach ($pageData as $key => $value) {
 		if (is_string($value)) {
-			$t[$key] = str_replace('_', ' ', $value);
+			$pageData[$key] = str_replace('_', ' ', $value);
 		}
 	}
 
-	$query1 = <<<SQL
-        UPDATE pages
-            SET target = ?, pupdate = ?, word = ?
-        WHERE user = ? AND title = ? AND lang = ? and (target = '' OR target IS NULL);
-    SQL;
+	// Check if the record already exists in the database
+	$checkQuery = <<<SQL
+		SELECT id, target FROM pages
+		WHERE user = ? AND title = ? AND lang = ?
+		LIMIT 1;
+	SQL;
 
-	$params1 = [$t['target'], $t['pupdate'], $t['word'], $t['user'], $t['title'], $t['lang']];
+	$checkParams = [$pageData['user'], $pageData['title'], $pageData['lang']];
+	$exists = fetch_query($checkQuery, $checkParams);
 
-	$_result1 = execute_query($query1, $params1);
+	// If record exists, UPDATE it
+	if ($exists && count($exists) > 0) {
+		$row = $exists[0];
 
-	$query2 = <<<SQL
-        INSERT INTO pages (title, word, translate_type, cat, lang, date, user, pupdate, target, add_date)
-            SELECT ?, ?, ?, ?, ?, DATE(NOW()), ?, ?, ?, now()
-        WHERE NOT EXISTS (SELECT 1 FROM pages WHERE title = ? AND lang = ? AND user = ? );
-    SQL;
+		$recordId = $row['id'];
+		$recordTarget = $row['target'];
 
-	$params2 = [$t['title'], $t['word'], $t['translate_type'], $t['cat'], $t['lang'], $t['user'], $t['pupdate'], $t['target'], $t['title'], $t['lang'], $t['user']];
+		// Allow update if target is empty/NULL, or equals the incoming target value
+		$canUpdate = empty($recordTarget) || $recordTarget === $pageData['target'];
 
-	if (isset($_REQUEST['test'])) echo "$query1<br/>$query2";
+		if (!$canUpdate && !$overwrite) {
+			// Target already set to something else — do not overwrite, don't pretend success
+			if (isset($_REQUEST['test'])) {
+				echo "skip update: target already set to '$recordTarget' for id:$recordId<br/>";
+			}
+			return false;
+		}
 
-	$result2 = execute_query($query2, $params2);
+		$updateQuery = <<<SQL
+			UPDATE pages
+			SET target = ?, pupdate = ?, word = ?
+			WHERE id = ?;
+		SQL;
 
-	return $result2;
-}
+		$updateParams = [
+			$pageData['target'],
+			$pageData['pupdate'],
+			$pageData['word'],
+			$recordId
+		];
 
-function add_pages_to_db($title, $translateType, $cat, $lang, $user, $target, $pupdate, $word)
-{
+		if (isset($_REQUEST['test'])) {
+			echo "updateQuery: $updateQuery<br/>";
+		}
 
-	$translateType = (!empty($translateType)) ? $translateType : 'lead';
-	$cat = (!empty($cat)) ? $cat : 'RTT';
-
-	if (empty($word)) {
-		$word = MainTables::$xWordsTable[$title] ?? 0;
-		if ($translateType == 'all') $word = MainTables::$xAllWordsTable[$title] ?? 0;
+		return execute_query($updateQuery, $updateParams);
 	}
 
-	// add them all to array
-	$t = [
-		'user'		=> trim($user),
-		'lang'		=> trim($lang),
-		'title'		=> trim($title),
-		'target'	=> trim($target),
-		'pupdate'	=> trim($pupdate),
-		'cat'		=> trim($cat),
-		'translate_type' => trim($translateType),
-		'word'		=> $word
+	// If record does not exist, INSERT it
+	$insertQuery = <<<SQL
+		INSERT INTO pages (title, word, translate_type, cat, lang, date, user, pupdate, target, add_date)
+		VALUES (?, ?, ?, ?, ?, DATE(NOW()), ?, ?, ?, NOW());
+	SQL;
+
+	$insertParams = [
+		$pageData['title'],
+		$pageData['word'],
+		$pageData['translate_type'],
+		$pageData['cat'],
+		$pageData['lang'],
+		$pageData['user'],
+		$pageData['pupdate'],
+		$pageData['target']
 	];
 
-	insert_to_pages($t);
+	if (isset($_REQUEST['test'])) {
+		echo "insertQuery: $insertQuery<br/>";
+	}
 
-	$findIt = fetch_query("SELECT * FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?", [$title, $lang, $user, $target]);
+	return execute_query($insertQuery, $insertParams);
+}
 
-	$insertDone = (!empty($findIt)) ? true : false;
+/**
+ * Add pages to the database and verify insertion.
+ *
+ * @param string $title
+ * @param string $translateType
+ * @param string|null $cat
+ * @param string $lang
+ * @param string $user
+ * @param string $target
+ * @param string $pupdate
+ * @param int|string|null $word
+ * @param bool $overwrite
+ * @return bool
+ */
+function add_pages_to_db(
+	string $title,
+	string $translateType,
+	?string $cat,
+	string $lang,
+	string $user,
+	string $target,
+	string $pupdate,
+	int|string|null $word = null,
+	bool $overwrite = false,
+): bool {
 
-	return $insertDone;
+	$cat = (!empty($cat)) ? $cat : 'RTT';
+
+	// Add them all to array
+	$pageData = [
+		'user'           => trim($user),
+		'lang'           => trim($lang),
+		'title'          => trim($title),
+		'target'         => trim($target),
+		'pupdate'        => trim($pupdate),
+		'cat'            => trim($cat),
+		'translate_type' => trim($translateType),
+		'word'           => $word,
+	];
+
+	return insert_to_pages($pageData, $overwrite);
+}
+
+function checkAfterAdd(
+	string $title,
+	string $lang,
+	string $user,
+	string $target,
+): bool {
+
+	$findIt = fetch_query(
+		"SELECT 1 FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?",
+		[$title, $lang, $user, $target]
+	);
+
+	return (!empty($findIt));
 }

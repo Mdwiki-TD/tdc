@@ -3,8 +3,10 @@
 
 namespace App\Coordinator\Admin\Add;
 
+use App\Tables\Main\MainTables;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\MdwikiSql\AddHelper\add_pages_to_db;
+use function App\MdwikiSql\AddHelper\checkAfterAdd;
 
 /**
  * Class AddPostProcessor
@@ -12,7 +14,7 @@ use function App\MdwikiSql\AddHelper\add_pages_to_db;
  */
 class AddPostProcessor extends AbstractPostHandler
 {
-    protected bool $isPopUpPage = false;
+	protected bool $isPopUpPage = false;
 
 
 	public function process(array $post): void
@@ -28,25 +30,43 @@ class AddPostProcessor extends AbstractPostHandler
 		foreach ($rows as $key => $table) {
 			$mdtitle = $table['mdtitle'] ?? '';
 			$cat     = rawurldecode($table['cat'] ?? '');
-			$type    = $table['type'] ?? '';
+			$translateType = $table['translate_type'] ?? '';
 			$user    = rawurldecode($table['user'] ?? '');
 			$lang    = $table['lang'] ?? '';
 			$target  = $table['target'] ?? '';
 			$pupdate = $table['pupdate'] ?? '';
 			$word    = $table['word'] ?? '';
 
-			if (!empty($mdtitle) && !empty($lang) && !empty($user)) {
-				$result = add_pages_to_db($mdtitle, $type, $cat, $lang, $user, $target, $pupdate, $word);
+			$translateType = (!empty($translateType)) ? $translateType : 'lead';
 
-				if ($result === false) {
+			if (empty($word)) {
+				$word = MainTables::getWord($mdtitle, $translateType);
+			}
+			if (!empty($mdtitle) && !empty($lang) && !empty($user)) {
+				$add = add_pages_to_db(
+					$mdtitle,
+					$translateType,
+					$cat,
+					$lang,
+					$user,
+					$target,
+					$pupdate,
+					$word,
+				);
+				if ($add === false) {
 					$this->addError("Failed to add translations.");
 				} else {
 					$this->addText("Translations added successfully.");
+				}
+
+        		$result = checkAfterAdd($mdtitle, $lang, $user, $target);
+
+				if ($result === false) {
+					$this->addError("checkAfterAdd: Failed to add translations.");
 				}
 			} else {
 				$this->addError("Failed to add translations. Missing required fields.");
 			}
 		}
 	}
-
 }

@@ -77,13 +77,13 @@ class MsgTest extends TestCase
         $hereParams = [
             'code' => 'ar',
             'cat' => 'RTT',
-            'type' => 'lead',
+            'tr_type' => 'lead',
             'title' => 'TestTitle'
         ];
 
         $this->assertArrayHasKey('code', $hereParams);
         $this->assertArrayHasKey('cat', $hereParams);
-        $this->assertArrayHasKey('type', $hereParams);
+        $this->assertArrayHasKey('tr_type', $hereParams);
         $this->assertArrayHasKey('title', $hereParams);
     }
 
@@ -92,14 +92,14 @@ class MsgTest extends TestCase
         $params = [
             'code' => 'ar',
             'cat' => 'RTT',
-            'type' => 'lead',
+            'tr_type' => 'lead',
             'title' => 'Test Title'
         ];
 
         $query = http_build_query($params);
         $this->assertStringContainsString('code=ar', $query);
         $this->assertStringContainsString('cat=RTT', $query);
-        $this->assertStringContainsString('type=lead', $query);
+        $this->assertStringContainsString('tr_type=lead', $query);
         $this->assertStringContainsString('title=Test+Title', $query);
     }
 

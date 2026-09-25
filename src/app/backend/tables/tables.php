@@ -25,7 +25,39 @@ class MainTables
 	public static $xLeadRefsTable = [];
 	public static $xAssessmentsTable = [];
 	public static $xLangsTable = [];
+
+	/**
+	 * Get the ref count based on mdtitle and translateType.
+	 *
+	 * @param string $mdtitle
+	 * @param string $translateType
+	 * @return int
+	 */
+	public static function getRefCount(string $mdtitle, string $translateType = 'lead'): int
+	{
+		if ($translateType === 'all') {
+			return self::$xAllRefsTable[$mdtitle] ?? 0;
+		}
+
+		return self::$xLeadRefsTable[$mdtitle] ?? 0;
+	}
+	/**
+	 * Get the word count based on mdtitle and translateType.
+	 *
+	 * @param string $mdtitle
+	 * @param string $translateType
+	 * @return int
+	 */
+	public static function getWord(string $mdtitle, string $translateType = 'lead'): int
+	{
+		if ($translateType === 'all') {
+			return self::$xAllWordsTable[$mdtitle] ?? 0;
+		}
+
+		return self::$xWordsTable[$mdtitle] ?? 0;
+	}
 }
+
 $_titles_infos = td_or_sql_titles_infos();
 
 // var_dump(json_encode($_titles_infos, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
