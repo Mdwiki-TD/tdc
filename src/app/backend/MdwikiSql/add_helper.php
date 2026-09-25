@@ -17,7 +17,7 @@ function insert_to_pages(array $pageData): bool
 
 	// Check if the record already exists in the database
 	$checkQuery = <<<SQL
-		SELECT 1 FROM pages
+		SELECT id, target FROM pages
 		WHERE user = ? AND title = ? AND lang = ?
 		LIMIT 1;
 	SQL;
@@ -27,6 +27,11 @@ function insert_to_pages(array $pageData): bool
 
 	// If record exists, UPDATE it
 	if ($exists && count($exists) > 0) {
+		$row = $exists[0];
+
+		$recordId = $row['id'];
+		$recordTarget = $row['target'];
+
 		$updateQuery = <<<SQL
 			UPDATE pages
 			SET target = ?, pupdate = ?, word = ?
