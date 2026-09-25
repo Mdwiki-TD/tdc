@@ -1,11 +1,10 @@
 <?php
 // src/app/coordinator/admin/settings/settings_post.php
 
-namespace App\Coordinator\Admin\settings;
+namespace App\Coordinator\Admin\Settings;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\MdwikiSql\update_settings_value;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class SettingsPostProcessor
