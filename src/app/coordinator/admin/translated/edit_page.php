@@ -30,13 +30,10 @@ class EditPageController extends AbstractEditController
         return new EditPagePostHandler($this->id, $this->table);
     }
 
-    public function renderFormCard(): void {
-        $this->renderEditForm($this->id, $this->table);
-    }
     /**
      * Displays the edit page form.
      */
-    private function renderEditForm(string $id, string $table): void
+    private function renderEditForm(string $id, string $table): string
     {
         $pageData = fetch_query("SELECT * FROM {$table} WHERE id = ?", [$id]);
 
@@ -51,7 +48,7 @@ class EditPageController extends AbstractEditController
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
-        $form = <<<HTML
+        return <<<HTML
             <form action='index.php?ty=translated/edit_page&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
                 <input id='id' name='id' value='$id' type='hidden'/>
@@ -119,10 +116,14 @@ class EditPageController extends AbstractEditController
                 </div>
             </form>
         HTML;
-
-        $headerTitle = "Edit Page (id: {$this->id}, table: {$this->table})";
-
-        $this->echoCard($headerTitle, $form);
+    }
+    protected function getCardTitle(): string
+    {
+        return "Edit Page (id: {$this->id}, table: {$this->table})";
+    }
+    public function buildForm(): string
+    {
+        return $this->renderEditForm($this->id, $this->table);
     }
 }
 

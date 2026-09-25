@@ -88,15 +88,13 @@ class EditQidController extends AbstractEditController
         HTML;
     }
 
-    /**
-     * Renders the card wrapping the form.
-     */
-    public function renderFormCard(): void
+    protected function getCardTitle(): string
     {
-        $headerTitle = ($this->id !== '') ? 'Edit Qid' : 'Add New Qid';
-        $form = $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
-
-        $this->echoCard($headerTitle, $form);
+        return ($this->id !== '') ? 'Edit Qid' : 'Add New Qid';
+    }
+    public function buildForm(): string
+    {
+        return $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
     }
 }
 

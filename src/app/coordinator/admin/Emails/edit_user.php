@@ -102,15 +102,14 @@ class EditUserController extends AbstractEditController
         HTML;
     }
 
-    /**
-     * Renders the card wrapping the form.
-     */
-    public function renderFormCard(): void
-    {
-        $headerTitle = (!empty($this->userId)) ? 'Edit User' : 'Add New User';
-        $form = $this->buildFormHtml($this->userId);
 
-        $this->echoCard($headerTitle, $form);
+    protected function getCardTitle(): string
+    {
+        return $this->userId !== '' ? 'Edit User' : 'Add New User';
+    }
+    protected function buildForm(): string
+    {
+        return $this->buildFormHtml($this->userId);
     }
 }
 

@@ -104,15 +104,13 @@ class EditTranslateTypeController extends AbstractEditController
         HTML;
     }
 
-    /**
-     * Renders the card wrapping the form.
-     */
-    public function renderFormCard(): void
+    protected function getCardTitle(): string
     {
-        $headerTitle = (!empty($this->id)) ? 'Edit Translate type' : 'Add Translate type';
-        $form = $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
-
-        $this->echoCard($headerTitle, $form);
+        return (!empty($this->id)) ? 'Edit Translate type' : 'Add Translate type';
+    }
+    public function buildForm(): string
+    {
+        return $this->buildFormHtml($this->title, $this->lead, $this->full, $this->id);
     }
 }
 

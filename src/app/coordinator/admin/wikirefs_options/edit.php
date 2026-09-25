@@ -20,18 +20,22 @@ class WikiRefsOptionsEditController extends AbstractEditController
     {
         return new WikiRefsOptionsEditPostHandler();
     }
+    protected function getCardTitle(): string
+    {
+        $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
+        $headerTitle = (!empty($id)) ? 'Edit language settings' : 'Add language settings';
+        return $headerTitle;
+    }
     /**
      * Renders the add/edit form for the language settings row.
      */
-    public function renderFormCard(): void
+    public function buildForm(): string
     {
         $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $langCode   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');
         $expend     = filter_var($_GET['expend'] ?? '', FILTER_VALIDATE_INT) ?: '';
         $moveDots   = filter_var($_GET['move_dots'] ?? '', FILTER_VALIDATE_INT) ?: '';
         $addEnLang  = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
-
-        $headerTitle = (!empty($id)) ? 'Edit language settings' : 'Add language settings';
 
         $idRow = <<<HTML
             <input class='form-control' value='$id' name='id' type='hidden'/>
@@ -80,7 +84,7 @@ class WikiRefsOptionsEditController extends AbstractEditController
             HTML;
         }
 
-        $form = <<<HTML
+        return <<<HTML
             <form action='index.php?ty=wikirefs_options/edit&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
                 <input name='edit' value="1" type="hidden"/>
@@ -108,8 +112,6 @@ class WikiRefsOptionsEditController extends AbstractEditController
                 </div>
             </form>
         HTML;
-
-        $this->echoCard($headerTitle, $form);
     }
 }
 
