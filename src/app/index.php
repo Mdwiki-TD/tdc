@@ -5,7 +5,7 @@ namespace App;
 
 use App\User\CurrentUser;
 use function App\Utils\Functions\test_print;
-use function App\Utils\HtmlSide\create_side;
+use App\Utils\SidebarMenu;
 
 /**
  * Class AppRouter
@@ -31,9 +31,9 @@ class AppRouter
 	];
 
 
-    public function __construct(CurrentUser $currentUser)
-    {
-        $this->currentUser = $currentUser;
+	public function __construct(CurrentUser $currentUser)
+	{
+		$this->currentUser = $currentUser;
 		$this->isCoordinator = $this->currentUser->isCoordinator();
 		$this->scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 		$this->ty = $this->resolveTy();
@@ -113,7 +113,8 @@ class AppRouter
 	 */
 	private function renderSidebarStart(): void
 	{
-		$sidebar = create_side($this->scriptName, $this->ty, $this->isCoordinator);
+		$sidebar = new SidebarMenu($this->scriptName, $this->ty, $this->isCoordinator);
+		$sidebar = $sidebar->render();
 
 		echo <<<HTML
         <div class='row content'>
@@ -171,7 +172,8 @@ class AppRouter
 		}
 
 		if ($this->ty === "sidebar") {
-			echo create_side($this->scriptName, $this->ty, $this->isCoordinator);
+			$sidebar = new SidebarMenu($this->scriptName, $this->ty, $this->isCoordinator);
+			echo $sidebar->render();
 			return;
 		}
 
