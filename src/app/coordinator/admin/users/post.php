@@ -1,7 +1,7 @@
 <?php
-// src/app/coordinator/admin/emails/post.php
+// src/app/coordinator/admin/users/post.php
 
-namespace App\Coordinator\Admin\Emails;
+namespace App\Coordinator\Admin\Users;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\sql_update_user;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Coordinator\Admin\Emails;
+namespace Tests\Coordinator\Admin\Users;
 
 use PHPUnit\Framework\TestCase;
 

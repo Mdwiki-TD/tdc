@@ -1,7 +1,7 @@
 <?php
-// src/app/coordinator/admin/emails/edit_user.php
+// src/app/coordinator/admin/users/edit_user.php
 
-namespace App\Coordinator\Admin\Emails;
+namespace App\Coordinator\Admin\Users;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\Utils\Html\make_project_to_user;

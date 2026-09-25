@@ -5,7 +5,6 @@ namespace App\Coordinator\Admin\Campaigns;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
-use function App\csrf\verify_csrf_token;
 
 /**
  * Class CampaignsPostProcessor

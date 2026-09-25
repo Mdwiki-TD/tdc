@@ -1,7 +1,7 @@
 <?php
-// src/app/coordinator/admin/emails/msg.php
+// src/app/coordinator/admin/users/msg.php
 
-namespace App\Coordinator\Admin\Emails;
+namespace App\Coordinator\Admin\Users;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
@@ -11,7 +11,7 @@ use function App\APICalls\MdwikiSql\fetch_query;
 use function App\APICalls\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
-use function App\Emails\Sugust\get_sugust;
+use function App\Tools\Sugust\get_sugust;
 
 /**
  * Class MsgController

@@ -67,9 +67,9 @@ class AppRouter
 			"add",
 			"admins",
 			"campaigns",
-			"emails",
-			"emails/edit_user",
-			"emails/msg",
+			"users",
+			"users/edit_user",
+			"users/msg",
 			"full_translators",
 			"last_coord",
 			"pages_users_to_main",
@@ -95,9 +95,9 @@ class AppRouter
 		$aliasesMap = [
 			"translate_type" => "tt",
 			"Campaigns" => "campaigns",
-			"Emails" => "emails",
-			"Emails/edit_user" => "emails/edit_user",
-			"Emails/msg" => "emails/msg",
+			"Emails" => "users",
+			"Emails/edit_user" => "users/edit_user",
+			"Emails/msg" => "users/msg",
 		];
 		if (isset($aliasesMap[$rawTy])) {
 			$rawTy = $aliasesMap[$rawTy];
