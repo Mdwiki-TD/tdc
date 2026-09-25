@@ -3,16 +3,8 @@
 
 namespace App\Templates;
 
-use App\User\CurrentUser;
-
 class PageFooter
 {
-	private currentUser $currentUser;
-
-	public function __construct(CurrentUser $currentUser)
-	{
-		$this->currentUser = $currentUser;
-	}
 
 	/**
 	 * Builds the inline <script> that reports page load time via the
@@ -46,11 +38,6 @@ class PageFooter
 	 */
 	public function render(?float $timeStart = null): void
 	{
-		if ($this->currentUser->isLoggedIn()) {
-			if (!isset($_COOKIE['cookie_alert_dismissed1'])) {
-				echo $this->cokkieMsg();
-			}
-		}
 
 		echo $this->loadTimeScript($timeStart);
 
@@ -69,28 +56,8 @@ class PageFooter
         </html>
         HTML;
 	}
-	private function cokkieMsg(): string {
-		return <<<HTML
-            <div id="cookie-alert" class="alert alert-dismissible fade show" role="alert">
-                <div class="d-flex align-items-center justify-content-center text-center fixed-bottom">
-                    <div class="card border-warning m-1">
-                        <div class="w-100 d-flex justify-content-end">
-                            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <div class="card-body me-5">
-                            <p class="card-text">This website uses cookies to save your username for a better experience.</p>
-                        </div>
-                        <div class="card-footer text-muted">
-                            <button type="button" class="btn btn-sm btn-success" onclick="acceptCookieAlert()" data-bs-dismiss="alert" aria-label="Close">Accept</button>
-                            <button type="button" class="btn btn-sm btn-warning" data-bs-dismiss="alert" aria-label="Close">Dismiss</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        HTML;
-	}
 }
 
 // Usage (replaces the old procedural src/templates/footer.php):
-// $pageFooter = new PageFooter($currentUser);
+// $pageFooter = new PageFooter();
 // $pageFooter->render($pageHeader->getLoadStartTime());

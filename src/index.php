@@ -27,5 +27,5 @@ $router->handleRequest();
 
 $timeStart = $pageHeader->getLoadStartTime();
 
-$pageFooter = new PageFooter($currentUser);
+$pageFooter = new PageFooter();
 $pageFooter->render($timeStart);
