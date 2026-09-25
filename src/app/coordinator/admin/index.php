@@ -80,15 +80,20 @@ class AdminResolver
         // String mapping with fully qualified namespace
         // Array mapping string keys to fully qualified class names
         $map = [
-            "last_coord"           => "App\\Coordinator\\Admin\\Las tCoord\\LastCoordIndexController",
+            "add"                  => "App\\Coordinator\\Admin\\Add\\AddIndexController",
+            "admins"               => "App\\Coordinator\\Admin\\Admins\\AdminsIndexController",
+            "campaigns"            => "App\\Coordinator\\Admin\\Campaigns\\CampaignsIndexController",
+            "full_translators"     => "App\\Coordinator\\Admin\\FullTranslators\\FullTranslatorsIndexController",
+            "last_coord"           => "App\\Coordinator\\Admin\\LastCoord\\LastCoordIndexController",
             "pages_users_to_main"  => "App\\Coordinator\\Admin\\PagesUsersToMain\\PagesUsersToMainIndexController",
+            "projects"             => "App\\Coordinator\\Admin\\Projects\\ProjectsIndexController",
             "qids"                 => "App\\Coordinator\\Admin\\Qids\\QidsIndexController",
             "reports"              => "App\\Coordinator\\Admin\\Reports\\ReportsIndexController",
-            "reports2"             => "App\\Coordinator\\Admin\\Reports\\ReportsIndex2Controller",
+            "settings"             => "App\\Coordinator\\Admin\\Settings\\SettingsIndexController",
             "translated"           => "App\\Coordinator\\Admin\\Translated\\TranslatedIndexController",
-            "tt"                   => "App\\Coordinator\\Admin\\Tt\\TranslateTypeIndexController",
+            "tt"                   => "App\\Coordinator\\Admin\\TranslateType\\TranslateTypeIndexController",
             "users"                => "App\\Coordinator\\Admin\\Users\\UsersIndexController",
-            "users_msg"            => "App\\Coordinator\\Admin\\Users\\MsgController",
+            "users_not_inprocess"  => "App\\Coordinator\\Admin\\UsersNotInprocess\\UsersNotInprocessIndexController",
             "wikirefs_options"     => "App\\Coordinator\\Admin\\WikiRefsOptions\\WikiRefsOptionsIndexController",
         ];
         if (isset($map[$ty])) {
