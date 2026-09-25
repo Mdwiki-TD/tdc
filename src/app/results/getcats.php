@@ -2,7 +2,7 @@
 
 namespace App\Results\GetCats;
 
-use function App\Utils\Functions\test_print;
+use function App\Utils\test_print;
 use function App\APICalls\MdwikiApi\get_mdwiki_url_with_params;
 use function App\Utils\TablesDir\open_td_tables_file;
 

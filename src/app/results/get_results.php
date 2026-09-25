@@ -3,7 +3,7 @@
 namespace App\Results\GetResults;
 
 use function App\Results\GetCats\get_mdwiki_cat_members;
-use function App\Utils\Functions\test_print;
+use function App\Utils\test_print;
 use function App\Utils\TablesDir\open_td_tables_file;
 
 function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)

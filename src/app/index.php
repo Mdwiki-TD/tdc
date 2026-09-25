@@ -4,14 +4,14 @@
 namespace App;
 
 use App\User\CurrentUser;
-use function App\Utils\Functions\test_print;
 use App\Utils\SidebarMenu;
+use App\Utils\TestPrinter;
 
 /**
  * Class AppRouter
  * Handles layout initialization and dynamic request routing for the application.
  */
-class AppRouter
+class AppRouter extends TestPrinter
 {
 	private CurrentUser $currentUser;
 	private bool $isCoordinator;
@@ -188,7 +188,7 @@ class AppRouter
 		}
 
 		// Fallback for missing or unauthorized routes
-		test_print("can't find {$adminFile}");
+		$this->testPrint("can't find {$adminFile}");
 		include_once __DIR__ . "/coordinator/404.php";
 	}
 
