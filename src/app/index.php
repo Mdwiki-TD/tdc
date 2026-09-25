@@ -30,9 +30,10 @@ class AppRouter
 		"stat",
 	];
 
-	public function __construct()
-	{
-		$this->currentUser = CurrentUser::getInstance();
+
+    public function __construct(CurrentUser $currentUser)
+    {
+        $this->currentUser = $currentUser;
 		$this->isCoordinator = $this->currentUser->isCoordinator();
 		$this->scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 		$this->ty = $this->resolveTy();

@@ -4,29 +4,21 @@
 namespace App\Templates;
 
 use App\User\CurrentUser;
-use App\Settings\Settings;
 use App\Head\PageHead;
 
 class PageHeader
 {
-	private Settings $settings;
 	private CurrentUser $currentUser;
 	private PageHead $pageHead;
 	private float $timeStart;
-	private bool $hideNav;
 
-	public function __construct(bool $hideNav = false)
+	public function __construct(CurrentUser $currentUser)
 	{
 		// Track page load time for performance monitoring
 		$this->timeStart = microtime(true);
-
-		$this->settings    = Settings::getInstance();
-		$this->currentUser = new CurrentUser($this->settings);
+		$this->currentUser = $currentUser;
 		$this->pageHead    = new PageHead();
 
-		// When ?nonav is passed, the navbar is skipped entirely
-		// instead of being rendered and then hidden with JS.
-		$this->hideNav = $hideNav;
 	}
 
 	/**
@@ -49,13 +41,13 @@ class PageHeader
 	 */
 	private function buildCoordToolsLink(): string
 	{
-		if ($this->currentUser->isCoordinator()) {
-			return '<a href="/tdc/index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Coordinator Tools</a>';
-		}
+		$isCoordinator = $this->currentUser->isCoordinator();
 
-		return '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Tools</a>';
+		$href  = $isCoordinator ? '/tdc/index.php' : 'tools.php';
+		$label = $isCoordinator ? 'Coordinator Tools' : 'Tools';
+
+		return '<a href="' . $href . '" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> ' . $label . '</a>';
 	}
-
 	/**
 	 * Builds the user menu (login link, or username + logout)
 	 * depending on the authentication state.
@@ -92,8 +84,11 @@ class PageHeader
 	 * Renders the full page header: <head>, alert (if any),
 	 * <body> tag, navigation, and opening of the main container.
 	 */
-	public function render(): void
+	public function render(bool $hideNav = false): void
 	{
+		// When ?nonav is passed, the navbar is skipped entirely
+		// instead of being rendered and then hidden with JS.
+
 		echo "<!DOCTYPE html>";
 		echo $this->pageHead->print_full_head();
 
@@ -103,7 +98,7 @@ class PageHeader
 
 		echo "<body>";
 
-		if (!$this->hideNav) {
+		if (!$hideNav) {
 			echo $this->pageHead->write_body(
 				$this->buildCoordToolsLink(),
 				$this->buildUserMenu()
@@ -125,10 +120,6 @@ class PageHeader
 		return $this->timeStart;
 	}
 
-	public function isNavHidden(): bool
-	{
-		return $this->hideNav;
-	}
 }
 
 // Usage (replaces the old procedural src/templates/header.php):

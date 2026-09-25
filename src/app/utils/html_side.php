@@ -1,4 +1,5 @@
 <?php
+// src/app/utils/html_side.php
 
 /**
  * Sidebar Navigation Generator Module
