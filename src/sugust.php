@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 
 include_once __DIR__ . '/include.php';
 
-use function App\Tools\Sugust\get_sugust;
+use function App\Coordinator\Helps\Sugust\get_sugust;
 
 $title  = $_GET['title'] ?? $_POST['title'] ?? '';
 $lang  = $_GET['lang'] ?? $_POST['lang'] ?? '';

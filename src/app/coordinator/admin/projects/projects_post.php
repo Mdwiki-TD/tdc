@@ -15,6 +15,8 @@ use function App\APICalls\MdwikiSql\execute_query;
  */
 class ProjectsPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = false;
+
 	public function process(array $post): void
 	{
         $this->processRows($post['rows'] ?? []);

@@ -13,6 +13,8 @@ use function App\APICalls\MdwikiSql\execute_query;
  */
 class CampaignsPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = false;
+
 	private string $defaultCat;
 
 	public function __construct()

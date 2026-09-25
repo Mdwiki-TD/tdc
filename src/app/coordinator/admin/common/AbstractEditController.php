@@ -39,7 +39,7 @@ abstract class AbstractEditController extends AbstractController
         $this->echoCard($this->getCardTitle(), $this->buildForm());
     }
 
-    /** Hook: e.g. fix_it prints a duplicate-page alert before the card. */
+    /** Hook: e.g. fix_page prints a duplicate-page alert before the card. */
     protected function beforeCard(): void {}
 
     /**

@@ -15,6 +15,8 @@ use function App\APICalls\MdwikiSql\get_qid_by_title;
  */
 class QidsPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = true;
+
 	private string $qidTable;
 
 	public function __construct(string $qidTable = 'qids')

@@ -13,6 +13,8 @@ use function App\APICalls\MdwikiSql\insert_to_translate_type;
  */
 class TtPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = true;
+
 
 	/**
 	 * Executes authorization check and processes the POST submission.

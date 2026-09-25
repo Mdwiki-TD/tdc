@@ -11,7 +11,7 @@ use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\make_edit_icon_new;
 use function App\SQLorAPI\Recent\get_pages_users_to_main;
 use function App\SQLorAPI\Funcs\get_pages_users_langs;
-use function App\Tools\RecentHelps\filter_recent2;
+use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
 
 /**

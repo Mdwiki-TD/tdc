@@ -1,7 +1,7 @@
 <?php
 // src/app/coordinator/helpers/add_helper.php
 
-namespace Add\AddPost;
+namespace App\Coordinator\Helps\AddHelper;
 
 use App\Tables\Main\MainTables;
 use function App\APICalls\MdwikiSql\execute_query;

@@ -1,13 +1,12 @@
 <?php
-// src/app/coordinator/admin/pages_users_to_main/fix_it_post.php
+// src/app/coordinator/admin/pages_users_to_main/fix_page_post.php
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\APICalls\MdwikiSql\execute_query;
 use function App\APICalls\MdwikiSql\fetch_query;
-use function App\Utils\Html\div_alert;
-use function Add\AddPost\add_pages_to_db;
+use function App\Coordinator\Helps\AddHelper\add_pages_to_db;
 
 /**
  * Class FixItPostProcessor
@@ -15,6 +14,8 @@ use function Add\AddPost\add_pages_to_db;
  */
 class FixItPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = true;
+
 	public function process(array $post): void
 	{
         $this->processFormData($post);

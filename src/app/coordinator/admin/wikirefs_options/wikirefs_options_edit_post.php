@@ -13,6 +13,8 @@ use function App\APICalls\MdwikiSql\execute_query;
  */
 class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = true;
+
     protected function process(array $post): void
     {
         $langCode  = trim($post['lang_code'] ?? '');

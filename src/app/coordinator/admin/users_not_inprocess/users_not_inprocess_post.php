@@ -12,6 +12,8 @@ use function App\APICalls\MdwikiSql\execute_query;
  */
 class UsersNotInprocessPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = false;
+
 	private const DB_TABLE_NAME = 'users_no_inprocess';
 
 	public function process(array $post): void

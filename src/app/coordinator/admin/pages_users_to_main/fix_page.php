@@ -1,12 +1,12 @@
 <?php
-// src/app/coordinator/admin/pages_users_to_main/fix_it.php
+// src/app/coordinator/admin/pages_users_to_main/fix_page.php
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\APICalls\MdwikiSql\fetch_query;
 
-require_once __DIR__ . '/fix_it_post.php';
+require_once __DIR__ . '/fix_page_post.php';
 
 /**
  * Class FixItController

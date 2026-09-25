@@ -82,7 +82,7 @@ class AppRouter
 			"users_not_inprocess",
 			"wikirefs_options",
 
-			"pages_users_to_main/fix_it",
+			"pages_users_to_main/fix_page",
 			"qids/edit_qid",
 			"translated/edit_page",
 			"tt/edit_translate_type",
@@ -97,7 +97,8 @@ class AppRouter
 			"users_no_inprocess" => "users_not_inprocess",							// new
 			"Campaigns" => "campaigns",
 			"Emails" => "users",
-			"fix_page" => "pages_users_to_main/fix_it",								// new
+			"pages_users_to_main/fix_it" => "pages_users_to_main/fix_page",								// new
+			"fix_page" => "pages_users_to_main/fix_page",								// new
 
 			"edit_page" => "translated/edit_page",									// new
 			"edit_user" => "users/edit_user",										// new
@@ -109,7 +110,7 @@ class AppRouter
 			"edit_translate_type" => "tt/edit_translate_type",						// new
 		];
 		if (isset($aliasesMap[$rawTy])) {
-			$rawTy = $aliasesMap[$rawTy];
+			return $aliasesMap[$rawTy];
 		}
 
 		// Sanitize parameter to prevent directory traversal
@@ -205,7 +206,7 @@ class AppRouter
 
 		// Fallback for missing or unauthorized routes
 		TestPrinter::testPrint("can't find {$adminFile}");
-		include_once __DIR__ . "/coordinator/404.php";
+		include_once __DIR__ . "/404.php";
 	}
 
 	/**

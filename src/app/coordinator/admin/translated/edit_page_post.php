@@ -13,6 +13,8 @@ use function App\APICalls\MdwikiSql\execute_query;
  */
 class EditPagePostHandler extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = true;
+
     private string $id;
     private string $table;
 

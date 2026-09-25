@@ -125,7 +125,7 @@ function make_mail_icon_new(array $tab, string $funcName = "pup_window_new"): st
         'nonav' => '1'
     ];
 
-    $mailUrl = "index.php?ty=emails/msg&" . http_build_query($mailParams, '', '&', PHP_QUERY_RFC3986);
+    $mailUrl = "index.php?ty=users/msg&" . http_build_query($mailParams, '', '&', PHP_QUERY_RFC3986);
     $escapedUrl = htmlspecialchars($mailUrl, ENT_QUOTES, 'UTF-8');
 
     return <<<HTML

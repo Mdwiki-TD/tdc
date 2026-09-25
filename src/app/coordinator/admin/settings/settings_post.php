@@ -13,6 +13,8 @@ use function App\csrf\verify_csrf_token;
  */
 class SettingsPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = false;
+
 	public function process(array $post): void
 	{
         $this->processRows($post['rows'] ?? []);

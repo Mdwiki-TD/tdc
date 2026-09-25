@@ -14,6 +14,8 @@ use function App\APICalls\MdwikiSql\get_user_by_username;
  */
 class EditUserPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = true;
+
 
 	/**
 	 * Validates and processes the incoming submission.

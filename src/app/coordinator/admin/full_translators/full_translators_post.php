@@ -12,6 +12,8 @@ use function App\APICalls\MdwikiSql\execute_query;
  */
 class FullTranslatorsPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = false;
+
 	private const DB_TABLE_NAME = 'full_translators';
 
 

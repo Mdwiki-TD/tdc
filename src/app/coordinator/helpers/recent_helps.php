@@ -1,7 +1,7 @@
 <?php
 // src/app/coordinator/helpers/recent_helps.php
 
-namespace App\Tools\RecentHelps;
+namespace App\Coordinator\Helps\RecentHelps;
 
 use App\Tables\Langs\LangsTables;
 use function App\Utils\test_print;

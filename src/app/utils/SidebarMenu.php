@@ -104,7 +104,7 @@ class SidebarMenu
             ],
             'Users' => [
                 ['id' => 'admins', 'admin' => 1, 'href' => 'admins', 'title' => 'Coordinators', 'icon' => 'bi-person-gear'],
-                ['id' => 'emails', 'admin' => 1, 'href' => 'emails', 'title' => 'Emails', 'icon' => 'bi-envelope'],
+                ['id' => 'users', 'admin' => 1, 'href' => 'users', 'title' => 'Emails', 'icon' => 'bi-envelope'],
                 ['id' => 'full_tr', 'admin' => 1, 'href' => 'full_translators', 'title' => 'Full translators', 'icon' => 'bi-person-check'],
                 ['id' => 'user_inp', 'admin' => 1, 'href' => 'users_not_inprocess', 'title' => 'Not in process', 'icon' => 'bi-hourglass'],
             ],

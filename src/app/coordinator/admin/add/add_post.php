@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Add;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function Add\AddPost\add_pages_to_db;
+use function App\Coordinator\Helps\AddHelper\add_pages_to_db;
 
 /**
  * Class AddPostProcessor
@@ -12,6 +12,8 @@ use function Add\AddPost\add_pages_to_db;
  */
 class AddPostProcessor extends AbstractPostHandler
 {
+    protected bool $isPopUpPage = false;
+
 
 	public function process(array $post): void
 	{

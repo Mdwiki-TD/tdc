@@ -12,8 +12,8 @@ use function App\Utils\Html\make_edit_icon_new;
 use function App\SQLorAPI\Recent\get_recent_translated;
 use function App\SQLorAPI\Recent\get_total_translations_count;
 use function App\SQLorAPI\Funcs\get_pages_langs;
-use function App\Tools\RecentHelps\filter_table;
-use function App\Tools\RecentHelps\filter_recent2;
+use function App\Coordinator\Helps\RecentHelps\filter_table;
+use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
 /**
  * Class TranslatedIndexController

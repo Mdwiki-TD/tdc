@@ -11,7 +11,7 @@ use function App\APICalls\MdwikiSql\fetch_query;
 use function App\APICalls\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
-use function App\Tools\Sugust\get_sugust;
+use function App\Coordinator\Helps\Sugust\get_sugust;
 
 /**
  * Class MsgController

@@ -17,6 +17,9 @@ use function App\Utils\Html\div_alert;
  */
 abstract class AbstractPostHandler
 {
+    // Regular protected property with a default value
+    protected bool $isPopUpPage = false;
+
     protected bool $returnToFormPage = false;
     protected bool $csrfError = false;
 
@@ -43,17 +46,19 @@ abstract class AbstractPostHandler
         $this->texts[] = $message;
     }
 
-	/**
-	 * Generates a close button HTML block.
-	 */
-	public function getCloseButtonHtml(): string
-	{
-		return <<<HTML
+    /**
+     * Generates a close button HTML block.
+     */
+    public function getCloseButtonHtml(): string
+    {
+        if (!$this->isPopUpPage) return "";
+
+        return <<<HTML
             <div class="aligncenter">
                 <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
             </div>
         HTML;
-	}
+    }
 
     public function DisplayCsrfAlert(): void
     {
