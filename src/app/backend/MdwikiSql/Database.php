@@ -83,7 +83,7 @@ class Database
         }
     }
 
-    public function disableFullGroupByMode($sqlQuery)
+    public function disableFullGroupByMode(string $sqlQuery)
     {
         // if the query contains "GROUP BY", disable ONLY_FULL_GROUP_BY, strtoupper() is for case insensitive
         if (strpos(strtoupper($sqlQuery), 'GROUP BY') !== false && !$this->groupByModeDisabled) {
@@ -98,26 +98,7 @@ class Database
         }
     }
 
-    public function executequery($sqlQuery, $params = null)
-    {
-        try {
-            $this->disableFullGroupByMode($sqlQuery);
-
-            $q = $this->db->prepare($sqlQuery);
-            if ($params) {
-                $q->execute($params);
-            } else {
-                $q->execute();
-            }
-            return true;
-        } catch (PDOException $e) {
-            echo "sql error:" . $e->getMessage() . "<br>" . $sqlQuery;
-            error_log("SQL Error in executequery: " . $e->getMessage() . " | Query: " . $sqlQuery);
-            return false;
-        }
-    }
-
-    public function fetchquery($sqlQuery, $params = null)
+    public function fetchquery(string $sqlQuery, $params = null)
     {
         try {
             $this->disableFullGroupByMode($sqlQuery);
@@ -137,6 +118,40 @@ class Database
             error_log("SQL Error in fetchquery: " . $e->getMessage() . " | Query: " . $sqlQuery);
             return [];
         }
+    }
+
+    public function executequery(string $sqlQuery, $params = null)
+    {
+        try {
+            $this->disableFullGroupByMode($sqlQuery);
+
+            $q = $this->db->prepare($sqlQuery);
+            if ($params) {
+                $q->execute($params);
+            } else {
+                $q->execute();
+            }
+            error_log("Rows affected: " . $q->rowCount());
+            return true;
+        } catch (PDOException $e) {
+            echo "sql error:" . $e->getMessage() . "<br>" . $sqlQuery;
+            error_log("SQL Error in executequery: " . $e->getMessage() . " | Query: " . $sqlQuery);
+            $this->test_print("SQL Error in executequery: " . $e->getMessage() . " | Query: " . $sqlQuery);
+            return false;
+        }
+    }
+
+    public function executQqueryOrFail(string $sqlQuery, $params = null): void
+    {
+        $this->disableFullGroupByMode($sqlQuery);
+
+        $q = $this->db->prepare($sqlQuery);
+        if ($params) {
+            $q->execute($params);
+        } else {
+            $q->execute();
+        }
+        error_log("Rows affected: " . $q->rowCount());
     }
 
     public function __destruct()

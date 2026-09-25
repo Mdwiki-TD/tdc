@@ -110,16 +110,20 @@ function add_pages_to_db(
 		'word'           => $word,
 	];
 
-	$insert_result = insert_to_pages($t);
+	return insert_to_pages($t);
+}
 
-	if (!$insert_result) {
-		return false;
-	}
+function checkAfterAdd(
+	string $title,
+	string $lang,
+	string $user,
+	string $target,
+): bool {
 
 	$findIt = fetch_query(
 		"SELECT 1 FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?",
 		[$title, $lang, $user, $target]
 	);
 
-	return !empty($findIt);
+	return (!empty($findIt));
 }

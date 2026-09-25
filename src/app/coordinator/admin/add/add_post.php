@@ -6,6 +6,7 @@ namespace App\Coordinator\Admin\Add;
 use App\Tables\Main\MainTables;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\MdwikiSql\AddHelper\add_pages_to_db;
+use function App\MdwikiSql\AddHelper\checkAfterAdd;
 
 /**
  * Class AddPostProcessor
@@ -42,12 +43,19 @@ class AddPostProcessor extends AbstractPostHandler
 				$word = MainTables::getWord($mdtitle, $translateType);
 			}
 			if (!empty($mdtitle) && !empty($lang) && !empty($user)) {
-				$result = add_pages_to_db($mdtitle, $translateType, $cat, $lang, $user, $target, $pupdate, $word);
-
-				if ($result === false) {
+				$add = add_pages_to_db($mdtitle, $translateType, $cat, $lang, $user, $target, $pupdate, $word);
+				if ($add === false) {
 					$this->addError("Failed to add translations.");
 				} else {
 					$this->addText("Translations added successfully.");
+				}
+
+        		$result = checkAfterAdd($mdtitle, $lang, $user, $target);
+
+				if ($result === false) {
+					$this->addError("checkAfterAdd: Failed to add translations.");
+				} else {
+					$this->addText("checkAfterAdd: Translations added successfully.");
 				}
 			} else {
 				$this->addError("Failed to add translations. Missing required fields.");

@@ -8,6 +8,7 @@ use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\MdwikiSql\execute_query;
 use function App\MdwikiSql\fetch_query;
 use function App\MdwikiSql\AddHelper\add_pages_to_db;
+use function App\MdwikiSql\AddHelper\checkAfterAdd;
 
 /**
  * Class FixItPostProcessor
@@ -55,12 +56,19 @@ class FixItPostProcessor extends AbstractPostHandler
             $word = MainTables::getWord($title, $translateType);
         }
 
-        $result = add_pages_to_db($title, $translateType, $cat, $lang, $newUser, $newTarget, $pupdate, $word);
-
-        if ($result === false) {
+        $add = add_pages_to_db($title, $translateType, $cat, $lang, $newUser, $newTarget, $pupdate, $word);
+        if ($add === false) {
             $this->addError("Failed to add translations.");
         } else {
             $this->addText("Translations added successfully.");
+        }
+
+        $result = checkAfterAdd($title, $lang, $newUser, $newTarget);
+
+        if ($result === false) {
+            $this->addError("checkAfterAdd: Failed to add translations.");
+        } else {
+            $this->addText("checkAfterAdd: Translations added successfully.");
 
             $deleted = $this->deleteUserPage($id);
 
