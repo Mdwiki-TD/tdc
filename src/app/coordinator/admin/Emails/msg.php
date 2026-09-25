@@ -73,11 +73,7 @@ class MsgController extends AbstractControllerNoPost
      */
     private function renderHeaderScripts(): void
     {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
+        echo '</div><div class="container-fluid">';
 
         $hoste = ($_SERVER["SERVER_NAME"] == "localhost")
             ? "https://cdnjs.cloudflare.com"
@@ -332,7 +328,6 @@ class MsgController extends AbstractControllerNoPost
             <input name='csrf_token' value="$csrfToken" type="hidden"/>
         HTML;
     }
-
 }
 
 // Instantiate and execute controller

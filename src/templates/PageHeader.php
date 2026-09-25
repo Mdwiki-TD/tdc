@@ -15,7 +15,7 @@ class PageHeader
 	private float $timeStart;
 	private bool $hideNav;
 
-	public function __construct()
+	public function __construct(bool $hideNav = false)
 	{
 		// Track page load time for performance monitoring
 		$this->timeStart = microtime(true);
@@ -26,7 +26,7 @@ class PageHeader
 
 		// When ?nonav is passed, the navbar is skipped entirely
 		// instead of being rendered and then hidden with JS.
-		$this->hideNav = isset($_GET['nonav']);
+		$this->hideNav = $hideNav;
 	}
 
 	/**
@@ -108,6 +108,8 @@ class PageHeader
 				$this->buildCoordToolsLink(),
 				$this->buildUserMenu()
 			);
+		} else {
+			echo "<header class='mb-3 border-bottom'> </header>";
 		}
 
 		echo "<main id='body'><div id='maindiv' class='container-fluid'>";

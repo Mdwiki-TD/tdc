@@ -47,10 +47,6 @@ abstract class AbstractEditController extends AbstractController
      */
     public function renderHeaderScripts(): void
     {
-        echo '</div><script>
-            $("#mainnav").hide();
-            $("#maindiv").hide();
-        </script>
-        <div class="container-fluid">';
+        echo '</div><div class="container-fluid">';
     }
 }

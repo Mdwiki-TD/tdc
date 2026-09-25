@@ -12,7 +12,8 @@ require_once __DIR__ . '/templates/PageHead.php';
 include_once __DIR__ . '/templates/PageHeader.php';
 include_once __DIR__ . '/templates/PageFooter.php';
 
-$pageHeader = new PageHeader();
+$hideNav = isset($_GET['nonav']);
+$pageHeader = new PageHeader($hideNav);
 $pageHeader->render();
 
 // Instantiate and execute application router
