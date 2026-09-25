@@ -13,6 +13,7 @@ class PageHeader
 	private CurrentUser $currentUser;
 	private PageHead $pageHead;
 	private float $timeStart;
+	private bool $hideNav;
 
 	public function __construct()
 	{
@@ -22,6 +23,10 @@ class PageHeader
 		$this->settings    = Settings::getInstance();
 		$this->currentUser = new CurrentUser($this->settings);
 		$this->pageHead    = new PageHead();
+
+		// When ?nonav is passed, the navbar is skipped entirely
+		// instead of being rendered and then hidden with JS.
+		$this->hideNav = isset($_GET['nonav']);
 	}
 
 	/**
@@ -45,7 +50,7 @@ class PageHeader
 	private function buildCoordToolsLink(): string
 	{
 		if ($this->currentUser->isCoordinator()) {
-			return '<a href="/tdc/index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span> <i class="bi bi-tools me-1"></i> Coordinator Tools</a>';
+			return '<a href="/tdc/index.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Coordinator Tools</a>';
 		}
 
 		return '<a href="tools.php" class="nav-link py-2 px-0 px-lg-2"><span class="navtitles"></span><i class="bi bi-tools me-1"></i> Tools</a>';
@@ -98,10 +103,12 @@ class PageHeader
 
 		echo "<body>";
 
-		echo $this->pageHead->write_body(
-			$this->buildCoordToolsLink(),
-			$this->buildUserMenu()
-		);
+		if (!$this->hideNav) {
+			echo $this->pageHead->write_body(
+				$this->buildCoordToolsLink(),
+				$this->buildUserMenu()
+			);
+		}
 
 		echo "<main id='body'><div id='maindiv' class='container-fluid'>";
 	}
@@ -115,4 +122,13 @@ class PageHeader
 	{
 		return $this->timeStart;
 	}
+
+	public function isNavHidden(): bool
+	{
+		return $this->hideNav;
+	}
 }
+
+// Usage (replaces the old procedural src/templates/header.php):
+// $pageHeader = new PageHeader();
+// $pageHeader->render();
