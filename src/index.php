@@ -3,7 +3,6 @@
 
 use App\Templates\PageHeader;
 use App\Templates\PageFooter;
-use App\Settings\Settings;
 
 use App\User\CurrentUser;
 use App\AppRouter;
@@ -17,8 +16,7 @@ include_once __DIR__ . '/templates/PageFooter.php';
 
 $hideNav = isset($_GET['nonav']);
 
-$settings    = Settings::getInstance();
-$currentUser = CurrentUser::getInstance($settings);
+$currentUser = CurrentUser::getInstance();
 
 $pageHeader = new PageHeader($currentUser);
 $pageHeader->render($hideNav);
@@ -29,5 +27,5 @@ $router->handleRequest();
 
 $timeStart = $pageHeader->getLoadStartTime();
 
-$pageFooter = new PageFooter($timeStart);
-$pageFooter->render();
+$pageFooter = new PageFooter($currentUser);
+$pageFooter->render($timeStart);
