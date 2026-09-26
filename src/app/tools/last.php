@@ -31,6 +31,11 @@ class LastController extends AbstractControllerNoPost
      */
     public function handleRequest(): void
     {
+        $this->ShowMainView();
+        $this->renderDataTableScript();
+    }
+    public function ShowMainView(): void
+    {
         $qslResults = $this->fetchResults();
 
         $recentRows = '';
@@ -50,7 +55,6 @@ class LastController extends AbstractControllerNoPost
         $tableId = ($this->lastTable === 'pages') ? 'last_table' : 'last_users_table';
 
         $this->renderMainCard($countResult, $filterTa, $filterByLang, $tableId, $recentRows);
-        $this->renderDataTableScript();
     }
 
     /**
@@ -164,6 +168,89 @@ class LastController extends AbstractControllerNoPost
     }
 
     /**
+     * Builds the language filter <select> options.
+     */
+    private function filterRecent(string $lang, array $data): string
+    {
+        ksort($data);
+        $langList = "<option data-tokens='All' value='All'>All</option>";
+
+        foreach ($data as $codr) {
+            $code    = $codr["lang"] ?? '';
+            $autonym = $codr["autonym"] ?? '';
+            if (empty($code)) {
+                continue;
+            }
+
+            $selected = ($code === $lang) ? 'selected' : '';
+            $langList .= <<<HTML
+                <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
+            HTML;
+        }
+        return $langList;
+    }
+
+    /**
+     * Renders the DataTables initialization and column-toggle scripts.
+     */
+    private function renderDataTableScript(): void
+    {
+        echo <<<HTML
+            <script>
+                $(document).ready(function() {
+                    var table;
+                    var tableElement = $('#last_table');
+                    if (tableElement.length) {
+                        table = $('#last_table').DataTable({
+                            stateSave: true,
+                            // order: [ [6, 'desc'] ],
+                            paging: false,
+                            // lengthMenu: [[100, 150, 200], [250, 150, 200]],
+                            // scrollY: 800,
+                            responsive: {
+                                details: true
+                            }
+                        });
+                    }
+
+                    var usersTableElement = $('#last_users_table');
+                    if (usersTableElement.length) {
+                        table = $('#last_users_table').DataTable({
+                            stateSave: true,
+                            // paging: false,
+                            lengthMenu: [
+                                [100, 150, 200],
+                                [100, 150, 200]
+                            ],
+                            // scrollY: 800,
+                            responsive: {
+                                details: true
+                            }
+                        });
+                    }
+                    if (table) {
+                        document.querySelectorAll('a.toggle-vis').forEach((el) => {
+                            el.addEventListener('click', function(e) {
+                                e.preventDefault();
+
+                                // add class mb_btn_active to this
+                                el.classList.toggle('btn-outline-primary');
+                                el.classList.toggle('btn-outline-secondary');
+
+                                let columnIdx = e.target.getAttribute('data-column');
+                                let column = table.column(columnIdx);
+
+                                // Toggle the visibility
+                                column.visible(!column.visible());
+                            });
+                        });
+                    }
+
+                });
+            </script>
+        HTML;
+    }
+    /**
      * Renders a single "recent translations" table row.
      */
     private function createLastTableData(array $tabg, int $nnnn): string
@@ -246,29 +333,6 @@ class LastController extends AbstractControllerNoPost
     }
 
     /**
-     * Builds the language filter <select> options.
-     */
-    private function filterRecent(string $lang, array $data): string
-    {
-        ksort($data);
-        $langList = "<option data-tokens='All' value='All'>All</option>";
-
-        foreach ($data as $codr) {
-            $code    = $codr["lang"] ?? '';
-            $autonym = $codr["autonym"] ?? '';
-            if (empty($code)) {
-                continue;
-            }
-
-            $selected = ($code === $lang) ? 'selected' : '';
-            $langList .= <<<HTML
-                <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
-            HTML;
-        }
-        return $langList;
-    }
-
-    /**
      * Renders the main filter + results card.
      */
     private function renderMainCard(int $countResult, string $filterTa, string $filterByLang, string $tableId, string $recentRows): void
@@ -347,64 +411,4 @@ class LastController extends AbstractControllerNoPost
         HTML;
     }
 
-    /**
-     * Renders the DataTables initialization and column-toggle scripts.
-     */
-    private function renderDataTableScript(): void
-    {
-        echo <<<HTML
-            <script>
-                $(document).ready(function() {
-                    var table;
-                    var tableElement = $('#last_table');
-                    if (tableElement.length) {
-                        table = $('#last_table').DataTable({
-                            stateSave: true,
-                            // order: [ [6, 'desc'] ],
-                            paging: false,
-                            // lengthMenu: [[100, 150, 200], [250, 150, 200]],
-                            // scrollY: 800,
-                            responsive: {
-                                details: true
-                            }
-                        });
-                    }
-
-                    var usersTableElement = $('#last_users_table');
-                    if (usersTableElement.length) {
-                        table = $('#last_users_table').DataTable({
-                            stateSave: true,
-                            // paging: false,
-                            lengthMenu: [
-                                [100, 150, 200],
-                                [100, 150, 200]
-                            ],
-                            // scrollY: 800,
-                            responsive: {
-                                details: true
-                            }
-                        });
-                    }
-                    if (table) {
-                        document.querySelectorAll('a.toggle-vis').forEach((el) => {
-                            el.addEventListener('click', function(e) {
-                                e.preventDefault();
-
-                                // add class mb_btn_active to this
-                                el.classList.toggle('btn-outline-primary');
-                                el.classList.toggle('btn-outline-secondary');
-
-                                let columnIdx = e.target.getAttribute('data-column');
-                                let column = table.column(columnIdx);
-
-                                // Toggle the visibility
-                                column.visible(!column.visible());
-                            });
-                        });
-                    }
-
-                });
-            </script>
-        HTML;
-    }
 }
