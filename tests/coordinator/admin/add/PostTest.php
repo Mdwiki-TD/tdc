@@ -21,7 +21,7 @@ class PostTest extends TestCase
 
         $mdtitle = $table['mdtitle'] ?? '';
         $cat = rawurldecode($table['cat'] ?? '');
-        $tr_type = $table['tr_type'] ?? '';
+        $trType = $table['tr_type'] ?? '';
         $user = rawurldecode($table['user'] ?? '');
         $lang = $table['lang'] ?? '';
         $target = $table['target'] ?? '';
@@ -30,7 +30,7 @@ class PostTest extends TestCase
 
         $this->assertEquals('Test Title', $mdtitle);
         $this->assertEquals('RTT', $cat);
-        $this->assertEquals('lead', $tr_type);
+        $this->assertEquals('lead', $trType);
         $this->assertEquals('testuser', $user);
         $this->assertEquals('ar', $lang);
         $this->assertEquals('TestTarget', $target);
@@ -191,11 +191,11 @@ class PostTest extends TestCase
 
         $mdtitle = $params['mdtitle'] ?? '';
         $cat = $params['cat'] ?? '';
-        $tr_type = $params['tr_type'] ?? '';
+        $trType = $params['tr_type'] ?? '';
 
         $this->assertEquals('', $mdtitle);
         $this->assertEquals('', $cat);
-        $this->assertEquals('', $tr_type);
+        $this->assertEquals('', $trType);
     }
 
     public function testWordParameterOptional()
