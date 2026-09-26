@@ -21,7 +21,7 @@ The TDC system follows a layered architecture design pattern, separating concern
 
 ### Component Organization
 
--   **Data Access Layer**: Retrieves data either directly from a SQL database or from an external API, determined by the `$use_td_api` global variable.
+-   **Data Access Layer**: Retrieves data either directly from a SQL database or from an external API, determined by the `$useTdApi` global variable.
 -   **Language Support System**: Manages language codes, names, and translations through a structured set of tables.
 
 ## Main Features
