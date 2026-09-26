@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Tools;
+
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\SQLorAPI\Process\get_users_process_new;
 
 
@@ -13,63 +16,76 @@ B.id as id2, B.title as title2, B.user as user2, B.target as target2
 where (A.target = '' OR A.target IS NULL)
 and A.lang = B.lang
 and A.title = B.title
-and B.target != ''
+and B.target !== ''
 ;
 
 للحذف:
-SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and A.lang = B.lang and A.title = B.title and B.target != '';
+SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and A.lang = B.lang and A.title = B.title and B.target !== '';
 */
 
-$text = "";
+/**
+ * Class ProcessTotalController
+ * Renders user process article counts table.
+ */
+class ProcessTotalController extends AbstractControllerNoPost
+{
+    /**
+     * Handles request execution.
+     */
+    public function handleRequest(): void
+    {
+        $text = "";
 
-$userProcessTab = get_users_process_new();
+        $userProcessTab = get_users_process_new();
 
-// sort user_process_tab by value
-arsort($userProcessTab);
+        // sort user_process_tab by value
+        arsort($userProcessTab);
 
-$n = 0;
+        $n = 0;
 
-foreach ($userProcessTab as $user => $count) {
-    if ($user != 'test' && !empty($user) && $count > 0) {
-        $n++;
+        foreach ($userProcessTab as $user => $count) {
+            if ($user !== 'test' && !empty($user) && $count > 0) {
+                $n++;
 
-        $use = rawurlEncode($user);
-        $use = str_replace('+', '_', $use);
+                $use = rawurlencode($user);
+                $use = str_replace('+', '_', $use);
 
-        $text .= <<<HTML
-        <tr>
-            <td data-content='#'>
-                $n
-            </td>
-            <td data-content='User'>
-                <a href='/Translation_Dashboard/leaderboard.php?user=$use'>$user</a>
-            </td>
-            <td data-content='Articles'>
-                $count
-            </td>
-        </tr>
-        HTML;
-    };
-};
-
-echo <<<HTML
-    <div class='card'>
-        <div class='card-header'>
-            <h4>Translations in process</h4>
-        </div>
-        <div class='card-body'>
-            <table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
-                <thead>
+                $text .= <<<HTML
                     <tr>
-                        <th>#</th>
-                        <th class='spannowrap'>User</th>
-                        <th>Articles</th>
+                        <td data-content='#'>
+                            $n
+                        </td>
+                        <td data-content='User'>
+                            <a href='/Translation_Dashboard/leaderboard.php?user=$use'>$user</a>
+                        </td>
+                        <td data-content='Articles'>
+                            $count
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    $text
-                </tbody>
-            </table>
-        </div>
-    </div>
-HTML;
+                HTML;
+            }
+        }
+
+        echo <<<HTML
+            <div class='card'>
+                <div class='card-header'>
+                    <h4>Translations in process</h4>
+                </div>
+                <div class='card-body'>
+                    <table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class='spannowrap'>User</th>
+                                <th>Articles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            $text
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        HTML;
+    }
+}
