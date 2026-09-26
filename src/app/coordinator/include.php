@@ -2,6 +2,7 @@
 // src/app/coordinator/include.php
 
 
+require_once __DIR__ . '/RecentTranslations.php';
 require_once __DIR__ . '/helpers/include.php';
 
 // require_once __DIR__ . '/admin/common/FormBuilder.php';
