@@ -8,7 +8,6 @@ class MsgTest extends TestCase
 {
     public function testGetHost1ReturnsString()
     {
-        // Since get_host1() is defined in msg.php, we need to test its logic
         $serverName = 'localhost';
         $hoste = ($serverName == "localhost")
             ? "https://cdnjs.cloudflare.com"
