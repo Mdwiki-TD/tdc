@@ -155,9 +155,7 @@ class StatController extends AbstractControllerNoPost
 			$without .= "<td>{$v['without']}</td>";
 		}
 
-		echo <<<HTML
-	<div class='card'>
-		<div class='card-header'>
+		$header = <<<HTML
 			<form method='get' action='index.php'>
 				<input name='ty' value='stat' type='hidden'/>
 				<div class='row'>
@@ -170,32 +168,37 @@ class StatController extends AbstractControllerNoPost
 					<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
 				</div>
 			</form>
-		</div>
-		<div class='card-body1'>
-			<table class='table table-striped compact table_text_left'>
-				<thead>
-					<tr>
-						<th>Key</th>
-						$ths
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th>With</th>
-						$with
-					</tr>
-					<tr>
-						<th>Without</th>
-						$without
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class='card-body'>
-			$tableHtml
-		</div>
-	</div>
-HTML;
+		HTML;
+		echo <<<HTML
+			<div class='card'>
+				<div class='card-header'>
+					{$header}
+				</div>
+				<div class='card-body1'>
+					<table class='table table-striped compact table_text_left'>
+						<thead>
+							<tr>
+								<th>Key</th>
+								$ths
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>With</th>
+								$with
+							</tr>
+							<tr>
+								<th>Without</th>
+								$without
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class='card-body'>
+					$tableHtml
+				</div>
+			</div>
+		HTML;
 	}
 
 	private function filterStat(string $cat): string

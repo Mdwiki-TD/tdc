@@ -58,11 +58,11 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         $catsTitles = array_keys(TablesSql::$sCatToCamp);
 
         $template = <<<HTML
-            <div class="input-group">
-                <span class="input-group-text">%s</span>
-                %s
-            </div>
-        HTML;
+			<div class="input-group">
+				<span class="input-group-text">%s</span>
+				%s
+			</div>
+		HTML;
 
         $dropdown = makeDropdown($catsTitles, $cat, 'cat', 'All');
 
@@ -75,9 +75,9 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
     private function loadTranslateTypeData(): void
     {
         $translateTypeSql = <<<SQL
-            SELECT tt_id, tt_title, tt_lead, tt_full
-            FROM translate_type
-        SQL;
+			SELECT tt_id, tt_title, tt_lead, tt_full
+			FROM translate_type
+		SQL;
 
         foreach (fetch_query($translateTypeSql) as $k => $tab) {
             $this->fullTranslatesTab[$tab['tt_title']] = [
@@ -159,28 +159,28 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
 
         return <<<HTML
-            <tr>
-                <th data-sort="$numb">
-                    $numb
-                </th>
-                <td data-sort="$title">
-                    $mdTitle
-                </td>
-                <td data-sort='$lead'>
-                    <div class='form-check form-switch'>
-                        <input class='form-check-input' type='checkbox' name='lead_$numb' value='1' $leadChecked disabled>
-                    </div>
-                </td>
-                <td data-sort='$full'>
-                    <div class='form-check form-switch'>
-                        <input class='form-check-input' type='checkbox' name='full_$numb' value='1' $fullChecked disabled>
-                    </div>
-                </td>
-                <td>
-                    $editIcon
-                </td>
-            </tr>
-        HTML;
+			<tr>
+				<th data-sort="$numb">
+					$numb
+				</th>
+				<td data-sort="$title">
+					$mdTitle
+				</td>
+				<td data-sort='$lead'>
+					<div class='form-check form-switch'>
+						<input class='form-check-input' type='checkbox' name='lead_$numb' value='1' $leadChecked disabled>
+					</div>
+				</td>
+				<td data-sort='$full'>
+					<div class='form-check form-switch'>
+						<input class='form-check-input' type='checkbox' name='full_$numb' value='1' $fullChecked disabled>
+					</div>
+				</td>
+				<td>
+					$editIcon
+				</td>
+			</tr>
+		HTML;
     }
 
     /**
@@ -190,41 +190,39 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
     {
         $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
 
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <form action="index.php?ty=translate_type" method="GET">
-                        $testin
-                        <input name='ty' value="translate_type" type="hidden"/>
-                        <div class='row'>
-                            <div class='col-md-6'>
-                                <h4>Translate Type ($ttCount):</h4>
-                            </div>
-                            <div class='col-md-4'>
-                                $filterHtml
-                            </div>
-                            <div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
-                        </div>
-                    </form>
-                </div>
-                <div class='card-body'>
-                    <table id='em' class='table table-striped compact table_responsive table_text_left'>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Title</th>
-                                <th>Lead</th>
-                                <th>Full</th>
-                                <th>Edit</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tab_ma">
-                            $tableRows
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        HTML;
+        $header = <<<HTML
+			<form action="index.php?ty=translate_type" method="GET">
+				$testin
+				<input name='ty' value="translate_type" type="hidden"/>
+				<div class='row'>
+					<div class='col-md-6'>
+						<h4>Translate Type ($ttCount):</h4>
+					</div>
+					<div class='col-md-4'>
+						$filterHtml
+					</div>
+					<div class='aligncenter col-md-2'><input class='btn btn-outline-primary' type='submit' value='Filter' /></div>
+				</div>
+			</form>
+		HTML;
+        $body = <<<HTML
+			<table id='em' class='table table-striped compact table_responsive table_text_left'>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Title</th>
+						<th>Lead</th>
+						<th>Full</th>
+						<th>Edit</th>
+					</tr>
+				</thead>
+				<tbody id="tab_ma">
+					$tableRows
+				</tbody>
+			</table>
+		HTML;
+
+        $this->echoBs5Card($header, $body, '');
     }
 
     /**
@@ -233,12 +231,12 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
     private function renderAddNewCard(string $newRow): void
     {
         echo <<<HTML
-            <div class='card mt-1'>
-                <div class='card-body'>
-                    $newRow
-                </div>
-            </div>
-        HTML;
+			<div class='card mt-1'>
+				<div class='card-body'>
+					$newRow
+				</div>
+			</div>
+		HTML;
     }
 
     /**
@@ -247,22 +245,20 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
     private function renderDataTableScript(): void
     {
         echo <<<HTML
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    var t = $('#em').DataTable({
-                        stateSave: true,
-                        // order: [[5    , 'desc']],
-                        // paging: false,
-                        lengthMenu: [
-                            [250, 500],
-                            [250, 500]
-                        ],
-                        // scrollY: 800
-                    });
-                });
-            </script>
-        HTML;
+			<script type="text/javascript">
+				$(document).ready(function() {
+					var t = $('#em').DataTable({
+						stateSave: true,
+						// order: [[5	, 'desc']],
+						// paging: false,
+						lengthMenu: [
+							[250, 500],
+							[250, 500]
+						],
+						// scrollY: 800
+					});
+				});
+			</script>
+		HTML;
     }
 }
-
-

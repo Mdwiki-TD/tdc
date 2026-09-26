@@ -4,13 +4,20 @@ src/
 │   ├── backend/
 │   │   ├── api_calls/
 │   │   │   ├── mdwiki_api.php
-│   │   │   ├── mdwiki_sql.php
 │   │   │   └── wiki_api.php
 │   │   ├── api_or_sql/
 │   │   │   ├── funcs.php
 │   │   │   ├── index.php
 │   │   │   ├── process_data.php
 │   │   │   └── recent_data.php
+│   │   ├── MdwikiSql/
+│   │   │   ├── add_helper.php
+│   │   │   ├── Database.php
+│   │   │   └── mdwiki_sql.php
+│   │   ├── results/
+│   │   │   ├── get_results.php
+│   │   │   ├── getcats.php
+│   │   │   └── README.md
 │   │   ├── tables/
 │   │   │   ├── lang_names.json
 │   │   │   ├── langcode.php
@@ -44,8 +51,8 @@ src/
 │   │   │   ├── last_coord/
 │   │   │   │   └── index.php
 │   │   │   ├── pages_users_to_main/
-│   │   │   │   ├── fix_it.php
-│   │   │   │   ├── fix_it_post.php
+│   │   │   │   ├── fix_page.php
+│   │   │   │   ├── fix_page_post.php
 │   │   │   │   └── index.php
 │   │   │   ├── projects/
 │   │   │   │   ├── index.php
@@ -73,7 +80,7 @@ src/
 │   │   │   │   ├── edit_user_post.php
 │   │   │   │   ├── index.php
 │   │   │   │   └── msg.php
-│   │   │   ├── users_no_inprocess/
+│   │   │   ├── users_not_inprocess/
 │   │   │   │   ├── index.php
 │   │   │   │   └── users_not_inprocess_post.php
 │   │   │   ├── wikirefs_options/
@@ -83,22 +90,17 @@ src/
 │   │   │   ├── index.php
 │   │   │   └── README.md
 │   │   ├── helpers/
-│   │   │   ├── add_helper.php
 │   │   │   ├── include.php
 │   │   │   ├── index.php
 │   │   │   ├── recent_helps.php
 │   │   │   └── sugust_helper.php
-│   │   ├── 404.php
 │   │   ├── admin.7z
 │   │   ├── include.php
 │   │   ├── index.php
 │   │   └── README.md
-│   ├── results/
-│   │   ├── get_results.php
-│   │   ├── getcats.php
-│   │   └── README.md
 │   ├── tools/
 │   │   ├── categories.php
+│   │   ├── include.php
 │   │   ├── index.php
 │   │   ├── last.php
 │   │   ├── process.php
@@ -111,6 +113,7 @@ src/
 │   │   ├── SidebarMenu.php
 │   │   ├── tables_dir.php
 │   │   └── TestPrinter.php
+│   ├── 404.php
 │   ├── csrf.php
 │   ├── include_all.php
 │   └── index.php
@@ -127,6 +130,7 @@ src/
 │   ├── reports-script.js
 │   └── sidebar.js
 ├── templates/
+│   ├── include.php
 │   ├── PageFooter.php
 │   ├── PageHead.php
 │   └── PageHeader.php

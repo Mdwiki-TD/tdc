@@ -20,8 +20,8 @@ admin/
 ├── last_coord/
 │   └── index.php
 ├── pages_users_to_main/
-│   ├── fix_it.php
-│   ├── fix_it_post.php
+│   ├── fix_page.php
+│   ├── fix_page_post.php
 │   └── index.php
 ├── projects/
 │   ├── index.php
@@ -49,7 +49,7 @@ admin/
 │   ├── edit_user_post.php
 │   ├── index.php
 │   └── msg.php
-├── users_no_inprocess/
+├── users_not_inprocess/
 │   ├── index.php
 │   └── users_not_inprocess_post.php
 ├── wikirefs_options/

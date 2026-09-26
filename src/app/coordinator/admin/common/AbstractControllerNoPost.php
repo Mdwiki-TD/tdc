@@ -27,18 +27,17 @@ abstract class AbstractControllerNoPost
 
     abstract function handleRequest(): void;
 
-
     /**
      * Renders the card wrapping the form.
      */
-    public function echoCard(string $headerTitle, string $body): void
+    public function echoBs5Card(string $header, string $body, string $bodyClass=""): void
     {
         echo <<<HTML
             <div class='card'>
                 <div class='card-header'>
-                    <h4>$headerTitle</h4>
+                    $header
                 </div>
-                <div class='card-body'>
+                <div class='card-body $bodyClass'>
                     $body
                 </div>
             </div>
