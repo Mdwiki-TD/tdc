@@ -29,7 +29,26 @@ class LastCoordIndexController extends AbstractControllerNoPost
         }
 
         $this->lastTable = $_GET['last_table'] ?? 'pages';
-        $this->lastTable = in_array($this->lastTable, ['pages', 'pages_users']) ? $this->lastTable : 'pages';
+        $this->lastTable = in_array($this->lastTable, ['pages', 'pages_users'], true) ? $this->lastTable : 'pages';
+    }
+
+    /**
+     * Builds the escaped "send mail" URL for a single row.
+     */
+    private function makeMailIconUrl(array $tab): string
+    {
+        $mailParams = [
+            'user'   => $tab['user'] ?? '',
+            'lang'   => $tab['lang'] ?? '',
+            'target' => $tab['target'] ?? '',
+            'date'   => $tab['pupdate'] ?? '',
+            'title'  => $tab['title'] ?? '',
+            'nonav'  => '1',
+        ];
+
+        $mailUrl = "index.php?ty=msg&" . http_build_query($mailParams, '', '&', PHP_QUERY_RFC3986);
+
+        return htmlspecialchars($mailUrl, ENT_QUOTES, 'UTF-8');
     }
 
     /**
@@ -41,7 +60,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
 
         $qslResults = $this->fetchResults();
 
-        $recentRows = "";
+        $recentRows = '';
         $noo = 0;
 
         foreach ($qslResults as $tat => $tabe) {
@@ -49,13 +68,13 @@ class LastCoordIndexController extends AbstractControllerNoPost
             $recentRows .= $this->createLastTableData($tabe, $noo);
         }
 
-        $tableId = ($this->lastTable === 'pages') ? 'last_table' : 'last_users_table';
-
         $langResult = $this->fetchLangOptions();
         $filterByLang = $this->filterRecent($this->lang, $langResult);
         $countResult = count($langResult);
 
         $filterTa = $this->buildNamespaceFilter();
+
+        $tableId = ($this->lastTable === 'pages') ? 'last_table' : 'last_users_table';
 
         $this->renderMainCard($countResult, $filterTa, $filterByLang, $tableId, $recentRows);
         $this->renderDataTableScript();
@@ -113,10 +132,10 @@ class LastCoordIndexController extends AbstractControllerNoPost
             'pages_users' => 'User',
         ];
 
-        $filterTa = "";
+        $filterTa = '';
 
         foreach ($data as $tableName => $label) {
-            $checked = ($tableName === $this->lastTable) ? 'checked' : "";
+            $checked = ($tableName === $this->lastTable) ? 'checked' : '';
             $filterTa .= <<<HTML
                 <div class="form-check form-check-inline">
                     <input class="form-check-input"
@@ -134,29 +153,12 @@ class LastCoordIndexController extends AbstractControllerNoPost
     }
 
     /**
-     * Builds the escaped "send mail" URL for a single row.
-     */
-    private function makeMailIconUrl(array $tab): string
-    {
-        $mailParams = [
-            'user'   => $tab['user'] ?? "",
-            'lang'   => $tab['lang'] ?? "",
-            'target' => $tab['target'] ?? "",
-            'date'   => $tab['pupdate'] ?? "",
-            'title'  => $tab['title'] ?? "",
-            'nonav'  => '1',
-        ];
-
-        $mailUrl = "index.php?ty=msg&" . http_build_query($mailParams, "", '&', PHP_QUERY_RFC3986);
-
-        return htmlspecialchars($mailUrl, ENT_QUOTES, 'UTF-8');
-    }
-
-    /**
      * Builds the pageviews link/number for a single row.
      */
     private function makeViewByNumber(string $target, $numb, string $lang, string $pupdate): string
     {
+
+        // TODO: remove makeViewByNumber, and use make_view_by_number from wiki_api.php
         // remove spaces and tab characters
         $target = trim($target);
         $numb2 = (!empty($numb)) ? $numb : "?";
@@ -169,19 +171,19 @@ class LastCoordIndexController extends AbstractControllerNoPost
             'agent'     => 'all-agents',
             'start'     => $start,
             'end'       => $end,
-            // 'range' => 'all-time',
+            // 'range'  => 'all-time',
             'redirects' => '0',
             'pages'     => $target,
-        ], "", '&', PHP_QUERY_RFC3986);
+        ], '', '&', PHP_QUERY_RFC3986);
 
-        $numb3 = (is_numeric($numb2)) ? number_format($numb2) : $numb2;
+        $numb3 = (is_numeric($numb2)) ? number_format((float)$numb2) : $numb2;
         $link = "<a target='_blank' href='$url'>$numb3</a>";
 
         if (is_numeric($numb2) && intval($numb2) > 0) {
             return $link;
         }
 
-        $start2 = !empty($pupdate) ? str_replace('-', "", $pupdate) : '20190101';
+        $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
 
         $url2 = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
 
@@ -193,36 +195,33 @@ class LastCoordIndexController extends AbstractControllerNoPost
      */
     private function createLastTableData(array $tabg, int $nnnn): string
     {
-        $user = $tabg['user'] ?? "";
+        $user     = $tabg['user'] ?? '';
+        $llang    = $tabg['lang'] ?? '';
+        $mdTitle  = trim($tabg['title'] ?? '');
+        $target   = trim($tabg['target'] ?? '');
+        $pupdate  = $tabg['pupdate'] ?? '';
+        $addDate  = $tabg['add_date'] ?? '';
+        $campaign = $tabg['campaign'] ?? '';
 
-        $llang    = $tabg['lang'] ?? "";
-        $mdTitle  = trim($tabg['title'] ?? "");
-        $target   = trim($tabg['target'] ?? "");
-        $pupdate  = $tabg['pupdate'] ?? "";
-        $addDate  = $tabg['add_date'] ?? "";
-        $campaign = $tabg['campaign'] ?? "";
+        $mdwikiRevid = $tabg['mdwiki_revid'] ?? '';
 
-        $mdwikiRevid = $tabg['mdwiki_revid'] ?? "";
-
-        // if $add_date has : then split before first space
+        // if $addDate has : then split before first space
         if (strpos($addDate, ':') !== false) {
             $addDate = explode(' ', $addDate)[0];
         }
 
         $maxUsernameDisplayLength = 15;
         $userName = $user;
-
-        // $user_name is the first word of the user if length > 15
+        // $userName is the first word of the user if length > 15
         if (strlen($user) > $maxUsernameDisplayLength) {
-            $userName = explode(' ', $user);
-            $userName = $userName[0];
+            $parts = explode(' ', $user);
+            $userName = $parts[0];
         }
 
-        $view = "";
+        $view = '';
 
         if ($this->lastTable === "pages") {
             $viewsNumber = $tabg['views'] ?? '?';
-
             $view = $this->makeViewByNumber($target, $viewsNumber, $llang, $pupdate);
         }
 
@@ -251,11 +250,15 @@ class LastCoordIndexController extends AbstractControllerNoPost
             $params['save'] = 1;
         }
 
-        $fixwikirefs = "/fixwikirefs.php?" . http_build_query($params, "", '&', PHP_QUERY_RFC3986);
+        $fixwikirefs = "/fixwikirefs.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+
+        $talkUrl = <<<HTML
+            (<a target='_blank' href='//{$llang}.wikipedia.org/w/index.php?title=User_talk:{$escapedUser}'>talk</a>)
+        HTML;
 
         $mdTitleEncoded = rawurlencode($mdTitle);
 
-        $flags = "";
+        $flags = '';
 
         return <<<HTML
             <tr>
@@ -265,7 +268,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
                 <td>
                     <a href="/Translation_Dashboard/leaderboard.php?user=$user" data-bs-toggle="tooltip" data-bs-title="$user">
                         $userName
-                    </a> (<a target='_blank' href='//{$llang}.wikipedia.org/w/index.php?title=User_talk:{$escapedUser}'>talk</a>)
+                    </a> $talkUrl
                 </td>
                 <td>
                     <a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$mailIcon}' onclick='pup_window_new(this)'>@</a>
@@ -307,19 +310,17 @@ class LastCoordIndexController extends AbstractControllerNoPost
         $langList = "<option data-tokens='All' value='All'>All</option>";
 
         foreach ($data as $codr) {
-            $code = $codr["lang"] ?? "";
-            $autonym = $codr["autonym"] ?? "";
-
+            $code    = $codr["lang"] ?? '';
+            $autonym = $codr["autonym"] ?? '';
             if (empty($code)) {
                 continue;
             }
 
-            $selected = ($code == $lang) ? 'selected' : "";
+            $selected = ($code === $lang) ? 'selected' : '';
             $langList .= <<<HTML
                 <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
             HTML;
         }
-
         return $langList;
     }
 
@@ -351,7 +352,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
                             </div>
                             <div class='col-md-3'>
                                 <div class="input-group">
-                                <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
+                                    <!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
                                     <select aria-label="Language code"
                                         class="selectpicker"
                                         id='lang'
@@ -376,7 +377,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
                 </div>
                 <div class='card-body'>
                     <div class="d-none d-md-inline">
-                        <span class="" data-column="0">Toggle columns:</span>
+                        <span class='' data-column="0">Toggle columns:</span>
                         <a class="toggle-vis btn btn-outline-primary" data-column="$campaignNumber" type="button">Campaign</a>
                         <a class="toggle-vis btn btn-outline-primary" data-column="$fixNumber" type="button">Fixref</a>
                         <a class="toggle-vis btn btn-outline-primary" data-column="$flagsNumber" type="button">Flags</a>
@@ -449,6 +450,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
                             el.addEventListener('click', function(e) {
                                 e.preventDefault();
 
+                                // add class mb_btn_active to this
                                 el.classList.toggle('btn-outline-primary');
                                 el.classList.toggle('btn-outline-secondary');
 
@@ -466,5 +468,3 @@ class LastCoordIndexController extends AbstractControllerNoPost
         HTML;
     }
 }
-
-

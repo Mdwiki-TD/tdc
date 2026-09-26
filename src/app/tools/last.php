@@ -1,4 +1,5 @@
 <?php
+// src/app/tools/last.php
 
 namespace App\Tools;
 
@@ -7,7 +8,7 @@ use function App\APICalls\TDApi\get_td_api;
 
 /**
  * Class LastController
- * Renders recent translations for non-admin/general tools view.
+ * Renders the "Recent translations" for non-admin/general tools view.
  */
 class LastController extends AbstractControllerNoPost
 {
@@ -25,6 +26,108 @@ class LastController extends AbstractControllerNoPost
         $this->lastTable = in_array($this->lastTable, ['pages', 'pages_users'], true) ? $this->lastTable : 'pages';
     }
 
+    /**
+     * Handles request execution.
+     */
+    public function handleRequest(): void
+    {
+        $qslResults = $this->fetchResults();
+
+        $recentRows = '';
+        $noo = 0;
+
+        foreach ($qslResults as $tat => $tabe) {
+            $noo++;
+            $recentRows .= $this->createLastTableData($tabe, $noo);
+        }
+
+        $langResult = $this->fetchLangOptions();
+        $filterByLang = $this->filterRecent($this->lang, $langResult);
+        $countResult = count($langResult);
+
+        $filterTa = $this->buildNamespaceFilter();
+
+        $tableId = ($this->lastTable === 'pages') ? 'last_table' : 'last_users_table';
+
+        $this->renderMainCard($countResult, $filterTa, $filterByLang, $tableId, $recentRows);
+        $this->renderDataTableScript();
+    }
+
+    /**
+     * Fetches the "recent translations" result set from the TD API.
+     */
+    private function fetchResults(): array
+    {
+        $apiParamsUsers = [
+            'get'    => 'pages_users',
+            'target' => 'not_empty',
+            'lang'   => $this->lang,
+            'order'  => 'pupdate',
+            'limit'  => '100',
+        ];
+
+        $apiParamsPages = [
+            'get'    => 'pages_with_views',
+            'target' => 'not_empty',
+            'lang'   => $this->lang,
+            'order'  => 'pupdate_or_add_date',
+            'limit'  => '250',
+        ];
+
+        $apiResults = ($this->lastTable === 'pages')
+            ? get_td_api($apiParamsPages)
+            : get_td_api($apiParamsUsers);
+
+        return $apiResults['results'] ?? [];
+    }
+
+    /**
+     * Fetches the list of language options for the current table.
+     */
+    private function fetchLangOptions(): array
+    {
+        $apiParamsLangs = [
+            'get' => ($this->lastTable === 'pages') ? 'pages_langs' : 'pages_users_langs',
+        ];
+
+        $apiResults = get_td_api($apiParamsLangs);
+
+        return $apiResults['results'] ?? [];
+    }
+
+    /**
+     * Builds the namespace (pages / pages_users) radio filter markup.
+     */
+    private function buildNamespaceFilter(): string
+    {
+        $data = [
+            'pages'       => 'Main',
+            'pages_users' => 'User',
+        ];
+
+        $filterTa = '';
+
+        foreach ($data as $tableName => $label) {
+            $checked = ($tableName === $this->lastTable) ? 'checked' : '';
+            $filterTa .= <<<HTML
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input"
+                        type="radio"
+                        name="last_table"
+                        id="radio_$tableName"
+                        value="$tableName"
+                        $checked>
+                    <label class="form-check-label" for="radio_$tableName">$label</label>
+                </div>
+            HTML;
+        }
+
+        return $filterTa;
+    }
+
+    /**
+     * Builds the pageviews link/number for a single row.
+     */
     private function makeViewByNumber(string $target, $numb, string $lang, string $pupdate): string
     {
 
@@ -60,10 +163,13 @@ class LastController extends AbstractControllerNoPost
         return "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
     }
 
+    /**
+     * Renders a single "recent translations" table row.
+     */
     private function createLastTableData(array $tabg, int $nnnn): string
     {
-        $user     = $tabg['user'] ?? "";
-        $llang    = $tabg['lang'] ?? "";
+        $user     = $tabg['user'] ?? '';
+        $llang    = $tabg['lang'] ?? '';
         $mdTitle  = trim($tabg['title'] ?? '');
         $target   = trim($tabg['target'] ?? '');
         $pupdate  = $tabg['pupdate'] ?? '';
@@ -85,7 +191,7 @@ class LastController extends AbstractControllerNoPost
             $userName = $parts[0];
         }
 
-        $view = "";
+        $view = '';
 
         if ($this->lastTable === "pages") {
             $viewsNumber = $tabg['views'] ?? '?';
@@ -102,7 +208,7 @@ class LastController extends AbstractControllerNoPost
 
         $mdTitleEncoded = rawurlencode($mdTitle);
 
-        $flags = "";
+        $flags = '';
 
         return <<<HTML
             <tr>
@@ -139,14 +245,17 @@ class LastController extends AbstractControllerNoPost
         HTML;
     }
 
+    /**
+     * Builds the language filter <select> options.
+     */
     private function filterRecent(string $lang, array $data): string
     {
         ksort($data);
         $langList = "<option data-tokens='All' value='All'>All</option>";
 
         foreach ($data as $codr) {
-            $code    = $codr["lang"] ?? "";
-            $autonym = $codr["autonym"] ?? "";
+            $code    = $codr["lang"] ?? '';
+            $autonym = $codr["autonym"] ?? '';
             if (empty($code)) {
                 continue;
             }
@@ -160,83 +269,9 @@ class LastController extends AbstractControllerNoPost
     }
 
     /**
-     * Handles request execution.
+     * Renders the main filter + results card.
      */
-    public function handleRequest(): void
-    {
-        $apiParamsUsers = [
-            'get'    => 'pages_users',
-            'target' => 'not_empty',
-            'lang'   => $this->lang,
-            'order'  => 'pupdate',
-            'limit'  => '100',
-        ];
-
-        $apiParamsPages = [
-            'get'    => 'pages_with_views',
-            'target' => 'not_empty',
-            'lang'   => $this->lang,
-            'order'  => 'pupdate_or_add_date',
-            'limit'  => '250',
-        ];
-
-        $apiResults = ($this->lastTable === 'pages') ? get_td_api($apiParamsPages) : get_td_api($apiParamsUsers);
-        $qslResults = $apiResults['results'] ?? [];
-
-        $recentRows = "";
-        $noo = 0;
-
-        foreach ($qslResults as $tat => $tabe) {
-            $noo++;
-            $recentRows .= $this->createLastTableData($tabe, $noo);
-        }
-
-        $apiParamsLangs = [
-            'get' => ($this->lastTable === 'pages') ? 'pages_langs' : 'pages_users_langs',
-        ];
-
-        $langResults = get_td_api($apiParamsLangs);
-        $result = $langResults['results'] ?? [];
-
-        $filterByLang = $this->filterRecent($this->lang, $result);
-        $countResult = count($result);
-
-        $filterTa = $this->buildNamespaceFilter();
-
-        $tableId = ($this->lastTable === 'pages') ? 'last_table' : 'last_users_table';
-
-        $this->renderCard($countResult, $filterTa, $filterByLang, $tableId, $recentRows);
-        $this->renderScript();
-    }
-
-    private function buildNamespaceFilter(): string
-    {
-        $data = [
-            "pages"       => 'Main',
-            "pages_users" => 'User',
-        ];
-
-        $filterTa = "";
-
-        foreach ($data as $tableName => $label) {
-            $checked = ($tableName === $this->lastTable) ? "checked" : "";
-            $filterTa .= <<<HTML
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input"
-                        type="radio"
-                        name="last_table"
-                        id="radio_$tableName"
-                        value="$tableName"
-                        $checked>
-                    <label class="form-check-label" for="radio_$tableName">$label</label>
-                </div>
-            HTML;
-        }
-
-        return $filterTa;
-    }
-
-    private function renderCard(int $countResult, string $filterTa, string $filterByLang, string $tableId, string $recentRows): void
+    private function renderMainCard(int $countResult, string $filterTa, string $filterByLang, string $tableId, string $recentRows): void
     {
         $campaignNumber = 3;
         $flagsNumber = 8;
@@ -285,7 +320,7 @@ class LastController extends AbstractControllerNoPost
                 </div>
                 <div class='card-body'>
                     <div class="d-none d-md-inline">
-                        <span class="" data-column="0">Toggle columns:</span>
+                        <span class='' data-column="0">Toggle columns:</span>
                         <a class="toggle-vis btn btn-outline-primary" data-column="$campaignNumber" type="button">Campaign</a>
                         <a class="toggle-vis btn btn-outline-primary" data-column="$flagsNumber" type="button">Flags</a>
                     </div>
@@ -312,61 +347,64 @@ class LastController extends AbstractControllerNoPost
         HTML;
     }
 
-    private function renderScript(): void
+    /**
+     * Renders the DataTables initialization and column-toggle scripts.
+     */
+    private function renderDataTableScript(): void
     {
         echo <<<HTML
-<script>
-    $(document).ready(function() {
-        var table;
-        var tableElement = $('#last_table');
-        if (tableElement.length) {
-            table = $('#last_table').DataTable({
-                stateSave: true,
-                // order: [ [6, 'desc'] ],
-                paging: false,
-                // lengthMenu: [[100, 150, 200], [250, 150, 200]],
-                // scrollY: 800,
-                responsive: {
-                    details: true
-                }
-            });
-        }
+            <script>
+                $(document).ready(function() {
+                    var table;
+                    var tableElement = $('#last_table');
+                    if (tableElement.length) {
+                        table = $('#last_table').DataTable({
+                            stateSave: true,
+                            // order: [ [6, 'desc'] ],
+                            paging: false,
+                            // lengthMenu: [[100, 150, 200], [250, 150, 200]],
+                            // scrollY: 800,
+                            responsive: {
+                                details: true
+                            }
+                        });
+                    }
 
-        var usersTableElement = $('#last_users_table');
-        if (usersTableElement.length) {
-            table = $('#last_users_table').DataTable({
-                stateSave: true,
-                // paging: false,
-                lengthMenu: [
-                    [100, 150, 200],
-                    [100, 150, 200]
-                ],
-                // scrollY: 800,
-                responsive: {
-                    details: true
-                }
-            });
-        }
-        if (table) {
-            document.querySelectorAll('a.toggle-vis').forEach((el) => {
-                el.addEventListener('click', function(e) {
-                    e.preventDefault();
+                    var usersTableElement = $('#last_users_table');
+                    if (usersTableElement.length) {
+                        table = $('#last_users_table').DataTable({
+                            stateSave: true,
+                            // paging: false,
+                            lengthMenu: [
+                                [100, 150, 200],
+                                [100, 150, 200]
+                            ],
+                            // scrollY: 800,
+                            responsive: {
+                                details: true
+                            }
+                        });
+                    }
+                    if (table) {
+                        document.querySelectorAll('a.toggle-vis').forEach((el) => {
+                            el.addEventListener('click', function(e) {
+                                e.preventDefault();
 
-                    // add class mb_btn_active to this
-                    el.classList.toggle('btn-outline-primary');
-                    el.classList.toggle('btn-outline-secondary');
+                                // add class mb_btn_active to this
+                                el.classList.toggle('btn-outline-primary');
+                                el.classList.toggle('btn-outline-secondary');
 
-                    let columnIdx = e.target.getAttribute('data-column');
-                    let column = table.column(columnIdx);
+                                let columnIdx = e.target.getAttribute('data-column');
+                                let column = table.column(columnIdx);
 
-                    // Toggle the visibility
-                    column.visible(!column.visible());
+                                // Toggle the visibility
+                                column.visible(!column.visible());
+                            });
+                        });
+                    }
+
                 });
-            });
-        }
-
-    });
-</script>
-HTML;
+            </script>
+        HTML;
     }
 }
