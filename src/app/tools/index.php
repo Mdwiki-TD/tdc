@@ -2,5 +2,7 @@
 
 namespace App\Tools;
 
-include_once __DIR__ . '/last.php';
-?>
+use App\Tools\LastController;
+
+$controller = new LastController();
+$controller->handleRequest();

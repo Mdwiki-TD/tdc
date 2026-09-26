@@ -1,3 +1,21 @@
+<?php
+
+namespace App\Tools;
+
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
+
+/**
+ * Class CategoriesController
+ * Renders the "Translations Categories" table and script.
+ */
+class CategoriesController extends AbstractControllerNoPost
+{
+    /**
+     * Handles request execution by outputting the HTML template and DataTables script.
+     */
+    public function handleRequest(): void
+    {
+        echo <<<HTML
 <div class='card'>
     <div class='card-header'>
         <span class="h4">
@@ -53,11 +71,11 @@
                     };
 
                     if (restData[key]) {
-                        row.category = `<a target="_blank" href="${restData[key].url}">${restData[key].title}</a>`;
+                        row.category = `<a target="_blank" href="\${restData[key].url}">\${restData[key].title}</a>`;
                         categoryCount++;
                     } else {
-                        const fallbackUrl = `https://${lang}.wikipedia.org/wiki/Category:Translated_from_MDWiki`;
-                        row.fallback = `⚠️ <a target="_blank" href="${fallbackUrl}">Category:Translated from MDWiki</a>`;
+                        const fallbackUrl = `https://\${lang}.wikipedia.org/wiki/Category:Translated_from_MDWiki`;
+                        row.fallback = `⚠️ <a target="_blank" href="\${fallbackUrl}">Category:Translated from MDWiki</a>`;
                         fallbackCount++;
                     }
 
@@ -96,3 +114,6 @@
         ]
     });
 </script>
+HTML;
+    }
+}

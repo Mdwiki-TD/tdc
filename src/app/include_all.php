@@ -78,3 +78,4 @@ include_once __DIR__ . '/utils/tables_dir.php';
 
 include_once __DIR__ . '/backend/include.php';
 require_once __DIR__ . '/coordinator/include.php';
+require_once __DIR__ . '/tools/include.php';

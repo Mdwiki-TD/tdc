@@ -55,7 +55,7 @@ class AdminResolver
     {
         // String mapping with fully qualified namespace
         // Array mapping string keys to fully qualified class names
-        $map = [
+        $Controllers = [
             "add"                     => "App\\Coordinator\\Admin\\Add\\AddIndexController",
             "admins"                  => "App\\Coordinator\\Admin\\Admins\\AdminsIndexController",
             "campaigns"               => "App\\Coordinator\\Admin\\Campaigns\\CampaignsIndexController",
@@ -81,8 +81,9 @@ class AdminResolver
             "msg"                     => "App\\Coordinator\\Admin\\Users\\MsgController",
             "wikirefs_options_edit"   => "App\\Coordinator\\Admin\\WikiRefsOptions\\WikiRefsOptionsEditController",
         ];
-        if (isset($map[$ty])) {
-            $controller = new $map[$ty]();
+        if (isset($Controllers[$ty])) {
+            $className = $Controllers[$ty];
+            $controller = new $className();
             $controller->handleRequest();
             return true;
         }
@@ -104,5 +105,4 @@ class AdminResolver
         TestPrinter::testPrint("can't find {$ty}");
         include_once dirname(dirname(__DIR__)) . "/404.php";
     }
-
 }
