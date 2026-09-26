@@ -25,8 +25,8 @@ class AppRouter
 	private array $toolsControllers = [
 		"categories"    => "\\App\\Tools\\CategoriesController",
 		"last"          => "\\App\\Tools\\LastController",
-		"process"       => "\\App\\Tools\\ProcessController",
-		"process1"      => "\\App\\Tools\\Process1Controller",
+		"process"       => "\\App\\Tools\\ProcessControllerDataTable",
+		"process1"      => "\\App\\Tools\\ProcessController",
 		"process_total" => "\\App\\Tools\\ProcessTotalController",
 		"stat"          => "\\App\\Tools\\StatController",
 	];

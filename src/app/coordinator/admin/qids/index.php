@@ -181,45 +181,44 @@ class QidsIndexController extends AbstractControllerNoPost
 
 		$dis = $this->dis;
 
-		echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
-                        <input name='ty' value='qids' type='hidden'/>
-                        <div class='row'>
-                            <div class='col-md-4'>
-                                <h4>$qidsTitle: ($dis:<span>$numb</span>)</h4>
-                            </div>
-                            <div class='col-md-2'>
-                                $filterTa
-                            </div>
-                            <div class='col-md-4'>
-                                $filterDis
-                            </div>
-                            <div class='aligncenter col-md-2'>
-                                <input class='btn btn-outline-primary' type='submit' value='Filter' />
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class='card-body'>
-                    <table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2 table_text_left' style='width: 98%;'>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>id</th>
-                                <th>Title</th>
-                                <th>Qid</th>
-                                <th>Edit</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tab_logic">
-                            $formRows
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        HTML;
+		$header = <<<HTML
+			<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
+				<input name='ty' value='qids' type='hidden'/>
+				<div class='row'>
+					<div class='col-md-4'>
+						<h4>$qidsTitle: ($dis:<span>$numb</span>)</h4>
+					</div>
+					<div class='col-md-2'>
+						$filterTa
+					</div>
+					<div class='col-md-4'>
+						$filterDis
+					</div>
+					<div class='aligncenter col-md-2'>
+						<input class='btn btn-outline-primary' type='submit' value='Filter' />
+					</div>
+				</div>
+			</form>
+		HTML;
+
+		$body = <<<HTML
+			<table class='table table-striped compact table-mobile-responsive table-mobile-sided sortable2 table_text_left' style='width: 98%;'>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>id</th>
+						<th>Title</th>
+						<th>Qid</th>
+						<th>Edit</th>
+					</tr>
+				</thead>
+				<tbody id="tab_logic">
+					$formRows
+				</tbody>
+			</table>
+		HTML;
+
+		$this->echoBs5Card($header, $body);
 	}
 
 	/**

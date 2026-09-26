@@ -16,18 +16,7 @@ class RecentTranslations
         $this->lang = $lang;
         $this->lastTable = $lastTable;
     }
-    public function ShowMainView(string $recentRows): void
-    {
-        $langResult = $this->fetchLangOptions();
-        $filterByLang = $this->filterRecent($this->lang, $langResult);
-        $countResult = count($langResult);
 
-        $filterTa = $this->buildNamespaceFilter();
-
-        $tableId = ($this->lastTable === 'pages') ? 'last_table' : 'last_users_table';
-
-        $this->renderMainCard($countResult, $filterTa, $filterByLang, $tableId, $recentRows);
-    }
     /**
      * Fetches the "recent translations" result set from the TD API.
      */
