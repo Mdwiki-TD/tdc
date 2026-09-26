@@ -82,14 +82,12 @@ class LastCoordIndexController extends AbstractControllerNoPost
 	{
 		$langResult = $this->helper->fetchLangOptions();
 		$filterByLang = $this->helper->filterRecent($this->lang, $langResult);
-		$countResult = count($langResult);
 
 		$filterTa = $this->helper->buildNamespaceFilter();
 
 		$tableId = ($this->lastTable === 'pages') ? 'last_table' : 'last_users_table';
 
 		$this->renderMainCard(
-			$countResult,
 			$filterTa,
 			$filterByLang,
 			$tableId,
@@ -123,7 +121,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
 	/**
 	 * Renders the main filter + results card.
 	 */
-	public function renderMainCard(int $countResult, string $filterTa, string $filterByLang, string $tableId, string $recentRows): void
+	public function renderMainCard(string $filterTa, string $filterByLang, string $tableId, string $recentRows): void
 	{
 		$campaignNumber = 4;
 		$flagsNumber = 10;
@@ -134,7 +132,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
 				<input name='ty' value='last_coord' type='hidden'/>
 				<div class='row'>
 					<div class='col-md-4'>
-						<h4>Recent translations ($countResult):</h4>
+						<h4>Recent translations:</h4>
 					</div>
 					<div class='col-md-4'>
 						<div class="input-group">

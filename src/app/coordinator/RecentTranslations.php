@@ -134,15 +134,14 @@ class RecentTranslations
     {
         ksort($data);
         $langList = "<option data-tokens='All' value='All'>All</option>";
-
         foreach ($data as $codr) {
-            $code    = $codr["lang"] ?? '';
-            $autonym = $codr["autonym"] ?? '';
+            $rawCode = (string)($codr["lang"] ?? '');
+            $code    = htmlspecialchars($rawCode, ENT_QUOTES, 'UTF-8');
+            $autonym = htmlspecialchars((string)($codr["autonym"] ?? ''), ENT_QUOTES, 'UTF-8');
             if (empty($code)) {
                 continue;
             }
-
-            $selected = ($code === $lang) ? 'selected' : '';
+            $selected = ($rawCode === $lang) ? 'selected' : '';
             $langList .= <<<HTML
                 <option data-tokens='$code' value='$code' $selected>($code) $autonym</option>
             HTML;
