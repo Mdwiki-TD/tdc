@@ -1,7 +1,4 @@
 <?PHP
-include_once __DIR__ . '/CurrentUser.php';
-
-include_once __DIR__ . '/settings.php';
 
 # api_calls
 include_once __DIR__ . '/MdwikiSql/Database.php';
