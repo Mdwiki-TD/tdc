@@ -46,17 +46,13 @@ namespace App\MdwikiSql;
 
 use App\MdwikiSql\Database;
 
-function execute_query(string $sqlQuery, $params = null)
+function execute_query(string $sqlQuery, ?array $params = null): bool
 {
     // Create a new database object
     $db = new Database('DB_NAME');
 
     // Execute a SQL query
-    if ($params) {
-        $results = $db->executequery($sqlQuery, $params);
-    } else {
-        $results = $db->executequery($sqlQuery);
-    }
+    $results = $db->executequery($sqlQuery, $params);
 
     // Print the results
     // foreach ($results as $row) echo $row['column1'] . " " . $row['column2'] . "<br>";
@@ -66,7 +62,7 @@ function execute_query(string $sqlQuery, $params = null)
 
     return $results;
 };
-function fetch_query(string $sqlQuery, $params = null, $noprint = false)
+function fetch_query(string $sqlQuery, ?array $params = null, $noprint = false): array
 {
     // Create a new database object
     $db = new Database('DB_NAME');
@@ -76,11 +72,7 @@ function fetch_query(string $sqlQuery, $params = null, $noprint = false)
     }
 
     // Execute a SQL query
-    if ($params) {
-        $results = $db->fetchquery($sqlQuery, $params);
-    } else {
-        $results = $db->fetchquery($sqlQuery, null);
-    }
+    $results = $db->fetchquery($sqlQuery, $params);
 
     // Print the results
     // foreach ($results as $row) echo $row['column1'] . " " . $row['column2'] . "<br>";
