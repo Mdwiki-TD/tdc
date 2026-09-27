@@ -58,16 +58,17 @@ class Database
             $this->db = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->user, $this->password);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
+            $this->db = null;
+            $this->testPrint($e->getMessage());
             // Log the error message
             error_log($e->getMessage());
             // Display a generic message
             echo "Unable to connect to the database. Please try again later.";
             throw new \RuntimeException('Database connection failed');
-            // exit();
         }
     }
 
-    public function test_print($s)
+    public function testPrint($s)
     {
         if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
             return;
@@ -83,7 +84,7 @@ class Database
         }
     }
 
-    public function disableFullGroupByMode(string $sqlQuery)
+    public function disableFullGroupByMode(string $sqlQuery): void
     {
         // if the query contains "GROUP BY", disable ONLY_FULL_GROUP_BY, strtoupper() is for case insensitive
         if (strpos(strtoupper($sqlQuery), 'GROUP BY') !== false && !$this->groupByModeDisabled) {
@@ -98,8 +99,13 @@ class Database
         }
     }
 
-    public function fetchquery(string $sqlQuery, $params = null)
+    public function fetchquery(string $sqlQuery, $params = null): array
     {
+        if ($this->db === null) {
+            error_log("Database connection is not established.");
+            return [];
+        };
+
         try {
             $this->disableFullGroupByMode($sqlQuery);
 
@@ -122,6 +128,10 @@ class Database
 
     public function executequery(string $sqlQuery, $params = null)
     {
+        if ($this->db === null) {
+            error_log("Database connection is not established.");
+            return false;
+        };
         try {
             $this->disableFullGroupByMode($sqlQuery);
 
@@ -136,7 +146,7 @@ class Database
         } catch (PDOException $e) {
             echo "sql error:" . $e->getMessage() . "<br>" . $sqlQuery;
             error_log("SQL Error in executequery: " . $e->getMessage() . " | Query: " . $sqlQuery);
-            $this->test_print("SQL Error in executequery: " . $e->getMessage() . " | Query: " . $sqlQuery);
+            $this->testPrint("SQL Error in executequery: " . $e->getMessage() . " | Query: " . $sqlQuery);
             return false;
         }
     }

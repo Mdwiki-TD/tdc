@@ -3,8 +3,8 @@ let UrlDone = [];
 function add_data(ix, value, code) {
     $(`input[name="rows[${ix}][${code}]"]`).val(value);
 }
-function delete_row($row_id) {
-    $(`#row_${$row_id}`).remove();
+function delete_row($rowId) {
+    $(`#row_${$rowId}`).remove();
 }
 
 async function add_new_row() {

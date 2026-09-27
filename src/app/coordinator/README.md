@@ -210,7 +210,7 @@ While the calling code may validate this, the file itself does not sanitize the 
 
 Several views output user-supplied values without `htmlspecialchars()`:
 
--   `tools/last.php`: `$user`, `$llang`, `$md_title` interpolated into HTML
+-   `tools/last.php`: `$user`, `$llang`, `$mdTitle` interpolated into HTML
 -   `admin/Emails/msg.php`: User values embedded in HTML email content
 -   Multiple admin forms: Form values echoed back without escaping on error
 

@@ -34,10 +34,10 @@ class EditUserController extends AbstractEditController
         $userInfo  = get_user_by_id($userId);
         $user      = $userInfo['username'] ?? '';
         $wiki      = $userInfo['wiki'] ?? '';
-        $user_group = $userInfo['user_group'] ?? '';
+        $userGroup = $userInfo['user_group'] ?? '';
         $email     = $userInfo['email'] ?? '';
 
-        $projectLine = make_project_to_user($user_group);
+        $projectLine = make_project_to_user($userGroup);
 
         $idRow = <<<HTML
             <div class='col-md-3'>
