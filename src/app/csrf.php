@@ -55,38 +55,6 @@ namespace App\csrf;
 use RuntimeException;
 
 /**
- * Ensure session is started before token operations
- *
- * This check ensures that the session is available for token storage.
- * If no session exists, one is started with secure defaults.
- *
- * @return void
- * @throws RuntimeException If session cannot be started
- */
-function ensure_session_started(): void
-{
-    if (session_status() === PHP_SESSION_NONE) {
-        // Configure secure session settings
-        $sessionOptions = [
-            'use_strict_mode' => true,
-            'use_cookies' => true,
-            'use_only_cookies' => true,
-            'cookie_httponly' => true,
-            'cookie_samesite' => 'Strict',
-        ];
-
-        // Enable secure flag in production (HTTPS)
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
-            $sessionOptions['cookie_secure'] = true;
-        }
-        // Start the PHP session
-        if (!session_start($sessionOptions)) {
-            throw new RuntimeException('Failed to start session for CSRF protection');
-        }
-    }
-}
-
-/**
  * Verify a submitted CSRF token against stored tokens
  *
  * This function validates that:
@@ -227,5 +195,3 @@ function clear_all_tokens(): void
 
     $_SESSION['csrf_tokens'] = [];
 }
-
-ensure_session_started();

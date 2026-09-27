@@ -48,7 +48,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 // Configure secure session settings
 ini_set('session.use_strict_mode', '1');
 
-// don't use App\Settings\Settings here, Instance is not created yet
+// don't use App\Settings here, Instance is not created yet
 $env = getenv('APP_ENV') ?: ($_ENV['APP_ENV'] ?? 'development');
 
 if ($env === 'development' && file_exists(__DIR__ . '/load_env.php')) {
@@ -75,6 +75,9 @@ include_once __DIR__ . '/utils/TestPrinter.php';
 include_once __DIR__ . '/utils/SidebarMenu.php';
 include_once __DIR__ . '/utils/html.php';
 include_once __DIR__ . '/utils/tables_dir.php';
+
+include_once __DIR__ . '/User/include.php';
+include_once __DIR__ . '/Settings.php';
 
 include_once __DIR__ . '/backend/include.php';
 require_once __DIR__ . '/coordinator/include.php';
