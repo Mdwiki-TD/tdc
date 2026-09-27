@@ -86,9 +86,9 @@ class AccessKeyRepository
     }
 
     /**
-     * Ensures the user row exists and writes/updates their access keys.
-     * Wrapped in a transaction when the underlying Database supports it,
-     * so a partial failure doesn't leave inconsistent rows.
+     * Ensures the user row exists and writes/updates their access keys,
+     * wrapped in a transaction so a partial failure doesn't leave
+     * inconsistent rows.
      *
      * @throws \RuntimeException on failure
      */
@@ -96,13 +96,7 @@ class AccessKeyRepository
     {
         $user = trim($user);
 
-        $supportsTransactions = method_exists($this->db, "beginTransaction")
-            && method_exists($this->db, "commit")
-            && method_exists($this->db, "rollback");
-
-        if ($supportsTransactions) {
-            $this->db->beginTransaction();
-        }
+        $this->db->beginTransaction();
 
         try {
             $userAdded   = $this->ensureUserExists($user);
@@ -112,13 +106,9 @@ class AccessKeyRepository
                 throw new \RuntimeException("Failed to write user data or access keys to database.");
             }
 
-            if ($supportsTransactions) {
-                $this->db->commit();
-            }
+            $this->db->commit();
         } catch (\Throwable $e) {
-            if ($supportsTransactions) {
-                $this->db->rollback();
-            }
+            $this->db->rollback();
             throw $e;
         }
     }
