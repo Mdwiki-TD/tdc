@@ -26,7 +26,7 @@ function insert_to_pages(array $pageData, bool $overwrite): bool
 	$exists = fetch_query($checkQuery, $checkParams);
 
 	// If record exists, UPDATE it
-	if ($exists && count($exists) > 0) {
+	if (count($exists) > 0) {
 		$row = $exists[0];
 
 		$recordId = $row['id'];
