@@ -1,5 +1,5 @@
 <?php
-// src/app/CurrentUser.php
+// src/app/User/CurrentUser.php
 
 namespace App\User;
 
