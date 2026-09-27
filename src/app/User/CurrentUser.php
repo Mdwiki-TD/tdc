@@ -138,4 +138,14 @@ class CurrentUser
     {
         $this->isCoordinator = $this->coordinators->isCoordinator($this->username);
     }
+
+    public function addUsernameToCookies(string $username): void
+    {
+        $this->cookies->write($username);
+    }
+
+    public function saveUserData(string $user, string $accessKey, string $accessSecret): void
+    {
+        $this->accessKeys->saveUserData($user, $accessKey, $accessSecret);
+    }
 }
