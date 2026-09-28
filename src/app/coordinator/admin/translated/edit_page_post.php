@@ -57,9 +57,9 @@ class EditPagePostHandler extends AbstractPostHandler
     /**
      * Deletes a page record from the given database table.
      *
-     * @return array<mixed>|false
+     * @return bool
      */
-    private function deletePage(string $id, string $table)
+    private function deletePage(string $id, string $table): bool
     {
         $query = "DELETE FROM {$table} WHERE id = ?";
         return execute_query($query, [$id]);
@@ -68,9 +68,9 @@ class EditPagePostHandler extends AbstractPostHandler
     /**
      * Updates page information in the database.
      *
-     * @return array<mixed>|false
+     * @return bool
      */
-    private function editPage(string $id, string $table, string $title, string $target, string $lang, string $user, string $pupdate)
+    private function editPage(string $id, string $table, string $title, string $target, string $lang, string $user, string $pupdate): bool
     {
         $query = "UPDATE {$table}
             SET
