@@ -1,5 +1,5 @@
 <?php
-// src/templates/PageFooter.php
+// src/Layout/PageFooter.php
 
 namespace App\Layout;
 
@@ -58,6 +58,6 @@ class PageFooter
 	}
 }
 
-// Usage (replaces the old procedural src/templates/footer.php):
+// Usage (replaces the old procedural src/Layout/footer.php):
 // $pageFooter = new PageFooter();
 // $pageFooter->render($pageHeader->getLoadStartTime());

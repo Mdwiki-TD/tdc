@@ -1,5 +1,5 @@
 <?php
-// src/templates/PageHeader.php
+// src/Layout/PageHeader.php
 
 namespace App\Layout;
 
