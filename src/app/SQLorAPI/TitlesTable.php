@@ -139,12 +139,6 @@ class TitlesTable
     }
 }
 
-
-function getTitlesInfos()
-{
-    return (new TitlesTable())->getTitlesInfos();
-}
-
 function getProjects()
 {
     return (new TitlesTable())->getProjects();

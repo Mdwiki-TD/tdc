@@ -2,19 +2,7 @@
 
 namespace App\Tables\Main;
 
-
-/*
-(\$)(enwiki_pageviews_table|Words_table|All_Words_table|All_Refs_table|Lead_Refs_table|Assessments_table|Langs_table)\b
-
-MainTables::$1x_$2
-
-use App\Tables\Main\MainTables;
-
-*/
-
-
-
-use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
+use function App\SQLorAPI\getTitlesInfos;
 
 class MainTables
 {
@@ -58,7 +46,7 @@ class MainTables
 	}
 }
 
-$_titles_infos = td_or_sql_titles_infos();
+$_titles_infos = getTitlesInfos();
 
 // var_dump(json_encode($_titles_infos, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 // [{ "title": "11p deletion syndrome", "importance": "", "r_lead_refs": 5, "r_all_refs": 14, "en_views": 1592, "w_lead_words": 221, "w_all_words": 547, "qid": "Q1892153" }, ...]

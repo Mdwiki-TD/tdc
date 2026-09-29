@@ -12,7 +12,7 @@ use function App\Utils\Html\make_edit_icon_new;
 use function App\SQLorAPI\Recent\get_pages_users_to_main;
 use function App\SQLorAPI\Funcs\get_pages_users_langs;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
-use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
+use function App\SQLorAPI\getTitlesInfos;
 
 /**
  * Class PagesUsersToMainIndexController
@@ -75,7 +75,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 			return [];
 		}
 
-		$infos = td_or_sql_titles_infos($titles);
+		$infos = getTitlesInfos($titles);
 
 		return array_column($infos, 'qid', 'title');
 	}
