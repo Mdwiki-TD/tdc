@@ -59,7 +59,7 @@ class StatController extends AbstractControllerNoPost
 		$noPv = 0;
 		$i = 0;
 
-		$qids_t = (new QidsTable())->get_td_or_sql_qids('all');
+		$qids_t = (new QidsTable())->getQids('all');
 		$sqlQids = array_column($qids_t, 'qid', 'title');
 
 		foreach ($titles as $title) {

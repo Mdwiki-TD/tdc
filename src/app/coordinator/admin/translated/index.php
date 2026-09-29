@@ -82,7 +82,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	private function getLanguages(): array
 	{
 		$tabes = [];
-		$llangs = (new PagesTable())->get_pages_langs();
+		$llangs = (new PagesTable())->getPagesLangs();
 
 		foreach ($llangs as $tat) {
 			if (gettype($tat) !== 'string') {

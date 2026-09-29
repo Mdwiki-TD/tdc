@@ -36,7 +36,7 @@ class UsersIndexController extends AbstractControllerNoPost
 	{
 		$this->validateCoordinator();
 
-		$lastUserToTab = (new UsersTable())->get_users_by_last_pupdate();
+		$lastUserToTab = (new UsersTable())->getUsersByLastPupdate();
 		$usersDone = $this->getSortedArray();
 
 		$projectFilter = $this->emailsFilterTable($this->mainProject);

@@ -52,7 +52,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 
 		$tabesCodes = array_column($tabes, "lang_code");
 
-		$langsD = (new PagesTable())->get_pages_langs();
+		$langsD = (new PagesTable())->getPagesLangs();
 
 		foreach ($langsD as $tat) {
 			$lal = strtolower($tat);

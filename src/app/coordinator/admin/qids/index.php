@@ -45,8 +45,8 @@ class QidsIndexController extends AbstractControllerNoPost
 		$qidsTitle = ($this->qidTable === 'qids') ? 'TD Qids' : 'Qids Others';
 		$dbService  = new QidsTable();
 		$rows = ($this->qidTable === 'qids')
-			? $dbService->get_td_or_sql_qids($this->dis)
-			: $dbService->get_td_or_sql_qids_others($this->dis);
+			? $dbService->getQids($this->dis)
+			: $dbService->getQidsOthers($this->dis);
 
 		[$formRows, $numb] = $this->buildFormRows($rows);
 

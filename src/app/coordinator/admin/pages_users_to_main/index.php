@@ -85,7 +85,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	private function getLanguages(): array
 	{
 		$tabes = [];
-		$llangs = (new PagesTable())->get_pages_users_langs();
+		$llangs = (new PagesTable())->getPagesUsersLangs();
 
 		foreach ($llangs as $tat) {
 			if (gettype($tat) !== 'string') {
