@@ -4,7 +4,7 @@
 namespace App\MdwikiSql\AddHelper;
 
 use function App\MdwikiSql\execute_query;
-use function App\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetchQuery;
 
 function insert_to_pages(array $pageData, bool $overwrite): bool
 {
@@ -23,7 +23,7 @@ function insert_to_pages(array $pageData, bool $overwrite): bool
 	SQL;
 
 	$checkParams = [$pageData['user'], $pageData['title'], $pageData['lang']];
-	$exists = fetch_query($checkQuery, $checkParams);
+	$exists = fetchQuery($checkQuery, $checkParams);
 
 	// If record exists, UPDATE it
 	if (count($exists) > 0) {
@@ -137,7 +137,7 @@ function checkAfterAdd(
 	string $target,
 ): bool {
 
-	$findIt = fetch_query(
+	$findIt = fetchQuery(
 		"SELECT 1 FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?",
 		[$title, $lang, $user, $target]
 	);

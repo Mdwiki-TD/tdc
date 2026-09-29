@@ -97,50 +97,50 @@ class RecentDataTest extends TestCase
 
     public function testGetTotalTranslationsCountReturnsInt()
     {
-        $result = (new PagesTable())->get_total_translations_count('ar', 'pages');
+        $result = (new PagesTable())->getTotalTranslationsCount('ar', 'pages');
         $this->assertIsInt($result);
         $this->assertGreaterThanOrEqual(0, $result);
     }
 
     public function testGetTotalTranslationsCountWithAllLang()
     {
-        $result = (new PagesTable())->get_total_translations_count('All', 'pages');
+        $result = (new PagesTable())->getTotalTranslationsCount('All', 'pages');
         $this->assertIsInt($result);
         $this->assertGreaterThanOrEqual(0, $result);
     }
 
     public function testGetTotalTranslationsCountWithEmptyLang()
     {
-        $result = (new PagesTable())->get_total_translations_count('', 'pages');
+        $result = (new PagesTable())->getTotalTranslationsCount('', 'pages');
         $this->assertIsInt($result);
         $this->assertGreaterThanOrEqual(0, $result);
     }
 
     public function testGetPagesUsersToMainReturnsArray()
     {
-        $result = (new PagesTable())->get_pages_users_to_main('ar');
+        $result = (new PagesTable())->getPagesUsersToMain('ar');
         $this->assertIsArray($result);
     }
 
     public function testGetPagesUsersToMainHandlesAllLang()
     {
-        $result = (new PagesTable())->get_pages_users_to_main('All');
+        $result = (new PagesTable())->getPagesUsersToMain('All');
         $this->assertIsArray($result);
     }
 
     public function testGetPagesUsersToMainCachesResults()
     {
         // First call
-        $result1 = (new PagesTable())->get_pages_users_to_main('es');
+        $result1 = (new PagesTable())->getPagesUsersToMain('es');
         // Second call should return cached result
-        $result2 = (new PagesTable())->get_pages_users_to_main('es');
+        $result2 = (new PagesTable())->getPagesUsersToMain('es');
 
         $this->assertSame($result1, $result2);
     }
 
     public function testGetPagesUsersToMainWithEmptyLang()
     {
-        $result = (new PagesTable())->get_pages_users_to_main('');
+        $result = (new PagesTable())->getPagesUsersToMain('');
         $this->assertIsArray($result);
     }
 

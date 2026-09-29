@@ -54,7 +54,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
 		$offset = ($page - 1) * $limit;
 
 		$sqlResults = (new RecentTable())->getRecentTranslated($this->lang, $this->table, $limit, $offset);
-		$totalCount = (new PagesTable())->get_total_translations_count($this->lang, $this->table);
+		$totalCount = (new PagesTable())->getTotalTranslationsCount($this->lang, $this->table);
 
 		$pagination = "";
 		if ($totalCount > $limit) {

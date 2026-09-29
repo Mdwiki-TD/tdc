@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
-use function App\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetchQuery;
 
 require_once __DIR__ . '/fix_page_post.php';
 
@@ -38,7 +38,7 @@ class FixItController extends AbstractEditController
     /** Loads the pages_users row once; shared by beforeCard/getCardTitle/buildForm. */
     private function loadRow(): array
     {
-        return $this->row ??= (fetch_query("SELECT * FROM pages_users WHERE id = ?", [$this->id])[0] ?? []);
+        return $this->row ??= (fetchQuery("SELECT * FROM pages_users WHERE id = ?", [$this->id])[0] ?? []);
     }
 
     protected function beforeCard(): void
@@ -49,7 +49,7 @@ class FixItController extends AbstractEditController
         $lang  = $row['lang'] ?? '';
 
         // Check if page already exists in main pages table
-        $dup = fetch_query(
+        $dup = fetchQuery(
             "SELECT * FROM pages WHERE title = ? AND lang = ? AND (target != '' AND target IS NOT NULL)",
             [$title, $lang]
         );

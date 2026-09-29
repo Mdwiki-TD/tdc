@@ -10,7 +10,7 @@ use App\SQLorAPI\UsersTable;
 
 use function App\Utils\Html\make_mail_icon_new;
 use function App\Utils\Html\make_edit_icon_new;
-use function App\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetchQuery;
 
 /**
  * Class EmailsIndexController
@@ -62,13 +62,13 @@ class UsersIndexController extends AbstractControllerNoPost
 
 		$livePages = (new PagesTable())->getCountPagesNotEmpty();
 
-		$ddi = fetch_query("select user_id, username, email, wiki, user_group from users;");
+		$ddi = fetchQuery("select user_id, username, email, wiki, user_group from users;");
 
 		foreach ($ddi as $key => $gk) {
 			$usersDone[$gk['username']] = $gk;
 		}
 
-		$der = (new PagesTable())->get_td_or_sql_page_user_not_in_users();
+		$der = (new PagesTable())->getPageUserNotInUsers();
 
 		foreach ($der as $d => $tat) {
 			if (!array_key_exists($tat, $usersDone)) {

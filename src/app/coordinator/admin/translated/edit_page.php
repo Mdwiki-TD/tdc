@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Translated;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
-use function App\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetchQuery;
 
 require_once __DIR__ . '/edit_page_post.php';
 
@@ -35,7 +35,7 @@ class EditPageController extends AbstractEditController
      */
     private function renderEditForm(string $id, string $table): string
     {
-        $pageData = fetch_query("SELECT * FROM {$table} WHERE id = ?", [$id]);
+        $pageData = fetchQuery("SELECT * FROM {$table} WHERE id = ?", [$id]);
 
         $title   = $pageData[0]['title'] ?? '';
         $target  = $pageData[0]['target'] ?? '';

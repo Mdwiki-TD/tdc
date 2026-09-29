@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
 use App\Tables\Main\MainTables;
 use function App\csrf\generate_csrf_token;
-use function App\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetchQuery;
 use function App\APICalls\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
@@ -111,7 +111,7 @@ class MsgController extends AbstractControllerNoPost
     {
         $emailsArray = [];
 
-        foreach (fetch_query("select username, email from users;") as $key => $ta) {
+        foreach (fetchQuery("select username, email from users;") as $key => $ta) {
             $emailsArray[$ta['username']] = $ta['email'];
         }
 

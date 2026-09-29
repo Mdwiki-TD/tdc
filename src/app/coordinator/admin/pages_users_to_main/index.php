@@ -41,7 +41,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	{
 		$this->validateCoordinator();
 
-		$sqlResults = (new PagesTable())->get_pages_users_to_main($this->lang);
+		$sqlResults = (new PagesTable())->getPagesUsersToMain($this->lang);
 
 		$titlesQids = $this->getTitlesQidsMap($sqlResults);
 
