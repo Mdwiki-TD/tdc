@@ -4,7 +4,7 @@
 // use App\Coordinator\RecentTranslations;
 namespace App\Coordinator;
 
-use function App\APICalls\TDApi\get_td_api;
+use function App\SQLorAPI\get_td_api;
 
 class RecentTranslations
 {

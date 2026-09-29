@@ -4,7 +4,7 @@
 namespace App\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use function App\APICalls\TDApi\get_td_api;
+use function App\SQLorAPI\get_td_api;
 
 /**
  * Class ProcessController
