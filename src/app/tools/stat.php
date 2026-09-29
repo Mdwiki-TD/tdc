@@ -6,7 +6,7 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Main\MainTables;
 use function App\Utils\Html\makeDropdown;
 use function App\Results\GetCats\get_mdwiki_cat_members;
-use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
+use App\SQLorAPI\CategoriesTable;
 use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
 
 /**
@@ -204,7 +204,7 @@ class StatController extends AbstractControllerNoPost
 	private function filterStat(string $cat): string
 	{
 		$catsTitles = [];
-		$categories = get_td_or_sql_categories();
+		$categories = (new CategoriesTable())->getCategories();
 
 		foreach ($categories as $k => $tab) {
 			$catsTitles[] = $tab['category'] ?? "";

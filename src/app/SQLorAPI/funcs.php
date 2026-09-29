@@ -26,25 +26,6 @@ function get_publish_reports_stats(): array
     return $statsData;
 }
 
-function get_td_or_sql_categories(): array
-{
-
-    static $categories = [];
-
-    if (!empty($categories ?? [])) {
-        return $categories;
-    }
-
-    $apiParams = ['get' => 'categories'];
-    $query = "select id, category, category2, campaign, depth, is_default from categories";
-
-    $data = superFunction($apiParams, [], $query);
-
-    $categories = $data;
-
-    return $categories;
-}
-
 function get_coordinators(): array
 {
 

@@ -3,7 +3,7 @@
 namespace App\Tables\SqlTables;
 
 use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
-use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
+use App\SQLorAPI\CategoriesTable;
 
 class TablesSql
 {
@@ -23,7 +23,7 @@ class TablesSql
     public static $sProjectsTitleToId = [];
 }
 
-$categoriesTab = get_td_or_sql_categories();
+$categoriesTab = (new CategoriesTable())->getCategories();
 
 foreach ($categoriesTab as $k => $tab) {
     if (!empty($tab['category']) && !empty($tab['campaign'])) {

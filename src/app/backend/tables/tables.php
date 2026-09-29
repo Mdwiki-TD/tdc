@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Tables\Main;
-
-use function App\SQLorAPI\getTitlesInfos;
+use App\SQLorAPI\TitlesTable;
 
 class MainTables
 {
@@ -46,7 +45,7 @@ class MainTables
 	}
 }
 
-$_titles_infos = getTitlesInfos();
+$_titles_infos = (new TitlesTable())->getTitlesInfos();
 
 // var_dump(json_encode($_titles_infos, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 // [{ "title": "11p deletion syndrome", "importance": "", "r_lead_refs": 5, "r_all_refs": 14, "en_views": 1592, "w_lead_words": 221, "w_all_words": 547, "qid": "Q1892153" }, ...]
