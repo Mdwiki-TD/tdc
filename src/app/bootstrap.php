@@ -80,6 +80,11 @@ include_once __DIR__ . '/utils/tables_dir.php';
 include_once __DIR__ . '/User/bootstrap.php';
 include_once __DIR__ . '/Settings.php';
 
+# MdwikiSql
+include_once __DIR__ . '/MdwikiSql/Database.php';
+include_once __DIR__ . '/MdwikiSql/add_helper.php';
+include_once __DIR__ . '/MdwikiSql/mdwiki_sql.php';
+
 # SQLorAPI
 include_once __DIR__ . '/SQLorAPI/bootstrap.php';
 

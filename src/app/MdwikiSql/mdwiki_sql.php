@@ -49,7 +49,7 @@ use App\MdwikiSql\Database;
 function execute_query(string $sqlQuery, ?array $params = null): bool
 {
     // Create a new database object
-    $db = new Database('DB_NAME');
+    $db = new Database();
 
     // Execute a SQL query
     $results = $db->executequery($sqlQuery, $params);
@@ -65,7 +65,7 @@ function execute_query(string $sqlQuery, ?array $params = null): bool
 function fetchQuery(string $sqlQuery, ?array $params = null, $noprint = false): array
 {
     // Create a new database object
-    $db = new Database('DB_NAME');
+    $db = new Database();
 
     if ($noprint == false) {
         $db->testPrint($sqlQuery);
