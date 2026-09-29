@@ -238,7 +238,7 @@ composer install
 
 ### Integration
 
-This module is loaded via `include.php` at the application root:
+This module is loaded via `bootstrap.php` at the application root:
 
 ```php
 require_once __DIR__ . '/utils/functions.php';

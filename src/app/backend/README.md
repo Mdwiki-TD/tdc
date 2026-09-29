@@ -133,7 +133,7 @@ The three-layer separation is clear and purposeful. Each layer has a distinct re
 -   **Dead API path**: `$useTdApi = false` is hardcoded, making the entire API-based data retrieval path unused code
 -   **Connection-per-query anti-pattern**: Each database call creates and destroys a PDO connection
 -   **Global variable coupling**: `$useTdApi` and `$GLOBALS` are used extensively for configuration and state
--   **No PSR-4 autoloading**: Despite namespaces, files are manually included via `include.php`
+-   **No PSR-4 autoloading**: Despite namespaces, files are manually included via `bootstrap.php`
 -   **Mixed data access strategies**: Some files use direct SQL, others use the API, with no clear guideline for when to use which
 
 ---
@@ -286,7 +286,7 @@ When running on localhost, the module automatically:
 
 ### Integration
 
-This module is loaded via `include.php` at the application root:
+This module is loaded via `bootstrap.php` at the application root:
 
 ```php
 require_once __DIR__ . '/backend/api_calls/mdwiki_sql.php';

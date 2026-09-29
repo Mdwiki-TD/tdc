@@ -26,7 +26,7 @@ src/
 │   │   ├── td_api_wrap/
 │   │   │   └── td_api.php
 │   │   ├── CurrentUser.php
-│   │   ├── include.php
+│   │   ├── bootstrap.php
 │   │   ├── README.md
 │   │   └── settings.php
 │   ├── coordinator/
@@ -90,17 +90,17 @@ src/
 │   │   │   ├── index.php
 │   │   │   └── README.md
 │   │   ├── helpers/
-│   │   │   ├── include.php
+│   │   │   ├── bootstrap.php
 │   │   │   ├── index.php
 │   │   │   ├── recent_helps.php
 │   │   │   └── sugust_helper.php
 │   │   ├── admin.7z
-│   │   ├── include.php
+│   │   ├── bootstrap.php
 │   │   ├── index.php
 │   │   └── README.md
 │   ├── tools/
 │   │   ├── categories.php
-│   │   ├── include.php
+│   │   ├── bootstrap.php
 │   │   ├── index.php
 │   │   ├── last.php
 │   │   ├── process.php
@@ -115,7 +115,7 @@ src/
 │   │   └── TestPrinter.php
 │   ├── 404.php
 │   ├── csrf.php
-│   ├── include_all.php
+│   ├── bootstrap.php
 │   └── index.php
 ├── css/
 │   ├── sidebar-desktop.css
@@ -128,11 +128,11 @@ src/
 │   ├── reports-script.js
 │   └── sidebar.js
 ├── templates/
-│   ├── include.php
+│   ├── bootstrap.php
 │   ├── PageFooter.php
 │   ├── PageHead.php
 │   └── PageHeader.php
-├── include.php
+├── bootstrap.php
 ├── index.php
 ├── sugust.php
 └── tools.php

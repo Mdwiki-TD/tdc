@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/helpers/include.php
+// src/app/coordinator/helpers/bootstrap.php
 
 namespace App\Coordinator\Helps;
 
