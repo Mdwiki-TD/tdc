@@ -82,3 +82,6 @@ include_once __DIR__ . '/Settings.php';
 include_once __DIR__ . '/backend/include.php';
 require_once __DIR__ . '/coordinator/include.php';
 require_once __DIR__ . '/tools/include.php';
+
+# AppRouter
+include_once __DIR__ . '/index.php';
