@@ -3,8 +3,7 @@
 namespace App\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use function App\SQLorAPI\Process\get_users_process_new;
-
+use App\SQLorAPI\InProcessTable;
 
 /*
 
@@ -36,7 +35,7 @@ class ProcessTotalController extends AbstractControllerNoPost
 	{
 		$text = "";
 
-		$userProcessTab = get_users_process_new();
+		$userProcessTab = (new InProcessTable())->getUsersProcessNew();
 
 		// sort user_process_tab by value
 		arsort($userProcessTab);

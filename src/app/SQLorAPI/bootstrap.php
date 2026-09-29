@@ -1,7 +1,7 @@
 <?PHP
 
 # SQLorAPI
-include_once __DIR__ . '/SQLorAPI/ApiOrSqlService.php';
-include_once __DIR__ . '/SQLorAPI/funcs.php';
-include_once __DIR__ . '/SQLorAPI/process_data.php';
-include_once __DIR__ . '/SQLorAPI/recent_data.php';
+include_once __DIR__ . '/ApiOrSqlService.php';
+include_once __DIR__ . '/funcs.php';
+include_once __DIR__ . '/InProcessTable.php';
+include_once __DIR__ . '/recent_data.php';

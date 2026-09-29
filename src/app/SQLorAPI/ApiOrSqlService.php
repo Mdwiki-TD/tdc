@@ -2,25 +2,25 @@
 
 namespace App\SQLorAPI;
 
+use App\MdwikiSql\Database;
 use App\Settings;
-use function App\MdwikiSql\fetch_query;
+use App\Logger;
 
-function test_print_z($s): void
+function fetch_query(string $sqlQuery, ?array $params = null): array
 {
-    if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
-        return;
-    }
-    $print_t = (isset($_REQUEST['test']) || isset($_COOKIE['test'])) ? true : false;
+    // Create a new database object
+    $db = new Database();
 
-    if ($print_t && is_string($s)) {
-        echo "\n<br>\n$s";
-    } elseif ($print_t) {
-        echo "\n<br>\n";
-        print_r($s);
-    }
-}
+    // Execute a SQL query
+    $results = $db->fetchquery($sqlQuery, $params);
 
-function post_url(string $endPoint, array $params = []): string
+    // Destroy the database object
+    $db = null;
+    return $results;
+};
+
+
+function post_url(string $ServerUrl, array $params = []): string
 {
     if (empty($params)) return "";
 
@@ -29,7 +29,7 @@ function post_url(string $endPoint, array $params = []): string
 
     $ch = curl_init();
 
-    $url = "{$endPoint}?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+    $url = "{$ServerUrl}?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
     curl_setopt_array($ch, [
         CURLOPT_URL => $url,
@@ -50,20 +50,20 @@ function post_url(string $endPoint, array $params = []): string
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
     if ($httpCode !== 200) {
-        test_print_z('post_url: Error: API request failed with status code ' . $httpCode);
+        Logger::debug('post_url: Error: API request failed with status code ' . $httpCode);
     }
 
     $executionTime = (microtime(true) - $timeStart);
     $executionTime = round($executionTime, 4);
 
-    test_print_z("post_url (time: $executionTime s): (http_code: $httpCode) $url2");
+    Logger::debug("post_url (time: $executionTime s): (http_code: $httpCode) $url2");
 
     if ($output === FALSE) {
-        test_print_z("post_url: cURL Error: " . curl_error($ch));
+        Logger::debug("post_url: cURL Error: " . curl_error($ch));
     }
 
     if (curl_errno($ch)) {
-        test_print_z('post_url: Error:' . curl_error($ch));
+        Logger::debug('post_url: Error:' . curl_error($ch));
     }
 
     curl_close($ch);
@@ -73,11 +73,10 @@ function post_url(string $endPoint, array $params = []): string
 function get_td_api(array $params): array
 {
     $settings = Settings::getInstance();
-    $endPoint = $settings->ServerUrl;
 
-    $endPoint .= '/api.php';
+    $ServerUrl = $settings->ServerUrl . '/api.php';
 
-    $out = post_url($endPoint, $params);
+    $out = post_url($ServerUrl, $params);
 
     $apiResults = json_decode($out, true);
 
@@ -88,67 +87,79 @@ function get_td_api(array $params): array
     $result = $apiResults['results'] ?? [];
 
     if (isset($result['error'])) {
-        test_print_z('Error:' . json_encode($result['error'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        Logger::debug('Error:' . json_encode($result['error'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
     return $apiResults;
 }
-
-function use_td_api_or_sql(): bool
+class ApiOrSqlService
 {
-    static $useTdApi = false;
-    // static $useTdApi = null;
-    if ($useTdApi === null) {
-        // var_dump(json_encode($settingsTabe, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-        // "{ "allow_type_of_translate": 0, "translation_button_in_progress_table": 1, "fix_ref_in_text": 0, "use_td_api": 1, "use_mdwikicx": 1}"
-        $apiResults = get_td_api(['get' => 'settings']);
-        $data = $apiResults['results'] ?? [];
+    private static ?bool $useTdApi = null;
 
-        $settingsTabe = array_column($data, 'value', 'title');
-
-        $useTdApi  = (($settingsTabe['use_td_api'] ?? "") == "1") ? true : false;
-
-        if (isset($_GET['use_td_api'])) {
-            $useTdApi  = $_GET['use_td_api'] != "x";
-        }
+    public static function resetCache(): void
+    {
+        // self::$useTdApi = null;
+        self::$useTdApi = false; // disabled
     }
-    return $useTdApi;
-}
 
-function isvalid($str)
-{
-    return !empty($str) && strtolower($str) != "all";
-}
+    function useTdApiOrSql(): bool
+    {
+        if (self::$useTdApi === null) {
+            // var_dump(json_encode($settingsTabe, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            // "{ "allow_type_of_translate": 0, "translation_button_in_progress_table": 1, "fix_ref_in_text": 0, "use_td_api": 1, "use_mdwikicx": 1}"
+            $apiResults = get_td_api(['get' => 'settings']);
+            $data = $apiResults['results'] ?? [];
 
-function super_function(
+            $settingsTabe = array_column($data, 'value', 'title');
+
+            self::$useTdApi = (($settingsTabe['use_td_api'] ?? "") == "1");
+        }
+        return self::$useTdApi;
+    }
+
+    public static function isValid(mixed $str): bool
+    {
+        return !empty($str) && strtolower((string)$str) != "all";
+    }
+
+    public function superFunction(
+        array $apiParams,
+        array $sqlParams,
+        string $sqlQuery,
+        bool $noRefind = false
+    ): array {
+        $apiData = [];
+
+        $useTdApi = self::useTdApiOrSql();
+        if ($useTdApi) {
+            $apiResults = get_td_api($apiParams);
+
+            $apiData = $apiResults['results'] ?? [];
+
+            $length = $apiResults['length'] ?? null;
+
+            if ($length === 0) {
+                // API return empty list. no need to check sql.
+                return $apiData;
+            }
+        }
+
+        if (empty($apiData) && (getenv('APP_ENV') === 'testing' || defined('PHPUNIT_RUNNING'))) {
+            return [];
+        }
+
+        if (empty($apiData) && !$noRefind) {
+            $apiData = fetch_query($sqlQuery, $sqlParams);
+        }
+
+        return $apiData;
+    }
+}
+function superFunction(
     array $apiParams,
     array $sqlParams,
     string $sqlQuery,
     bool $noRefind = false
-): array {
-    $apiData = [];
-
-    $useTdApi = use_td_api_or_sql();
-    if ($useTdApi) {
-        $apiResults = get_td_api($apiParams);
-
-        $apiData = $apiResults['results'] ?? [];
-
-        $length = $apiResults['length'] ?? null;
-
-        if ($length === 0) {
-            // API return empty list. no need to check sql.
-            return $apiData;
-        }
-    }
-
-    if (empty($apiData) && (getenv('APP_ENV') === 'testing' || defined('PHPUNIT_RUNNING'))) {
-        return [];
-    }
-
-    if (empty($apiData) && !$noRefind) {
-        $apiData = fetch_query($sqlQuery, $sqlParams);
-    }
-
-    return $apiData;
+) {
+    return (new ApiOrSqlService())->superFunction($apiParams, $sqlParams, $sqlQuery, $noRefind);
 }

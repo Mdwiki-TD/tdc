@@ -2,7 +2,7 @@
 
 namespace App\SQLorAPI\Recent;
 
-use function App\SQLorAPI\super_function;
+use function App\SQLorAPI\superFunction;
 
 function get_recent_sql($lang): array
 {
@@ -44,7 +44,7 @@ function get_recent_sql($lang): array
         limit 250
     SQL;
 
-    $tab = super_function($apiParams, $sqlParams, $sqlQuery);
+    $tab = superFunction($apiParams, $sqlParams, $sqlQuery);
 
     // merage the two arrays without duplicates
     // $tab = array_unique(array_merge($dd0, $dd1), SORT_REGULAR);
@@ -96,7 +96,7 @@ function get_recent_pages_users($lang): array
         limit 100
     SQL;
 
-    $tab = super_function($apiParams, $sqlParams, $qua);
+    $tab = superFunction($apiParams, $sqlParams, $qua);
 
     // sort the table by add_date
     usort($tab, function ($a, $b) {
@@ -137,7 +137,7 @@ function get_recent_translated($lang, $table, $limit, $offset): array
         // $sqlParams[] = $offset;
     }
 
-    $dd = super_function($apiParams, $sqlParams, $query);
+    $dd = superFunction($apiParams, $sqlParams, $query);
 
     // sort the table by add_date
     usort($dd, function ($a, $b) {
@@ -161,7 +161,7 @@ function get_total_translations_count($lang, $table): int
         $apiParams['lang'] = $lang;
     }
 
-    $dd = super_function($apiParams, $sqlParams, $query);
+    $dd = superFunction($apiParams, $sqlParams, $query);
 
     $result = (int)($dd[0]['count'] ?? 0);
 
@@ -187,7 +187,7 @@ function get_pages_users_to_main($lang): array
         $apiParams['lang'] = $lang;
     }
 
-    $dd = super_function($apiParams, $sqlParams, $query);
+    $dd = superFunction($apiParams, $sqlParams, $query);
 
     $cache[$lang] = $dd;
 

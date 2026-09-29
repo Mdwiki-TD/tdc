@@ -70,6 +70,7 @@ if (file_exists($vendorAutoload)) {
 
 // Load security module first
 include_once __DIR__ . '/csrf.php';
+include_once __DIR__ . '/Logger.php';
 
 include_once __DIR__ . '/utils/TestPrinter.php';
 include_once __DIR__ . '/utils/SidebarMenu.php';

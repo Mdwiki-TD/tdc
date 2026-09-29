@@ -2,7 +2,7 @@
 
 namespace App\SQLorAPI\Funcs;
 
-use function App\SQLorAPI\super_function;
+use function App\SQLorAPI\superFunction;
 
 function get_publish_reports_stats(): array
 {
@@ -21,7 +21,7 @@ function get_publish_reports_stats(): array
 
     $apiParams = ['get' => 'publish_reports_stats'];
 
-    $statsData = super_function($apiParams, [], $query);
+    $statsData = superFunction($apiParams, [], $query);
 
     return $statsData;
 }
@@ -38,7 +38,7 @@ function get_td_or_sql_categories(): array
     $apiParams = ['get' => 'categories'];
     $query = "select id, category, category2, campaign, depth, is_default from categories";
 
-    $data = super_function($apiParams, [], $query);
+    $data = superFunction($apiParams, [], $query);
 
     $categories = $data;
 
@@ -57,7 +57,7 @@ function get_coordinators(): array
     $apiParams = ['get' => 'coordinators'];
     $query = "SELECT id, username, is_active FROM coordinators order by id";
 
-    $data = super_function($apiParams, [], $query);
+    $data = superFunction($apiParams, [], $query);
 
     $coordinators = $data;
 
@@ -102,7 +102,7 @@ function get_users_by_last_pupdate(): array
         ORDER BY pupdate DESC;
     SQL;
 
-    $data = super_function($apiParams, [], $query);
+    $data = superFunction($apiParams, [], $query);
 
     foreach ($data as $key => $gg) {
         $lastUserToTab[$gg['user']] = $gg;
@@ -125,7 +125,7 @@ function get_td_or_sql_count_pages_not_empty(): array
         select DISTINCT user, count(target) as count from pages where target != '' group by user order by count desc
     SQL;
 
-    $data = super_function($apiParams, [], $query);
+    $data = superFunction($apiParams, [], $query);
 
     $data = array_column($data, 'count', 'user');
 
@@ -153,7 +153,7 @@ function get_td_or_sql_page_user_not_in_users(): array
         select DISTINCT p.user from pages AS p WHERE NOT EXISTS ( SELECT 1 FROM users AS u WHERE p.user = u.username )
     SQL;
 
-    $data = super_function($apiParams, $sqlParams, $query);
+    $data = superFunction($apiParams, $sqlParams, $query);
 
     $data = array_column($data, 'user');
 
@@ -174,7 +174,7 @@ function get_td_or_sql_language_settings(): array
     $apiParams = ['get' => 'language_settings'];
     $query = "SELECT * FROM language_settings order by lang_code";
 
-    $dataLangs = super_function($apiParams, $sqlParams, $query);
+    $dataLangs = superFunction($apiParams, $sqlParams, $query);
 
     return $dataLangs;
 }
@@ -190,7 +190,7 @@ function get_td_or_sql_users_no_inprocess(): array
     $apiParams = ['get' => 'users_no_inprocess'];
     $query = "SELECT id, user, is_active FROM users_no_inprocess order by id";
 
-    $users = super_function($apiParams, $sqlParams, $query);
+    $users = superFunction($apiParams, $sqlParams, $query);
 
     return $users;
 }
@@ -206,7 +206,7 @@ function get_td_or_sql_full_translators(): array
     $apiParams = ['get' => 'full_translators'];
     $query = "SELECT id, user, is_active FROM full_translators order by id";
 
-    $fullTranslators = super_function($apiParams, $sqlParams, $query);
+    $fullTranslators = superFunction($apiParams, $sqlParams, $query);
 
     return $fullTranslators;
 }
@@ -224,7 +224,7 @@ function get_td_or_sql_projects(): array
     $apiParams = ['get' => 'projects'];
     $query = "select g_id, g_title from projects";
 
-    $data = super_function($apiParams, $sqlParams, $query);
+    $data = superFunction($apiParams, $sqlParams, $query);
 
     $projects = $data;
 
@@ -262,7 +262,7 @@ function get_td_or_sql_qids($dis): array
 
     $query = (array_key_exists($dis, $quaries)) ? $quaries[$dis] : $quaries['all'];
 
-    $data = super_function($apiParams, $sqlParams, $query);
+    $data = superFunction($apiParams, $sqlParams, $query);
 
     $cache[$dis] = $data;
 
@@ -300,7 +300,7 @@ function get_td_or_sql_qids_others($dis): array
 
     $query = (array_key_exists($dis, $quaries)) ? $quaries[$dis] : $quaries['all'];
 
-    $data = super_function($apiParams, $sqlParams, $query);
+    $data = superFunction($apiParams, $sqlParams, $query);
 
     $cache[$dis] = $data;
 
@@ -318,7 +318,7 @@ function get_td_or_sql_settings(): array
     $apiParams = ['get' => 'settings'];
     $query = "select id, title, displayed, value, Type, ignored from settings";
 
-    $setting_d = super_function($apiParams, $sqlParams, $query);
+    $setting_d = superFunction($apiParams, $sqlParams, $query);
 
     return $setting_d;
 }
@@ -334,7 +334,7 @@ function get_pages_langs(): array
     $sqlParams = [];
     $apiParams = ['get' => 'pages', 'distinct' => "1", 'select' => 'lang', 'lang' => 'not_empty'];
     $query = "SELECT DISTINCT lang FROM pages where (lang != '' and lang IS NOT NULL)";
-    $data = super_function($apiParams, $sqlParams, $query);
+    $data = superFunction($apiParams, $sqlParams, $query);
 
     $data = array_column($data, 'lang');
 
@@ -357,7 +357,7 @@ function get_pages_users_langs(): array
     $sqlParams = [];
     $apiParams = ['get' => 'pages_users', 'distinct' => "1", 'select' => 'lang'];
     $query = "SELECT DISTINCT lang FROM pages_users";
-    $data = super_function($apiParams, $sqlParams, $query);
+    $data = superFunction($apiParams, $sqlParams, $query);
 
     $data = array_column($data, 'lang');
 
@@ -399,10 +399,10 @@ function td_or_sql_titles_infos($titles = []): array
     if (!empty($titles)) {
         $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
         $qua .= " WHERE ase.title IN ($placeholders)";
-        $sqlParams = $titles;              // pass to super_function
+        $sqlParams = $titles;              // pass to superFunction
     }
 
-    $data = super_function($apiParams, $sqlParams, $qua);
+    $data = superFunction($apiParams, $sqlParams, $qua);
 
     return $data;
 }

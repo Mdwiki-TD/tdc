@@ -2,17 +2,6 @@
 
 namespace App\Tables\SqlTables;
 
-
-/*
-(\$)(full_translates|no_lead_translates|cat_titles|cat_to_camp|camp_to_cat|main_cat|main_camp|camps_cat2|camp_input_depth|campaign_input_list|catinput_list|projects_title_to_id)\b
-
-TablesSql::$1s_$2
-
-use App\Tables\SqlTables\TablesSql;
-
-include_once __DIR__ . '/Tables/sql_tables.php';
-*/
-
 use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
 use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
 

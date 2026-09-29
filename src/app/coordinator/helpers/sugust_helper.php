@@ -4,8 +4,8 @@
 namespace App\Coordinator\Helps\Sugust;
 
 use App\Tables\Main\MainTables;
+use App\SQLorAPI\InProcessTable;
 use function App\Results\GetResults\get_cat_exists_and_missing;
-use function App\SQLorAPI\Process\get_lang_in_process_new;
 
 function get_sugust($title, $lang)
 {
@@ -25,7 +25,7 @@ function get_sugust($title, $lang)
 
     $itemsMissing = $items['missing'] ?? [];
 
-    $data = get_lang_in_process_new($lang);
+    $data = (new InProcessTable())->getLangInProcessByYear($lang);
 
     $res = array_column($data, 'title');
 
