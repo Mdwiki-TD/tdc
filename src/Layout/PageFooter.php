@@ -1,7 +1,7 @@
 <?php
-// src/templates/PageFooter.php
+// src/Layout/PageFooter.php
 
-namespace App\Templates;
+namespace App\Layout;
 
 class PageFooter
 {
@@ -50,7 +50,7 @@ class PageFooter
         <script src='/tdc/js/footer.js'></script>
 
         <!-- Common JavaScript -->
-        <script src="/Translation_Dashboard/js/c.js"></script>
+        <script src="/Translation_Dashboard/js/card-widget.js"></script>
         </body>
 
         </html>
@@ -58,6 +58,6 @@ class PageFooter
 	}
 }
 
-// Usage (replaces the old procedural src/templates/footer.php):
+// Usage (replaces the old procedural src/Layout/footer.php):
 // $pageFooter = new PageFooter();
 // $pageFooter->render($pageHeader->getLoadStartTime());

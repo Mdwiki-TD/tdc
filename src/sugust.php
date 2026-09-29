@@ -2,7 +2,7 @@
 
 header('Content-Type: application/json');
 
-include_once __DIR__ . '/include.php';
+include_once __DIR__ . '/bootstrap.php';
 
 use function App\Coordinator\Helps\Sugust\get_sugust;
 

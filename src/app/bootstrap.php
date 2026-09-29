@@ -26,7 +26,7 @@
  * Usage:
  * ```php
  * // Include at the start of any entry point
- * include_once __DIR__ . '/include.php';
+ * include_once __DIR__ . '/bootstrap.php';
  * ```
  *
  * @package    Core
@@ -76,9 +76,12 @@ include_once __DIR__ . '/utils/SidebarMenu.php';
 include_once __DIR__ . '/utils/html.php';
 include_once __DIR__ . '/utils/tables_dir.php';
 
-include_once __DIR__ . '/User/include.php';
+include_once __DIR__ . '/User/bootstrap.php';
 include_once __DIR__ . '/Settings.php';
 
-include_once __DIR__ . '/backend/include.php';
-require_once __DIR__ . '/coordinator/include.php';
-require_once __DIR__ . '/tools/include.php';
+include_once __DIR__ . '/backend/bootstrap.php';
+require_once __DIR__ . '/coordinator/bootstrap.php';
+require_once __DIR__ . '/tools/bootstrap.php';
+
+# AppRouter
+include_once __DIR__ . '/index.php';

@@ -1,5 +1,5 @@
 <?php
-// src/app/tools/include.php
+// src/app/tools/bootstrap.php
 
 require_once __DIR__ . '/categories.php';
 require_once __DIR__ . '/last.php';

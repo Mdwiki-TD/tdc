@@ -40,7 +40,7 @@ class EditUserTest extends TestCase
         $_GET['user_id'] = '123';
 
         // Load required dependencies
-        require_once __DIR__ . '/../../../../src/include.php';
+        require_once __DIR__ . '/../../../../src/bootstrap.php';
 
         // Capture output
         ob_start();
