@@ -4,14 +4,13 @@
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\SQLorAPI\TitlesTable;
+use App\SQLorAPI\PagesTable;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\make_edit_icon_new;
-use function App\SQLorAPI\get_pages_users_to_main;
-use function App\SQLorAPI\get_pages_users_langs;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
 /**
@@ -42,7 +41,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	{
 		$this->validateCoordinator();
 
-		$sqlResults = get_pages_users_to_main($this->lang);
+		$sqlResults = (new PagesTable())->get_pages_users_to_main($this->lang);
 
 		$titlesQids = $this->getTitlesQidsMap($sqlResults);
 
@@ -86,7 +85,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	private function getLanguages(): array
 	{
 		$tabes = [];
-		$llangs = get_pages_users_langs();
+		$llangs = (new PagesTable())->get_pages_users_langs();
 
 		foreach ($llangs as $tat) {
 			if (gettype($tat) !== 'string') {

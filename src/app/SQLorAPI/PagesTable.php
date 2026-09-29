@@ -270,167 +270,121 @@ class PagesTable
 
         return self::$countPagesCacheNotEmpty;
     }
-}
 
+    public function get_td_or_sql_page_user_not_in_users(): array
+    {
 
-function getCountPages()
-{
-    return (new PagesTable())->getCountPages();
-}
+        static $users = [];
 
-function getLangPagesByCat($lang, $cat)
-{
-    return (new PagesTable())->getLangPagesByCat($lang, $cat);
-}
+        if (!empty($users ?? [])) {
+            return $users;
+        }
 
-function getUserPages($userMain, $year_y, $lang_y)
-{
-    return (new PagesTable())->getUserPages($userMain, $year_y, $lang_y);
-}
+        $sqlParams = [];
+        $apiParams = array('get' => 'pages', 'distinct' => 1, 'select' => 'user');
+        $query = <<<SQL
+            select DISTINCT p.user from pages AS p WHERE NOT EXISTS ( SELECT 1 FROM users AS u WHERE p.user = u.username )
+        SQL;
 
-function getPagesWithPupdate()
-{
-    return (new PagesTable())->getPagesWithPupdate();
-}
+        $data = $this->service->superFunction($apiParams, $sqlParams, $query);
 
-function getLangPages($lang, $year_y)
-{
-    return (new PagesTable())->getLangPages($lang, $year_y);
-}
+        $data = array_column($data, 'user');
 
-function getLangYears($mainlang)
-{
-    return (new PagesTable())->getLangYears($mainlang);
-}
+        $users = $data;
 
-function getUserYears($user)
-{
-    return (new PagesTable())->getUserYears($user);
-}
-
-function getUserLangs($user)
-{
-    return (new PagesTable())->getUserLangs($user);
-}
-
-function getUserCamps($user)
-{
-    return (new PagesTable())->getUserCamps($user);
-}
-
-function get_td_or_sql_page_user_not_in_users(): array
-{
-
-    static $users = [];
-
-    if (!empty($users ?? [])) {
-        return $users;
+        return $data;
     }
 
-    $sqlParams = [];
-    $apiParams = array('get' => 'pages', 'distinct' => 1, 'select' => 'user');
-    $query = <<<SQL
-        select DISTINCT p.user from pages AS p WHERE NOT EXISTS ( SELECT 1 FROM users AS u WHERE p.user = u.username )
-    SQL;
+    public function get_pages_langs(): array
+    {
 
-    $data = superFunction($apiParams, $sqlParams, $query);
+        static $pagesLangs = [];
 
-    $data = array_column($data, 'user');
+        if (!empty($pagesLangs ?? [])) {
+            return $pagesLangs;
+        }
 
-    $users = $data;
+        $sqlParams = [];
+        $apiParams = ['get' => 'pages', 'distinct' => "1", 'select' => 'lang', 'lang' => 'not_empty'];
+        $query = "SELECT DISTINCT lang FROM pages where (lang != '' and lang IS NOT NULL)";
+        $data = $this->service->superFunction($apiParams, $sqlParams, $query);
 
-    return $data;
-}
+        $data = array_column($data, 'lang');
 
-function get_pages_langs(): array
-{
+        // var_export(json_encode($data));
 
-    static $pagesLangs = [];
+        $pagesLangs = $data;
 
-    if (!empty($pagesLangs ?? [])) {
-        return $pagesLangs;
+        return $data;
     }
 
-    $sqlParams = [];
-    $apiParams = ['get' => 'pages', 'distinct' => "1", 'select' => 'lang', 'lang' => 'not_empty'];
-    $query = "SELECT DISTINCT lang FROM pages where (lang != '' and lang IS NOT NULL)";
-    $data = superFunction($apiParams, $sqlParams, $query);
+    public function get_pages_users_langs(): array
+    {
 
-    $data = array_column($data, 'lang');
+        static $pagesUsersLangs = [];
 
-    // var_export(json_encode($data));
+        if (!empty($pagesUsersLangs ?? [])) {
+            return $pagesUsersLangs;
+        }
 
-    $pagesLangs = $data;
+        $sqlParams = [];
+        $apiParams = ['get' => 'pages_users', 'distinct' => "1", 'select' => 'lang'];
+        $query = "SELECT DISTINCT lang FROM pages_users";
+        $data = $this->service->superFunction($apiParams, $sqlParams, $query);
 
-    return $data;
-}
+        $data = array_column($data, 'lang');
 
-function get_pages_users_langs(): array
-{
+        $pagesUsersLangs = $data;
 
-    static $pagesUsersLangs = [];
-
-    if (!empty($pagesUsersLangs ?? [])) {
-        return $pagesUsersLangs;
+        return $data;
     }
 
-    $sqlParams = [];
-    $apiParams = ['get' => 'pages_users', 'distinct' => "1", 'select' => 'lang'];
-    $query = "SELECT DISTINCT lang FROM pages_users";
-    $data = superFunction($apiParams, $sqlParams, $query);
+    public function get_total_translations_count($lang, $cand): int
+    {
 
-    $data = array_column($data, 'lang');
+        $table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
 
-    $pagesUsersLangs = $data;
+        $sqlParams = [];
+        $apiParams = ['get' => $table, 'select' => 'count(*)'];
 
-    return $data;
-}
+        $query = "select COUNT(*) AS count from $table where target != ''";
 
-function get_total_translations_count($lang, $cand): int
-{
+        if (!empty($lang) && $lang != 'All') {
+            $query .= " AND lang = ?";
+            $sqlParams[] = $lang;
+            $apiParams['lang'] = $lang;
+        }
 
-    $table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
+        $dd = $this->service->superFunction($apiParams, $sqlParams, $query);
 
-    $sqlParams = [];
-    $apiParams = ['get' => $table, 'select' => 'count(*)'];
+        $result = (int)($dd[0]['count'] ?? 0);
 
-    $query = "select COUNT(*) AS count from $table where target != ''";
-
-    if (!empty($lang) && $lang != 'All') {
-        $query .= " AND lang = ?";
-        $sqlParams[] = $lang;
-        $apiParams['lang'] = $lang;
+        return $result;
     }
 
-    $dd = superFunction($apiParams, $sqlParams, $query);
+    public function get_pages_users_to_main($lang): array
+    {
+        static $cache = [];
 
-    $result = (int)($dd[0]['count'] ?? 0);
+        if (!empty($cache[$lang] ?? [])) {
+            return $cache[$lang];
+        }
 
-    return $result;
-}
+        $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
 
-function get_pages_users_to_main($lang): array
-{
-    static $cache = [];
+        $sqlParams = [];
+        $apiParams = array('get' => "pages_users_to_main");
 
-    if (!empty($cache[$lang] ?? [])) {
-        return $cache[$lang];
+        if (!empty($lang) && $lang != 'All') {
+            $query .= " AND pu.lang = ?";
+            $sqlParams[] = $lang;
+            $apiParams['lang'] = $lang;
+        }
+
+        $dd = $this->service->superFunction($apiParams, $sqlParams, $query);
+
+        $cache[$lang] = $dd;
+
+        return $dd;
     }
-
-    $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
-
-    $sqlParams = [];
-    $apiParams = array('get' => "pages_users_to_main");
-
-    if (!empty($lang) && $lang != 'All') {
-        $query .= " AND pu.lang = ?";
-        $sqlParams[] = $lang;
-        $apiParams['lang'] = $lang;
-    }
-
-    $dd = superFunction($apiParams, $sqlParams, $query);
-
-    $cache[$lang] = $dd;
-
-    return $dd;
 }

@@ -6,12 +6,11 @@ namespace App\Coordinator\Admin\Users;
 use App\SQLorAPI\PagesTable;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\SqlTables\TablesSql;
+use App\SQLorAPI\UsersTable;
 
 use function App\Utils\Html\make_mail_icon_new;
 use function App\Utils\Html\make_edit_icon_new;
 use function App\MdwikiSql\fetch_query;
-use function App\SQLorAPI\get_users_by_last_pupdate;
-use function App\SQLorAPI\get_td_or_sql_page_user_not_in_users;
 
 /**
  * Class EmailsIndexController
@@ -37,7 +36,7 @@ class UsersIndexController extends AbstractControllerNoPost
 	{
 		$this->validateCoordinator();
 
-		$lastUserToTab = get_users_by_last_pupdate();
+		$lastUserToTab = (new UsersTable())->get_users_by_last_pupdate();
 		$usersDone = $this->getSortedArray();
 
 		$projectFilter = $this->emailsFilterTable($this->mainProject);
@@ -69,7 +68,7 @@ class UsersIndexController extends AbstractControllerNoPost
 			$usersDone[$gk['username']] = $gk;
 		}
 
-		$der = get_td_or_sql_page_user_not_in_users();
+		$der = (new PagesTable())->get_td_or_sql_page_user_not_in_users();
 
 		foreach ($der as $d => $tat) {
 			if (!array_key_exists($tat, $usersDone)) {

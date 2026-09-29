@@ -77,7 +77,7 @@ function get_td_or_sql_language_settings(): array
     $apiParams = ['get' => 'language_settings'];
     $query = "SELECT * FROM language_settings order by lang_code";
 
-    $dataLangs = superFunction($apiParams, $sqlParams, $query);
+    $dataLangs = (new ApiOrSqlService())->superFunction($apiParams, $sqlParams, $query);
 
     return $dataLangs;
 }

@@ -4,8 +4,9 @@
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
+use App\SQLorAPI\PagesTable;
+
 use function App\SQLorAPI\get_td_or_sql_language_settings;
-use function App\SQLorAPI\get_pages_langs;
 use function App\Utils\Html\make_edit_icon_new;
 
 /**
@@ -51,7 +52,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 
 		$tabesCodes = array_column($tabes, "lang_code");
 
-		$langsD = get_pages_langs();
+		$langsD = (new PagesTable())->get_pages_langs();
 
 		foreach ($langsD as $tat) {
 			$lal = strtolower($tat);

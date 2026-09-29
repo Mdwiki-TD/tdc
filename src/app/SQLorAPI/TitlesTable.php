@@ -156,7 +156,7 @@ function get_publish_reports_stats(): array
 
     $apiParams = ['get' => 'publish_reports_stats'];
 
-    $statsData = superFunction($apiParams, [], $query);
+    $statsData = (new ApiOrSqlService())->superFunction($apiParams, [], $query);
 
     return $statsData;
 }
