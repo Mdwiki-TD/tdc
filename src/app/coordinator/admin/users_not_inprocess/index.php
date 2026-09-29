@@ -3,9 +3,8 @@
 
 namespace App\Coordinator\Admin\UsersNotInprocess;
 
+use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractController;
-use function App\SQLorAPI\Funcs\get_td_or_sql_users_no_inprocess;
-
 
 require_once __DIR__ . '/users_not_inprocess_post.php';
 
@@ -24,7 +23,7 @@ class UsersNotInprocessIndexController extends AbstractController
         return new UsersNotInprocessPostProcessor();
     }
     public function renderFormCard(): void {
-        $users = get_td_or_sql_users_no_inprocess();
+        $users = (new UsersTable())->getUsersNoInprocess();
 
         $formText = $this->buildUserRows($users);
         $numb = count($users) + 1;

@@ -3,8 +3,8 @@
 
 namespace App\Coordinator\Admin\Admins;
 
+use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractController;
-use function App\SQLorAPI\Funcs\get_coordinators;
 
 require_once __DIR__ . '/admins_post.php';
 
@@ -24,7 +24,7 @@ class AdminsIndexController extends AbstractController
     }
 
     public function renderFormCard(): void {
-		$coordinators = get_coordinators();
+		$coordinators = (new UsersTable())->getCoordinators();
 		sort($coordinators);
 
 		$formText = $this->buildCoordinatorRows($coordinators);

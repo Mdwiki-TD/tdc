@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\Settings;
 
+use App\SQLorAPI\SettingsTable;
 use App\Coordinator\Admin\Common\AbstractController;
 use App\Coordinator\Admin\Settings\SettingsPostProcessor;
-use function App\SQLorAPI\Funcs\get_td_or_sql_settings;
 
 
 require_once __DIR__ . '/settings_post.php';
@@ -23,7 +23,7 @@ class SettingsIndexController extends AbstractController
         return new SettingsPostProcessor();
     }
     public function renderFormCard(): void {
-        $settings = get_td_or_sql_settings();
+        $settings = (new SettingsTable())->getSettings();
 
         $text = $this->buildSettingsTable($settings);
 

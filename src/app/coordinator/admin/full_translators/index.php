@@ -3,9 +3,8 @@
 
 namespace App\Coordinator\Admin\FullTranslators;
 
+use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractController;
-use function App\SQLorAPI\Funcs\get_td_or_sql_full_translators;
-
 
 require_once __DIR__ . '/full_translators_post.php';
 
@@ -24,7 +23,7 @@ class FullTranslatorsIndexController extends AbstractController
         return new FullTranslatorsPostProcessor();
     }
     public function renderFormCard(): void {
-        $translators = get_td_or_sql_full_translators();
+        $translators = (new UsersTable())->getFullTranslators();
 
         $formText = $this->buildTranslatorRows($translators);
         $numb = count($translators) + 1;

@@ -26,24 +26,6 @@ function get_publish_reports_stats(): array
     return $statsData;
 }
 
-function get_coordinators(): array
-{
-
-    static $coordinators = [];
-
-    if (!empty($coordinators ?? [])) {
-        return $coordinators;
-    }
-
-    $apiParams = ['get' => 'coordinators'];
-    $query = "SELECT id, username, is_active FROM coordinators order by id";
-
-    $data = superFunction($apiParams, [], $query);
-
-    $coordinators = $data;
-
-    return $coordinators;
-}
 function get_users_by_last_pupdate(): array
 {
 
@@ -92,33 +74,6 @@ function get_users_by_last_pupdate(): array
     return $lastUserToTab;
 }
 
-function get_td_or_sql_count_pages_not_empty(): array
-{
-
-    static $countPages = [];
-
-    if (!empty($countPages ?? [])) {
-        return $countPages;
-    }
-
-    $apiParams = array('get' => 'count_pages', 'target' => 'not_empty');
-    $query = <<<SQL
-        select DISTINCT user, count(target) as count from pages where target != '' group by user order by count desc
-    SQL;
-
-    $data = superFunction($apiParams, [], $query);
-
-    $data = array_column($data, 'count', 'user');
-
-    arsort($data);
-
-    // print_r($data);
-
-    $countPages = $data;
-
-    return $data;
-}
-
 function get_td_or_sql_page_user_not_in_users(): array
 {
 
@@ -158,38 +113,6 @@ function get_td_or_sql_language_settings(): array
     $dataLangs = superFunction($apiParams, $sqlParams, $query);
 
     return $dataLangs;
-}
-
-function get_td_or_sql_users_no_inprocess(): array
-{
-
-    static $users = [];
-
-    if (!empty($users)) return $users;
-
-    $sqlParams = [];
-    $apiParams = ['get' => 'users_no_inprocess'];
-    $query = "SELECT id, user, is_active FROM users_no_inprocess order by id";
-
-    $users = superFunction($apiParams, $sqlParams, $query);
-
-    return $users;
-}
-
-function get_td_or_sql_full_translators(): array
-{
-
-    static $fullTranslators = [];
-
-    if (!empty($fullTranslators)) return $fullTranslators;
-
-    $sqlParams = [];
-    $apiParams = ['get' => 'full_translators'];
-    $query = "SELECT id, user, is_active FROM full_translators order by id";
-
-    $fullTranslators = superFunction($apiParams, $sqlParams, $query);
-
-    return $fullTranslators;
 }
 
 function get_td_or_sql_projects(): array
@@ -288,21 +211,6 @@ function get_td_or_sql_qids_others($dis): array
     return $data;
 }
 
-function get_td_or_sql_settings(): array
-{
-
-    static $setting_d = [];
-
-    if (!empty($setting_d)) return $setting_d;
-
-    $sqlParams = [];
-    $apiParams = ['get' => 'settings'];
-    $query = "select id, title, displayed, value, Type, ignored from settings";
-
-    $setting_d = superFunction($apiParams, $sqlParams, $query);
-
-    return $setting_d;
-}
 function get_pages_langs(): array
 {
 
