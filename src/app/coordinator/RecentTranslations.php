@@ -4,7 +4,7 @@
 // use App\Coordinator\RecentTranslations;
 namespace App\Coordinator;
 
-use function App\SQLorAPI\get_td_api;
+use App\SQLorAPI\ApiOrSqlService;
 
 class RecentTranslations
 {
@@ -39,8 +39,8 @@ class RecentTranslations
         ];
 
         $apiResults = ($this->lastTable === 'pages')
-            ? get_td_api($apiParamsPages)
-            : get_td_api($apiParamsUsers);
+            ? ApiOrSqlService::getTdApi($apiParamsPages)
+            : ApiOrSqlService::getTdApi($apiParamsUsers);
 
         return $apiResults['results'] ?? [];
     }
@@ -54,7 +54,7 @@ class RecentTranslations
             'get' => ($this->lastTable === 'pages') ? 'pages_langs' : 'pages_users_langs',
         ];
 
-        $apiResults = get_td_api($apiParamsLangs);
+        $apiResults = ApiOrSqlService::getTdApi($apiParamsLangs);
 
         return $apiResults['results'] ?? [];
     }

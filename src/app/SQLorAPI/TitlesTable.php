@@ -137,26 +137,27 @@ class TitlesTable
 
         return self::$langsCache;
     }
-}
 
-function get_publish_reports_stats(): array
-{
+    public function get_publish_reports_stats(): array
+    {
 
-    static $statsData = [];
+        static $statsData = [];
 
-    if (!empty($statsData)) {
+        if (!empty($statsData)) {
+            return $statsData;
+        }
+
+        $query = <<<SQL
+            SELECT DISTINCT YEAR(date) as year, MONTH(date) as month, lang, user, result
+            FROM publish_reports
+            GROUP BY year, month, lang, user, result
+        SQL;
+
+        $apiParams = ['get' => 'publish_reports_stats'];
+
+        $statsData = $this->service->superFunction($apiParams, [], $query);
+
         return $statsData;
     }
 
-    $query = <<<SQL
-        SELECT DISTINCT YEAR(date) as year, MONTH(date) as month, lang, user, result
-        FROM publish_reports
-        GROUP BY year, month, lang, user, result
-    SQL;
-
-    $apiParams = ['get' => 'publish_reports_stats'];
-
-    $statsData = (new ApiOrSqlService())->superFunction($apiParams, [], $query);
-
-    return $statsData;
 }

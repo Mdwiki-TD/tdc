@@ -4,7 +4,7 @@
 namespace App\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use function App\SQLorAPI\get_td_api;
+use App\SQLorAPI\ApiOrSqlService;
 
 /**
  * Class ProcessController
@@ -59,7 +59,7 @@ class ProcessController extends AbstractControllerNoPost
 
 	public function CreateData(): string
 	{
-		$apiResults = get_td_api(['get' => 'in_process', 'limit' => '100', 'order' => 'add_date']);
+		$apiResults = ApiOrSqlService::getTdApi(['get' => 'in_process', 'limit' => '100', 'order' => 'add_date']);
 		$data = $apiResults['results'] ?? [];
 
 		$tbodyHtml = "";
