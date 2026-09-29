@@ -2,8 +2,8 @@
 
 namespace App\SQLorAPI\Process;
 
-use function App\SQLorAPI\Get\super_function;
-use function App\SQLorAPI\Get\isvalid;
+use function App\SQLorAPI\super_function;
+use function App\SQLorAPI\isvalid;
 
 function get_users_process_new(): array
 {

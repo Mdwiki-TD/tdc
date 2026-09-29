@@ -23,8 +23,6 @@ src/
 │   │   │   ├── langcode.php
 │   │   │   ├── sql_tables.php
 │   │   │   └── tables.php
-│   │   ├── td_api_wrap/
-│   │   │   └── td_api.php
 │   │   ├── CurrentUser.php
 │   │   ├── bootstrap.php
 │   │   ├── README.md

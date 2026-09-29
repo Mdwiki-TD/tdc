@@ -79,6 +79,12 @@ include_once __DIR__ . '/utils/tables_dir.php';
 include_once __DIR__ . '/User/bootstrap.php';
 include_once __DIR__ . '/Settings.php';
 
+# SQLorAPI
+include_once __DIR__ . '/SQLorAPI/ApiOrSqlService.php';
+include_once __DIR__ . '/SQLorAPI/funcs.php';
+include_once __DIR__ . '/SQLorAPI/process_data.php';
+include_once __DIR__ . '/SQLorAPI/recent_data.php';
+
 include_once __DIR__ . '/backend/bootstrap.php';
 require_once __DIR__ . '/coordinator/bootstrap.php';
 require_once __DIR__ . '/tools/bootstrap.php';

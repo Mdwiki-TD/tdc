@@ -2,7 +2,7 @@
 
 namespace App\SQLorAPI\Recent;
 
-use function App\SQLorAPI\Get\super_function;
+use function App\SQLorAPI\super_function;
 
 function get_recent_sql($lang): array
 {
