@@ -128,7 +128,7 @@ function post_url_mdwiki(string $endPoint, array $params = []): string
         test_print('post_url_mdwiki: Error: ' . $curlError);
     }
 
-    curl_close($ch);
+    // curl_close($ch);
 
     // return is_string($output) ? $output : '';
     return $output === false ? '' : $output;

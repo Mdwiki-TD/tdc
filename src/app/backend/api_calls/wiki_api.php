@@ -22,7 +22,7 @@ function get_url_result_curl(string $url): string
         echo "<br>cURL Error: " . curl_error($ch) . "<br>$url";
     }
 
-    curl_close($ch);
+    // curl_close($ch);
 
     return $output;
 }
