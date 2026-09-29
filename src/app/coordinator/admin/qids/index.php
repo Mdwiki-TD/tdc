@@ -7,8 +7,7 @@ use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_edit_icon_new;
-use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
-use function App\SQLorAPI\Funcs\get_td_or_sql_qids_others;
+use App\SQLorAPI\QidsTable;
 
 /**
  * Class QidsIndexController
@@ -44,10 +43,10 @@ class QidsIndexController extends AbstractControllerNoPost
         $this->validateCoordinator();
 
 		$qidsTitle = ($this->qidTable === 'qids') ? 'TD Qids' : 'Qids Others';
-
+		$dbService  = new QidsTable();
 		$rows = ($this->qidTable === 'qids')
-			? get_td_or_sql_qids($this->dis)
-			: get_td_or_sql_qids_others($this->dis);
+			? $dbService->get_td_or_sql_qids($this->dis)
+			: $dbService->get_td_or_sql_qids_others($this->dis);
 
 		[$formRows, $numb] = $this->buildFormRows($rows);
 

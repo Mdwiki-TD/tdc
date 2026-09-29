@@ -4,10 +4,11 @@ namespace App\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Main\MainTables;
+use App\SQLorAPI\CategoriesTable;
+use App\SQLorAPI\QidsTable;
+
 use function App\Utils\Html\makeDropdown;
 use function App\Results\GetCats\get_mdwiki_cat_members;
-use App\SQLorAPI\CategoriesTable;
-use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
 
 /**
  * Class StatController
@@ -58,7 +59,7 @@ class StatController extends AbstractControllerNoPost
 		$noPv = 0;
 		$i = 0;
 
-		$qids_t = get_td_or_sql_qids('all');
+		$qids_t = (new QidsTable())->get_td_or_sql_qids('all');
 		$sqlQids = array_column($qids_t, 'qid', 'title');
 
 		foreach ($titles as $title) {

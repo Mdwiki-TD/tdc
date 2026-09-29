@@ -6,10 +6,8 @@ use App\SQLorAPI\ApiOrSqlService;
 
 class RecentTable
 {
-    private static array $categoriesCache = [];
-    private static array $campsToCatCache = [];
-    private static array $countMembersCache = [];
-    private static array $staticsCache = [];
+    private static array $PagesWithViewsCache = [];
+    private static array $RecentPagesUsersCache = [];
 
     private ApiOrSqlService $service;
     public function __construct(?ApiOrSqlService $service = null)
@@ -19,19 +17,15 @@ class RecentTable
 
     public static function resetCache(): void
     {
-        self::$categoriesCache = [];
-        self::$campsToCatCache = [];
-        self::$countMembersCache = [];
-        self::$staticsCache = [];
+        self::$PagesWithViewsCache = [];
+        self::$RecentPagesUsersCache = [];
     }
 
     public function getRecentPagesWithViews(string $lang): array
     {
 
-        static $cache = [];
-
-        if (!empty($cache[$lang] ?? [])) {
-            return $cache[$lang];
+        if (!empty(self::$PagesWithViewsCache[$lang] ?? [])) {
+            return self::$PagesWithViewsCache[$lang];
         }
 
         $langLine = '';
@@ -65,20 +59,17 @@ class RecentTable
             limit 250
         SQL;
 
-        $tab = superFunction($apiParams, $sqlParams, $sqlQuery);
+        $tab = $this->service->superFunction($apiParams, $sqlParams, $sqlQuery);
 
-        $cache[$lang] = $tab;
+        self::$PagesWithViewsCache[$lang] = $tab;
 
         return $tab;
     }
 
     public function getRecentPagesUsers(string $lang): array
     {
-
-        static $cache = [];
-
-        if (!empty($cache[$lang] ?? [])) {
-            return $cache[$lang];
+        if (!empty(self::$RecentPagesUsersCache[$lang] ?? [])) {
+            return self::$RecentPagesUsersCache[$lang];
         }
 
         $sqlParams = [];
@@ -109,14 +100,14 @@ class RecentTable
             limit 100
         SQL;
 
-        $tab = superFunction($apiParams, $sqlParams, $qua);
+        $tab = $this->service->superFunction($apiParams, $sqlParams, $qua);
 
         // sort the table by add_date
         usort($tab, function ($a, $b) {
             return strtotime($b['pupdate']) - strtotime($a['pupdate']);
         });
 
-        $cache[$lang] = $tab;
+        self::$RecentPagesUsersCache[$lang] = $tab;
 
         return $tab;
     }
@@ -150,7 +141,7 @@ class RecentTable
             // $sqlParams[] = $offset;
         }
 
-        $dd = superFunction($apiParams, $sqlParams, $query);
+        $dd = $this->service->superFunction($apiParams, $sqlParams, $query);
 
         // sort the table by add_date
         usort($dd, function ($a, $b) {
