@@ -65,6 +65,4 @@ class UsersTable
 
         return self::$fullTranslatorsCache;
     }
-
-
 }
