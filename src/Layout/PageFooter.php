@@ -1,7 +1,7 @@
 <?php
 // src/templates/PageFooter.php
 
-namespace App\Templates;
+namespace App\Layout;
 
 class PageFooter
 {
@@ -50,7 +50,7 @@ class PageFooter
         <script src='/tdc/js/footer.js'></script>
 
         <!-- Common JavaScript -->
-        <script src="/Translation_Dashboard/js/c.js"></script>
+        <script src="/Translation_Dashboard/js/card-widget.js"></script>
         </body>
 
         </html>
