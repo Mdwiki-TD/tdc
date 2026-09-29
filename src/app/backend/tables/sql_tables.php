@@ -2,7 +2,7 @@
 
 namespace App\Tables\SqlTables;
 
-use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
+use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\CategoriesTable;
 
 class TablesSql
@@ -43,6 +43,6 @@ foreach ($categoriesTab as $k => $tab) {
     };
 };
 
-$projectsTab = get_td_or_sql_projects();
+$projectsTab = (new TitlesTable())->getProjects();
 
 TablesSql::$sProjectsTitleToId = array_column($projectsTab, 'g_id', 'g_title');

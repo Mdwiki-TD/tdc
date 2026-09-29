@@ -4,97 +4,98 @@ namespace Tests\Backend\ApiOrSql;
 
 use PHPUnit\Framework\TestCase;
 
-use function App\SQLorAPI\Recent\get_recent_sql;
-use function App\SQLorAPI\Recent\get_recent_pages_users;
-use function App\SQLorAPI\Recent\get_recent_translated;
-use function App\SQLorAPI\Recent\get_total_translations_count;
-use function App\SQLorAPI\Recent\get_pages_users_to_main;
+use function App\SQLorAPI\getRecentPagesWithViews;
+use function App\SQLorAPI\getRecentPagesUsers;
+use function App\SQLorAPI\getRecentTranslated;
+
+use function App\SQLorAPI\get_total_translations_count;
+use function App\SQLorAPI\get_pages_users_to_main;
 
 class RecentDataTest extends TestCase
 {
     public function testGetRecentSqlReturnsArray()
     {
-        $result = get_recent_sql('ar');
+        $result = getRecentPagesWithViews('ar');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentSqlHandlesAllLang()
     {
-        $result = get_recent_sql('All');
+        $result = getRecentPagesWithViews('All');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentSqlCachesResults()
     {
         // First call
-        $result1 = get_recent_sql('en');
+        $result1 = getRecentPagesWithViews('en');
         // Second call should return cached result
-        $result2 = get_recent_sql('en');
+        $result2 = getRecentPagesWithViews('en');
 
         $this->assertSame($result1, $result2);
     }
 
     public function testGetRecentSqlWithEmptyLang()
     {
-        $result = get_recent_sql('');
+        $result = getRecentPagesWithViews('');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentPagesUsersReturnsArray()
     {
-        $result = get_recent_pages_users('ar');
+        $result = getRecentPagesUsers('ar');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentPagesUsersHandlesAllLang()
     {
-        $result = get_recent_pages_users('All');
+        $result = getRecentPagesUsers('All');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentPagesUsersCachesResults()
     {
         // First call
-        $result1 = get_recent_pages_users('fr');
+        $result1 = getRecentPagesUsers('fr');
         // Second call should return cached result
-        $result2 = get_recent_pages_users('fr');
+        $result2 = getRecentPagesUsers('fr');
 
         $this->assertSame($result1, $result2);
     }
 
     public function testGetRecentPagesUsersWithEmptyLang()
     {
-        $result = get_recent_pages_users('');
+        $result = getRecentPagesUsers('');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedReturnsArray()
     {
-        $result = get_recent_translated('ar', 'pages', 10, 0);
+        $result = getRecentTranslated('ar', 'pages', 10, 0);
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedWithAllLang()
     {
-        $result = get_recent_translated('All', 'pages', 10, 0);
+        $result = getRecentTranslated('All', 'pages', 10, 0);
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedWithOffset()
     {
-        $result = get_recent_translated('en', 'pages', 5, 10);
+        $result = getRecentTranslated('en', 'pages', 5, 10);
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedWithZeroLimit()
     {
-        $result = get_recent_translated('en', 'pages', 0, 0);
+        $result = getRecentTranslated('en', 'pages', 0, 0);
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedWithEmptyLang()
     {
-        $result = get_recent_translated('', 'pages', 10, 0);
+        $result = getRecentTranslated('', 'pages', 10, 0);
         $this->assertIsArray($result);
     }
 
@@ -150,7 +151,7 @@ class RecentDataTest extends TestCase
     // Edge case: test with special characters in language code
     public function testGetRecentSqlWithSpecialCharLang()
     {
-        $result = get_recent_sql('test-lang');
+        $result = getRecentPagesWithViews('test-lang');
         $this->assertIsArray($result);
     }
 
@@ -158,7 +159,7 @@ class RecentDataTest extends TestCase
     public function testGetRecentTranslatedWithNegativeValues()
     {
         // Should handle negative limit gracefully
-        $result = get_recent_translated('en', 'pages', -1, -1);
+        $result = getRecentTranslated('en', 'pages', -1, -1);
         $this->assertIsArray($result);
     }
 }

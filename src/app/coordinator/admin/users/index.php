@@ -10,8 +10,8 @@ use App\Tables\SqlTables\TablesSql;
 use function App\Utils\Html\make_mail_icon_new;
 use function App\Utils\Html\make_edit_icon_new;
 use function App\MdwikiSql\fetch_query;
-use function App\SQLorAPI\Funcs\get_users_by_last_pupdate;
-use function App\SQLorAPI\Funcs\get_td_or_sql_page_user_not_in_users;
+use function App\SQLorAPI\get_users_by_last_pupdate;
+use function App\SQLorAPI\get_td_or_sql_page_user_not_in_users;
 
 /**
  * Class EmailsIndexController

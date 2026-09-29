@@ -4,9 +4,8 @@
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\User\CurrentUser;
-use function App\SQLorAPI\Funcs\get_td_or_sql_language_settings;
-use function App\SQLorAPI\Funcs\get_pages_langs;
+use function App\SQLorAPI\get_td_or_sql_language_settings;
+use function App\SQLorAPI\get_pages_langs;
 use function App\Utils\Html\make_edit_icon_new;
 
 /**

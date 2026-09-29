@@ -9,9 +9,9 @@ use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\make_edit_icon_new;
-use function App\SQLorAPI\Recent\get_recent_translated;
-use function App\SQLorAPI\Recent\get_total_translations_count;
-use function App\SQLorAPI\Funcs\get_pages_langs;
+use function App\SQLorAPI\getRecentTranslated;
+use function App\SQLorAPI\get_total_translations_count;
+use function App\SQLorAPI\get_pages_langs;
 use function App\Coordinator\Helps\RecentHelps\filter_table;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
@@ -53,7 +53,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
 		$page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 		$offset = ($page - 1) * $limit;
 
-		$sqlResults = get_recent_translated($this->lang, $this->table, $limit, $offset);
+		$sqlResults = getRecentTranslated($this->lang, $this->table, $limit, $offset);
 		$totalCount = get_total_translations_count($this->lang, $this->table);
 
 		$pagination = "";
