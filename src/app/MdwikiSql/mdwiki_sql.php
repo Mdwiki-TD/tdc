@@ -67,10 +67,6 @@ function fetchQuery(string $sqlQuery, ?array $params = null, $noprint = false): 
     // Create a new database object
     $db = new Database();
 
-    if ($noprint == false) {
-        $db->testPrint($sqlQuery);
-    }
-
     // Execute a SQL query
     $results = $db->fetchquery($sqlQuery, $params);
 

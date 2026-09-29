@@ -49,25 +49,6 @@ namespace App\Utils\Html;
 use App\Tables\SqlTables\TablesSql;
 
 /**
- * Generate a banner alert with danger styling
- *
- * @param string $text The alert message
- *
- * @return string HTML for the alert banner
- */
-function banner_alert(string $text): string
-{
-    // $escaped = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
-    return <<<HTML
-        <div class='container'>
-            <div class="alert alert-danger" role="alert">
-                <i class="bi bi-exclamation-triangle"></i> {$text}
-            </div>
-        </div>
-    HTML;
-}
-
-/**
  * Generate a Bootstrap modal dialog
  *
  * @param string $label   Modal title
@@ -101,6 +82,111 @@ function make_modal_fade(string $label, string $text, string $id, string $button
         </div>
     HTML;
 }
+
+/**
+ * Generate a dropdown select element
+ *
+ * @param array<int,string> $tab  Options array
+ * @param string            $cat  Currently selected value
+ * @param string            $id   Select element ID and name
+ * @param string            $add  Additional option (e.g., 'all')
+ *
+ * @return string HTML for the select element
+ */
+function makeDropdown(array $tab, string $cat, string $id, string $add): string
+{
+    $options = "";
+
+    foreach ($tab as $dd) {
+        $se = ($cat === $dd) ? 'selected' : '';
+
+        if (empty($dd)) continue;
+
+        $escaped = htmlspecialchars($dd, ENT_QUOTES, 'UTF-8');
+        $options .= "<option value='{$escaped}' {$se}>{$escaped}</option>";
+    }
+
+    $selLine = "";
+    if (!empty($add)) {
+        $add2 = ($add === 'all') ? 'All' : $add;
+        $sel = ($cat === $add) ? "selected" : "";
+        $escapedAdd = htmlspecialchars($add, ENT_QUOTES, 'UTF-8');
+        $escapedAdd2 = htmlspecialchars($add2, ENT_QUOTES, 'UTF-8');
+        $selLine = "<option value='{$escapedAdd}' {$sel}>{$escapedAdd2}</option>";
+    }
+
+    return <<<HTML
+        <select dir="ltr" id="{$id}" name="{$id}" class="form-select" data-bs-theme="auto">
+            {$selLine}
+            {$options}
+        </select>
+    HTML;
+}
+
+/**
+ * Generate a link to an MDWiki user page
+ *
+ * @param string $user Username
+ *
+ * @return string HTML anchor element or original username if empty
+ */
+function make_mdwiki_user_url(string $user): string
+{
+    if (!empty($user)) {
+        $encodedUser = rawurlencode(str_replace(' ', '_', $user));
+        $escapedUser = htmlspecialchars($user, ENT_QUOTES, 'UTF-8');
+        return "<a href='https://mdwiki.org/wiki/User:{$encodedUser}' taget='_blank'>{$escapedUser}</a>";
+    }
+    return $user;
+}
+
+function makeColSm4(string $title, string $table, int $numb = 4, string $table2 = '', string $title2 = ''): string
+{
+    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
+    return <<<HTML
+        <div class="col-md-{$numb}">
+            <div class="card card2 mb-3">
+                <div class="card-header">
+                    <span class="card-title" style="font-weight:bold;">
+                        {$escapedTitle}
+                    </span>
+                    <div style='float: right'>
+                        {$title2}
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="card-body1 card2">
+                    {$table}
+                </div>
+                <!-- <div class="card-footer"></div> -->
+            </div>
+            {$table2}
+        </div>
+    HTML;
+}
+
+/**
+ * Generate a banner alert with danger styling
+ *
+ * @param string $text The alert message
+ *
+ * @return string HTML for the alert banner
+ */
+function banner_alert(string $text): string
+{
+    // $escaped = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    return <<<HTML
+        <div class='container'>
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> {$text}
+            </div>
+        </div>
+    HTML;
+}
+
 
 /**
  * Generate an email icon button for messaging users
@@ -200,44 +286,6 @@ function make_input_group_no_col(string $label, string $id, string $value, strin
     HTML;
 }
 
-/**
- * Generate a dropdown select element
- *
- * @param array<int,string> $tab  Options array
- * @param string            $cat  Currently selected value
- * @param string            $id   Select element ID and name
- * @param string            $add  Additional option (e.g., 'all')
- *
- * @return string HTML for the select element
- */
-function makeDropdown(array $tab, string $cat, string $id, string $add): string
-{
-    $options = "";
-
-    foreach ($tab as $dd) {
-        $se = ($cat === $dd) ? 'selected' : '';
-        $escaped = htmlspecialchars($dd, ENT_QUOTES, 'UTF-8');
-        $options .= "<option value='{$escaped}' {$se}>{$escaped}</option>";
-    }
-
-    $selLine = "";
-    if (!empty($add)) {
-        $add2 = ($add === 'all') ? 'All' : $add;
-        $sel = ($cat === $add) ? "selected" : "";
-        $escapedAdd = htmlspecialchars($add, ENT_QUOTES, 'UTF-8');
-        $escapedAdd2 = htmlspecialchars($add2, ENT_QUOTES, 'UTF-8');
-        $selLine = "<option value='{$escapedAdd}' {$sel}>{$escapedAdd2}</option>";
-    }
-
-
-
-    return <<<HTML
-        <select dir="ltr" id="{$id}" name="{$id}" class="form-select" data-bs-theme="auto">
-            {$selLine}
-            {$options}
-        </select>
-    HTML;
-}
 
 /**
  * Generate a card component with header and body
@@ -275,33 +323,7 @@ function makeCard(string $title, string $table): string
  *
  * @return string HTML for the column with card
  */
-function makeColSm4(string $title, string $table, int $numb = 4, string $table2 = '', string $title2 = ''): string
-{
-    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
-    return <<<HTML
-    <div class="col-md-{$numb}">
-        <div class="card card2 mb-3">
-            <div class="card-header">
-                <span class="card-title" style="font-weight:bold;">
-                    {$escapedTitle}
-                </span>
-                <div style='float: right'>
-                    {$title2}
-                </div>
-                <div class="card-tools">
-                    <button type="button" class="btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                </div>
-            </div>
-            <div class="card-body1 card2">
-                {$table}
-            </div>
-            <!-- <div class="card-footer"></div> -->
-        </div>
-        {$table2}
-    </div>
-    HTML;
-}
 
 /**
  * Generate a card with centered header
@@ -422,22 +444,6 @@ function make_talk_url(string $lang, string $user): string
     return "<a target='_blank' href='//{$escapedLang}.wikipedia.org/w/index.php?title=User_talk:{$escapedUser}'>talk</a>";
 }
 
-/**
- * Generate a link to an MDWiki user page
- *
- * @param string $user Username
- *
- * @return string HTML anchor element or original username if empty
- */
-function make_mdwiki_user_url(string $user): string
-{
-    if (!empty($user)) {
-        $encodedUser = rawurlencode(str_replace(' ', '_', $user));
-        $escapedUser = htmlspecialchars($user, ENT_QUOTES, 'UTF-8');
-        return "<a href='https://mdwiki.org/wiki/User:{$encodedUser}'>{$escapedUser}</a>";
-    }
-    return $user;
-}
 
 /**
  * Generate a link to a Wikipedia article

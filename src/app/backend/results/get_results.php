@@ -2,8 +2,8 @@
 
 namespace App\Results\GetResults;
 
+use App\Logger;
 use function App\Results\GetCats\get_mdwiki_cat_members;
-use function App\Utils\test_print;
 use function App\Utils\TablesDir\open_td_tables_file;
 
 function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
@@ -14,14 +14,14 @@ function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
     foreach ($membersTo as $mr) {
         $members[] = $mr;
     };
-    test_print("members size:" . count($members));
+    Logger::debug("members size:" . count($members));
 
     $tablesPath = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
 
     $jsonFile = "$tablesPath/cash_exists/$code.json";
     $exists = open_td_tables_file($jsonFile);
 
-    test_print("$jsonFile: exists size:" . count($exists));
+    Logger::debug("$jsonFile: exists size:" . count($exists));
 
     // Find missing elements
     // $missing = array_diff($members, $exists);
@@ -40,6 +40,6 @@ function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
         "len_of_exists" => $exsLen,
         "missing" => $missing
     );
-    test_print("end of get_cat_exists_and_missing <br>===============================");
+    Logger::debug("end of get_cat_exists_and_missing <br>===============================");
     return $results;
 }

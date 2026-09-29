@@ -72,10 +72,10 @@ if (file_exists($vendorAutoload)) {
 include_once __DIR__ . '/csrf.php';
 include_once __DIR__ . '/Logger.php';
 
-include_once __DIR__ . '/utils/TestPrinter.php';
-include_once __DIR__ . '/utils/SidebarMenu.php';
-include_once __DIR__ . '/utils/html.php';
-include_once __DIR__ . '/utils/tables_dir.php';
+# Utils
+include_once __DIR__ . '/Utils/SidebarMenu.php';
+include_once __DIR__ . '/Utils/html.php';
+include_once __DIR__ . '/Utils/tables_dir.php';
 
 include_once __DIR__ . '/User/bootstrap.php';
 include_once __DIR__ . '/Settings.php';

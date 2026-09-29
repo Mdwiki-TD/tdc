@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Admin;
 
-use App\Utils\TestPrinter;
+use App\Logger;
 
 
 class AdminResolver
@@ -102,7 +102,7 @@ class AdminResolver
         }
 
         // Fallback for missing or unauthorized routes
-        TestPrinter::testPrint("can't find {$ty}");
+        Logger::debug("can't find {$ty}");
         include_once dirname(dirname(__DIR__)) . "/404.php";
     }
 }

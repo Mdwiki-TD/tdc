@@ -42,7 +42,7 @@
 
 namespace App\APICalls;
 
-use function App\Utils\test_print;
+use App\Logger;
 
 /**
  * User agent string for API requests
@@ -85,7 +85,7 @@ function post_url_mdwiki(string $endPoint, array $params = []): string
     $ch = curl_init();
 
     if ($ch === false) {
-        test_print("post_url_mdwiki: Failed to initialize cURL");
+        Logger::debug("post_url_mdwiki: Failed to initialize cURL");
         return '';
     }
 
@@ -115,17 +115,17 @@ function post_url_mdwiki(string $endPoint, array $params = []): string
         . htmlspecialchars($url2, ENT_QUOTES, 'UTF-8') . '</a>';
 
     if ($httpCode !== 200) {
-        test_print('post_url_mdwiki: Error: API request failed with status code ' . $httpCode);
+        Logger::debug('post_url_mdwiki: Error: API request failed with status code ' . $httpCode);
     }
 
-    test_print("post_url_mdwiki: (http_code: $httpCode) $url2");
+    Logger::debug("post_url_mdwiki: (http_code: $httpCode) $url2");
 
     if ($output === false) {
-        test_print("post_url_mdwiki: cURL Error: " . ($curlError ?: 'Unknown error'));
+        Logger::debug("post_url_mdwiki: cURL Error: " . ($curlError ?: 'Unknown error'));
     }
 
     if (curl_errno($ch)) {
-        test_print('post_url_mdwiki: Error: ' . $curlError);
+        Logger::debug('post_url_mdwiki: Error: ' . $curlError);
     }
 
     // curl_close($ch);
@@ -175,7 +175,7 @@ function get_mdwiki_url_with_params(array $params): array
     $result = json_decode($out, true);
 
     if (!is_array($result)) {
-        test_print("post_url_mdwiki: Failed to parse JSON response");
+        Logger::debug("post_url_mdwiki: Failed to parse JSON response");
         return [];
     }
 

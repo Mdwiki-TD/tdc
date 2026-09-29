@@ -177,7 +177,7 @@ class HtmlTest extends TestCase
     public function testMakeMdwikiUserUrl()
     {
         $result = make_mdwiki_user_url("Test User");
-        $this->assertStringContainsString("<a href='https://mdwiki.org/wiki/User:Test_User'>Test User</a>", $result);
+        $this->assertStringContainsString("<a href='https://mdwiki.org/wiki/User:Test_User' taget='_blank'>Test User</a>", $result);
     }
 
     public function testMakeTargetUrl()

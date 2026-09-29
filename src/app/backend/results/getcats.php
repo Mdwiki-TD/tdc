@@ -2,7 +2,7 @@
 
 namespace App\Results\GetCats;
 
-use function App\Utils\test_print;
+use App\Logger;
 use function App\APICalls\get_mdwiki_url_with_params;
 use function App\Utils\TablesDir\open_td_tables_file;
 
@@ -15,7 +15,7 @@ function get_category_from_cache(string $category): array
     $data = open_td_tables_file($filePath);
 
     if (!isset($data['list']) || !is_array($data['list'])) {
-        test_print("Invalid format in JSON file: $filePath");
+        Logger::debug("Invalid format in JSON file: $filePath");
         return [];
     }
 
@@ -61,7 +61,7 @@ function fetch_category_members(string $category): array
         }
     } while ($cmcontinue);
 
-    test_print("Fetched category members count: " . count($items));
+    Logger::debug("Fetched category members count: " . count($items));
     return $items;
 }
 
@@ -113,7 +113,7 @@ function get_mdwiki_cat_members(string $category, bool $useCache = true, int $de
     });
 
     $uniqueTitles = array_unique($filteredTitles);
-    test_print("Final titles count: " . count($uniqueTitles));
-    test_print("End of get_mdwiki_cat_members <br>===============================");
+    Logger::debug("Final titles count: " . count($uniqueTitles));
+    Logger::debug("End of get_mdwiki_cat_members <br>===============================");
     return $uniqueTitles;
 }
