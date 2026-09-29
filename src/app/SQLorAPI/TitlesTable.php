@@ -57,7 +57,7 @@ class TitlesTable
 
         return self::$titlesInfosCache;
     }
-    public function getTitlesInfosByTitles(array $titles): array
+    public function getTitlesInfosByTitles(?array $titles): array
     {
         // Ensure $titles is an array
         if (!is_array($titles)) {
@@ -92,7 +92,7 @@ class TitlesTable
             $sqlParams = $titles;              // pass to superFunction
         }
 
-        $data = superFunction($apiParams, $sqlParams, $qua);
+        $data = $this->service->superFunction($apiParams, $sqlParams, $qua);
 
         return $data;
     }
