@@ -53,8 +53,8 @@ class TranslatedIndexController extends AbstractControllerNoPost
 		$page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 		$offset = ($page - 1) * $limit;
 
-		$sqlResults = (new RecentTable())->getRecentTranslated($this->lang, $this->table, $limit, $offset);
-		$totalCount = (new PagesTable())->getTotalTranslationsCount($this->lang, $this->table);
+		$sqlResults = (RecentTable::getInstance())->getRecentTranslated($this->lang, $this->table, $limit, $offset);
+		$totalCount = (PagesTable::getInstance())->getTotalTranslationsCount($this->lang, $this->table);
 
 		$pagination = "";
 		if ($totalCount > $limit) {
@@ -82,7 +82,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	private function getLanguages(): array
 	{
 		$tabes = [];
-		$llangs = (new PagesTable())->getPagesLangs();
+		$llangs = (PagesTable::getInstance())->getPagesLangs();
 
 		foreach ($llangs as $tat) {
 			if (gettype($tat) !== 'string') {

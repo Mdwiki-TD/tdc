@@ -34,7 +34,7 @@ class AddIndexController extends AbstractController
     private function buildCategoryOptions(): string
     {
         $cats = '';
-        $categories = (new CategoriesTable())->getCategories();
+        $categories = (CategoriesTable::getInstance())->getCategories();
 
         foreach ($categories as $key => $ta) {
             $ca = $ta['category'] ?? '';

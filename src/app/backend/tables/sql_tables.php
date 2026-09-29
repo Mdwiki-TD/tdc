@@ -23,7 +23,7 @@ class TablesSql
     public static $sProjectsTitleToId = [];
 }
 
-$categoriesTab = (new CategoriesTable())->getCategories();
+$categoriesTab = (CategoriesTable::getInstance())->getCategories();
 
 foreach ($categoriesTab as $k => $tab) {
     if (!empty($tab['category']) && !empty($tab['campaign'])) {
@@ -43,6 +43,6 @@ foreach ($categoriesTab as $k => $tab) {
     };
 };
 
-$projectsTab = (new TitlesTable())->getProjects();
+$projectsTab = (TitlesTable::getInstance())->getProjects();
 
 TablesSql::$sProjectsTitleToId = array_column($projectsTab, 'g_id', 'g_title');

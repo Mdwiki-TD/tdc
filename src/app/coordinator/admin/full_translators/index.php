@@ -23,7 +23,7 @@ class FullTranslatorsIndexController extends AbstractController
         return new FullTranslatorsPostProcessor();
     }
     public function renderFormCard(): void {
-        $translators = (new UsersTable())->getFullTranslators();
+        $translators = (UsersTable::getInstance())->getFullTranslators();
 
         $formText = $this->buildTranslatorRows($translators);
         $numb = count($translators) + 1;

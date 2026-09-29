@@ -35,7 +35,7 @@ class ProcessTotalController extends AbstractControllerNoPost
 	{
 		$text = "";
 
-		$userProcessTab = (new InProcessTable())->getUsersProcessNew();
+		$userProcessTab = (InProcessTable::getInstance())->getUsersProcessNew();
 
 		// sort user_process_tab by value
 		arsort($userProcessTab);

@@ -48,11 +48,11 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 	 */
 	private function buildMergedLanguageSettings(): array
 	{
-		$tabes = (new SettingsTable())->getLanguageSettings();
+		$tabes = (SettingsTable::getInstance())->getLanguageSettings();
 
 		$tabesCodes = array_column($tabes, "lang_code");
 
-		$langsD = (new PagesTable())->getPagesLangs();
+		$langsD = (PagesTable::getInstance())->getPagesLangs();
 
 		foreach ($langsD as $tat) {
 			$lal = strtolower($tat);

@@ -36,7 +36,7 @@ class UsersIndexController extends AbstractControllerNoPost
 	{
 		$this->validateCoordinator();
 
-		$lastUserToTab = (new UsersTable())->getUsersByLastPupdate();
+		$lastUserToTab = (UsersTable::getInstance())->getUsersByLastPupdate();
 		$usersDone = $this->getSortedArray();
 
 		$projectFilter = $this->emailsFilterTable($this->mainProject);
@@ -60,7 +60,7 @@ class UsersIndexController extends AbstractControllerNoPost
 	{
 		$usersDone = [];
 
-		$livePages = (new PagesTable())->getCountPagesNotEmpty();
+		$livePages = (PagesTable::getInstance())->getCountPagesNotEmpty();
 
 		$ddi = fetchQuery("select user_id, username, email, wiki, user_group from users;");
 
@@ -68,7 +68,7 @@ class UsersIndexController extends AbstractControllerNoPost
 			$usersDone[$gk['username']] = $gk;
 		}
 
-		$der = (new PagesTable())->getPageUserNotInUsers();
+		$der = (PagesTable::getInstance())->getPageUserNotInUsers();
 
 		foreach ($der as $d => $tat) {
 			if (!array_key_exists($tat, $usersDone)) {

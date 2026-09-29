@@ -25,7 +25,7 @@ function get_sugust($title, $lang)
 
     $itemsMissing = $items['missing'] ?? [];
 
-    $data = (new InProcessTable())->getLangInProcessByYear($lang);
+    $data = (InProcessTable::getInstance())->getLangInProcessByYear($lang);
 
     $res = array_column($data, 'title');
 

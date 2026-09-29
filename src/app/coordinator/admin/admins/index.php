@@ -24,7 +24,7 @@ class AdminsIndexController extends AbstractController
     }
 
     public function renderFormCard(): void {
-		$coordinators = (new UsersTable())->getCoordinators();
+		$coordinators = (UsersTable::getInstance())->getCoordinators();
 		sort($coordinators);
 
 		$formText = $this->buildCoordinatorRows($coordinators);

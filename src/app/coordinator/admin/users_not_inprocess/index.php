@@ -23,7 +23,7 @@ class UsersNotInprocessIndexController extends AbstractController
         return new UsersNotInprocessPostProcessor();
     }
     public function renderFormCard(): void {
-        $users = (new UsersTable())->getUsersNoInprocess();
+        $users = (UsersTable::getInstance())->getUsersNoInprocess();
 
         $formText = $this->buildUserRows($users);
         $numb = count($users) + 1;

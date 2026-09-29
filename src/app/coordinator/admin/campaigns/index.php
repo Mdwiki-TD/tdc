@@ -23,7 +23,7 @@ class CampaignsIndexController extends AbstractController
     }
     public function renderFormCard(): void
     {
-        $categories = (new CategoriesTable())->getCategories();
+        $categories = (CategoriesTable::getInstance())->getCategories();
 
         $tableRows = $this->buildTableRows($categories);
 

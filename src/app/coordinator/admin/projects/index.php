@@ -22,7 +22,7 @@ class ProjectsIndexController extends AbstractController
         return new ProjectsPostProcessor();
     }
     public function renderFormCard(): void {
-		$projects = (new TitlesTable())->getProjects();
+		$projects = (TitlesTable::getInstance())->getProjects();
 
 		// Sort projects by g_id
 		uasort($projects, function ($a, $b) {

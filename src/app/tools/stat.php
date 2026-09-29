@@ -59,7 +59,7 @@ class StatController extends AbstractControllerNoPost
 		$noPv = 0;
 		$i = 0;
 
-		$qids_t = (new QidsTable())->getQids('all');
+		$qids_t = (QidsTable::getInstance())->getQids('all');
 		$sqlQids = array_column($qids_t, 'qid', 'title');
 
 		foreach ($titles as $title) {
@@ -205,7 +205,7 @@ class StatController extends AbstractControllerNoPost
 	private function filterStat(string $cat): string
 	{
 		$catsTitles = [];
-		$categories = (new CategoriesTable())->getCategories();
+		$categories = (CategoriesTable::getInstance())->getCategories();
 
 		foreach ($categories as $k => $tab) {
 			$catsTitles[] = $tab['category'] ?? "";

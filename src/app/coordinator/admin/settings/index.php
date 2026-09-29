@@ -23,7 +23,7 @@ class SettingsIndexController extends AbstractController
         return new SettingsPostProcessor();
     }
     public function renderFormCard(): void {
-        $settings = (new SettingsTable())->getSettings();
+        $settings = (SettingsTable::getInstance())->getSettings();
 
         $text = $this->buildSettingsTable($settings);
 

@@ -41,7 +41,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	{
 		$this->validateCoordinator();
 
-		$sqlResults = (new PagesTable())->getPagesUsersToMain($this->lang);
+		$sqlResults = (PagesTable::getInstance())->getPagesUsersToMain($this->lang);
 
 		$titlesQids = $this->getTitlesQidsMap($sqlResults);
 
@@ -74,7 +74,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 			return [];
 		}
 
-		$infos = (new TitlesTable())->getTitlesInfosByTitles($titles);
+		$infos = (TitlesTable::getInstance())->getTitlesInfosByTitles($titles);
 
 		return array_column($infos, 'qid', 'title');
 	}
@@ -85,7 +85,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	private function getLanguages(): array
 	{
 		$tabes = [];
-		$llangs = (new PagesTable())->getPagesUsersLangs();
+		$llangs = (PagesTable::getInstance())->getPagesUsersLangs();
 
 		foreach ($llangs as $tat) {
 			if (gettype($tat) !== 'string') {
