@@ -1,6 +1,6 @@
 <?php
 
-namespace App\APICalls;
+namespace App\SQLorAPI;
 
 use App\Settings;
 use function App\MdwikiSql\fetch_query;
