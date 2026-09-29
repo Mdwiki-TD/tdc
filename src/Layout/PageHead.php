@@ -36,7 +36,6 @@ class PageHead
             "/Translation_Dashboard/css/mobile_format.css",
             "/Translation_Dashboard/css/Responsive_Table.css",
             "/Translation_Dashboard/css/theme.css",
-            "/tdc/css/tdc.css",
             "/tdc/css/sidebar-desktop.css",
             "/tdc/css/sidebar-mobile.css",
         ];

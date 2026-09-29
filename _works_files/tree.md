@@ -118,10 +118,8 @@ src/
 │   ├── include_all.php
 │   └── index.php
 ├── css/
-│   ├── Responsive_Table.css
 │   ├── sidebar-desktop.css
 │   ├── sidebar-mobile.css
-│   └── tdc.css
 ├── js/
 │   ├── add_by_url.js
 │   ├── autocomplate.js

@@ -120,6 +120,6 @@ class PageHeader
 	}
 }
 
-// Usage (replaces the old procedural src/templates/header.php):
+// Usage (replaces the old procedural src/Layout/header.php):
 // $pageHeader = new PageHeader();
 // $pageHeader->render();
