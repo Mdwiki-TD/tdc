@@ -16,7 +16,7 @@
  * Usage Example:
  * ```php
  * // Include the module
- * include_once __DIR__ . '/csrf.php';
+ * include_once __DIR__ . '/CSRFManager.php';
  *
  * // Generate a token for a form
  * use function App\csrf\generate_csrf_token;
