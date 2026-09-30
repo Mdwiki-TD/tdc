@@ -6,7 +6,8 @@ namespace App\Coordinator\Admin\Users;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
 use App\Tables\Langs\LangsTables;
-use function App\csrf\generate_csrf_token;
+use App\Security\CSRFManager;
+
 use function App\MdwikiSql\fetchQuery;
 use function App\APICalls\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
@@ -322,7 +323,7 @@ class MsgController extends AbstractControllerNoPost
     }
     public function createCsrfTokenField(): string
     {
-        $csrfToken = generate_csrf_token();
+        $csrfToken = (new CSRFManager())->generateToken();
 
         return <<<HTML
             <input name='csrf_token' value="$csrfToken" type="hidden"/>
