@@ -3,13 +3,13 @@
 namespace App\Results\GetCats;
 
 use App\Logger;
+use App\Settings;
 use function App\APICalls\get_mdwiki_url_with_params;
 use function App\Utils\TablesDir\open_td_tables_file;
 
 function get_category_from_cache(string $category): array
 {
-    $tablesPath = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
-
+    $tablesPath = Settings::getInstance()->TablesPath;
     $filePath = "$tablesPath/cats_cash/$category.json";
 
     $data = open_td_tables_file($filePath);
@@ -19,7 +19,7 @@ function get_category_from_cache(string $category): array
         return [];
     }
 
-    // تصفية العناصر غير المرغوب فيها
+    // Filter unwanted items
     $data2 = array_filter($data['list'], function ($item) {
         return !preg_match('/^(Category|File|Template|User):/', $item) && !preg_match('/\(disambiguation\)$/', $item);
     });
@@ -107,7 +107,7 @@ function get_mdwiki_cat_members(string $category, bool $useCache = true, int $de
         $currentDepth++;
     }
 
-    // تصفية النتائج النهائية
+    // Filter unwanted items
     $filteredTitles = array_filter($titles, function ($title) {
         return !preg_match('/^(File|Template|User):/', $title) && !preg_match('/\(disambiguation\)$/', $title);
     });

@@ -3,6 +3,8 @@
 namespace App\Results\GetResults;
 
 use App\Logger;
+use App\Settings;
+
 use function App\Results\GetCats\get_mdwiki_cat_members;
 use function App\Utils\TablesDir\open_td_tables_file;
 
@@ -16,7 +18,7 @@ function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
     };
     Logger::debug("members size:" . count($members));
 
-    $tablesPath = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
+    $tablesPath = Settings::getInstance()->TablesPath;
 
     $jsonFile = "$tablesPath/cash_exists/$code.json";
     $exists = open_td_tables_file($jsonFile);
