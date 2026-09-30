@@ -1,0 +1,537 @@
+<?php
+
+/**
+ * HTML Generation Utilities Module
+ *
+ * Provides helper functions for generating consistent HTML components
+ * throughout the Translation Dashboard application. These functions
+ * ensure proper escaping, consistent styling, and reduce code duplication.
+ *
+ * Features:
+ * - Alert and notification components
+ * - Modal dialogs
+ * - Form input groups
+ * - Navigation links (MDWiki, Wikipedia, translation URLs)
+ * - Dropdown menus and data lists
+ * - Card and panel components
+ *
+ * Security:
+ * - All output functions use htmlspecialchars() for XSS prevention
+ * - URLs are properly encoded with rawurlencode()
+ * - HTML attributes are escaped
+ *
+ * Usage Example:
+ * ```php
+ * use function App\Utils\Html\make_mdwiki_title;
+ * use function App\Utils\Html\make_target_url;
+ * use function App\Utils\Html\div_alert;
+ *
+ * // Generate MDWiki link
+ * echo make_mdwiki_title('COVID-19');
+ *
+ * // Generate Wikipedia link
+ * echo make_target_url('مرض_فيروس_كورونا_2019', 'ar', 'COVID-19');
+ *
+ * // Display success message
+ * echo div_alert(['Settings saved successfully'], 'success');
+ * ```
+ *
+ * @package    Utils
+ * @subpackage Html
+ * @author     Translation Dashboard Team
+ * @version    2.0.0
+ * @since      1.0.0
+ * @license    GPL-3.0-or-later
+ */
+
+namespace App\Utils\Html;
+
+use App\Tables\SqlTables\TablesSql;
+
+/**
+ * Generate a Bootstrap modal dialog
+ *
+ * @param string $label   Modal title
+ * @param string $text    Modal body content
+ * @param string $id      Modal element ID
+ * @param string $button  Additional button HTML (optional)
+ *
+ * @return string HTML for the modal
+ */
+function make_modal_fade(string $label, string $text, string $id, string $button = ''): string
+{
+    $randomId = 'modalLabel' . random_int(1000, 9999);
+
+    return <<<HTML
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="{$id}" tabindex="-1" role="dialog" aria-labelledby="{$randomId}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="{$randomId}">{$label}</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">{$text}</div>
+                    <div class="modal-footer">
+                        {$button}
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    HTML;
+}
+
+/**
+ * Generate a dropdown select element
+ *
+ * @param array<int,string> $tab  Options array
+ * @param string            $cat  Currently selected value
+ * @param string            $id   Select element ID and name
+ * @param string            $add  Additional option (e.g., 'all')
+ *
+ * @return string HTML for the select element
+ */
+function makeDropdown(array $tab, string $cat, string $id, string $add): string
+{
+    $options = "";
+
+    foreach ($tab as $dd) {
+        $se = ($cat === $dd) ? 'selected' : '';
+
+        if (empty($dd)) continue;
+
+        $escaped = htmlspecialchars($dd, ENT_QUOTES, 'UTF-8');
+        $options .= "<option value='{$escaped}' {$se}>{$escaped}</option>";
+    }
+
+    $selLine = "";
+    if (!empty($add)) {
+        $add2 = ($add === 'all') ? 'All' : $add;
+        $sel = ($cat === $add) ? "selected" : "";
+        $escapedAdd = htmlspecialchars($add, ENT_QUOTES, 'UTF-8');
+        $escapedAdd2 = htmlspecialchars($add2, ENT_QUOTES, 'UTF-8');
+        $selLine = "<option value='{$escapedAdd}' {$sel}>{$escapedAdd2}</option>";
+    }
+
+    return <<<HTML
+        <select dir="ltr" id="{$id}" name="{$id}" class="form-select" data-bs-theme="auto">
+            {$selLine}
+            {$options}
+        </select>
+    HTML;
+}
+
+/**
+ * Generate a link to an MDWiki user page
+ *
+ * @param string $user Username
+ *
+ * @return string HTML anchor element or original username if empty
+ */
+function make_mdwiki_user_url(string $user): string
+{
+    if (!empty($user)) {
+        $encodedUser = rawurlencode(str_replace(' ', '_', $user));
+        $escapedUser = htmlspecialchars($user, ENT_QUOTES, 'UTF-8');
+        return "<a href='https://mdwiki.org/wiki/User:{$encodedUser}' taget='_blank'>{$escapedUser}</a>";
+    }
+    return $user;
+}
+
+function makeColSm4(string $title, string $table, int $numb = 4, string $table2 = '', string $title2 = ''): string
+{
+    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
+    return <<<HTML
+        <div class="col-md-{$numb}">
+            <div class="card card2 mb-3">
+                <div class="card-header">
+                    <span class="card-title" style="font-weight:bold;">
+                        {$escapedTitle}
+                    </span>
+                    <div style='float: right'>
+                        {$title2}
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="card-body1 card2">
+                    {$table}
+                </div>
+                <!-- <div class="card-footer"></div> -->
+            </div>
+            {$table2}
+        </div>
+    HTML;
+}
+
+/**
+ * Generate a banner alert with danger styling
+ *
+ * @param string $text The alert message
+ *
+ * @return string HTML for the alert banner
+ */
+function banner_alert(string $text): string
+{
+    // $escaped = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    return <<<HTML
+        <div class='container'>
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> {$text}
+            </div>
+        </div>
+    HTML;
+}
+
+
+/**
+ * Generate an email icon button for messaging users
+ *
+ * @param array<string,mixed> $tab       Translation record with user/lang/target info
+ * @param string              $funcName JavaScript function to call on click
+ *
+ * @return string HTML for the email button
+ */
+function make_mail_icon_new(array $tab, string $funcName = "pup_window_new"): string
+{
+    if (empty($funcName)) {
+        $funcName = "pup_window_new";
+    }
+
+    $mailParams = [
+        'user' => $tab['user'] ?? '',
+        'lang' => $tab['lang'] ?? '',
+        'target' => $tab['target'] ?? '',
+        'date' => $tab['pupdate'] ?? '',
+        'title' => $tab['title'] ?? '',
+        'nonav' => '1'
+    ];
+
+    $mailUrl = "index.php?ty=msg&" . http_build_query($mailParams, '', '&', PHP_QUERY_RFC3986);
+    $escapedUrl = htmlspecialchars($mailUrl, ENT_QUOTES, 'UTF-8');
+
+    return <<<HTML
+    	<a class='btn btn-outline-primary btn-sm spannowrap' pup-target='{$escapedUrl}' onclick='{$funcName}(this)'>@</a>
+    HTML;
+}
+
+/**
+ * Generate a project selection dropdown options
+ *
+ * @param string $project Currently selected project
+ *
+ * @return string HTML option elements
+ */
+function make_project_to_user(string $project): string
+{
+    $str = "<option value='Uncategorized'>Uncategorized</option>";
+
+    foreach (TablesSql::$sProjectsTitleToId as $pTitle => $pId) {
+        $selected = ($project === $pTitle) ? "selected" : "";
+        $escaped = htmlspecialchars($pTitle, ENT_QUOTES, 'UTF-8');
+        $str .= "<option value='{$escaped}' {$selected}>{$escaped}</option>";
+    }
+
+    return $str;
+}
+
+/**
+ * Generate an input group with label
+ *
+ * @param string $label    Input label
+ * @param string $id       Input ID and name
+ * @param string $value    Input value
+ * @param string $required 'required' attribute or empty
+ *
+ * @return string HTML for the input group
+ */
+function make_input_group(string $label, string $id, string $value, string $required): string
+{
+    $val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    return <<<HTML
+    <div class='col-md-3'>
+        <div class='input-group mb-3'>
+            <span class='input-group-text'>{$label}</span>
+            <input class='form-control' type='text' name='{$id}' value='{$val2}' {$required}/>
+        </div>
+    </div>
+    HTML;
+}
+
+/**
+ * Generate an input group without column wrapper
+ *
+ * @param string $label    Input label
+ * @param string $id       Input ID and name
+ * @param string $value    Input value
+ * @param string $required 'required' attribute or empty
+ *
+ * @return string HTML for the input group
+ */
+function make_input_group_no_col(string $label, string $id, string $value, string $required): string
+{
+    $val2 = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    $label = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+
+
+    return <<<HTML
+    <div class='input-group mb-3'>
+        <span class='input-group-text'>{$label}</span>
+        <input class='form-control' type='text' name='{$id}' value='{$val2}' {$required}/>
+    </div>
+    HTML;
+}
+
+
+/**
+ * Generate a card component with header and body
+ *
+ * @param string $title Card header title
+ * @param string $table Card body content
+ *
+ * @return string HTML for the card
+ */
+function makeCard(string $title, string $table): string
+{
+    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
+    return <<<HTML
+    <div class="card">
+        <div class="card-header aligncenter" style="font-weight:bold;">
+            {$escapedTitle}
+        </div>
+        <div class="card-body1 card2">
+            {$table}
+        </div>
+        <!-- <div class="card-footer"></div> -->
+    </div>
+    HTML;
+}
+
+/**
+ * Generate a card in a column layout
+ *
+ * @param string $title  Card header title
+ * @param string $table  Card body content
+ * @param int    $numb   Column width (1-12)
+ * @param string $table2 Additional content below card
+ * @param string $title2 Header subtitle
+ *
+ * @return string HTML for the column with card
+ */
+
+
+/**
+ * Generate a card with centered header
+ *
+ * @param string $title    Header title
+ * @param string $subtitle Header subtitle
+ * @param string $table    Card body content
+ * @param int    $numb     Column width (1-12)
+ *
+ * @return string HTML for the card
+ */
+function make_col_sm_body(string $title, string $subtitle, string $table, int $numb = 4): string
+{
+    $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $escapedSubtitle = htmlspecialchars($subtitle, ENT_QUOTES, 'UTF-8');
+
+    return <<<HTML
+    <div class="col-md-{$numb}">
+        <div class="card">
+            <div class="card-header aligncenter1">
+                <span style="font-weight:bold;">{$escapedTitle}</span> {$escapedSubtitle}
+            </div>
+            <div class="card-body card2">
+                {$table}
+            </div>
+        </div>
+        <br>
+    </div>
+    HTML;
+}
+
+/**
+ * Generate dropdown option elements
+ *
+ * @param array<string,string> $uxutable Options array (display => value)
+ * @param string               $code     Currently selected value
+ *
+ * @return string HTML option elements
+ */
+function make_drop(array $uxutable, string $code): string
+{
+    $options = "";
+
+    foreach ($uxutable as $name => $cod) {
+        $selected = ($code === $cod) ? "selected" : "";
+        $escapedName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        $escapedCod = htmlspecialchars($cod, ENT_QUOTES, 'UTF-8');
+        $options .= "<option value='{$escapedCod}' {$selected}>{$escapedName}</option>";
+    }
+
+    return $options;
+}
+
+/**
+ * Generate datalist option elements
+ *
+ * @param array<string,string> $hyh Options array (display => value)
+ *
+ * @return string HTML option elements
+ */
+function make_datalist_options(array $hyh): string
+{
+    $options = '';
+    foreach ($hyh as $language => $code) {
+        $escapedLang = htmlspecialchars($language, ENT_QUOTES, 'UTF-8');
+        $escapedCode = htmlspecialchars($code, ENT_QUOTES, 'UTF-8');
+        $options .= "<option value='{$escapedCode}'>{$escapedLang}</option>";
+    }
+    return $options;
+}
+
+/**
+ * Generate a link to an MDWiki page
+ *
+ * @param string $title Page title
+ *
+ * @return string HTML anchor element or original title if empty
+ */
+function make_mdwiki_title(string $title): string
+{
+    if (!empty($title)) {
+        $encodedTitle = rawurlencode(str_replace(' ', '_', $title));
+        $escapedTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+        return "<a target='_blank' href='https://mdwiki.org/wiki/{$encodedTitle}'>{$escapedTitle}</a>";
+    }
+    return $title;
+}
+
+/**
+ * Generate a link to an MDWiki category page
+ *
+ * @param string $category Category name
+ *
+ * @return string HTML anchor element or original category if empty
+ */
+function make_cat_url(string $category): string
+{
+    if (!empty($category)) {
+        $encodedCategory = rawurlencode(str_replace(' ', '_', $category));
+        $escapedCategory = htmlspecialchars($category, ENT_QUOTES, 'UTF-8');
+        return "<a target='_blank' href='https://mdwiki.org/wiki/Category:{$encodedCategory}'>{$escapedCategory}</a>";
+    }
+    return $category;
+}
+
+/**
+ * Generate a link to a user talk page
+ *
+ * @param string $lang Language code
+ * @param string $user Username
+ *
+ * @return string HTML anchor element
+ */
+function make_talk_url(string $lang, string $user): string
+{
+    $escapedLang = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
+    $escapedUser = rawurlencode($user);
+    return "<a target='_blank' href='//{$escapedLang}.wikipedia.org/w/index.php?title=User_talk:{$escapedUser}'>talk</a>";
+}
+
+
+/**
+ * Generate a link to a Wikipedia article
+ *
+ * @param string      $target  Article title
+ * @param string      $lang    Language code
+ * @param string      $name    Display name (optional, defaults to target)
+ * @param bool        $deleted Whether to show deleted indicator
+ *
+ * @return string HTML anchor element or original target if empty
+ */
+function make_target_url(string $target, string $lang, string $name = '', bool $deleted = false): string
+{
+    $displayName = (!empty($name)) ? $name : $target;
+
+    if (!empty($target)) {
+        $encodedTarget = rawurlencode(str_replace(' ', '_', $target));
+        $escapedDisplay = htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8');
+        $escapedLang = htmlspecialchars($lang, ENT_QUOTES, 'UTF-8');
+
+        $link = "<a target='_blank' href='https://{$escapedLang}.wikipedia.org/wiki/{$encodedTarget}'>{$escapedDisplay}</a>";
+
+        if ($deleted) {
+            $link .= ' <span class="text-danger">(DELETED)</span>';
+        }
+        return $link;
+    }
+    return $target;
+}
+
+/**
+ * Generate an alert div with multiple messages
+ *
+ * @param array<int,string> $texts Messages to display
+ * @param string            $type  Alert type (success, danger, warning, info, secondary)
+ *
+ * @return string HTML for the alert div
+ */
+function div_alert(array $texts, string $type = "secondary"): string
+{
+    if (empty($texts)) {
+        return "";
+    }
+
+    if (empty($type)) {
+        $type = "secondary";
+    }
+
+    $allowedTypes = ['success', 'danger', 'warning', 'info', 'secondary', 'primary', 'light', 'dark'];
+    if (!in_array($type, $allowedTypes, true)) {
+        $type = "secondary";
+    }
+
+    $messages = "";
+    foreach ($texts as $text) {
+        $messages .= htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . "<br>";
+    }
+    return "<div class='container m-1'><div class='alert alert-{$type}' role='alert'>{$messages}</div></div>";
+}
+
+/**
+ * Generate an edit icon button
+ *
+ * @param string              $target       Edit target route
+ * @param array<string,mixed> $editParams  Parameters for the edit URL
+ * @param string              $text         Button text
+ *
+ * @return string HTML for the edit button
+ */
+function make_edit_icon_new(string $target, array $editParams, string $text = "Edit"): string
+{
+    if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
+        $editParams['test'] = 1;
+    }
+
+    $editParams['nonav'] = 1;
+
+    $editUrl = "index.php?ty={$target}&" . http_build_query($editParams, '', '&', PHP_QUERY_RFC3986);
+
+    if (empty($text)) {
+        $text = "Edit";
+    }
+
+    $classSm = ($text === "Edit") ? "btn-sm" : "";
+    $escapedUrl = htmlspecialchars($editUrl, ENT_QUOTES, 'UTF-8');
+    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+
+    return <<<HTML
+		<a class='btn btn-outline-primary {$classSm}' pup-target='{$escapedUrl}' onclick='pup_window_new(this)'>{$text}</a>
+	HTML;
+}
