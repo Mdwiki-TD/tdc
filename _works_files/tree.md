@@ -1,25 +1,11 @@
 ```
 src/
 ├── app/
-│   ├── backend/
-│   │   ├── api_calls/
-│   │   │   ├── mdwiki_api.php
-│   │   │   └── wiki_api.php
-│   │   ├── MdwikiSql/
-│   │   │   ├── add_helper.php
-│   │   │   ├── Database.php
-│   │   │   └── mdwiki_sql.php
-│   │   ├── results/
-│   │   │   ├── get_results.php
-│   │   │   ├── getcats.php
-│   │   │   └── README.md
-│   │   ├── tables/
-│   │   │   ├── lang_names.json
-│   │   │   ├── langcode.php
-│   │   │   ├── sql_tables.php
-│   │   │   └── tables.php
-│   │   ├── bootstrap.php
-│   │   └── README.md
+│   ├── ApiClients/
+│   │   ├── mdwiki_api.php
+│   │   └── wiki_api.php
+│   ├── Controllers/
+│   │   └── AppRouter.php
 │   ├── coordinator/
 │   │   ├── admin/
 │   │   │   ├── add/
@@ -90,19 +76,34 @@ src/
 │   │   ├── index.php
 │   │   ├── README.md
 │   │   └── RecentTranslations.php
+│   ├── MdwikiSql/
+│   │   ├── add_helper.php
+│   │   ├── Database.php
+│   │   └── mdwiki_sql.php
+│   ├── Results27/
+│   │   ├── bootstrap.php
+│   │   ├── get_results.php
+│   │   ├── getcats.php
+│   │   └── README.md
 │   ├── SQLorAPI/
 │   │   ├── ApiOrSqlService.php
+│   │   ├── BaseTable.php
 │   │   ├── bootstrap.php
 │   │   ├── CategoriesTable.php
-│   │   ├── funcs.php
 │   │   ├── InProcessTable.php
 │   │   ├── LeaderboardTable.php
 │   │   ├── PagesTable.php
-│   │   ├── recent_data.php
+│   │   ├── QidsTable.php
+│   │   ├── RecentTable.php
 │   │   ├── SettingsTable.php
 │   │   ├── TitlesTable.php
 │   │   ├── UsersTable.php
 │   │   └── ViewsTable.php
+│   ├── Tables/
+│   │   ├── lang_names.json
+│   │   ├── langcode.php
+│   │   ├── sql_tables.php
+│   │   └── tables.php
 │   ├── tools/
 │   │   ├── bootstrap.php
 │   │   ├── categories.php
@@ -120,17 +121,17 @@ src/
 │   │   ├── README.md
 │   │   ├── SessionManager.php
 │   │   └── UserCookieService.php
-│   ├── utils/
+│   ├── Utils/
 │   │   ├── html.php
+│   │   ├── html2.php
+│   │   ├── htmlUrls.php
 │   │   ├── README.md
-│   │   ├── SidebarMenu.php
-│   │   ├── tables_dir.php
-│   │   └── TestPrinter.php
+│   │   └── SidebarMenu.php
 │   ├── 404.php
 │   ├── bootstrap.php
-│   ├── csrf.php
-│   ├── index.php
+│   ├── CSRFManager.php
 │   ├── Logger.php
+│   ├── README.md
 │   └── Settings.php
 ├── css/
 │   ├── sidebar-desktop.css

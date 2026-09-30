@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Common;
 
 use App\User\CurrentUser;
-use function App\csrf\generate_csrf_token;
+use App\Security\CSRFManager;
 
 /**
  * Class AbstractController
@@ -54,7 +54,7 @@ abstract class AbstractController
 
     public function createCsrfTokenField(): string
     {
-        $csrfToken = generate_csrf_token();
+        $csrfToken = (new CSRFManager())->generateToken();
 
         return <<<HTML
             <input name='csrf_token' value="$csrfToken" type="hidden"/>

@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Common;
 
 use App\User\CurrentUser;
-use function App\csrf\verify_csrf_token;
+use App\Security\CSRFManager;
 use function App\Utils\Html\div_alert;
 
 /**
@@ -72,7 +72,8 @@ abstract class AbstractPostHandler
      */
     final public function handle(array $post): array
     {
-        if (!verify_csrf_token()) {
+        $manager = new CSRFManager();
+        if (!$manager->verifyToken($_POST['csrf_token'] ?? null)) {
             $this->csrfError = true;
             return $this->result();
         }
