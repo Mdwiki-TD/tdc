@@ -86,7 +86,7 @@ include_once __DIR__ . '/MdwikiSql/add_helper.php';
 include_once __DIR__ . '/MdwikiSql/mdwiki_sql.php';
 
 # Controllers
-include_once __DIR__ . '/index.php'; // AppRouter
+include_once __DIR__ . '/Controllers/AppRouter.php'; // AppRouter
 include_once __DIR__ . '/backend/bootstrap.php';
 include_once __DIR__ . '/coordinator/bootstrap.php';
 include_once __DIR__ . '/tools/bootstrap.php';
