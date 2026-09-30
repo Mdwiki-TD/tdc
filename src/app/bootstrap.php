@@ -91,6 +91,11 @@ include_once __DIR__ . '/backend/bootstrap.php';
 include_once __DIR__ . '/coordinator/bootstrap.php';
 include_once __DIR__ . '/tools/bootstrap.php';
 
+# Tables
+include_once __DIR__ . '/Tables/sql_tables.php';
+include_once __DIR__ . '/Tables/tables.php';
+include_once __DIR__ . '/Tables/langcode.php';
+
 # Utils
 include_once __DIR__ . '/Utils/SidebarMenu.php';
 include_once __DIR__ . '/Utils/html.php';
