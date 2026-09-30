@@ -1,11 +1,8 @@
 ```
 app/
-├── backend/
-│   ├── api_calls/
-│   │   ├── mdwiki_api.php
-│   │   └── wiki_api.php
-│   ├── bootstrap.php
-│   └── README.md
+├── ApiClients/
+│   ├── mdwiki_api.php
+│   └── wiki_api.php
 ├── Controllers/
 │   └── AppRouter.php
 ├── coordinator/
