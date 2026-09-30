@@ -9,7 +9,7 @@ use function App\Utils\Html\makeDropdown;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_edit_icon_new;
 use function App\Results\GetCats\get_mdwiki_cat_members;
-use function App\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetchQuery;
 
 /**
  * Class TranslateTypeIndexController
@@ -79,7 +79,7 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
 			FROM translate_type
 		SQL;
 
-        foreach (fetch_query($translateTypeSql) as $k => $tab) {
+        foreach (fetchQuery($translateTypeSql) as $k => $tab) {
             $this->fullTranslatesTab[$tab['tt_title']] = [
                 'id'   => $tab['tt_id'],
                 'lead' => $tab['tt_lead'],
@@ -98,7 +98,7 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         TablesSql::$sCatTitles = [];
 
         if ($this->cat === 'All') {
-            $rows = fetch_query('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)');
+            $rows = fetchQuery('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)');
 
             foreach ($rows as $key => $gg) {
                 if (!in_array($gg['title'], $this->fullTranslatesTab)) {

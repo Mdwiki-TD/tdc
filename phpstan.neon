@@ -1,23 +1,36 @@
+# PHPStan Configuration for Translation Dashboard
+# Run: vendor/bin/phpstan analyse -c phpstan.neon
+
 parameters:
     level: 5
+
+    # parallel:
+    #     maximumNumberOfProcesses: 10
+
     paths:
         - src/
 
     excludePaths:
         - vendor
         - *_old.php
-    reportUnmatchedIgnoredErrors: false
-    ignoreErrors:
-        - "#Function .+ not found#"
-        - "#Call to an undefined function#"
 
-    # Scan directories for class definitions
-    # scanDirectories:
-        # - I:/MD_TOOLS/mdwiki.toolforge.org/PHP_REPOS/auth_repo/vendor/
+    # Treat phpdoc types as assertions for runtime safety
+    treatPhpDocTypesAsCertain: true
+
+    # Report unmatched ignored errors
+    reportUnmatchedIgnoredErrors: true
+
+    # Universal object crates (classes with dynamic properties)
+    universalObjectCratesClasses:
+        - stdClass
+
+    # Ignore specific errors during transition
+    ignoreErrors: []
+
+    # Bootstrap file for autoloading
+    bootstrapFiles:
+        - tests/bootstrap.php
 
     # Scan files for class definitions
     scanFiles:
-        - src/bootstrap.php
-
-    bootstrapFiles:
-        - tests/bootstrap.php
+        - src/app/bootstrap.php

@@ -3,8 +3,8 @@
 
 namespace App\Coordinator\Helps\RecentHelps;
 
+use App\Logger;
 use App\Tables\Langs\LangsTables;
-use function App\Utils\test_print;
 
 function filter_recent2($lang, $result)
 {
@@ -14,7 +14,7 @@ function filter_recent2($lang, $result)
     $langList = "<option data-tokens='All' value='All'>All</option>";
 
     foreach ($result as $langCode) {
-        $langeee = LangsTables::$LCodeToLang[$langCode] ?? '';
+        $langeee = LangsTables::get_lang_title($langCode) ?? '';
         $selected = ($langCode == $lang) ? 'selected' : '';
         if (empty($langCode)) continue;
         $langList .= <<<HTML
@@ -43,7 +43,7 @@ function do_add_date($results)
         $addPup = intval($pupdate);
 
         if ($addAdd > $addPup) {
-            test_print("add_add($addAdd) > add_pup($addPup)");
+            Logger::debug("add_add($addAdd) > add_pup($addPup)");
             return true;
         }
 

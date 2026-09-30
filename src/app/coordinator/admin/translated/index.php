@@ -5,13 +5,13 @@ namespace App\Coordinator\Admin\Translated;
 
 use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
+use App\SQLorAPI\PagesTable;
+use App\SQLorAPI\RecentTable;
 use App\Tables\Langs\LangsTables;
+
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\make_edit_icon_new;
-use function App\SQLorAPI\Recent\get_recent_translated;
-use function App\SQLorAPI\Recent\get_total_translations_count;
-use function App\SQLorAPI\Funcs\get_pages_langs;
 use function App\Coordinator\Helps\RecentHelps\filter_table;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
@@ -37,7 +37,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
 			$this->table = "pages_users";
 		}
 
-		if ($this->lang !== 'All' && !isset(LangsTables::$LCodeToLang[$this->lang])) {
+		if ($this->lang !== 'All' && !LangsTables::get_lang_title($this->lang)) {
 			$this->lang = 'All';
 		}
 	}
@@ -53,8 +53,8 @@ class TranslatedIndexController extends AbstractControllerNoPost
 		$page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 		$offset = ($page - 1) * $limit;
 
-		$sqlResults = get_recent_translated($this->lang, $this->table, $limit, $offset);
-		$totalCount = get_total_translations_count($this->lang, $this->table);
+		$sqlResults = (RecentTable::getInstance())->getRecentTranslated($this->lang, $this->table, $limit, $offset);
+		$totalCount = (PagesTable::getInstance())->getTotalTranslationsCount($this->lang, $this->table);
 
 		$pagination = "";
 		if ($totalCount > $limit) {
@@ -82,7 +82,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	private function getLanguages(): array
 	{
 		$tabes = [];
-		$llangs = get_pages_langs();
+		$llangs = (PagesTable::getInstance())->getPagesLangs();
 
 		foreach ($llangs as $tat) {
 			if (gettype($tat) !== 'string') {

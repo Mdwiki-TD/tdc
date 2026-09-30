@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Add;
 
 use App\Coordinator\Admin\Common\AbstractController;
-use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
+use App\SQLorAPI\CategoriesTable;
 
 
 require_once __DIR__ . '/add_post.php';
@@ -34,7 +34,7 @@ class AddIndexController extends AbstractController
     private function buildCategoryOptions(): string
     {
         $cats = '';
-        $categories = get_td_or_sql_categories();
+        $categories = (CategoriesTable::getInstance())->getCategories();
 
         foreach ($categories as $key => $ta) {
             $ca = $ta['category'] ?? '';

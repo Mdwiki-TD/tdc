@@ -1,5 +1,5 @@
 <?php
-// src/app/utils/SidebarMenu.php
+// src/app/Utils/SidebarMenu.php
 
 /**
  * Sidebar Navigation Generator

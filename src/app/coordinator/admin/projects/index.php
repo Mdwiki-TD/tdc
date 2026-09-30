@@ -3,8 +3,8 @@
 
 namespace App\Coordinator\Admin\Projects;
 
+use App\SQLorAPI\TitlesTable;
 use App\Coordinator\Admin\Common\AbstractController;
-use function App\SQLorAPI\Funcs\get_td_or_sql_projects;
 
 
 require_once __DIR__ . '/projects_post.php';
@@ -22,7 +22,7 @@ class ProjectsIndexController extends AbstractController
         return new ProjectsPostProcessor();
     }
     public function renderFormCard(): void {
-		$projects = get_td_or_sql_projects();
+		$projects = (TitlesTable::getInstance())->getProjects();
 
 		// Sort projects by g_id
 		uasort($projects, function ($a, $b) {

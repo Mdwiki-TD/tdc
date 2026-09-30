@@ -22,11 +22,11 @@
  *
  * Usage Example:
  * ```php
- * use function App\MdwikiSql\fetch_query;
+ * use function App\MdwikiSql\fetchQuery;
  * use function App\MdwikiSql\execute_query;
  *
  * // Fetch results (SELECT queries)
- * $users = fetch_query("SELECT * FROM users WHERE is_active = ?", [1]);
+ * $users = fetchQuery("SELECT * FROM users WHERE is_active = ?", [1]);
  *
  * // Execute queries (INSERT, UPDATE, DELETE)
  * execute_query("UPDATE settings SET value = ? WHERE id = ?", ['new_value', 5]);
@@ -49,7 +49,7 @@ use App\MdwikiSql\Database;
 function execute_query(string $sqlQuery, ?array $params = null): bool
 {
     // Create a new database object
-    $db = new Database('DB_NAME');
+    $db = new Database();
 
     // Execute a SQL query
     $results = $db->executequery($sqlQuery, $params);
@@ -62,14 +62,10 @@ function execute_query(string $sqlQuery, ?array $params = null): bool
 
     return $results;
 };
-function fetch_query(string $sqlQuery, ?array $params = null, $noprint = false): array
+function fetchQuery(string $sqlQuery, ?array $params = null, $noprint = false): array
 {
     // Create a new database object
-    $db = new Database('DB_NAME');
-
-    if ($noprint == false) {
-        $db->testPrint($sqlQuery);
-    }
+    $db = new Database();
 
     // Execute a SQL query
     $results = $db->fetchquery($sqlQuery, $params);
@@ -188,7 +184,7 @@ function get_user_by_id(string $userId): ?array
     if (empty($userId)) {
         return null;
     }
-    $result = fetch_query("SELECT * FROM users WHERE user_id = ?", [$userId]);
+    $result = fetchQuery("SELECT * FROM users WHERE user_id = ?", [$userId]);
     return $result[0] ?? null;
 }
 
@@ -203,7 +199,7 @@ function get_user_by_username(string $username): ?array
     if (empty($username)) {
         return null;
     }
-    $result = fetch_query("SELECT * FROM users WHERE username = ?", [$username]);
+    $result = fetchQuery("SELECT * FROM users WHERE username = ?", [$username]);
     return $result[0] ?? null;
 }
 
@@ -224,7 +220,7 @@ function get_qid_row(string $column, string $value, string $table = 'qids'): ?ar
         return null;
     }
 
-    $result = fetch_query("SELECT * FROM {$table} WHERE {$column} = ?", [$value]);
+    $result = fetchQuery("SELECT * FROM {$table} WHERE {$column} = ?", [$value]);
     return $result[0] ?? null;
 }
 

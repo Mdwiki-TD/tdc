@@ -4,9 +4,9 @@
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\User\CurrentUser;
-use function App\SQLorAPI\Funcs\get_td_or_sql_language_settings;
-use function App\SQLorAPI\Funcs\get_pages_langs;
+use App\SQLorAPI\PagesTable;
+
+use App\SQLorAPI\SettingsTable;
 use function App\Utils\Html\make_edit_icon_new;
 
 /**
@@ -48,11 +48,11 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 	 */
 	private function buildMergedLanguageSettings(): array
 	{
-		$tabes = get_td_or_sql_language_settings();
+		$tabes = (SettingsTable::getInstance())->getLanguageSettings();
 
 		$tabesCodes = array_column($tabes, "lang_code");
 
-		$langsD = get_pages_langs();
+		$langsD = (PagesTable::getInstance())->getPagesLangs();
 
 		foreach ($langsD as $tat) {
 			$lal = strtolower($tat);

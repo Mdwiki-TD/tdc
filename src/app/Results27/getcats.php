@@ -2,24 +2,20 @@
 
 namespace App\Results\GetCats;
 
-use function App\Utils\test_print;
+use App\Logger;
+use App\Settings;
 use function App\APICalls\get_mdwiki_url_with_params;
-use function App\Utils\TablesDir\open_td_tables_file;
 
 function get_category_from_cache(string $category): array
 {
-    $tablesPath = getenv("TABLES_PATH") !== false ? getenv("TABLES_PATH") : ($_ENV["TABLES_PATH"] ?? "");
-
-    $filePath = "$tablesPath/cats_cash/$category.json";
-
-    $data = open_td_tables_file($filePath);
+    $data = Settings::getInstance()->OpenTablesPathFile("cats_cash/$category.json");
 
     if (!isset($data['list']) || !is_array($data['list'])) {
-        test_print("Invalid format in JSON file: $filePath");
+        Logger::debug("Invalid format in JSON file: cats_cash/$category.json");
         return [];
     }
 
-    // تصفية العناصر غير المرغوب فيها
+    // Filter unwanted items
     $data2 = array_filter($data['list'], function ($item) {
         return !preg_match('/^(Category|File|Template|User):/', $item) && !preg_match('/\(disambiguation\)$/', $item);
     });
@@ -61,7 +57,7 @@ function fetch_category_members(string $category): array
         }
     } while ($cmcontinue);
 
-    test_print("Fetched category members count: " . count($items));
+    Logger::debug("Fetched category members count: " . count($items));
     return $items;
 }
 
@@ -107,13 +103,13 @@ function get_mdwiki_cat_members(string $category, bool $useCache = true, int $de
         $currentDepth++;
     }
 
-    // تصفية النتائج النهائية
+    // Filter unwanted items
     $filteredTitles = array_filter($titles, function ($title) {
         return !preg_match('/^(File|Template|User):/', $title) && !preg_match('/\(disambiguation\)$/', $title);
     });
 
     $uniqueTitles = array_unique($filteredTitles);
-    test_print("Final titles count: " . count($uniqueTitles));
-    test_print("End of get_mdwiki_cat_members <br>===============================");
+    Logger::debug("Final titles count: " . count($uniqueTitles));
+    Logger::debug("End of get_mdwiki_cat_members <br>===============================");
     return $uniqueTitles;
 }

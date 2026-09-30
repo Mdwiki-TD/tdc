@@ -42,7 +42,6 @@ class ReportsIndex2Controller extends AbstractControllerNoPost
             'result' => true,
         ];
 
-        // $data = get_publish_reports_stats();
         $data = [];
 
         foreach ($keys as $key => $useSelectPicker) {

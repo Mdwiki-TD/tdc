@@ -3,154 +3,151 @@
 namespace Tests\Backend\ApiOrSql;
 
 use PHPUnit\Framework\TestCase;
+use App\SQLorAPI\PagesTable;
+use App\SQLorAPI\RecentTable;
 
-use function App\SQLorAPI\Recent\get_recent_sql;
-use function App\SQLorAPI\Recent\get_recent_pages_users;
-use function App\SQLorAPI\Recent\get_recent_translated;
-use function App\SQLorAPI\Recent\get_total_translations_count;
-use function App\SQLorAPI\Recent\get_pages_users_to_main;
 
 class RecentDataTest extends TestCase
 {
     public function testGetRecentSqlReturnsArray()
     {
-        $result = get_recent_sql('ar');
+        $result = (RecentTable::getInstance())->getRecentPagesWithViews('ar');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentSqlHandlesAllLang()
     {
-        $result = get_recent_sql('All');
+        $result = (RecentTable::getInstance())->getRecentPagesWithViews('All');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentSqlCachesResults()
     {
         // First call
-        $result1 = get_recent_sql('en');
+        $result1 = (RecentTable::getInstance())->getRecentPagesWithViews('en');
         // Second call should return cached result
-        $result2 = get_recent_sql('en');
+        $result2 = (RecentTable::getInstance())->getRecentPagesWithViews('en');
 
         $this->assertSame($result1, $result2);
     }
 
     public function testGetRecentSqlWithEmptyLang()
     {
-        $result = get_recent_sql('');
+        $result = (RecentTable::getInstance())->getRecentPagesWithViews('');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentPagesUsersReturnsArray()
     {
-        $result = get_recent_pages_users('ar');
+        $result = (RecentTable::getInstance())->getRecentPagesUsers('ar');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentPagesUsersHandlesAllLang()
     {
-        $result = get_recent_pages_users('All');
+        $result = (RecentTable::getInstance())->getRecentPagesUsers('All');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentPagesUsersCachesResults()
     {
         // First call
-        $result1 = get_recent_pages_users('fr');
+        $result1 = (RecentTable::getInstance())->getRecentPagesUsers('fr');
         // Second call should return cached result
-        $result2 = get_recent_pages_users('fr');
+        $result2 = (RecentTable::getInstance())->getRecentPagesUsers('fr');
 
         $this->assertSame($result1, $result2);
     }
 
     public function testGetRecentPagesUsersWithEmptyLang()
     {
-        $result = get_recent_pages_users('');
+        $result = (RecentTable::getInstance())->getRecentPagesUsers('');
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedReturnsArray()
     {
-        $result = get_recent_translated('ar', 'pages', 10, 0);
+        $result = (RecentTable::getInstance())->getRecentTranslated('ar', 'pages', 10, 0);
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedWithAllLang()
     {
-        $result = get_recent_translated('All', 'pages', 10, 0);
+        $result = (RecentTable::getInstance())->getRecentTranslated('All', 'pages', 10, 0);
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedWithOffset()
     {
-        $result = get_recent_translated('en', 'pages', 5, 10);
+        $result = (RecentTable::getInstance())->getRecentTranslated('en', 'pages', 5, 10);
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedWithZeroLimit()
     {
-        $result = get_recent_translated('en', 'pages', 0, 0);
+        $result = (RecentTable::getInstance())->getRecentTranslated('en', 'pages', 0, 0);
         $this->assertIsArray($result);
     }
 
     public function testGetRecentTranslatedWithEmptyLang()
     {
-        $result = get_recent_translated('', 'pages', 10, 0);
+        $result = (RecentTable::getInstance())->getRecentTranslated('', 'pages', 10, 0);
         $this->assertIsArray($result);
     }
 
     public function testGetTotalTranslationsCountReturnsInt()
     {
-        $result = get_total_translations_count('ar', 'pages');
+        $result = (PagesTable::getInstance())->getTotalTranslationsCount('ar', 'pages');
         $this->assertIsInt($result);
         $this->assertGreaterThanOrEqual(0, $result);
     }
 
     public function testGetTotalTranslationsCountWithAllLang()
     {
-        $result = get_total_translations_count('All', 'pages');
+        $result = (PagesTable::getInstance())->getTotalTranslationsCount('All', 'pages');
         $this->assertIsInt($result);
         $this->assertGreaterThanOrEqual(0, $result);
     }
 
     public function testGetTotalTranslationsCountWithEmptyLang()
     {
-        $result = get_total_translations_count('', 'pages');
+        $result = (PagesTable::getInstance())->getTotalTranslationsCount('', 'pages');
         $this->assertIsInt($result);
         $this->assertGreaterThanOrEqual(0, $result);
     }
 
     public function testGetPagesUsersToMainReturnsArray()
     {
-        $result = get_pages_users_to_main('ar');
+        $result = (PagesTable::getInstance())->getPagesUsersToMain('ar');
         $this->assertIsArray($result);
     }
 
     public function testGetPagesUsersToMainHandlesAllLang()
     {
-        $result = get_pages_users_to_main('All');
+        $result = (PagesTable::getInstance())->getPagesUsersToMain('All');
         $this->assertIsArray($result);
     }
 
     public function testGetPagesUsersToMainCachesResults()
     {
         // First call
-        $result1 = get_pages_users_to_main('es');
+        $result1 = (PagesTable::getInstance())->getPagesUsersToMain('es');
         // Second call should return cached result
-        $result2 = get_pages_users_to_main('es');
+        $result2 = (PagesTable::getInstance())->getPagesUsersToMain('es');
 
         $this->assertSame($result1, $result2);
     }
 
     public function testGetPagesUsersToMainWithEmptyLang()
     {
-        $result = get_pages_users_to_main('');
+        $result = (PagesTable::getInstance())->getPagesUsersToMain('');
         $this->assertIsArray($result);
     }
 
     // Edge case: test with special characters in language code
     public function testGetRecentSqlWithSpecialCharLang()
     {
-        $result = get_recent_sql('test-lang');
+        $result = (RecentTable::getInstance())->getRecentPagesWithViews('test-lang');
         $this->assertIsArray($result);
     }
 
@@ -158,7 +155,7 @@ class RecentDataTest extends TestCase
     public function testGetRecentTranslatedWithNegativeValues()
     {
         // Should handle negative limit gracefully
-        $result = get_recent_translated('en', 'pages', -1, -1);
+        $result = (RecentTable::getInstance())->getRecentTranslated('en', 'pages', -1, -1);
         $this->assertIsArray($result);
     }
 }

@@ -4,10 +4,11 @@ namespace App\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\Main\MainTables;
+use App\SQLorAPI\CategoriesTable;
+use App\SQLorAPI\QidsTable;
+
 use function App\Utils\Html\makeDropdown;
 use function App\Results\GetCats\get_mdwiki_cat_members;
-use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
-use function App\SQLorAPI\Funcs\get_td_or_sql_qids;
 
 /**
  * Class StatController
@@ -58,7 +59,7 @@ class StatController extends AbstractControllerNoPost
 		$noPv = 0;
 		$i = 0;
 
-		$qids_t = get_td_or_sql_qids('all');
+		$qids_t = (QidsTable::getInstance())->getQids('all');
 		$sqlQids = array_column($qids_t, 'qid', 'title');
 
 		foreach ($titles as $title) {
@@ -91,13 +92,13 @@ class StatController extends AbstractControllerNoPost
 				$noAllref++;
 			}
 
-			$asse = MainTables::$xAssessmentsTable[$title] ?? '';
-			if (!isset(MainTables::$xAssessmentsTable[$title])) {
+			$asse = MainTables::getAssessments($title);
+			if (empty($asse)) {
 				$noImportance++;
 			}
 
-			$pv = MainTables::$xEnwikiPageviewsTable[$title] ?? 0;
-			if (!isset(MainTables::$xEnwikiPageviewsTable[$title])) {
+			$pv = MainTables::getViews($title);
+			if (empty($pv)) {
 				$noPv++;
 			}
 
@@ -204,7 +205,7 @@ class StatController extends AbstractControllerNoPost
 	private function filterStat(string $cat): string
 	{
 		$catsTitles = [];
-		$categories = get_td_or_sql_categories();
+		$categories = (CategoriesTable::getInstance())->getCategories();
 
 		foreach ($categories as $k => $tab) {
 			$catsTitles[] = $tab['category'] ?? "";

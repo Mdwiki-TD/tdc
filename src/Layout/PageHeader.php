@@ -98,6 +98,7 @@ class PageHeader
 		echo "<body>";
 
 		if (!$hideNav) {
+			// Output HTML header and navigation
 			echo $this->pageHead->write_body(
 				$this->buildCoordToolsLink(),
 				$this->buildUserMenu()

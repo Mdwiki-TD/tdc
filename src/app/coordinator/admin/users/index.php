@@ -3,14 +3,14 @@
 
 namespace App\Coordinator\Admin\Users;
 
+use App\SQLorAPI\PagesTable;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\SqlTables\TablesSql;
+use App\SQLorAPI\UsersTable;
+
 use function App\Utils\Html\make_mail_icon_new;
 use function App\Utils\Html\make_edit_icon_new;
-use function App\MdwikiSql\fetch_query;
-use function App\SQLorAPI\Funcs\get_users_by_last_pupdate;
-use function App\SQLorAPI\Funcs\get_td_or_sql_count_pages_not_empty;
-use function App\SQLorAPI\Funcs\get_td_or_sql_page_user_not_in_users;
+use function App\MdwikiSql\fetchQuery;
 
 /**
  * Class EmailsIndexController
@@ -36,7 +36,7 @@ class UsersIndexController extends AbstractControllerNoPost
 	{
 		$this->validateCoordinator();
 
-		$lastUserToTab = get_users_by_last_pupdate();
+		$lastUserToTab = (UsersTable::getInstance())->getUsersByLastPupdate();
 		$usersDone = $this->getSortedArray();
 
 		$projectFilter = $this->emailsFilterTable($this->mainProject);
@@ -60,15 +60,15 @@ class UsersIndexController extends AbstractControllerNoPost
 	{
 		$usersDone = [];
 
-		$livePages = get_td_or_sql_count_pages_not_empty();
+		$livePages = (PagesTable::getInstance())->getCountPagesNotEmpty();
 
-		$ddi = fetch_query("select user_id, username, email, wiki, user_group from users;");
+		$ddi = fetchQuery("select user_id, username, email, wiki, user_group from users;");
 
 		foreach ($ddi as $key => $gk) {
 			$usersDone[$gk['username']] = $gk;
 		}
 
-		$der = get_td_or_sql_page_user_not_in_users();
+		$der = (PagesTable::getInstance())->getPageUserNotInUsers();
 
 		foreach ($der as $d => $tat) {
 			if (!array_key_exists($tat, $usersDone)) {

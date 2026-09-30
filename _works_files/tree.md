@@ -5,11 +5,6 @@ src/
 │   │   ├── api_calls/
 │   │   │   ├── mdwiki_api.php
 │   │   │   └── wiki_api.php
-│   │   ├── api_or_sql/
-│   │   │   ├── funcs.php
-│   │   │   ├── index.php
-│   │   │   ├── process_data.php
-│   │   │   └── recent_data.php
 │   │   ├── MdwikiSql/
 │   │   │   ├── add_helper.php
 │   │   │   ├── Database.php
@@ -23,12 +18,8 @@ src/
 │   │   │   ├── langcode.php
 │   │   │   ├── sql_tables.php
 │   │   │   └── tables.php
-│   │   ├── td_api_wrap/
-│   │   │   └── td_api.php
-│   │   ├── CurrentUser.php
 │   │   ├── bootstrap.php
-│   │   ├── README.md
-│   │   └── settings.php
+│   │   └── README.md
 │   ├── coordinator/
 │   │   ├── admin/
 │   │   │   ├── add/
@@ -97,16 +88,38 @@ src/
 │   │   ├── admin.7z
 │   │   ├── bootstrap.php
 │   │   ├── index.php
-│   │   └── README.md
-│   ├── tools/
-│   │   ├── categories.php
+│   │   ├── README.md
+│   │   └── RecentTranslations.php
+│   ├── SQLorAPI/
+│   │   ├── ApiOrSqlService.php
 │   │   ├── bootstrap.php
+│   │   ├── CategoriesTable.php
+│   │   ├── funcs.php
+│   │   ├── InProcessTable.php
+│   │   ├── LeaderboardTable.php
+│   │   ├── PagesTable.php
+│   │   ├── recent_data.php
+│   │   ├── SettingsTable.php
+│   │   ├── TitlesTable.php
+│   │   ├── UsersTable.php
+│   │   └── ViewsTable.php
+│   ├── tools/
+│   │   ├── bootstrap.php
+│   │   ├── categories.php
 │   │   ├── index.php
 │   │   ├── last.php
 │   │   ├── process.php
 │   │   ├── process1.php
 │   │   ├── process_total.php
 │   │   └── stat.php
+│   ├── User/
+│   │   ├── AccessKeyRepository.php
+│   │   ├── bootstrap.php
+│   │   ├── CoordinatorRepository.php
+│   │   ├── CurrentUser.php
+│   │   ├── README.md
+│   │   ├── SessionManager.php
+│   │   └── UserCookieService.php
 │   ├── utils/
 │   │   ├── html.php
 │   │   ├── README.md
@@ -114,12 +127,14 @@ src/
 │   │   ├── tables_dir.php
 │   │   └── TestPrinter.php
 │   ├── 404.php
-│   ├── csrf.php
 │   ├── bootstrap.php
-│   └── index.php
+│   ├── csrf.php
+│   ├── index.php
+│   ├── Logger.php
+│   └── Settings.php
 ├── css/
 │   ├── sidebar-desktop.css
-│   ├── sidebar-mobile.css
+│   └── sidebar-mobile.css
 ├── js/
 │   ├── add_by_url.js
 │   ├── autocomplate.js
@@ -127,11 +142,12 @@ src/
 │   ├── footer.js
 │   ├── reports-script.js
 │   └── sidebar.js
-├── templates/
+├── Layout/
 │   ├── bootstrap.php
 │   ├── PageFooter.php
 │   ├── PageHead.php
-│   └── PageHeader.php
+│   ├── PageHeader.php
+│   └── PageRunner.php
 ├── bootstrap.php
 ├── index.php
 ├── sugust.php

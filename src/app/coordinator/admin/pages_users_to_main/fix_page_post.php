@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\PagesUsersToMain;
 use App\Tables\Main\MainTables;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 use function App\MdwikiSql\execute_query;
-use function App\MdwikiSql\fetch_query;
+use function App\MdwikiSql\fetchQuery;
 use function App\MdwikiSql\AddHelper\add_pages_to_db;
 use function App\MdwikiSql\AddHelper\checkAfterAdd;
 
@@ -40,7 +40,7 @@ class FixItPostProcessor extends AbstractPostHandler
             $this->addError("Invalid id supplied.");
         }
 
-        $pageData = fetch_query("SELECT * FROM pages_users WHERE id = ?", [$id]);
+        $pageData = fetchQuery("SELECT * FROM pages_users WHERE id = ?", [$id]);
 
         if (empty($pageData)) {
             $this->addError("Page with id:($id) not found.");
@@ -97,8 +97,8 @@ class FixItPostProcessor extends AbstractPostHandler
         execute_query("DELETE FROM pages_users_to_main WHERE id = ?", [$id]);
         execute_query("DELETE FROM pages_users WHERE id = ?", [$id]);
 
-        $findIt1 = fetch_query("SELECT 1 FROM pages_users WHERE id = ? LIMIT 1", [$id]);
-        $findIt2 = fetch_query("SELECT 1 FROM pages_users_to_main WHERE id = ? LIMIT 1", [$id]);
+        $findIt1 = fetchQuery("SELECT 1 FROM pages_users WHERE id = ? LIMIT 1", [$id]);
+        $findIt2 = fetchQuery("SELECT 1 FROM pages_users_to_main WHERE id = ? LIMIT 1", [$id]);
 
         return empty($findIt1) && empty($findIt2);
     }

@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Campaigns;
 
 use App\Coordinator\Admin\Common\AbstractController;
-use function App\SQLorAPI\Funcs\get_td_or_sql_categories;
+use App\SQLorAPI\CategoriesTable;
 
 
 require_once __DIR__ . '/campaigns_post.php';
@@ -23,7 +23,7 @@ class CampaignsIndexController extends AbstractController
     }
     public function renderFormCard(): void
     {
-        $categories = get_td_or_sql_categories();
+        $categories = (CategoriesTable::getInstance())->getCategories();
 
         $tableRows = $this->buildTableRows($categories);
 

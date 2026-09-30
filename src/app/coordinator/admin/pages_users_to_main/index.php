@@ -3,16 +3,15 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
-use App\User\CurrentUser;
-use App\Coordinator\Admin\Common\AbstractControllerNoPost;
+use App\SQLorAPI\TitlesTable;
+use App\SQLorAPI\PagesTable;
 use App\Tables\Langs\LangsTables;
+
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\make_edit_icon_new;
-use function App\SQLorAPI\Recent\get_pages_users_to_main;
-use function App\SQLorAPI\Funcs\get_pages_users_langs;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
-use function App\SQLorAPI\Funcs\td_or_sql_titles_infos;
 
 /**
  * Class PagesUsersToMainIndexController
@@ -30,7 +29,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 		// $this->currentUser = CurrentUser::getInstance();
 		$this->lang = $_GET['lang'] ?? 'All';
 
-		if ($this->lang !== 'All' && !isset(LangsTables::$LCodeToLang[$this->lang])) {
+		if ($this->lang !== 'All' && !LangsTables::get_lang_title($this->lang)) {
 			$this->lang = 'All';
 		}
 	}
@@ -42,7 +41,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	{
 		$this->validateCoordinator();
 
-		$sqlResults = get_pages_users_to_main($this->lang);
+		$sqlResults = (PagesTable::getInstance())->getPagesUsersToMain($this->lang);
 
 		$titlesQids = $this->getTitlesQidsMap($sqlResults);
 
@@ -75,7 +74,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 			return [];
 		}
 
-		$infos = td_or_sql_titles_infos($titles);
+		$infos = (TitlesTable::getInstance())->getTitlesInfosByTitles($titles);
 
 		return array_column($infos, 'qid', 'title');
 	}
@@ -86,7 +85,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	private function getLanguages(): array
 	{
 		$tabes = [];
-		$llangs = get_pages_users_langs();
+		$llangs = (PagesTable::getInstance())->getPagesUsersLangs();
 
 		foreach ($llangs as $tat) {
 			if (gettype($tat) !== 'string') {
