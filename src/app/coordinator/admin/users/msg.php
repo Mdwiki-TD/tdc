@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Users;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
-use App\Tables\Main\MainTables;
+use App\Tables\Langs\LangsTables;
 use function App\csrf\generate_csrf_token;
 use function App\MdwikiSql\fetchQuery;
 use function App\APICalls\WikiApi\get_views;
@@ -138,7 +138,7 @@ class MsgController extends AbstractControllerNoPost
 
         $views2 = "<a target='_blank' href='$urlViews3'><font color='#0000ff'>$views people</font></a>";
 
-        $lang2 = MainTables::$xLangsTable[$this->lang]['name'] ?? $this->lang;
+        $lang2 = LangsTables::get_lang_name($this->lang) ?? $this->lang;
         $lang2 = make_target_url($this->target, $this->lang, $lang2);
 
         $date = $this->date;

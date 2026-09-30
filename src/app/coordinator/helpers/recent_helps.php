@@ -4,7 +4,7 @@
 namespace App\Coordinator\Helps\RecentHelps;
 
 use App\Logger;
-use function App\Tables\Langs\get_lang_title;
+use App\Tables\Langs\LangsTables;
 
 function filter_recent2($lang, $result)
 {
@@ -14,7 +14,7 @@ function filter_recent2($lang, $result)
     $langList = "<option data-tokens='All' value='All'>All</option>";
 
     foreach ($result as $langCode) {
-        $langeee = get_lang_title($langCode) ?? '';
+        $langeee = LangsTables::get_lang_title($langCode) ?? '';
         $selected = ($langCode == $lang) ? 'selected' : '';
         if (empty($langCode)) continue;
         $langList .= <<<HTML
