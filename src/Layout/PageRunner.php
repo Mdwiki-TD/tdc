@@ -31,6 +31,5 @@ final class PageRunner
 
         $pageFooter = new PageFooter();
         $pageFooter->render($timeStart);
-
     }
 }
