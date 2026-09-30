@@ -38,9 +38,9 @@ use App\SQLorAPI\TitlesTable;
 
 class LangsTables
 {
-    public static $already_loaded = false;
+    private static $already_loaded = false;
     public static $L_skip_codes = ["commons", "species", "ary", "arz", "meta", "en", "simple"];
-    public static $LChangeCodes = [
+    private static $LChangeCodes = [
         "gsw" => "als",
         "sgs" => "bat-smg",
         "nb"    =>    "no",
@@ -58,9 +58,9 @@ class LangsTables
         "zh_yue"    =>    "zh-yue",
         "yue"    =>    "zh-yue",
     ];
-    public static $L_code_to_lang_name = [];
-    public static $L_lang_to_code = [];
-    public static $LCodeToLang = [];
+    private static $L_code_to_lang_name = [];
+    private static $L_lang_to_code = [];
+    private static $LCodeToLang = [];
 
     private static function load(): void
     {

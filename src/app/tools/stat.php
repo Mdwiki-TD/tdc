@@ -92,13 +92,13 @@ class StatController extends AbstractControllerNoPost
 				$noAllref++;
 			}
 
-			$asse = MainTables::$xAssessmentsTable[$title] ?? '';
-			if (!isset(MainTables::$xAssessmentsTable[$title])) {
+			$asse = MainTables::getAssessments($title);
+			if (empty($asse)) {
 				$noImportance++;
 			}
 
-			$pv = MainTables::$xEnwikiPageviewsTable[$title] ?? 0;
-			if (!isset(MainTables::$xEnwikiPageviewsTable[$title])) {
+			$pv = MainTables::getViews($title);
+			if (empty($pv)) {
 				$noPv++;
 			}
 

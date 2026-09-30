@@ -7,7 +7,7 @@ use App\Tables\Main\MainTables;
 use App\SQLorAPI\InProcessTable;
 use function App\Results\GetResults\get_cat_exists_and_missing;
 
-function get_sugust($title, $lang)
+function get_sugust($title, $lang): array
 {
 
     $title  = $title ?? '';
@@ -43,7 +43,7 @@ function get_sugust($title, $lang)
     $dd = [];
     foreach ($itemsMissing as $t) {
         $key = str_replace('_', ' ', $t);
-        $dd[$key] = MainTables::$xEnwikiPageviewsTable[$key] ?? 0;
+        $dd[$key] = MainTables::getViews($key);
     }
 
     arsort($dd);

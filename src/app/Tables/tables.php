@@ -6,13 +6,13 @@ use App\SQLorAPI\TitlesTable;
 
 class MainTables
 {
-	public static $already_loaded = false;
-	public static $xEnwikiPageviewsTable = [];
-	public static $xWordsTable = [];
-	public static $xAllWordsTable = [];
-	public static $xAllRefsTable = [];
-	public static $xLeadRefsTable = [];
-	public static $xAssessmentsTable = [];
+	private static $already_loaded = false;
+	private static $xEnwikiPageviewsTable = [];
+	private static $xWordsTable = [];
+	private static $xAllWordsTable = [];
+	private static $xAllRefsTable = [];
+	private static $xLeadRefsTable = [];
+	private static $xAssessmentsTable = [];
 
 	/**
 	 * Get the ref count based on mdtitle and translateType.
@@ -74,5 +74,15 @@ class MainTables
 
 			self::$xAssessmentsTable[$title] = $tab['importance'];
 		};
+	}
+	public static function getViews(string $title): int
+	{
+		self::load();
+		return self::$xEnwikiPageviewsTable[$title] ?? 0;
+	}
+	public static function getAssessments(string $title): string|null
+	{
+		self::load();
+		return self::$xAssessmentsTable[$title] ?? null;
 	}
 }
