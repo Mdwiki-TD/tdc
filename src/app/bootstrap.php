@@ -70,27 +70,27 @@ if (file_exists($vendorAutoload)) {
 
 // Load security module first
 include_once __DIR__ . '/csrf.php';
-include_once __DIR__ . '/Logger.php';
-
-# Utils
-include_once __DIR__ . '/Utils/SidebarMenu.php';
-include_once __DIR__ . '/Utils/html.php';
-include_once __DIR__ . '/Utils/tables_dir.php';
-
 include_once __DIR__ . '/User/bootstrap.php';
 include_once __DIR__ . '/Settings.php';
+include_once __DIR__ . '/Logger.php';
+
+# SQLorAPI
+include_once __DIR__ . '/SQLorAPI/bootstrap.php';
 
 # MdwikiSql
 include_once __DIR__ . '/MdwikiSql/Database.php';
 include_once __DIR__ . '/MdwikiSql/add_helper.php';
 include_once __DIR__ . '/MdwikiSql/mdwiki_sql.php';
 
-# SQLorAPI
-include_once __DIR__ . '/SQLorAPI/bootstrap.php';
-
+# Controllers
+include_once __DIR__ . '/index.php'; // AppRouter
 include_once __DIR__ . '/backend/bootstrap.php';
-require_once __DIR__ . '/coordinator/bootstrap.php';
-require_once __DIR__ . '/tools/bootstrap.php';
+include_once __DIR__ . '/coordinator/bootstrap.php';
+include_once __DIR__ . '/tools/bootstrap.php';
 
-# AppRouter
-include_once __DIR__ . '/index.php';
+# Utils
+include_once __DIR__ . '/Utils/SidebarMenu.php';
+include_once __DIR__ . '/Utils/html.php';
+include_once __DIR__ . '/Utils/html2.php';
+include_once __DIR__ . '/Utils/htmlUrls.php';
+include_once __DIR__ . '/Utils/tables_dir.php';

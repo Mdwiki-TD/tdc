@@ -7,7 +7,7 @@ on:
         types: [opened, synchronize, reopened]
 
 jobs:
-    test:
+    phpunit:
         runs-on: ubuntu-latest
 
         strategy:
@@ -15,8 +15,8 @@ jobs:
                 php-version: ["8.2"]
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v6
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
@@ -38,7 +38,7 @@ jobs:
                       ${{ runner.os }}-composer-
 
             - name: Install dependencies
-              run: composer install --prefer-dist --no-progress
+              run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-            - name: Run PHPUnit tests
-              run: vendor/bin/phpunit --testdox
+            - name: Run PHPUnit
+              run: vendor/bin/phpunit tests --testdox --colors=always -c phpunit.xml
