@@ -2,7 +2,6 @@
 
 namespace App\Utils\Html;
 
-
 function make_mdwiki_href($title)
 {
     if (empty($title)) return $title;

@@ -77,6 +77,9 @@ include_once __DIR__ . '/Logger.php';
 # SQLorAPI
 include_once __DIR__ . '/SQLorAPI/bootstrap.php';
 
+# Results27
+include_once __DIR__ . "/Results27/bootstrap.php";
+
 # MdwikiSql
 include_once __DIR__ . '/MdwikiSql/Database.php';
 include_once __DIR__ . '/MdwikiSql/add_helper.php';
