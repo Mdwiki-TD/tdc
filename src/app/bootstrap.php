@@ -85,9 +85,12 @@ include_once __DIR__ . '/MdwikiSql/Database.php';
 include_once __DIR__ . '/MdwikiSql/add_helper.php';
 include_once __DIR__ . '/MdwikiSql/mdwiki_sql.php';
 
+# ApiClients
+include_once __DIR__ . '/ApiClients/mdwiki_api.php';
+include_once __DIR__ . '/ApiClients/wiki_api.php';
+
 # Controllers
 include_once __DIR__ . '/Controllers/AppRouter.php'; // AppRouter
-include_once __DIR__ . '/backend/bootstrap.php';
 include_once __DIR__ . '/coordinator/bootstrap.php';
 include_once __DIR__ . '/tools/bootstrap.php';
 

@@ -134,6 +134,7 @@ src/
 │   ├── bootstrap.php
 │   ├── CSRFManager.php
 │   ├── Logger.php
+│   ├── README.md
 │   └── Settings.php
 ├── css/
 │   ├── sidebar-desktop.css
