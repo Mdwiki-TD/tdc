@@ -96,4 +96,3 @@ include_once __DIR__ . '/Utils/SidebarMenu.php';
 include_once __DIR__ . '/Utils/html.php';
 include_once __DIR__ . '/Utils/html2.php';
 include_once __DIR__ . '/Utils/htmlUrls.php';
-include_once __DIR__ . '/Utils/tables_dir.php';
