@@ -34,13 +34,21 @@ https://db-names.toolforge.org/
 "zh-yue" : "yue"
 */
 
-use App\Tables\Main\MainTables;
+use App\SQLorAPI\TitlesTable;
 
 class LangsTables
 {
+    public static $L_skip_codes = [];
     public static $LChangeCodes = [];
+    public static $L_code_to_lang_name = [];
+    public static $L_lang_to_code = [];
     public static $LCodeToLang = [];
 }
+
+LangsTables::$L_skip_codes = ["commons", "species", "ary", "arz", "meta", "en", "simple"];
+/*
+bh	        bho
+*/
 
 LangsTables::$LChangeCodes = [
     "gsw" => "als",
@@ -61,16 +69,51 @@ LangsTables::$LChangeCodes = [
     "yue"    =>    "zh-yue",
 ];
 
-foreach (MainTables::$xLangsTable as $_ => $langTab) {
-    $langCode = $langTab['code'] ?? "";
-    $langName = $langTab['autonym'] ?? "";
-
-    if (empty($langCode)) continue;
-    if (isset(LangsTables::$LChangeCodes[$langCode]) && isset(LangsTables::$LCodeToLang[LangsTables::$LChangeCodes[$langCode]])) {
-        continue;
+function load_langs_tables()
+{
+    static $already_loaded = false;
+    if ($already_loaded) {
+        return;
     }
+    $already_loaded = true;
 
-    $langTitle = "($langCode) $langName";
+    $langs_table = (TitlesTable::getInstance())->getLangs();
 
-    LangsTables::$LCodeToLang[$langCode] = $langTitle;
-};
+    foreach ($langs_table as $_ => $langTab) {
+        $langCode = $langTab['code'] ?? "";
+        $langName = $langTab['autonym'] ?? "";
+
+        if (empty($langCode)) continue;
+        if (isset(LangsTables::$LChangeCodes[$langCode]) && isset(LangsTables::$LCodeToLang[LangsTables::$LChangeCodes[$langCode]])) {
+            continue;
+        }
+
+        $langTitle = "($langCode) $langName";
+
+        LangsTables::$LCodeToLang[$langCode] = $langTitle;
+        LangsTables::$L_code_to_lang_name[$langCode] = $langName;
+        LangsTables::$L_lang_to_code[$langTitle] = $langCode;
+    }
+}
+
+function get_lang_title($lang_code)
+{
+    load_langs_tables();
+
+    return LangsTables::$LCodeToLang[$lang_code] ?? null;
+}
+
+function get_lang_name($code)
+{
+    load_langs_tables();
+
+    return LangsTables::$L_code_to_lang_name[$code] ?? null;
+}
+
+
+function get_lang_code($lang_title)
+{
+    load_langs_tables();
+
+    return LangsTables::$L_lang_to_code[$lang_title] ?? null;
+}

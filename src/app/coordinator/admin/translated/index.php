@@ -5,10 +5,10 @@ namespace App\Coordinator\Admin\Translated;
 
 use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Tables\Langs\LangsTables;
 use App\SQLorAPI\PagesTable;
 use App\SQLorAPI\RecentTable;
 
+use function App\Tables\Langs\get_lang_title;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\make_edit_icon_new;
@@ -37,7 +37,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
 			$this->table = "pages_users";
 		}
 
-		if ($this->lang !== 'All' && !isset(LangsTables::$LCodeToLang[$this->lang])) {
+		if ($this->lang !== 'All' && !get_lang_title($this->lang)) {
 			$this->lang = 'All';
 		}
 	}

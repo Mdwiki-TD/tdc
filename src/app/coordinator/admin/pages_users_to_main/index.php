@@ -6,8 +6,8 @@ namespace App\Coordinator\Admin\PagesUsersToMain;
 use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\PagesTable;
 
+use function App\Tables\Langs\get_lang_title;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Tables\Langs\LangsTables;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Utils\Html\make_edit_icon_new;
@@ -29,7 +29,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 		// $this->currentUser = CurrentUser::getInstance();
 		$this->lang = $_GET['lang'] ?? 'All';
 
-		if ($this->lang !== 'All' && !isset(LangsTables::$LCodeToLang[$this->lang])) {
+		if ($this->lang !== 'All' && !get_lang_title($this->lang)) {
 			$this->lang = 'All';
 		}
 	}
