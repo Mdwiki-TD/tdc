@@ -3,10 +3,8 @@
 
 namespace App\Coordinator\Admin\Qids;
 
+use App\SQLorAPI\QidsTable;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\execute_query;
-use function App\MdwikiSql\get_qid_row;
-use function App\MdwikiSql\get_qid_by_title;
 
 /**
  * Class QidsPostProcessor
@@ -64,7 +62,7 @@ class QidsPostProcessor extends AbstractPostHandler
 				continue;
 			}
 
-			$txTab = get_qid_row('qid', $qid, $this->qidTable);
+			$txTab = (QidsTable::getInstance())->get_qid_row('qid', $qid, $this->qidTable);
 
 			if ($txTab) {
 				$txId = $txTab['id'];
@@ -81,7 +79,7 @@ class QidsPostProcessor extends AbstractPostHandler
 				}
 			}
 
-			$ttTab = get_qid_row('title', $title, $this->qidTable);
+			$ttTab = (QidsTable::getInstance())->get_qid_row('title', $title, $this->qidTable);
 
 			if ($ttTab) {
 				$qidOfTitle5 = $ttTab['qid'];
@@ -119,7 +117,7 @@ class QidsPostProcessor extends AbstractPostHandler
 			$params = [$title, $qid, $id];
 		}
 
-		execute_query($qua, $params);
+		(QidsTable::getInstance())->db->executequery($qua, $params);
 
 		if (!empty($qid)) {
 			$qua2 = <<<SQL
@@ -127,7 +125,7 @@ class QidsPostProcessor extends AbstractPostHandler
                 WHERE title = ? and (qid = '' OR qid IS NULL);
             SQL;
 
-			execute_query($qua2, [$qid, $title]);
+			(QidsTable::getInstance())->db->executequery($qua2, [$qid, $title]);
 		}
 	}
 
@@ -138,7 +136,7 @@ class QidsPostProcessor extends AbstractPostHandler
 	{
 		$this->addIt($id, $title, $qid);
 
-		$qidOfTitle = get_qid_by_title($title, $this->qidTable);
+		$qidOfTitle = (QidsTable::getInstance())->get_qid_by_title($title, $this->qidTable);
 
 		if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
 			$this->addText("Data Changes successfully of title: $title, Qid: $qid");
@@ -154,7 +152,7 @@ class QidsPostProcessor extends AbstractPostHandler
 	{
 		$this->addIt('', $title, $qid);
 
-		$qidOfTitle = get_qid_by_title($title, $this->qidTable);
+		$qidOfTitle = (QidsTable::getInstance())->get_qid_by_title($title, $this->qidTable);
 
 		if (!empty($qidOfTitle) && $qidOfTitle == $qid) {
 			$this->addText("Qid added successfully for title: $title.");

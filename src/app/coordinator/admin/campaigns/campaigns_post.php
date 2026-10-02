@@ -4,7 +4,6 @@
 namespace App\Coordinator\Admin\Campaigns;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\execute_query;
 
 /**
  * Class CampaignsPostProcessor
@@ -46,7 +45,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 
 			if (!empty($del) && $del != "0") {
 				$qua2 = "DELETE FROM categories WHERE id = ?";
-				execute_query($qua2, [$del]);
+				$this->db->executequery($qua2, [$del]);
 				continue;
 			}
 
@@ -70,7 +69,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 
 			$params = [$camp, $cat1, $cat2, $dep, $isDefault, $ido];
 
-			execute_query($qua, $params);
+			$this->db->executequery($qua, $params);
 		}
 	}
 
@@ -91,7 +90,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 			$qua = "INSERT INTO categories (category, campaign, depth, is_default, category2) SELECT ?, ?, ?, ?, ?";
 			$params = [$cat1, $camp, $dep, $isDefault, $cat2];
 
-			execute_query($qua, $params);
+			$this->db->executequery($qua, $params);
 		}
 	}
 

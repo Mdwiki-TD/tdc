@@ -3,9 +3,9 @@
 
 namespace App\Coordinator\Admin\Users;
 
+use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractEditController;
 use function App\Utils\Html\make_project_to_user;
-use function App\MdwikiSql\get_user_by_id;
 
 require_once __DIR__ . '/edit_user_post.php';
 
@@ -31,7 +31,7 @@ class EditUserController extends AbstractEditController
      */
     private function buildFormHtml(string $userId): string
     {
-        $userInfo  = get_user_by_id($userId);
+        $userInfo  = (UsersTable::getInstance())->get_user_by_id($userId);
         $user      = $userInfo['username'] ?? '';
         $wiki      = $userInfo['wiki'] ?? '';
         $userGroup = $userInfo['user_group'] ?? '';

@@ -83,7 +83,6 @@ include_once __DIR__ . "/Results27/bootstrap.php";
 # MdwikiSql
 include_once __DIR__ . '/MdwikiSql/Database.php';
 include_once __DIR__ . '/MdwikiSql/AddHelper.php';
-include_once __DIR__ . '/MdwikiSql/mdwiki_sql.php';
 
 # ApiClients
 include_once __DIR__ . '/ApiClients/mdwiki_api.php';

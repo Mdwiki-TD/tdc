@@ -4,7 +4,6 @@
 namespace App\Coordinator\Admin\UsersNotInprocess;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\execute_query;
 
 /**
  * Class UsersNotInprocessPostProcessor
@@ -35,7 +34,7 @@ class UsersNotInprocessPostProcessor extends AbstractPostHandler
 			if (!empty($del) && !empty($uId)) {
 				$qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
 
-				$result = execute_query($qua2, [$uId]);
+				$result = $this->db->executequery($qua2, [$uId]);
 
 				if ($result === false) {
 					$this->addError("Failed to delete user $user.");
@@ -67,7 +66,7 @@ class UsersNotInprocessPostProcessor extends AbstractPostHandler
                         is_active = VALUES(is_active)
                 SQL;
 
-				$result = execute_query($qua, [$user, $isActive]);
+				$result = $this->db->executequery($qua, [$user, $isActive]);
 
 				if ($result === false) {
 					$this->addError("Failed to add user $user.");

@@ -3,12 +3,9 @@
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
+use App\MdwikiSql\AddHelper;
 use App\Tables\Main\MainTables;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\execute_query;
-use function App\MdwikiSql\fetchQuery;
-use function App\MdwikiSql\AddHelper\add_pages_to_db;
-use function App\MdwikiSql\AddHelper\checkAfterAdd;
 
 /**
  * Class FixItPostProcessor
@@ -17,6 +14,13 @@ use function App\MdwikiSql\AddHelper\checkAfterAdd;
 class FixItPostProcessor extends AbstractPostHandler
 {
     protected bool $isPopUpPage = true;
+
+    private AddHelper $addHelper;
+
+    public function __construct()
+    {
+        $this->addHelper = new AddHelper();
+    }
 
     public function process(array $post): void
     {
@@ -40,7 +44,7 @@ class FixItPostProcessor extends AbstractPostHandler
             $this->addError("Invalid id supplied.");
         }
 
-        $pageData = fetchQuery("SELECT * FROM pages_users WHERE id = ?", [$id]);
+        $pageData = $this->db->fetchQuery("SELECT * FROM pages_users WHERE id = ?", [$id]);
 
         if (empty($pageData)) {
             $this->addError("Page with id:($id) not found.");
@@ -57,7 +61,7 @@ class FixItPostProcessor extends AbstractPostHandler
             $word = MainTables::getWord($title, $translateType);
         }
 
-        $add = add_pages_to_db(
+        $add = $this->addHelper->addPagesToDb(
             $title,
             $translateType,
             $cat,
@@ -74,7 +78,7 @@ class FixItPostProcessor extends AbstractPostHandler
             $this->addText("Translations added successfully.");
         }
 
-        $result = checkAfterAdd($title, $lang, $newUser, $newTarget);
+        $result = $this->addHelper->checkAfterAdd($title, $lang, $newUser, $newTarget);
 
         if ($result === false) {
             $this->addError("checkAfterAdd: Failed to add translations.");
@@ -94,11 +98,11 @@ class FixItPostProcessor extends AbstractPostHandler
      */
     private function deleteUserPage(int $id): bool
     {
-        execute_query("DELETE FROM pages_users_to_main WHERE id = ?", [$id]);
-        execute_query("DELETE FROM pages_users WHERE id = ?", [$id]);
+        $this->db->executequery("DELETE FROM pages_users_to_main WHERE id = ?", [$id]);
+        $this->db->executequery("DELETE FROM pages_users WHERE id = ?", [$id]);
 
-        $findIt1 = fetchQuery("SELECT 1 FROM pages_users WHERE id = ? LIMIT 1", [$id]);
-        $findIt2 = fetchQuery("SELECT 1 FROM pages_users_to_main WHERE id = ? LIMIT 1", [$id]);
+        $findIt1 = $this->db->fetchQuery("SELECT 1 FROM pages_users WHERE id = ? LIMIT 1", [$id]);
+        $findIt2 = $this->db->fetchQuery("SELECT 1 FROM pages_users_to_main WHERE id = ? LIMIT 1", [$id]);
 
         return empty($findIt1) && empty($findIt2);
     }

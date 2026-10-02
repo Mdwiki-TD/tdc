@@ -3,6 +3,7 @@
 
 namespace App\Coordinator\Admin\Common;
 
+use App\MdwikiSql\Database;
 use App\User\CurrentUser;
 
 /**
@@ -12,6 +13,12 @@ use App\User\CurrentUser;
  */
 abstract class AbstractControllerNoPost
 {
+    public Database $db;
+
+    public function __construct()
+    {
+        $this->db = new Database();
+    }
     public function validateCoordinator(): void
     {
         // Validate user authorization

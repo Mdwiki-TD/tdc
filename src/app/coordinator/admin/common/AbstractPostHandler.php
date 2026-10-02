@@ -5,6 +5,7 @@ namespace App\Coordinator\Admin\Common;
 
 use App\User\CurrentUser;
 use App\Security\CSRFManager;
+use App\MdwikiSql\Database;
 use function App\Utils\Html\div_alert;
 
 /**
@@ -26,6 +27,12 @@ abstract class AbstractPostHandler
     protected array $errors = [];
     protected array $texts = [];
 
+    public Database $db;
+
+    public function __construct()
+    {
+        $this->db = new Database();
+    }
     public function validateCoordinator(): void
     {
         // Validate user authorization

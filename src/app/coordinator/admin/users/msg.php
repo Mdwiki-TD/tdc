@@ -8,7 +8,6 @@ use App\User\CurrentUser;
 use App\Tables\Langs\LangsTables;
 use App\Security\CSRFManager;
 
-use function App\MdwikiSql\fetchQuery;
 use function App\ApiClients\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
@@ -112,7 +111,7 @@ class MsgController extends AbstractControllerNoPost
     {
         $emailsArray = [];
 
-        foreach (fetchQuery("select username, email from users;") as $key => $ta) {
+        foreach ($this->db->fetchQuery("select username, email from users;") as $key => $ta) {
             $emailsArray[$ta['username']] = $ta['email'];
         }
 

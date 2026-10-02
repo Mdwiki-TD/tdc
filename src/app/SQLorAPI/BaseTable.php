@@ -13,6 +13,6 @@ class BaseTable
     {
         $this->db = new Database();
         // set $useTdApi to false in tdc repo
-        $this->service = $service ?? new ApiOrSqlService($db, false);
+        $this->service = $service ?? new ApiOrSqlService($this->db, false);
     }
 }

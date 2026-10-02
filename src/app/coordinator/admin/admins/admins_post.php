@@ -4,7 +4,6 @@
 namespace App\Coordinator\Admin\Admins;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\execute_query;
 
 /**
  * Class AdminsPostProcessor
@@ -41,7 +40,7 @@ class AdminsPostProcessor extends AbstractPostHandler
             if (!empty($del) && !empty($uId)) {
                 $qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
 
-                $result = execute_query($qua2, [$uId]);
+                $result = $this->db->executequery($qua2, [$uId]);
 
                 if ($result === false) {
                     $this->addError("Failed to delete user $username.");
@@ -71,7 +70,7 @@ class AdminsPostProcessor extends AbstractPostHandler
                         is_active = VALUES(is_active)
                 SQL;
 
-                $result = execute_query($qua, [$username, $isActive]);
+                $result = $this->db->executequery($qua, [$username, $isActive]);
 
                 if ($result === false) {
                     $this->addError("Failed to add user $username.");
