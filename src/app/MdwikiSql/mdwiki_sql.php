@@ -61,7 +61,8 @@ function execute_query(string $sqlQuery, ?array $params = null): bool
     $db = null;
 
     return $results;
-};
+}
+
 function fetchQuery(string $sqlQuery, ?array $params = null, $noprint = false): array
 {
     // Create a new database object
@@ -77,7 +78,7 @@ function fetchQuery(string $sqlQuery, ?array $params = null, $noprint = false): 
     $db = null;
 
     return $results;
-};
+}
 
 function sql_add_user($userName, $email, $wiki, $project)
 {
