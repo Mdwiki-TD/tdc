@@ -15,6 +15,10 @@ class EditUserPostProcessor extends AbstractPostHandler
     protected bool $isPopUpPage = true;
 
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 	/**
 	 * Validates and processes the incoming submission.
 	 */

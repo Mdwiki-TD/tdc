@@ -24,6 +24,7 @@ class UsersIndexController extends AbstractControllerNoPost
 
 	public function __construct()
 	{
+        parent::__construct();
 		$this->limit = (int) ($_GET['limit'] ?? 0);
 		$this->mainProject = $_GET['project'] ?? 'All';
 	}

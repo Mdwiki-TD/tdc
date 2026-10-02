@@ -15,6 +15,10 @@ class UsersNotInprocessPostProcessor extends AbstractPostHandler
 
 	private const DB_TABLE_NAME = 'users_no_inprocess';
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 	public function process(array $post): void
 	{
 		$this->processRows($post['rows'] ?? []);

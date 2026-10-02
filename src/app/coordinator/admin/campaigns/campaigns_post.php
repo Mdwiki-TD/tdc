@@ -18,6 +18,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 
 	public function __construct()
 	{
+        parent::__construct();
 		$this->defaultCat = $_POST['default_cat'] ?? '';
 	}
 

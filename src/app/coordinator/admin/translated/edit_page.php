@@ -19,6 +19,7 @@ class EditPageController extends AbstractEditController
 
     public function __construct()
     {
+        parent::__construct();
         $this->id    = $_GET['id'] ?? $_POST['id'] ?? '';
         $cand        = $_GET['table'] ?? $_POST['table'] ?? '';
         $this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';

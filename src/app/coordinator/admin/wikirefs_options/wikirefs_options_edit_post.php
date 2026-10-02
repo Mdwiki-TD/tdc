@@ -14,6 +14,10 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
 {
     protected bool $isPopUpPage = true;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
     protected function process(array $post): void
     {
         $langCode  = trim($post['lang_code'] ?? '');

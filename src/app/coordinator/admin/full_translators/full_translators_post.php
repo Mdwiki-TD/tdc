@@ -15,6 +15,10 @@ class FullTranslatorsPostProcessor extends AbstractPostHandler
 
 	private const DB_TABLE_NAME = 'full_translators';
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
 	public function process(array $post): void
 	{

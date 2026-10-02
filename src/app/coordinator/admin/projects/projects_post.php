@@ -15,6 +15,10 @@ class ProjectsPostProcessor extends AbstractPostHandler
 {
     protected bool $isPopUpPage = false;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 	public function process(array $post): void
 	{
         $this->processRows($post['rows'] ?? []);

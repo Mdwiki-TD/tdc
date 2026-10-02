@@ -31,6 +31,7 @@ class MsgController extends AbstractControllerNoPost
 
     public function __construct()
     {
+        parent::__construct();
         $this->globalUsername = CurrentUser::getInstance()->getUsername();
 
         $this->test   = $_REQUEST['test'] ?? '';
@@ -40,7 +41,6 @@ class MsgController extends AbstractControllerNoPost
         $this->lang   = $_GET['lang'] ?? $_POST['lang'] ?? '';
         $this->target = $_GET['target'] ?? $_POST['target'] ?? '';
     }
-
     /**
      * Handles authentication and executes controller output.
      */

@@ -19,6 +19,7 @@ class FixItPostProcessor extends AbstractPostHandler
 
     public function __construct()
     {
+        parent::__construct();
         $this->addHelper = new AddHelper();
     }
 

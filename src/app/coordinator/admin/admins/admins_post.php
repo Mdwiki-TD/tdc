@@ -15,6 +15,11 @@ class AdminsPostProcessor extends AbstractPostHandler
 
     private const DB_TABLE_NAME = 'coordinators';
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Validates and processes the incoming submission.
      */

@@ -23,6 +23,7 @@ class EditPagePostHandler extends AbstractPostHandler
      */
     public function __construct(string $id, string $table)
     {
+        parent::__construct();
         $this->id = $id;
         $this->table = $table;
     }

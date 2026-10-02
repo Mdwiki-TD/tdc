@@ -22,6 +22,7 @@ class FixItController extends AbstractEditController
 
     public function __construct()
     {
+        parent::__construct();
         $this->id        = $_GET['id'] ?? '';
         $this->newTarget = $_GET['new_target'] ?? '';
         $this->newUser   = $_GET['new_user'] ?? '';

@@ -15,6 +15,10 @@ class TtPostProcessor extends AbstractPostHandler
     protected bool $isPopUpPage = true;
 
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 	/**
 	 * Executes authorization check and processes the POST submission.
 	 */
