@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/helpers/add_helper.php
+// src/app/coordinator/helpers/AddHelper.php
 
 namespace App\MdwikiSql\AddHelper;
 

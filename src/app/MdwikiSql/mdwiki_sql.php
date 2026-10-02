@@ -174,36 +174,6 @@ function insert_to_translate_type($ttTitle, $ttLead, $ttFull, $ttId = 0)
 }
 
 /**
- * Fetches a single user record by user_id.
- *
- * @param string $userId
- * @return array<string, mixed>|null
- */
-function get_user_by_id(string $userId): ?array
-{
-    if (empty($userId)) {
-        return null;
-    }
-    $result = fetchQuery("SELECT * FROM users WHERE user_id = ?", [$userId]);
-    return $result[0] ?? null;
-}
-
-/**
- * Fetches a single user record by username.
- *
- * @param string $username
- * @return array<string, mixed>|null
- */
-function get_user_by_username(string $username): ?array
-{
-    if (empty($username)) {
-        return null;
-    }
-    $result = fetchQuery("SELECT * FROM users WHERE username = ?", [$username]);
-    return $result[0] ?? null;
-}
-
-/**
  * Fetches a single qid row by column ('qid' or 'title') from 'qids' or 'qids_others'.
  *
  * @param string $column 'qid' or 'title'

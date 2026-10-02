@@ -82,17 +82,17 @@ include_once __DIR__ . "/Results27/bootstrap.php";
 
 # MdwikiSql
 include_once __DIR__ . '/MdwikiSql/Database.php';
-include_once __DIR__ . '/MdwikiSql/add_helper.php';
+include_once __DIR__ . '/MdwikiSql/AddHelper.php';
 include_once __DIR__ . '/MdwikiSql/mdwiki_sql.php';
 
 # ApiClients
 include_once __DIR__ . '/ApiClients/mdwiki_api.php';
-include_once __DIR__ . '/ApiClients/wiki_api.php';
+include_once __DIR__ . '/ApiClients/WikiApi.php';
 
 # Controllers
 include_once __DIR__ . '/Controllers/AppRouter.php'; // AppRouter
 include_once __DIR__ . '/coordinator/bootstrap.php';
-include_once __DIR__ . '/tools/bootstrap.php';
+include_once __DIR__ . '/Tools/bootstrap.php';
 
 # Tables
 include_once __DIR__ . '/Tables/sql_tables.php';

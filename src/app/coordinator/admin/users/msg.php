@@ -9,7 +9,7 @@ use App\Tables\Langs\LangsTables;
 use App\Security\CSRFManager;
 
 use function App\MdwikiSql\fetchQuery;
-use function App\APICalls\WikiApi\get_views;
+use function App\ApiClients\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Coordinator\Helps\Sugust\get_sugust;
