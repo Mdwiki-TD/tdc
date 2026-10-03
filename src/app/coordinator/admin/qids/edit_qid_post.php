@@ -117,7 +117,7 @@ class QidsPostProcessor extends AbstractPostHandler
 			$params = [$title, $qid, $id];
 		}
 
-		(QidsTable::getInstance())->db->executequery($qua, $params);
+		(QidsTable::getInstance())->db->executeQuery($qua, $params);
 
 		if (!empty($qid)) {
 			$qua2 = <<<SQL
@@ -125,7 +125,7 @@ class QidsPostProcessor extends AbstractPostHandler
                 WHERE title = ? and (qid = '' OR qid IS NULL);
             SQL;
 
-			(QidsTable::getInstance())->db->executequery($qua2, [$qid, $title]);
+			(QidsTable::getInstance())->db->executeQuery($qua2, [$qid, $title]);
 		}
 	}
 

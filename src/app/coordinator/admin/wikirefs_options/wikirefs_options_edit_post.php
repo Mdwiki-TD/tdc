@@ -43,7 +43,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     {
         $qua = "DELETE FROM language_settings WHERE id = ?";
 
-        $result = $this->db->executequery($qua, [$id]);
+        $result = $this->db->executeQuery($qua, [$id]);
 
         if ($result === false) {
             $this->addError("Failed to delete language $langCode.");
@@ -68,7 +68,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
             ";
         $params = [$langCode, $expend, $moveDots, $addEnLang, $id];
 
-        $result = $this->db->executequery($qua, $params);
+        $result = $this->db->executeQuery($qua, $params);
 
         if ($result === false) {
             $this->addError("Failed to update language $langCode.");
@@ -90,7 +90,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
         $qua = "INSERT INTO language_settings (lang_code, expend, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
         $params = [$langCode, $expend, $moveDots, $addEnLang];
 
-        $result = $this->db->executequery($qua, $params);
+        $result = $this->db->executeQuery($qua, $params);
 
         if ($result === false) {
             $this->addError("Failed to add language $langCode.");

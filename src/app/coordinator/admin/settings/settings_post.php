@@ -59,7 +59,7 @@ class SettingsPostProcessor extends AbstractPostHandler
         $params = [$value, $id];
 
         // Prepare and execute the SQL query with parameter binding
-        $results = $this->db->executequery($query, $params);
+        $results = $this->db->executeQuery($query, $params);
 
         return $results;
     }

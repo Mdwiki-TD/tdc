@@ -103,7 +103,7 @@ class EditUserPostProcessor extends AbstractPostHandler
 		$params = [$userName, $email, $wiki, $project, $userName];
 
 		// Prepare and execute the SQL query with parameter binding
-		$results = $this->db->executequery($qua, $params);
+		$results = $this->db->executeQuery($qua, $params);
 
 		return $results;
 	}
@@ -126,7 +126,7 @@ class EditUserPostProcessor extends AbstractPostHandler
 		$params = [$userName, $email, $project, $wiki, $userId];
 
 		// Prepare and execute the SQL query with parameter binding
-		$results = $this->db->executequery($qua, $params);
+		$results = $this->db->executeQuery($qua, $params);
 
 		return $results;
 	}

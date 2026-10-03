@@ -145,7 +145,7 @@ class QidsTable extends BaseTable
      * @param string $table 'qids' or 'qids_others'
      * @return array<string, mixed>|null
      */
-    function get_qid_row(string $column, string $value, string $table = 'qids'): ?array
+    public function get_qid_row(string $column, string $value, string $table = 'qids'): ?array
     {
         $allowedColumns = ['qid', 'title'];
         $allowedTables = ['qids', 'qids_others'];
@@ -165,7 +165,7 @@ class QidsTable extends BaseTable
      * @param string $table 'qids' or 'qids_others'
      * @return string|null
      */
-    function get_qid_by_title(string $title, string $table = 'qids'): ?string
+    public function get_qid_by_title(string $title, string $table = 'qids'): ?string
     {
         $row = $this->get_qid_row('title', $title, $table);
         return isset($row['qid']) ? (string) $row['qid'] : null;

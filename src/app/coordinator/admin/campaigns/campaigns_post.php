@@ -46,7 +46,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 
 			if (!empty($del) && $del != "0") {
 				$qua2 = "DELETE FROM categories WHERE id = ?";
-				$this->db->executequery($qua2, [$del]);
+				$this->db->executeQuery($qua2, [$del]);
 				continue;
 			}
 
@@ -70,7 +70,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 
 			$params = [$camp, $cat1, $cat2, $dep, $isDefault, $ido];
 
-			$this->db->executequery($qua, $params);
+			$this->db->executeQuery($qua, $params);
 		}
 	}
 
@@ -91,7 +91,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 			$qua = "INSERT INTO categories (category, campaign, depth, is_default, category2) SELECT ?, ?, ?, ?, ?";
 			$params = [$cat1, $camp, $dep, $isDefault, $cat2];
 
-			$this->db->executequery($qua, $params);
+			$this->db->executeQuery($qua, $params);
 		}
 	}
 

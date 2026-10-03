@@ -99,8 +99,8 @@ class FixItPostProcessor extends AbstractPostHandler
      */
     private function deleteUserPage(int $id): bool
     {
-        $this->db->executequery("DELETE FROM pages_users_to_main WHERE id = ?", [$id]);
-        $this->db->executequery("DELETE FROM pages_users WHERE id = ?", [$id]);
+        $this->db->executeQuery("DELETE FROM pages_users_to_main WHERE id = ?", [$id]);
+        $this->db->executeQuery("DELETE FROM pages_users WHERE id = ?", [$id]);
 
         $findIt1 = $this->db->fetchQuery("SELECT 1 FROM pages_users WHERE id = ? LIMIT 1", [$id]);
         $findIt2 = $this->db->fetchQuery("SELECT 1 FROM pages_users_to_main WHERE id = ? LIMIT 1", [$id]);

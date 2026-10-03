@@ -79,7 +79,7 @@ class AddHelper
 				echo "updateQuery: $updateQuery<br/>";
 			}
 
-			return $this->db->executequery($updateQuery, $updateParams);
+			return $this->db->executeQuery($updateQuery, $updateParams);
 		}
 
 		// If record does not exist, INSERT it
@@ -103,7 +103,7 @@ class AddHelper
 			echo "insertQuery: $insertQuery<br/>";
 		}
 
-		return $this->db->executequery($insertQuery, $insertParams);
+		return $this->db->executeQuery($insertQuery, $insertParams);
 	}
 
 	/**

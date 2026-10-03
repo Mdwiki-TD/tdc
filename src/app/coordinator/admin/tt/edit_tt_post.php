@@ -38,7 +38,7 @@ class TtPostProcessor extends AbstractPostHandler
 			$params = [$ttTitle, $ttLead, $ttFull];
 		};
 
-		$result = $this->db->executequery($query, $params);
+		$result = $this->db->executeQuery($query, $params);
 
 		return $result;
 	}

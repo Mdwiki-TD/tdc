@@ -35,7 +35,7 @@ class ProjectsPostProcessor extends AbstractPostHandler
 			$params = [$gTitle, $gTitle];
 		};
 
-		$result = $this->db->executequery($query, $params);
+		$result = $this->db->executeQuery($query, $params);
 
 		return $result;
 	}
@@ -53,7 +53,7 @@ class ProjectsPostProcessor extends AbstractPostHandler
 
 			if (!empty($del) && !empty($gId)) {
 				$qua2 = "DELETE FROM projects WHERE g_id = ?";
-				$this->db->executequery($qua2, [$gId]);
+				$this->db->executeQuery($qua2, [$gId]);
 
 				$this->addText("Project $gTitle deleted.");
 				continue;

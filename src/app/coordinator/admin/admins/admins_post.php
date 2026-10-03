@@ -45,7 +45,7 @@ class AdminsPostProcessor extends AbstractPostHandler
             if (!empty($del) && !empty($uId)) {
                 $qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
 
-                $result = $this->db->executequery($qua2, [$uId]);
+                $result = $this->db->executeQuery($qua2, [$uId]);
 
                 if ($result === false) {
                     $this->addError("Failed to delete user $username.");
@@ -75,7 +75,7 @@ class AdminsPostProcessor extends AbstractPostHandler
                         is_active = VALUES(is_active)
                 SQL;
 
-                $result = $this->db->executequery($qua, [$username, $isActive]);
+                $result = $this->db->executeQuery($qua, [$username, $isActive]);
 
                 if ($result === false) {
                     $this->addError("Failed to add user $username.");
