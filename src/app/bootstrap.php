@@ -67,23 +67,13 @@ if (file_exists($vendorAutoload)) {
     die("Vendor autoload not found. Please run 'composer install' in the project root.");
 }
 
-// include_once __DIR__ . '/autoload.php';
+include_once __DIR__ . '/autoload.php';
 
 // Load security module first
 include_once __DIR__ . '/CSRFManager.php';
-include_once __DIR__ . '/User/bootstrap.php';
-include_once __DIR__ . '/Settings.php';
-include_once __DIR__ . '/Logger.php';
-
-# SQLorAPI
-include_once __DIR__ . '/SQLorAPI/bootstrap.php';
 
 # Results27
 include_once __DIR__ . "/Results27/bootstrap.php";
-
-# MdwikiSql
-include_once __DIR__ . '/MdwikiSql/Database.php';
-include_once __DIR__ . '/MdwikiSql/AddHelper.php';
 
 # ApiClients
 include_once __DIR__ . '/ApiClients/mdwiki_api.php';
@@ -98,9 +88,6 @@ include_once __DIR__ . '/Tools/bootstrap.php';
 include_once __DIR__ . '/Tables/sql_tables.php';
 include_once __DIR__ . '/Tables/tables.php';
 include_once __DIR__ . '/Tables/langcode.php';
-
-# Utils
-include_once __DIR__ . '/Utils/SidebarMenu.php';
 include_once __DIR__ . '/Utils/html.php';
 include_once __DIR__ . '/Utils/html2.php';
 include_once __DIR__ . '/Utils/htmlUrls.php';
