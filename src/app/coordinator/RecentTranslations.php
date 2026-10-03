@@ -95,7 +95,7 @@ class RecentTranslations
     public function makeViewByNumber(string $target, $numb, string $lang, string $pupdate): string
     {
 
-        // TODO: remove makeViewByNumber, and use make_view_by_number from wiki_api.php
+        // TODO: remove makeViewByNumber, and use make_view_by_number from WikiApi.php
         // remove spaces and tab characters
         $target = trim($target);
         $numb2 = (!empty($numb)) ? $numb : "?";

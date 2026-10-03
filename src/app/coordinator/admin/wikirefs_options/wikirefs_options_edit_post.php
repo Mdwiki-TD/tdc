@@ -4,7 +4,6 @@
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\execute_query;
 
 /**
  * Class WikiRefsOptionsEditPostHandler
@@ -15,6 +14,10 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
 {
     protected bool $isPopUpPage = true;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
     protected function process(array $post): void
     {
         $langCode  = trim($post['lang_code'] ?? '');
@@ -40,7 +43,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     {
         $qua = "DELETE FROM language_settings WHERE id = ?";
 
-        $result = execute_query($qua, [$id]);
+        $result = $this->db->executeQuery($qua, [$id]);
 
         if ($result === false) {
             $this->addError("Failed to delete language $langCode.");
@@ -65,7 +68,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
             ";
         $params = [$langCode, $expend, $moveDots, $addEnLang, $id];
 
-        $result = execute_query($qua, $params);
+        $result = $this->db->executeQuery($qua, $params);
 
         if ($result === false) {
             $this->addError("Failed to update language $langCode.");
@@ -87,7 +90,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
         $qua = "INSERT INTO language_settings (lang_code, expend, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
         $params = [$langCode, $expend, $moveDots, $addEnLang];
 
-        $result = execute_query($qua, $params);
+        $result = $this->db->executeQuery($qua, $params);
 
         if ($result === false) {
             $this->addError("Failed to add language $langCode.");

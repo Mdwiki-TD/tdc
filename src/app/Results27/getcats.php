@@ -4,7 +4,7 @@ namespace App\Results\GetCats;
 
 use App\Logger;
 use App\Settings;
-use function App\APICalls\get_mdwiki_url_with_params;
+use function App\ApiClients\get_mdwiki_url_with_params;
 
 function get_category_from_cache(string $category): array
 {

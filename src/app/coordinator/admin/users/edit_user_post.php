@@ -3,10 +3,8 @@
 
 namespace App\Coordinator\Admin\Users;
 
+use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\sql_update_user;
-use function App\MdwikiSql\sql_add_user;
-use function App\MdwikiSql\get_user_by_username;
 
 /**
  * Class EditUserPostProcessor
@@ -17,6 +15,10 @@ class EditUserPostProcessor extends AbstractPostHandler
     protected bool $isPopUpPage = true;
 
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 	/**
 	 * Validates and processes the incoming submission.
 	 */
@@ -63,7 +65,7 @@ class EditUserPostProcessor extends AbstractPostHandler
 			$wiki = trim($wiki);
 			$project = trim($project);
 
-			$ttTab = get_user_by_username($user);
+			$ttTab = (UsersTable::getInstance())->get_user_by_username($user);
 
 			if ($ttTab) {
 				$ttUsername = $ttTab['username'];
@@ -81,12 +83,51 @@ class EditUserPostProcessor extends AbstractPostHandler
 			}
 
 			if (empty($userId)) {
-				sql_add_user($user, $email, $wiki, $project);
+				$this->sql_add_user($user, $email, $wiki, $project);
 				$this->addText("User:($user) added successfully.");
 			} else {
-				sql_update_user($user, $email, $wiki, $project, $userId);
+				$this->sql_update_user($user, $email, $wiki, $project, $userId);
 				$this->addText("User:($user) updated successfully.");
 			}
 		}
+	}
+
+	private function sql_add_user($userName, $email, $wiki, $project)
+	{
+		// Create a new database object
+		// Use a prepared statement for INSERT
+		$qua = <<<SQL
+			INSERT INTO users (username, email, wiki, user_group) SELECT ?, ?, ?, ?
+			WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = ?)
+		SQL;
+		$params = [$userName, $email, $wiki, $project, $userName];
+
+		// Prepare and execute the SQL query with parameter binding
+		$results = $this->db->executeQuery($qua, $params);
+
+		return $results;
+	}
+
+	private function sql_update_user($userName, $email, $wiki, $project, $userId)
+	{
+		// Check if $userId is set and not empty
+		if (empty($userId) || $userId == 0 || $userId == "0") {
+			return;
+		}
+		// Use a prepared statement for UPDATE
+		$qua = <<<SQL
+			UPDATE users SET
+				username = ?,
+				email = ?,
+				user_group = ?,
+				wiki = ?
+			WHERE user_id = ?
+		SQL;
+		$params = [$userName, $email, $project, $wiki, $userId];
+
+		// Prepare and execute the SQL query with parameter binding
+		$results = $this->db->executeQuery($qua, $params);
+
+		return $results;
 	}
 }

@@ -4,8 +4,6 @@
 namespace App\Coordinator\Admin\Projects;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\insert_to_projects;
-use function App\MdwikiSql\execute_query;
 
 /**
  * Class ProjectsPostProcessor
@@ -17,10 +15,31 @@ class ProjectsPostProcessor extends AbstractPostHandler
 {
     protected bool $isPopUpPage = false;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 	public function process(array $post): void
 	{
         $this->processRows($post['rows'] ?? []);
 	}
+
+
+	private function insert_to_projects($gTitle, $gId): bool
+	{
+		$query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
+		$params = [$gTitle, $gId];
+
+		if ($gId == 0 || $gId == '0' || empty($gId)) {
+			$query = "INSERT INTO projects (g_title) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM projects WHERE g_title = ?)";
+			$params = [$gTitle, $gTitle];
+		};
+
+		$result = $this->db->executeQuery($query, $params);
+
+		return $result;
+	}
+
 
 	/**
 	 * Processes each submitted project row: delete, add, or update.
@@ -34,7 +53,7 @@ class ProjectsPostProcessor extends AbstractPostHandler
 
 			if (!empty($del) && !empty($gId)) {
 				$qua2 = "DELETE FROM projects WHERE g_id = ?";
-				execute_query($qua2, [$gId]);
+				$this->db->executeQuery($qua2, [$gId]);
 
 				$this->addText("Project $gTitle deleted.");
 				continue;
@@ -46,7 +65,7 @@ class ProjectsPostProcessor extends AbstractPostHandler
 				continue;
 			}
 
-			insert_to_projects($gTitle, $gId);
+			$this->insert_to_projects($gTitle, $gId);
 
 			if (empty($gId)) {
 				$this->addText("Project $gTitle Added.");

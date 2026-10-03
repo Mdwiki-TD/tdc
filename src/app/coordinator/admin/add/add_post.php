@@ -3,19 +3,24 @@
 
 namespace App\Coordinator\Admin\Add;
 
+use App\MdwikiSql\AddHelper;
 use App\Tables\Main\MainTables;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\AddHelper\add_pages_to_db;
-use function App\MdwikiSql\AddHelper\checkAfterAdd;
 
 /**
  * Class AddPostProcessor
- * Handles submission of new translation rows via add_pages_to_db().
+ * Handles submission of new translation rows via addPagesToDb().
  */
 class AddPostProcessor extends AbstractPostHandler
 {
 	protected bool $isPopUpPage = false;
 
+    private AddHelper $addHelper;
+
+    public function __construct()
+    {
+        $this->addHelper = new AddHelper();
+    }
 
 	public function process(array $post): void
 	{
@@ -43,7 +48,7 @@ class AddPostProcessor extends AbstractPostHandler
 				$word = MainTables::getWord($mdtitle, $translateType);
 			}
 			if (!empty($mdtitle) && !empty($lang) && !empty($user)) {
-				$add = add_pages_to_db(
+				$add = $this->addHelper->addPagesToDb(
 					$mdtitle,
 					$translateType,
 					$cat,
@@ -59,7 +64,7 @@ class AddPostProcessor extends AbstractPostHandler
 					$this->addText("Translations added successfully.");
 				}
 
-        		$result = checkAfterAdd($mdtitle, $lang, $user, $target);
+        		$result = $this->addHelper->checkAfterAdd($mdtitle, $lang, $user, $target);
 
 				if ($result === false) {
 					$this->addError("checkAfterAdd: Failed to add translations.");

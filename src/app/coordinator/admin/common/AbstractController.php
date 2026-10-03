@@ -3,6 +3,7 @@
 
 namespace App\Coordinator\Admin\Common;
 
+use App\MdwikiSql\Database;
 use App\User\CurrentUser;
 use App\Security\CSRFManager;
 
@@ -13,6 +14,12 @@ use App\Security\CSRFManager;
  */
 abstract class AbstractController
 {
+    public Database $db;
+
+    public function __construct()
+    {
+        $this->db = new Database();
+    }
     public function validateCoordinator(): void
     {
         // Validate user authorization

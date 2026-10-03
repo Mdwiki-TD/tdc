@@ -4,7 +4,6 @@
 namespace App\Coordinator\Admin\Settings;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\update_settings_value;
 
 /**
  * Class SettingsPostProcessor
@@ -14,6 +13,10 @@ class SettingsPostProcessor extends AbstractPostHandler
 {
     protected bool $isPopUpPage = false;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 	public function process(array $post): void
 	{
         $this->processRows($post['rows'] ?? []);
@@ -39,7 +42,26 @@ class SettingsPostProcessor extends AbstractPostHandler
                 continue;
             }
 
-            $re = update_settings_value($id, $value);
+            $re = $this->update_settings_value($id, $value);
         }
     }
+
+    private function update_settings_value($id, $value)
+    {
+        // Create a new database object
+        if ($id == 0 || $id == '0' || empty($id)) {
+            return;
+        }
+
+        $query = <<<SQL
+            UPDATE settings SET value = ? WHERE id = ?
+        SQL;
+        $params = [$value, $id];
+
+        // Prepare and execute the SQL query with parameter binding
+        $results = $this->db->executeQuery($query, $params);
+
+        return $results;
+    }
+
 }

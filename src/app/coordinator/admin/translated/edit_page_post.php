@@ -4,7 +4,6 @@
 namespace App\Coordinator\Admin\Translated;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-use function App\MdwikiSql\execute_query;
 
 /**
  * Class EditPagePostHandler
@@ -24,6 +23,7 @@ class EditPagePostHandler extends AbstractPostHandler
      */
     public function __construct(string $id, string $table)
     {
+        parent::__construct();
         $this->id = $id;
         $this->table = $table;
     }
@@ -62,7 +62,7 @@ class EditPagePostHandler extends AbstractPostHandler
     private function deletePage(string $id, string $table): bool
     {
         $query = "DELETE FROM {$table} WHERE id = ?";
-        return execute_query($query, [$id]);
+        return $this->db->executeQuery($query, [$id]);
     }
 
     /**
@@ -84,7 +84,7 @@ class EditPagePostHandler extends AbstractPostHandler
         ";
         $params = [$title, $target, $lang, $user, $pupdate, $id];
 
-        $result = execute_query($query, $params);
+        $result = $this->db->executeQuery($query, $params);
 
         if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
             echo "<pre>{$query}</pre>";

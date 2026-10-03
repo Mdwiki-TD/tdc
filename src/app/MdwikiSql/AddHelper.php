@@ -1,0 +1,174 @@
+<?php
+// src/app/MdwikiSql/AddHelper.php
+
+namespace App\MdwikiSql;
+
+use App\MdwikiSql\Database;
+
+class AddHelper
+{
+	private Database $db;
+
+	/**
+	 * AddHelper constructor.
+	 * Initializes the Database dependency.
+	 */
+	public function __construct(?Database $db = null)
+	{
+		$this->db = $db ?? new Database();
+	}
+
+	/**
+	 * Inserts a new page record or updates an existing one based on constraints.
+	 *
+	 * @param array $pageData
+	 * @param bool $overwrite
+	 * @return bool
+	 */
+	public function insertToPages(array $pageData, bool $overwrite = false): bool
+	{
+		// Replace underscores with spaces for string values
+		foreach ($pageData as $key => $value) {
+			if (is_string($value)) {
+				$pageData[$key] = str_replace('_', ' ', $value);
+			}
+		}
+
+		// Check if the record already exists in the database
+		$checkQuery = <<<SQL
+			SELECT id, target FROM pages
+			WHERE user = ? AND title = ? AND lang = ?
+			LIMIT 1;
+		SQL;
+
+		$checkParams = [$pageData['user'], $pageData['title'], $pageData['lang']];
+		$exists = $this->db->fetchQuery($checkQuery, $checkParams);
+
+		// If record exists, UPDATE it
+		if (count($exists) > 0) {
+			$row = $exists[0];
+
+			$recordId = $row['id'];
+			$recordTarget = $row['target'];
+
+			// Allow update if target is empty/NULL, or equals the incoming target value
+			$canUpdate = empty($recordTarget) || $recordTarget === $pageData['target'];
+
+			if (!$canUpdate && !$overwrite) {
+				// Target already set to something else — do not overwrite, don't pretend success
+				if (isset($_REQUEST['test'])) {
+					echo "skip update: target already set to '$recordTarget' for id:$recordId<br/>";
+				}
+				return false;
+			}
+
+			$updateQuery = <<<SQL
+				UPDATE pages
+				SET target = ?, pupdate = ?, word = ?
+				WHERE id = ?;
+			SQL;
+
+			$updateParams = [
+				$pageData['target'],
+				$pageData['pupdate'],
+				$pageData['word'],
+				$recordId
+			];
+
+			if (isset($_REQUEST['test'])) {
+				echo "updateQuery: $updateQuery<br/>";
+			}
+
+			return $this->db->executeQuery($updateQuery, $updateParams);
+		}
+
+		// If record does not exist, INSERT it
+		$insertQuery = <<<SQL
+			INSERT INTO pages (title, word, translate_type, cat, lang, date, user, pupdate, target, add_date)
+			VALUES (?, ?, ?, ?, ?, DATE(NOW()), ?, ?, ?, NOW());
+		SQL;
+
+		$insertParams = [
+			$pageData['title'],
+			$pageData['word'],
+			$pageData['translate_type'],
+			$pageData['cat'],
+			$pageData['lang'],
+			$pageData['user'],
+			$pageData['pupdate'],
+			$pageData['target']
+		];
+
+		if (isset($_REQUEST['test'])) {
+			echo "insertQuery: $insertQuery<br/>";
+		}
+
+		return $this->db->executeQuery($insertQuery, $insertParams);
+	}
+
+	/**
+	 * Formats inputs and adds/updates page data in the database.
+	 *
+	 * @param string $title
+	 * @param string $translateType
+	 * @param string|null $cat
+	 * @param string $lang
+	 * @param string $user
+	 * @param string $target
+	 * @param string $pupdate
+	 * @param int|string|null $word
+	 * @param bool $overwrite
+	 * @return bool
+	 */
+	public function addPagesToDb(
+		string $title,
+		string $translateType,
+		?string $cat,
+		string $lang,
+		string $user,
+		string $target,
+		string $pupdate,
+		int|string|null $word = null,
+		bool $overwrite = false
+	): bool {
+		$cat = (!empty($cat)) ? $cat : 'RTT';
+
+		// Prepare structured array
+		$pageData = [
+			'user'		   => trim($user),
+			'lang'		   => trim($lang),
+			'title'		  => trim($title),
+			'target'		 => trim($target),
+			'pupdate'		=> trim($pupdate),
+			'cat'			=> trim($cat),
+			'translate_type' => trim($translateType),
+			'word'		   => $word,
+		];
+
+		return $this->insertToPages($pageData, $overwrite);
+	}
+
+	/**
+	 * Verifies whether the page record exists in the database after addition.
+	 *
+	 * @param string $title
+	 * @param string $lang
+	 * @param string $user
+	 * @param string $target
+	 * @return bool
+	 */
+	public function checkAfterAdd(
+		string $title,
+		string $lang,
+		string $user,
+		string $target
+	): bool {
+		$findIt = $this->db->fetchQuery(
+			"SELECT 1 FROM pages WHERE title = ? AND lang = ? AND user = ? AND target = ?",
+			[$title, $lang, $user, $target]
+		);
+
+		return !empty($findIt);
+	}
+}
+
