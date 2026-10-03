@@ -1,8 +1,8 @@
 <?php
-// src/index.php
+// src/tools.php
 
 use App\Layout\PageRunner;
-use App\AppRouter;
+use App\Controllers\AppRouter;
 
 require_once __DIR__ . '/bootstrap.php';
 
