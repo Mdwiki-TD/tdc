@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin;
 
 use App\Logger;
+use App\NotFound;
 
 
 class AdminResolver
@@ -93,7 +94,7 @@ class AdminResolver
     public function dispatch(string $ty): void
     {
         if (!$this->isCoordinator) {
-            include_once dirname(dirname(__DIR__)) . "/404.php";
+            NotFound::render();
             return;
         }
 
@@ -103,6 +104,6 @@ class AdminResolver
 
         // Fallback for missing or unauthorized routes
         Logger::debug("can't find {$ty}");
-        include_once dirname(dirname(__DIR__)) . "/404.php";
+        NotFound::render();
     }
 }
