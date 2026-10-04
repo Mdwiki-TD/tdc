@@ -26,7 +26,8 @@ class Html2
     /**
      * Generate a project selection dropdown options
      *
-     * @param string $project Currently selected project
+     * @param string                     $project            Currently selected project
+     * @param array<string, int|string>  $ProjectsTitleToId  Map of project title to project ID
      *
      * @return string HTML option elements
      */

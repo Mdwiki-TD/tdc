@@ -27,7 +27,7 @@ class TtPostProcessor extends AbstractPostHandler
 		$this->processRows($post['rows'] ?? []);
 	}
 
-	private function insert_to_translate_type($ttTitle, $ttLead, $ttFull, $ttId = 0)
+	private function insert_to_translate_type(string $ttTitle, mixed $ttLead, mixed $ttFull, mixed $ttId = 0): bool
 	{
 
 		$query = "UPDATE translate_type SET tt_lead = ?, tt_full = ? WHERE tt_id = ?";

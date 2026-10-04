@@ -46,11 +46,11 @@ class SettingsPostProcessor extends AbstractPostHandler
         }
     }
 
-    private function update_settings_value($id, $value)
+    private function update_settings_value(mixed $id, mixed $value): bool
     {
         // Create a new database object
         if ($id == 0 || $id == '0' || empty($id)) {
-            return;
+            return false;
         }
 
         $query = <<<SQL

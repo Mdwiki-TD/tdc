@@ -25,7 +25,7 @@ class ProjectsPostProcessor extends AbstractPostHandler
 	}
 
 
-	private function insert_to_projects($gTitle, $gId): bool
+	private function insert_to_projects(string $gTitle, mixed $gId): bool
 	{
 		$query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
 		$params = [$gTitle, $gId];

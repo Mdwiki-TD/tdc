@@ -7,9 +7,9 @@ use App\Settings;
 
 class GetResults
 {
-    public static function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
+    public static function get_cat_exists_and_missing(mixed $cat, int|string $depth, string $code, bool $useCache = true): array
     {
-        $membersTo = GetCats::get_mdwiki_cat_members($cat, $useCache, $depth);
+        $membersTo = GetCats::get_mdwiki_cat_members($cat, $useCache, (int)$depth);
         // z("<br>membersTo size:" . count($membersTo));
         $members = [];
         foreach ($membersTo as $mr) {

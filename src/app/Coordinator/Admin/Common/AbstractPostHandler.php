@@ -103,7 +103,7 @@ abstract class AbstractPostHandler
     /**
      * Parses a checkbox-style value into a strict 0/1 int.
      */
-    protected function boolInt($value): int
+    protected function boolInt(mixed $value): int
     {
         return filter_var(
             $value,

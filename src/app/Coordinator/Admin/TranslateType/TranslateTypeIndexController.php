@@ -148,7 +148,7 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
     /**
      * Renders a single translate-type table row.
      */
-    private function renderRow(string $id, string $title, $lead, $full, int $numb): string
+    private function renderRow(string $id, string $title, mixed $lead, mixed $full, int $numb): string
     {
         $editParams = [
             'id'    => $id,

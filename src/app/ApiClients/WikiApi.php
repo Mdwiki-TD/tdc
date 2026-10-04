@@ -61,7 +61,7 @@ class WikiApi
 
         return "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
     }
-    public static function get_views($target, $lang, $pupdate)
+    public static function get_views(string $target, string $lang, ?string $pupdate): int
     {
         if (empty($target)) return 0;
         $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';

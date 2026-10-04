@@ -84,7 +84,7 @@ final class Settings
     /**
      *
      */
-    private function generateServerUrl()
+    private function generateServerUrl(): string
     {
         /*
         "SERVER_PORT": "9001",
@@ -111,25 +111,29 @@ final class Settings
     }
     /**
      */
-    public function isDevelopment()
+    public function isDevelopment(): bool
     {
         return $this->appEnv === "development";
     }
-    public function isProduction()
+
+    public function isProduction(): bool
     {
         return $this->appEnv === "production";
     }
-    public function isTesting()
+
+    public function isTesting(): bool
     {
         return $this->appEnv === "testing";
     }
+
     /**
      * Generates a dynamic Callback URL that works seamlessly on Windows (localhost)
      * and Linux (production) environments.
-     * * @param string $path The destination path (e.g., 'auth/callback')
+     *
+     * @param string $path The destination path (e.g., 'auth/callback')
      * @return string The absolute URL including protocol and host
      */
-    public function generateCallbackUrl($path = '/auth/callback.php')
+    public function generateCallbackUrl(string $path = '/auth/callback.php'): string
     {
         // Normalize Path: Ensure the path starts with a single forward slash
         $path = '/' . ltrim($path, '/');
@@ -137,7 +141,7 @@ final class Settings
         // Build the final absolute URI
         return $this->ServerUrl . $path;
     }
-    private function envVar(string $key)
+    private function envVar(string $key): string
     {
         $value = getenv($key);
         if ($value !== false) {

@@ -7,7 +7,7 @@ use App\Tables\LangsTables;
 
 class RecentHelps
 {
-    public static function filter_recent2($lang, $result)
+    public static function filter_recent2(string $lang, array $result): string
     {
         ksort($result);
 
@@ -25,7 +25,7 @@ class RecentHelps
         return $langList;
     }
 
-    public static function do_add_date($results)
+    public static function do_add_date(array $results): bool
     {
         foreach ($results as $tat => $tabe) {
             $pupdate  = $tabe['pupdate'] ?? ''; // 2025-01-30
@@ -50,7 +50,7 @@ class RecentHelps
         return false;
     }
 
-    public static function filter_table($data, $vav, $id)
+    public static function filter_table(array $data, string $vav, string $id): string
     {
         $lList = "";
 

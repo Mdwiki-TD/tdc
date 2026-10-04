@@ -45,7 +45,10 @@ class SidebarMenu
     private string $currentType;
     private bool $userIsCoordinator;
 
+    /** @var array<string,string> */
     private array $mainMenuIcons;
+
+    /** @var array<string,array<int,array<string,mixed>>> */
     private array $mainMenu;
 
     /**
