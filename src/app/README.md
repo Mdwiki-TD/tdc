@@ -77,6 +77,11 @@ app/
 │   │   └── StatController.php
 │   ├── README.md
 │   └── RecentTranslations.php
+├── Layout/
+│   ├── PageFooter.php
+│   ├── PageHead.php
+│   ├── PageHeader.php
+│   └── PageRunner.php
 ├── MdwikiSql/
 │   ├── AddHelper.php
 │   └── Database.php
@@ -112,11 +117,11 @@ app/
 │   ├── Html2.php
 │   ├── HtmlUrls.php
 │   └── SidebarMenu.php
-├── 404.php
 ├── autoload.php
 ├── bootstrap.php
 ├── CSRFManager.php
 ├── Logger.php
+├── NotFound.php
 ├── README.md
 └── Settings.php
 
