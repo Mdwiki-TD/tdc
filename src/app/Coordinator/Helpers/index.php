@@ -1,2 +1,2 @@
 <?php
-// src/app/Coordinator/helpers/index.php
+// src/app/Coordinator/Helpers/index.php

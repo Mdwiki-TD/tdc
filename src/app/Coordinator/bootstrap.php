@@ -2,7 +2,7 @@
 // src/app/Coordinator/bootstrap.php
 
 
-require_once __DIR__ . '/helpers/bootstrap.php';
+require_once __DIR__ . '/Helpers/bootstrap.php';
 
 include_once __DIR__ . "/Admin/add/index.php";
 include_once __DIR__ . "/Admin/admins/index.php";

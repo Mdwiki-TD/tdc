@@ -1,5 +1,5 @@
 <?php
-// src/app/Coordinator/helpers/sugust_helper.php
+// src/app/Coordinator/Helpers/sugust_helper.php
 
 namespace App\Coordinator\Helps\Sugust;
 
