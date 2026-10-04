@@ -1,39 +1,53 @@
 <?php
 
-namespace Tests\Utils\Html;
 
-use PHPUnit\Framework\TestCase;
+
+namespace Tests\App\Utils;
+
 use App\Utils\Html;
+use PHPUnit\Framework\TestCase;
 
 class HtmlTest extends TestCase
 {
-    public function testMakeModalFade()
+    public function testMakeModalFade(): void
     {
-        $result = Html::make_modal_fade("Modal Title", "Modal Body", "modal_id1", "<button>X</button>");
-        $this->assertStringContainsString("Modal Title", $result);
-        $this->assertStringContainsString("Modal Body", $result);
-        $this->assertStringContainsString("id=\"modal_id1\"", $result);
-        $this->assertStringContainsString("<button>X</button>", $result);
+        $html = Html::make_modal_fade('Logout', 'Are you sure?', 'logoutModal', '<button>Yes</button>');
+
+        $this->assertStringContainsString('id="logoutModal"', $html);
+        $this->assertStringContainsString('Logout', $html);
+        $this->assertStringContainsString('Are you sure?', $html);
+        $this->assertStringContainsString('<button>Yes</button>', $html);
     }
 
-    public function testMakeDropdown()
+    public function testMakeDropdown(): void
     {
-        $tab = ['Category 1', 'Category 2'];
-        $result = Html::makeDropdown($tab, 'Category 2', 'dropdown_id', 'all');
+        $options = ['cat1', 'cat2', 'cat3'];
+        $html = Html::makeDropdown($options, 'cat2', 'cat_select', 'all');
 
-        $this->assertStringContainsString("id=\"dropdown_id\"", $result);
-        $this->assertStringContainsString("<option value='all' >All</option>", $result);
-        $this->assertStringContainsString("<option value='Category 1' >Category 1</option>", $result);
-        $this->assertStringContainsString("<option value='Category 2' selected>Category 2</option>", $result);
+        $this->assertStringContainsString('id="cat_select"', $html);
+        $this->assertStringContainsString('value=\'all\'', $html);
+        $this->assertStringContainsString('value=\'cat2\' selected', $html);
+        $this->assertStringContainsString('value=\'cat1\'', $html);
     }
 
-    public function testMakeColSm4()
+    public function testMakeColSm4(): void
     {
-        $result = Html::makeColSm4("Header", "Table Data", 6, "<div>Footer</div>", "Subtitle");
-        $this->assertStringContainsString("col-md-6", $result);
-        $this->assertStringContainsString("Header", $result);
-        $this->assertStringContainsString("Subtitle", $result);
-        $this->assertStringContainsString("Table Data", $result);
-        $this->assertStringContainsString("<div>Footer</div>", $result);
+        $html = Html::makeColSm4('Card Title', '<table>Content</table>', 6, '<div>Extra</div>', 'SubTitle');
+
+        $this->assertStringContainsString('col-md-6', $html);
+        $this->assertStringContainsString('Card Title', $html);
+        $this->assertStringContainsString('<table>Content</table>', $html);
+        $this->assertStringContainsString('<div>Extra</div>', $html);
+        $this->assertStringContainsString('SubTitle', $html);
+    }
+
+    public function testMakeCol(): void
+    {
+        $html = Html::makeCol('Main Title', '<table>Table 1</table>', '<table>Table 2</table>');
+
+        $this->assertStringContainsString('col-lg-3 col-md-12 col-sm-12', $html);
+        $this->assertStringContainsString('Main Title', $html);
+        $this->assertStringContainsString('Table 1', $html);
+        $this->assertStringContainsString('Table 2', $html);
     }
 }

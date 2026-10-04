@@ -1,21 +1,22 @@
 <?php
 
-/**
- * Seed test for: NotFound
- * Source: src/app/NotFound.php
- * TODO: write the actual tests.
- */
-
 
 
 namespace Tests\App;
 
+use App\NotFound;
 use PHPUnit\Framework\TestCase;
 
 class NotFoundTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testRenderOutputs404Card(): void
     {
-        $this->markTestIncomplete('Tests for NotFound are not written yet.');
+        ob_start();
+        NotFound::render();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('404', $output);
+        $this->assertStringContainsString('Page not found.', $output);
+        $this->assertStringContainsString('card border-danger', $output);
     }
 }

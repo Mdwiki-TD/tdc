@@ -7,7 +7,6 @@
  */
 
 
-
 namespace Tests\App\Coordinator\Admin\Qids;
 
 use PHPUnit\Framework\TestCase;

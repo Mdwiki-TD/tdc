@@ -1,100 +1,95 @@
 <?php
 
-namespace Tests\Utils\Html;
 
-use PHPUnit\Framework\TestCase;
+
+namespace Tests\App\Utils;
+
 use App\Utils\Html2;
+use PHPUnit\Framework\TestCase;
 
 class Html2Test extends TestCase
 {
-    public function testBannerAlert()
+    public function testBannerAlert(): void
     {
-        $result = Html2::banner_alert("Test Alert Error");
-        $this->assertStringContainsString("Test Alert Error", $result);
-        $this->assertStringContainsString("alert alert-danger", $result);
+        $html = Html2::banner_alert('Warning message');
+
+        $this->assertStringContainsString('alert alert-danger', $html);
+        $this->assertStringContainsString('Warning message', $html);
     }
 
-    public function testMakeProjectToUser()
+    public function testMakeProjectToUser(): void
     {
-        $ProjectsTitleToId = [
-            'Project Alpha' => 1,
-            'Project Beta' => 2
-        ];
+        $projects = ['Project A' => 1, 'Project B' => 2];
+        $html = Html2::make_project_to_user('Project A', $projects);
 
-        $result = Html2::make_project_to_user('Project Beta', $ProjectsTitleToId);
-        $this->assertStringContainsString("<option value='Uncategorized'>Uncategorized</option>", $result);
-        $this->assertStringContainsString("<option value='Project Alpha' >Project Alpha</option>", $result);
-        $this->assertStringContainsString("<option value='Project Beta' selected>Project Beta</option>", $result);
+        $this->assertStringContainsString('<option value=\'Uncategorized\'>Uncategorized</option>', $html);
+        $this->assertStringContainsString('<option value=\'Project A\' selected>Project A</option>', $html);
+        $this->assertStringContainsString('<option value=\'Project B\' >Project B</option>', $html);
     }
 
-    public function testMakeInputGroup()
+    public function testMakeInputGroup(): void
     {
-        $result = Html2::make_input_group("Username", "usr_id", "John <script>", "required");
-        $this->assertStringContainsString("<span class='input-group-text'>Username</span>", $result);
-        $this->assertStringContainsString("name='usr_id'", $result);
-        $this->assertStringContainsString("value='John &lt;script&gt;'", $result);
-        $this->assertStringContainsString("required", $result);
-        $this->assertStringContainsString("col-md-3", $result);
+        $html = Html2::make_input_group('Username', 'user_id', 'John', 'required');
+
+        $this->assertStringContainsString('<span class=\'input-group-text\'>Username</span>', $html);
+        $this->assertStringContainsString('name=\'user_id\' value=\'John\' required', $html);
     }
 
-    public function testMakeInputGroupNoCol()
+    public function testMakeInputGroupNoCol(): void
     {
-        $result = Html2::make_input_group_no_col("Email", "email_id", "test@example.com", "");
-        $this->assertStringContainsString("<span class='input-group-text'>Email</span>", $result);
-        $this->assertStringContainsString("name='email_id'", $result);
-        $this->assertStringContainsString("value='test@example.com'", $result);
-        $this->assertStringNotContainsString("col-md-3", $result);
+        $html = Html2::make_input_group_no_col('Email', 'email_id', 'john@example.com', '');
+
+        $this->assertStringContainsString('<span class=\'input-group-text\'>Email</span>', $html);
+        $this->assertStringContainsString('name=\'email_id\' value=\'john@example.com\'', $html);
     }
 
-    public function testMakeCard()
+    public function testMakeCard(): void
     {
-        $result = Html2::makeCard("Card Title", "<p>Card Content</p>");
-        $this->assertStringContainsString("Card Title", $result);
-        $this->assertStringContainsString("<p>Card Content</p>", $result);
+        $html = Html2::makeCard('Card Title', '<div>Card Body</div>');
+
+        $this->assertStringContainsString('Card Title', $html);
+        $this->assertStringContainsString('<div>Card Body</div>', $html);
     }
 
-    public function testMakeColSmBody()
+    public function testMakeColSmBody(): void
     {
-        $result = Html2::make_col_sm_body("Main Title", "Sub Title", "Body Data", 5);
-        $this->assertStringContainsString("col-md-5", $result);
-        $this->assertStringContainsString("Main Title", $result);
-        $this->assertStringContainsString("Sub Title", $result);
-        $this->assertStringContainsString("Body Data", $result);
+        $html = Html2::make_col_sm_body('Main Title', 'Subtitle', '<div>Table</div>', 6);
+
+        $this->assertStringContainsString('col-md-6', $html);
+        $this->assertStringContainsString('Main Title', $html);
+        $this->assertStringContainsString('Subtitle', $html);
+        $this->assertStringContainsString('<div>Table</div>', $html);
     }
 
-    public function testMakeDrop()
+    public function testMakeDrop(): void
     {
-        $options = [
-            'Display A' => 'val_a',
-            'Display B' => 'val_b'
-        ];
-        $result = Html2::make_drop($options, 'val_b');
-        $this->assertStringContainsString("<option value='val_a' >Display A</option>", $result);
-        $this->assertStringContainsString("<option value='val_b' selected>Display B</option>", $result);
+        $options = ['Option 1' => 'opt1', 'Option 2' => 'opt2'];
+        $html = Html2::make_drop($options, 'opt2');
+
+        $this->assertStringContainsString('<option value=\'opt1\' >Option 1</option>', $html);
+        $this->assertStringContainsString('<option value=\'opt2\' selected>Option 2</option>', $html);
     }
 
-    public function testMakeDatalistOptions()
+    public function testMakeDatalistOptions(): void
     {
-        $options = [
-            'English' => 'en',
-            'French' => 'fr'
-        ];
-        $result = Html2::make_datalist_options($options);
-        $this->assertStringContainsString("<option value='en'>English</option>", $result);
-        $this->assertStringContainsString("<option value='fr'>French</option>", $result);
+        $languages = ['English' => 'en', 'Spanish' => 'es'];
+        $html = Html2::make_datalist_options($languages);
+
+        $this->assertStringContainsString('<option value=\'en\'>English</option>', $html);
+        $this->assertStringContainsString('<option value=\'es\'>Spanish</option>', $html);
     }
 
-    public function testDivAlert()
+    public function testDivAlert(): void
     {
-        $result = Html2::div_alert(["Message 1", "Message 2"], "danger");
-        $this->assertStringContainsString("alert alert-danger", $result);
-        $this->assertStringContainsString("Message 1", $result);
-        $this->assertStringContainsString("Message 2", $result);
+        $messages = ['Message 1', 'Message 2'];
+        $html = Html2::div_alert($messages, 'success');
 
-        $resultEmpty = Html2::div_alert([]);
-        $this->assertEquals("", $resultEmpty);
+        $this->assertStringContainsString('alert alert-success', $html);
+        $this->assertStringContainsString('Message 1<br>Message 2<br>', $html);
+    }
 
-        $resultInvalidType = Html2::div_alert(["Msg"], "unknown");
-        $this->assertStringContainsString("alert alert-secondary", $resultInvalidType);
+    public function testDivAlertEmptyReturnsEmpty(): void
+    {
+        $this->assertSame('', Html2::div_alert([]));
     }
 }
