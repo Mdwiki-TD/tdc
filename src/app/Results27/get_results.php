@@ -14,7 +14,7 @@ function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
     $members = [];
     foreach ($membersTo as $mr) {
         $members[] = $mr;
-    };
+    }
     Logger::debug("members size:" . count($members));
 
     $jsonFile = "cash_exists/$code.json";
@@ -27,7 +27,7 @@ function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
     $missing = [];
     foreach ($members as $mem) {
         if (!in_array($mem, $exists)) $missing[] = $mem;
-    };
+    }
 
     // Remove duplicates from $missing
     $missing = array_unique($missing);

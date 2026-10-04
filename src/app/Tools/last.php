@@ -3,12 +3,13 @@
 
 namespace App\Tools;
 
+use App\ApiClients\WikiApi;
 use App\Coordinator\RecentTranslations;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 
 /**
  * Class LastController
- * Renders the "Recent translations" for non-admin/general tools view.
+ * Renders the "Recent translations" for non-Admin/general tools view.
  */
 class LastController extends AbstractControllerNoPost
 {
@@ -177,7 +178,7 @@ class LastController extends AbstractControllerNoPost
 
 		if ($this->lastTable === "pages") {
 			$viewsNumber = $tabg['views'] ?? '?';
-			$view = $this->helper->makeViewByNumber($target, $viewsNumber, $llang, $pupdate);
+			$view = WikiApi::makeViewByNumber($target, $viewsNumber, $llang, $pupdate);
 		}
 
 		$encodedTitle = rawurlencode(str_replace(' ', '_', $mdTitle));

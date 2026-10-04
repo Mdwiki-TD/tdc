@@ -3,11 +3,11 @@
 namespace App\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Tables\Main\MainTables;
+use App\Tables\MainTables;
 use App\SQLorAPI\CategoriesTable;
 use App\SQLorAPI\QidsTable;
 
-use function App\Utils\Html\makeDropdown;
+use App\Utils\Html;
 use function App\Results\GetCats\get_mdwiki_cat_members;
 
 /**
@@ -218,7 +218,7 @@ class StatController extends AbstractControllerNoPost
 			</div>
 		HTML;
 
-		$y1 = makeDropdown($catsTitles, $cat, 'cat', '');
+		$y1 = Html::makeDropdown($catsTitles, $cat, 'cat', '');
 		return sprintf($d33, 'Category:', $y1);
 	}
 }

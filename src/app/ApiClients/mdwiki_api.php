@@ -2,42 +2,6 @@
 
 /**
  * MDWiki API Communication Module
- *
- * Provides functions for making HTTP POST requests to the MDWiki API.
- * This module handles all direct communication with mdwiki.org's MediaWiki
- * API endpoint for wiki operations.
- *
- * Features:
- * - cURL-based HTTP POST requests
- * - Configurable timeouts
- * - User agent identification
- * - JSON response parsing
- * - Debug logging in test mode
- *
- * API Endpoint: https://mdwiki.org/w/api.php
- *
- * Usage Example:
- * ```php
- * use function App\ApiClients\get_mdwiki_url_with_params;
- *
- * // Get page content
- * $result = get_mdwiki_url_with_params([
- *     'action' => 'query',
- *     'prop' => 'revisions',
- *     'titles' => 'Page_Title',
- *     'rvprop' => 'content',
- *     'format' => 'json'
- * ]);
- * ```
- *
- * @package    ApiClients
- * @author     Translation Dashboard Team
- * @version    2.0.0
- * @since      1.0.0
- * @license    GPL-3.0-or-later
- *
- * @see https://www.mediawiki.org/wiki/API:Main_page
- * @see https://mdwiki.org/w/api.php
  */
 
 namespace App\ApiClients;
@@ -85,7 +49,7 @@ function post_url_mdwiki(string $endPoint, array $params = []): string
     $ch = curl_init();
 
     if ($ch === false) {
-        Logger::debug("post_url_mdwiki: Failed to initialize cURL");
+        Logger::debug(" Failed to initialize cURL");
         return '';
     }
 
@@ -115,17 +79,17 @@ function post_url_mdwiki(string $endPoint, array $params = []): string
         . htmlspecialchars($url2, ENT_QUOTES, 'UTF-8') . '</a>';
 
     if ($httpCode !== 200) {
-        Logger::debug('post_url_mdwiki: Error: API request failed with status code ' . $httpCode);
+        Logger::debug(' Error: API request failed with status code ' . $httpCode);
     }
 
-    Logger::debug("post_url_mdwiki: (http_code: $httpCode) $url2");
+    Logger::debug(" (http_code: $httpCode) $url2");
 
     if ($output === false) {
-        Logger::debug("post_url_mdwiki: cURL Error: " . ($curlError ?: 'Unknown error'));
+        Logger::debug(" cURL Error: " . ($curlError ?: 'Unknown error'));
     }
 
     if (curl_errno($ch)) {
-        Logger::debug('post_url_mdwiki: Error: ' . $curlError);
+        Logger::debug(' Error: ' . $curlError);
     }
 
     // curl_close($ch);
@@ -175,7 +139,7 @@ function get_mdwiki_url_with_params(array $params): array
     $result = json_decode($out, true);
 
     if (!is_array($result)) {
-        Logger::debug("post_url_mdwiki: Failed to parse JSON response");
+        Logger::debug(" Failed to parse JSON response");
         return [];
     }
 
