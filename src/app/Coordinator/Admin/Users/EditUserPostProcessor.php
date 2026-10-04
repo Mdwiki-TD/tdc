@@ -92,7 +92,7 @@ class EditUserPostProcessor extends AbstractPostHandler
 		}
 	}
 
-	private function sql_add_user($userName, $email, $wiki, $project)
+	private function sql_add_user(string $userName, string $email, string $wiki, string $project): bool
 	{
 		// Create a new database object
 		// Use a prepared statement for INSERT
@@ -108,11 +108,11 @@ class EditUserPostProcessor extends AbstractPostHandler
 		return $results;
 	}
 
-	private function sql_update_user($userName, $email, $wiki, $project, $userId)
+	private function sql_update_user(string $userName, string $email, string $wiki, string $project, mixed $userId): bool
 	{
 		// Check if $userId is set and not empty
 		if (empty($userId) || $userId == 0 || $userId == "0") {
-			return;
+			return false;
 		}
 		// Use a prepared statement for UPDATE
 		$qua = <<<SQL

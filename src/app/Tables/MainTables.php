@@ -6,13 +6,25 @@ use App\SQLorAPI\TitlesTable;
 
 class MainTables
 {
-	private static $already_loaded = false;
-	private static $xEnwikiPageviewsTable = [];
-	private static $xWordsTable = [];
-	private static $xAllWordsTable = [];
-	private static $xAllRefsTable = [];
-	private static $xLeadRefsTable = [];
-	private static $xAssessmentsTable = [];
+	private static bool $already_loaded = false;
+
+	/** @var array<string, int> */
+	private static array $xEnwikiPageviewsTable = [];
+
+	/** @var array<string, int> */
+	private static array $xWordsTable = [];
+
+	/** @var array<string, int> */
+	private static array $xAllWordsTable = [];
+
+	/** @var array<string, int> */
+	private static array $xAllRefsTable = [];
+
+	/** @var array<string, int> */
+	private static array $xLeadRefsTable = [];
+
+	/** @var array<string, string|null> */
+	private static array $xAssessmentsTable = [];
 
 	/**
 	 * Get the ref count based on mdtitle and translateType.

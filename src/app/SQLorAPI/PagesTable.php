@@ -346,7 +346,7 @@ class PagesTable extends BaseTable
         return $data;
     }
 
-    public function getTotalTranslationsCount($lang, $cand): int
+    public function getTotalTranslationsCount(mixed $lang, mixed $cand): int
     {
 
         $table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
@@ -369,7 +369,7 @@ class PagesTable extends BaseTable
         return $result;
     }
 
-    public function getPagesUsersToMain($lang): array
+    public function getPagesUsersToMain(mixed $lang): array
     {
         static $cache = [];
 

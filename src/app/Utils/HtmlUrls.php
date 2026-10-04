@@ -4,7 +4,7 @@ namespace App\Utils;
 
 class HtmlUrls
 {
-    public static function make_mdwiki_href($title)
+    public static function make_mdwiki_href(?string $title): ?string
     {
         if (empty($title)) return $title;
 
@@ -28,48 +28,52 @@ class HtmlUrls
         return $user;
     }
 
-    public static function make_mdwiki_article_url_blank($title, $name = null)
+    public static function make_mdwiki_article_url_blank(?string $title, ?string $name = null): ?string
     {
         if (empty($title)) return $title;
 
-        $displayName = $name ? $name : $title;
+        $displayName = $name !== null && $name !== '' ? $name : $title;
 
         $encoded_title = rawurlencode(str_replace(' ', '_', $title));
 
         return "<a target='_blank' href='https://mdwiki.org/wiki/$encoded_title'>$displayName</a>";
     }
 
-    public static function make_mdwiki_cat_url($category, $name = null)
+    public static function make_mdwiki_cat_url(?string $category, ?string $name = null): ?string
     {
         if (empty($category)) return $category;
 
         $new_cat = str_replace('Category:', '', $category);
 
-        $displayName = $name ? $name : $new_cat;
+        $displayName = $name !== null && $name !== '' ? $name : $new_cat;
 
         $encoded_category = rawurlencode(str_replace(' ', '_', $new_cat));
 
         return "<a target='_blank' href='https://mdwiki.org/wiki/Category:$encoded_category'>$displayName</a>";
     }
 
-    public static function make_wikipedia_url_blank($target, $lang, $name = '', $deleted = false)
+    public static function make_wikipedia_url_blank(mixed $target, string $lang, mixed $name = '', mixed $deleted = false): mixed
     {
         if (empty($target)) return $target;
 
         $displayName = (!empty($name)) ? $name : $target;
+        if (is_array($displayName)) {
+            $displayName = implode(', ', $displayName);
+        }
 
-        $encodedTarget = rawurlencode(str_replace(' ', '_', $target));
+        $targetStr = is_array($target) ? implode('_', $target) : (string)$target;
+        $encodedTarget = rawurlencode(str_replace(' ', '_', $targetStr));
 
         $link = "<a target='_blank' href='https://$lang.wikipedia.org/wiki/$encodedTarget'>$displayName</a>";
 
-        if ($deleted == 1) {
+        if ($deleted == 1 || $deleted === true) {
             $link .= ' <span class="text-danger">(DELETED)</span>';
         }
 
         return $link;
     }
 
-    public static function make_wikidata_url_blank($qid, $name = '', $default = '')
+    public static function make_wikidata_url_blank(?string $qid, ?string $name = '', ?string $default = ''): ?string
     {
         if (empty($qid)) return $default;
 

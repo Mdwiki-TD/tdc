@@ -8,7 +8,7 @@ use App\Results27\GetResults;
 
 class Sugust
 {
-    public static function get_sugust($title, $lang): array
+    public static function get_sugust(?string $title, ?string $lang): array
     {
         $title = $title ?? '';
         $lang = $lang ?? '';

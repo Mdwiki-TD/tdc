@@ -39,7 +39,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     /**
      * Deletes a language_settings row.
      */
-    private function deleteRow($id, string $langCode): void
+    private function deleteRow(mixed $id, string $langCode): void
     {
         $qua = "DELETE FROM language_settings WHERE id = ?";
 
@@ -55,7 +55,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     /**
      * Updates an existing language_settings row.
      */
-    private function updateRow($id, string $langCode, int $expend, int $moveDots, int $addEnLang): void
+    private function updateRow(mixed $id, string $langCode, int $expend, int $moveDots, int $addEnLang): void
     {
         $qua = "UPDATE language_settings
             SET
