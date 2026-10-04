@@ -91,7 +91,7 @@ include_once __DIR__ . '/ApiClients/WikiApi.php';
 
 # Controllers
 include_once __DIR__ . '/Controllers/AppRouter.php'; // AppRouter
-include_once __DIR__ . '/coordinator/bootstrap.php';
+include_once __DIR__ . '/Coordinator/bootstrap.php';
 include_once __DIR__ . '/Tools/bootstrap.php';
 
 # Tables

@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/RecentTranslations.php
+// src/app/Coordinator/RecentTranslations.php
 
 // use App\Coordinator\RecentTranslations;
 namespace App\Coordinator;

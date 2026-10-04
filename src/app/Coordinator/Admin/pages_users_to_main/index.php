@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/Admin/pages_users_to_main/index.php
+// src/app/Coordinator/Admin/pages_users_to_main/index.php
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
 

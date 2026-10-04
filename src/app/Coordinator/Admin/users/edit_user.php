@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/Admin/users/edit_user.php
+// src/app/Coordinator/Admin/users/edit_user.php
 
 namespace App\Coordinator\Admin\Users;
 

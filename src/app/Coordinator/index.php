@@ -1,2 +1,2 @@
 <?php
-// src/app/coordinator/index.php
+// src/app/Coordinator/index.php

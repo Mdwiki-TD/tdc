@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/bootstrap.php
+// src/app/Coordinator/bootstrap.php
 
 
 require_once __DIR__ . '/RecentTranslations.php';

@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/Admin/reports/index2.php
+// src/app/Coordinator/Admin/reports/index2.php
 
 namespace App\Coordinator\Admin\Reports;
 
