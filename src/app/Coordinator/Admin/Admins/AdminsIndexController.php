@@ -5,7 +5,6 @@ namespace App\Coordinator\Admin\Admins;
 
 use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractController;
-
 /**
  * Class AdminsIndexController
  * Renders the editable coordinators (admins) table. On POST, delegates
