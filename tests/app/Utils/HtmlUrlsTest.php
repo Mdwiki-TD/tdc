@@ -1,87 +1,95 @@
 <?php
 
-namespace Tests\Utils\Html;
 
-use PHPUnit\Framework\TestCase;
+
+namespace Tests\App\Utils;
+
 use App\Utils\HtmlUrls;
+use PHPUnit\Framework\TestCase;
 
 class HtmlUrlsTest extends TestCase
 {
-    public function testMakeMailIconNew()
+    public function testMakeMdwikiHref(): void
     {
-        $tab = [
-            'user' => 'JohnDoe',
-            'lang' => 'en',
-            'target' => 'Test_Target',
-            'pupdate' => '2023-10-10',
-            'title' => 'Page_Title'
-        ];
-        $result = HtmlUrls::make_mail_icon_new($tab, 'test_func');
-        $this->assertStringContainsString("test_func(this)", $result);
-        $this->assertStringContainsString("user=JohnDoe", $result);
-        $this->assertStringContainsString("lang=en", $result);
-        $this->assertStringContainsString("target=Test_Target", $result);
+        $this->assertNull(HtmlUrls::make_mdwiki_href(null));
+        $this->assertSame('https://mdwiki.org/wiki/Main_Page', HtmlUrls::make_mdwiki_href('Main Page'));
     }
 
-    public function testMakeMdwikiTitle()
+    public function testMakeMdwikiUserUrl(): void
     {
-        $result1 = HtmlUrls::make_mdwiki_title("Main Page");
-        $this->assertStringContainsString("<a target='_blank' href='https://mdwiki.org/wiki/Main_Page'>Main Page</a>", $result1);
-
-        $result2 = HtmlUrls::make_mdwiki_title("");
-        $this->assertEquals("", $result2);
+        $this->assertSame('', HtmlUrls::make_mdwiki_user_url(''));
+        $html = HtmlUrls::make_mdwiki_user_url('John Doe');
+        $this->assertStringContainsString('https://mdwiki.org/wiki/User:John_Doe', $html);
+        $this->assertStringContainsString('John Doe', $html);
     }
 
-    public function testMakeCatUrl()
+    public function testMakeMdwikiArticleUrlBlank(): void
     {
-        $result = HtmlUrls::make_cat_url("Test Category");
-        $this->assertStringContainsString("<a target='_blank' href='https://mdwiki.org/wiki/Category:Test_Category'>Test Category</a>", $result);
-
-        $result2 = HtmlUrls::make_cat_url("");
-        $this->assertEquals("", $result2);
+        $this->assertNull(HtmlUrls::make_mdwiki_article_url_blank(null));
+        $html = HtmlUrls::make_mdwiki_article_url_blank('Test Title', 'Custom Name');
+        $this->assertStringContainsString('href=\'https://mdwiki.org/wiki/Test_Title\'', $html);
+        $this->assertStringContainsString('>Custom Name</a>', $html);
     }
 
-    public function testMakeTalkUrl()
+    public function testMakeMdwikiCatUrl(): void
     {
-        $result = HtmlUrls::make_talk_url("ar", "Mr. User");
-        $this->assertStringContainsString("<a target='_blank' href='//ar.wikipedia.org/w/index.php?title=User_talk:Mr.%20User'>talk</a>", $result);
+        $this->assertNull(HtmlUrls::make_mdwiki_cat_url(null));
+        $html = HtmlUrls::make_mdwiki_cat_url('Category:Medicine');
+        $this->assertStringContainsString('href=\'https://mdwiki.org/wiki/Category:Medicine\'', $html);
     }
 
-    public function testMakeMdwikiUserUrl()
+    public function testMakeWikipediaUrlBlank(): void
     {
-        $result = HtmlUrls::make_mdwiki_user_url("Test User");
-        $this->assertStringContainsString("<a href='https://mdwiki.org/wiki/User:Test_User' taget='_blank'>Test User</a>", $result);
+        $this->assertNull(HtmlUrls::make_wikipedia_url_blank(null, 'en'));
+
+        $html = HtmlUrls::make_wikipedia_url_blank('Heart_attack', 'en', 'Heart Attack', true);
+        $this->assertStringContainsString('https://en.wikipedia.org/wiki/Heart_attack', $html);
+        $this->assertStringContainsString('(DELETED)', $html);
     }
 
-    public function testMakeTargetUrl()
+    public function testMakeWikidataUrlBlank(): void
     {
-        $result = HtmlUrls::make_target_url("Target Page", "ar", "Display Name", true);
-        $this->assertStringContainsString("<a target='_blank' href='https://ar.wikipedia.org/wiki/Target_Page'>Display Name</a>", $result);
-        $this->assertStringContainsString("(DELETED)", $result);
+        $this->assertSame('default_val', HtmlUrls::make_wikidata_url_blank('', '', 'default_val'));
 
-        $result2 = HtmlUrls::make_target_url("Page Without Display", "en");
-        $this->assertStringContainsString(">Page Without Display</a>", $result2);
+        $html = HtmlUrls::make_wikidata_url_blank('Q12345', 'Item Q12345');
+        $this->assertStringContainsString('https://wikidata.org/wiki/Q12345', $html);
+        $this->assertStringContainsString('Item Q12345', $html);
     }
 
-    public function testMakeEditIconNew()
+    public function testMakeTalkUrl(): void
     {
-        // Save state
-        $origReq = $_REQUEST;
-        $origCookie = $_COOKIE;
+        $html = HtmlUrls::make_talk_url('en', 'TestUser');
+        $this->assertStringContainsString('//en.wikipedia.org/w/index.php?title=User_talk:TestUser', $html);
+    }
 
-        $_REQUEST['test'] = 1;
+    public function testMakeTargetUrl(): void
+    {
+        $html = HtmlUrls::make_target_url('Article_Title', 'fr', 'Display Name', false);
+        $this->assertStringContainsString('https://fr.wikipedia.org/wiki/Article_Title', $html);
+        $this->assertStringContainsString('Display Name', $html);
+    }
 
+    public function testMakeEditIconNew(): void
+    {
         $params = ['id' => 123];
-        $result = HtmlUrls::make_edit_icon_new("TestTarget", $params, "Edit Record");
+        $html = HtmlUrls::make_edit_icon_new('edit_page', $params, 'Edit Article');
 
-        $this->assertStringContainsString("index.php?ty=TestTarget", $result);
-        $this->assertStringContainsString("id=123", $result);
-        $this->assertStringContainsString("test=1", $result);
-        $this->assertStringContainsString("pup_window_new(this)", $result);
-        $this->assertStringContainsString(">Edit Record</a>", $result);
+        $this->assertStringContainsString('pup-target=\'index.php?ty=edit_page&amp;id=123&amp;nonav=1\'', $html);
+        $this->assertStringContainsString('Edit Article', $html);
+    }
 
-        // Restore state
-        $_REQUEST = $origReq;
-        $_COOKIE = $origCookie;
+    public function testMakeMailIconNew(): void
+    {
+        $record = [
+            'user' => 'UserA',
+            'lang' => 'en',
+            'target' => 'TargetPage',
+            'pupdate' => '2023-01-01',
+            'title' => 'TitleA'
+        ];
+        $html = HtmlUrls::make_mail_icon_new($record);
+
+        $this->assertStringContainsString('index.php?ty=msg&amp;user=UserA', $html);
+        $this->assertStringContainsString('onclick=\'pup_window_new(this)\'', $html);
     }
 }

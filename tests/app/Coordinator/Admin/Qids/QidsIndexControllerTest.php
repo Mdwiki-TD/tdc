@@ -6,7 +6,6 @@
  * TODO: write the actual tests.
  */
 
-declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Qids;
 

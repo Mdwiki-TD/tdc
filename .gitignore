@@ -17,8 +17,6 @@ composer.lock
 load_env.php
 /.phpunit.cache
 /build/coverage-html
-/.commandcode
-_works_files/tree.py
 /docs
 src/app/_old_index.php
 *.7z

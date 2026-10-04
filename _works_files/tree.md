@@ -78,6 +78,11 @@ src/
 │   │   │   └── StatController.php
 │   │   ├── README.md
 │   │   └── RecentTranslations.php
+│   ├── Layout/
+│   │   ├── PageFooter.php
+│   │   ├── PageHead.php
+│   │   ├── PageHeader.php
+│   │   └── PageRunner.php
 │   ├── MdwikiSql/
 │   │   ├── AddHelper.php
 │   │   └── Database.php
@@ -113,11 +118,11 @@ src/
 │   │   ├── Html2.php
 │   │   ├── HtmlUrls.php
 │   │   └── SidebarMenu.php
-│   ├── 404.php
 │   ├── autoload.php
 │   ├── bootstrap.php
 │   ├── CSRFManager.php
 │   ├── Logger.php
+│   ├── NotFound.php
 │   ├── README.md
 │   └── Settings.php
 ├── css/
@@ -130,12 +135,6 @@ src/
 │   ├── footer.js
 │   ├── reports-script.js
 │   └── sidebar.js
-├── Layout/
-│   ├── bootstrap.php
-│   ├── PageFooter.php
-│   ├── PageHead.php
-│   ├── PageHeader.php
-│   └── PageRunner.php
 ├── bootstrap.php
 ├── index.php
 ├── sugust.php
