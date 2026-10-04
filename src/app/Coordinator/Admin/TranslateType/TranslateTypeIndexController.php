@@ -1,11 +1,10 @@
 <?php
-// src/app/Coordinator/Admin/tt/index.php
+// src/app/Coordinator/Admin/TranslateType/TranslateTypeIndexController.php
 
 namespace App\Coordinator\Admin\TranslateType;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\CategoriesTable;
-
 use App\Utils\HtmlUrls;
 use App\Utils\Html;
 use function App\Results\GetCats\get_mdwiki_cat_members;

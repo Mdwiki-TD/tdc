@@ -1,5 +1,5 @@
 <?php
-// src/app/Coordinator/Admin/tt/edit_tt_post.php
+// src/app/Coordinator/Admin/TranslateType/TtPostProcessor.php
 
 namespace App\Coordinator\Admin\TranslateType;
 

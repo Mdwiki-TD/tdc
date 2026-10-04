@@ -18,15 +18,16 @@ include_once __DIR__ . "/Admin/qids/index.php";
 include_once __DIR__ . "/Admin/reports/index.php";
 include_once __DIR__ . "/Admin/settings/index.php";
 include_once __DIR__ . "/Admin/translated/index.php";
-include_once __DIR__ . "/Admin/tt/index.php";
 include_once __DIR__ . "/Admin/users/index.php";
 include_once __DIR__ . "/Admin/users_not_inprocess/index.php";
 include_once __DIR__ . "/Admin/wikirefs_options/index.php";
 
+// include_once __DIR__ . "/Admin/TranslateType/TranslateTypeIndexController.php";
+// include_once __DIR__ . "/Admin/TranslateType/TtPostProcessor.php";
+// include_once __DIR__ . "/Admin/TranslateType/EditTranslateTypeController.php";
 
 include_once __DIR__ . "/Admin/qids/edit_qid.php";
 include_once __DIR__ . "/Admin/translated/edit_page.php";
-include_once __DIR__ . "/Admin/tt/edit_translate_type.php";
 include_once __DIR__ . "/Admin/users/edit_user.php";
 include_once __DIR__ . "/Admin/users/msg.php";
 include_once __DIR__ . "/Admin/wikirefs_options/wikirefs_options_edit.php";
