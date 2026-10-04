@@ -1,16 +1,16 @@
 <?php
-// src/app/Coordinator/Admin/Users/UsersIndexController.php
+// src/app/Coordinator/Admin/users/index.php
 
 namespace App\Coordinator\Admin\Users;
 
 use App\SQLorAPI\PagesTable;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Tables\SqlTables\TablesSql;
+use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\UsersTable;
-use App\Utils\Html;
+use App\Utils\HtmlUrls;
 
 /**
- * Class UsersIndexController
+ * Class EmailsIndexController
  * Renders the users/emails dashboard: username, email, project, wiki,
  * live-page count, and per-row send-email / edit actions, with a
  * project filter.
@@ -43,7 +43,7 @@ class UsersIndexController extends AbstractControllerNoPost
 
 		$this->renderMainCard($numb, $projectFilter, $formRows);
 
-		$newRow = Html::make_edit_icon_new('edit_user', ['new' => 1], 'Add one!');
+		$newRow = HtmlUrls::make_edit_icon_new('edit_user', ['new' => 1], 'Add one!');
 		$this->renderAddNewCard($newRow);
 
 		$this->renderDataTableAssets();
@@ -81,8 +81,10 @@ class UsersIndexController extends AbstractControllerNoPost
 			$sortedArray[$u] = $tab;
 		}
 
+		// Sort $sortedArray by live pages, descending
 		uasort($sortedArray, function ($a, $b) {
 			return $b['live'] <=> $a['live'];
+			// use ($a['live'] <=> $b['live']) to sort ascending
 		});
 
 		return $sortedArray;
@@ -93,13 +95,16 @@ class UsersIndexController extends AbstractControllerNoPost
 	 */
 	private function emailsFilterTable(string $projectName): string
 	{
-		TablesSql::$sProjectsTitleToId["empty"] = "empty";
+		$projectsTab = (TitlesTable::getInstance())->getProjects();
+		$ProjectsTitleToId = array_column($projectsTab, 'g_id', 'g_title');
+
+		$ProjectsTitleToId["empty"] = "empty";
 
 		$lList = <<<HTML
 			<option data-tokens='all' value='All'>All</option>
 		HTML;
 
-		foreach (TablesSql::$sProjectsTitleToId as $pTitle => $pId) {
+		foreach ($ProjectsTitleToId as $pTitle => $pId) {
 			if (empty($pTitle)) {
 				continue;
 			}
@@ -167,12 +172,12 @@ class UsersIndexController extends AbstractControllerNoPost
 			$mailIcon = '';
 
 			if (array_key_exists($userName, $lastUserToTab)) {
-				$mailIcon = Html::make_mail_icon_new($lastUserToTab[$userName], 'pup_window_email');
+				$mailIcon = HtmlUrls::make_mail_icon_new($lastUserToTab[$userName], 'pup_window_email');
 			}
 
 			$editParams = [ 'user_id' => $userId];
 
-			$editIcon = Html::make_edit_icon_new("edit_user", $editParams);
+			$editIcon = HtmlUrls::make_edit_icon_new("edit_user", $editParams);
 
 			$formRows .= <<<HTML
 				<tr>
@@ -305,10 +310,13 @@ class UsersIndexController extends AbstractControllerNoPost
 							}
 						},
 						stateSave: true,
+						// order: [[5	, 'desc']],
+						// paging: false,
 						lengthMenu: [
 							[50, 100, 150],
 							[50, 100, 150]
 						],
+						// scrollY: 800
 					});
 				});
 			</script>
@@ -317,3 +325,5 @@ class UsersIndexController extends AbstractControllerNoPost
 		HTML;
 	}
 }
+
+

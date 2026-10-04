@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Translated;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
+
 /**
  * Class EditPageController
  * Handles editing and deleting translated pages (GET renders the form,

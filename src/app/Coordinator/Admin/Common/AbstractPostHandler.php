@@ -3,11 +3,10 @@
 
 namespace App\Coordinator\Admin\Common;
 
-use App\Utils\Html;
-
 use App\User\CurrentUser;
 use App\CSRFManager;
 use App\MdwikiSql\Database;
+use App\Utils\Html2;
 
 /**
  * Class AbstractPostHandler
@@ -124,13 +123,13 @@ abstract class AbstractPostHandler
     }
     public function RenderIndexMesseges(array $result): void
     {
-        echo Html::div_alert($result['errors'], 'danger');
+        echo Html2::div_alert($result['errors'], 'danger');
 
         if ($result['csrfError']) {
             $this->DisplayCsrfAlert();
         }
 
-        echo Html::div_alert($result['texts'], 'success');
+        echo Html2::div_alert($result['texts'], 'success');
     }
     public function RenderMesseges(array $result): void
     {

@@ -1,13 +1,15 @@
 <?php
+// src/app/tools/last.php
 
 namespace App\Coordinator\Tools;
 
+use App\ApiClients\WikiApi;
 use App\Coordinator\RecentTranslations;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 
 /**
  * Class LastController
- * Renders the "Recent translations" for non-admin/general tools view.
+ * Renders the "Recent translations" for non-Admin/general tools view.
  */
 class LastController extends AbstractControllerNoPost
 {
@@ -38,7 +40,6 @@ class LastController extends AbstractControllerNoPost
 
 		$this->helper->renderDataTableScript();
 	}
-
 	public function CreateRecentRows(): string
 	{
 		$qslResults = $this->helper->fetchResults();
@@ -52,7 +53,6 @@ class LastController extends AbstractControllerNoPost
 		}
 		return $recentRows;
 	}
-
 	public function ShowMainView(string $recentRows): void
 	{
 		$langResult = $this->helper->fetchLangOptions();
@@ -69,6 +69,7 @@ class LastController extends AbstractControllerNoPost
 			$recentRows,
 		);
 	}
+
 
 	/**
 	 * Renders the main filter + results card.
@@ -95,6 +96,7 @@ class LastController extends AbstractControllerNoPost
 					</div>
 					<div class='col-md-3'>
 						<div class="input-group">
+							<!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
 							<select aria-label="Language code"
 								class="selectpicker"
 								id='lang'
@@ -159,12 +161,14 @@ class LastController extends AbstractControllerNoPost
 		$addDate  = $tabg['add_date'] ?? '';
 		$campaign = $tabg['campaign'] ?? '';
 
+		// if $addDate has : then split before first space
 		if (strpos($addDate, ':') !== false) {
 			$addDate = explode(' ', $addDate)[0];
 		}
 
 		$maxUsernameDisplayLength = 15;
 		$userName = $user;
+		// $userName is the first word of the user if length > 15
 		if (strlen($user) > $maxUsernameDisplayLength) {
 			$parts = explode(' ', $user);
 			$userName = $parts[0];
@@ -174,7 +178,7 @@ class LastController extends AbstractControllerNoPost
 
 		if ($this->lastTable === "pages") {
 			$viewsNumber = $tabg['views'] ?? '?';
-			$view = $this->helper->makeViewByNumber($target, $viewsNumber, $llang, $pupdate);
+			$view = WikiApi::makeViewByNumber($target, $viewsNumber, $llang, $pupdate);
 		}
 
 		$encodedTitle = rawurlencode(str_replace(' ', '_', $mdTitle));

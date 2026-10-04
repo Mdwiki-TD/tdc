@@ -1,9 +1,11 @@
 <?php
+// src/app/Coordinator/Admin/index.php
 
 namespace App\Coordinator\Admin;
 
 use App\Logger;
 use App\NotFound;
+
 
 class AdminResolver
 {
@@ -14,31 +16,46 @@ class AdminResolver
         $this->isCoordinator = $isCoordinator;
     }
 
+    /**
+     * Determines, maps, and sanitizes the requested route key ('ty').
+     */
     public function resolveTy(string $rawTy): string
     {
+        // Map route aliases
         $aliasesMap = [
             "qids/edit_qid" => "edit_qid",
             "tt" => "translate_type",
             "users_no_inprocess" => "users_not_inprocess",
             "Campaigns" => "campaigns",
+
             "Emails" => "users",
+
             "pages_users_to_main/fix_it" => "fix_page",
             "pages_users_to_main/fix_page" => "fix_page",
+
             "translated/edit_page" => "edit_page",
+
             "users/edit_user" => "edit_user",
             "Emails/edit_user" => "edit_user",
+
             "users/msg" => "msg",
             "Emails/msg" => "msg",
+
             "wikirefs_options/wikirefs_options_edit" => "wikirefs_options_edit",
             "wikirefs_options/edit" => "wikirefs_options_edit",
+
             "tt/edit_translate_type" => "edit_translate_type",
         ];
 
-        return $aliasesMap[$rawTy] ?? $rawTy;
+        return (isset($aliasesMap[$rawTy])) ? $aliasesMap[$rawTy] : $rawTy;
     }
-
+    /**
+     * Dispatches the request to the target script or view based on routes and permissions.
+     */
     public function dispatchObject(string $ty): bool
     {
+        // String mapping with fully qualified namespace
+        // Array mapping string keys to fully qualified class names
         $Controllers = [
             "add"                     => "App\\Coordinator\\Admin\\Add\\AddIndexController",
             "admins"                  => "App\\Coordinator\\Admin\\Admins\\AdminsIndexController",
@@ -85,6 +102,7 @@ class AdminResolver
             return;
         }
 
+        // Fallback for missing or unauthorized routes
         Logger::debug("can't find {$ty}");
         NotFound::render();
     }

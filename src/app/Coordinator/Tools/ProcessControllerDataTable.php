@@ -1,4 +1,5 @@
 <?php
+// src/app/tools/process.php
 
 namespace App\Coordinator\Tools;
 
@@ -40,12 +41,14 @@ class ProcessControllerDataTable extends AbstractControllerNoPost
 		echo <<<HTML
 			<script>
 				$(document).ready(function() {
+					// Determine endpoint based on environment
+					const host = window.location.hostname === 'localhost' ? 'http://localhost:9001' : 'https://mdwiki.toolforge.org';
 					const apiUrl = `/api.php?get=in_process&limit=200&order=add_date`;
 
 					$('#process_table').DataTable({
 						ajax: {
 							url: apiUrl,
-							dataSrc: 'results'
+							dataSrc: 'results' // Tells DataTables to look for the array inside the 'results' key
 						},
 						stateSave: true,
 						lengthMenu: [
@@ -82,6 +85,7 @@ class ProcessControllerDataTable extends AbstractControllerNoPost
 							{
 								data: 'add_date',
 								render: function(data, type, row) {
+									// Extract YYYY-MM-DD from the timestamp
 									let dateOnly = data.includes(' ') ? data.split(' ')[0] : data;
 									let encodedTitle = encodeURIComponent(row.title);
 									return `<a href="//mdwikicx.toolforge.org/wiki/\${row.lang}/\${encodedTitle}" target="_blank">\${dateOnly}</a>`;

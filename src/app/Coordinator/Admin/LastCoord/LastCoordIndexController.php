@@ -3,6 +3,7 @@
 
 namespace App\Coordinator\Admin\LastCoord;
 
+use App\ApiClients\WikiApi;
 use App\User\CurrentUser;
 use App\Coordinator\RecentTranslations;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
@@ -231,7 +232,7 @@ class LastCoordIndexController extends AbstractControllerNoPost
 
 		if ($this->lastTable === "pages") {
 			$viewsNumber = $tabg['views'] ?? '?';
-			$view = $this->helper->makeViewByNumber($target, $viewsNumber, $llang, $pupdate);
+			$view = WikiApi::makeViewByNumber($target, $viewsNumber, $llang, $pupdate);
 		}
 
 		$encodedTitle = rawurlencode(str_replace(' ', '_', $mdTitle));

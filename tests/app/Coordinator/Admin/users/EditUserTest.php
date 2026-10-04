@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class EditUserTest extends TestCase
 {
-    private $outputBuffer;
 
     protected function setUp(): void
     {
@@ -38,9 +37,6 @@ class EditUserTest extends TestCase
         $_GET['project'] = 'TestProject';
         $_GET['email'] = 'test@example.com';
         $_GET['user_id'] = '123';
-
-        // Load required dependencies
-        require_once __DIR__ . '/../../../../src/bootstrap.php';
 
         // Capture output
         ob_start();

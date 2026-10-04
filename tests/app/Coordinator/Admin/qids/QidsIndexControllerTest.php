@@ -4,7 +4,7 @@ namespace Tests\Coordinator\Admin\Qids;
 
 use PHPUnit\Framework\TestCase;
 
-class IndexTest extends TestCase
+class QidsIndexControllerTest extends TestCase
 {
     public function testQidTableValidation()
     {

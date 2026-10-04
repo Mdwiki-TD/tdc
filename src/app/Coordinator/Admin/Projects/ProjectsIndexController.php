@@ -5,6 +5,7 @@ namespace App\Coordinator\Admin\Projects;
 
 use App\SQLorAPI\TitlesTable;
 use App\Coordinator\Admin\Common\AbstractController;
+
 /**
  * Class ProjectsIndexController
  * Renders the editable projects table. On POST, delegates to

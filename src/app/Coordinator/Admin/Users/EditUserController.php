@@ -3,10 +3,11 @@
 
 namespace App\Coordinator\Admin\Users;
 
-use App\Utils\Html;
-
+use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractEditController;
+use App\Utils\Html2;
+
 /**
  * Class EditUserController
  * Renders the add/edit form for a single user's email/wiki/project
@@ -27,7 +28,7 @@ class EditUserController extends AbstractEditController
     /**
      * Builds the user/email/wiki/project edit-or-add form markup.
      */
-    private function buildFormHtml(string $userId): string
+    private function buildFormHtml(string $userId, array $ProjectsTitleToId): string
     {
         $userInfo  = (UsersTable::getInstance())->get_user_by_id($userId);
         $user      = $userInfo['username'] ?? '';
@@ -35,7 +36,7 @@ class EditUserController extends AbstractEditController
         $userGroup = $userInfo['user_group'] ?? '';
         $email     = $userInfo['email'] ?? '';
 
-        $projectLine = Html::make_project_to_user($userGroup);
+        $projectLine = Html2::make_project_to_user($userGroup, $ProjectsTitleToId);
 
         $idRow = <<<HTML
             <div class='col-md-3'>
@@ -107,6 +108,9 @@ class EditUserController extends AbstractEditController
     }
     protected function buildForm(): string
     {
-        return $this->buildFormHtml($this->userId);
+        $projectsTab = (TitlesTable::getInstance())->getProjects();
+        $ProjectsTitleToId = array_column($projectsTab, 'g_id', 'g_title');
+
+        return $this->buildFormHtml($this->userId, $ProjectsTitleToId);
     }
 }

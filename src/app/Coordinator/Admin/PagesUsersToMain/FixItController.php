@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
+
 /**
  * Class FixItController
  * Handles displaying the page edit form and duplicate entry checks (GET requests).

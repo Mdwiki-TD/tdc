@@ -1,4 +1,5 @@
 <?php
+// src/app/tools/process1.php
 
 namespace App\Coordinator\Tools;
 
@@ -72,6 +73,8 @@ class ProcessController extends AbstractControllerNoPost
 
 	private function createProcessRow(array $tab, int $nnnn): string
 	{
+		// { "id": 3284, "title": "Triquetral fracture", "user": "SeaTub", "lang": "es", "cat": "RTT", "translate_type": "all", "word": 198, "add_date": "2026-02-17 03:00:00", "campaign": "Main", "autonym": "español" }
+
 		$user	  	= $tab['user'] ?? "";
 		$langCode  	= $tab['lang'] ?? "";
 		$mdTitle   	= $tab['title'] ?? "";
@@ -79,6 +82,7 @@ class ProcessController extends AbstractControllerNoPost
 		$campaign  	= $tab['campaign'] ?? "";
 
 		$date	  = $tab['add_date'] ?? "";
+		// if $date has : then split before first space `2026-02-25 03:00:00` > `2026-02-25`
 		if (strpos($date, ':') !== false) {
 			$date = explode(' ', $date)[0];
 		}

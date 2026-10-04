@@ -4,7 +4,7 @@ namespace Tests\Coordinator\Admin\Projects;
 
 use PHPUnit\Framework\TestCase;
 
-class IndexTest extends TestCase
+class ProjectsIndexControllerTest extends TestCase
 {
     public function testUasortByGId()
     {

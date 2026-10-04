@@ -5,6 +5,7 @@ namespace App\Coordinator\Admin\Campaigns;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use App\SQLorAPI\CategoriesTable;
+
 /**
  * Class CampaignsIndexController
  * Renders the editable campaigns/categories table. On POST, delegates

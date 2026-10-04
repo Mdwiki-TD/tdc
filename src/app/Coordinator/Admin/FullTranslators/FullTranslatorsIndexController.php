@@ -5,6 +5,8 @@ namespace App\Coordinator\Admin\FullTranslators;
 
 use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractController;
+
+
 /**
  * Class FullTranslatorsIndexController
  * Renders the editable "full article translators" table. On POST,

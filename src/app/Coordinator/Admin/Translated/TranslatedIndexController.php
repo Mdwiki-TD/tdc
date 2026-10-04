@@ -1,16 +1,17 @@
 <?php
-// src/app/Coordinator/Admin/Translated/TranslatedIndexController.php
+// src/app/Coordinator/Admin/translated/index.php
 
 namespace App\Coordinator\Admin\Translated;
-
-use App\Coordinator\Helps\RecentHelps;
-use App\Utils\Html;
 
 use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\PagesTable;
 use App\SQLorAPI\RecentTable;
 use App\Tables\LangsTables;
+
+use App\Utils\HtmlUrls;
+use function App\Coordinator\Helps\RecentHelps\filter_table;
+use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
 /**
  * Class TranslatedIndexController
@@ -105,15 +106,15 @@ class TranslatedIndexController extends AbstractControllerNoPost
 		$target  = trim($tabg['target'] ?? '');
 		$pupdate = $tabg['pupdate'] ?? '';
 
-		$mdwikiTitle = Html::make_mdwiki_title($mdTitle);
-		$targe33	 = Html::make_target_url($target, $lang);
+		$mdwikiTitle = HtmlUrls::make_mdwiki_title($mdTitle);
+		$targe33	 = HtmlUrls::make_target_url($target, $lang);
 
 		$editParams = [
 			'id'	=> $id,
 			'table' => $table
 		];
 
-		$editIcon = Html::make_edit_icon_new("edit_page", $editParams);
+		$editIcon = HtmlUrls::make_edit_icon_new("edit_page", $editParams);
 
 		return <<<HTML
 			<tr>
@@ -193,14 +194,14 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	private function renderFilterCard(int $countResult, string $paginationHtml): void
 	{
 		$langTable  = $this->getLanguages();
-		$filterLang = RecentHelps::filter_recent2($this->lang, $langTable);
+		$filterLang = filter_recent2($this->lang, $langTable);
 
 		$data = [
 			"pages"	   => 'Main',
 			"pages_users" => 'User',
 		];
 
-		$filterNs = RecentHelps::filter_table($data, $this->table, 'table');
+		$filterNs = filter_table($data, $this->table, 'table');
 
 		$header = <<<HTML
 			<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
@@ -263,3 +264,5 @@ class TranslatedIndexController extends AbstractControllerNoPost
 		HTML;
 	}
 }
+
+

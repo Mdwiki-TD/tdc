@@ -3,15 +3,14 @@
 
 namespace App\Coordinator\Admin\Users;
 
-use App\ApiClients\WikiApi;
-use App\Coordinator\Helps\Sugust;
-use App\Utils\Html;
-
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
 use App\Tables\LangsTables;
 use App\CSRFManager;
 
+use App\ApiClients\WikiApi;
+use App\Utils\HtmlUrls;
+use function App\Coordinator\Helps\Sugust\get_sugust;
 
 /**
  * Class MsgController
@@ -52,7 +51,7 @@ class MsgController extends AbstractControllerNoPost
 
         $views = WikiApi::get_views($this->target, $this->lang, $this->date);
 
-        $sugustTab = Sugust::get_sugust($this->title, $this->lang);
+        $sugustTab = get_sugust($this->title, $this->lang);
         $sugust = $sugustTab['sugust'] ?? '';
 
         $here = $this->buildHereLink($sugust);
@@ -123,8 +122,8 @@ class MsgController extends AbstractControllerNoPost
      */
     private function buildMessageBody(int $views, string $sugust, string $here): string
     {
-        $title2 = Html::make_mdwiki_title($this->title);
-        $sugust2 = Html::make_mdwiki_title($sugust);
+        $title2 = HtmlUrls::make_mdwiki_title($this->title);
+        $sugust2 = HtmlUrls::make_mdwiki_title($sugust);
 
         $urlViews3 = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query([
             'project'   => "{$this->lang}.wikipedia.org",
@@ -139,7 +138,7 @@ class MsgController extends AbstractControllerNoPost
         $views2 = "<a target='_blank' href='$urlViews3'><font color='#0000ff'>$views people</font></a>";
 
         $lang2 = LangsTables::get_lang_name($this->lang) ?? $this->lang;
-        $lang2 = Html::make_target_url($this->target, $this->lang, $lang2);
+        $lang2 = HtmlUrls::make_target_url($this->target, $this->lang, $lang2);
 
         $date = $this->date;
 

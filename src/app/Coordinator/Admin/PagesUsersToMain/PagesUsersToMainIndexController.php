@@ -1,16 +1,15 @@
 <?php
-// src/app/Coordinator/Admin/PagesUsersToMain/PagesUsersToMainIndexController.php
+// src/app/Coordinator/Admin/pages_users_to_main/index.php
 
 namespace App\Coordinator\Admin\PagesUsersToMain;
-
-use App\Coordinator\Helps\RecentHelps;
-use App\Utils\Html;
 
 use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\PagesTable;
 use App\Tables\LangsTables;
+use App\Utils\HtmlUrls;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
+use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
 /**
  * Class PagesUsersToMainIndexController
@@ -20,10 +19,12 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
  */
 class PagesUsersToMainIndexController extends AbstractControllerNoPost
 {
+	// private CurrentUser $currentUser;
 	private string $lang;
 
 	public function __construct()
 	{
+		// $this->currentUser = CurrentUser::getInstance();
 		$this->lang = $_GET['lang'] ?? 'All';
 
 		if ($this->lang !== 'All' && !LangsTables::get_lang_title($this->lang)) {
@@ -151,13 +152,13 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 		$target  = trim($tabg['target'] ?? '');
 		$pupdate = $tabg['pupdate'] ?? '';
 
-		$mdwikiTitle = Html::make_mdwiki_title($mdTitle);
-		$targe33	 = Html::make_target_url($target, $lang);
+		$mdwikiTitle = HtmlUrls::make_mdwiki_title($mdTitle);
+		$targe33	 = HtmlUrls::make_target_url($target, $lang);
 
 		$newUser   = $tabg['new_user'] ?? "";
 		$newTarget = $tabg['new_target'] ?? "";
 
-		$targe44 = Html::make_target_url($newTarget, $lang);
+		$targe44 = HtmlUrls::make_target_url($newTarget, $lang);
 
 		$editParams = [
 			'id'		 => $id,
@@ -165,7 +166,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 			'new_target' => $newTarget,
 		];
 
-		$editIcon = Html::make_edit_icon_new("fix_page", $editParams);
+		$editIcon = HtmlUrls::make_edit_icon_new("fix_page", $editParams);
 
 		$qid	= $tabg['qid'] ?? "";
 		$newQid = $tabg['new_qid'] ?? "";
@@ -229,7 +230,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	private function renderFilterCard(int $countResult, string $recentTableHtml): void
 	{
 		$langTable = $this->getLanguages();
-		$filterLang = RecentHelps::filter_recent2($this->lang, $langTable);
+		$filterLang = filter_recent2($this->lang, $langTable);
 
 		$header = <<<HTML
 			<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
@@ -240,6 +241,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 					</div>
 					<div class='col-md-3'>
 						<div class="input-group">
+						<!-- <span class="input-group-text">Lang:</span> -->  <!-- bg-light-subtle -->
 							<select aria-label="Language code"
 								class="selectpicker"
 								id='lang'
@@ -278,22 +280,27 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 				$(document).ready(function() {
 					var table = $('#pages_table').DataTable({
 						stateSave: true,
+						// order: [[10	, 'desc']],
+						// paging: false,
 						lengthMenu: [
 							[50, 100, 150],
 							[50, 100, 150]
 						],
+						// scrollY: 800
 					});
 
 					document.querySelectorAll('a.toggle-vis').forEach((el) => {
 						el.addEventListener('click', function(e) {
 							e.preventDefault();
 
+							// add class mb_btn_active to this
 							el.classList.toggle('btn-outline-primary');
 							el.classList.toggle('btn-outline-secondary');
 
 							let columnIdx = e.target.getAttribute('data-column');
 							let column = table.column(columnIdx);
 
+							// Toggle the visibility
 							column.visible(!column.visible());
 						});
 					});

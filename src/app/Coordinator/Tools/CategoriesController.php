@@ -41,6 +41,10 @@ class CategoriesController extends AbstractControllerNoPost
 		$this->echoBs5Card($header, $body, '');
 
 		echo <<<HTML
+			<!-- langs_url example: { "results": [ { "lang": "ar" }, { "lang": "or" }, { "lang": "zh" }, ... } -->
+
+			<!-- rest_api example: { "orwiki": { "title": "ଶ୍ରେଣୀ:Translated from MDWiki", "badges": [], "url": "https://or.wikipedia.org/wiki/ଶ୍ରେଣୀ:Translated_from_MDWiki" }, "arwiki": { "title": "تصنيف:Translated from MDWiki", "badges": [], "url": "https://ar.wikipedia.org/wiki/تصنيف:Translated_from_MDWiki" }, ... } -->
+
 			<script>
 				const langs_url = `/api.php?get=pages&select=lang&distinct=1&lang=not_empty`;
 				const rest_api = `https://www.wikidata.org/w/rest.php/wikibase/v1/entities/items/Q107014860/sitelinks`;
@@ -51,6 +55,7 @@ class CategoriesController extends AbstractControllerNoPost
 					info: false,
 					searching: false,
 					ajax: function(data, callback, settings) {
+						// Fetch data from both sources with Promise.all
 						Promise.all([
 							fetch(langs_url).then(res => res.json()),
 							fetch(rest_api).then(res => res.json())
@@ -79,6 +84,7 @@ class CategoriesController extends AbstractControllerNoPost
 								return row;
 							});
 
+							// Column counters
 							$('#cat_count').text(categoryCount);
 							$('#fallback_count').text(fallbackCount);
 

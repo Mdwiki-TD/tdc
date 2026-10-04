@@ -5,6 +5,7 @@ namespace App\Coordinator\Admin\Add;
 
 use App\Coordinator\Admin\Common\AbstractController;
 use App\SQLorAPI\CategoriesTable;
+
 /**
  * Class AddIndexController
  * Renders the "Add translations" form, including the category select

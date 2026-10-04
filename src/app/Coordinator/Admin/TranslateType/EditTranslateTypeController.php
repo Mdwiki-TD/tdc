@@ -1,9 +1,10 @@
 <?php
-// src/app/Coordinator/Admin/tt/edit_translate_type.php
+// src/app/Coordinator/Admin/TranslateType/edit_translate_type.php
 
 namespace App\Coordinator\Admin\TranslateType;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
+
 /**
  *
  * Class EditTranslateTypeController

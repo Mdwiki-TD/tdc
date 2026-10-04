@@ -4,7 +4,7 @@ namespace Tests\Coordinator\Admin\PagesUsersToMain;
 
 use PHPUnit\Framework\TestCase;
 
-class IndexTest extends TestCase
+class PagesUsersToMainIndexControllerTest extends TestCase
 {
     public function testGetLanguagesTypeFilter()
     {

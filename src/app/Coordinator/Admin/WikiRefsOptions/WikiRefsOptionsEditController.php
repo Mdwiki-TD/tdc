@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
+
 /**
  * Class WikiRefsOptionsEditController
  * Handles add/edit/delete of a single language_settings row (GET

@@ -4,6 +4,7 @@
 namespace App\Coordinator\Admin\Qids;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
+
 /**
  * Class EditQidController
  * Renders the add/edit form for a single qid entry (GET request only;

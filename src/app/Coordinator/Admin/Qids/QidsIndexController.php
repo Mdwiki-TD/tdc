@@ -3,10 +3,9 @@
 
 namespace App\Coordinator\Admin\Qids;
 
-use App\Utils\Html;
-
 use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
+use App\Utils\HtmlUrls;
 use App\SQLorAPI\QidsTable;
 
 /**
@@ -105,8 +104,8 @@ class QidsIndexController extends AbstractControllerNoPost
 			'qid'       => $qid,
 		];
 
-		$editIcon = Html::make_edit_icon_new('qids/edit_qid', $editParams);
-		$mdTitle  = Html::make_mdwiki_title($title);
+		$editIcon = HtmlUrls::make_edit_icon_new('qids/edit_qid', $editParams);
+		$mdTitle  = HtmlUrls::make_mdwiki_title($title);
 
 		return <<<HTML
             <tr>
@@ -225,7 +224,7 @@ class QidsIndexController extends AbstractControllerNoPost
 	 */
 	private function renderAddNewCard(): void
 	{
-		$newRow = Html::make_edit_icon_new('qids/edit_qid', ['new' => 1, 'qid_table' => $this->qidTable], 'Add one!');
+		$newRow = HtmlUrls::make_edit_icon_new('qids/edit_qid', ['new' => 1, 'qid_table' => $this->qidTable], 'Add one!');
 
 		echo <<<HTML
             <div class='card mt-1'>

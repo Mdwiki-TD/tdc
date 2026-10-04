@@ -89,40 +89,6 @@ class RecentTranslations
     }
 
     /**
-     * Builds the pageviews link/number for a single row.
-     */
-    public function makeViewByNumber(string $target, $numb, string $lang, string $pupdate): string
-    {
-        $target = trim($target);
-        $numb2 = (!empty($numb)) ? $numb : "?";
-        $start = !empty($pupdate) ? $pupdate : '2019-01-01';
-        $end = date("Y-m-d", strtotime("yesterday"));
-
-        $url = 'https://pageviews.wmcloud.org/?' . http_build_query([
-            'project'   => "$lang.wikipedia.org",
-            'platform'  => 'all-access',
-            'agent'     => 'all-agents',
-            'start'     => $start,
-            'end'       => $end,
-            'redirects' => '0',
-            'pages'     => $target,
-        ], '', '&', PHP_QUERY_RFC3986);
-
-        $numb3 = (is_numeric($numb2)) ? number_format((float)$numb2) : $numb2;
-        $link = "<a target='_blank' href='$url'>$numb3</a>";
-
-        if (is_numeric($numb2) && intval($numb2) > 0) {
-            return $link;
-        }
-
-        $start2 = !empty($pupdate) ? str_replace('-', '', $pupdate) : '20190101';
-
-        $url2 = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
-
-        return "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
-    }
-
-    /**
      * Builds the language filter <select> options.
      */
     public function filterRecent(string $lang, array $data): string
@@ -157,7 +123,10 @@ class RecentTranslations
                     if (tableElement.length) {
                         table = $('#last_table').DataTable({
                             stateSave: true,
+                            // order: [ [6, 'desc'] ],
                             paging: false,
+                            // lengthMenu: [[100, 150, 200], [250, 150, 200]],
+                            // scrollY: 800,
                             responsive: {
                                 details: true
                             }
@@ -168,10 +137,12 @@ class RecentTranslations
                     if (usersTableElement.length) {
                         table = $('#last_users_table').DataTable({
                             stateSave: true,
+                            // paging: false,
                             lengthMenu: [
                                 [100, 150, 200],
                                 [100, 150, 200]
                             ],
+                            // scrollY: 800,
                             responsive: {
                                 details: true
                             }
@@ -182,12 +153,14 @@ class RecentTranslations
                             el.addEventListener('click', function(e) {
                                 e.preventDefault();
 
+                                // add class mb_btn_active to this
                                 el.classList.toggle('btn-outline-primary');
                                 el.classList.toggle('btn-outline-secondary');
 
                                 let columnIdx = e.target.getAttribute('data-column');
                                 let column = table.column(columnIdx);
 
+                                // Toggle the visibility
                                 column.visible(!column.visible());
                             });
                         });

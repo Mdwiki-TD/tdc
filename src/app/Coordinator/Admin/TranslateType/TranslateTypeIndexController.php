@@ -1,13 +1,13 @@
 <?php
-// src/app/Coordinator/Admin/tt/index.php
+// src/app/Coordinator/Admin/TranslateType/TranslateTypeIndexController.php
 
 namespace App\Coordinator\Admin\TranslateType;
 
-use App\Results27\GetCats;
-use App\Utils\Html;
-
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Tables\SqlTables\TablesSql;
+use App\SQLorAPI\CategoriesTable;
+use App\Utils\HtmlUrls;
+use App\Utils\Html;
+use function App\Results27\GetCats\get_mdwiki_cat_members;
 
 /**
  * Class TranslateTypeIndexController
@@ -38,23 +38,37 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         $filterHtml = $this->renderFilterSelect($this->cat);
 
         $this->loadTranslateTypeData();
-        $this->loadCategoryTitles();
+        $CatTitles = $this->loadCategoryTitles();
 
-        [$tableRows, $ttCount] = $this->buildTableRows();
+        [$tableRows, $ttCount] = $this->buildTableRows($CatTitles);
 
-        $newRow = Html::make_edit_icon_new('edit_translate_type', ['new' => 1], 'Add one!');
+        $newRow = HtmlUrls::make_edit_icon_new('edit_translate_type', ['new' => 1], 'Add one!');
 
         $this->renderMainCard($filterHtml, $ttCount, $tableRows);
         $this->renderAddNewCard($newRow);
         $this->renderDataTableScript();
     }
 
+    private function loadCatToCamp(): array
+    {
+        $categoriesTab = (CategoriesTable::getInstance())->getCategories();
+        $CatToCamp = [];
+        foreach ($categoriesTab as $k => $tab) {
+            if (!empty($tab['category']) && !empty($tab['campaign'])) {
+                $CatToCamp[$tab['category']] = $tab['campaign'];
+            }
+        }
+
+        return $CatToCamp;
+    }
     /**
      * Builds the category filter dropdown markup.
      */
     private function renderFilterSelect(string $cat): string
     {
-        $catsTitles = array_keys(TablesSql::$sCatToCamp);
+        $CatToCamp = $this->loadCatToCamp();
+
+        $catsTitles = array_keys($CatToCamp);
 
         $template = <<<HTML
 			<div class="input-group">
@@ -87,14 +101,8 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         }
     }
 
-    /**
-     * Populates TablesSql::$sCatTitles either from the full set of
-     * known/unclassified titles ("All") or from a Wikipedia category's
-     * members.
-     */
-    private function loadCategoryTitles(): void
+    private function loadCategoryTitles(): array
     {
-        TablesSql::$sCatTitles = [];
 
         if ($this->cat === 'All') {
             $rows = $this->db->fetchQuery('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)');
@@ -105,21 +113,20 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
                 }
             }
 
-            TablesSql::$sCatTitles = array_keys($this->fullTranslatesTab);
-        } else {
-            TablesSql::$sCatTitles = GetCats::get_mdwiki_cat_members($this->cat, true, 1);
+            return array_keys($this->fullTranslatesTab);
         }
+        return get_mdwiki_cat_members($this->cat, true, 1);
     }
 
     /**
      * Builds every table row and returns [$html, $count].
      */
-    private function buildTableRows(): array
+    private function buildTableRows(array $CatTitles): array
     {
         $tableRows = '';
         $ttCount = 0;
 
-        foreach (TablesSql::$sCatTitles as $title) {
+        foreach ($CatTitles as $title) {
             if (in_array($title, $this->newTitles)) {
                 continue;
             }
@@ -150,9 +157,9 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
             'full'  => $full,
         ];
 
-        $editIcon = Html::make_edit_icon_new('edit_translate_type', $editParams);
+        $editIcon = HtmlUrls::make_edit_icon_new('edit_translate_type', $editParams);
 
-        $mdTitle = Html::make_mdwiki_title($title);
+        $mdTitle = HtmlUrls::make_mdwiki_title($title);
 
         $leadChecked = ($lead == 1 || $lead == "1") ? 'checked' : '';
         $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';

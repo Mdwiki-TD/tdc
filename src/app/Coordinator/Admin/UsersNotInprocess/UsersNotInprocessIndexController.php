@@ -5,6 +5,7 @@ namespace App\Coordinator\Admin\UsersNotInprocess;
 
 use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractController;
+
 /**
  * Class UsersNotInprocessIndexController
  * Renders the editable "users not added to in-process table" list. On
