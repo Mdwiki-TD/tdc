@@ -1,7 +1,6 @@
 <?php
 // src/app/Coordinator/RecentTranslations.php
 
-// use App\Coordinator\RecentTranslations;
 namespace App\Coordinator;
 
 use App\SQLorAPI\ApiOrSqlService;

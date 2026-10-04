@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class EditUserTest extends TestCase
 {
-    private $outputBuffer;
 
     protected function setUp(): void
     {

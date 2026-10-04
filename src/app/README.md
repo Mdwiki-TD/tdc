@@ -68,7 +68,13 @@ app/
 │   ├── Helpers/
 │   │   ├── RecentHelps.php
 │   │   └── Sugust.php
-│   ├── admin.7z
+│   ├── Tools/
+│   │   ├── CategoriesController.php
+│   │   ├── LastController.php
+│   │   ├── ProcessController.php
+│   │   ├── ProcessControllerDataTable.php
+│   │   ├── ProcessTotalController.php
+│   │   └── StatController.php
 │   ├── README.md
 │   └── RecentTranslations.php
 ├── MdwikiSql/
@@ -92,16 +98,8 @@ app/
 │   ├── UsersTable.php
 │   └── ViewsTable.php
 ├── Tables/
-│   ├── lang_names.json
 │   ├── LangsTables.php
 │   └── MainTables.php
-├── Tools/
-│   ├── CategoriesController.php
-│   ├── LastController.php
-│   ├── ProcessController.php
-│   ├── ProcessControllerDataTable.php
-│   ├── ProcessTotalController.php
-│   └── StatController.php
 ├── User/
 │   ├── AccessKeyRepository.php
 │   ├── CoordinatorRepository.php
