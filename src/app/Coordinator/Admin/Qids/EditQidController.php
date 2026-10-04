@@ -1,0 +1,96 @@
+<?php
+// src/app/coordinator/admin/qids/edit_qid.php
+
+namespace App\Coordinator\Admin\Qids;
+
+use App\Coordinator\Admin\Common\AbstractEditController;
+/**
+ * Class EditQidController
+ * Renders the add/edit form for a single qid entry (GET request only;
+ * submission is handled by QidsPostProcessor).
+ */
+class EditQidController extends AbstractEditController
+{
+    private string $id;
+    private string $title;
+    private string $qid;
+    private string $qidTable;
+
+    public function __construct()
+    {
+        $this->id       = $_GET['id'] ?? '';
+        $this->title    = $_GET['title'] ?? '';
+        $this->qid      = $_GET['qid'] ?? '';
+        $table          = $_GET['qid_table'] ?? '';
+        $this->qidTable = in_array($table, ['qids', 'qids_others'], true) ? $table : 'qids';
+    }
+
+    protected function createPostProcessor(): object
+    {
+        return new QidsPostProcessor($_GET['qid_table'] ?? '');
+    }
+
+    /**
+     * Builds the id/title/qid edit-or-add form markup.
+     */
+    private function buildFormHtml(string $id, string $title, string $qid, string $qidTable): string
+    {
+        $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
+        $idRow = <<<HTML
+            <div class='col-md-3'>
+                <div class='input-group mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='input-group-text'>Id</span>
+                    </div>
+                    <input class='form-control' type='text' name='rows[1][id]' value='$id' readonly/>
+                </div>
+            </div>
+        HTML;
+
+        if (empty($id)) {
+            $idRow = "";
+        }
+
+        return <<<HTML
+            <form action='index.php?ty=qids/edit_qid&qid_table=$qidTable&nonav=120' method="POST">
+                {$this->createCsrfTokenField()}
+                <input name='qid_table' value="$qidTable" type="hidden"/>
+                <input name='edit' value="1" type="hidden"/>
+                <div class='container'>
+                    <div class='row'>
+                        $idRow
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Title</span>
+                                </div>
+                                <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='input-group mb-3'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Qid</span>
+                                </div>
+                                <input class='form-control' type='text' name='rows[1][qid]' value='$qid' required/>
+                            </div>
+                        </div>
+                        <div class='col-md-2'>
+                            <input class='btn btn-outline-primary' type='submit' value='send'/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        HTML;
+    }
+
+    protected function getCardTitle(): string
+    {
+        return $this->id !== '' ? 'Edit Qid' : 'Add New Qid';
+    }
+    protected function buildForm(): string
+    {
+        return $this->buildFormHtml($this->id, $this->title, $this->qid, $this->qidTable);
+    }
+}

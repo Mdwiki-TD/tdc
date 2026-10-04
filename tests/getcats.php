@@ -4,11 +4,11 @@ header('Content-Type: application/json');
 
 include_once __DIR__ . '/../bootstrap.php';
 
-use function App\Results\GetCats\get_mdwiki_cat_members;
+use App\Results27\GetCats;
 
 $cat  = $_REQUEST['cat'] ?? 'RTT';
 
-$tab = get_mdwiki_cat_members($cat, false);
+$tab = GetCats::get_mdwiki_cat_members($cat, false);
 
 sort($tab);
 
