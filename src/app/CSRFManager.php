@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Security;
+namespace App;
 
 use RuntimeException;
 

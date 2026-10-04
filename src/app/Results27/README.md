@@ -18,7 +18,7 @@ The `results/` module is the **translation gap analysis engine** for the Mdwiki 
 | ------------- | ------------------------------------------------------------- |
 | PHP 8.2+      | Runtime language                                              |
 | MediaWiki API | Live category member fetching from mdwiki.org                 |
-| cURL          | HTTP transport (via `mdwiki_api.php`)                         |
+| cURL          | HTTP transport (via `MdwikiApi.php`)                         |
 | JSON files    | Local caching layer for category members and translation data |
 | Composer      | Dependency management                                         |
 
@@ -32,8 +32,8 @@ The `results/` module is the **translation gap analysis engine** for the Mdwiki 
 
 ```
 results/
-├── get_results.php     # Gap analysis: compares category members vs translated pages
-└── getcats.php         # Category member retrieval with caching and recursive traversal
+├── GetResults.php     # Gap analysis: compares category members vs translated pages
+└── GetCats.php         # Category member retrieval with caching and recursive traversal
 ```
 
 ### Data Flow
@@ -52,18 +52,18 @@ get_cat_exists_and_missing(cat, depth, code)
 
 | Function                       | File              | Purpose                               |
 | ------------------------------ | ----------------- | ------------------------------------- |
-| `get_cat_exists_and_missing()` | `get_results.php` | Main entry point: gap analysis        |
-| `get_mdwiki_cat_members()`     | `getcats.php`     | Recursive category traversal with BFS |
-| `get_category_members()`       | `getcats.php`     | Cache-or-API orchestrator             |
-| `fetch_category_members()`     | `getcats.php`     | Live MediaWiki API caller             |
-| `get_category_from_cache()`    | `getcats.php`     | JSON cache reader                     |
+| `get_cat_exists_and_missing()` | `GetResults.php` | Main entry point: gap analysis        |
+| `get_mdwiki_cat_members()`     | `GetCats.php`     | Recursive category traversal with BFS |
+| `get_category_members()`       | `GetCats.php`     | Cache-or-API orchestrator             |
+| `fetch_category_members()`     | `GetCats.php`     | Live MediaWiki API caller             |
+| `get_category_from_cache()`    | `GetCats.php`     | JSON cache reader                     |
 
 ### Namespaces
 
 | Namespace            | File              |
 | -------------------- | ----------------- |
-| `Results\GetResults` | `get_results.php` |
-| `Results\GetCats`    | `getcats.php`     |
+| `Results\GetResults` | `GetResults.php` |
+| `Results\GetCats`    | `GetCats.php`     |
 
 ---
 
@@ -78,12 +78,12 @@ get_cat_exists_and_missing(cat, depth, code)
 
 ### Code Organization
 
-**Good**. Two files with clear responsibilities: `getcats.php` handles data retrieval, `get_results.php` handles analysis. The BFS implementation is clean and well-structured.
+**Good**. Two files with clear responsibilities: `GetCats.php` handles data retrieval, `GetResults.php` handles analysis. The BFS implementation is clean and well-structured.
 
 ### SOLID Principles Compliance
 
 -   **Single Responsibility**: Each function has one clear purpose
--   **Separation of Concerns**: Data retrieval (`getcats.php`) is cleanly separated from analysis (`get_results.php`)
+-   **Separation of Concerns**: Data retrieval (`GetCats.php`) is cleanly separated from analysis (`GetResults.php`)
 
 ### Maintainability
 
@@ -223,7 +223,7 @@ $TABLESPATH/
 ### Usage Example
 
 ```php
-use App\Results\GetResults\get_cat_exists_and_missing;
+use App\Results27\GetResults\get_cat_exists_and_missing;
 
 // Get missing translations for "Diseases" category in Arabic
 $result = get_cat_exists_and_missing('Diseases', 2, 'ar');

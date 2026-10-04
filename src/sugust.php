@@ -4,11 +4,11 @@ header('Content-Type: application/json');
 
 include_once __DIR__ . '/bootstrap.php';
 
-use function App\Coordinator\Helps\Sugust\get_sugust;
+use App\Coordinator\Helps\Sugust;
 
 $title  = $_GET['title'] ?? $_POST['title'] ?? '';
 $lang  = $_GET['lang'] ?? $_POST['lang'] ?? '';
 
-$tab = get_sugust($title, $lang);
+$tab = Sugust::get_sugust($title, $lang);
 
 echo json_encode($tab);

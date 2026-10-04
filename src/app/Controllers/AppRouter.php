@@ -1,7 +1,7 @@
 <?php
-// src/app/AppRouter.php
+// src/app/Controllers/AppRouter.php
 
-namespace App;
+namespace App\Controllers;
 
 use App\User\CurrentUser;
 use App\Utils\SidebarMenu;
@@ -23,12 +23,12 @@ class AppRouter
 	 * @var array<string, string> Map of tool route keys to controller class names
 	 */
 	private array $toolsControllers = [
-		"categories"    => "\\App\\Tools\\CategoriesController",
-		"last"          => "\\App\\Tools\\LastController",
-		"process"       => "\\App\\Tools\\ProcessControllerDataTable",
-		"process1"      => "\\App\\Tools\\ProcessController",
-		"process_total" => "\\App\\Tools\\ProcessTotalController",
-		"stat"          => "\\App\\Tools\\StatController",
+		"categories"    => "\\App\\Coordinator\\Tools\\CategoriesController",
+		"last"          => "\\App\\Coordinator\\Tools\\LastController",
+		"process"       => "\\App\\Coordinator\\Tools\\ProcessControllerDataTable",
+		"process1"      => "\\App\\Coordinator\\Tools\\ProcessController",
+		"process_total" => "\\App\\Coordinator\\Tools\\ProcessTotalController",
+		"stat"          => "\\App\\Coordinator\\Tools\\StatController",
 	];
 
 
