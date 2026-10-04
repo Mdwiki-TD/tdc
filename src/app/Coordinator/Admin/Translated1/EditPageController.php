@@ -5,8 +5,6 @@ namespace App\Coordinator\Admin\Translated;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 
-require_once __DIR__ . '/edit_page_post.php';
-
 /**
  * Class EditPageController
  * Handles editing and deleting translated pages (GET renders the form,
