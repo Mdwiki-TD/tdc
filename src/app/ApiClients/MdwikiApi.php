@@ -14,7 +14,7 @@ class MdwikiApi
         $ch = curl_init();
 
         if ($ch === false) {
-            Logger::debug("post_url_mdwiki: Failed to initialize cURL");
+            Logger::debug(" Failed to initialize cURL");
             return '';
         }
 
@@ -38,17 +38,17 @@ class MdwikiApi
             . htmlspecialchars($url2, ENT_QUOTES, 'UTF-8') . '</a>';
 
         if ($httpCode !== 200) {
-            Logger::debug('post_url_mdwiki: Error: API request failed with status code ' . $httpCode);
+            Logger::debug(' Error: API request failed with status code ' . $httpCode);
         }
 
-        Logger::debug("post_url_mdwiki: (http_code: $httpCode) $url2");
+        Logger::debug(" (http_code: $httpCode) $url2");
 
         if ($output === false) {
-            Logger::debug("post_url_mdwiki: cURL Error: " . ($curlError ?: 'Unknown error'));
+            Logger::debug(" cURL Error: " . ($curlError ?: 'Unknown error'));
         }
 
         if (curl_errno($ch)) {
-            Logger::debug('post_url_mdwiki: Error: ' . $curlError);
+            Logger::debug(' Error: ' . $curlError);
         }
 
         return $output === false ? '' : $output;
@@ -67,7 +67,7 @@ class MdwikiApi
         $result = json_decode($out, true);
 
         if (!is_array($result)) {
-            Logger::debug("post_url_mdwiki: Failed to parse JSON response");
+            Logger::debug(" Failed to parse JSON response");
             return [];
         }
 
