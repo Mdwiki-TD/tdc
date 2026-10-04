@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+
 
 // Set test environment
 putenv('APP_ENV=testing');
