@@ -3,7 +3,7 @@
 namespace App\Coordinator\Helps;
 
 use App\Logger;
-use App\Tables\Langs\LangsTables;
+use App\Tables\LangsTables;
 
 class RecentHelps
 {

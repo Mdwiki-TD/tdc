@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tools;
+namespace App\Coordinator\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Tables\Main\MainTables;
+use App\Tables\MainTables;
 use App\SQLorAPI\CategoriesTable;
 use App\SQLorAPI\QidsTable;
 use App\Utils\Html;

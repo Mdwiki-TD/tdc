@@ -140,7 +140,7 @@ class CampaignsIndexController extends AbstractController
                     `;
 
                     $('#tab_logic').append(e);
-                };
+                }
             </script>
         HTML;
     }

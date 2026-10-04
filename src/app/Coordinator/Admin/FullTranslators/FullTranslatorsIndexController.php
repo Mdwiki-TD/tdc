@@ -166,7 +166,7 @@ class FullTranslatorsIndexController extends AbstractController
                     `;
 
                     $('#full_tab').append(e);
-                };
+                }
             </script>
         HTML;
     }

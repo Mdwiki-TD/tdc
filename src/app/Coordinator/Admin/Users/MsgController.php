@@ -9,8 +9,8 @@ use App\Utils\Html;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
-use App\Tables\Langs\LangsTables;
-use App\Security\CSRFManager;
+use App\Tables\LangsTables;
+use App\CSRFManager;
 
 
 /**

@@ -6,14 +6,14 @@ function populateFilterOptions(results) {
     if (!results) return;
     const unique = (key, transform = val => val) => {
         return [...new Set(results.map(item => transform(item[key])))].filter(Boolean).sort();
-    };
+    }
 
     // إعداد القيم الافتراضية
     const now = new Date();
     const defaults = {
         year: String(now.getFullYear()),
         month: String(now.getMonth() + 1).padStart(2, '0')
-    };
+    }
 
     const options = {
         year: unique('year', d => String(d)),
@@ -21,7 +21,7 @@ function populateFilterOptions(results) {
         user: unique('user'),
         lang: unique('lang'),
         result: unique('result')
-    };
+    }
 
     // التأكد من وجود القيم الافتراضية ضمن الخيارات
     for (const key of ['year', 'month']) {
@@ -154,7 +154,7 @@ function processTableData(json) {
     originalResults = json.results;
 
     // تجميع الصفوف حسب الحقول المطلوبة
-    const grouped = {};
+    const grouped = {}
     originalResults.forEach(item => {
         const key = [
             item.date.split(' ')[0], // فقط جزء التاريخ بدون الوقت
@@ -169,7 +169,7 @@ function processTableData(json) {
                 ...item,
                 resultsArray: [item.result],
                 idsArray: [item.id]
-            };
+            }
         } else {
             grouped[key].resultsArray.push(item.result);
             grouped[key].idsArray.push(item.id);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tools;
+namespace App\Coordinator\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 
@@ -65,7 +65,7 @@ class CategoriesController extends AbstractControllerNoPost
 									lang: lang,
 									category: "",
 									fallback: ""
-								};
+								}
 
 								if (restData[key]) {
 									row.category = `<a target="_blank" href="\${restData[key].url}">\${restData[key].title}</a>`;

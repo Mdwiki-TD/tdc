@@ -151,7 +151,7 @@ class ProjectsIndexController extends AbstractController
                     `;
 
                     $('#g_tab').append(e);
-                };
+                }
             </script>
         HTML;
 	}

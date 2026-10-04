@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Common;
 use App\Utils\Html;
 
 use App\User\CurrentUser;
-use App\Security\CSRFManager;
+use App\CSRFManager;
 use App\MdwikiSql\Database;
 
 /**

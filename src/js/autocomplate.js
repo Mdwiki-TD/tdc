@@ -53,7 +53,7 @@ function filterData(data, term) {
 				return {
 					label: `${item.code} - ${item.name} (${item.autonym})`,
 					value: item.code
-				};
+				}
 			}
 		}
 	});

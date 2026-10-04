@@ -10,7 +10,7 @@ use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\PagesTable;
 use App\SQLorAPI\RecentTable;
-use App\Tables\Langs\LangsTables;
+use App\Tables\LangsTables;
 
 /**
  * Class TranslatedIndexController

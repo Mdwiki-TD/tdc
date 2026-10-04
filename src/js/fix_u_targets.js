@@ -41,7 +41,7 @@ function fix_u_targets() {
     });
     //---
     return true;
-};
+}
 
 // load to_get() when document is ready
 $(document).ready(function () {

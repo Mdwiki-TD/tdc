@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tools;
+namespace App\Coordinator\Tools;
 
 use App\Coordinator\RecentTranslations;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;

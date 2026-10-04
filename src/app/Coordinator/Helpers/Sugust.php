@@ -2,7 +2,7 @@
 
 namespace App\Coordinator\Helps;
 
-use App\Tables\Main\MainTables;
+use App\Tables\MainTables;
 use App\SQLorAPI\InProcessTable;
 use App\Results27\GetResults;
 
