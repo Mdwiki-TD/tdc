@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\PagesTable;
-use App\Tables\Langs\LangsTables;
+use App\Tables\LangsTables;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use function App\Utils\Html\make_mdwiki_title;

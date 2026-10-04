@@ -5,8 +5,8 @@ namespace App\Coordinator\Admin\Users;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
-use App\Tables\Langs\LangsTables;
-use App\Security\CSRFManager;
+use App\Tables\LangsTables;
+use App\CSRFManager;
 
 use function App\ApiClients\WikiApi\get_views;
 use function App\Utils\Html\make_mdwiki_title;

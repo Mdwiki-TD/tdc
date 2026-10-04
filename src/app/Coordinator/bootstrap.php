@@ -2,7 +2,6 @@
 // src/app/Coordinator/bootstrap.php
 
 
-require_once __DIR__ . '/RecentTranslations.php';
 require_once __DIR__ . '/helpers/bootstrap.php';
 
 // require_once __DIR__ . '/Admin/common/FormBuilder.php';

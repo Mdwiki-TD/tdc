@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Common;
 
 use App\User\CurrentUser;
-use App\Security\CSRFManager;
+use App\CSRFManager;
 use App\MdwikiSql\Database;
 use function App\Utils\Html\div_alert;
 

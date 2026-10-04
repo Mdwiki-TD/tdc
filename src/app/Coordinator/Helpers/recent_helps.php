@@ -4,7 +4,7 @@
 namespace App\Coordinator\Helps\RecentHelps;
 
 use App\Logger;
-use App\Tables\Langs\LangsTables;
+use App\Tables\LangsTables;
 
 function filter_recent2($lang, $result)
 {

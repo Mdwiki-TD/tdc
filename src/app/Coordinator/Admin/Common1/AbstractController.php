@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Common;
 
 use App\MdwikiSql\Database;
 use App\User\CurrentUser;
-use App\Security\CSRFManager;
+use App\CSRFManager;
 
 /**
  * Class AbstractController
