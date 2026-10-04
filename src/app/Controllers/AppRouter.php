@@ -1,7 +1,7 @@
 <?php
-// src/app/AppRouter.php
+// src/app/Controllers/AppRouter.php
 
-namespace App;
+namespace App\Controllers;
 
 use App\User\CurrentUser;
 use App\Utils\SidebarMenu;

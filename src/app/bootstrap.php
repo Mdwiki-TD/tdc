@@ -5,29 +5,7 @@
  *
  * This file serves as the central bootstrap for the Translation Dashboard
  * application. It handles environment setup and includes all necessary
- * dependencies in the correct order.
- *
- * Include Order:
- * 1. CSRF protection module
- * 2. Configuration settings
- * 3. Utility functions (glob-loaded)
- * 4. OAuth authentication (environment-specific path)
- * 5. API call modules (glob-loaded)
- * 6. API/SQL abstraction layer (glob-loaded)
- * 7. Database table definitions (glob-loaded, special handling for langcode)
- * 8. Results processing modules
- * 9. Coordinator tools helpers
- *
- * Environment Setup:
- * - Sets HOME environment variable for configuration file discovery
- * - Handles Windows development environment (I:/MD_TOOLS/MDWIKI_MAIN_REPO)
- * - Production uses Toolforge standard HOME path
- *
- * Usage:
- * ```php
- * // Include at the start of any entry point
- * include_once __DIR__ . '/bootstrap.php';
- * ```
+ * dependencies.
  *
  * @package    Core
  * @subpackage Bootstrap
@@ -44,11 +22,9 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 	error_reporting(E_ALL);
 }
 
-
 // Configure secure session settings
 ini_set('session.use_strict_mode', '1');
 
-// don't use App\Settings here, Instance is not created yet
 $env = getenv('APP_ENV') ?: ($_ENV['APP_ENV'] ?? 'development');
 
 if ($env === 'development' && file_exists(__DIR__ . '/load_env.php')) {
@@ -68,24 +44,3 @@ if (file_exists($vendorAutoload)) {
 }
 
 include_once __DIR__ . '/autoload.php';
-
-// Load security module first
-include_once __DIR__ . '/CSRFManager.php';
-
-# Results27
-include_once __DIR__ . "/Results27/bootstrap.php";
-
-# ApiClients
-include_once __DIR__ . '/ApiClients/mdwiki_api.php';
-include_once __DIR__ . '/ApiClients/WikiApi.php';
-
-# Controllers
-include_once __DIR__ . '/Controllers/AppRouter.php'; // AppRouter
-include_once __DIR__ . '/coordinator/bootstrap.php';
-include_once __DIR__ . '/Tools/bootstrap.php';
-
-# Tables
-include_once __DIR__ . '/Tables/sql_tables.php';
-include_once __DIR__ . '/Utils/html.php';
-include_once __DIR__ . '/Utils/html2.php';
-include_once __DIR__ . '/Utils/htmlUrls.php';
