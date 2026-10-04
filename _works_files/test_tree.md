@@ -12,7 +12,6 @@ tests/
 │   │   │   │   ├── AddIndexControllerTest.php
 │   │   │   │   ├── AddPostProcessorTest.php
 │   │   │   │   └── PostTest.php
-│   │   │   ├── add/
 │   │   │   ├── Admins/
 │   │   │   │   ├── AdminsIndexControllerTest.php
 │   │   │   │   └── AdminsPostProcessorTest.php
@@ -37,13 +36,11 @@ tests/
 │   │   │   │   ├── FixItControllerTest.php
 │   │   │   │   ├── FixItPostProcessorTest.php
 │   │   │   │   └── PagesUsersToMainIndexControllerTest.php
-│   │   │   ├── projects/
 │   │   │   ├── Projects/
 │   │   │   │   ├── PostTest.php
 │   │   │   │   ├── ProjectsIndexControllerTest.old.php
 │   │   │   │   ├── ProjectsIndexControllerTest.php
 │   │   │   │   └── ProjectsPostProcessorTest.php
-│   │   │   ├── qids/
 │   │   │   ├── Qids/
 │   │   │   │   ├── EditQidControllerTest.php
 │   │   │   │   ├── EditQidTest.php
@@ -56,7 +53,6 @@ tests/
 │   │   │   ├── Settings/
 │   │   │   │   ├── SettingsIndexControllerTest.php
 │   │   │   │   └── SettingsPostProcessorTest.php
-│   │   │   ├── translated/
 │   │   │   ├── Translated/
 │   │   │   │   ├── EditPageControllerTest.php
 │   │   │   │   ├── EditPagePostHandlerTest.old.php
@@ -66,7 +62,6 @@ tests/
 │   │   │   │   ├── EditTranslateTypeControllerTest.php
 │   │   │   │   ├── TranslateTypeIndexControllerTest.php
 │   │   │   │   └── TtPostProcessorTest.php
-│   │   │   ├── users/
 │   │   │   ├── Users/
 │   │   │   │   ├── EditUserControllerTest.php
 │   │   │   │   ├── EditUserPostProcessorTest.php
