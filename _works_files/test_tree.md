@@ -10,9 +10,9 @@ tests/
 │   │   ├── Admin/
 │   │   │   ├── Add/
 │   │   │   │   ├── AddIndexControllerTest.php
-│   │   │   │   └── AddPostProcessorTest.php
-│   │   │   ├── add/
+│   │   │   │   ├── AddPostProcessorTest.php
 │   │   │   │   └── PostTest.php
+│   │   │   ├── add/
 │   │   │   ├── Admins/
 │   │   │   │   ├── AdminsIndexControllerTest.php
 │   │   │   │   └── AdminsPostProcessorTest.php
@@ -38,16 +38,16 @@ tests/
 │   │   │   │   ├── FixItPostProcessorTest.php
 │   │   │   │   └── PagesUsersToMainIndexControllerTest.php
 │   │   │   ├── projects/
-│   │   │   │   ├── PostTest.php
-│   │   │   │   └── ProjectsIndexControllerTest.php
 │   │   │   ├── Projects/
+│   │   │   │   ├── PostTest.php
+│   │   │   │   ├── ProjectsIndexControllerTest.old.php
 │   │   │   │   ├── ProjectsIndexControllerTest.php
 │   │   │   │   └── ProjectsPostProcessorTest.php
 │   │   │   ├── qids/
-│   │   │   │   ├── EditQidTest.php
-│   │   │   │   └── QidsIndexControllerTest.php
 │   │   │   ├── Qids/
 │   │   │   │   ├── EditQidControllerTest.php
+│   │   │   │   ├── EditQidTest.php
+│   │   │   │   ├── QidsIndexControllerTest.old.php
 │   │   │   │   ├── QidsIndexControllerTest.php
 │   │   │   │   └── QidsPostProcessorTest.php
 │   │   │   ├── Reports/
@@ -57,9 +57,9 @@ tests/
 │   │   │   │   ├── SettingsIndexControllerTest.php
 │   │   │   │   └── SettingsPostProcessorTest.php
 │   │   │   ├── translated/
-│   │   │   │   └── EditPagePostHandlerTest.php
 │   │   │   ├── Translated/
 │   │   │   │   ├── EditPageControllerTest.php
+│   │   │   │   ├── EditPagePostHandlerTest.old.php
 │   │   │   │   ├── EditPagePostHandlerTest.php
 │   │   │   │   └── TranslatedIndexControllerTest.php
 │   │   │   ├── TranslateType/
@@ -67,14 +67,14 @@ tests/
 │   │   │   │   ├── TranslateTypeIndexControllerTest.php
 │   │   │   │   └── TtPostProcessorTest.php
 │   │   │   ├── users/
-│   │   │   │   ├── EditUserTest.php
-│   │   │   │   ├── MsgTest.php
-│   │   │   │   ├── PostTest.php
-│   │   │   │   └── UsersIndexControllerTest.php
 │   │   │   ├── Users/
 │   │   │   │   ├── EditUserControllerTest.php
 │   │   │   │   ├── EditUserPostProcessorTest.php
+│   │   │   │   ├── EditUserTest.php
 │   │   │   │   ├── MsgControllerTest.php
+│   │   │   │   ├── MsgTest.php
+│   │   │   │   ├── PostTest.php
+│   │   │   │   ├── UsersIndexControllerTest.old.php
 │   │   │   │   └── UsersIndexControllerTest.php
 │   │   │   ├── UsersNotInprocess/
 │   │   │   │   ├── UsersNotInprocessIndexControllerTest.php
