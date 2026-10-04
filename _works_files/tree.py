@@ -15,7 +15,7 @@ skip_list = [
     "*.7z",
 ]
 
-admin_path = main_project_path / "src/app/coordinator/admin"
+admin_path = main_project_path / "src/app/Coordinator/Admin"
 
 paths = [
     (main_project_path / "src", Path(__file__).parent / "tree.md"),
