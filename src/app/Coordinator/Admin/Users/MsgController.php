@@ -10,7 +10,7 @@ use App\CSRFManager;
 
 use App\ApiClients\WikiApi;
 use App\Utils\HtmlUrls;
-use function App\Coordinator\Helps\Sugust\get_sugust;
+use App\Coordinator\Helps\Sugust;
 
 /**
  * Class MsgController
@@ -51,7 +51,7 @@ class MsgController extends AbstractControllerNoPost
 
         $views = WikiApi::get_views($this->target, $this->lang, $this->date);
 
-        $sugustTab = get_sugust($this->title, $this->lang);
+        $sugustTab = Sugust::get_sugust($this->title, $this->lang);
         $sugust = $sugustTab['sugust'] ?? '';
 
         $here = $this->buildHereLink($sugust);

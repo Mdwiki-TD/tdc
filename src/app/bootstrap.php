@@ -34,14 +34,3 @@ if (file_exists($vendorAutoload)) {
 }
 
 include_once __DIR__ . '/autoload.php';
-
-# Results27
-include_once __DIR__ . '/Results27/GetResults.php';
-include_once __DIR__ . '/Results27/GetCats.php';
-
-# ApiClients
-include_once __DIR__ . '/ApiClients/MdwikiApi.php';
-
-# Coordinator
-require_once __DIR__ . '/Coordinator/Helpers/RecentHelps.php';
-include_once __DIR__ . '/Coordinator/Helpers/Sugust.php';

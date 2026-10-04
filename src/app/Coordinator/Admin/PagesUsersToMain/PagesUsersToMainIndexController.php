@@ -9,7 +9,7 @@ use App\Tables\LangsTables;
 use App\Utils\HtmlUrls;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use function App\Coordinator\Helps\RecentHelps\filter_recent2;
+use App\Coordinator\Helps\RecentHelps;
 
 /**
  * Class PagesUsersToMainIndexController
@@ -230,7 +230,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	private function renderFilterCard(int $countResult, string $recentTableHtml): void
 	{
 		$langTable = $this->getLanguages();
-		$filterLang = filter_recent2($this->lang, $langTable);
+		$filterLang = RecentHelps::filter_recent2($this->lang, $langTable);
 
 		$header = <<<HTML
 			<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>

@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\CategoriesTable;
 use App\Utils\HtmlUrls;
 use App\Utils\Html;
-use function App\Results27\GetCats\get_mdwiki_cat_members;
+use App\Results27\GetCats;
 
 /**
  * Class TranslateTypeIndexController
@@ -115,7 +115,7 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
 
             return array_keys($this->fullTranslatesTab);
         }
-        return get_mdwiki_cat_members($this->cat, true, 1);
+        return GetCats::get_mdwiki_cat_members($this->cat, true, 1);
     }
 
     /**

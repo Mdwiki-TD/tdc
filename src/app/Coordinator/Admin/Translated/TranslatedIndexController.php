@@ -10,8 +10,7 @@ use App\SQLorAPI\RecentTable;
 use App\Tables\LangsTables;
 
 use App\Utils\HtmlUrls;
-use function App\Coordinator\Helps\RecentHelps\filter_table;
-use function App\Coordinator\Helps\RecentHelps\filter_recent2;
+use App\Coordinator\Helps\RecentHelps;
 
 /**
  * Class TranslatedIndexController
@@ -194,14 +193,14 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	private function renderFilterCard(int $countResult, string $paginationHtml): void
 	{
 		$langTable  = $this->getLanguages();
-		$filterLang = filter_recent2($this->lang, $langTable);
+		$filterLang = RecentHelps::filter_recent2($this->lang, $langTable);
 
 		$data = [
 			"pages"	   => 'Main',
 			"pages_users" => 'User',
 		];
 
-		$filterNs = filter_table($data, $this->table, 'table');
+		$filterNs = RecentHelps::filter_table($data, $this->table, 'table');
 
 		$header = <<<HTML
 			<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>

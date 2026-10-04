@@ -6,9 +6,8 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\Tables\MainTables;
 use App\SQLorAPI\CategoriesTable;
 use App\SQLorAPI\QidsTable;
-
 use App\Utils\Html;
-use function App\Results27\GetCats\get_mdwiki_cat_members;
+use App\Results27\GetCats;
 
 /**
  * Class StatController
@@ -48,7 +47,7 @@ class StatController extends AbstractControllerNoPost
 		<tbody>
 	HTML;
 
-		$titles = get_mdwiki_cat_members($this->cat, true, 1);
+		$titles = GetCats::get_mdwiki_cat_members($this->cat, true, 1);
 
 		$noQid = 0;
 		$noWord = 0;
