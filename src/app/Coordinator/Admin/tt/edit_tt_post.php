@@ -36,7 +36,7 @@ class TtPostProcessor extends AbstractPostHandler
 		if ($ttId == 0 || $ttId == '0' || empty($ttId)) {
 			$query = "INSERT INTO translate_type (tt_title, tt_lead, tt_full) SELECT ?, ?, ?";
 			$params = [$ttTitle, $ttLead, $ttFull];
-		};
+		}
 
 		$result = $this->db->executeQuery($query, $params);
 

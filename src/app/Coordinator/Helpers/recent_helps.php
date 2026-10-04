@@ -20,7 +20,7 @@ function filter_recent2($lang, $result)
         $langList .= <<<HTML
             <option data-tokens='$langCode' value='$langCode' $selected>$langeee</option>
             HTML;
-    };
+    }
 
     return $langList;
 }
@@ -47,7 +47,7 @@ function do_add_date($results)
             return true;
         }
 
-    };
+    }
 
     return false;
 }

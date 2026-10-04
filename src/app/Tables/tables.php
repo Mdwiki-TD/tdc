@@ -73,7 +73,7 @@ class MainTables
 			self::$xLeadRefsTable[$title] = $tab['r_lead_refs'];
 
 			self::$xAssessmentsTable[$title] = $tab['importance'];
-		};
+		}
 	}
 	public static function getViews(string $title): int
 	{

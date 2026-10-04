@@ -174,7 +174,7 @@ class AdminsIndexController extends AbstractController
                     `;
 
                     $('#full_tab').append(e);
-                };
+                }
             </script>
         HTML;
 	}

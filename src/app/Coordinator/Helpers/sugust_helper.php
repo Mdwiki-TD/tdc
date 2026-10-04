@@ -15,7 +15,7 @@ function get_sugust($title, $lang): array
 
     if (empty($title)) {
         return array('sugust' => '', 'time' => 0);
-    };
+    }
 
     $timeStart = microtime(true);
 

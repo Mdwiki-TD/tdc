@@ -61,7 +61,7 @@ function make_view_by_number($target, $numb, $lang, $pupdate)
     $link = "<a target='_blank' name='toget' data-json-url='$url2' href='$url'>$numb2</a>";
 
     return $link;
-};
+}
 
 function get_views($target, $lang, $pupdate)
 {
@@ -84,4 +84,4 @@ function get_views($target, $lang, $pupdate)
     $view = isset($result['items']) ? array_sum(array_column($result['items'], 'views')) : 0;
 
     return $view;
-};
+}

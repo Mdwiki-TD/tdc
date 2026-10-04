@@ -70,7 +70,7 @@ class CategoriesController extends AbstractControllerNoPost
 									lang: lang,
 									category: "",
 									fallback: ""
-								};
+								}
 
 								if (restData[key]) {
 									row.category = `<a target="_blank" href="\${restData[key].url}">\${restData[key].title}</a>`;

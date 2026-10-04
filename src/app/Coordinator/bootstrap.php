@@ -4,12 +4,6 @@
 
 require_once __DIR__ . '/helpers/bootstrap.php';
 
-// require_once __DIR__ . '/Admin/common/FormBuilder.php';
-require_once __DIR__ . '/Admin/common/AbstractPostHandler.php';
-require_once __DIR__ . '/Admin/common/AbstractController.php';
-require_once __DIR__ . '/Admin/common/AbstractEditController.php';
-require_once __DIR__ . '/Admin/common/AbstractControllerNoPost.php';
-
 include_once __DIR__ . "/Admin/add/index.php";
 include_once __DIR__ . "/Admin/admins/index.php";
 include_once __DIR__ . "/Admin/campaigns/index.php";
@@ -36,5 +30,3 @@ include_once __DIR__ . "/Admin/tt/edit_translate_type.php";
 include_once __DIR__ . "/Admin/users/edit_user.php";
 include_once __DIR__ . "/Admin/users/msg.php";
 include_once __DIR__ . "/Admin/wikirefs_options/wikirefs_options_edit.php";
-
-require_once __DIR__ . '/Admin/index.php';

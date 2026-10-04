@@ -33,7 +33,7 @@ class ProjectsPostProcessor extends AbstractPostHandler
 		if ($gId == 0 || $gId == '0' || empty($gId)) {
 			$query = "INSERT INTO projects (g_title) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM projects WHERE g_title = ?)";
 			$params = [$gTitle, $gTitle];
-		};
+		}
 
 		$result = $this->db->executeQuery($query, $params);
 

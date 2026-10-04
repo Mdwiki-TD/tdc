@@ -40,8 +40,8 @@ foreach ($categoriesTab as $k => $tab) {
         $isDefault = $tab['is_default'];
         if ($isDefault == 1 || $isDefault == '1') TablesSql::$sMainCat = $tab['category'];
         if ($isDefault == 1 || $isDefault == '1') TablesSql::$sMainCamp = $tab['campaign'];
-    };
-};
+    }
+}
 
 $projectsTab = (TitlesTable::getInstance())->getProjects();
 
