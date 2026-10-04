@@ -6,8 +6,6 @@ namespace App\Coordinator\Admin\Settings;
 use App\SQLorAPI\SettingsTable;
 use App\Coordinator\Admin\Common\AbstractController;
 use App\Coordinator\Admin\Settings\SettingsPostProcessor;
-
-
 /**
  * Class SettingsIndexController
  * Renders the editable site settings form. On POST, delegates to

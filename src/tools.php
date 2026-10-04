@@ -1,5 +1,5 @@
 <?php
-// src/index.php
+// src/tools.php
 
 use App\Layout\PageRunner;
 use App\Controllers\AppRouter;
