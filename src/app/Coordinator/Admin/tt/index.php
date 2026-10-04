@@ -6,9 +6,7 @@ namespace App\Coordinator\Admin\TranslateType;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\CategoriesTable;
 
-use function App\Utils\Html\makeDropdown;
-use function App\Utils\Html\make_mdwiki_title;
-use function App\Utils\Html\make_edit_icon_new;
+use App\Utils\Html;
 use function App\Results\GetCats\get_mdwiki_cat_members;
 
 /**
@@ -44,7 +42,7 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
 
         [$tableRows, $ttCount] = $this->buildTableRows($CatTitles);
 
-        $newRow = make_edit_icon_new('edit_translate_type', ['new' => 1], 'Add one!');
+        $newRow = HtmlUrls::make_edit_icon_new('edit_translate_type', ['new' => 1], 'Add one!');
 
         $this->renderMainCard($filterHtml, $ttCount, $tableRows);
         $this->renderAddNewCard($newRow);
@@ -79,7 +77,7 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
 			</div>
 		HTML;
 
-        $dropdown = makeDropdown($catsTitles, $cat, 'cat', 'All');
+        $dropdown = Html::makeDropdown($catsTitles, $cat, 'cat', 'All');
 
         return sprintf($template, 'Category:', $dropdown);
     }
@@ -159,9 +157,9 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
             'full'  => $full,
         ];
 
-        $editIcon = make_edit_icon_new('edit_translate_type', $editParams);
+        $editIcon = HtmlUrls::make_edit_icon_new('edit_translate_type', $editParams);
 
-        $mdTitle = make_mdwiki_title($title);
+        $mdTitle = HtmlUrls::make_mdwiki_title($title);
 
         $leadChecked = ($lead == 1 || $lead == "1") ? 'checked' : '';
         $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';

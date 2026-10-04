@@ -9,9 +9,7 @@ use App\SQLorAPI\PagesTable;
 use App\SQLorAPI\RecentTable;
 use App\Tables\LangsTables;
 
-use function App\Utils\Html\make_mdwiki_title;
-use function App\Utils\Html\make_target_url;
-use function App\Utils\Html\make_edit_icon_new;
+use App\Utils\Html;
 use function App\Coordinator\Helps\RecentHelps\filter_table;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
@@ -108,15 +106,15 @@ class TranslatedIndexController extends AbstractControllerNoPost
 		$target  = trim($tabg['target'] ?? '');
 		$pupdate = $tabg['pupdate'] ?? '';
 
-		$mdwikiTitle = make_mdwiki_title($mdTitle);
-		$targe33	 = make_target_url($target, $lang);
+		$mdwikiTitle = HtmlUrls::make_mdwiki_title($mdTitle);
+		$targe33	 = HtmlUrls::make_target_url($target, $lang);
 
 		$editParams = [
 			'id'	=> $id,
 			'table' => $table
 		];
 
-		$editIcon = make_edit_icon_new("edit_page", $editParams);
+		$editIcon = HtmlUrls::make_edit_icon_new("edit_page", $editParams);
 
 		return <<<HTML
 			<tr>

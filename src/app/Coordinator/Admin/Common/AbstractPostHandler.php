@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Common;
 use App\User\CurrentUser;
 use App\CSRFManager;
 use App\MdwikiSql\Database;
-use function App\Utils\Html\div_alert;
+use App\Utils\Html;
 
 /**
  * Class AbstractPostHandler
@@ -123,13 +123,13 @@ abstract class AbstractPostHandler
     }
     public function RenderIndexMesseges(array $result): void
     {
-        echo div_alert($result['errors'], 'danger');
+        echo Html2::div_alert($result['errors'], 'danger');
 
         if ($result['csrfError']) {
             $this->DisplayCsrfAlert();
         }
 
-        echo div_alert($result['texts'], 'success');
+        echo Html2::div_alert($result['texts'], 'success');
     }
     public function RenderMesseges(array $result): void
     {

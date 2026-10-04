@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Users;
 use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractEditController;
-use function App\Utils\Html\make_project_to_user;
+use App\Utils\Html;
 
 require_once __DIR__ . '/edit_user_post.php';
 
@@ -38,7 +38,7 @@ class EditUserController extends AbstractEditController
         $userGroup = $userInfo['user_group'] ?? '';
         $email     = $userInfo['email'] ?? '';
 
-        $projectLine = make_project_to_user($userGroup, $ProjectsTitleToId);
+        $projectLine = Html2::make_project_to_user($userGroup, $ProjectsTitleToId);
 
         $idRow = <<<HTML
             <div class='col-md-3'>

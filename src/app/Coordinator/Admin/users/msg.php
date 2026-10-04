@@ -9,8 +9,7 @@ use App\Tables\LangsTables;
 use App\CSRFManager;
 
 use App\ApiClients\WikiApi;
-use function App\Utils\Html\make_mdwiki_title;
-use function App\Utils\Html\make_target_url;
+use App\Utils\Html;
 use function App\Coordinator\Helps\Sugust\get_sugust;
 
 /**
@@ -123,8 +122,8 @@ class MsgController extends AbstractControllerNoPost
      */
     private function buildMessageBody(int $views, string $sugust, string $here): string
     {
-        $title2 = make_mdwiki_title($this->title);
-        $sugust2 = make_mdwiki_title($sugust);
+        $title2 = HtmlUrls::make_mdwiki_title($this->title);
+        $sugust2 = HtmlUrls::make_mdwiki_title($sugust);
 
         $urlViews3 = 'https://' . 'pageviews.wmcloud.org/?' . http_build_query([
             'project'   => "{$this->lang}.wikipedia.org",
@@ -139,7 +138,7 @@ class MsgController extends AbstractControllerNoPost
         $views2 = "<a target='_blank' href='$urlViews3'><font color='#0000ff'>$views people</font></a>";
 
         $lang2 = LangsTables::get_lang_name($this->lang) ?? $this->lang;
-        $lang2 = make_target_url($this->target, $this->lang, $lang2);
+        $lang2 = HtmlUrls::make_target_url($this->target, $this->lang, $lang2);
 
         $date = $this->date;
 

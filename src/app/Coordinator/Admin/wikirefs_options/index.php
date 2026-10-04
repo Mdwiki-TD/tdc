@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\PagesTable;
 
 use App\SQLorAPI\SettingsTable;
-use function App\Utils\Html\make_edit_icon_new;
+use App\Utils\Html;
 
 /**
  * Class WikiRefsOptionsIndexController
@@ -36,7 +36,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 
 		$this->renderMainCard($sato);
 
-		$newRow = make_edit_icon_new("wikirefs_options_edit", ["new" => 1], "Add one!");
+		$newRow = HtmlUrls::make_edit_icon_new("wikirefs_options_edit", ["new" => 1], "Add one!");
 		$this->renderAddNewCard($newRow);
 
 		$this->renderDataTableScript();
@@ -91,7 +91,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 			"add_en_lang" => $tabg["add_en_lang"],
 		];
 
-		$editIcon = make_edit_icon_new("wikirefs_options_edit", $editParams);
+		$editIcon = HtmlUrls::make_edit_icon_new("wikirefs_options_edit", $editParams);
 
 		return <<<HTML
 			<tr>

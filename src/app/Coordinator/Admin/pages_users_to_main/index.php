@@ -8,9 +8,7 @@ use App\SQLorAPI\PagesTable;
 use App\Tables\LangsTables;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use function App\Utils\Html\make_mdwiki_title;
-use function App\Utils\Html\make_target_url;
-use function App\Utils\Html\make_edit_icon_new;
+use App\Utils\Html;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
 /**
@@ -154,13 +152,13 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 		$target  = trim($tabg['target'] ?? '');
 		$pupdate = $tabg['pupdate'] ?? '';
 
-		$mdwikiTitle = make_mdwiki_title($mdTitle);
-		$targe33	 = make_target_url($target, $lang);
+		$mdwikiTitle = HtmlUrls::make_mdwiki_title($mdTitle);
+		$targe33	 = HtmlUrls::make_target_url($target, $lang);
 
 		$newUser   = $tabg['new_user'] ?? "";
 		$newTarget = $tabg['new_target'] ?? "";
 
-		$targe44 = make_target_url($newTarget, $lang);
+		$targe44 = HtmlUrls::make_target_url($newTarget, $lang);
 
 		$editParams = [
 			'id'		 => $id,
@@ -168,7 +166,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 			'new_target' => $newTarget,
 		];
 
-		$editIcon = make_edit_icon_new("fix_page", $editParams);
+		$editIcon = HtmlUrls::make_edit_icon_new("fix_page", $editParams);
 
 		$qid	= $tabg['qid'] ?? "";
 		$newQid = $tabg['new_qid'] ?? "";

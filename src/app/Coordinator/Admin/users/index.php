@@ -10,8 +10,7 @@ use App\SQLorAPI\TitlesTable;
 
 use App\SQLorAPI\UsersTable;
 
-use function App\Utils\Html\make_mail_icon_new;
-use function App\Utils\Html\make_edit_icon_new;
+use App\Utils\Html;
 
 /**
  * Class EmailsIndexController
@@ -47,7 +46,7 @@ class UsersIndexController extends AbstractControllerNoPost
 
 		$this->renderMainCard($numb, $projectFilter, $formRows);
 
-		$newRow = make_edit_icon_new('edit_user', ['new' => 1], 'Add one!');
+		$newRow = HtmlUrls::make_edit_icon_new('edit_user', ['new' => 1], 'Add one!');
 		$this->renderAddNewCard($newRow);
 
 		$this->renderDataTableAssets();
@@ -176,12 +175,12 @@ class UsersIndexController extends AbstractControllerNoPost
 			$mailIcon = '';
 
 			if (array_key_exists($userName, $lastUserToTab)) {
-				$mailIcon = make_mail_icon_new($lastUserToTab[$userName], 'pup_window_email');
+				$mailIcon = HtmlUrls::make_mail_icon_new($lastUserToTab[$userName], 'pup_window_email');
 			}
 
 			$editParams = [ 'user_id' => $userId];
 
-			$editIcon = make_edit_icon_new("edit_user", $editParams);
+			$editIcon = HtmlUrls::make_edit_icon_new("edit_user", $editParams);
 
 			$formRows .= <<<HTML
 				<tr>
