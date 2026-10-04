@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/users_not_inprocess/users_not_inprocess_post.php
+// src/app/Coordinator/Admin/users_not_inprocess/users_not_inprocess_post.php
 
 namespace App\Coordinator\Admin\UsersNotInprocess;
 

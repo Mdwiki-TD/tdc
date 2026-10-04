@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/last_coord/index.php
+// src/app/Coordinator/Admin/last_coord/index.php
 
 namespace App\Coordinator\Admin\LastCoord;
 

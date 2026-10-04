@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/add/add_post.php
+// src/app/Coordinator/Admin/add/add_post.php
 
 namespace App\Coordinator\Admin\Add;
 

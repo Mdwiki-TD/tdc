@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/tt/index.php
+// src/app/Coordinator/Admin/tt/index.php
 
 namespace App\Coordinator\Admin\TranslateType;
 
