@@ -5,8 +5,6 @@ namespace App\Coordinator\Admin\Qids;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 
-require_once __DIR__ . '/edit_qid_post.php';
-
 /**
  * Class EditQidController
  * Renders the add/edit form for a single qid entry (GET request only;

@@ -5,8 +5,6 @@ namespace App\Coordinator\Admin\PagesUsersToMain;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 
-require_once __DIR__ . '/fix_page_post.php';
-
 /**
  * Class FixItController
  * Handles displaying the page edit form and duplicate entry checks (GET requests).

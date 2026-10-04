@@ -8,8 +8,6 @@ use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractEditController;
 use App\Utils\Html2;
 
-require_once __DIR__ . '/edit_user_post.php';
-
 /**
  * Class EditUserController
  * Renders the add/edit form for a single user's email/wiki/project

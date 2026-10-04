@@ -1,5 +1,5 @@
 <?php
-// src/app/Coordinator/Helpers/recent_helps.php
+// src/app/Coordinator/Helpers/RecentHelps.php
 
 namespace App\Coordinator\Helps\RecentHelps;
 

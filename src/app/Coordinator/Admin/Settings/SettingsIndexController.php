@@ -8,8 +8,6 @@ use App\Coordinator\Admin\Common\AbstractController;
 use App\Coordinator\Admin\Settings\SettingsPostProcessor;
 
 
-require_once __DIR__ . '/settings_post.php';
-
 /**
  * Class SettingsIndexController
  * Renders the editable site settings form. On POST, delegates to

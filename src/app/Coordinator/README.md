@@ -53,7 +53,7 @@ coordinator/
 │   ├── process_total.php              # Summary of users with in-process work
 │   ├── stat.php                        # Category statistics (words, refs, views)
 │   ├── categories.php                  # Translation categories per language
-│   └── recent_helps.php               # Helper functions for recent views
+│   └── RecentHelps.php               # Helper functions for recent views
 └── admin/                              # Admin CRUD interfaces (coordinator-only)
     ├── index.php                       # Alias for tools/last.php
     ├── add/                            # Add translation records
@@ -124,7 +124,7 @@ coordinator/
 
 | Namespace           | Files                     | Responsibility                      |
 | ------------------- | ------------------------- | ----------------------------------- |
-| `Tools\RecentHelps` | `tools/recent_helps.php`  | Helper functions for recent views   |
+| `Tools\RecentHelps` | `tools/RecentHelps.php`  | Helper functions for recent views   |
 | `Add\AddPost`       | `admin/add/add_post.php`  | Database insert logic for new pages |
 | `Emails\Sugust`     | `admin/Emails/sugust.php` | Article suggestion engine           |
 

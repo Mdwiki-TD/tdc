@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Results\GetResults;
+namespace App\Results27\GetResults;
 
 use App\Logger;
 use App\Settings;
 
-use function App\Results\GetCats\get_mdwiki_cat_members;
+use function App\Results27\GetCats\get_mdwiki_cat_members;
 
 function get_cat_exists_and_missing($cat, $depth, $code, $useCache = true)
 {

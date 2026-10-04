@@ -1,11 +1,11 @@
 <?php
-// src/app/Coordinator/Helpers/sugust_helper.php
+// src/app/Coordinator/Helpers/Sugust.php
 
 namespace App\Coordinator\Helps\Sugust;
 
 use App\Tables\MainTables;
 use App\SQLorAPI\InProcessTable;
-use function App\Results\GetResults\get_cat_exists_and_missing;
+use function App\Results27\GetResults\get_cat_exists_and_missing;
 
 function get_sugust($title, $lang): array
 {

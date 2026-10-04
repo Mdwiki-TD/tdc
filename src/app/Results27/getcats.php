@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Results\GetCats;
+namespace App\Results27\GetCats;
 
 use App\Logger;
 use App\Settings;

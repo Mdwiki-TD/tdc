@@ -6,9 +6,6 @@ namespace App\Coordinator\Admin\Projects;
 use App\SQLorAPI\TitlesTable;
 use App\Coordinator\Admin\Common\AbstractController;
 
-
-require_once __DIR__ . '/projects_post.php';
-
 /**
  * Class ProjectsIndexController
  * Renders the editable projects table. On POST, delegates to

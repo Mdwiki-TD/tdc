@@ -6,8 +6,6 @@ namespace App\Coordinator\Admin\Admins;
 use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractController;
 
-require_once __DIR__ . '/admins_post.php';
-
 /**
  * Class AdminsIndexController
  * Renders the editable coordinators (admins) table. On POST, delegates

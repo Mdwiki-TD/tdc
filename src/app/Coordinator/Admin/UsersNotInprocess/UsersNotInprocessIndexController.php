@@ -1,46 +1,44 @@
 <?php
-// src/app/Coordinator/Admin/full_translators/index.php
+// src/app/Coordinator/Admin/users_not_inprocess/index.php
 
-namespace App\Coordinator\Admin\FullTranslators;
+namespace App\Coordinator\Admin\UsersNotInprocess;
 
 use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractController;
 
-require_once __DIR__ . '/full_translators_post.php';
-
 /**
- * Class FullTranslatorsIndexController
- * Renders the editable "full article translators" table. On POST,
- * delegates to FullTranslatorsPostProcessor first, then always renders
- * the current state of the list/form below it.
+ * Class UsersNotInprocessIndexController
+ * Renders the editable "users not added to in-process table" list. On
+ * POST, delegates to UsersNotInprocessPostProcessor first, then always
+ * renders the current state of the list/form below it.
  */
-class FullTranslatorsIndexController extends AbstractController
+class UsersNotInprocessIndexController extends AbstractController
 {
-    private const TY_NAME = 'full_translators';
+    private const TY_NAME = 'users_not_inprocess';
 
     protected function createPostProcessor(): object
     {
-        return new FullTranslatorsPostProcessor();
+        return new UsersNotInprocessPostProcessor();
     }
     public function renderFormCard(): void {
-        $translators = (UsersTable::getInstance())->getFullTranslators();
+        $users = (UsersTable::getInstance())->getUsersNoInprocess();
 
-        $formText = $this->buildTranslatorRows($translators);
-        $numb = count($translators) + 1;
+        $formText = $this->buildUserRows($users);
+        $numb = count($users) + 1;
         $formText .= $this->buildAddRowMarkup($numb);
 
         $this->renderCard($formText);
         $this->renderAddRowScript();
     }
     /**
-     * Builds the editable table rows for each existing full translator.
+     * Builds the editable table rows for each existing excluded user.
      */
-    private function buildTranslatorRows(array $translators): string
+    private function buildUserRows(array $users): string
     {
         $formText = '';
         $numb = 0;
 
-        foreach ($translators as $key => $table) {
+        foreach ($users as $key => $table) {
             $numb++;
 
             $userId   = $table['id'] ?? '';
@@ -59,7 +57,7 @@ class FullTranslatorsIndexController extends AbstractController
                         <span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
                         <input name='rows[$numb][user]' value='$usere' type='hidden'/>
                     </td>
-                    <td data-content="active">
+                    <td data-content="Active" data-order='$isActive'>
                         <div class='form-check form-switch'>
                             <input type='hidden' name='rows[$numb][active_orginal_value]' value='$isActive'>
                             <input type='hidden' name='rows[$numb][is_active]' value='0'>
@@ -77,7 +75,7 @@ class FullTranslatorsIndexController extends AbstractController
     }
 
     /**
-     * Builds the trailing empty row used to add a new full translator.
+     * Builds the trailing empty row used to add a new excluded user.
      */
     private function buildAddRowMarkup(int $numb): string
     {
@@ -86,11 +84,11 @@ class FullTranslatorsIndexController extends AbstractController
                 <td data-content="id">
                     <span><b>Add:</b></span>
                 </td>
-                <td data-content="user">
+                <td data-content="User">
                     <input class='form-control' name='rows[$numb][is_new]' value='yes' type='hidden'/>
                     <input class='form-control td_user_input' name='rows[$numb][user]' />
                 </td>
-                <td data-content="active">
+                <td data-content="Active">
                     <div class="form-check form-switch">
                         <input type="hidden" name="rows[$numb][is_active]" value="1">
                         -
@@ -104,20 +102,20 @@ class FullTranslatorsIndexController extends AbstractController
     }
 
     /**
-     * Renders the full translators card with the editable table form.
+     * Renders the users card with the editable table form.
      */
     private function renderCard(string $formText): void
     {
 
         $tyName = self::TY_NAME;
 
-        $form = <<<HTML
+        $body = <<<HTML
             <form action="index.php?ty=$tyName" method="POST">
                 {$this->createCsrfTokenField()}
                 <input name='ty' value="$tyName" type="hidden"/>
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
-                        <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+                        <table class='table table-striped compact table-mobile-responsive table-mobile-sided table_text_left'>
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -139,7 +137,7 @@ class FullTranslatorsIndexController extends AbstractController
             </form>
         HTML;
 
-        $this->echoCard("Full article translators:", $form);
+        $this->echoCard("Users Not to be added to (in process) table:", $body);
     }
 
     /**

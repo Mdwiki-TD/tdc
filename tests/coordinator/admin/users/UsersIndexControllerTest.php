@@ -4,7 +4,7 @@ namespace Tests\Coordinator\Admin\Users;
 
 use PHPUnit\Framework\TestCase;
 
-class IndexTest extends TestCase
+class UsersIndexControllerTest extends TestCase
 {
     public function testGetSortedArrayLogic()
     {

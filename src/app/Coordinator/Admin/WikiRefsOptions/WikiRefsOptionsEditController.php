@@ -5,8 +5,6 @@ namespace App\Coordinator\Admin\WikiRefsOptions;
 
 use App\Coordinator\Admin\Common\AbstractEditController;
 
-require_once __DIR__ . '/wikirefs_options_edit_post.php';
-
 /**
  * Class WikiRefsOptionsEditController
  * Handles add/edit/delete of a single language_settings row (GET

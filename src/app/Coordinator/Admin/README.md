@@ -1,62 +1,62 @@
 ```
 admin/
-├── add/
-│   ├── add_post.php
-│   └── index.php
-├── admins/
-│   ├── admins_post.php
-│   └── index.php
-├── campaigns/
-│   ├── campaigns_post.php
-│   └── index.php
-├── common/
+├── Add/
+│   ├── AddIndexController.php
+│   └── AddPostProcessor.php
+├── Admins/
+│   ├── AdminsIndexController.php
+│   └── AdminsPostProcessor.php
+├── Campaigns/
+│   ├── CampaignsIndexController.php
+│   └── CampaignsPostProcessor.php
+├── Common/
 │   ├── AbstractController.php
 │   ├── AbstractControllerNoPost.php
 │   ├── AbstractEditController.php
 │   └── AbstractPostHandler.php
-├── full_translators/
-│   ├── full_translators_post.php
-│   └── index.php
-├── last_coord/
-│   └── index.php
-├── pages_users_to_main/
-│   ├── fix_page.php
-│   ├── fix_page_post.php
-│   └── index.php
-├── projects/
-│   ├── index.php
-│   └── projects_post.php
-├── qids/
-│   ├── edit_qid.php
-│   ├── edit_qid_post.php
-│   └── index.php
-├── reports/
-│   ├── index.php
-│   └── index2.php
-├── settings/
-│   ├── index.php
-│   └── settings_post.php
-├── translated/
-│   ├── edit_page.php
-│   ├── edit_page_post.php
-│   └── index.php
-├── tt/
-│   ├── edit_translate_type.php
-│   ├── edit_tt_post.php
-│   └── index.php
-├── users/
-│   ├── edit_user.php
-│   ├── edit_user_post.php
-│   ├── index.php
-│   └── msg.php
-├── users_not_inprocess/
-│   ├── index.php
-│   └── users_not_inprocess_post.php
-├── wikirefs_options/
-│   ├── index.php
-│   ├── wikirefs_options_edit.php
-│   └── wikirefs_options_edit_post.php
-├── index.php
+├── FullTranslators/
+│   ├── FullTranslatorsIndexController.php
+│   └── FullTranslatorsPostProcessor.php
+├── LastCoord/
+│   └── LastCoordIndexController.php
+├── PagesUsersToMain/
+│   ├── FixItController.php
+│   ├── FixItPostProcessor.php
+│   └── PagesUsersToMainIndexController.php
+├── Projects/
+│   ├── ProjectsIndexController.php
+│   └── ProjectsPostProcessor.php
+├── Qids/
+│   ├── EditQidController.php
+│   ├── QidsIndexController.php
+│   └── QidsPostProcessor.php
+├── Reports/
+│   ├── ReportsIndex2Controller.php
+│   └── ReportsIndexController.php
+├── Settings/
+│   ├── SettingsIndexController.php
+│   └── SettingsPostProcessor.php
+├── Translated/
+│   ├── EditPageController.php
+│   ├── EditPagePostHandler.php
+│   └── TranslatedIndexController.php
+├── TranslateType/
+│   ├── EditTranslateTypeController.php
+│   ├── TranslateTypeIndexController.php
+│   └── TtPostProcessor.php
+├── Users/
+│   ├── EditUserController.php
+│   ├── EditUserPostProcessor.php
+│   ├── MsgController.php
+│   └── UsersIndexController.php
+├── UsersNotInprocess/
+│   ├── UsersNotInprocessIndexController.php
+│   └── UsersNotInprocessPostProcessor.php
+├── WikiRefsOptions/
+│   ├── WikiRefsOptionsEditController.php
+│   ├── WikiRefsOptionsEditPostHandler.php
+│   └── WikiRefsOptionsIndexController.php
+├── AdminResolver.php
 └── README.md
 
 ```

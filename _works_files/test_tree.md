@@ -6,27 +6,29 @@ tests/
 ├── coordinator/
 │   └── admin/
 │       ├── add/
-│       │   ├── IndexTest.php
+│       │   ├── AddIndexControllerTest.php
 │       │   └── PostTest.php
 │       ├── pages_users_to_main/
 │       │   ├── FixItPostTest.php
 │       │   ├── FixItTest.php
-│       │   └── IndexTest.php
+│       │   └── PagesUsersToMainIndexControllerTest.php
 │       ├── projects/
-│       │   ├── IndexTest.php
-│       │   └── PostTest.php
+│       │   ├── PostTest.php
+│       │   └── ProjectsIndexControllerTest.php
 │       ├── qids/
 │       │   ├── EditQidTest.php
-│       │   └── IndexTest.php
+│       │   └── QidsIndexControllerTest.php
 │       ├── translated/
 │       │   └── EditPagePostHandlerTest.php
 │       └── users/
 │           ├── EditUserTest.php
-│           ├── IndexTest.php
 │           ├── MsgTest.php
-│           └── PostTest.php
+│           ├── PostTest.php
+│           └── UsersIndexControllerTest.php
 ├── utils/
-│   └── HtmlTest.php
+│   ├── Html2Test.php
+│   ├── HtmlTest.php
+│   └── HtmlUrlsTest.php
 ├── bootstrap.php
 └── getcats.php
 

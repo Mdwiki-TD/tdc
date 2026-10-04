@@ -4,7 +4,7 @@ namespace Tests\Coordinator\Admin\Add;
 
 use PHPUnit\Framework\TestCase;
 
-class IndexTest extends TestCase
+class AddIndexControllerTest extends TestCase
 {
     public function testRangeGeneration()
     {

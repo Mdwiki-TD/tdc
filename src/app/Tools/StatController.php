@@ -8,7 +8,7 @@ use App\SQLorAPI\CategoriesTable;
 use App\SQLorAPI\QidsTable;
 
 use App\Utils\Html;
-use function App\Results\GetCats\get_mdwiki_cat_members;
+use function App\Results27\GetCats\get_mdwiki_cat_members;
 
 /**
  * Class StatController

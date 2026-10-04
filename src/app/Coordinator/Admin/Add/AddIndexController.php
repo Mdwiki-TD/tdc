@@ -6,9 +6,6 @@ namespace App\Coordinator\Admin\Add;
 use App\Coordinator\Admin\Common\AbstractController;
 use App\SQLorAPI\CategoriesTable;
 
-
-require_once __DIR__ . '/add_post.php';
-
 /**
  * Class AddIndexController
  * Renders the "Add translations" form, including the category select
