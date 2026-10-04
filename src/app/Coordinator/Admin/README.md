@@ -1,5 +1,5 @@
 ```
-admin/
+Admin/
 ├── Add/
 │   ├── AddIndexController.php
 │   └── AddPostProcessor.php
