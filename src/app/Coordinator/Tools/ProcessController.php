@@ -1,7 +1,7 @@
 <?php
 // src/app/tools/process1.php
 
-namespace App\Tools;
+namespace App\Coordinator\Tools;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\ApiOrSqlService;

@@ -1,7 +1,7 @@
 <?php
 // src/app/tools/last.php
 
-namespace App\Tools;
+namespace App\Coordinator\Tools;
 
 use App\ApiClients\WikiApi;
 use App\Coordinator\RecentTranslations;
