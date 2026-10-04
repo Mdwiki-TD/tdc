@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/wikirefs_options/wikirefs_options_edit_post.php
+// src/app/coordinator/Admin/wikirefs_options/wikirefs_options_edit_post.php
 
 namespace App\Coordinator\Admin\WikiRefsOptions;
 

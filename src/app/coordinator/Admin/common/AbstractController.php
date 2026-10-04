@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/common/AbstractController.php
+// src/app/coordinator/Admin/common/AbstractController.php
 
 namespace App\Coordinator\Admin\Common;
 

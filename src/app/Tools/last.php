@@ -8,7 +8,7 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 
 /**
  * Class LastController
- * Renders the "Recent translations" for non-admin/general tools view.
+ * Renders the "Recent translations" for non-Admin/general tools view.
  */
 class LastController extends AbstractControllerNoPost
 {

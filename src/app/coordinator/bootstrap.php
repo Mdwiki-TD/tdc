@@ -5,37 +5,37 @@
 require_once __DIR__ . '/RecentTranslations.php';
 require_once __DIR__ . '/helpers/bootstrap.php';
 
-// require_once __DIR__ . '/admin/common/FormBuilder.php';
-require_once __DIR__ . '/admin/common/AbstractPostHandler.php';
-require_once __DIR__ . '/admin/common/AbstractController.php';
-require_once __DIR__ . '/admin/common/AbstractEditController.php';
-require_once __DIR__ . '/admin/common/AbstractControllerNoPost.php';
+// require_once __DIR__ . '/Admin/common/FormBuilder.php';
+require_once __DIR__ . '/Admin/common/AbstractPostHandler.php';
+require_once __DIR__ . '/Admin/common/AbstractController.php';
+require_once __DIR__ . '/Admin/common/AbstractEditController.php';
+require_once __DIR__ . '/Admin/common/AbstractControllerNoPost.php';
 
-include_once __DIR__ . "/admin/add/index.php";
-include_once __DIR__ . "/admin/admins/index.php";
-include_once __DIR__ . "/admin/campaigns/index.php";
-include_once __DIR__ . "/admin/full_translators/index.php";
-include_once __DIR__ . "/admin/last_coord/index.php";
+include_once __DIR__ . "/Admin/add/index.php";
+include_once __DIR__ . "/Admin/admins/index.php";
+include_once __DIR__ . "/Admin/campaigns/index.php";
+include_once __DIR__ . "/Admin/full_translators/index.php";
+include_once __DIR__ . "/Admin/last_coord/index.php";
 
-include_once __DIR__ . "/admin/pages_users_to_main/index.php";
-include_once __DIR__ . "/admin/pages_users_to_main/fix_page.php";
+include_once __DIR__ . "/Admin/pages_users_to_main/index.php";
+include_once __DIR__ . "/Admin/pages_users_to_main/fix_page.php";
 
-include_once __DIR__ . "/admin/projects/index.php";
-include_once __DIR__ . "/admin/qids/index.php";
-include_once __DIR__ . "/admin/reports/index.php";
-include_once __DIR__ . "/admin/settings/index.php";
-include_once __DIR__ . "/admin/translated/index.php";
-include_once __DIR__ . "/admin/tt/index.php";
-include_once __DIR__ . "/admin/users/index.php";
-include_once __DIR__ . "/admin/users_not_inprocess/index.php";
-include_once __DIR__ . "/admin/wikirefs_options/index.php";
+include_once __DIR__ . "/Admin/projects/index.php";
+include_once __DIR__ . "/Admin/qids/index.php";
+include_once __DIR__ . "/Admin/reports/index.php";
+include_once __DIR__ . "/Admin/settings/index.php";
+include_once __DIR__ . "/Admin/translated/index.php";
+include_once __DIR__ . "/Admin/tt/index.php";
+include_once __DIR__ . "/Admin/users/index.php";
+include_once __DIR__ . "/Admin/users_not_inprocess/index.php";
+include_once __DIR__ . "/Admin/wikirefs_options/index.php";
 
 
-include_once __DIR__ . "/admin/qids/edit_qid.php";
-include_once __DIR__ . "/admin/translated/edit_page.php";
-include_once __DIR__ . "/admin/tt/edit_translate_type.php";
-include_once __DIR__ . "/admin/users/edit_user.php";
-include_once __DIR__ . "/admin/users/msg.php";
-include_once __DIR__ . "/admin/wikirefs_options/wikirefs_options_edit.php";
+include_once __DIR__ . "/Admin/qids/edit_qid.php";
+include_once __DIR__ . "/Admin/translated/edit_page.php";
+include_once __DIR__ . "/Admin/tt/edit_translate_type.php";
+include_once __DIR__ . "/Admin/users/edit_user.php";
+include_once __DIR__ . "/Admin/users/msg.php";
+include_once __DIR__ . "/Admin/wikirefs_options/wikirefs_options_edit.php";
 
-require_once __DIR__ . '/admin/index.php';
+require_once __DIR__ . '/Admin/index.php';

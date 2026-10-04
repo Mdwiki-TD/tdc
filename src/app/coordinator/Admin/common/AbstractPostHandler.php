@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/common/AbstractPostHandler.php
+// src/app/coordinator/Admin/common/AbstractPostHandler.php
 
 namespace App\Coordinator\Admin\Common;
 

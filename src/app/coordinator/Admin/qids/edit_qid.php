@@ -1,5 +1,5 @@
 <?php
-// src/app/coordinator/admin/qids/edit_qid.php
+// src/app/coordinator/Admin/qids/edit_qid.php
 
 namespace App\Coordinator\Admin\Qids;
 
