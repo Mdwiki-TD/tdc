@@ -65,7 +65,7 @@ async function get_info(articleTitle, language) {
         "origin": "*",
         // "rvtag": "OAuth CID: 9394"
         "rvdir": "newer",
-    }
+    };
 
     const url = `https://${language}.wikipedia.org/w/api.php?` + new URLSearchParams(params).toString();
     const response = await fetch(url, { method: "GET", mode: "cors" });
@@ -96,7 +96,7 @@ async function get_page_info(language, articleTitle) {
         "user": user,
         "pupdate": pupdate,
         "mdtitle": mdtitle
-    }
+    };
 
     return page_data;
 }

@@ -2,17 +2,6 @@
 
 /**
  * Application Bootstrap and Include Module
- *
- * This file serves as the central bootstrap for the Translation Dashboard
- * application. It handles environment setup and includes all necessary
- * dependencies.
- *
- * @package    Core
- * @subpackage Bootstrap
- * @author     Translation Dashboard Team
- * @version    2.0.0
- * @since      1.0.0
- * @license    GPL-3.0-or-later
  */
 
 // Enable debug mode via request or cookie
