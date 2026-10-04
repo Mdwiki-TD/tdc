@@ -3,7 +3,6 @@
 namespace Tests\Coordinator\Admin\Users;
 
 use PHPUnit\Framework\TestCase;
-use App\Tables\SqlTables\TablesSql;
 
 class IndexTest extends TestCase
 {
@@ -41,20 +40,6 @@ class IndexTest extends TestCase
 
         $keys = array_keys($testArray);
         $this->assertEquals('user2', $keys[0]);
-    }
-
-    public function testEmailsFilterTableProjectMapping()
-    {
-        // Test that TablesSql projects get "empty" added
-        TablesSql::$sProjectsTitleToId = [
-            'Project1' => 1,
-            'Project2' => 2
-        ];
-
-        TablesSql::$sProjectsTitleToId["empty"] = "empty";
-
-        $this->assertArrayHasKey("empty", TablesSql::$sProjectsTitleToId);
-        $this->assertEquals("empty", TablesSql::$sProjectsTitleToId["empty"]);
     }
 
     public function testEmailsFilterTableSelectedOption()

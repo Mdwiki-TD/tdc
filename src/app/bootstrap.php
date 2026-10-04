@@ -80,11 +80,6 @@ include_once __DIR__ . '/ApiClients/WikiApi.php';
 include_once __DIR__ . '/Coordinator/bootstrap.php';
 include_once __DIR__ . '/Tools/bootstrap.php';
 
-# Tables
-include_once __DIR__ . '/Tables/sql_tables.php';
-include_once __DIR__ . '/Tables/tables.php';
-include_once __DIR__ . '/Tables/LangsTables.php';
-
 # Utils
 include_once __DIR__ . '/Utils/Html.php';
 include_once __DIR__ . '/Utils/Html2.php';

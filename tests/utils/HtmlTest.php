@@ -3,8 +3,6 @@
 namespace Tests\Utils\Html;
 
 use PHPUnit\Framework\TestCase;
-use App\Tables\SqlTables\TablesSql;
-
 use function App\Utils\Html\banner_alert;
 use function App\Utils\Html\make_modal_fade;
 use function App\Utils\Html\make_mail_icon_new;
@@ -61,12 +59,12 @@ class HtmlTest extends TestCase
 
     public function testMakeProjectToUser()
     {
-        TablesSql::$sProjectsTitleToId = [
+        $ProjectsTitleToId = [
             'Project Alpha' => 1,
             'Project Beta' => 2
         ];
 
-        $result = make_project_to_user('Project Beta');
+        $result = make_project_to_user('Project Beta', $ProjectsTitleToId);
         $this->assertStringContainsString("<option value='Uncategorized'>Uncategorized</option>", $result);
         $this->assertStringContainsString("<option value='Project Alpha' >Project Alpha</option>", $result);
         $this->assertStringContainsString("<option value='Project Beta' selected>Project Beta</option>", $result);

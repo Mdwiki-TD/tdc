@@ -2,9 +2,6 @@
 
 namespace App\Utils\Html;
 
-use App\Tables\SqlTables\TablesSql;
-
-
 /**
  * Generate a banner alert with danger styling
  *
@@ -31,11 +28,11 @@ function banner_alert(string $text): string
  *
  * @return string HTML option elements
  */
-function make_project_to_user(string $project): string
+function make_project_to_user(string $project, array $ProjectsTitleToId): string
 {
     $str = "<option value='Uncategorized'>Uncategorized</option>";
 
-    foreach (TablesSql::$sProjectsTitleToId as $pTitle => $pId) {
+    foreach ($ProjectsTitleToId as $pTitle => $pId) {
         $selected = ($project === $pTitle) ? "selected" : "";
         $escaped = htmlspecialchars($pTitle, ENT_QUOTES, 'UTF-8');
         $str .= "<option value='{$escaped}' {$selected}>{$escaped}</option>";

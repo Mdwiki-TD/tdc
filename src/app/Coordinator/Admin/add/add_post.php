@@ -4,7 +4,7 @@
 namespace App\Coordinator\Admin\Add;
 
 use App\MdwikiSql\AddHelper;
-use App\Tables\Main\MainTables;
+use App\Tables\MainTables;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 
 /**

@@ -4,7 +4,8 @@
 namespace App\Coordinator\Admin\TranslateType;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Tables\SqlTables\TablesSql;
+use App\SQLorAPI\CategoriesTable;
+
 use function App\Utils\Html\makeDropdown;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_edit_icon_new;
@@ -39,9 +40,9 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         $filterHtml = $this->renderFilterSelect($this->cat);
 
         $this->loadTranslateTypeData();
-        $this->loadCategoryTitles();
+        $CatTitles = $this->loadCategoryTitles();
 
-        [$tableRows, $ttCount] = $this->buildTableRows();
+        [$tableRows, $ttCount] = $this->buildTableRows($CatTitles);
 
         $newRow = make_edit_icon_new('edit_translate_type', ['new' => 1], 'Add one!');
 
@@ -50,12 +51,26 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         $this->renderDataTableScript();
     }
 
+    private function loadCatToCamp(): array
+    {
+        $categoriesTab = (CategoriesTable::getInstance())->getCategories();
+        $CatToCamp = [];
+        foreach ($categoriesTab as $k => $tab) {
+            if (!empty($tab['category']) && !empty($tab['campaign'])) {
+                $CatToCamp[$tab['category']] = $tab['campaign'];
+            }
+        }
+
+        return $CatToCamp;
+    }
     /**
      * Builds the category filter dropdown markup.
      */
     private function renderFilterSelect(string $cat): string
     {
-        $catsTitles = array_keys(TablesSql::$sCatToCamp);
+        $CatToCamp = $this->loadCatToCamp();
+
+        $catsTitles = array_keys($CatToCamp);
 
         $template = <<<HTML
 			<div class="input-group">
@@ -88,14 +103,8 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         }
     }
 
-    /**
-     * Populates TablesSql::$sCatTitles either from the full set of
-     * known/unclassified titles ("All") or from a Wikipedia category's
-     * members.
-     */
-    private function loadCategoryTitles(): void
+    private function loadCategoryTitles(): array
     {
-        TablesSql::$sCatTitles = [];
 
         if ($this->cat === 'All') {
             $rows = $this->db->fetchQuery('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)');
@@ -106,21 +115,20 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
                 }
             }
 
-            TablesSql::$sCatTitles = array_keys($this->fullTranslatesTab);
-        } else {
-            TablesSql::$sCatTitles = get_mdwiki_cat_members($this->cat, true, 1);
+            return array_keys($this->fullTranslatesTab);
         }
+        return get_mdwiki_cat_members($this->cat, true, 1);
     }
 
     /**
      * Builds every table row and returns [$html, $count].
      */
-    private function buildTableRows(): array
+    private function buildTableRows(array $CatTitles): array
     {
         $tableRows = '';
         $ttCount = 0;
 
-        foreach (TablesSql::$sCatTitles as $title) {
+        foreach ($CatTitles as $title) {
             if (in_array($title, $this->newTitles)) {
                 continue;
             }

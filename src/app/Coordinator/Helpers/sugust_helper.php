@@ -3,7 +3,7 @@
 
 namespace App\Coordinator\Helps\Sugust;
 
-use App\Tables\Main\MainTables;
+use App\Tables\MainTables;
 use App\SQLorAPI\InProcessTable;
 use function App\Results\GetResults\get_cat_exists_and_missing;
 

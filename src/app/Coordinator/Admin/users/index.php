@@ -5,7 +5,9 @@ namespace App\Coordinator\Admin\Users;
 
 use App\SQLorAPI\PagesTable;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Tables\SqlTables\TablesSql;
+
+use App\SQLorAPI\TitlesTable;
+
 use App\SQLorAPI\UsersTable;
 
 use function App\Utils\Html\make_mail_icon_new;
@@ -97,13 +99,16 @@ class UsersIndexController extends AbstractControllerNoPost
 	 */
 	private function emailsFilterTable(string $projectName): string
 	{
-		TablesSql::$sProjectsTitleToId["empty"] = "empty";
+		$projectsTab = (TitlesTable::getInstance())->getProjects();
+		$ProjectsTitleToId = array_column($projectsTab, 'g_id', 'g_title');
+
+		$ProjectsTitleToId["empty"] = "empty";
 
 		$lList = <<<HTML
 			<option data-tokens='all' value='All'>All</option>
 		HTML;
 
-		foreach (TablesSql::$sProjectsTitleToId as $pTitle => $pId) {
+		foreach ($ProjectsTitleToId as $pTitle => $pId) {
 			if (empty($pTitle)) {
 				continue;
 			}
