@@ -35,7 +35,7 @@ class WikiApi
         $url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/' . $lang . '.wikipedia/all-access/all-agents/' . rawurlencode($target) . '/daily/' . $start2 . '/2030010100';
 
         // $output = file_get_contents( $url );
-        $output = get_url_result_curl($url);
+        $output = self::get_url_result_curl($url);
 
         $result = json_decode($output, true);
 
