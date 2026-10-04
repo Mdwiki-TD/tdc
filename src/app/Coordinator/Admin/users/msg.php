@@ -8,7 +8,7 @@ use App\User\CurrentUser;
 use App\Tables\LangsTables;
 use App\CSRFManager;
 
-use function App\ApiClients\WikiApi\get_views;
+use App\ApiClients\WikiApi;
 use function App\Utils\Html\make_mdwiki_title;
 use function App\Utils\Html\make_target_url;
 use function App\Coordinator\Helps\Sugust\get_sugust;
@@ -50,7 +50,7 @@ class MsgController extends AbstractControllerNoPost
 
         $this->renderHeaderScripts();
 
-        $views = get_views($this->target, $this->lang, $this->date);
+        $views = WikiApi::get_views($this->target, $this->lang, $this->date);
 
         $sugustTab = get_sugust($this->title, $this->lang);
         $sugust = $sugustTab['sugust'] ?? '';

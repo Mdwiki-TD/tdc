@@ -74,7 +74,6 @@ include_once __DIR__ . "/Results27/bootstrap.php";
 
 # ApiClients
 include_once __DIR__ . '/ApiClients/mdwiki_api.php';
-include_once __DIR__ . '/ApiClients/WikiApi.php';
 
 # Controllers
 include_once __DIR__ . '/Coordinator/bootstrap.php';
