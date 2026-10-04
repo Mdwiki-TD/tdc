@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\PagesTable;
 
 use App\SQLorAPI\SettingsTable;
-use App\Utils\Html;
+use App\Utils\HtmlUrls;
 
 /**
  * Class WikiRefsOptionsIndexController

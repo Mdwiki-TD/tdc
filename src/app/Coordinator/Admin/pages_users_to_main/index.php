@@ -6,9 +6,9 @@ namespace App\Coordinator\Admin\PagesUsersToMain;
 use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\PagesTable;
 use App\Tables\LangsTables;
+use App\Utils\HtmlUrls;
 
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Utils\Html;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 
 /**

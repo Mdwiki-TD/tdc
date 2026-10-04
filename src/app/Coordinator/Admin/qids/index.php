@@ -5,7 +5,7 @@ namespace App\Coordinator\Admin\Qids;
 
 use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-use App\Utils\Html;
+use App\Utils\HtmlUrls;
 use App\SQLorAPI\QidsTable;
 
 /**

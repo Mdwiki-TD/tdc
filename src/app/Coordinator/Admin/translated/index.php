@@ -9,7 +9,7 @@ use App\SQLorAPI\PagesTable;
 use App\SQLorAPI\RecentTable;
 use App\Tables\LangsTables;
 
-use App\Utils\Html;
+use App\Utils\HtmlUrls;
 use function App\Coordinator\Helps\RecentHelps\filter_table;
 use function App\Coordinator\Helps\RecentHelps\filter_recent2;
 

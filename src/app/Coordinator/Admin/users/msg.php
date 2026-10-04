@@ -9,7 +9,7 @@ use App\Tables\LangsTables;
 use App\CSRFManager;
 
 use App\ApiClients\WikiApi;
-use App\Utils\Html;
+use App\Utils\HtmlUrls;
 use function App\Coordinator\Helps\Sugust\get_sugust;
 
 /**

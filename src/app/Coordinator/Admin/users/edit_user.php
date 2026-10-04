@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Users;
 use App\SQLorAPI\TitlesTable;
 use App\SQLorAPI\UsersTable;
 use App\Coordinator\Admin\Common\AbstractEditController;
-use App\Utils\Html;
+use App\Utils\Html2;
 
 require_once __DIR__ . '/edit_user_post.php';
 

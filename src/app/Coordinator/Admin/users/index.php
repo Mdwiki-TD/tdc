@@ -5,12 +5,9 @@ namespace App\Coordinator\Admin\Users;
 
 use App\SQLorAPI\PagesTable;
 use App\Coordinator\Admin\Common\AbstractControllerNoPost;
-
 use App\SQLorAPI\TitlesTable;
-
 use App\SQLorAPI\UsersTable;
-
-use App\Utils\Html;
+use App\Utils\HtmlUrls;
 
 /**
  * Class EmailsIndexController

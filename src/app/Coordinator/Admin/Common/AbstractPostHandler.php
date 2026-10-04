@@ -6,7 +6,7 @@ namespace App\Coordinator\Admin\Common;
 use App\User\CurrentUser;
 use App\CSRFManager;
 use App\MdwikiSql\Database;
-use App\Utils\Html;
+use App\Utils\Html2;
 
 /**
  * Class AbstractPostHandler
