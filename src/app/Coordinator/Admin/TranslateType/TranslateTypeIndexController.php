@@ -19,13 +19,12 @@ use App\Results27\GetCats;
 class TranslateTypeIndexController extends AbstractControllerNoPost
 {
     private string $cat;
-    private array $fullTranslatesTab = [];
-    private array $newTitles = [];
 
     public function __construct()
     {
         parent::__construct();
-        $this->cat = $_GET['cat'] ?? 'All';
+        $cat = $_GET['cat'] ?? 'All';
+        $this->cat = strtolower($cat);
     }
 
     /**
@@ -38,9 +37,8 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         $filterHtml = $this->renderFilterSelect($this->cat);
 
         $this->loadTranslateTypeData();
-        $CatTitles = $this->loadCategoryTitles();
 
-        [$tableRows, $ttCount] = $this->buildTableRows($CatTitles);
+        [$tableRows, $ttCount] = $this->buildTableRows();
 
         $newRow = HtmlUrls::make_edit_icon_new('edit_translate_type', ['new' => 1], 'Add one!');
 
@@ -85,55 +83,58 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
     /**
      * Loads the translate_type table into a title-keyed lookup array.
      */
-    private function loadTranslateTypeData(): void
+    private function loadTranslateTypeData(): array
     {
         $translateTypeSql = <<<SQL
 			SELECT tt_id, tt_title, tt_lead, tt_full
 			FROM translate_type
 		SQL;
+        $params = [];
+        if ($this->cat !== 'all') {
+            $translateTypeSql .= " WHERE tt_title IN (SELECT article_id FROM category_members WHERE category = ?)";
+            $params[] = $this->cat;
+        }
+        $fullTranslatesTab = [];
 
-        foreach ($this->db->fetchQuery($translateTypeSql) as $k => $tab) {
-            $this->fullTranslatesTab[$tab['tt_title']] = [
+        foreach ($this->db->fetchQuery($translateTypeSql, $params) as $k => $tab) {
+            $fullTranslatesTab[$tab['tt_title']] = [
                 'id'   => $tab['tt_id'],
                 'lead' => $tab['tt_lead'],
                 'full' => $tab['tt_full'],
             ];
         }
+        return $fullTranslatesTab;
     }
 
-    private function loadCategoryTitles(): array
+    public function loadCategoryTitles(array $fullTranslatesTab): array
     {
+        $newTitles = [];
+        if ($this->cat !== 'all') {
+            $rows = $this->db->fetchQuery('SELECT article_id FROM category_members WHERE category = ?', [$this->cat]);
 
-        if ($this->cat === 'All') {
-            $rows = $this->db->fetchQuery('SELECT DISTINCT title from qids WHERE title not in (SELECT tt_title FROM translate_type)');
-
-            foreach ($rows as $key => $gg) {
-                if (!in_array($gg['title'], $this->fullTranslatesTab)) {
-                    $this->newTitles[] = $gg['title'];
+            foreach ($rows as $gg) {
+                if (!in_array($gg['article_id'], $fullTranslatesTab)) {
+                    $newTitles[] = $gg['article_id'];
                 }
             }
-
-            return array_keys($this->fullTranslatesTab);
         }
-        return GetCats::get_mdwiki_cat_members($this->cat, true, 1);
+        return $newTitles;
     }
 
     /**
      * Builds every table row and returns [$html, $count].
      */
-    private function buildTableRows(array $CatTitles): array
+    private function buildTableRows(): array
     {
+        $fullTranslatesTab = $this->loadTranslateTypeData();
+
+        // $newTitles = $this->loadCategoryTitles($fullTranslatesTab);
+
         $tableRows = '';
         $ttCount = 0;
 
-        foreach ($CatTitles as $title) {
-            if (in_array($title, $this->newTitles)) {
-                continue;
-            }
-
+        foreach ($fullTranslatesTab as $title => $table) {
             $ttCount++;
-
-            $table = $this->fullTranslatesTab[$title] ?? [];
 
             $id   = $table['id'] ?? '';
             $lead = $table['lead'] ?? 1;
@@ -194,11 +195,8 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
      */
     private function renderMainCard(string $filterHtml, int $ttCount, string $tableRows): void
     {
-        $testin = (($_GET['test'] ?? '') != '') ? '<input type="hidden" name="test" value="1" />' : "";
-
         $header = <<<HTML
 			<form action="index.php?ty=translate_type" method="GET">
-				$testin
 				<input name='ty' value="translate_type" type="hidden"/>
 				<div class='row'>
 					<div class='col-md-6'>
