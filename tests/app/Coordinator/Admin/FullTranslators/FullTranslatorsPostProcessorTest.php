@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\FullTranslators;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(FullTranslatorsPostProcessor::class)]
 class FullTranslatorsPostProcessorTest extends TestCase
 {
     public function testPlaceholder(): void

@@ -4,6 +4,9 @@ namespace Tests\Coordinator\Admin\Users;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Msg::class)]
 class MsgTest extends TestCase
 {
     public function testGetHost1ReturnsString()

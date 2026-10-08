@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\WikiRefsOptions;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(WikiRefsOptionsEditController::class)]
 class WikiRefsOptionsEditControllerTest extends TestCase
 {
     public function testPlaceholder(): void

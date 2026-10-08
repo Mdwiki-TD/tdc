@@ -7,6 +7,9 @@ namespace Tests\App\Layout;
 use App\Layout\PageFooter;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(PageFooter::class)]
 class PageFooterTest extends TestCase
 {
     public function testRenderWithTimeStart(): void

@@ -12,6 +12,9 @@ namespace Tests\App\Controllers;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(AppRouter::class)]
 class AppRouterTest extends TestCase
 {
     public function testPlaceholder(): void

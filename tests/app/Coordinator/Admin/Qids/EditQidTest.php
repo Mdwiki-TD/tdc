@@ -4,6 +4,9 @@ namespace Tests\Coordinator\Admin\Qids;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(EditQid::class)]
 class EditQidTest extends TestCase
 {
     public function testHeaderTitleWithId()

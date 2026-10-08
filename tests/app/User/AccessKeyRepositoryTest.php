@@ -10,6 +10,9 @@ use App\User\AccessKeyRepository;
 use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(AccessKeyRepository::class)]
 class AccessKeyRepositoryTest extends TestCase
 {
     private Database $dbMock;

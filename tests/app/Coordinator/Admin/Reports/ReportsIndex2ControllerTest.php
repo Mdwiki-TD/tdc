@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\Reports;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ReportsIndex2Controller::class)]
 class ReportsIndex2ControllerTest extends TestCase
 {
     public function testPlaceholder(): void

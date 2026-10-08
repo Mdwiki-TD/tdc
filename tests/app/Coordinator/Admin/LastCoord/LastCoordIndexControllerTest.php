@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\LastCoord;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(LastCoordIndexController::class)]
 class LastCoordIndexControllerTest extends TestCase
 {
     public function testPlaceholder(): void

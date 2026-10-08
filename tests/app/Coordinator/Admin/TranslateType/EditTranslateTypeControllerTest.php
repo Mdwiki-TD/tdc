@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\TranslateType;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(EditTranslateTypeController::class)]
 class EditTranslateTypeControllerTest extends TestCase
 {
     public function testPlaceholder(): void

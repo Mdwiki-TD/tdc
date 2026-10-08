@@ -7,6 +7,9 @@ namespace Tests\App\Utils;
 use App\Utils\SidebarMenu;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(SidebarMenu::class)]
 class SidebarMenuTest extends TestCase
 {
     public function testRenderForCoordinatorUser(): void

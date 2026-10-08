@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\Translated;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(EditPagePostHandler::class)]
 class EditPagePostHandlerTest extends TestCase
 {
     public function testPlaceholder(): void

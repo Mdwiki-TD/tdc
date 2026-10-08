@@ -8,6 +8,9 @@ use App\Logger;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Logger::class)]
 class LoggerTest extends TestCase
 {
     private array $originalCookie;
@@ -32,7 +35,7 @@ class LoggerTest extends TestCase
     private function resetLoggerDebugState(): void
     {
         $reflection = new ReflectionClass(Logger::class);
-        $property = $reflection->getProperty('isDebugEnabled');
+        $property = $reflection->getProperty('debug');
         $property->setValue(null, null);
     }
 

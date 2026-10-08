@@ -12,6 +12,9 @@ namespace Tests\App\ApiClients;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(MdwikiApi::class)]
 class MdwikiApiTest extends TestCase
 {
     public function testPlaceholder(): void

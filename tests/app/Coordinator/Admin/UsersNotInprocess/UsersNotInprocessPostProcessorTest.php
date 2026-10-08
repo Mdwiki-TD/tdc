@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\UsersNotInprocess;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(UsersNotInprocessPostProcessor::class)]
 class UsersNotInprocessPostProcessorTest extends TestCase
 {
     public function testPlaceholder(): void

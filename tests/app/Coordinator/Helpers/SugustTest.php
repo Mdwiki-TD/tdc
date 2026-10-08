@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Helpers;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Sugust::class)]
 class SugustTest extends TestCase
 {
     public function testPlaceholder(): void

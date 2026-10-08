@@ -7,6 +7,9 @@ namespace Tests\App\User;
 use App\User\SessionManager;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(SessionManager::class)]
 class SessionManagerTest extends TestCase
 {
     protected function setUp(): void

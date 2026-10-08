@@ -12,6 +12,9 @@ namespace Tests\App\User;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(CurrentUser::class)]
 class CurrentUserTest extends TestCase
 {
     public function testPlaceholder(): void

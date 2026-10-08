@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Tools;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ProcessTotalController::class)]
 class ProcessTotalControllerTest extends TestCase
 {
     public function testPlaceholder(): void
