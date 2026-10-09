@@ -14,6 +14,8 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 // Configure secure session settings
 ini_set('session.use_strict_mode', '1');
 
+include_once __DIR__ . '/autoload.php';
+
 // don't use App\Settings here, Instance is not created yet
 $env = getenv('APP_ENV') ?: ($_ENV['APP_ENV'] ?? 'development');
 
@@ -32,5 +34,3 @@ if (file_exists($vendorAutoload)) {
 } else {
     die("Vendor autoload not found. Please run 'composer install' in the project root.");
 }
-
-include_once __DIR__ . '/autoload.php';
