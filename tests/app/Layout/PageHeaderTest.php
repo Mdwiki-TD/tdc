@@ -8,6 +8,9 @@ use App\Layout\PageHeader;
 use App\User\CurrentUser;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(PageHeader::class)]
 class PageHeaderTest extends TestCase
 {
     public function testRenderWithGuestUser(): void

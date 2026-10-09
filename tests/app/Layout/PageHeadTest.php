@@ -7,6 +7,9 @@ namespace Tests\App\Layout;
 use App\Layout\PageHead;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(PageHead::class)]
 class PageHeadTest extends TestCase
 {
     private array $originalServer;

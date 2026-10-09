@@ -7,6 +7,9 @@ namespace Tests\App\Utils;
 use App\Utils\Html;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Html::class)]
 class HtmlTest extends TestCase
 {
     public function testMakeModalFade(): void

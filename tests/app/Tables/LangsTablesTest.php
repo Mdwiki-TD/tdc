@@ -12,6 +12,9 @@ namespace Tests\App\Tables;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(LangsTables::class)]
 class LangsTablesTest extends TestCase
 {
     public function testPlaceholder(): void

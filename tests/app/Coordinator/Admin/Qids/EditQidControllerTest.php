@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\Qids;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(EditQidController::class)]
 class EditQidControllerTest extends TestCase
 {
     public function testPlaceholder(): void

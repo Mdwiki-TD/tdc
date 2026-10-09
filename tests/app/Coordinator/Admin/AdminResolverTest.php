@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(AdminResolver::class)]
 class AdminResolverTest extends TestCase
 {
     public function testPlaceholder(): void

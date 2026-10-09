@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\PagesUsersToMain;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(FixItPostProcessor::class)]
 class FixItPostProcessorTest extends TestCase
 {
     public function testPlaceholder(): void

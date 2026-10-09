@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\Admins;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(AdminsPostProcessor::class)]
 class AdminsPostProcessorTest extends TestCase
 {
     public function testPlaceholder(): void

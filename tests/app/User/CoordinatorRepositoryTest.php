@@ -1,13 +1,12 @@
 <?php
-
-
-
 namespace Tests\App\User;
 
 use App\MdwikiSql\Database;
 use App\User\CoordinatorRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(CoordinatorRepository::class)]
 class CoordinatorRepositoryTest extends TestCase
 {
     private Database $dbMock;

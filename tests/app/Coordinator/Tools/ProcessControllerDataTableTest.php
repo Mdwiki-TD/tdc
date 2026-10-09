@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Tools;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ProcessControllerDataTable::class)]
 class ProcessControllerDataTableTest extends TestCase
 {
     public function testPlaceholder(): void

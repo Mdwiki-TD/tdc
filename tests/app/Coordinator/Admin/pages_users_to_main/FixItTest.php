@@ -4,6 +4,9 @@ namespace Tests\Coordinator\Admin\PagesUsersToMain;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(FixIt::class)]
 class FixItTest extends TestCase
 {
     public function testFixItEchoFormParameters()

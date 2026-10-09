@@ -4,6 +4,9 @@ namespace Tests\Coordinator\Admin\Users;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Post::class)]
 class PostTest extends TestCase
 {
     public function testEmailValidation()

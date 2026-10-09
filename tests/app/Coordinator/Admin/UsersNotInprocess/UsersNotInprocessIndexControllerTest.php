@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\UsersNotInprocess;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(UsersNotInprocessIndexController::class)]
 class UsersNotInprocessIndexControllerTest extends TestCase
 {
     public function testPlaceholder(): void

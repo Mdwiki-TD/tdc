@@ -12,6 +12,9 @@ namespace Tests\App\SQLorAPI;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(QidsTable::class)]
 class QidsTableTest extends TestCase
 {
     public function testPlaceholder(): void

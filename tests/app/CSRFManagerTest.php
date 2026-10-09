@@ -8,6 +8,9 @@ use App\CSRFManager;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(CSRFManager::class)]
 class CSRFManagerTest extends TestCase
 {
     private CSRFManager $csrfManager;

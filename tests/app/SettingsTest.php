@@ -9,6 +9,9 @@ use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Settings::class)]
 class SettingsTest extends TestCase
 {
     private array $originalServer;

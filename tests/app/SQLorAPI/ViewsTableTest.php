@@ -12,6 +12,9 @@ namespace Tests\App\SQLorAPI;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ViewsTable::class)]
 class ViewsTableTest extends TestCase
 {
     public function testPlaceholder(): void

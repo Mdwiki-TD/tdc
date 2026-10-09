@@ -1,12 +1,11 @@
 <?php
-
-
-
 namespace Tests\App\Utils;
 
 use App\Utils\Html2;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Html2::class)]
 class Html2Test extends TestCase
 {
     public function testBannerAlert(): void
@@ -20,7 +19,7 @@ class Html2Test extends TestCase
     public function testMakeProjectToUser(): void
     {
         $projects = ['Project A' => 1, 'Project B' => 2];
-        $html = Html2::make_project_to_user('Project A', $projects);
+        $html     = Html2::make_project_to_user('Project A', $projects);
 
         $this->assertStringContainsString('<option value=\'Uncategorized\'>Uncategorized</option>', $html);
         $this->assertStringContainsString('<option value=\'Project A\' selected>Project A</option>', $html);
@@ -64,7 +63,7 @@ class Html2Test extends TestCase
     public function testMakeDrop(): void
     {
         $options = ['Option 1' => 'opt1', 'Option 2' => 'opt2'];
-        $html = Html2::make_drop($options, 'opt2');
+        $html    = Html2::make_drop($options, 'opt2');
 
         $this->assertStringContainsString('<option value=\'opt1\' >Option 1</option>', $html);
         $this->assertStringContainsString('<option value=\'opt2\' selected>Option 2</option>', $html);
@@ -73,7 +72,7 @@ class Html2Test extends TestCase
     public function testMakeDatalistOptions(): void
     {
         $languages = ['English' => 'en', 'Spanish' => 'es'];
-        $html = Html2::make_datalist_options($languages);
+        $html      = Html2::make_datalist_options($languages);
 
         $this->assertStringContainsString('<option value=\'en\'>English</option>', $html);
         $this->assertStringContainsString('<option value=\'es\'>Spanish</option>', $html);
@@ -82,7 +81,7 @@ class Html2Test extends TestCase
     public function testDivAlert(): void
     {
         $messages = ['Message 1', 'Message 2'];
-        $html = Html2::div_alert($messages, 'success');
+        $html     = Html2::div_alert($messages, 'success');
 
         $this->assertStringContainsString('alert alert-success', $html);
         $this->assertStringContainsString('Message 1<br>Message 2<br>', $html);

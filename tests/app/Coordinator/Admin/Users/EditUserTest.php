@@ -4,6 +4,9 @@ namespace Tests\Coordinator\Admin\Users;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(EditUser::class)]
 class EditUserTest extends TestCase
 {
 

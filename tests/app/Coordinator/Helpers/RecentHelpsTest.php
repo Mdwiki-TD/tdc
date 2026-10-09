@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Helpers;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(RecentHelps::class)]
 class RecentHelpsTest extends TestCase
 {
     public function testPlaceholder(): void

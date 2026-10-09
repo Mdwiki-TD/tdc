@@ -17,6 +17,9 @@ class DummyController
     }
 }
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(PageRunner::class)]
 class PageRunnerTest extends TestCase
 {
     private array $originalGet;

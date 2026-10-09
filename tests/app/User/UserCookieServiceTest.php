@@ -9,6 +9,9 @@ use App\User\UserCookieService;
 use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(UserCookieService::class)]
 class UserCookieServiceTest extends TestCase
 {
     private array $originalCookie;

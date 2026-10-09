@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\Common;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(AbstractControllerNoPost::class)]
 class AbstractControllerNoPostTest extends TestCase
 {
     public function testPlaceholder(): void

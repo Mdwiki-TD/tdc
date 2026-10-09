@@ -12,6 +12,9 @@ namespace Tests\App\Results27;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(GetResults::class)]
 class GetResultsTest extends TestCase
 {
     public function testPlaceholder(): void

@@ -12,6 +12,9 @@ namespace Tests\App\Coordinator\Admin\Campaigns;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(CampaignsIndexController::class)]
 class CampaignsIndexControllerTest extends TestCase
 {
     public function testPlaceholder(): void

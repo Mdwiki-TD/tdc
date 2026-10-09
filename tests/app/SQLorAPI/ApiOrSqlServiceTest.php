@@ -12,6 +12,9 @@ namespace Tests\App\SQLorAPI;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ApiOrSqlService::class)]
 class ApiOrSqlServiceTest extends TestCase
 {
     public function testPlaceholder(): void

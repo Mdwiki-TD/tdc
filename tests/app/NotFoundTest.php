@@ -7,6 +7,9 @@ namespace Tests\App;
 use App\NotFound;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(NotFound::class)]
 class NotFoundTest extends TestCase
 {
     public function testRenderOutputs404Card(): void

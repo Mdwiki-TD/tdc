@@ -7,6 +7,9 @@ namespace Tests\App\Utils;
 use App\Utils\HtmlUrls;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(HtmlUrls::class)]
 class HtmlUrlsTest extends TestCase
 {
     public function testMakeMdwikiHref(): void

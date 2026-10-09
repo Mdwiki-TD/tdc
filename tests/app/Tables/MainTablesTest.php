@@ -6,12 +6,12 @@
  * TODO: write the actual tests.
  */
 
-
-
 namespace Tests\App\Tables;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(MainTables::class)]
 class MainTablesTest extends TestCase
 {
     public function testPlaceholder(): void
