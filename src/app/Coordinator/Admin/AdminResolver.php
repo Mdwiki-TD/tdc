@@ -54,7 +54,7 @@ class AdminResolver
     /**
      * Dispatches the request to the target script or view based on routes and permissions.
      */
-    public function dispatchObject(string $ty): bool
+    public function dispatchObject(string $endpoint): bool
     {
         // String mapping with fully qualified namespace
         // Array mapping string keys to fully qualified class names
@@ -85,8 +85,8 @@ class AdminResolver
             "wikirefs_options_edit" => "App\\Coordinator\\Admin\\WikiRefsOptions\\WikiRefsOptionsEditController",
         ];
 
-        if (isset($Controllers[$ty])) {
-            $className = $Controllers[$ty];
+        if (isset($Controllers[$endpoint])) {
+            $className = $Controllers[$endpoint];
             $controller = new $className();
             $controller->handleRequest();
             return true;
@@ -94,7 +94,7 @@ class AdminResolver
         return false;
     }
 
-    public function dispatch(string $ty): void
+    public function dispatch(string $endpoint): void
     {
         if (!$this->isCoordinator && !$this->isAdmin) {
             NotFound::render();
@@ -106,17 +106,17 @@ class AdminResolver
             "admins",
         ];
 
-        if (in_array($ty, $onlyAdmins) && !$this->isAdmin) {
+        if (in_array($endpoint, $onlyAdmins) && !$this->isAdmin) {
             NotFound::render();
             return;
         }
 
-        if ($this->dispatchObject($ty)) {
+        if ($this->dispatchObject($endpoint)) {
             return;
         }
 
         // Fallback for missing or unauthorized routes
-        Logger::debug("can't find {$ty}");
+        Logger::debug("can't find {$endpoint}");
         NotFound::render();
     }
 }

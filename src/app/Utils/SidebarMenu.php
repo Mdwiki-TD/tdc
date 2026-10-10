@@ -54,14 +54,18 @@ class SidebarMenu
 
     /**
      * @param string $filename          Current script filename (for building URLs)
-     * @param string $ty                Current tool type (for active state highlighting)
+     * @param string $endpoint                Current tool type (for active state highlighting)
      * @param bool   $userIsCoordinator Whether the current user is a coordinator
      * @param bool   $isAdmin           Whether the current user is a admin
      */
-    public function __construct(string $filename, string $ty, bool $userIsCoordinator, bool $isAdmin)
-    {
+    public function __construct(
+        string $filename,
+        string $endpoint,
+        bool $userIsCoordinator,
+        bool $isAdmin
+    ) {
         $this->filename = $filename;
-        $this->currentType = $ty;
+        $this->currentType = $endpoint;
         $this->userIsCoordinator = $userIsCoordinator;
         $this->isAdmin = $isAdmin;
 

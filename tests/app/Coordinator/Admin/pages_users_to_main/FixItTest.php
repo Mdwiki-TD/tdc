@@ -53,9 +53,9 @@ class FixItTest extends TestCase
 
     public function testFormActionUrl()
     {
-        $ty = 'fix_page';
+        $endpoint = 'fix_page';
         $nonav = '120';
-        $action = "index.php?ty=$ty&nonav=$nonav";
+        $action = "index.php?ty=$endpoint&nonav=$nonav";
 
         $this->assertEquals('index.php?ty=fix_page&nonav=120', $action);
     }
