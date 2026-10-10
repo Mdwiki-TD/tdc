@@ -30,25 +30,27 @@
  * echo $sidebar->render();
  * ```
  *
- * @package    Utils
- * @author     Translation Dashboard Team
- * @version    2.0.0
- * @since      1.0.0
- * @license    GPL-3.0-or-later
+ * @package     Utils
+ * @author      Translation Dashboard Team
+ * @version     2.0.0
+ * @since       1.0.0
+ * @license     GPL-3.0-or-later
  */
 
 namespace App\Utils;
+
+use App\Utils\SidebarItem;
 
 class SidebarMenu
 {
     private string $filename;
     private string $currentType;
-    private bool $userIsCoordinator;
+    private bool   $userIsCoordinator;
 
     /** @var array<string,string> */
     private array $mainMenuIcons;
 
-    /** @var array<string,array<int,array<string,mixed>>> */
+    /** @var array<string,array<int,SidebarItem>> */
     private array $mainMenu;
 
     /**
@@ -58,8 +60,8 @@ class SidebarMenu
      */
     public function __construct(string $filename, string $ty, bool $userIsCoordinator)
     {
-        $this->filename          = $filename;
-        $this->currentType       = $ty;
+        $this->filename = $filename;
+        $this->currentType = $ty;
         $this->userIsCoordinator = $userIsCoordinator;
 
         [$this->mainMenuIcons, $this->mainMenu] = $this->menuData();
@@ -70,7 +72,7 @@ class SidebarMenu
      *
      * Returns the menu structure with icons, links, and access control settings.
      *
-     * @return array{0:array<string,string>,1:array<string,array<int,array<string,mixed>>>}
+     * @return array{0:array<string,string>,1:array<string,array<int,SidebarItem>>}
      *         Tuple of (icon mapping, menu structure)
      */
     private function menuData(): array
@@ -78,173 +80,173 @@ class SidebarMenu
         // Main menu icons for each group
         $mainMenuIcons = [
             "Translations" => "bi-translate",
-            "Pages" => "bi-file-text",
-            "Qids" => "bi-database",
-            "Users" => "bi-people",
-            "Others" => "bi-three-dots",
-            "Tools" => "bi-tools",
+            "Pages"        => "bi-file-text",
+            "Qids"         => "bi-database",
+            "Users"        => "bi-people",
+            "Others"       => "bi-three-dots",
+            "Tools"        => "bi-tools",
         ];
 
-        // Menu structure: [id, admin-required, href, title, icon, optional target]
+        // Menu structure using SidebarItem objects
         $mainMenu = [
             "Translations" => [
-                [
-                    "id" => "last",
-                    "admin" => 0,
-                    "no_admin" => 1,
-                    "href" => "last",
-                    "title" => "Recent",
-                    "icon" => "bi-clock-history"
-                ],
-                [
-                    "id" => "last_coord",
-                    "admin" => 1,
-                    "href" => "last_coord",
-                    "title" => "Recent",
-                    "icon" => "bi-clock-history"
-                ],
-                [
-                    "id" => "process",
-                    "admin" => 0,
-                    "href" => "process",
-                    "title" => "In Process",
-                    "icon" => "bi-hourglass"
-                ],
-                [
-                    "id" => "process_total",
-                    "admin" => 0,
-                    "href" => "process_total",
-                    "title" => "In Process (Total)",
-                    "icon" => "bi-hourglass-split"
-                ],
-                [
-                    "id" => "reports",
-                    "admin" => 1,
-                    "href" => "reports",
-                    "title" => "Publish Reports",
-                    "icon" => "bi-file-earmark-text"
-                ],
+                new SidebarItem(
+                    id: "last",
+                    admin: 0,
+                    no_admin: 1,
+                    href: "last",
+                    title: "Recent",
+                    icon: "bi-clock-history"
+                ),
+                new SidebarItem(
+                    id: "last_coord",
+                    admin: 1,
+                    href: "last_coord",
+                    title: "Recent",
+                    icon: "bi-clock-history"
+                ),
+                new SidebarItem(
+                    id: "process",
+                    admin: 0,
+                    href: "process",
+                    title: "In Process",
+                    icon: "bi-hourglass"
+                ),
+                new SidebarItem(
+                    id: "process_total",
+                    admin: 0,
+                    href: "process_total",
+                    title: "In Process (Total)",
+                    icon: "bi-hourglass-split"
+                ),
+                new SidebarItem(
+                    id: "reports",
+                    admin: 1,
+                    href: "reports",
+                    title: "Publish Reports",
+                    icon: "bi-file-earmark-text"
+                ),
             ],
-            "Pages" => [
-                [
-                    "id" => "tt_load",
-                    "admin" => 1,
-                    "href" => "translate_type",
-                    "title" => "Translate Type",
-                    "icon" => "bi-translate"
-                ],
-                [
-                    "id" => "translated",
-                    "admin" => 1,
-                    "href" => "translated",
-                    "title" => "Translated Pages",
-                    "icon" => "bi-check2-square"
-                ],
-                [
-                    "id" => "pages_users_to_main",
-                    "admin" => 1,
-                    "href" => "pages_users_to_main",
-                    "title" => "Pages to check",
-                    "icon" => "bi-check"
-                ],
-                [
-                    "id" => "add",
-                    "admin" => 1,
-                    "href" => "add",
-                    "title" => "Add translations",
-                    "icon" => "bi-plus-square"
-                ],
-                [
-                    "id" => "qidsload",
-                    "admin" => 1,
-                    "href" => "qids",
-                    "title" => "Qids",
-                    "icon" => "bi-list-ul"
-                ],
+            "Pages"        => [
+                new SidebarItem(
+                    id: "tt_load",
+                    admin: 1,
+                    href: "translate_type",
+                    title: "Translate Type",
+                    icon: "bi-translate"
+                ),
+                new SidebarItem(
+                    id: "translated",
+                    admin: 1,
+                    href: "translated",
+                    title: "Translated Pages",
+                    icon: "bi-check2-square"
+                ),
+                new SidebarItem(
+                    id: "pages_users_to_main",
+                    admin: 1,
+                    href: "pages_users_to_main",
+                    title: "Pages to check",
+                    icon: "bi-check"
+                ),
+                new SidebarItem(
+                    id: "add",
+                    admin: 1,
+                    href: "add",
+                    title: "Add translations",
+                    icon: "bi-plus-square"
+                ),
+                new SidebarItem(
+                    id: "qidsload",
+                    admin: 1,
+                    href: "qids",
+                    title: "Qids",
+                    icon: "bi-list-ul"
+                ),
             ],
-            "Users" => [
-                [
-                    "id" => "admins",
-                    "admin" => 1,
-                    "href" => "admins",
-                    "title" => "Coordinators",
-                    "icon" => "bi-person-gear"
-                ],
-                [
-                    "id" => "users",
-                    "admin" => 1,
-                    "href" => "users",
-                    "title" => "Emails",
-                    "icon" => "bi-envelope"
-                ],
-                [
-                    "id" => "full_tr",
-                    "admin" => 1,
-                    "href" => "full_translators",
-                    "title" => "Full translators",
-                    "icon" => "bi-person-check"
-                ],
-                [
-                    "id" => "user_inp",
-                    "admin" => 1,
-                    "href" => "users_not_inprocess",
-                    "title" => "Not in process",
-                    "icon" => "bi-hourglass"
-                ],
+            "Users"        => [
+                new SidebarItem(
+                    id: "admins",
+                    admin: 1,
+                    href: "admins",
+                    title: "Coordinators",
+                    icon: "bi-person-gear"
+                ),
+                new SidebarItem(
+                    id: "users",
+                    admin: 1,
+                    href: "users",
+                    title: "Emails",
+                    icon: "bi-envelope"
+                ),
+                new SidebarItem(
+                    id: "full_tr",
+                    admin: 1,
+                    href: "full_translators",
+                    title: "Full translators",
+                    icon: "bi-person-check"
+                ),
+                new SidebarItem(
+                    id: "user_inp",
+                    admin: 1,
+                    href: "users_not_inprocess",
+                    title: "Not in process",
+                    icon: "bi-hourglass"
+                ),
             ],
-            "Others" => [
-                [
-                    "id" => "projects",
-                    "admin" => 1,
-                    "href" => "projects",
-                    "title" => "Projects",
-                    "icon" => "bi-kanban"
-                ],
-                [
-                    "id" => "campaigns",
-                    "admin" => 1,
-                    "href" => "campaigns",
-                    "title" => "Campaigns",
-                    "icon" => "bi-megaphone"
-                ],
-                [
-                    "id" => "settings",
-                    "admin" => 1,
-                    "href" => "settings",
-                    "title" => "Settings",
-                    "icon" => "bi-gear"
-                ],
-                [
-                    "id" => "categories",
-                    "admin" => 0,
-                    "href" => "categories",
-                    "title" => "Categories",
-                    "icon" => "bi-tags"
-                ],
+            "Others"       => [
+                new SidebarItem(
+                    id: "projects",
+                    admin: 1,
+                    href: "projects",
+                    title: "Projects",
+                    icon: "bi-kanban"
+                ),
+                new SidebarItem(
+                    id: "campaigns",
+                    admin: 1,
+                    href: "campaigns",
+                    title: "Campaigns",
+                    icon: "bi-megaphone"
+                ),
+                new SidebarItem(
+                    id: "settings",
+                    admin: 1,
+                    href: "settings",
+                    title: "Settings",
+                    icon: "bi-gear"
+                ),
+                new SidebarItem(
+                    id: "categories",
+                    admin: 0,
+                    href: "categories",
+                    title: "Categories",
+                    icon: "bi-tags"
+                ),
             ],
-            "Tools" => [
-                [
-                    "id" => "stat",
-                    "admin" => 0,
-                    "href" => "stat",
-                    "title" => "Status",
-                    "icon" => "bi-graph-up"
-                ],
-                [
-                    "id" => "wikirefs_options",
-                    "admin" => 1,
-                    "href" => "wikirefs_options",
-                    "title" => "Fix refs (Options)",
-                    "icon" => "bi-wrench-adjustable"
-                ],
-                [
-                    "id" => "fixwikirefs",
-                    "admin" => 0,
-                    "href" => "/fixwikirefs.php",
-                    "title" => "Fixwikirefs",
-                    "target" => "_blank",
-                    "icon" => "bi-wrench"
-                ],
+            "Tools"        => [
+                new SidebarItem(
+                    id: "stat",
+                    admin: 0,
+                    href: "stat",
+                    title: "Status",
+                    icon: "bi-graph-up"
+                ),
+                new SidebarItem(
+                    id: "wikirefs_options",
+                    admin: 1,
+                    href: "wikirefs_options",
+                    title: "Fix refs (Options)",
+                    icon: "bi-wrench-adjustable"
+                ),
+                new SidebarItem(
+                    id: "fixwikirefs",
+                    admin: 0,
+                    href: "/fixwikirefs.php",
+                    title: "Fixwikirefs",
+                    target: "_blank",
+                    icon: "bi-wrench"
+                ),
             ],
         ];
 
@@ -281,7 +283,7 @@ class SidebarMenu
      * Build the list items (<li>) for a single menu group, applying
      * access control and active-state detection.
      *
-     * @param array<int,array<string,mixed>> $items
+     * @param array<int,SidebarItem> $items
      *
      * @return array{0:string,1:bool} Tuple of (list items HTML, whether the group is active)
      */
@@ -291,17 +293,17 @@ class SidebarMenu
         $groupIsActive = false;
 
         foreach ($items as $item) {
-            $href = isset($item['href']) && is_string($item['href']) ? $item['href'] : '';
+            $href = $item->href ?? '';
 
             // Check if this item is active
             if ($href === $this->currentType) {
                 $groupIsActive = true;
             }
 
-            $icon = isset($item['icon']) && is_string($item['icon']) ? $item['icon'] : null;
-            $target = isset($item['target']) && is_string($item['target']) ? $item['target'] : null;
-            $admin = (int)($item['admin'] ?? 0);
-            $noAdmin = (int)($item['no_admin'] ?? 0);
+            $icon = $item->icon ?? null;
+            $target = $item->target ?? null;
+            $admin = (int) ($item->admin ?? 0);
+            $noAdmin = (int) ($item->no_admin ?? 0);
 
             // Skip non-admin items for coordinators
             if ($noAdmin === 1 && $this->userIsCoordinator) {
@@ -317,8 +319,8 @@ class SidebarMenu
             // Build full URL (unless external link)
             $hrefFull = ($target !== null && $target !== '') ? $href : "{$this->filename}?ty={$href}";
 
-            $id = isset($item['id']) && is_string($item['id']) ? $item['id'] : '';
-            $title = isset($item['title']) && is_string($item['title']) ? $item['title'] : '';
+            $id = $item->id ?? '';
+            $title = $item->title ?? '';
             $link = $this->generateListItem($hrefFull, $title, $icon, $target);
 
             $lis .= <<<HTML
@@ -342,7 +344,7 @@ class SidebarMenu
         $iconClass = $this->mainMenuIcons[$groupKey] ?? '';
         $iconHtml = (!empty($iconClass)) ? "<i class='bi {$iconClass} me-1'></i>" : '';
 
-        $escapedKey = htmlspecialchars((string)$groupKey, ENT_QUOTES, 'UTF-8');
+        $escapedKey = htmlspecialchars((string) $groupKey, ENT_QUOTES, 'UTF-8');
 
         return <<<HTML
             <li class="mb-1">
@@ -396,7 +398,7 @@ class SidebarMenu
 
             // Only render group if it has visible items
             if (!empty($lis)) {
-                $sidebar .= $this->buildGroup((string)$groupKey, $lis, $groupIsActive);
+                $sidebar .= $this->buildGroup((string) $groupKey, $lis, $groupIsActive);
             }
         }
 
