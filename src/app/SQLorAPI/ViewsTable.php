@@ -6,7 +6,7 @@ use App\SQLorAPI\BaseTable;
 
 class ViewsTable extends BaseTable
 {
-    private static array $viewsCache = [];
+    private static array $viewsCache     = [];
     private static array $userViewsCache = [];
     private static array $langViewsCache = [];
     private static array $graphDataCache = [];
@@ -29,14 +29,14 @@ class ViewsTable extends BaseTable
         self::$graphDataCache = [];
     }
 
-    public function getViews(mixed $year, mixed $lang): array
+    public function getViews(int|string $year, string $lang): array
     {
-        $key = (string)$year . (string)$lang;
+        $key = (string) $year . (string) $lang;
         if (!empty(self::$viewsCache[$key] ?? [])) {
             return self::$viewsCache[$key];
         }
 
-        $apiParams = ['get' => 'views_new'];
+        $apiParams = ['get' => 'views'];
         $query2 = <<<SQL
             SELECT p.title, v.target, v.lang, v.views
             FROM views_new_all v
@@ -73,14 +73,14 @@ class ViewsTable extends BaseTable
         return $data;
     }
 
-    public function getUserViews(mixed $user, mixed $yearY, mixed $langY): array
+    public function getUserViews(string $user, int|string $yearY, string $langY): array
     {
         $key = 'user_views_' . $user . '_' . $yearY . '_' . $langY;
         if (!empty(self::$userViewsCache[$key] ?? [])) {
             return self::$userViewsCache[$key];
         }
 
-        $apiParams = ['get' => 'user_views2', 'lang' => $langY, 'user' => $user, 'year' => $yearY];
+        $apiParams = ['get' => 'user_views', 'lang' => $langY, 'user' => $user, 'year' => $yearY];
 
         $query2 = <<<SQL
             SELECT v.target, v.lang, v.views
@@ -119,14 +119,14 @@ class ViewsTable extends BaseTable
         return $tableOfViews;
     }
 
-    public function getLangViews(mixed $mainlang, mixed $yearY): array
+    public function getLangViews(string $mainlang, int|string $yearY): array
     {
         $key = 'lang_views_' . $mainlang . '_' . $yearY;
         if (!empty(self::$langViewsCache[$key] ?? [])) {
             return self::$langViewsCache[$key];
         }
 
-        $apiParams = ['get' => 'lang_views2', 'lang' => $mainlang, 'year' => $yearY];
+        $apiParams = ['get' => 'lang_views', 'lang' => $mainlang, 'year' => $yearY];
 
         $query2 = <<<SQL
             SELECT v.target, v.lang, v.views

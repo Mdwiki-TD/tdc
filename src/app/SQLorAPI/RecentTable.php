@@ -6,7 +6,7 @@ use App\SQLorAPI\BaseTable;
 
 class RecentTable extends BaseTable
 {
-    private static array $PagesWithViewsCache = [];
+    private static array $PagesWithViewsCache   = [];
     private static array $RecentPagesUsersCache = [];
 
 
@@ -38,13 +38,13 @@ class RecentTable extends BaseTable
         $sqlParams = [];
 
         $apiParams = [
-            'get' => 'pages_with_views',
+            'get'    => 'pages_with_views',
             'target' => 'not_empty',
-            "order" => 'pupdate_or_add_date',
-            'limit' => '250',
+            "order"  => 'pupdate_or_add_date',
+            'limit'  => '250',
         ];
 
-        if (!empty($lang) && $lang != 'All') {
+        if ($this->service->isValid($lang)) {
             $langLine = "and p.lang = ?";
             $sqlParams[] = $lang;
 
@@ -80,15 +80,15 @@ class RecentTable extends BaseTable
         $sqlParams = [];
 
         $apiParams = [
-            'get' => 'pages_users',
+            'get'    => 'pages_users',
             'target' => 'not_empty',
-            "order" => 'pupdate',
-            'limit' => '100'
+            "order"  => 'pupdate',
+            'limit'  => '100'
         ];
 
         $langLine = '';
 
-        if (!empty($lang) && $lang != 'All') {
+        if ($this->service->isValid($lang)) {
             $langLine = "and lang = ?";
             $sqlParams[] = $lang;
             $apiParams['lang'] = $lang;
@@ -126,7 +126,7 @@ class RecentTable extends BaseTable
 
         $query = "SELECT * FROM $table WHERE target != ''";
 
-        if (!empty($lang) && $lang != 'All') {
+        if ($this->service->isValid($lang)) {
             $query .= " AND lang = ?";
             $sqlParams[] = $lang;
             $apiParams['lang'] = $lang;
@@ -147,14 +147,13 @@ class RecentTable extends BaseTable
             // $sqlParams[] = $offset;
         }
 
-        $dd = $this->service->superFunction($apiParams, $sqlParams, $query);
+        $data = $this->service->superFunction($apiParams, $sqlParams, $query);
 
         // sort the table by add_date
-        usort($dd, function ($a, $b) {
+        usort($data, function ($a, $b) {
             return strtotime($b['add_date']) - strtotime($a['add_date']);
         });
 
-        return $dd;
+        return $data;
     }
-
 }

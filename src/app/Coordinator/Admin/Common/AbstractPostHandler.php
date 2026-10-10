@@ -22,10 +22,10 @@ abstract class AbstractPostHandler
     protected bool $isPopUpPage = false;
 
     protected bool $returnToFormPage = false;
-    protected bool $csrfError = false;
+    protected bool $csrfError        = false;
 
     protected array $errors = [];
-    protected array $texts = [];
+    protected array $texts  = [];
 
     public Database $db;
 
@@ -35,8 +35,17 @@ abstract class AbstractPostHandler
     }
     public function validateCoordinator(): void
     {
-        // Validate user authorization
+        // Validate Coordinator user authorization
         if (!CurrentUser::getInstance()->isCoordinator()) {
+            // return to home page
+            header('Location: /index.php');
+            exit;
+        }
+    }
+    public function validateAdmin(): void
+    {
+        // Validate admin user authorization
+        if (!CurrentUser::getInstance()->isAdmin()) {
             // return to home page
             header('Location: /index.php');
             exit;
@@ -58,7 +67,8 @@ abstract class AbstractPostHandler
      */
     public function getCloseButtonHtml(): string
     {
-        if (!$this->isPopUpPage) return "";
+        if (!$this->isPopUpPage)
+            return "";
 
         return <<<HTML
             <div class="aligncenter">

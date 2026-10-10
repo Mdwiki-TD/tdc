@@ -28,6 +28,15 @@ abstract class AbstractControllerNoPost
             exit;
         }
     }
+    public function validateAdmin(): void
+    {
+        // Validate admin user authorization
+        if (!CurrentUser::getInstance()->isAdmin()) {
+            // return to home page
+            header('Location: /index.php');
+            exit;
+        }
+    }
     /**
      * Handles authentication and executes controller output.
      */
@@ -37,7 +46,7 @@ abstract class AbstractControllerNoPost
     /**
      * Renders the card wrapping the form.
      */
-    public function echoBs5Card(string $header, string $body, string $bodyClass=""): void
+    public function echoBs5Card(string $header, string $body, string $bodyClass = ""): void
     {
         echo <<<HTML
             <div class='card'>
