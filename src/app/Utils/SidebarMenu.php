@@ -92,36 +92,36 @@ class SidebarMenu
             "Translations" => [
                 new SidebarItem(
                     id: "last",
-                    admin: 0,
-                    no_admin: 1,
+                    forAdmin: false,
+                    notForAdmin: true,
                     href: "last",
                     title: "Recent",
                     icon: "bi-clock-history"
                 ),
                 new SidebarItem(
                     id: "last_coord",
-                    admin: 1,
+                    forAdmin: true,
                     href: "last_coord",
                     title: "Recent",
                     icon: "bi-clock-history"
                 ),
                 new SidebarItem(
                     id: "process",
-                    admin: 0,
+                    forAdmin: false,
                     href: "process",
                     title: "In Process",
                     icon: "bi-hourglass"
                 ),
                 new SidebarItem(
                     id: "process_total",
-                    admin: 0,
+                    forAdmin: false,
                     href: "process_total",
                     title: "In Process (Total)",
                     icon: "bi-hourglass-split"
                 ),
                 new SidebarItem(
                     id: "reports",
-                    admin: 1,
+                    forAdmin: true,
                     href: "reports",
                     title: "Publish Reports",
                     icon: "bi-file-earmark-text"
@@ -130,35 +130,35 @@ class SidebarMenu
             "Pages"        => [
                 new SidebarItem(
                     id: "tt_load",
-                    admin: 1,
+                    forAdmin: true,
                     href: "translate_type",
                     title: "Translate Type",
                     icon: "bi-translate"
                 ),
                 new SidebarItem(
                     id: "translated",
-                    admin: 1,
+                    forAdmin: true,
                     href: "translated",
                     title: "Translated Pages",
                     icon: "bi-check2-square"
                 ),
                 new SidebarItem(
                     id: "pages_users_to_main",
-                    admin: 1,
+                    forAdmin: true,
                     href: "pages_users_to_main",
                     title: "Pages to check",
                     icon: "bi-check"
                 ),
                 new SidebarItem(
                     id: "add",
-                    admin: 1,
+                    forAdmin: true,
                     href: "add",
                     title: "Add translations",
                     icon: "bi-plus-square"
                 ),
                 new SidebarItem(
                     id: "qidsload",
-                    admin: 1,
+                    forAdmin: true,
                     href: "qids",
                     title: "Qids",
                     icon: "bi-list-ul"
@@ -167,28 +167,28 @@ class SidebarMenu
             "Users"        => [
                 new SidebarItem(
                     id: "admins",
-                    admin: 1,
+                    forAdmin: true,
                     href: "admins",
                     title: "Coordinators",
                     icon: "bi-person-gear"
                 ),
                 new SidebarItem(
                     id: "users",
-                    admin: 1,
+                    forAdmin: true,
                     href: "users",
                     title: "Emails",
                     icon: "bi-envelope"
                 ),
                 new SidebarItem(
                     id: "full_tr",
-                    admin: 1,
+                    forAdmin: true,
                     href: "full_translators",
                     title: "Full translators",
                     icon: "bi-person-check"
                 ),
                 new SidebarItem(
                     id: "user_inp",
-                    admin: 1,
+                    forAdmin: true,
                     href: "users_not_inprocess",
                     title: "Not in process",
                     icon: "bi-hourglass"
@@ -197,28 +197,28 @@ class SidebarMenu
             "Others"       => [
                 new SidebarItem(
                     id: "projects",
-                    admin: 1,
+                    forAdmin: true,
                     href: "projects",
                     title: "Projects",
                     icon: "bi-kanban"
                 ),
                 new SidebarItem(
                     id: "campaigns",
-                    admin: 1,
+                    forAdmin: true,
                     href: "campaigns",
                     title: "Campaigns",
                     icon: "bi-megaphone"
                 ),
                 new SidebarItem(
                     id: "settings",
-                    admin: 1,
+                    forAdmin: true,
                     href: "settings",
                     title: "Settings",
                     icon: "bi-gear"
                 ),
                 new SidebarItem(
                     id: "categories",
-                    admin: 0,
+                    forAdmin: false,
                     href: "categories",
                     title: "Categories",
                     icon: "bi-tags"
@@ -227,21 +227,21 @@ class SidebarMenu
             "Tools"        => [
                 new SidebarItem(
                     id: "stat",
-                    admin: 0,
+                    forAdmin: false,
                     href: "stat",
                     title: "Status",
                     icon: "bi-graph-up"
                 ),
                 new SidebarItem(
                     id: "wikirefs_options",
-                    admin: 1,
+                    forAdmin: true,
                     href: "wikirefs_options",
                     title: "Fix refs (Options)",
                     icon: "bi-wrench-adjustable"
                 ),
                 new SidebarItem(
                     id: "fixwikirefs",
-                    admin: 0,
+                    forAdmin: false,
                     href: "/fixwikirefs.php",
                     title: "Fixwikirefs",
                     target: "_blank",
@@ -300,17 +300,16 @@ class SidebarMenu
                 $groupIsActive = true;
             }
 
-            $icon = $item->icon ?? null;
-            $target = $item->target ?? null;
-            $admin = (int) ($item->admin ?? 0);
-            $noAdmin = (int) ($item->no_admin ?? 0);
+            $icon = $item->icon;
+            $target = $item->target;
+            $forCoordinator = $item->forCoordinator;
 
             // Skip non-admin items for coordinators
-            if ($noAdmin === 1 && $this->userIsCoordinator) {
+            if ($item->notForAdmin === true && $this->userIsCoordinator) {
                 continue;
             }
             // Skip admin items for non-coordinators
-            if ($admin === 1 && !$this->userIsCoordinator) {
+            if ($item->forAdmin === true && !$this->userIsCoordinator) {
                 continue;
             }
 
