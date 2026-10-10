@@ -98,6 +98,7 @@ class SidebarMenu
                     href: "last",
                     title: "Recent",
                     icon: "bi-clock-history",
+                    forAnyuser: true,
                     notForAdmin: true,
                 ),
                 new SidebarItem(
@@ -276,11 +277,12 @@ class SidebarMenu
                 $groupIsActive = true;
             }
 
+            // Skip non-admin items for coordinators
+            if ($item->notForAdmin === true && ($this->userIsCoordinator || $this->isAdmin)) {
+                continue;
+            }
+
             if ($item->forAnyuser === false) {
-                // Skip non-admin items for coordinators
-                if ($item->notForAdmin === true && ($this->userIsCoordinator || $this->isAdmin)) {
-                    continue;
-                }
                 // Skip items for non-coordinators
                 if ($item->forCoordinator === true && !$this->userIsCoordinator && !$this->isAdmin) {
                     continue;
