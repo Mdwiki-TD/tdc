@@ -15,6 +15,7 @@ class AppRouter
 {
 	private AdminResolver $resolver;
 	private CurrentUser $currentUser;
+	private bool $isAdmin;
 	private bool $isCoordinator;
 	private string $ty;
 	private string $scriptName;
@@ -37,9 +38,10 @@ class AppRouter
 
 		$this->currentUser = $currentUser;
 		$this->isCoordinator = $this->currentUser->isCoordinator();
+		$this->isAdmin = $this->currentUser->isAdmin();
 		$this->scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 
-		$this->resolver = new AdminResolver($this->isCoordinator);
+		$this->resolver = new AdminResolver($this->isCoordinator, $this->isAdmin);
 
 		$this->ty = $this->resolveTy();
 	}
@@ -83,7 +85,7 @@ class AppRouter
 	 */
 	private function renderSidebarStart(): void
 	{
-		$sidebar = new SidebarMenu($this->scriptName, $this->ty, $this->isCoordinator);
+		$sidebar = new SidebarMenu($this->scriptName, $this->ty, $this->isCoordinator, $this->isAdmin);
 		$sidebar = $sidebar->render();
 
 		echo <<<HTML
@@ -134,7 +136,7 @@ class AppRouter
 	private function dispatch(string $ty): void
 	{
 		if ($ty === "sidebar") {
-			$sidebar = new SidebarMenu($this->scriptName, $ty, $this->isCoordinator);
+			$sidebar = new SidebarMenu($this->scriptName, $ty, $this->isCoordinator, $this->isAdmin);
 			echo $sidebar->render();
 			return;
 		}
