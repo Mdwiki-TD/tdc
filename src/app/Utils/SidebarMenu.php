@@ -348,7 +348,7 @@ class SidebarMenu
         $show = $groupIsActive ? 'show' : '';
         $expanded = $groupIsActive ? 'true' : 'false';
 
-        $iconClass = $group->icon ?? '';
+        $iconClass = $group->icon ?: '';
         $iconHtml = (!empty($iconClass)) ? "<i class='bi {$iconClass} me-1'></i>" : '';
 
         $escapedId = htmlspecialchars($group->id, ENT_QUOTES, 'UTF-8');
