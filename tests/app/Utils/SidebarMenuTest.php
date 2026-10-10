@@ -55,7 +55,7 @@ class SidebarMenuTest extends TestCase
         $html = $sidebar->render();
 
         $this->assertStringContainsString('<li id=\'process\' class=\'active\'>', $html);
-        $this->assertStringContainsString('id="Translations-collapse"', $html);
+        $this->assertStringContainsString('id="translations-collapse"', $html);
         $this->assertStringContainsString('class="collapse show"', $html);
     }
 

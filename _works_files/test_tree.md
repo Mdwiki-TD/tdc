@@ -75,7 +75,7 @@ tests/
 │   │   │   │   ├── WikiRefsOptionsEditPostHandlerTest.php
 │   │   │   │   └── WikiRefsOptionsIndexControllerTest.php
 │   │   │   └── AdminResolverTest.php
-│   │   ├── Helpers/
+│   │   ├── Helps/
 │   │   │   ├── RecentHelpsTest.php
 │   │   │   └── SugustTest.php
 │   │   ├── Tools/
@@ -125,7 +125,6 @@ tests/
 │   │   ├── HtmlUrlsTest.php
 │   │   └── SidebarMenuTest.php
 │   ├── CSRFManagerTest.php
-│   ├── LoggerTest.php
 │   ├── NotFoundTest.php
 │   └── SettingsTest.php
 └── bootstrap.php

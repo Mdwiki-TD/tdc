@@ -65,7 +65,7 @@ app/
 │   │   │   └── WikiRefsOptionsIndexController.php
 │   │   ├── AdminResolver.php
 │   │   └── README.md
-│   ├── Helpers/
+│   ├── Helps/
 │   │   ├── RecentHelps.php
 │   │   └── Sugust.php
 │   ├── Tools/
@@ -100,6 +100,7 @@ app/
 │   ├── RecentTable.php
 │   ├── SettingsTable.php
 │   ├── TitlesTable.php
+│   ├── UsersLeaderboardTable.php
 │   ├── UsersTable.php
 │   └── ViewsTable.php
 ├── Tables/
@@ -116,6 +117,8 @@ app/
 │   ├── Html.php
 │   ├── Html2.php
 │   ├── HtmlUrls.php
+│   ├── SidebarGroup.php
+│   ├── SidebarItem.php
 │   └── SidebarMenu.php
 ├── autoload.php
 ├── bootstrap.php

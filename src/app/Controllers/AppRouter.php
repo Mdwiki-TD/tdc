@@ -17,7 +17,7 @@ class AppRouter
 	private CurrentUser $currentUser;
 	private bool $isAdmin;
 	private bool $isCoordinator;
-	private string $ty;
+	private string $endpoint;
 	private string $scriptName;
 
 	/**
@@ -43,7 +43,7 @@ class AppRouter
 
 		$this->resolver = new AdminResolver($this->isCoordinator, $this->isAdmin);
 
-		$this->ty = $this->resolveTy();
+		$this->endpoint = $this->resolveTy();
 	}
 
 	/**
@@ -55,7 +55,7 @@ class AppRouter
 			$this->renderSidebarStart();
 		}
 
-		$this->dispatch($this->ty);
+		$this->dispatch($this->endpoint);
 
 		if (!$this->shouldHideNav()) {
 			$this->renderSidebarEnd();
@@ -85,7 +85,7 @@ class AppRouter
 	 */
 	private function renderSidebarStart(): void
 	{
-		$sidebar = new SidebarMenu($this->scriptName, $this->ty, $this->isCoordinator, $this->isAdmin);
+		$sidebar = new SidebarMenu($this->scriptName, $this->endpoint, $this->isCoordinator, $this->isAdmin);
 		$sidebar = $sidebar->render();
 
 		echo <<<HTML
@@ -133,20 +133,20 @@ class AppRouter
 	/**
 	 * Dispatches the request to the target script or view based on routes and permissions.
 	 */
-	private function dispatch(string $ty): void
+	private function dispatch(string $endpoint): void
 	{
-		if ($ty === "sidebar") {
-			$sidebar = new SidebarMenu($this->scriptName, $ty, $this->isCoordinator, $this->isAdmin);
+		if ($endpoint === "sidebar") {
+			$sidebar = new SidebarMenu($this->scriptName, $endpoint, $this->isCoordinator, $this->isAdmin);
 			echo $sidebar->render();
 			return;
 		}
 
-		if (isset($this->toolsControllers[$ty])) {
-			$className = $this->toolsControllers[$ty];
+		if (isset($this->toolsControllers[$endpoint])) {
+			$className = $this->toolsControllers[$endpoint];
 			$controller = new $className();
 			$controller->handleRequest();
 			return;
 		}
-		$this->resolver->dispatch($ty);
+		$this->resolver->dispatch($endpoint);
 	}
 }
