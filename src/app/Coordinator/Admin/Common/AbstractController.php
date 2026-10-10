@@ -29,6 +29,15 @@ abstract class AbstractController
             exit;
         }
     }
+    public function validateAdmin(): void
+    {
+        // Validate admin user authorization
+        if (!CurrentUser::getInstance()->isAdmin()) {
+            // return to home page
+            header('Location: /index.php');
+            exit;
+        }
+    }
     /**
      * Handles authentication and executes controller output.
      */

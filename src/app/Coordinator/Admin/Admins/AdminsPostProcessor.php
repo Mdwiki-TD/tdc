@@ -25,7 +25,7 @@ class AdminsPostProcessor extends AbstractPostHandler
      */
     protected function process(array $post): void
     {
-        $this->validateCoordinator();
+        $this->validateAdmin();
         $this->processRows($post['rows'] ?? []);
 
     }

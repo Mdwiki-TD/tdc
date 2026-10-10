@@ -19,6 +19,7 @@ class SettingsPostProcessor extends AbstractPostHandler
     }
 	public function process(array $post): void
 	{
+        $this->validateAdmin();
         $this->processRows($post['rows'] ?? []);
 	}
 

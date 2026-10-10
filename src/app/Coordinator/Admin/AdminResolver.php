@@ -84,6 +84,7 @@ class AdminResolver
             "msg"                   => "App\\Coordinator\\Admin\\Users\\MsgController",
             "wikirefs_options_edit" => "App\\Coordinator\\Admin\\WikiRefsOptions\\WikiRefsOptionsEditController",
         ];
+
         if (isset($Controllers[$ty])) {
             $className = $Controllers[$ty];
             $controller = new $className();
@@ -96,6 +97,16 @@ class AdminResolver
     public function dispatch(string $ty): void
     {
         if (!$this->isCoordinator && !$this->isAdmin) {
+            NotFound::render();
+            return;
+        }
+
+        $onlyAdmins = [
+            "settings",
+            "admins",
+        ];
+
+        if (in_array($ty, $onlyAdmins) && !$this->isAdmin) {
             NotFound::render();
             return;
         }

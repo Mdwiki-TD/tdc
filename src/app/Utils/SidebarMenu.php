@@ -216,7 +216,7 @@ class SidebarMenu
                     href: "settings",
                     title: "Settings",
                     icon: "bi-gear",
-                    forCoordinator: true
+                    adminOnly: true,
                 ),
                 new SidebarItem(
                     id: "categories",
