@@ -270,7 +270,7 @@ class SidebarMenu
         $groupIsActive = false;
 
         foreach ($items as $item) {
-            $href = $item->href ?? '';
+            $href = $item->href;
 
             // Check if this item is active
             if ($href === $this->currentType) {
