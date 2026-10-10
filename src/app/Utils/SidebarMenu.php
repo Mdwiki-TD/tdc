@@ -333,8 +333,14 @@ class SidebarMenu
     /**
      * Build the collapsible group markup (button + desktop/mobile lists).
      */
-    private function buildGroup(SidebarGroup $group, string $lis, bool $groupIsActive): string
+    private function buildGroup(SidebarGroup $group): string
     {
+        [$groupHtml, $groupIsActive] = $this->buildGroupItems($group->items);
+
+        if (empty($groupHtml)) {
+            return "";
+        }
+
         $show = $groupIsActive ? 'show' : '';
         $expanded = $groupIsActive ? 'true' : 'false';
 
@@ -355,13 +361,13 @@ class SidebarMenu
                     <div class="d-none d-md-inline">
                         <!-- desktop -->
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            {$lis}
+                            {$groupHtml}
                         </ul>
                     </div>
                     <div class="d-inline d-md-none">
                         <!-- mobile -->
                         <ul class="navbar-nav flex-row flex-wrap btn-toggle-nav-mobile list-unstyled fw-normal pb-1 small">
-                            {$lis}
+                            {$groupHtml}
                         </ul>
                     </div>
                 </div>
@@ -392,12 +398,7 @@ class SidebarMenu
         HTML;
 
         foreach ($this->mainMenu as $group) {
-            [$lis, $groupIsActive] = $this->buildGroupItems($group->items);
-
-            // Only render group if it has visible items
-            if (!empty($lis)) {
-                $sidebar .= $this->buildGroup($group, $lis, $groupIsActive);
-            }
+            $sidebar .= $this->buildGroup($group);
         }
 
         $sidebar .= "</ul>";
