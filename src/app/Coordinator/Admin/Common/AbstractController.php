@@ -6,37 +6,20 @@ namespace App\Coordinator\Admin\Common;
 use App\MdwikiSql\Database;
 use App\User\CurrentUser;
 use App\CSRFManager;
+use App\Coordinator\Admin\Common\BaseController;
 
 /**
  * Class AbstractController
  *
  * Base class for controllers handlers.
  */
-abstract class AbstractController
+abstract class AbstractController extends BaseController
 {
     public Database $db;
 
     public function __construct()
     {
         $this->db = new Database();
-    }
-    public function validateCoordinator(): void
-    {
-        // Validate user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            // return to home page
-            header('Location: /index.php');
-            exit;
-        }
-    }
-    public function validateAdmin(): void
-    {
-        // Validate admin user authorization
-        if (!CurrentUser::getInstance()->isAdmin()) {
-            // return to home page
-            header('Location: /index.php');
-            exit;
-        }
     }
     /**
      * Handles authentication and executes controller output.
@@ -46,10 +29,11 @@ abstract class AbstractController
     {
         $this->validateCoordinator();
 
+        // Delegate POST requests to the POST processor
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->handlePostRequest();
         }
-
+        // Handle GET request and render view
         $this->renderFormCard();
     }
     abstract protected function createPostProcessor(): object;

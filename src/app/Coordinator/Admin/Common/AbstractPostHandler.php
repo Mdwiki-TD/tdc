@@ -7,6 +7,7 @@ use App\User\CurrentUser;
 use App\CSRFManager;
 use App\MdwikiSql\Database;
 use App\Utils\Html2;
+use App\Coordinator\Admin\Common\BaseController;
 
 /**
  * Class AbstractPostHandler
@@ -16,7 +17,7 @@ use App\Utils\Html2;
  * small helper for parsing checkbox-style 0/1 ints. Subclasses only
  * need to implement process() with their own delete/update/insert logic.
  */
-abstract class AbstractPostHandler
+abstract class AbstractPostHandler extends BaseController
 {
     // Regular protected property with a default value
     protected bool $isPopUpPage = false;
@@ -33,25 +34,6 @@ abstract class AbstractPostHandler
     {
         $this->db = new Database();
     }
-    public function validateCoordinator(): void
-    {
-        // Validate Coordinator user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            // return to home page
-            header('Location: /index.php');
-            exit;
-        }
-    }
-    public function validateAdmin(): void
-    {
-        // Validate admin user authorization
-        if (!CurrentUser::getInstance()->isAdmin()) {
-            // return to home page
-            header('Location: /index.php');
-            exit;
-        }
-    }
-
     protected function addError(string $message): void
     {
         $this->errors[] = $message;
@@ -94,9 +76,12 @@ abstract class AbstractPostHandler
             $this->csrfError = true;
             return $this->result();
         }
-        // TODO: Check if this needed
+
+        // Delegate POST requests to the POST processor
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            exit;
+            error_log('Invalid request method');
+            $this->addError("Invalid request method.");
+            return $this->result();
         }
 
         $this->process($post);

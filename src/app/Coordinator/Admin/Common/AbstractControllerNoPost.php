@@ -5,37 +5,20 @@ namespace App\Coordinator\Admin\Common;
 
 use App\MdwikiSql\Database;
 use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\BaseController;
 
 /**
  * Class AbstractControllerNoPost
  *
  * Base class for controllers handlers.
  */
-abstract class AbstractControllerNoPost
+abstract class AbstractControllerNoPost extends BaseController
 {
     public Database $db;
 
     public function __construct()
     {
         $this->db = new Database();
-    }
-    public function validateCoordinator(): void
-    {
-        // Validate user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            // return to home page
-            header('Location: /index.php');
-            exit;
-        }
-    }
-    public function validateAdmin(): void
-    {
-        // Validate admin user authorization
-        if (!CurrentUser::getInstance()->isAdmin()) {
-            // return to home page
-            header('Location: /index.php');
-            exit;
-        }
     }
     /**
      * Handles authentication and executes controller output.
