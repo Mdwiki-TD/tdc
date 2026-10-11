@@ -1,24 +1,25 @@
 <?php
 
-/**
- * Seed test for: WikiRefsOptionsEditController
- * Source: src/app/Coordinator/Admin/WikiRefsOptions/WikiRefsOptionsEditController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\WikiRefsOptions;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\WikiRefsOptions\WikiRefsOptionsEditController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(WikiRefsOptionsEditController::class)]
 class WikiRefsOptionsEditControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testGetCardTitle(): void
     {
-        $this->markTestIncomplete('Tests for WikiRefsOptionsEditController are not written yet.');
+        $controller = new WikiRefsOptionsEditController();
+
+        $ref = new \ReflectionClass($controller);
+        $method = $ref->getMethod('getCardTitle');
+        $method->setAccessible(true);
+        $title = $method->invoke($controller);
+
+        $this->assertStringContainsString('language settings', $title);
     }
 }

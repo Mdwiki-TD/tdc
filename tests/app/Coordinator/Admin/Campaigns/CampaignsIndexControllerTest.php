@@ -1,24 +1,42 @@
 <?php
 
-/**
- * Seed test for: CampaignsIndexController
- * Source: src/app/Coordinator/Admin/Campaigns/CampaignsIndexController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Campaigns;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Campaigns\CampaignsIndexController;
+use App\User\CurrentUser;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(CampaignsIndexController::class)]
 class CampaignsIndexControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for CampaignsIndexController are not written yet.');
+        parent::setUp();
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        SessionManager::ensureStarted();
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('isCoordinator')->willReturn(true);
+        $user->method('isAdmin')->willReturn(true);
+
+        $ref = new \ReflectionClass(CurrentUser::class);
+        $prop = $ref->getProperty('instance');
+        $prop->setAccessible(true);
+        $prop->setValue(null, $user);
+    }
+
+    public function testHandleRequest(): void
+    {
+        $controller = new CampaignsIndexController();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Campaigns', $output);
     }
 }

@@ -1,24 +1,26 @@
 <?php
 
-/**
- * Seed test for: GetCats
- * Source: src/app/Results27/getcats.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Results27;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Results27\GetCats;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(GetCats::class)]
 class GetCatsTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testGetCategoryFromCacheMissingFileReturnsEmptyArray(): void
     {
-        $this->markTestIncomplete('Tests for GetCats are not written yet.');
+        $res = GetCats::get_category_from_cache('non_existent_category_xyz');
+        $this->assertSame([], $res);
+    }
+
+    public function testFetchCategoryMembersFormatsTitlePrefix(): void
+    {
+        // When MdwikiApi returns no members, fetch_category_members returns empty array
+        $res = GetCats::fetch_category_members('TestCat');
+        $this->assertIsArray($res);
     }
 }

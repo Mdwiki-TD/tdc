@@ -1,24 +1,33 @@
 <?php
 
-/**
- * Seed test for: EditUserPostProcessor
- * Source: src/app/Coordinator/Admin/Users/EditUserPostProcessor.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Users;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Users\EditUserPostProcessor;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(EditUserPostProcessor::class)]
 class EditUserPostProcessorTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for EditUserPostProcessor are not written yet.');
+        parent::setUp();
+        SessionManager::ensureStarted();
+    }
+
+    public function testProcessEmptyPost(): void
+    {
+        $processor = new EditUserPostProcessor();
+
+        $ref = new \ReflectionClass($processor);
+        $method = $ref->getMethod('process');
+        $method->setAccessible(true);
+        $method->invoke($processor, []);
+
+        $res = $processor->handle([]);
+        $this->assertFalse($res['success']);
     }
 }

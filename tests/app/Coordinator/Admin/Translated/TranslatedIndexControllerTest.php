@@ -1,24 +1,31 @@
 <?php
 
-/**
- * Seed test for: TranslatedIndexController
- * Source: src/app/Coordinator/Admin/Translated/TranslatedIndexController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Translated;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Translated\TranslatedIndexController;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TranslatedIndexController::class)]
 class TranslatedIndexControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for TranslatedIndexController are not written yet.');
+        parent::setUp();
+        SessionManager::ensureStarted();
+    }
+
+    public function testHandleRequest(): void
+    {
+        $controller = new TranslatedIndexController();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Translated', $output);
     }
 }

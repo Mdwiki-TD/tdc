@@ -1,24 +1,25 @@
 <?php
 
-/**
- * Seed test for: EditPageController
- * Source: src/app/Coordinator/Admin/Translated/EditPageController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Translated;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Translated\EditPageController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(EditPageController::class)]
 class EditPageControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testGetCardTitle(): void
     {
-        $this->markTestIncomplete('Tests for EditPageController are not written yet.');
+        $controller = new EditPageController();
+
+        $ref = new \ReflectionClass($controller);
+        $method = $ref->getMethod('getCardTitle');
+        $method->setAccessible(true);
+        $title = $method->invoke($controller);
+
+        $this->assertStringContainsString('Edit Page', $title);
     }
 }

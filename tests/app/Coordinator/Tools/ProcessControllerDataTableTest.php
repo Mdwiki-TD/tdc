@@ -1,24 +1,26 @@
 <?php
 
-/**
- * Seed test for: ProcessControllerDataTable
- * Source: src/app/Coordinator/Tools/ProcessControllerDataTable.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Tools;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Tools\ProcessControllerDataTable;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ProcessControllerDataTable::class)]
 class ProcessControllerDataTableTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testHandleRequestOutputsDataTableScript(): void
     {
-        $this->markTestIncomplete('Tests for ProcessControllerDataTable are not written yet.');
+        $controller = new ProcessControllerDataTable();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Translations in process:', $output);
+        $this->assertStringContainsString('id="process_table"', $output);
+        $this->assertStringContainsString('in_process&limit=200', $output);
     }
 }

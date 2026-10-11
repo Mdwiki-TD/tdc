@@ -1,24 +1,31 @@
 <?php
 
-/**
- * Seed test for: WikiRefsOptionsIndexController
- * Source: src/app/Coordinator/Admin/WikiRefsOptions/WikiRefsOptionsIndexController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\WikiRefsOptions;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\WikiRefsOptions\WikiRefsOptionsIndexController;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(WikiRefsOptionsIndexController::class)]
 class WikiRefsOptionsIndexControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for WikiRefsOptionsIndexController are not written yet.');
+        parent::setUp();
+        SessionManager::ensureStarted();
+    }
+
+    public function testHandleRequest(): void
+    {
+        $controller = new WikiRefsOptionsIndexController();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Language settings', $output);
     }
 }

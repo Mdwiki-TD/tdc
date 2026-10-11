@@ -1,24 +1,25 @@
 <?php
 
-/**
- * Seed test for: EditTranslateTypeController
- * Source: src/app/Coordinator/Admin/TranslateType/EditTranslateTypeController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\TranslateType;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\TranslateType\EditTranslateTypeController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(EditTranslateTypeController::class)]
 class EditTranslateTypeControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testGetCardTitle(): void
     {
-        $this->markTestIncomplete('Tests for EditTranslateTypeController are not written yet.');
+        $controller = new EditTranslateTypeController();
+
+        $ref = new \ReflectionClass($controller);
+        $method = $ref->getMethod('getCardTitle');
+        $method->setAccessible(true);
+        $title = $method->invoke($controller);
+
+        $this->assertStringContainsString('Translate type', $title);
     }
 }

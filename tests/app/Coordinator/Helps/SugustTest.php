@@ -1,21 +1,29 @@
 <?php
 
-/**
- * Seed test for: Sugust
- * Source: src/app/Coordinator/Helps/Sugust.php
- * TODO: write the actual tests.
- */
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Helps;
-use PHPUnit\Framework\TestCase;
+
+use App\Coordinator\Helps\Sugust;
 use PHPUnit\Framework\Attributes\CoversClass;
-use app\Coordinator\Helps\Sugust;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Sugust::class)]
 class SugustTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testGetSugustEmptyTitle(): void
     {
-        $this->markTestIncomplete('Tests for Sugust are not written yet.');
+        $result = Sugust::get_sugust('', 'ar');
+
+        $this->assertSame('', $result['sugust']);
+        $this->assertSame(0, $result['time']);
+    }
+
+    public function testGetSugustNullInputs(): void
+    {
+        $result = Sugust::get_sugust(null, null);
+
+        $this->assertSame('', $result['sugust']);
+        $this->assertSame(0, $result['time']);
     }
 }

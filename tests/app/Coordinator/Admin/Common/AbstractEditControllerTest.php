@@ -1,24 +1,28 @@
 <?php
 
-/**
- * Seed test for: AbstractEditController
- * Source: src/app/Coordinator/Admin/Common/AbstractEditController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Common;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Common\AbstractEditController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractEditController::class)]
 class AbstractEditControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testRenderHeaderScripts(): void
     {
-        $this->markTestIncomplete('Tests for AbstractEditController are not written yet.');
+        $controller = new class extends AbstractEditController {
+            protected function buildForm(): string { return ''; }
+            protected function getCardTitle(): string { return 'Title'; }
+            protected function createPostProcessor(): object { return new \stdClass(); }
+        };
+
+        ob_start();
+        $controller->renderHeaderScripts();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('<div class="container-fluid">', $output);
     }
 }

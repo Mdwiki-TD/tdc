@@ -1,24 +1,33 @@
 <?php
 
-/**
- * Seed test for: TtPostProcessor
- * Source: src/app/Coordinator/Admin/TranslateType/TtPostProcessor.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\TranslateType;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\TranslateType\TtPostProcessor;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TtPostProcessor::class)]
 class TtPostProcessorTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for TtPostProcessor are not written yet.');
+        parent::setUp();
+        SessionManager::ensureStarted();
+    }
+
+    public function testProcessEmptyPost(): void
+    {
+        $processor = new TtPostProcessor();
+
+        $ref = new \ReflectionClass($processor);
+        $method = $ref->getMethod('process');
+        $method->setAccessible(true);
+        $method->invoke($processor, []);
+
+        $res = $processor->handle([]);
+        $this->assertFalse($res['success']);
     }
 }
