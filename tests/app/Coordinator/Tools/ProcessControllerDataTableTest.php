@@ -16,7 +16,7 @@ class ProcessControllerDataTableTest extends TestCase
         $controller = new ProcessControllerDataTable();
 
         ob_start();
-        $controller->handleRequest();
+        $controller->processRequest();
         $output = ob_get_clean();
 
         $this->assertStringContainsString('Translations in process:', $output);

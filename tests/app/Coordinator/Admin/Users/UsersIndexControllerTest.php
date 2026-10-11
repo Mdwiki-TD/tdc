@@ -23,7 +23,7 @@ class UsersIndexControllerTest extends TestCase
         $controller = new UsersIndexController();
 
         ob_start();
-        $controller->handleRequest();
+        $controller->processRequest();
         $output = ob_get_clean();
 
         $this->assertStringContainsString('Users', $output);

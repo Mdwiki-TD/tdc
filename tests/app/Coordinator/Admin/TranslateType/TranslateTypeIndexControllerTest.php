@@ -23,7 +23,7 @@ class TranslateTypeIndexControllerTest extends TestCase
         $controller = new TranslateTypeIndexController();
 
         ob_start();
-        $controller->handleRequest();
+        $controller->processRequest();
         $output = ob_get_clean();
 
         $this->assertStringContainsString('Translate Type', $output);

@@ -23,9 +23,9 @@ class UsersNotInprocessIndexControllerTest extends TestCase
         $controller = new UsersNotInprocessIndexController();
 
         ob_start();
-        $controller->handleRequest();
+        $controller->renderFormCard();
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('Users not in process', $output);
+        $this->assertStringContainsString("Users Excluded from 'In Progress' Table:", $output);
     }
 }

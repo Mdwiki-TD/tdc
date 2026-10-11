@@ -20,7 +20,8 @@ class UsersNotInprocessIndexController extends AbstractController
     {
         return new UsersNotInprocessPostProcessor();
     }
-    public function renderFormCard(): void {
+    public function renderFormCard(): void
+    {
         $users = (UsersTable::getInstance())->getUsersNoInprocess();
 
         $formText = $this->buildUserRows($users);
@@ -41,8 +42,8 @@ class UsersNotInprocessIndexController extends AbstractController
         foreach ($users as $key => $table) {
             $numb++;
 
-            $userId   = $table['id'] ?? '';
-            $usere    = $table['user'] ?? '';
+            $userId = $table['id'] ?? '';
+            $usere = $table['user'] ?? '';
             $isActive = $table['is_active'] ?? '';
 
             $activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
@@ -137,7 +138,7 @@ class UsersNotInprocessIndexController extends AbstractController
             </form>
         HTML;
 
-        $this->echoCard("Users Not to be added to (in process) table:", $body);
+        $this->echoCard("Users Excluded from 'In Progress' Table:", $body);
     }
 
     /**

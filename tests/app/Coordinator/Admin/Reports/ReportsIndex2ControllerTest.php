@@ -16,9 +16,9 @@ class ReportsIndex2ControllerTest extends TestCase
         $controller = new ReportsIndex2Controller();
 
         ob_start();
-        $controller->handleRequest();
+        $controller->processRequest();
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('Publish reports', $output);
+        $this->assertStringContainsString('Publish Reports', $output);
     }
 }

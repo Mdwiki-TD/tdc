@@ -32,7 +32,7 @@ class LastCoordIndexControllerTest extends TestCase
         $controller = new LastCoordIndexController();
 
         ob_start();
-        $controller->handleRequest();
+        $controller->processRequest();
         $output = ob_get_clean();
 
         $this->assertStringContainsString('Recent translations:', $output);
