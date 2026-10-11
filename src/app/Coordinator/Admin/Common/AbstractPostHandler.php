@@ -3,11 +3,10 @@
 
 namespace App\Coordinator\Admin\Common;
 
-use App\User\CurrentUser;
 use App\CSRFManager;
-use App\MdwikiSql\Database;
 use App\Utils\Html2;
 use App\Coordinator\Admin\Common\BaseController;
+
 
 /**
  * Class AbstractPostHandler
@@ -28,11 +27,10 @@ abstract class AbstractPostHandler extends BaseController
     protected array $errors = [];
     protected array $texts  = [];
 
-    public Database $db;
 
     public function __construct()
     {
-        $this->db = new Database();
+        parent::__construct();
     }
     protected function addError(string $message): void
     {
@@ -71,6 +69,11 @@ abstract class AbstractPostHandler extends BaseController
      */
     final public function handle(array $post): array
     {
+        if (!$this->validateCoordinator()) {
+            $this->addError("User is not authorized.");
+            $this->exit();
+            return $this->result();
+        }
         $manager = new CSRFManager();
         if (!$manager->verifyToken($_POST['csrf_token'] ?? null)) {
             $this->csrfError = true;

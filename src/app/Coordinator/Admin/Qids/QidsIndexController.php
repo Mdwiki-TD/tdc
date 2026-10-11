@@ -37,10 +37,8 @@ class QidsIndexController extends AbstractControllerNoPost
 	/**
 	 * Handles authentication and executes controller output.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
-        $this->validateCoordinator();
-
 		$qidsTitle = ($this->qidTable === 'qids') ? 'TD Qids' : 'Qids Others';
 		$dbService  = new QidsTable();
 		$rows = ($this->qidTable === 'qids')

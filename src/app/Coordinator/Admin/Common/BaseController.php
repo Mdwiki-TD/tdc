@@ -5,12 +5,14 @@ namespace App\Coordinator\Admin\Common;
 
 use App\User\CurrentUser;
 use App\NotFound;
+use App\MdwikiSql\Database;
 
 class BaseController
 {
+    public Database $db;
     public function __construct()
     {
-        // TODO: Implement __construct() method.
+        $this->db = new Database();
     }
 
     public function validateCoordinator(): bool

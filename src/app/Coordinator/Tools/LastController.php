@@ -13,9 +13,10 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
  */
 class LastController extends AbstractControllerNoPost
 {
+	public bool                $forCoordinators = false;
 	private RecentTranslations $helper;
-	private string $lang;
-	private string $lastTable;
+	private string             $lang;
+	private string             $lastTable;
 
 	public function __construct()
 	{
@@ -33,7 +34,7 @@ class LastController extends AbstractControllerNoPost
 	/**
 	 * Handles request execution.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
 		$recentRows = $this->CreateRecentRows();
 		$this->ShowMainView($recentRows);
@@ -153,12 +154,12 @@ class LastController extends AbstractControllerNoPost
 	 */
 	public function createLastTableData(array $tabg, int $nnnn): string
 	{
-		$user	 = $tabg['user'] ?? '';
-		$llang	= $tabg['lang'] ?? '';
-		$mdTitle  = trim($tabg['title'] ?? '');
-		$target   = trim($tabg['target'] ?? '');
-		$pupdate  = $tabg['pupdate'] ?? '';
-		$addDate  = $tabg['add_date'] ?? '';
+		$user = $tabg['user'] ?? '';
+		$llang = $tabg['lang'] ?? '';
+		$mdTitle = trim($tabg['title'] ?? '');
+		$target = trim($tabg['target'] ?? '');
+		$pupdate = $tabg['pupdate'] ?? '';
+		$addDate = $tabg['add_date'] ?? '';
 		$campaign = $tabg['campaign'] ?? '';
 
 		// if $addDate has : then split before first space

@@ -3,8 +3,6 @@
 
 namespace App\Coordinator\Admin\Common;
 
-use App\MdwikiSql\Database;
-use App\User\CurrentUser;
 use App\Coordinator\Admin\Common\BaseController;
 
 /**
@@ -14,18 +12,27 @@ use App\Coordinator\Admin\Common\BaseController;
  */
 abstract class AbstractControllerNoPost extends BaseController
 {
-    public Database $db;
+    public bool     $forCoordinators = true;
 
     public function __construct()
     {
-        $this->db = new Database();
+        parent::__construct();
     }
     /**
      * Handles authentication and executes controller output.
      */
 
-    abstract function handleRequest(): void;
+    // abstract function handleRequest(): void;
+    abstract function processRequest(): void;
 
+    public function handleRequest(): void
+    {
+        if ($this->forCoordinators && !$this->validateCoordinator()) {
+            $this->exit();
+            return;
+        }
+        $this->processRequest();
+    }
     /**
      * Renders the card wrapping the form.
      */

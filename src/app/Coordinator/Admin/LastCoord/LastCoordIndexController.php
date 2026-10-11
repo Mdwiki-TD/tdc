@@ -57,9 +57,8 @@ class LastCoordIndexController extends AbstractControllerNoPost
 	/**
 	 * Handles authentication and executes controller output.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
-		$this->validateCoordinator();
 
 		$recentRows = $this->CreateRecentRows();
 		$this->ShowMainView($recentRows);

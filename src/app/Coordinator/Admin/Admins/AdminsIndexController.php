@@ -13,42 +13,48 @@ use App\Coordinator\Admin\Common\AbstractController;
  */
 class AdminsIndexController extends AbstractController
 {
-	private const TY_NAME = 'admins';
+    public bool $forAdminOnly = true;
+    private const TY_NAME = 'admins';
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
     protected function createPostProcessor(): object
     {
         return new AdminsPostProcessor();
     }
 
-    public function renderFormCard(): void {
-		$coordinators = (UsersTable::getInstance())->getCoordinators();
-		sort($coordinators);
+    public function renderFormCard(): void
+    {
+        $coordinators = (UsersTable::getInstance())->getCoordinators();
+        sort($coordinators);
 
-		$formText = $this->buildCoordinatorRows($coordinators);
-		$numb = count($coordinators) + 1;
-		$formText .= $this->buildAddRowMarkup($numb);
+        $formText = $this->buildCoordinatorRows($coordinators);
+        $numb = count($coordinators) + 1;
+        $formText .= $this->buildAddRowMarkup($numb);
 
-		$this->renderCard($formText);
-		$this->renderAddRowScript();
+        $this->renderCard($formText);
+        $this->renderAddRowScript();
     }
-	/**
-	 * Builds the editable table rows for each existing coordinator.
-	 */
-	private function buildCoordinatorRows(array $coordinators): string
-	{
-		$formText = '';
-		$numb = 0;
+    /**
+     * Builds the editable table rows for each existing coordinator.
+     */
+    private function buildCoordinatorRows(array $coordinators): string
+    {
+        $formText = '';
+        $numb = 0;
 
-		foreach ($coordinators as $key => $table) {
-			$numb++;
+        foreach ($coordinators as $key => $table) {
+            $numb++;
 
-			$userId   = $table['id'] ?? '';
-			$usere    = $table['username'] ?? '';
-			$isActive = $table['is_active'] ?? '';
+            $userId = $table['id'] ?? '';
+            $usere = $table['username'] ?? '';
+            $isActive = $table['is_active'] ?? '';
 
-			$activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
+            $activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
 
-			$formText .= <<<HTML
+            $formText .= <<<HTML
                 <tr>
                     <td data-content="id">
                         <input class="form-control" size="20" name="rows[$numb][id]" value="$userId" type="hidden"/>
@@ -70,17 +76,17 @@ class AdminsIndexController extends AbstractController
                     </td>
                 </tr>
             HTML;
-		}
+        }
 
-		return $formText;
-	}
+        return $formText;
+    }
 
-	/**
-	 * Builds the trailing empty row used to add a new coordinator.
-	 */
-	private function buildAddRowMarkup(int $numb): string
-	{
-		return <<<HTML
+    /**
+     * Builds the trailing empty row used to add a new coordinator.
+     */
+    private function buildAddRowMarkup(int $numb): string
+    {
+        return <<<HTML
             <tr>
                 <td data-content="id">
                     <span><b>Add:</b></span>
@@ -100,16 +106,16 @@ class AdminsIndexController extends AbstractController
                 </td>
             </tr>
         HTML;
-	}
+    }
 
-	/**
-	 * Renders the coordinators card with the editable table form.
-	 */
-	private function renderCard(string $formText): void
-	{
-		$tyName = self::TY_NAME;
+    /**
+     * Renders the coordinators card with the editable table form.
+     */
+    private function renderCard(string $formText): void
+    {
+        $tyName = self::TY_NAME;
 
-		echo <<<HTML
+        echo <<<HTML
             <div class='card'>
                 <div class='card-header'>
                     <h4>Coordinators:</h4>
@@ -144,14 +150,14 @@ class AdminsIndexController extends AbstractController
                 </div>
             </div>
         HTML;
-	}
+    }
 
-	/**
-	 * Renders the client-side script for dynamically adding new rows.
-	 */
-	private function renderAddRowScript(): void
-	{
-		echo <<<'HTML'
+    /**
+     * Renders the client-side script for dynamically adding new rows.
+     */
+    private function renderAddRowScript(): void
+    {
+        echo <<<'HTML'
             <script type="text/javascript">
                 function add_row_v() {
                     var ii = $('#full_tab >tr').length + 1;
@@ -174,7 +180,7 @@ class AdminsIndexController extends AbstractController
                 }
             </script>
         HTML;
-	}
+    }
 }
 
 

@@ -17,12 +17,12 @@ use App\Utils\HtmlUrls;
  */
 class UsersIndexController extends AbstractControllerNoPost
 {
-	private int $limit;
+	private int    $limit;
 	private string $mainProject;
 
 	public function __construct()
 	{
-        parent::__construct();
+		parent::__construct();
 		$this->limit = (int) ($_GET['limit'] ?? 0);
 		$this->mainProject = $_GET['project'] ?? 'All';
 	}
@@ -30,10 +30,8 @@ class UsersIndexController extends AbstractControllerNoPost
 	/**
 	 * Handles authentication and executes controller output.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
-		$this->validateCoordinator();
-
 		$lastUserToTab = (UsersTable::getInstance())->getUsersByLastPupdate();
 		$usersDone = $this->getSortedArray();
 
@@ -175,7 +173,7 @@ class UsersIndexController extends AbstractControllerNoPost
 				$mailIcon = HtmlUrls::make_mail_icon_new($lastUserToTab[$userName], 'pup_window_email');
 			}
 
-			$editParams = [ 'user_id' => $userId];
+			$editParams = ['user_id' => $userId];
 
 			$editIcon = HtmlUrls::make_edit_icon_new("edit_user", $editParams);
 
@@ -261,7 +259,7 @@ class UsersIndexController extends AbstractControllerNoPost
 			</div>
 		HTML;
 
-        $this->echoBs5Card($header, $body, '');
+		$this->echoBs5Card($header, $body, '');
 	}
 
 	/**

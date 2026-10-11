@@ -15,6 +15,7 @@ use App\Results27\GetCats;
  */
 class StatController extends AbstractControllerNoPost
 {
+	public bool $forCoordinators = false;
 	private string $cat;
 
 	public function __construct()
@@ -25,27 +26,27 @@ class StatController extends AbstractControllerNoPost
 	/**
 	 * Handles request execution.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
 		$uuu = $this->filterStat($this->cat);
 
 		$tableHtml = <<<HTML
-	<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>title</th>
-				<th>qid</th>
-				<th>lead word</th>
-				<th>all word</th>
-				<th>ref</th>
-				<th>all ref</th>
-				<th>Importance</th>
-				<th>enwiki views</th>
-			</tr>
-		</thead>
-		<tbody>
-	HTML;
+			<table class='table table-striped compact soro table-mobile-responsive table-mobile-sided table_text_left'>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>title</th>
+						<th>qid</th>
+						<th>lead word</th>
+						<th>all word</th>
+						<th>ref</th>
+						<th>all ref</th>
+						<th>Importance</th>
+						<th>enwiki views</th>
+					</tr>
+				</thead>
+				<tbody>
+		HTML;
 
 		$titles = GetCats::get_mdwiki_cat_members($this->cat, true, 1);
 
@@ -102,27 +103,27 @@ class StatController extends AbstractControllerNoPost
 			}
 
 			$tableHtml .= <<<HTML
-	<tr>
-		<td data-content='#'>
-			$i</td>
-		<td data-content='Title'>
-			<a href="https://mdwiki.org/wiki/$title">$title</a></td>
-		<td data-content='Qid'>
-			$qidurl</td>
-		<td data-content='Lead Word'>
-			$word</td>
-		<td data-content='All Word'>
-			$allword</td>
-		<td data-content='Ref'>
-			$refs</td>
-		<td data-content='All Ref'>
-			$allRefs</td>
-		<td data-content='Importance'>
-			$asse</td>
-		<td data-content='enwiki views'>
-			<a href='https://en.wikipedia.org/w/api.php?action=query&prop=pageviews&titles=$title&redirects=1&pvipdays=30'>$pv</a></td>
-	</tr>
-	HTML;
+				<tr>
+					<td data-content='#'>
+						$i</td>
+					<td data-content='Title'>
+						<a href="https://mdwiki.org/wiki/$title">$title</a></td>
+					<td data-content='Qid'>
+						$qidurl</td>
+					<td data-content='Lead Word'>
+						$word</td>
+					<td data-content='All Word'>
+						$allword</td>
+					<td data-content='Ref'>
+						$refs</td>
+					<td data-content='All Ref'>
+						$allRefs</td>
+					<td data-content='Importance'>
+						$asse</td>
+					<td data-content='enwiki views'>
+						<a href='https://en.wikipedia.org/w/api.php?action=query&prop=pageviews&titles=$title&redirects=1&pvipdays=30'>$pv</a></td>
+				</tr>
+			HTML;
 		}
 
 		$tableHtml .= "</table>";
@@ -136,13 +137,13 @@ class StatController extends AbstractControllerNoPost
 		$withPv = $i - $noPv;
 
 		$lilo = [
-			'qid' => ['with' => $with_q, 'without' => $noQid],
+			'qid'          => ['with' => $with_q, 'without' => $noQid],
 			'enwiki views' => ['with' => $withPv, 'without' => $noPv],
-			'Importance' => ['with' => $withImportance, 'without' => $noImportance],
-			'word' => ['with' => $withWord, 'without' => $noWord],
-			'allword' => ['with' => $withAllword, 'without' => $noAllword],
-			'ref' => ['with' => $withRef, 'without' => $noRef],
-			'allref' => ['with' => $withAllref, 'without' => $noAllref],
+			'Importance'   => ['with' => $withImportance, 'without' => $noImportance],
+			'word'         => ['with' => $withWord, 'without' => $noWord],
+			'allword'      => ['with' => $withAllword, 'without' => $noAllword],
+			'ref'          => ['with' => $withRef, 'without' => $noRef],
+			'allref'       => ['with' => $withAllref, 'without' => $noAllref],
 		];
 
 		$ths = '';

@@ -42,10 +42,8 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	/**
 	 * Handles authentication and executes controller output.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
-		$this->validateCoordinator();
-
 		$limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 500;
 		$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 		$offset = ($page - 1) * $limit;

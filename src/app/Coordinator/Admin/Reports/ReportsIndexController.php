@@ -15,10 +15,8 @@ class ReportsIndexController extends AbstractControllerNoPost
     /**
      * Handles authentication and executes controller output.
      */
-    public function handleRequest(): void
+    public function processRequest(): void
     {
-        $this->validateCoordinator();
-
         $this->renderStyles();
         $this->renderCard();
         $this->renderInitScript();

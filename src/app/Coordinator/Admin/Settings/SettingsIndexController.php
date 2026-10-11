@@ -14,11 +14,17 @@ use App\Coordinator\Admin\Settings\SettingsPostProcessor;
  */
 class SettingsIndexController extends AbstractController
 {
+    public bool $forAdminOnly = true;
+    public function __construct()
+    {
+        parent::__construct();
+    }
     protected function createPostProcessor(): object
     {
         return new SettingsPostProcessor();
     }
-    public function renderFormCard(): void {
+    public function renderFormCard(): void
+    {
         $settings = (SettingsTable::getInstance())->getSettings();
 
         $text = $this->buildSettingsTable($settings);
@@ -53,10 +59,10 @@ class SettingsIndexController extends AbstractController
                 continue;
             }
 
-            $id        = $v['id'] ?? '';
-            $title     = $v['title'] ?? '';
+            $id = $v['id'] ?? '';
+            $title = $v['title'] ?? '';
             $displayed = $v['displayed'] ?? '';
-            $value     = $v['value'] ?? '';
+            $value = $v['value'] ?? '';
 
             $nn++;
 

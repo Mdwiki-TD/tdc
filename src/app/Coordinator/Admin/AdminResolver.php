@@ -96,6 +96,8 @@ class AdminResolver
 
     public function dispatch(string $endpoint): void
     {
+        $this->isCoordinator = true;
+        $this->isAdmin = true;
         if (!$this->isCoordinator && !$this->isAdmin) {
             NotFound::render();
             return;

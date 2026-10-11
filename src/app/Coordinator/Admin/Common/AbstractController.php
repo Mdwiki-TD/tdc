@@ -15,11 +15,11 @@ use App\Coordinator\Admin\Common\BaseController;
  */
 abstract class AbstractController extends BaseController
 {
-    public Database $db;
+    public bool $forAdminOnly = false;
 
     public function __construct()
     {
-        $this->db = new Database();
+        parent::__construct();
     }
     /**
      * Handles authentication and executes controller output.
@@ -27,7 +27,16 @@ abstract class AbstractController extends BaseController
 
     public function handleRequest(): void
     {
-        $this->validateCoordinator();
+        if ($this->forAdminOnly && !$this->validateAdmin()) {
+            $this->exit();
+            return;
+        }
+
+        // Validate coordinator
+        if (!$this->validateCoordinator()) {
+            $this->exit();
+            return;
+        }
 
         // Delegate POST requests to the POST processor
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
