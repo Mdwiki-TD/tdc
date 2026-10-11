@@ -1,24 +1,19 @@
 <?php
 
-/**
- * Seed test for: MsgController
- * Source: src/app/Coordinator/Admin/Users/MsgController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Users;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Users\MsgController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(MsgController::class)]
 class MsgControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testMsgControllerInstance(): void
     {
-        $this->markTestIncomplete('Tests for MsgController are not written yet.');
+        $controller = new MsgController();
+        $this->assertInstanceOf(MsgController::class, $controller);
     }
 }

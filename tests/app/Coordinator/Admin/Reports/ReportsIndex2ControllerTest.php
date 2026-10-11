@@ -1,24 +1,24 @@
 <?php
 
-/**
- * Seed test for: ReportsIndex2Controller
- * Source: src/app/Coordinator/Admin/Reports/ReportsIndex2Controller.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Reports;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Reports\ReportsIndex2Controller;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ReportsIndex2Controller::class)]
 class ReportsIndex2ControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testHandleRequest(): void
     {
-        $this->markTestIncomplete('Tests for ReportsIndex2Controller are not written yet.');
+        $controller = new ReportsIndex2Controller();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Publish reports', $output);
     }
 }

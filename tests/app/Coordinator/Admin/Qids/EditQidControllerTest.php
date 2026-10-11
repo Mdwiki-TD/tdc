@@ -1,24 +1,25 @@
 <?php
 
-/**
- * Seed test for: EditQidController
- * Source: src/app/Coordinator/Admin/Qids/EditQidController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Qids;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Qids\EditQidController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(EditQidController::class)]
 class EditQidControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testGetCardTitle(): void
     {
-        $this->markTestIncomplete('Tests for EditQidController are not written yet.');
+        $controller = new EditQidController();
+
+        $ref = new \ReflectionClass($controller);
+        $method = $ref->getMethod('getCardTitle');
+        $method->setAccessible(true);
+        $title = $method->invoke($controller);
+
+        $this->assertStringContainsString('Qid', $title);
     }
 }

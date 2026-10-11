@@ -1,23 +1,42 @@
 <?php
 
-/**
- * Seed test for: QidsIndexController
- * Source: src/app/Coordinator/Admin/Qids/QidsIndexController.php
- * TODO: write the actual tests.
- */
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Qids;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Qids\QidsIndexController;
+use App\User\CurrentUser;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(QidsIndexController::class)]
 class QidsIndexControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for QidsIndexController are not written yet.');
+        parent::setUp();
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        SessionManager::ensureStarted();
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('isCoordinator')->willReturn(true);
+        $user->method('isAdmin')->willReturn(true);
+
+        $ref = new \ReflectionClass(CurrentUser::class);
+        $prop = $ref->getProperty('instance');
+        $prop->setAccessible(true);
+        $prop->setValue(null, $user);
+    }
+
+    public function testHandleRequest(): void
+    {
+        $controller = new QidsIndexController();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Qids', $output);
     }
 }

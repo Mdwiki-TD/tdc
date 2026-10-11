@@ -1,24 +1,28 @@
 <?php
 
-/**
- * Seed test for: AbstractControllerNoPost
- * Source: src/app/Coordinator/Admin/Common/AbstractControllerNoPost.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Common;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractControllerNoPost::class)]
 class AbstractControllerNoPostTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testEchoBs5Card(): void
     {
-        $this->markTestIncomplete('Tests for AbstractControllerNoPost are not written yet.');
+        $controller = new class extends AbstractControllerNoPost {
+            public function handleRequest(): void {}
+        };
+
+        ob_start();
+        $controller->echoBs5Card('Header Title', 'Body Content', 'custom-body');
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Header Title', $output);
+        $this->assertStringContainsString('Body Content', $output);
+        $this->assertStringContainsString('custom-body', $output);
     }
 }

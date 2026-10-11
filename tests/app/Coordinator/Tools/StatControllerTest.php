@@ -1,24 +1,42 @@
 <?php
 
-/**
- * Seed test for: StatController
- * Source: src/app/Coordinator/Tools/StatController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Tools;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Tools\StatController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(StatController::class)]
 class StatControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    private array $origGet;
+
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for StatController are not written yet.');
+        parent::setUp();
+        $this->origGet = $_GET;
+    }
+
+    protected function tearDown(): void
+    {
+        $_GET = $this->origGet;
+        parent::tearDown();
+    }
+
+    public function testHandleRequestOutputsStatusAndFilter(): void
+    {
+        $_GET['cat'] = 'RTT';
+
+        $controller = new StatController();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Status:', $output);
+        $this->assertStringContainsString('Category:', $output);
+        $this->assertStringContainsString('enwiki views', $output);
     }
 }
