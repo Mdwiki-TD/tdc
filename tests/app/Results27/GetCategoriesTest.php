@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(GetCategories::class)]
-class GetCatsTest extends TestCase
+class GetCategoriesTest extends TestCase
 {
     public function testPlaceholder(): void
     {
