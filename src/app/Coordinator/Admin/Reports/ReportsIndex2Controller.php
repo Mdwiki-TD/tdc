@@ -16,10 +16,8 @@ class ReportsIndex2Controller extends AbstractControllerNoPost
     /**
      * Handles authentication and executes controller output.
      */
-    public function handleRequest(): void
+    public function processRequest(): void
     {
-        $this->validateCoordinator();
-
         $formOptions = $this->buildFormOptions();
 
         $this->renderFilterCard($formOptions);
@@ -93,10 +91,10 @@ class ReportsIndex2Controller extends AbstractControllerNoPost
      */
     private function renderFilterCard(array $formOptions): void
     {
-        $yearOptions   = $formOptions["year"] ?? "";
-        $monthOptions  = $formOptions["month"] ?? "";
-        $langOptions   = $formOptions["lang"] ?? "";
-        $userOptions   = $formOptions["user"] ?? "";
+        $yearOptions = $formOptions["year"] ?? "";
+        $monthOptions = $formOptions["month"] ?? "";
+        $langOptions = $formOptions["lang"] ?? "";
+        $userOptions = $formOptions["user"] ?? "";
         $resultOptions = $formOptions["result"] ?? "";
 
         echo <<<HTML

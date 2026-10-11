@@ -17,11 +17,14 @@ class SettingsPostProcessor extends AbstractPostHandler
     {
         parent::__construct();
     }
-	public function process(array $post): void
-	{
-        $this->validateAdmin();
+    public function process(array $post): void
+    {
+        if (!$this->validateAdmin()) {
+            $this->exit();
+            return;
+        }
         $this->processRows($post['rows'] ?? []);
-	}
+    }
 
     /**
      * Updates each submitted setting's value.
@@ -29,11 +32,11 @@ class SettingsPostProcessor extends AbstractPostHandler
     private function processRows(array $rows): void
     {
         foreach ($rows as $key => $table) {
-            $id    = $table['id'] ?? '';
+            $id = $table['id'] ?? '';
             $value = $table['value'] ?? '';
-            $title     = $table["title"] ?? '';
+            $title = $table["title"] ?? '';
             $displayed = $table["displayed"] ?? '';
-            $type      = $table["type"] ?? '';
+            $type = $table["type"] ?? '';
 
             // if (empty($title) || empty($displayed) || empty($type)) continue;
             // $re = update_settings($id, $title, $displayed, $value, $type);

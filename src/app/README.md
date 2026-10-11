@@ -86,7 +86,7 @@ app/
 │   ├── AddHelper.php
 │   └── Database.php
 ├── Results27/
-│   ├── GetCategories.php
+│   ├── getcats.php
 │   ├── GetResults.php
 │   └── README.md
 ├── SQLorAPI/

@@ -7,6 +7,7 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\User\CurrentUser;
 use App\Tables\LangsTables;
 use App\CSRFManager;
+use App\MdwikiSql\Database;
 
 use App\ApiClients\WikiApi;
 use App\Utils\HtmlUrls;
@@ -33,20 +34,18 @@ class MsgController extends AbstractControllerNoPost
         parent::__construct();
         $this->globalUsername = CurrentUser::getInstance()->getUsername();
 
-        $this->test   = $_REQUEST['test'] ?? '';
-        $this->title  = $_GET['title'] ?? $_POST['title'] ?? '';
-        $this->date   = $_GET['date'] ?? $_POST['date'] ?? '';
-        $this->user   = $_GET['user'] ?? $_POST['user'] ?? '';
-        $this->lang   = $_GET['lang'] ?? $_POST['lang'] ?? '';
+        $this->test = $_REQUEST['test'] ?? '';
+        $this->title = $_GET['title'] ?? $_POST['title'] ?? '';
+        $this->date = $_GET['date'] ?? $_POST['date'] ?? '';
+        $this->user = $_GET['user'] ?? $_POST['user'] ?? '';
+        $this->lang = $_GET['lang'] ?? $_POST['lang'] ?? '';
         $this->target = $_GET['target'] ?? $_POST['target'] ?? '';
     }
     /**
      * Handles authentication and executes controller output.
      */
-    public function handleRequest(): void
+    public function processRequest(): void
     {
-        $this->validateCoordinator();
-
         $this->renderHeaderScripts();
 
         $views = WikiApi::get_views($this->target, $this->lang, $this->date);
@@ -92,10 +91,10 @@ class MsgController extends AbstractControllerNoPost
     private function buildHereLink(string $sugust): string
     {
         $hereParams = [
-            'code'  => $this->lang,
-            'cat'   => 'RTT',
-            'tr_type'  => 'lead',
-            'title' => $sugust,
+            'code'    => $this->lang,
+            'cat'     => 'RTT',
+            'tr_type' => 'lead',
+            'title'   => $sugust,
         ];
 
         $hereUrl = "https://mdwiki.toolforge.org/Translation_Dashboard/translate_med/index.php?" . http_build_query($hereParams);
@@ -237,7 +236,6 @@ class MsgController extends AbstractControllerNoPost
                     </table>
                 </div>
             </div>
-
         HTML;
     }
 

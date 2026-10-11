@@ -35,9 +35,8 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	/**
 	 * Handles authentication and executes controller output.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
-		$this->validateCoordinator();
 
 		$sqlResults = (PagesTable::getInstance())->getPagesUsersToMain($this->lang);
 
@@ -145,33 +144,33 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 	 */
 	private function renderTableRow(array $tabg, int $index): string
 	{
-		$id	  = $tabg['id'] ?? "";
-		$user	= $tabg['user'] ?? "";
-		$lang	= $tabg['lang'] ?? "";
+		$id = $tabg['id'] ?? "";
+		$user = $tabg['user'] ?? "";
+		$lang = $tabg['lang'] ?? "";
 		$mdTitle = trim($tabg['title'] ?? '');
-		$target  = trim($tabg['target'] ?? '');
+		$target = trim($tabg['target'] ?? '');
 		$pupdate = $tabg['pupdate'] ?? '';
 
 		$mdwikiTitle = HtmlUrls::make_mdwiki_title($mdTitle);
-		$targe33	 = HtmlUrls::make_target_url($target, $lang);
+		$targe33 = HtmlUrls::make_target_url($target, $lang);
 
-		$newUser   = $tabg['new_user'] ?? "";
+		$newUser = $tabg['new_user'] ?? "";
 		$newTarget = $tabg['new_target'] ?? "";
 
 		$targe44 = HtmlUrls::make_target_url($newTarget, $lang);
 
 		$editParams = [
-			'id'		 => $id,
+			'id'         => $id,
 			'new_user'   => $newUser,
 			'new_target' => $newTarget,
 		];
 
 		$editIcon = HtmlUrls::make_edit_icon_new("fix_page", $editParams);
 
-		$qid	= $tabg['qid'] ?? "";
+		$qid = $tabg['qid'] ?? "";
 		$newQid = $tabg['new_qid'] ?? "";
 
-		$qidLink	= (!empty($qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$qid'>$qid</a>" : "";
+		$qidLink = (!empty($qid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$qid'>$qid</a>" : "";
 		$newQidLink = (!empty($newQid)) ? "<a target='_blank' href='https://wikidata.org/wiki/$newQid'>$newQid</a>" : "";
 
 		$newTarget2 = htmlspecialchars($newTarget, ENT_QUOTES);

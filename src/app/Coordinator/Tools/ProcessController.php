@@ -12,10 +12,11 @@ use App\SQLorAPI\ApiOrSqlService;
  */
 class ProcessController extends AbstractControllerNoPost
 {
+	public bool $forCoordinators = false;
 	/**
 	 * Handles request execution.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
 		$tbodyHtml = $this->CreateData();
 
@@ -75,13 +76,13 @@ class ProcessController extends AbstractControllerNoPost
 	{
 		// { "id": 3284, "title": "Triquetral fracture", "user": "SeaTub", "lang": "es", "cat": "RTT", "translate_type": "all", "word": 198, "add_date": "2026-02-17 03:00:00", "campaign": "Main", "autonym": "español" }
 
-		$user	  	= $tab['user'] ?? "";
-		$langCode  	= $tab['lang'] ?? "";
-		$mdTitle   	= $tab['title'] ?? "";
-		$autonym   	= $tab['autonym'] ?? "";
-		$campaign  	= $tab['campaign'] ?? "";
+		$user = $tab['user'] ?? "";
+		$langCode = $tab['lang'] ?? "";
+		$mdTitle = $tab['title'] ?? "";
+		$autonym = $tab['autonym'] ?? "";
+		$campaign = $tab['campaign'] ?? "";
 
-		$date	  = $tab['add_date'] ?? "";
+		$date = $tab['add_date'] ?? "";
 		// if $date has : then split before first space `2026-02-25 03:00:00` > `2026-02-25`
 		if (strpos($date, ':') !== false) {
 			$date = explode(' ', $date)[0];

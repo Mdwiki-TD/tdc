@@ -10,10 +10,11 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
  */
 class CategoriesController extends AbstractControllerNoPost
 {
+	public bool $forCoordinators = false;
 	/**
 	 * Handles request execution by outputting the HTML template and DataTables script.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
 		$header = <<<HTML
 			<span class="h4">

@@ -19,13 +19,13 @@ use App\Coordinator\Helps\RecentHelps;
 class TranslatedIndexController extends AbstractControllerNoPost
 {
 	private CurrentUser $currentUser;
-	private string $lang;
-	private string $table;
+	private string      $lang;
+	private string      $table;
 
 	public function __construct()
 	{
 		$this->currentUser = CurrentUser::getInstance();
-		$this->lang  = $_GET['lang'] ?? 'All';
+		$this->lang = $_GET['lang'] ?? 'All';
 		$cand = $_GET['table'] ?? 'pages';
 		$this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
 
@@ -42,12 +42,10 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	/**
 	 * Handles authentication and executes controller output.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
-		$this->validateCoordinator();
-
-		$limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 500;
-		$page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+		$limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 500;
+		$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 		$offset = ($page - 1) * $limit;
 
 		$sqlResults = (RecentTable::getInstance())->getRecentTranslated($this->lang, $this->table, $limit, $offset);
@@ -68,8 +66,10 @@ class TranslatedIndexController extends AbstractControllerNoPost
 
 		$recentTable .= "</tbody></table>";
 
-		$this->renderFilterCard(count($sqlResults), $pagination);
-		echo $recentTable;
+		$formTable = $this->renderFilterCard(count($sqlResults));
+
+		$body = $pagination . $recentTable;
+		$this->echoBs5Card($formTable, $body);
 		$this->renderDataTableScript();
 	}
 
@@ -98,18 +98,18 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	 */
 	private function renderTableRow(array $tabg, int $index, string $table): string
 	{
-		$id	  = $tabg['id'] ?? "";
-		$user	= $tabg['user'] ?? "";
-		$lang	= $tabg['lang'] ?? "";
+		$id = $tabg['id'] ?? "";
+		$user = $tabg['user'] ?? "";
+		$lang = $tabg['lang'] ?? "";
 		$mdTitle = trim($tabg['title'] ?? '');
-		$target  = trim($tabg['target'] ?? '');
+		$target = trim($tabg['target'] ?? '');
 		$pupdate = $tabg['pupdate'] ?? '';
 
 		$mdwikiTitle = HtmlUrls::make_mdwiki_title($mdTitle);
-		$targe33	 = HtmlUrls::make_target_url($target, $lang);
+		$targe33 = HtmlUrls::make_target_url($target, $lang);
 
 		$editParams = [
-			'id'	=> $id,
+			'id'    => $id,
 			'table' => $table
 		];
 
@@ -137,8 +137,8 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	 */
 	private function renderPaginationLinks(int $limit, int $page, string $table, string $lang, int $totalCount): string
 	{
-		$totalPages = (int)ceil($totalCount / $limit);
-		$baseUrl   = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
+		$totalPages = (int) ceil($totalCount / $limit);
+		$baseUrl = "?ty=translated&lang=$lang&table=$table&limit=$limit&page=";
 
 		$links = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
 		$links .= '<li class="page-item' . ($page <= 1 ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . '1">&laquo;</a></li>';
@@ -153,11 +153,11 @@ class TranslatedIndexController extends AbstractControllerNoPost
 		$links .= '<li class="page-item' . ($page >= $totalPages ? ' disabled' : '') . '"><a class="page-link" href="' . $baseUrl . $totalPages . '">&raquo;</a></li>';
 		$links .= '</ul></nav>';
 
-		$offset	= ($page - 1) * $limit;
+		$offset = ($page - 1) * $limit;
 		$startItem = $offset + 1;
-		$endItem   = min($offset + $limit, $totalCount);
+		$endItem = min($offset + $limit, $totalCount);
 
-		$summary  = "<p class=\"text-center\">";
+		$summary = "<p class=\"text-center\">";
 		$summary .= "Page " . ($offset / $limit + 1) . " from $totalPages ";
 		$summary .= "($startItem - $endItem from total " . number_format($totalCount) . " logs)";
 		$summary .= "</p>";
@@ -190,19 +190,19 @@ class TranslatedIndexController extends AbstractControllerNoPost
 	/**
 	 * Renders filter controls card header.
 	 */
-	private function renderFilterCard(int $countResult, string $paginationHtml): void
+	private function renderFilterCard(int $countResult): string
 	{
-		$langTable  = $this->getLanguages();
+		$langTable = $this->getLanguages();
 		$filterLang = RecentHelps::filter_recent2($this->lang, $langTable);
 
 		$data = [
-			"pages"	   => 'Main',
+			"pages"       => 'Main',
 			"pages_users" => 'User',
 		];
 
 		$filterNs = RecentHelps::filter_table($data, $this->table, 'table');
 
-		$header = <<<HTML
+		return <<<HTML
 			<form class='form-inline' style='margin-block-end: 0em;' method='get' action='index.php'>
 				<input name='ty' value='translated' type='hidden'/>
 				<div class='row'>
@@ -239,8 +239,6 @@ class TranslatedIndexController extends AbstractControllerNoPost
 				</div>
 			</form>
 		HTML;
-
-		$this->echoBs5Card($header, $paginationHtml, '');
 	}
 
 	/**

@@ -28,10 +28,11 @@ SELECT A.id from pages A, pages B where (A.target = '' OR A.target IS NULL) and 
  */
 class ProcessTotalController extends AbstractControllerNoPost
 {
+	public bool $forCoordinators = false;
 	/**
 	 * Handles request execution.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
 		$text = "";
 

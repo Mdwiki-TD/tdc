@@ -20,9 +20,9 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     }
     protected function process(array $post): void
     {
-        $langCode  = trim($post['lang_code'] ?? '');
-        $expend    = $this->boolInt($post['expend'] ?? 0);
-        $moveDots  = $this->boolInt($post['move_dots'] ?? 0);
+        $langCode = trim($post['lang_code'] ?? '');
+        $expend = $this->boolInt($post['expend'] ?? 0);
+        $moveDots = $this->boolInt($post['move_dots'] ?? 0);
         $addEnLang = $this->boolInt($post['add_en_lang'] ?? 0);
 
         if (isset($post['delete'])) {
