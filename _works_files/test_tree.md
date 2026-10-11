@@ -28,10 +28,6 @@ tests/
 │   │   │   │   └── FullTranslatorsPostProcessorTest.php
 │   │   │   ├── LastCoord/
 │   │   │   │   └── LastCoordIndexControllerTest.php
-│   │   │   ├── pages_users_to_main/
-│   │   │   │   ├── FixItPostTest.php
-│   │   │   │   ├── FixItTest.php
-│   │   │   │   └── PagesUsersToMainIndexControllerTest.php
 │   │   │   ├── PagesUsersToMain/
 │   │   │   │   ├── FixItControllerTest.php
 │   │   │   │   ├── FixItPostProcessorTest.php
