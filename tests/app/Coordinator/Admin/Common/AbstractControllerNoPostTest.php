@@ -14,7 +14,9 @@ class AbstractControllerNoPostTest extends TestCase
     public function testEchoBs5Card(): void
     {
         $controller = new class extends AbstractControllerNoPost {
-            public function handleRequest(): void {}
+            public function processRequest(): void
+            {
+            }
         };
 
         ob_start();

@@ -32,8 +32,8 @@ class AbstractPostHandlerTest extends TestCase
 
         ob_start();
         $handler->RenderIndexMesseges([
-            'errors' => ['Test Error'],
-            'texts' => ['Test Text'],
+            'errors'    => ['Test Error'],
+            'texts'     => ['Test Text'],
             'csrfError' => true
         ]);
         $output = ob_get_clean();

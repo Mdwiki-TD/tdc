@@ -14,9 +14,18 @@ class AbstractEditControllerTest extends TestCase
     public function testRenderHeaderScripts(): void
     {
         $controller = new class extends AbstractEditController {
-            protected function buildForm(): string { return ''; }
-            protected function getCardTitle(): string { return 'Title'; }
-            protected function createPostProcessor(): object { return new \stdClass(); }
+            protected function buildForm(): string
+            {
+                return '';
+            }
+            protected function getCardTitle(): string
+            {
+                return 'Title';
+            }
+            protected function createPostProcessor(): object
+            {
+                return new \stdClass();
+            }
         };
 
         ob_start();
