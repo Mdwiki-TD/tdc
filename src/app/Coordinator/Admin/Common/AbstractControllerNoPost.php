@@ -3,46 +3,36 @@
 
 namespace App\Coordinator\Admin\Common;
 
-use App\MdwikiSql\Database;
-use App\User\CurrentUser;
+use App\Coordinator\Admin\Common\BaseController;
 
 /**
  * Class AbstractControllerNoPost
  *
  * Base class for controllers handlers.
  */
-abstract class AbstractControllerNoPost
+abstract class AbstractControllerNoPost extends BaseController
 {
-    public Database $db;
+    public bool     $forCoordinators = true;
 
     public function __construct()
     {
-        $this->db = new Database();
-    }
-    public function validateCoordinator(): void
-    {
-        // Validate user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
-            // return to home page
-            header('Location: /index.php');
-            exit;
-        }
-    }
-    public function validateAdmin(): void
-    {
-        // Validate admin user authorization
-        if (!CurrentUser::getInstance()->isAdmin()) {
-            // return to home page
-            header('Location: /index.php');
-            exit;
-        }
+        parent::__construct();
     }
     /**
      * Handles authentication and executes controller output.
      */
 
-    abstract function handleRequest(): void;
+    // abstract function handleRequest(): void;
+    abstract function processRequest(): void;
 
+    public function handleRequest(): void
+    {
+        if ($this->forCoordinators && !$this->validateCoordinator()) {
+            $this->exit();
+            return;
+        }
+        $this->processRequest();
+    }
     /**
      * Renders the card wrapping the form.
      */

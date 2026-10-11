@@ -20,10 +20,8 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 	/**
 	 * Handles authentication and executes controller output.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
-		$this->validateCoordinator();
-
 		$tabes = $this->buildMergedLanguageSettings();
 
 		$sato = "";
@@ -75,18 +73,18 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 	 */
 	private function renderRow(array $tabg, int $numb): string
 	{
-		$id		 = $tabg["id"] ?? 0;
-		$lang	   = $tabg["lang_code"] ?? "";
-		$expend2	= ($tabg["expend"] == 1) ? "checked" : "";
-		$moveDots   = ($tabg["move_dots"] == 1) ? "checked" : "";
-		$addEnLang  = ($tabg["add_en_lang"] == 1) ? "checked" : "";
+		$id = $tabg["id"] ?? 0;
+		$lang = $tabg["lang_code"] ?? "";
+		$expend2 = ($tabg["expend"] == 1) ? "checked" : "";
+		$moveDots = ($tabg["move_dots"] == 1) ? "checked" : "";
+		$addEnLang = ($tabg["add_en_lang"] == 1) ? "checked" : "";
 
 		$lang = strtolower($lang);
 
 		$editParams = [
-			"id"		  => $id,
+			"id"          => $id,
 			"lang_code"   => $lang,
-			"expend"	  => $tabg["expend"],
+			"expend"      => $tabg["expend"],
 			"move_dots"   => $tabg["move_dots"],
 			"add_en_lang" => $tabg["add_en_lang"],
 		];

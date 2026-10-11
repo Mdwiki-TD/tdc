@@ -6,7 +6,7 @@ use App\Logger;
 use App\Settings;
 use App\ApiClients\MdwikiApi;
 
-class GetCats
+class GetCategories
 {
     public static function get_category_from_cache(string $category): array
     {
@@ -32,12 +32,12 @@ class GetCats
         }
 
         $params = [
-            "action" => "query",
-            "list" => "categorymembers",
+            "action"  => "query",
+            "list"    => "categorymembers",
             "cmtitle" => $category,
             "cmlimit" => "max",
-            "cmtype" => "page|subcat",
-            "format" => "json"
+            "cmtype"  => "page|subcat",
+            "format"  => "json"
         ];
 
         $items = [];

@@ -13,7 +13,7 @@ use App\Coordinator\Admin\Common\AbstractPostHandler;
  */
 class QidsPostProcessor extends AbstractPostHandler
 {
-    protected bool $isPopUpPage = true;
+	protected bool $isPopUpPage = true;
 
 	private string $qidTable;
 
@@ -29,10 +29,8 @@ class QidsPostProcessor extends AbstractPostHandler
 	/**
 	 * Executes authorization check and processes the POST submission.
 	 */
-    public function process(array $post): void
+	public function process(array $post): void
 	{
-		$this->validateCoordinator();
-
 		$this->processRows($post['rows'] ?? []);
 
 		if (!empty($this->texts)) {
@@ -49,8 +47,8 @@ class QidsPostProcessor extends AbstractPostHandler
 	{
 		foreach ($rows as $key => $table) {
 			$title = trim($table['title'] ?? '');
-			$qid   = trim($table['qid'] ?? '');
-			$id    = $table['id'] ?? '';
+			$qid = trim($table['qid'] ?? '');
+			$id = $table['id'] ?? '';
 
 			if (empty($title)) {
 				$this->addError("Title is required. qid=($qid)");

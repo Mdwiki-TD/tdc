@@ -11,10 +11,11 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
  */
 class ProcessControllerDataTable extends AbstractControllerNoPost
 {
+	public bool $forCoordinators = false;
 	/**
 	 * Handles request execution.
 	 */
-	public function handleRequest(): void
+	public function processRequest(): void
 	{
 		$header = <<<HTML
 			<h4>Translations in process:</h4>

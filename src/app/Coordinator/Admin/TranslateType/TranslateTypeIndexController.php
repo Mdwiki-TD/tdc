@@ -7,7 +7,6 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\CategoriesTable;
 use App\Utils\HtmlUrls;
 use App\Utils\Html;
-use App\Results27\GetCats;
 
 /**
  * Class TranslateTypeIndexController
@@ -30,10 +29,8 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
     /**
      * Handles authentication and executes controller output.
      */
-    public function handleRequest(): void
+    public function processRequest(): void
     {
-        $this->validateCoordinator();
-
         $filterHtml = $this->renderFilterSelect($this->cat);
 
         $this->loadTranslateTypeData();
@@ -136,7 +133,7 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
         foreach ($fullTranslatesTab as $title => $table) {
             $ttCount++;
 
-            $id   = $table['id'] ?? '';
+            $id = $table['id'] ?? '';
             $lead = $table['lead'] ?? 1;
             $full = $table['full'] ?? 0;
 

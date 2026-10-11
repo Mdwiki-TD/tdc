@@ -33,7 +33,7 @@ The `results/` module is the **translation gap analysis engine** for the Mdwiki 
 ```
 results/
 ├── GetResults.php     # Gap analysis: compares category members vs translated pages
-└── GetCats.php         # Category member retrieval with caching and recursive traversal
+└── GetCategories.php         # Category member retrieval with caching and recursive traversal
 ```
 
 ### Data Flow
@@ -53,17 +53,17 @@ get_cat_exists_and_missing(cat, depth, code)
 | Function                       | File              | Purpose                               |
 | ------------------------------ | ----------------- | ------------------------------------- |
 | `get_cat_exists_and_missing()` | `GetResults.php` | Main entry point: gap analysis        |
-| `get_mdwiki_cat_members()`     | `GetCats.php`     | Recursive category traversal with BFS |
-| `get_category_members()`       | `GetCats.php`     | Cache-or-API orchestrator             |
-| `fetch_category_members()`     | `GetCats.php`     | Live MediaWiki API caller             |
-| `get_category_from_cache()`    | `GetCats.php`     | JSON cache reader                     |
+| `get_mdwiki_cat_members()`     | `GetCategories.php`     | Recursive category traversal with BFS |
+| `get_category_members()`       | `GetCategories.php`     | Cache-or-API orchestrator             |
+| `fetch_category_members()`     | `GetCategories.php`     | Live MediaWiki API caller             |
+| `get_category_from_cache()`    | `GetCategories.php`     | JSON cache reader                     |
 
 ### Namespaces
 
 | Namespace            | File              |
 | -------------------- | ----------------- |
 | `Results\GetResults` | `GetResults.php` |
-| `Results\GetCats`    | `GetCats.php`     |
+| `Results\GetCategories`    | `GetCategories.php`     |
 
 ---
 
@@ -78,12 +78,12 @@ get_cat_exists_and_missing(cat, depth, code)
 
 ### Code Organization
 
-**Good**. Two files with clear responsibilities: `GetCats.php` handles data retrieval, `GetResults.php` handles analysis. The BFS implementation is clean and well-structured.
+**Good**. Two files with clear responsibilities: `GetCategories.php` handles data retrieval, `GetResults.php` handles analysis. The BFS implementation is clean and well-structured.
 
 ### SOLID Principles Compliance
 
 -   **Single Responsibility**: Each function has one clear purpose
--   **Separation of Concerns**: Data retrieval (`GetCats.php`) is cleanly separated from analysis (`GetResults.php`)
+-   **Separation of Concerns**: Data retrieval (`GetCategories.php`) is cleanly separated from analysis (`GetResults.php`)
 
 ### Maintainability
 

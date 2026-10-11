@@ -10,6 +10,10 @@ namespace App\Coordinator\Admin\Common;
  */
 abstract class AbstractEditController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     abstract protected function buildForm(): string;
 
@@ -21,7 +25,10 @@ abstract class AbstractEditController extends AbstractController
      */
     final public function handleRequest(): void
     {
-        $this->validateCoordinator();
+        if (!$this->validateCoordinator()) {
+            $this->exit();
+            return;
+        }
         $this->renderHeaderScripts();
 
         // Delegate POST requests to the POST processor
@@ -40,7 +47,9 @@ abstract class AbstractEditController extends AbstractController
     }
 
     /** Hook: e.g. fix_page prints a duplicate-page alert before the card. */
-    protected function beforeCard(): void {}
+    protected function beforeCard(): void
+    {
+    }
 
     /**
      * Renders UI scripts to isolate the modal/page layout.
