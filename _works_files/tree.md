@@ -87,7 +87,7 @@ src/
 │   │   ├── AddHelper.php
 │   │   └── Database.php
 │   ├── Results27/
-│   │   ├── getcats.php
+│   │   ├── GetCategories.php
 │   │   ├── GetResults.php
 │   │   └── README.md
 │   ├── SQLorAPI/

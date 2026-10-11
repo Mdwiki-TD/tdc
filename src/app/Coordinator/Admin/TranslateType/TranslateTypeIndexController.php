@@ -7,7 +7,7 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 use App\SQLorAPI\CategoriesTable;
 use App\Utils\HtmlUrls;
 use App\Utils\Html;
-use App\Results27\GetCats;
+use App\Results27\GetCategories;
 
 /**
  * Class TranslateTypeIndexController

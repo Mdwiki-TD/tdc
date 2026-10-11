@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Seed test for: GetCats
- * Source: src/app/Results27/getcats.php
+ * Seed test for: GetCategories
+ * Source: src/app/Results27/GetCategories.php
  * TODO: write the actual tests.
  */
 
@@ -14,11 +14,11 @@ use PHPUnit\Framework\TestCase;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(GetCats::class)]
+#[CoversClass(GetCategories::class)]
 class GetCatsTest extends TestCase
 {
     public function testPlaceholder(): void
     {
-        $this->markTestIncomplete('Tests for GetCats are not written yet.');
+        $this->markTestIncomplete('Tests for GetCategories are not written yet.');
     }
 }
