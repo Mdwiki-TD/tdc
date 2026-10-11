@@ -1,24 +1,26 @@
 <?php
 
-/**
- * Seed test for: SettingsPostProcessor
- * Source: src/app/Coordinator/Admin/Settings/SettingsPostProcessor.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Settings;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Settings\SettingsPostProcessor;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(SettingsPostProcessor::class)]
 class SettingsPostProcessorTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testProcessEmptyPost(): void
     {
-        $this->markTestIncomplete('Tests for SettingsPostProcessor are not written yet.');
+        $processor = new SettingsPostProcessor();
+
+        $ref = new \ReflectionClass($processor);
+        $method = $ref->getMethod('process');
+        $method->setAccessible(true);
+        $method->invoke($processor, []);
+
+        $res = $processor->handle([]);
+        $this->assertFalse($res['success']);
     }
 }
