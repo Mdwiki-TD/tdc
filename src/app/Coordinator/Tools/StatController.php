@@ -7,7 +7,7 @@ use App\Tables\MainTables;
 use App\SQLorAPI\CategoriesTable;
 use App\SQLorAPI\QidsTable;
 use App\Utils\Html;
-use App\Results27\GetCats;
+use App\Results27\GetCategories;
 
 /**
  * Class StatController
@@ -48,7 +48,7 @@ class StatController extends AbstractControllerNoPost
 				<tbody>
 		HTML;
 
-		$titles = GetCats::get_mdwiki_cat_members($this->cat, true, 1);
+		$titles = GetCategories::get_mdwiki_cat_members($this->cat, true, 1);
 
 		$noQid = 0;
 		$noWord = 0;

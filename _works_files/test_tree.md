@@ -28,10 +28,6 @@ tests/
 │   │   │   │   └── FullTranslatorsPostProcessorTest.php
 │   │   │   ├── LastCoord/
 │   │   │   │   └── LastCoordIndexControllerTest.php
-│   │   │   ├── pages_users_to_main/
-│   │   │   │   ├── FixItPostTest.php
-│   │   │   │   ├── FixItTest.php
-│   │   │   │   └── PagesUsersToMainIndexControllerTest.php
 │   │   │   ├── PagesUsersToMain/
 │   │   │   │   ├── FixItControllerTest.php
 │   │   │   │   ├── FixItPostProcessorTest.php
@@ -95,7 +91,7 @@ tests/
 │   │   ├── AddHelperTest.php
 │   │   └── DatabaseTest.php
 │   ├── Results27/
-│   │   ├── GetCatsTest.php
+│   │   ├── GetCategoriesTest.php
 │   │   └── GetResultsTest.php
 │   ├── SQLorAPI/
 │   │   ├── ApiOrSqlServiceTest.php

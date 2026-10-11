@@ -21,7 +21,8 @@ src/
 │   │   │   │   ├── AbstractController.php
 │   │   │   │   ├── AbstractControllerNoPost.php
 │   │   │   │   ├── AbstractEditController.php
-│   │   │   │   └── AbstractPostHandler.php
+│   │   │   │   ├── AbstractPostHandler.php
+│   │   │   │   └── BaseController.php
 │   │   │   ├── FullTranslators/
 │   │   │   │   ├── FullTranslatorsIndexController.php
 │   │   │   │   └── FullTranslatorsPostProcessor.php
@@ -87,7 +88,7 @@ src/
 │   │   ├── AddHelper.php
 │   │   └── Database.php
 │   ├── Results27/
-│   │   ├── getcats.php
+│   │   ├── GetCategories.php
 │   │   ├── GetResults.php
 │   │   └── README.md
 │   ├── SQLorAPI/

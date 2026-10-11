@@ -13,7 +13,8 @@ Admin/
 │   ├── AbstractController.php
 │   ├── AbstractControllerNoPost.php
 │   ├── AbstractEditController.php
-│   └── AbstractPostHandler.php
+│   ├── AbstractPostHandler.php
+│   └── BaseController.php
 ├── FullTranslators/
 │   ├── FullTranslatorsIndexController.php
 │   └── FullTranslatorsPostProcessor.php
