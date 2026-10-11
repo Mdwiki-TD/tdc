@@ -104,6 +104,7 @@ tests/
 │   │   ├── RecentTableTest.php
 │   │   ├── SettingsTableTest.php
 │   │   ├── TitlesTableTest.php
+│   │   ├── UsersLeaderboardTableTest.php
 │   │   ├── UsersTableTest.php
 │   │   └── ViewsTableTest.php
 │   ├── Tables/
@@ -119,8 +120,11 @@ tests/
 │   │   ├── Html2Test.php
 │   │   ├── HtmlTest.php
 │   │   ├── HtmlUrlsTest.php
+│   │   ├── SidebarGroupTest.php
+│   │   ├── SidebarItemTest.php
 │   │   └── SidebarMenuTest.php
 │   ├── CSRFManagerTest.php
+│   ├── LoggerTest.php
 │   ├── NotFoundTest.php
 │   └── SettingsTest.php
 └── bootstrap.php
