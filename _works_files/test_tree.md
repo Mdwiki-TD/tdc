@@ -95,7 +95,7 @@ tests/
 │   │   ├── AddHelperTest.php
 │   │   └── DatabaseTest.php
 │   ├── Results27/
-│   │   ├── GetCatsTest.php
+│   │   ├── GetCategoriesTest.php
 │   │   └── GetResultsTest.php
 │   ├── SQLorAPI/
 │   │   ├── ApiOrSqlServiceTest.php
