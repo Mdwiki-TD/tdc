@@ -281,7 +281,7 @@ class UsersIndexController extends AbstractControllerNoPost
 	 */
 	private function renderDataTableAssets(): void
 	{
-		$hoste = ($_SERVER["SERVER_NAME"] == "localhost")
+		$hoste = (getenv('APP_ENV') === 'production')
 			? "https://cdnjs.cloudflare.com"
 			: "https://tools-static.wmflabs.org/cdnjs";
 

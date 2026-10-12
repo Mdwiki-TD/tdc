@@ -55,8 +55,13 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     /**
      * Updates an existing language_settings row.
      */
-    private function updateRow(mixed $id, string $langCode, int $expend, int $moveDots, int $addEnLang): void
-    {
+    private function updateRow(
+        mixed $id,
+        string $langCode,
+        int $expend,
+        int $moveDots,
+        int $addEnLang
+    ): void {
         $qua = "UPDATE language_settings
             SET
                 lang_code = ?,
@@ -80,8 +85,12 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     /**
      * Inserts a new language_settings row.
      */
-    private function insertRow(string $langCode, int $expend, int $moveDots, int $addEnLang): void
-    {
+    private function insertRow(
+        string $langCode,
+        int $expend,
+        int $moveDots,
+        int $addEnLang
+    ): void {
         if (empty($langCode)) {
             $this->addError("Lang code is empty.");
             return;

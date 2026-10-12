@@ -1,24 +1,25 @@
 <?php
 
-/**
- * Seed test for: ProcessController
- * Source: src/app/Coordinator/Tools/ProcessController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Tools;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Tools\ProcessController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ProcessController::class)]
 class ProcessControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    public function testHandleRequestOutputsTableAndScript(): void
     {
-        $this->markTestIncomplete('Tests for ProcessController are not written yet.');
+        $controller = new ProcessController();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Translations in process:', $output);
+        $this->assertStringContainsString('id="process_table"', $output);
     }
 }

@@ -1,24 +1,42 @@
 <?php
 
-/**
- * Seed test for: AdminsIndexController
- * Source: src/app/Coordinator/Admin/Admins/AdminsIndexController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Admins;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Admins\AdminsIndexController;
+use App\User\CurrentUser;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AdminsIndexController::class)]
 class AdminsIndexControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for AdminsIndexController are not written yet.');
+        parent::setUp();
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        SessionManager::ensureStarted();
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('isCoordinator')->willReturn(true);
+        $user->method('isAdmin')->willReturn(true);
+
+        $ref = new \ReflectionClass(CurrentUser::class);
+        $prop = $ref->getProperty('instance');
+        $prop->setAccessible(true);
+        $prop->setValue(null, $user);
+    }
+
+    public function testHandleRequest(): void
+    {
+        $controller = new AdminsIndexController();
+
+        ob_start();
+        $controller->handleRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Coordinators', $output);
     }
 }

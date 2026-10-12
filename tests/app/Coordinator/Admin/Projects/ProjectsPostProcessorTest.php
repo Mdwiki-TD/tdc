@@ -1,24 +1,33 @@
 <?php
 
-/**
- * Seed test for: ProjectsPostProcessor
- * Source: src/app/Coordinator/Admin/Projects/ProjectsPostProcessor.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Projects;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Projects\ProjectsPostProcessor;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ProjectsPostProcessor::class)]
 class ProjectsPostProcessorTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for ProjectsPostProcessor are not written yet.');
+        parent::setUp();
+        SessionManager::ensureStarted();
+    }
+
+    public function testProcessEmptyPost(): void
+    {
+        $processor = new ProjectsPostProcessor();
+
+        $ref = new \ReflectionClass($processor);
+        $method = $ref->getMethod('process');
+        $method->setAccessible(true);
+        $method->invoke($processor, []);
+
+        $res = $processor->handle([]);
+        $this->assertFalse($res['success']);
     }
 }

@@ -1,24 +1,31 @@
 <?php
 
-/**
- * Seed test for: UsersIndexController
- * Source: src/app/Coordinator/Admin/Users/UsersIndexController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\Users;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\Users\UsersIndexController;
+use App\User\SessionManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(UsersIndexController::class)]
 class UsersIndexControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for UsersIndexController are not written yet.');
+        parent::setUp();
+        SessionManager::ensureStarted();
+    }
+
+    public function testHandleRequest(): void
+    {
+        $controller = new UsersIndexController();
+
+        ob_start();
+        $controller->processRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Users', $output);
     }
 }

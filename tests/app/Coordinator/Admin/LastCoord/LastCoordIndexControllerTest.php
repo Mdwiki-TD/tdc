@@ -1,24 +1,40 @@
 <?php
 
-/**
- * Seed test for: LastCoordIndexController
- * Source: src/app/Coordinator/Admin/LastCoord/LastCoordIndexController.php
- * TODO: write the actual tests.
- */
-
-
+declare(strict_types=1);
 
 namespace Tests\App\Coordinator\Admin\LastCoord;
 
-use PHPUnit\Framework\TestCase;
-
+use App\Coordinator\Admin\LastCoord\LastCoordIndexController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(LastCoordIndexController::class)]
 class LastCoordIndexControllerTest extends TestCase
 {
-    public function testPlaceholder(): void
+    private array $origGet;
+
+    protected function setUp(): void
     {
-        $this->markTestIncomplete('Tests for LastCoordIndexController are not written yet.');
+        parent::setUp();
+        $this->origGet = $_GET;
+    }
+
+    protected function tearDown(): void
+    {
+        $_GET = $this->origGet;
+        parent::tearDown();
+    }
+
+    public function testHandleRequestOutputsView(): void
+    {
+        $_GET['lang'] = 'All';
+
+        $controller = new LastCoordIndexController();
+
+        ob_start();
+        $controller->processRequest();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('Recent translations:', $output);
     }
 }

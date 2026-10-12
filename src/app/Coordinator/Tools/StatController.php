@@ -15,7 +15,7 @@ use App\Results27\GetCategories;
  */
 class StatController extends AbstractControllerNoPost
 {
-	public bool $forCoordinators = false;
+	public bool    $forCoordinators = false;
 	private string $cat;
 
 	public function __construct()
