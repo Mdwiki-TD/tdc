@@ -207,10 +207,4 @@ class CategoriesTable extends BaseTable
         return self::$staticsCache[$key];
     }
 
-    public function deleteCategory(string $id): bool
-    {
-        $qua2 = "DELETE FROM categories WHERE id = ?";
-        $deleted = $this->db->executeQuery($qua2, [$id]);
-        return $deleted;
-    }
 }

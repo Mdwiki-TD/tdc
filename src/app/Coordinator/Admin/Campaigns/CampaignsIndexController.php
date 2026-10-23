@@ -88,6 +88,26 @@ class CampaignsIndexController extends AbstractController
     }
 
     /**
+     * Builds the trailing empty row used to add a new project.
+     */
+    private function buildAddRowMarkup(): string
+    {
+        return <<<HTML
+            <tr>
+                <td data-content="id">
+                    <span><b>Add:</b></span>
+                </td>
+                <!-- <td>-</td> -->
+                <td><input class='form-control' name='new[1][campaign]' placeholder='Campaign' value=''/></td>
+                <td><input class='form-control' name='new[1][category]' placeholder='Category1' value=''/></td>
+                <td><input class='form-control' name='new[1][category2]' placeholder='Category2' value=''/></td>
+                <td><input class='form-control w-auto' type='number' name='new[1][depth]' value='0' min='0' max='10'/></td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        HTML;
+    }
+    /**
      * Renders the campaigns card with the editable table form.
      */
     private function renderCard(string $tableRows): void
@@ -125,26 +145,6 @@ class CampaignsIndexController extends AbstractController
         $this->echoCard("Campaigns:", $form);
     }
 
-    /**
-     * Builds the trailing empty row used to add a new project.
-     */
-    private function buildAddRowMarkup(): string
-    {
-        return <<<HTML
-            <tr>
-                <td data-content="id">
-                    <span><b>Add:</b></span>
-                </td>
-                <!-- <td>-</td> -->
-                <td><input class='form-control' name='new[1][campaign]' placeholder='Campaign' value=''/></td>
-                <td><input class='form-control' name='new[1][category]' placeholder='Category1' value=''/></td>
-                <td><input class='form-control' name='new[1][category2]' placeholder='Category2' value=''/></td>
-                <td><input class='form-control w-auto' type='number' name='new[1][depth]' value='0' min='0' max='10'/></td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-        HTML;
-    }
 }
 
 

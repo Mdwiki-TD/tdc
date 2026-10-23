@@ -28,9 +28,32 @@ class CampaignsPostProcessor extends AbstractPostHandler
 	public function process(array $post): void
 	{
 		$this->processRows($post['rows'] ?? []);
-
 		if (isset($post['new'])) {
 			$this->processNewRows($post['new']);
+		}
+	}
+
+	private function processNewRows(array $newRows): void
+	{
+		foreach ($newRows as $key => $table) {
+			$campaign = $table['campaign'];
+			$category = $table['category'];
+			$isDefault = 0;
+
+			if (empty($campaign) || empty($category)) {
+				continue;
+			}
+			$qua = "INSERT INTO categories (category, campaign, depth, is_default, category2) SELECT ?, ?, ?, ?, ?";
+			$params = [
+				$category,
+				$campaign,
+				$table['depth'] ?? 0,
+				$isDefault,
+				$$table['category2']
+			];
+
+			$result = $this->db->executeQuery($qua, $params);
+			$this->verifyInsertResult($result, $category, 'Campaign', 'category');
 		}
 	}
 	/**
@@ -39,7 +62,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 	private function processRows(array $rows): void
 	{
 		$categories = $this->categoriesTable->getCategories();
-		$categoriesById = array_column($categories, null, 'id');
+		$recordsById = array_column($categories, null, 'id');
 
 		foreach ($rows as $key => $table) {
 			$id = $table['id'] ?? '';
@@ -47,7 +70,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 			if (empty($id)) {
 				continue;
 			}
-			$dbData = $categoriesById[$id] ?? [];
+			$dbData = $recordsById[$id] ?? [];
 
 			if (empty($dbData)) {
 				$this->addWarning("Campaign with id $id does not exist.");
@@ -57,7 +80,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 			$del = $table['del'] ?? '';
 
 			if ($del === $id) {
-				$this->deleteRow($id);
+				$this->deleteRow($id, 'categories', "Campaign");
 				continue;
 			}
 
@@ -90,48 +113,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 			];
 
 			$updated = $this->db->executeQuery($qua, $params);
-			if ($updated === false) {
-				$this->addError("Failed to update Campaign with id $id.");
-				continue;
-			}
-
-			$this->addText("Campaign with id $id updated.");
+			$this->verifyUpdateResult($updated, $id, 'Campaign');
 		}
-	}
-
-	/**
-	 * Inserts newly submitted category rows.
-	 */
-	private function processNewRows(array $newRows): void
-	{
-		/*
-		if (isset($post['new'])) {
-			$this->processNewRows($post['new']);
-		}
-		*/
-		foreach ($newRows as $key => $table) {
-			$campaign = $table['campaign'];
-			$category = $table['category'];
-			$isDefault = 0;
-
-			if (empty($campaign) || empty($category)) {
-				continue;
-			}
-			$qua = "INSERT INTO categories (category, campaign, depth, is_default, category2) SELECT ?, ?, ?, ?, ?";
-			$params = [
-				$category,
-				$campaign,
-				$table['depth'] ?? 0,
-				$isDefault,
-				$$table['category2']
-			];
-
-			$this->db->executeQuery($qua, $params);
-		}
-	}
-	private function deleteRow(string $id): void
-	{
-		$deleted = $this->categoriesTable->deleteCategory($id);
-		$this->verifyDeleteResult($deleted, $id, 'Campaign');
 	}
 }

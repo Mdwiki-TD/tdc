@@ -26,8 +26,7 @@ class FullTranslatorsIndexController extends AbstractController
         $translators = (UsersTable::getInstance())->getFullTranslators();
 
         $formText = $this->buildTranslatorRows($translators);
-        $numb = count($translators) + 1;
-        $formText .= $this->buildAddRowMarkup($numb);
+        $formText .= $this->buildAddRowMarkup();
 
         $this->renderCard($formText);
     }
@@ -82,7 +81,7 @@ class FullTranslatorsIndexController extends AbstractController
     /**
      * Builds the trailing empty row used to add a new full translator.
      */
-    private function buildAddRowMarkup(int $numb): string
+    private function buildAddRowMarkup(): string
     {
         return <<<HTML
             <tr>
@@ -90,12 +89,11 @@ class FullTranslatorsIndexController extends AbstractController
                     <span><b>Add:</b></span>
                 </td>
                 <td data-content="user">
-                    <input class='form-control' name='rows[$numb][is_new]' value='yes' type='hidden'/>
-                    <input class='form-control td_user_input' name='rows[$numb][user]' />
+                    <input class='form-control td_user_input' name='new[1][user]' />
                 </td>
                 <td data-content="active">
                     <div class="form-check form-switch">
-                        <input type="hidden" name="rows[$numb][is_active]" value="1">
+                        <input type="hidden" name="new[1][is_active]" value="1">
                         -
                     </div>
                 </td>

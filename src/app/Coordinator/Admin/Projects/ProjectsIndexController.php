@@ -28,11 +28,9 @@ class ProjectsIndexController extends AbstractController
         });
 
         $formText = $this->buildProjectRows($projects);
-        $numb = count($projects) + 1;
-        $formText .= $this->buildAddRowMarkup($numb);
+        $formText .= $this->buildAddRowMarkup();
 
         $this->renderCard($formText);
-
     }
     /**
      * Builds the editable table rows for each existing project.
@@ -74,7 +72,7 @@ class ProjectsIndexController extends AbstractController
     /**
      * Builds the trailing empty row used to add a new project.
      */
-    private function buildAddRowMarkup(int $numb): string
+    private function buildAddRowMarkup(): string
     {
         return <<<HTML
             <tr>
@@ -82,7 +80,7 @@ class ProjectsIndexController extends AbstractController
                     <span><b>Add:</b></span>
                 </td>
                 <td data-content="user">
-                    <input class='form-control td_user_input' name='rows[$numb][g_title]' />
+                    <input class='form-control td_user_input' name='new[1][g_title]' />
                 </td>
                 <td data-content="delete">- </td>
             </tr>
@@ -95,40 +93,33 @@ class ProjectsIndexController extends AbstractController
     private function renderCard(string $formText): void
     {
 
-
-        echo <<<HTML
-            <div class='card'>
-                <div class='card-header'>
-                    <h4>Projects:</h4>
+        $form = <<<HTML
+            <form action="index.php?ty=projects" method="POST">
+                {$this->createCsrfTokenField()}
+                <input name='ty' value="projects" type="hidden"/>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Project</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="g_tab">
+                                $formText
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class='card-body'>
-                    <form action="index.php?ty=projects" method="POST">
-                        {$this->createCsrfTokenField()}
-                        <input name='ty' value="projects" type="hidden"/>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Project</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="g_tab">
-                                        $formText
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-group d-flex justify-content-between">
-                            <button type="submit" class="btn btn-outline-primary">Save</button>
-                            <span> </span>
-                        </div>
-                    </form>
+                <div class="form-group d-flex justify-content-between">
+                    <button type="submit" class="btn btn-outline-primary">Save</button>
                 </div>
-            </div>
+            </form>
         HTML;
+
+        $this->echoCard("Projects:", $form);
     }
 }
 

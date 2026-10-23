@@ -19,25 +19,30 @@ class ProjectsPostProcessor extends AbstractPostHandler
 	{
 		parent::__construct();
 	}
+
 	public function process(array $post): void
 	{
 		$this->processRows($post['rows'] ?? []);
+		if (isset($post['new'])) {
+			$this->processNewRows($post['new']);
+		}
 	}
 
-
-	private function insert_to_projects(string $gTitle, mixed $id): bool
+	private function processNewRows(array $newRows): void
 	{
-		$query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
-		$params = [$gTitle, $id];
+		foreach ($newRows as $key => $table) {
+			$gTitle = $table['g_title'] ?? '';
+			$gTitle = trim($gTitle);
 
-		if ($id == 0 || $id == '0' || empty($id)) {
+			if (empty($gTitle)) {
+				continue;
+			}
 			$query = "INSERT INTO projects (g_title) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM projects WHERE g_title = ?)";
 			$params = [$gTitle, $gTitle];
+
+			$result = $this->db->executeQuery($query, $params);
+			$this->verifyInsertResult($result, $gTitle, 'Project', 'title');
 		}
-
-		$result = $this->db->executeQuery($query, $params);
-
-		return $result;
 	}
 
 
@@ -52,9 +57,7 @@ class ProjectsPostProcessor extends AbstractPostHandler
 			$gTitle = $table['g_title'] ?? '';
 
 			if ($del === $id) {
-				$qua2 = "DELETE FROM projects WHERE g_id = ?";
-				$deleted = $this->db->executeQuery($qua2, [$id]);
-				$this->verifyDeleteResult($deleted, $id, 'Project');
+				$this->deleteRow($id, 'categories', "Campaign", 'g_id');
 				continue;
 			}
 
@@ -64,14 +67,10 @@ class ProjectsPostProcessor extends AbstractPostHandler
 				continue;
 			}
 
-			$this->insert_to_projects($gTitle, $id);
-
-			if (empty($id)) {
-				$this->addText("Project $gTitle Added.");
-			} else {
-				$this->addText("Project $gTitle Updated.");
-			}
+			$query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
+			$params = [$gTitle, $id];
+			$updated = $this->db->executeQuery($query, $params);
+			$this->verifyUpdateResult($updated, $id, 'Project');
 		}
 	}
-
 }

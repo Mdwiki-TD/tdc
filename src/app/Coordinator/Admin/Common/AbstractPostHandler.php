@@ -22,6 +22,19 @@ abstract class AbstractPostHandler extends BaseController
         parent::__construct();
     }
     /**
+     * Subclasses implement their own delete/update/insert logic here,
+     * filling $this->errors / $this->texts as needed.
+     */
+    abstract protected function process(array $post): void;
+
+    public function deleteRow(string $id, string $tableName, string $recordName = "User", string $columnName = "id"): void
+    {
+        $qua2 = "DELETE FROM {$tableName} WHERE {$columnName} = ?";
+
+        $result = $this->db->executeQuery($qua2, [$id]);
+        $this->verifyDeleteResult($result, $id, $recordName, $columnName);
+    }
+    /**
      * Verifies CSRF, then delegates to process() if valid.
      *
      * @return array{success: bool, csrfError: bool, errors: string[], texts: string[]}
@@ -50,12 +63,6 @@ abstract class AbstractPostHandler extends BaseController
 
         return $this->result();
     }
-
-    /**
-     * Subclasses implement their own delete/update/insert logic here,
-     * filling $this->errors / $this->texts as needed.
-     */
-    abstract protected function process(array $post): void;
 
     public function verifyDeleteResult(bool $deleted, string|int $id, string $recordName, string $columnName = "id"): void
     {

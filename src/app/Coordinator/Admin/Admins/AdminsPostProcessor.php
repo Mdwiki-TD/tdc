@@ -33,39 +33,60 @@ class AdminsPostProcessor extends AbstractPostHandler
             return;
         }
         $this->processRows($post['rows'] ?? []);
-
         if (isset($post['new'])) {
             $this->processNewRows($post['new']);
         }
+    }
+    private function processNewRows(array $newRows): void
+    {
+        foreach ($newRows as $key => $table) {
+            // '{ "id": "11", "username": "Ifteebd10"}
+            $username = trim($table['username'] ?? '');
 
+            if (empty($username)) {
+                $this->addWarning("Username is required.");
+                continue;
+            }
+
+            $isActive = $this->boolInt($table['is_active'] ?? 0, 1);
+            $tableName = self::DB_TABLE_NAME;
+
+            $qua = <<<SQL
+                INSERT INTO $tableName (username, is_active)
+                VALUES (?, ?)
+                ON DUPLICATE KEY UPDATE
+                    is_active = VALUES(is_active)
+            SQL;
+
+            $result = $this->db->executeQuery($qua, [$username, $isActive]);
+            $this->verifyInsertResult($result, $username, 'Username');
+        }
     }
     /**
      * Processes each submitted coordinator row: delete, add, or update.
      */
     private function processRows(array $rows): void
     {
-        $coordinators = $this->usersTable->getCoordinators();
-        $coordinatorsById = array_column($coordinators, null, 'id');
-        Logger::debug(json_encode($coordinatorsById));
+        $records = $this->usersTable->getCoordinators();
+        $recordsById = array_column($records, null, 'id');
 
         foreach ($rows as $key => $table) {
             // '{ "id": "11", "username": "u", "del": "11" }'
             // '{ "id": "11", "username": "u", "is_active": 1}
-
             $id = $table['id'] ?? '';
             $del = $table['del'] ?? '';
 
             if (empty($id)) {
                 continue;
             }
-            $dbData = $coordinatorsById[$id] ?? [];
+            $dbData = $recordsById[$id] ?? [];
             if (empty($dbData)) {
                 $this->addWarning("Coordinator with id $id does not exist.");
                 continue;
             }
 
             if ($del === $id) {
-                $this->deleteRow($id);
+                $this->deleteRow($id, self::DB_TABLE_NAME, "User");
                 continue;
             }
             $username = $dbData['username'];
@@ -84,41 +105,5 @@ class AdminsPostProcessor extends AbstractPostHandler
 
             $this->verifyUpdateResult($result, $username, 'Username');
         }
-    }
-
-    private function processNewRows(array $newRows): void
-    {
-        foreach ($newRows as $key => $table) {
-            // '{ "id": "11", "username": "Ifteebd10", "is_new": "yes" }
-
-            $username = trim($table['username'] ?? '');
-
-            if (empty($username)) {
-                $this->addWarning("Username is required.");
-                continue;
-            }
-
-            $isActive = $this->boolInt($table['is_active'] ?? 0, 1);
-
-            $tableName = self::DB_TABLE_NAME;
-
-            $qua = <<<SQL
-                INSERT INTO $tableName (username, is_active)
-                VALUES (?, ?)
-                ON DUPLICATE KEY UPDATE
-                    is_active = VALUES(is_active)
-            SQL;
-
-            $result = $this->db->executeQuery($qua, [$username, $isActive]);
-            $this->verifyInsertResult($result, $username, 'Username');
-        }
-    }
-
-    private function deleteRow(string $id): void
-    {
-        $qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
-
-        $result = $this->db->executeQuery($qua2, [$id]);
-        $this->verifyDeleteResult($result, $id, 'User');
     }
 }

@@ -89,7 +89,6 @@ class UsersNotInprocessIndexController extends AbstractController
                     <span><b>Add:</b></span>
                 </td>
                 <td data-content="User">
-                    <input class='form-control' name='new[1][is_new]' value='yes' type='hidden'/>
                     <input class='form-control td_user_input' name='new[1][user]' />
                 </td>
                 <td data-content="Active">

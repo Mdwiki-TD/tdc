@@ -26,7 +26,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
         $addEnLang = $this->boolInt($post['add_en_lang'] ?? 0);
 
         if (isset($post['delete'])) {
-            $this->deleteRow($post['delete'], $langCode);
+            $this->deleteLangRow($post['delete'], $langCode);
         } elseif (($post['id'] ?? '') != "") {
             $this->updateRow($post['id'], $langCode, $expend, $moveDots, $addEnLang);
         } elseif (($post['new'] ?? '') != "") {
@@ -39,7 +39,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     /**
      * Deletes a language_settings row.
      */
-    private function deleteRow(mixed $id, string $langCode): void
+    private function deleteLangRow(mixed $id, string $langCode): void
     {
         $qua = "DELETE FROM language_settings WHERE id = ?";
 
