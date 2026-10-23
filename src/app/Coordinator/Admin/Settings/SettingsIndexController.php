@@ -64,11 +64,11 @@ class SettingsIndexController extends AbstractController
             $id = $v['id'] ?? '';
             // $title = $v['title'] ?? '';
             $displayed = $v['displayed'] ?? '';
-            $value = $v['value'] ?? 0;
+            $value = $this->boolInt($data['value'] ?? 0);
 
             $nn++;
 
-            $checked = ($value == 1 || $value == "1") ? 'checked' : '';
+            $checked = ($value == 1) ? 'checked' : '';
             $valueLine = <<<HTML
                 <div class='form-check form-switch'>
                     <input type='hidden' name='rows[$nn][value]' value='0'>
