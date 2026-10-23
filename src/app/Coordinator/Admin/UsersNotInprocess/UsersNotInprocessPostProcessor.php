@@ -33,10 +33,13 @@ class UsersNotInprocessPostProcessor extends AbstractPostHandler
 	{
 		foreach ($newRows as $key => $table) {
 			// { "id": "1", "user": "" }
-			$username = trim($table['user'] ?? '');
+			$rawUsername = $table['user'] ?? '';
+			$username = trim($rawUsername);
 
 			if (empty($username)) {
-				$this->addWarning("Username is required.");
+				if ($rawUsername !== '') {
+					$this->addWarning("Username is required.");
+				}
 				continue;
 			}
 

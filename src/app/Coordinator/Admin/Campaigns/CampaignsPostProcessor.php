@@ -36,8 +36,8 @@ class CampaignsPostProcessor extends AbstractPostHandler
 	private function processNewRows(array $newRows): void
 	{
 		foreach ($newRows as $key => $table) {
-			$campaign = $table['campaign'];
-			$category = $table['category'];
+			$campaign = $table['campaign'] ?? '';
+			$category = $table['category'] ?? '';
 			$isDefault = 0;
 
 			if (empty($campaign) || empty($category)) {
@@ -49,7 +49,7 @@ class CampaignsPostProcessor extends AbstractPostHandler
 				$campaign,
 				$table['depth'] ?? 0,
 				$isDefault,
-				$$table['category2']
+				$table['category2'] ?? ''
 			];
 
 			$result = $this->db->executeQuery($qua, $params);
@@ -86,11 +86,11 @@ class CampaignsPostProcessor extends AbstractPostHandler
 
 			// dbData keys: id, category, category2, campaign, depth, is_default
 
-			if (!$this->hasDifferences($dbData, $table)) {
+			$isDefault = ($this->defaultCat == $id) ? 1 : 0;
+
+			if (!$this->hasDifferences($dbData, $table) && $isDefault == ($dbData['is_default'] ?? 0)) {
 				continue;
 			}
-
-			$isDefault = ($this->defaultCat == $id) ? 1 : 0;
 
 			$qua = "UPDATE categories
                 SET

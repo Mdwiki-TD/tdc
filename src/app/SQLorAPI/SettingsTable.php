@@ -30,7 +30,7 @@ class SettingsTable extends BaseTable
             return self::$sqlSettingsCache;
         }
 
-        $query = "select id, title, displayed, value, ignored from settings";
+        $query = "select id, title, displayed, Type, value, ignored from settings";
         $apiParams = ['get' => 'settings'];
 
         self::$sqlSettingsCache = $this->service->superFunction($apiParams, [], $query);
@@ -44,7 +44,7 @@ class SettingsTable extends BaseTable
             return [];
         }
 
-        $query = "select id, title, displayed, value, ignored from settings where id = ?";
+        $query = "select id, title, displayed, Type, value, ignored from settings where id = ?";
 
         $data = $this->service->getSql($query, [$id]);
 

@@ -54,15 +54,38 @@ class EditSettingsController extends AbstractEditController
     private function buildFormHtml(array $data): string
     {
         // title	displayed	value	ignored
-        $id = $data['id'] ?? '';
-        $title = $data['title'] ?? '';
-        $displayed = $data['displayed'] ?? '';
+        $id = htmlspecialchars((string)($data['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $title = htmlspecialchars((string)($data['title'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $displayed = htmlspecialchars((string)($data['displayed'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $type = strtolower((string)($data['Type'] ?? $data['type'] ?? 'check'));
 
-        $value = $this->boolInt($data['value'] ?? 0);
         $ignored = $this->boolInt($data['ignored'] ?? 0);
-
-        $enabledChecked = $this->isChecked($value);
         $ignoredChecked = $this->isChecked($ignored);
+
+        if ($type === 'check') {
+            $value = $this->boolInt($data['value'] ?? 0);
+            $enabledChecked = $this->isChecked($value);
+            $valueControl = <<<HTML
+                <div class='input-group form-control mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='me-3'>Enabled:</span>
+                    </div>
+                    <div class="form-check form-switch form-inline">
+                        <input class='form-check-input' type='checkbox' name='rows[1][value]' value='1' $enabledChecked>
+                    </div>
+                </div>
+            HTML;
+        } else {
+            $value = htmlspecialchars((string)($data['value'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $valueControl = <<<HTML
+                <div class='input-group mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='input-group-text'>Value</span>
+                    </div>
+                    <input class='form-control' type='text' name='rows[1][value]' value='$value'/>
+                </div>
+            HTML;
+        }
 
         return <<<HTML
             <form action='index.php?ty=edit_setting' method="POST">
@@ -101,14 +124,7 @@ class EditSettingsController extends AbstractEditController
                         <div class='col-md-3'>
                             <div class='row'>
                                 <div class='col'>
-                                    <div class='input-group form-control mb-3'>
-                                        <div class='input-group-prepend'>
-                                            <span class='me-3'>Enabled:</span>
-                                        </div>
-                                        <div class="form-check form-switch form-inline">
-                                            <input class='form-check-input' type='checkbox' name='rows[1][value]' value='1' $enabledChecked>
-                                        </div>
-                                    </div>
+                                    $valueControl
                                 </div>
                                 <div class='col'>
                                     <div class='input-group form-control mb-3'>

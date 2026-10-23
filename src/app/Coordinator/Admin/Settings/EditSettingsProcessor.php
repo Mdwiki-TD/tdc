@@ -25,6 +25,10 @@ class EditSettingsProcessor extends AbstractPostHandler
 	 */
 	public function process(array $post): void
 	{
+		if (!$this->validateAdmin()) {
+			$this->exit();
+			return;
+		}
 		$this->processRows($post['rows'] ?? []);
 	}
 

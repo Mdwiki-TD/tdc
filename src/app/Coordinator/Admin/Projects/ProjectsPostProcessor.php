@@ -57,7 +57,7 @@ class ProjectsPostProcessor extends AbstractPostHandler
 			$gTitle = $table['g_title'] ?? '';
 
 			if ($del === $id) {
-				$this->deleteRow($id, 'categories', "Campaign", 'g_id');
+				$this->deleteRow($id, 'projects', "Project", 'g_id');
 				continue;
 			}
 
