@@ -107,6 +107,7 @@ class AdminResolver
         $onlyAdmins = [
             "settings",
             "admins",
+            "edit_setting",
         ];
 
         if (in_array($endpoint, $onlyAdmins) && !$this->isAdmin) {

@@ -41,10 +41,23 @@ class AdminsPostProcessor extends AbstractPostHandler
     {
         foreach ($newRows as $key => $table) {
             // '{ "id": "11", "username": "Ifteebd10"}
-            $username = trim($table['username'] ?? '');
+            $rawUsername = $table['username'] ?? '';
+            $username = trim($rawUsername);
 
             if (empty($username)) {
-                $this->addWarning("Username is required.");
+                $hasOtherData = false;
+                foreach ($table as $k => $val) {
+                    if ($k === 'username' || $k === 'is_active') {
+                        continue;
+                    }
+                    if (trim((string)$val) !== '') {
+                        $hasOtherData = true;
+                        break;
+                    }
+                }
+                if ($rawUsername !== '' || $hasOtherData) {
+                    $this->addWarning("Username is required.");
+                }
                 continue;
             }
 

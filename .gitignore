@@ -20,4 +20,4 @@ load_env.php
 /docs
 src/app/_old_index.php
 *.7z
-state/**.lock
+state/**/*.lock

@@ -61,21 +61,27 @@ class SettingsIndexController extends AbstractController
                 continue;
             }
 
-            $id = $v['id'] ?? '';
-            // $title = $v['title'] ?? '';
-            $displayed = $v['displayed'] ?? '';
-            $value = $this->boolInt($v['value'] ?? 0);
+            $id = htmlspecialchars((string)($v['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $displayed = htmlspecialchars((string)($v['displayed'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $type = strtolower((string)($v['Type'] ?? $v['type'] ?? 'check'));
 
             $nn++;
 
-            $checked = $this->isChecked($value);
-
-            $valueLine = <<<HTML
-                <div class='form-check form-switch'>
-                    <input type='hidden' name='rows[$nn][value]' value='0'>
-                    <input class='form-check-input' type='checkbox' name='rows[$nn][value]' value='1' $checked>
-                </div>
-            HTML;
+            if ($type === 'check') {
+                $value = $this->boolInt($v['value'] ?? 0);
+                $checked = $this->isChecked($value);
+                $valueLine = <<<HTML
+                    <div class='form-check form-switch'>
+                        <input type='hidden' name='rows[$nn][value]' value='0'>
+                        <input class='form-check-input' type='checkbox' name='rows[$nn][value]' value='1' $checked>
+                    </div>
+                HTML;
+            } else {
+                $value = htmlspecialchars((string)($v['value'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $valueLine = <<<HTML
+                    <input class='form-control' type='text' name='rows[$nn][value]' value='$value'>
+                HTML;
+            }
 
             // Add link to EditSettingsController
             // $editIcon = HtmlUrls::make_edit_icon_new('edit_setting', ['id' => $id], 'Edit');
