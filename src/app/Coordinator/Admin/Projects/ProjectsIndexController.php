@@ -18,37 +18,38 @@ class ProjectsIndexController extends AbstractController
     {
         return new ProjectsPostProcessor();
     }
-    public function renderFormCard(): void {
-		$projects = (TitlesTable::getInstance())->getProjects();
+    public function renderFormCard(): void
+    {
+        $projects = (TitlesTable::getInstance())->getProjects();
 
-		// Sort projects by g_id
-		uasort($projects, function ($a, $b) {
-			return $a['g_id'] <=> $b['g_id'];
-		});
+        // Sort projects by g_id
+        uasort($projects, function ($a, $b) {
+            return $a['g_id'] <=> $b['g_id'];
+        });
 
-		$formText = $this->buildProjectRows($projects);
-		$numb = count($projects) + 1;
-		$formText .= $this->buildAddRowMarkup($numb);
+        $formText = $this->buildProjectRows($projects);
+        $numb = count($projects) + 1;
+        $formText .= $this->buildAddRowMarkup($numb);
 
-		$this->renderCard($formText);
-		$this->renderAddRowScript();
+        $this->renderCard($formText);
+        $this->renderAddRowScript();
 
     }
-	/**
-	 * Builds the editable table rows for each existing project.
-	 */
-	private function buildProjectRows(array $projects): string
-	{
-		$formText = '';
-		$numb = 0;
+    /**
+     * Builds the editable table rows for each existing project.
+     */
+    private function buildProjectRows(array $projects): string
+    {
+        $formText = '';
+        $numb = 0;
 
-		foreach ($projects as $gtitleKey => $tab) {
-			$numb++;
+        foreach ($projects as $gtitleKey => $tab) {
+            $numb++;
 
-			$gid = $tab['g_id'] ?? '';
-			$gtitle = $tab['g_title'] ?? '';
+            $gid = $tab['g_id'] ?? '';
+            $gtitle = $tab['g_title'] ?? '';
 
-			$formText .= <<<HTML
+            $formText .= <<<HTML
                 <tr>
                     <td data-content='id'>
                         <span><b>$gid</b></span>
@@ -62,17 +63,17 @@ class ProjectsIndexController extends AbstractController
                     </td>
                 </tr>
             HTML;
-		}
+        }
 
-		return $formText;
-	}
+        return $formText;
+    }
 
-	/**
-	 * Builds the trailing empty row used to add a new project.
-	 */
-	private function buildAddRowMarkup(int $numb): string
-	{
-		return <<<HTML
+    /**
+     * Builds the trailing empty row used to add a new project.
+     */
+    private function buildAddRowMarkup(int $numb): string
+    {
+        return <<<HTML
             <tr>
                 <td data-content="id">
                     <span><b>Add:</b></span>
@@ -80,20 +81,19 @@ class ProjectsIndexController extends AbstractController
                 <td data-content="user">
                     <input class='form-control td_user_input' name='rows[$numb][g_title]' />
                 </td>
-                <td data-content="delete">-
-                </td>
+                <td data-content="delete">- </td>
             </tr>
         HTML;
-	}
+    }
 
-	/**
-	 * Renders the projects card with the editable table form.
-	 */
-	private function renderCard(string $formText): void
-	{
+    /**
+     * Renders the projects card with the editable table form.
+     */
+    private function renderCard(string $formText): void
+    {
 
 
-		echo <<<HTML
+        echo <<<HTML
             <div class='card'>
                 <div class='card-header'>
                     <h4>Projects:</h4>
@@ -127,14 +127,14 @@ class ProjectsIndexController extends AbstractController
                 </div>
             </div>
         HTML;
-	}
+    }
 
-	/**
-	 * Renders the client-side script for dynamically adding new rows.
-	 */
-	private function renderAddRowScript(): void
-	{
-		echo <<<'HTML'
+    /**
+     * Renders the client-side script for dynamically adding new rows.
+     */
+    private function renderAddRowScript(): void
+    {
+        echo <<<'HTML'
             <script type="text/javascript">
                 function add_row() {
                     var ii = $('#g_tab >tr').length + 1;
@@ -155,7 +155,7 @@ class ProjectsIndexController extends AbstractController
                 }
             </script>
         HTML;
-	}
+    }
 }
 
 

@@ -66,13 +66,17 @@ class AdminsIndexController extends AbstractController
                     </td>
                     <td data-content="active">
                         <div class='form-check form-switch'>
-                            <input type='hidden' name='rows[$numb][active_orginal_value]' value='$isActive'>
+
                             <input type='hidden' name='rows[$numb][is_active]' value='0'>
                             <input class='form-check-input' type='checkbox' name='rows[$numb][is_active]' value='1' $activeChecked>
                         </div>
                     </td>
                     <td data-content="delete">
-                        <input type='checkbox' name='rows[$numb][del]' value='$userId'/> <label> delete</label>
+                        <div class='input-group alert alert-warning p-1 mb-1'>
+                            <div class="form-check form-switch form-inline">
+                                <input class="form-check-input" type="checkbox" name="rows[$numb][del]" value="$userId">
+                            </div>
+                        </div>
                     </td>
                 </tr>
             HTML;
