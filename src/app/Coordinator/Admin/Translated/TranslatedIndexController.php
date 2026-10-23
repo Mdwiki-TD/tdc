@@ -23,6 +23,7 @@ class TranslatedIndexController extends AbstractControllerNoPost
 
 	public function __construct()
 	{
+        parent::__construct();
 		$this->lang = $_GET['lang'] ?? 'All';
 		$cand = $_GET['table'] ?? 'pages';
 		$this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';

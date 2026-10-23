@@ -20,6 +20,7 @@ class EditSettingsController extends AbstractEditController
 
     public function __construct()
     {
+        parent::__construct();
         $this->id = $_GET['id'] ?? '';
         $this->data = $this->getData();
     }

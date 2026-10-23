@@ -20,6 +20,7 @@ class QidsIndexController extends AbstractControllerNoPost
 
 	public function __construct()
 	{
+        parent::__construct();
 
 		$this->qidTable = $_GET['qid_table'] ?? 'qids';
 		if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {

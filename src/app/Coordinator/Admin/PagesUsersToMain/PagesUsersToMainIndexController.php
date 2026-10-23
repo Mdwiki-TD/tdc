@@ -23,6 +23,7 @@ class PagesUsersToMainIndexController extends AbstractControllerNoPost
 
 	public function __construct()
 	{
+		parent::__construct();
 		$this->lang = $_GET['lang'] ?? 'All';
 
 		if ($this->lang !== 'All' && !LangsTables::get_lang_title($this->lang)) {

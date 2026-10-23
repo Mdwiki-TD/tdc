@@ -19,6 +19,7 @@ class EditQidController extends AbstractEditController
 
     public function __construct()
     {
+        parent::__construct();
         $this->id       = $_GET['id'] ?? '';
         $this->title    = $_GET['title'] ?? '';
         $this->qid      = $_GET['qid'] ?? '';

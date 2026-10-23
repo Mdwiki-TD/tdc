@@ -20,6 +20,7 @@ class EditTranslateTypeController extends AbstractEditController
 
     public function __construct()
     {
+        parent::__construct();
         $this->id = $_GET['id'] ?? '';
         $this->title = isset($_GET['title']) ? rawurldecode($_GET['title']) : '';
         $this->lead = $_GET['lead'] ?? '';

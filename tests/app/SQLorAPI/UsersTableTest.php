@@ -28,10 +28,15 @@ class UsersTableTest extends TestCase
     public function testGetCoordinatorsAndUsersNoInprocessAndFullTranslators(): void
     {
         $service = $this->createMock(ApiOrSqlService::class);
-        $service->expects($this->exactly(3))
-            ->method('superFunction')
+        $service->expects($this->exactly(1))
+            ->method('getSql')
             ->willReturnOnConsecutiveCalls(
                 [['id' => 1, 'username' => 'coord1', 'is_active' => 1]],
+            );
+
+        $service->expects($this->exactly(2))
+            ->method('superFunction')
+            ->willReturnOnConsecutiveCalls(
                 [['id' => 1, 'user' => 'no_proc1', 'is_active' => 1]],
                 [['id' => 1, 'user' => 'full1', 'is_active' => 1]]
             );

@@ -20,6 +20,7 @@ class StatController extends AbstractControllerNoPost
 
 	public function __construct()
 	{
+        parent::__construct();
 		$this->cat = $_GET['cat'] ?? 'RTT';
 	}
 
