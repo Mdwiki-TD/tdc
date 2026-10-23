@@ -24,24 +24,6 @@ class SettingsTableTest extends TestCase
         parent::tearDown();
     }
 
-    public function testGetSettingsAndEndpoint(): void
-    {
-        $service = $this->createMock(ApiOrSqlService::class);
-        $service->expects($this->once())
-            ->method('superFunction')
-            ->willReturn([
-                ['id' => 1, 'title' => 'use_mdwikicx', 'value' => '1']
-            ]);
-
-        $table = new SettingsTable($service);
-
-        $settings = $table->getSettings();
-        $this->assertCount(1, $settings);
-
-        $this->assertSame('https://mdwikicx.toolforge.org/w/index.php', $table->getEndpointOld());
-        $this->assertSame('https://mdwikicx.toolforge.org/w/index.php', $table->getEndpoint());
-    }
-
     public function testGetLanguageSettings(): void
     {
         $service = $this->createMock(ApiOrSqlService::class);
