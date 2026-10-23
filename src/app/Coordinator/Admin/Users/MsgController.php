@@ -46,7 +46,7 @@ class MsgController extends AbstractControllerNoPost
     {
         $this->renderHeaderScripts();
 
-        $views = WikiApi::get_views($this->target, $this->lang, $this->date);
+        $views = WikiApi::getViews($this->target, $this->lang, $this->date);
 
         $sugustTab = Sugust::get_sugust($this->title, $this->lang);
         $sugust = $sugustTab['sugust'] ?? '';
