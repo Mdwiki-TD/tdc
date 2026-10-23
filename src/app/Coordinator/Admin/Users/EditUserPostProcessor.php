@@ -83,11 +83,11 @@ class EditUserPostProcessor extends AbstractPostHandler
 			}
 
 			if (empty($userId)) {
-				$this->sql_add_user($user, $email, $wiki, $project);
-				$this->addText("User:($user) added successfully.");
+				$result = $this->sql_add_user($user, $email, $wiki, $project);
+				$this->reportResult($result, "User:($user) added successfully.", "Failed to add User:($user).");
 			} else {
-				$this->sql_update_user($user, $email, $wiki, $project, $userId);
-				$this->addText("User:($user) updated successfully.");
+				$result = $this->sql_update_user($user, $email, $wiki, $project, $userId);
+				$this->reportResult($result, "User:($user) updated successfully.", "Failed to update User:($user).");
 			}
 		}
 	}

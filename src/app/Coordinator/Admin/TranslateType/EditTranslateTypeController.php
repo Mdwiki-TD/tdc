@@ -41,20 +41,10 @@ class EditTranslateTypeController extends AbstractEditController
 
         $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
-        $idRow = <<<HTML
-            <div class='col-md-3'>
-                <div class='input-group mb-3'>
-                    <div class='input-group-prepend'>
-                        <span class='input-group-text'>Id</span>
-                    </div>
-                    <input class='form-control' type='text' value='$id' name='rows[1][id]' readonly/>
-                </div>
-            </div>
-        HTML;
-
-        if (empty($id)) {
-            $idRow = "";
-        }
+        $idRow = empty($id) ? "" : $this->inputGroup('Id', 'rows[1][id]', $id, 'readonly');
+        $titleGroup = $this->inputGroup('Title', 'rows[1][title]', $title2, 'required');
+        $leadSwitch = $this->switchField('Lead:', 'rows[1][lead]', $leadChecked);
+        $fullSwitch = $this->switchField('Full:', 'rows[1][full]', $fullChecked);
 
         return <<<HTML
             <form action='index.php?ty=edit_translate_type&nonav=120' method="POST">
@@ -63,35 +53,14 @@ class EditTranslateTypeController extends AbstractEditController
                 <div class='container'>
                     <div class='row'>
                         $idRow
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Title</span>
-                                </div>
-                                <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
-                            </div>
-                        </div>
+                        $titleGroup
                         <div class='col-md-3'>
                             <div class='row'>
                                 <div class='col'>
-                                    <div class='input-group form-control mb-3'>
-                                        <div class='input-group-prepend'>
-                                            <span class='me-3'>Lead:</span>
-                                        </div>
-                                        <div class="form-check form-switch form-inline">
-                                            <input class='form-check-input' type='checkbox' name='rows[1][lead]' value='1' $leadChecked>
-                                        </div>
-                                    </div>
+                                    $leadSwitch
                                 </div>
                                 <div class='col'>
-                                    <div class='input-group form-control mb-3'>
-                                        <div class='input-group-prepend'>
-                                            <span class='me-3'>Full:</span>
-                                        </div>
-                                        <div class="form-check form-switch form-inline">
-                                            <input class='form-check-input' type='checkbox' name='rows[1][full]' value='1' $fullChecked>
-                                        </div>
-                                    </div>
+                                    $fullSwitch
                                 </div>
                             </div>
                         </div>

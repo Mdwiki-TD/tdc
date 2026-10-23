@@ -39,20 +39,9 @@ class EditQidController extends AbstractEditController
     {
         $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 
-        $idRow = <<<HTML
-            <div class='col-md-3'>
-                <div class='input-group mb-3'>
-                    <div class='input-group-prepend'>
-                        <span class='input-group-text'>Id</span>
-                    </div>
-                    <input class='form-control' type='text' name='rows[1][id]' value='$id' readonly/>
-                </div>
-            </div>
-        HTML;
-
-        if (empty($id)) {
-            $idRow = "";
-        }
+        $idRow = empty($id) ? "" : $this->inputGroup('Id', 'rows[1][id]', $id, 'readonly');
+        $titleGroup = $this->inputGroup('Title', 'rows[1][title]', $title2, 'required');
+        $qidGroup = $this->inputGroup('Qid', 'rows[1][qid]', $qid, 'required');
 
         return <<<HTML
             <form action='index.php?ty=qids/edit_qid&qid_table=$qidTable&nonav=120' method="POST">
@@ -62,22 +51,8 @@ class EditQidController extends AbstractEditController
                 <div class='container'>
                     <div class='row'>
                         $idRow
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Title</span>
-                                </div>
-                                <input class='form-control' type='text' name='rows[1][title]' value='$title2' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Qid</span>
-                                </div>
-                                <input class='form-control' type='text' name='rows[1][qid]' value='$qid' required/>
-                            </div>
-                        </div>
+                        $titleGroup
+                        $qidGroup
                         <div class='col-md-2'>
                             <input class='btn btn-outline-primary' type='submit' value='send'/>
                         </div>

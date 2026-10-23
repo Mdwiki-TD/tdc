@@ -44,25 +44,15 @@ class SettingsPostProcessor extends AbstractPostHandler
                 continue;
             }
 
-            // if (empty($title) || empty($displayed) || empty($type)) continue;
-            // $re = update_settings($id, $title, $displayed, $value, $type);
-            // Don't use empty() for value because it can be 0 or "0" which is valid,
-            // but empty() would treat it as empty.
             if ($value === "") {
                 continue;
             }
             if ($value == $data['value']) {
-                // $this->addWarning("No changes made to setting ID: $id.");
                 continue;
             }
 
             $result = $this->update_settings_value($id, $value);
-
-			if ($result === false) {
-				$this->addError("Failed to update setting with id: $id.");
-			} else {
-				$this->addText("setting updated successfully, id: $id.");
-			}
+            $this->reportResult($result, "setting updated successfully, id: $id.", "Failed to update setting with id: $id.");
         }
     }
 

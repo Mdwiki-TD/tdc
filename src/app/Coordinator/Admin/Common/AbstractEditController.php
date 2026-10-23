@@ -65,4 +65,40 @@ abstract class AbstractEditController extends AbstractController
     {
         echo '</div><div class="container-fluid">';
     }
+
+    protected function inputGroup(
+        string $label,
+        string $name,
+        string $value,
+        string $attrs = '',
+        string $colClass = 'col-md-3',
+        string $inputClass = 'form-control',
+        string $type = 'text'
+    ): string {
+        $classStr = trim($inputClass);
+        return <<<HTML
+            <div class='$colClass'>
+                <div class='input-group mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='input-group-text'>$label</span>
+                    </div>
+                    <input class='$classStr' type='$type' name='$name' value='$value' $attrs/>
+                </div>
+            </div>
+        HTML;
+    }
+
+    protected function switchField(string $label, string $name, string $checked, string $val = '1'): string
+    {
+        return <<<HTML
+            <div class='input-group form-control mb-3'>
+                <div class='input-group-prepend'>
+                    <span class='me-3'>$label</span>
+                </div>
+                <div class="form-check form-switch form-inline">
+                    <input class='form-check-input' type='checkbox' name='$name' value='$val' $checked>
+                </div>
+            </div>
+        HTML;
+    }
 }

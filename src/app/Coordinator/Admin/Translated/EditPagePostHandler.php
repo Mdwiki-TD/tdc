@@ -31,9 +31,8 @@ class EditPagePostHandler extends AbstractPostHandler
     protected function process(array $post): void
     {
         if (isset($post['delete'])) {
-            $deleteId = (string) $post['delete'];
-            $deleted = $this->deletePage($deleteId, $this->table);
-            $this->verifyDeleteResult($deleted, $deleteId, 'Page');
+            $deleted = $this->deletePage($this->id, $this->table);
+            $this->verifyDeleteResult($deleted, $this->id, 'Page');
 
         } elseif (isset($post['edit'])) {
             $title = $post['title'] ?? '';
@@ -43,11 +42,7 @@ class EditPagePostHandler extends AbstractPostHandler
             $pupdate = $post['pupdate'] ?? '';
 
             $result = $this->editPage($this->id, $this->table, $title, $target, $lang, $user, $pupdate);
-            if ($result === false) {
-                $this->addError("Failed to update page (id: {$this->id}).");
-            } else {
-                $this->addText("Page (id: {$this->id}) updated successfully.");
-            }
+            $this->reportResult($result, "Page (id: {$this->id}) updated successfully.", "Failed to update page (id: {$this->id}).");
         }
     }
 

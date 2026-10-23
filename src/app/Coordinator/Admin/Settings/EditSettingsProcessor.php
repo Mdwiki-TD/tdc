@@ -77,12 +77,7 @@ class EditSettingsProcessor extends AbstractPostHandler
 			}
 
 			$result = $this->update_row($id, $displayed, $value, $ignored);
-
-			if ($result === false) {
-				$this->addError("Failed to update setting with id: $id.");
-			} else {
-				$this->addText("setting updated successfully, id: $id.");
-			}
+			$this->reportResult($result, "setting updated successfully, id: $id.", "Failed to update setting with id: $id.");
 		}
 	}
 }

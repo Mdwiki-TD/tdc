@@ -19,6 +19,7 @@ class EditUserController extends AbstractEditController
 
     public function __construct()
     {
+        parent::__construct();
         $this->userId = $_GET['user_id'] ?? $_POST['user_id'] ?? '';
     }
     protected function createPostProcessor(): object
@@ -38,20 +39,10 @@ class EditUserController extends AbstractEditController
 
         $projectLine = Html2::make_project_to_user($userGroup, $ProjectsTitleToId);
 
-        $idRow = <<<HTML
-            <div class='col-md-3'>
-                <div class='input-group mb-3'>
-                    <div class='input-group-prepend'>
-                        <span class='input-group-text'>User id</span>
-                    </div>
-                    <input class='form-control' type='text' name='emails[1][user_id]' value='$userId' readonly/>
-                </div>
-            </div>
-        HTML;
-
-        if (empty($userId)) {
-            $idRow = "";
-        }
+        $idRow = empty($userId) ? "" : $this->inputGroup('User id', 'emails[1][user_id]', $userId, 'readonly');
+        $userField = $this->inputGroup('User', 'emails[1][username]', $user, 'required');
+        $emailField = $this->inputGroup('email', 'emails[1][email]', $email);
+        $wikiField = $this->inputGroup('wiki', 'emails[1][wiki]', $wiki);
 
         return <<<HTML
             <form action='index.php?ty=edit_user&nonav=120&user_id={$this->userId}' method="POST">
@@ -60,30 +51,9 @@ class EditUserController extends AbstractEditController
                 <div class='container'>
                     <div class='row'>
                         $idRow
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>User</span>
-                                </div>
-                                <input class='form-control' type='text' name='emails[1][username]' value='$user' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>email</span>
-                                </div>
-                                <input class='form-control' type='text' name='emails[1][email]' value='$email'/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>wiki</span>
-                                </div>
-                                <input class='form-control' type='text' name='emails[1][wiki]' value='$wiki'/>
-                            </div>
-                        </div>
+                        $userField
+                        $emailField
+                        $wikiField
                         <div class='col-md-3'>
                             <div class='input-group mb-3'>
                                 <div class='input-group-prepend'>

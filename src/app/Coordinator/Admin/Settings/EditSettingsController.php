@@ -65,16 +65,7 @@ class EditSettingsController extends AbstractEditController
         if ($type === 'check') {
             $value = $this->boolInt($data['value'] ?? 0);
             $enabledChecked = $this->isChecked($value);
-            $valueControl = <<<HTML
-                <div class='input-group form-control mb-3'>
-                    <div class='input-group-prepend'>
-                        <span class='me-3'>Enabled:</span>
-                    </div>
-                    <div class="form-check form-switch form-inline">
-                        <input class='form-check-input' type='checkbox' name='rows[1][value]' value='1' $enabledChecked>
-                    </div>
-                </div>
-            HTML;
+            $valueControl = $this->switchField('Enabled:', 'rows[1][value]', $enabledChecked);
         } else {
             $value = htmlspecialchars((string)($data['value'] ?? ''), ENT_QUOTES, 'UTF-8');
             $valueControl = <<<HTML
@@ -87,6 +78,11 @@ class EditSettingsController extends AbstractEditController
             HTML;
         }
 
+        $idGroup        = $this->inputGroup('Id', 'rows[1][id]', $id, 'readonly', 'col');
+        $keyGroup       = $this->inputGroup('Key', 'rows[1][title]', $title, 'readonly', 'col');
+        $displayedGroup = $this->inputGroup('Displayed', 'rows[1][displayed]', $displayed, 'required');
+        $ignoredControl = $this->switchField('Ignored:', 'rows[1][ignored]', $ignoredChecked);
+
         return <<<HTML
             <form action='index.php?ty=edit_setting' method="POST">
                 {$this->createCsrfTokenField()}
@@ -95,46 +91,18 @@ class EditSettingsController extends AbstractEditController
                     <div class='row'>
                         <div class='col-md-3'>
                             <div class='row'>
-                                <div class='col'>
-                                    <div class='input-group mb-3'>
-                                        <div class='input-group-prepend'>
-                                            <span class='input-group-text'>Id</span>
-                                        </div>
-                                        <input class='form-control' type='text' value='$id' name='rows[1][id]' readonly/>
-                                    </div>
-                                </div>
-                                <div class='col'>
-                                    <div class='input-group mb-3'>
-                                        <div class='input-group-prepend'>
-                                            <span class='input-group-text'>Key</span>
-                                        </div>
-                                        <input class='form-control' type='text' name='rows[1][title]' value='$title' readonly/>
-                                    </div>
-                                </div>
+                                $idGroup
+                                $keyGroup
                             </div>
                         </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Displayed</span>
-                                </div>
-                                <input class='form-control' type='text' name='rows[1][displayed]' value='$displayed' required/>
-                            </div>
-                        </div>
+                        $displayedGroup
                         <div class='col-md-3'>
                             <div class='row'>
                                 <div class='col'>
                                     $valueControl
                                 </div>
                                 <div class='col'>
-                                    <div class='input-group form-control mb-3'>
-                                        <div class='input-group-prepend'>
-                                            <span class='me-3'>Ignored:</span>
-                                        </div>
-                                        <div class="form-check form-switch form-inline">
-                                            <input class='form-check-input' type='checkbox' name='rows[1][ignored]' value='1' $ignoredChecked>
-                                        </div>
-                                    </div>
+                                    $ignoredControl
                                 </div>
                             </div>
                         </div>

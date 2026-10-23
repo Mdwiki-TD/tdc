@@ -61,12 +61,7 @@ class TtPostProcessor extends AbstractPostHandler
 			}
 
 			$result = $this->insert_to_translate_type($title, $lead, $full, $id);
-
-			if ($result === false) {
-				$this->addError("Failed to add translate type, title: $title.");
-			} else {
-				$this->addText("Translate type added successfully, title: $title.");
-			}
+			$this->reportResult($result, "Translate type added successfully, title: $title.", "Failed to add translate type, title: $title.");
 		}
 	}
 }
