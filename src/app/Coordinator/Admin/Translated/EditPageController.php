@@ -46,6 +46,12 @@ class EditPageController extends AbstractEditController
         $title2  = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $target2 = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
 
+        $titleField = $this->inputGroup('Title', 'title', $title2, "id='title' required");
+        $langField  = $this->inputGroup('lang', 'lang', $lang, "id='lang' required", 'col-md-3', 'form-control lang_input');
+        $targetField = $this->inputGroup('target', 'target', $target2, "id='target' required");
+        $userField  = $this->inputGroup('user', 'user', $user, "id='user' required");
+        $pupdateField = $this->inputGroup('Published', 'pupdate', $pupdate, "id='pupdate' placeholder='YYYY-MM-DD' required");
+
         return <<<HTML
             <form action='index.php?ty=edit_page&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
@@ -55,46 +61,11 @@ class EditPageController extends AbstractEditController
                 $testLine
                 <div class='container'>
                     <div class='row'>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Title</span>
-                                </div>
-                                <input class='form-control' type='text' id='title' name='title' value='$title2' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>lang</span>
-                                </div>
-                                <input class='form-control lang_input' type='text' id='lang' name='lang' value='$lang' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>target</span>
-                                </div>
-                                <input class='form-control' type='text' id='target' name='target' value='$target2' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>user</span>
-                                </div>
-                                <input class='form-control' type='text' id='user' name='user' value='$user' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Published</span>
-                                </div>
-                                <input class='form-control' type='text' id='pupdate' name='pupdate' value='$pupdate' placeholder='YYYY-MM-DD' required/>
-                            </div>
-                        </div>
+                        $titleField
+                        $langField
+                        $targetField
+                        $userField
+                        $pupdateField
                         <div class='col-md-3'>
                             <div class='input-group form-control mb-3 alert alert-warning'>
                                 <div class='input-group-prepend'>

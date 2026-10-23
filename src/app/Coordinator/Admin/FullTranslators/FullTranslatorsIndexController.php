@@ -1,11 +1,9 @@
 <?php
-// src/app/Coordinator/Admin/full_translators/index.php
 
 namespace App\Coordinator\Admin\FullTranslators;
 
 use App\SQLorAPI\UsersTable;
-use App\Coordinator\Admin\Common\AbstractController;
-
+use App\Coordinator\Admin\Common\AbstractUserListIndexController;
 
 /**
  * Class FullTranslatorsIndexController
@@ -13,134 +11,25 @@ use App\Coordinator\Admin\Common\AbstractController;
  * delegates to FullTranslatorsPostProcessor first, then always renders
  * the current state of the list/form below it.
  */
-class FullTranslatorsIndexController extends AbstractController
+class FullTranslatorsIndexController extends AbstractUserListIndexController
 {
-    private const TY_NAME = 'full_translators';
-
     protected function createPostProcessor(): object
     {
         return new FullTranslatorsPostProcessor();
     }
-    public function renderFormCard(): void
+
+    protected function getTyName(): string
     {
-        $translators = (UsersTable::getInstance())->getFullTranslators();
-
-        $formText = $this->buildTranslatorRows($translators);
-        $formText .= $this->buildAddRowMarkup();
-
-        $this->renderCard($formText);
-    }
-    /**
-     * Builds the editable table rows for each existing full translator.
-     */
-    private function buildTranslatorRows(array $translators): string
-    {
-        $formText = '';
-        $numb = 0;
-
-        foreach ($translators as $key => $table) {
-            $numb++;
-
-            $userId = $table['id'] ?? '';
-            $usere = $table['user'] ?? '';
-            $isActive = $this->boolInt($table['is_active'] ?? 0);
-
-            $activeChecked = $this->isChecked($isActive);
-
-            $formText .= <<<HTML
-                <tr>
-                    <td data-content="id">
-                        <input class="form-control" size="20" name="rows[$numb][id]" value="$userId" type="hidden"/>
-                        <span><b>$userId</b></span>
-                    </td>
-                    <td data-content="user">
-                        <span><a href='/Translation_Dashboard/leaderboard.php?user=$usere'>$usere</a></span>
-                        <input name='rows[$numb][user]' value='$usere' type='hidden'/>
-                    </td>
-                    <td data-content="active">
-                        <div class='form-check form-switch'>
-
-                            <input type='hidden' name='rows[$numb][is_active]' value='0'>
-                            <input class='form-check-input' type='checkbox' name='rows[$numb][is_active]' value='1' $activeChecked>
-                        </div>
-                    </td>
-                    <td data-content="delete">
-                        <div class='input-group alert alert-warning p-1 mb-1'>
-                            <div class="form-check form-switch form-inline">
-                                <input class="form-check-input" type="checkbox" name="rows[$numb][del]" value="$userId">
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            HTML;
-        }
-
-        return $formText;
+        return 'full_translators';
     }
 
-    /**
-     * Builds the trailing empty row used to add a new full translator.
-     */
-    private function buildAddRowMarkup(): string
+    protected function getCardTitle(): string
     {
-        return <<<HTML
-            <tr>
-                <td data-content="id">
-                    <span><b>Add:</b></span>
-                </td>
-                <td data-content="user">
-                    <input class='form-control td_user_input' name='new[1][user]' />
-                </td>
-                <td data-content="active">
-                    <div class="form-check form-switch">
-                        <input type="hidden" name="new[1][is_active]" value="1">
-                        -
-                    </div>
-                </td>
-                <td data-content="delete">
-                    -
-                </td>
-            </tr>
-        HTML;
+        return 'Full article translators:';
     }
 
-    /**
-     * Renders the full translators card with the editable table form.
-     */
-    private function renderCard(string $formText): void
+    protected function getUsersData(): array
     {
-
-        $tyName = self::TY_NAME;
-
-        $form = <<<HTML
-            <form action="index.php?ty=$tyName" method="POST">
-                {$this->createCsrfTokenField()}
-                <input name='ty' value="$tyName" type="hidden"/>
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>User</th>
-                                    <th>Active</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody id="full_tab">
-                                $formText
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="form-group d-flex justify-content-between">
-                    <button type="submit" class="btn btn-outline-primary">Save</button>
-                </div>
-            </form>
-        HTML;
-
-        $this->echoCard("Full article translators:", $form);
+        return UsersTable::getInstance()->getFullTranslators();
     }
 }
-
-

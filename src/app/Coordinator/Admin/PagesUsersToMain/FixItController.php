@@ -122,6 +122,12 @@ class FixItController extends AbstractEditController
             HTML
             : "";
 
+        $titleField   = $this->inputGroup('Title', 'title', $title2, "id='title' required");
+        $langField    = $this->inputGroup('lang', 'lang', $lang, "id='lang' required", 'col-md-3', 'form-control lang_input');
+        $targetField  = $this->inputGroup('New target', 'new_target', $target2, "id='new_target' required");
+        $userField    = $this->inputGroup('New user', 'new_user', $this->newUser, "id='new_user' required");
+        $pupdateField = $this->inputGroup('Published', 'pupdate', $pupdate, "id='pupdate' placeholder='YYYY-MM-DD' required");
+
         return <<<HTML
             <form action='index.php?ty=fix_page&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
@@ -130,46 +136,11 @@ class FixItController extends AbstractEditController
                 $testLine
                 <div class='container'>
                     <div class='row'>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Title</span>
-                                </div>
-                                <input class='form-control' type='text' id='title' name='title' value='{$title2}' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>lang</span>
-                                </div>
-                                <input class='form-control lang_input' type='text' id='lang' name='lang' value='{$lang}' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>New target</span>
-                                </div>
-                                <input class='form-control' type='text' id='new_target' name='new_target' value='{$target2}' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>New user</span>
-                                </div>
-                                <input class='form-control' type='text' id='new_user' name='new_user' value='{$this->newUser}' required/>
-                            </div>
-                        </div>
-                        <div class='col-md-3'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Published</span>
-                                </div>
-                                <input class='form-control' type='text' id='pupdate' name='pupdate' value='{$pupdate}' placeholder='YYYY-MM-DD' required/>
-                            </div>
-                        </div>
+                        $titleField
+                        $langField
+                        $targetField
+                        $userField
+                        $pupdateField
                     </div>
                     <div class='row'>
                         <div class='col-6'>

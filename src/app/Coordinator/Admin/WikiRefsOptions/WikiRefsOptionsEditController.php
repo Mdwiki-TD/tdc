@@ -84,6 +84,8 @@ class WikiRefsOptionsEditController extends AbstractEditController
             HTML;
         }
 
+        $langCodeField = $this->inputGroup('Lang code', 'lang_code', $langCode, 'required', 'col-md-12');
+
         return <<<HTML
             <form action='index.php?ty=wikirefs_options_edit&nonav=120' method="POST">
                 {$this->createCsrfTokenField()}
@@ -91,14 +93,7 @@ class WikiRefsOptionsEditController extends AbstractEditController
                 <div class='container'>
                     <div class='row'>
                         $idRow
-                        <div class='col-md-12'>
-                            <div class='input-group mb-3'>
-                                <div class='input-group-prepend'>
-                                    <span class='input-group-text'>Lang code</span>
-                                </div>
-                                <input class='form-control' type='text' name='lang_code' value='$langCode' required/>
-                            </div>
-                        </div>
+                        $langCodeField
                         <div class='col-md-12'>
                             <div class='row'>
                                 $uRows

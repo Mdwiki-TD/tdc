@@ -69,12 +69,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
         $params = [$langCode, $expend, $moveDots, $addEnLang, $id];
 
         $result = $this->db->executeQuery($qua, $params);
-
-        if ($result === false) {
-            $this->addError("Failed to update language $langCode.");
-        } else {
-            $this->addText("language $langCode updated.");
-        }
+        $this->reportResult($result, "language $langCode updated.", "Failed to update language $langCode.");
     }
 
     /**
@@ -95,11 +90,6 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
         $params = [$langCode, $expend, $moveDots, $addEnLang];
 
         $result = $this->db->executeQuery($qua, $params);
-
-        if ($result === false) {
-            $this->addError("Failed to add language $langCode.");
-        } else {
-            $this->addText("language $langCode added.");
-        }
+        $this->reportResult($result, "language $langCode added.", "Failed to add language $langCode.");
     }
 }

@@ -34,6 +34,20 @@ abstract class AbstractPostHandler extends BaseController
         $result = $this->db->executeQuery($qua2, [$id]);
         $this->verifyDeleteResult($result, $id, $recordName, $columnName);
     }
+
+    public function deleteById(string $table, string $idColumn, mixed $id, string $label): void
+    {
+        $this->deleteRow((string)$id, $table, $label, $idColumn);
+    }
+
+    public function reportResult(bool $result, string $okMsg, string $failMsg): void
+    {
+        if ($result === false) {
+            $this->addError($failMsg);
+        } else {
+            $this->addText($okMsg);
+        }
+    }
     /**
      * Verifies CSRF, then delegates to process() if valid.
      *
