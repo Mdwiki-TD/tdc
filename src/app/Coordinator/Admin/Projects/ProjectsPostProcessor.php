@@ -13,24 +13,24 @@ use App\Coordinator\Admin\Common\AbstractPostHandler;
  */
 class ProjectsPostProcessor extends AbstractPostHandler
 {
-    protected bool $isPopUpPage = false;
+	protected bool $isPopUpPage = false;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+	}
 	public function process(array $post): void
 	{
-        $this->processRows($post['rows'] ?? []);
+		$this->processRows($post['rows'] ?? []);
 	}
 
 
-	private function insert_to_projects(string $gTitle, mixed $gId): bool
+	private function insert_to_projects(string $gTitle, mixed $id): bool
 	{
 		$query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
-		$params = [$gTitle, $gId];
+		$params = [$gTitle, $id];
 
-		if ($gId == 0 || $gId == '0' || empty($gId)) {
+		if ($id == 0 || $id == '0' || empty($id)) {
 			$query = "INSERT INTO projects (g_title) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM projects WHERE g_title = ?)";
 			$params = [$gTitle, $gTitle];
 		}
@@ -47,15 +47,14 @@ class ProjectsPostProcessor extends AbstractPostHandler
 	private function processRows(array $rows): void
 	{
 		foreach ($rows as $key => $table) {
-			$gId  = $table['g_id'] ?? '';
-			$del  = $table['del'] ?? '';
+			$id = $table['g_id'] ?? '';
+			$del = $table['del'] ?? '';
 			$gTitle = $table['g_title'] ?? '';
 
-			if (!empty($del) && !empty($gId)) {
+			if ($del === $id) {
 				$qua2 = "DELETE FROM projects WHERE g_id = ?";
-				$this->db->executeQuery($qua2, [$gId]);
-
-				$this->addText("Project $gTitle deleted.");
+				$deleted = $this->db->executeQuery($qua2, [$id]);
+				$this->verifyDeleteResult($deleted, $id, 'Project');
 				continue;
 			}
 
@@ -65,9 +64,9 @@ class ProjectsPostProcessor extends AbstractPostHandler
 				continue;
 			}
 
-			$this->insert_to_projects($gTitle, $gId);
+			$this->insert_to_projects($gTitle, $id);
 
-			if (empty($gId)) {
+			if (empty($id)) {
 				$this->addText("Project $gTitle Added.");
 			} else {
 				$this->addText("Project $gTitle Updated.");

@@ -57,4 +57,34 @@ abstract class AbstractPostHandler extends BaseController
      */
     abstract protected function process(array $post): void;
 
+    public function verifyDeleteResult(bool $deleted, string|int $id, string $recordName, string $columnName = "id"): void
+    {
+        if ($deleted === false) {
+            $this->addError("Failed to delete {$recordName} ({$columnName}: {$id}).");
+            // $this->addError("Failed to delete {$recordName} with {$columnName} ($id).");
+        } else {
+            $this->addText("{$recordName} ({$columnName}: {$id}) deleted successfully.");
+            // $this->addText("{$recordName} with {$columnName} {$id} deleted.");
+        }
+    }
+    public function verifyUpdateResult(bool $updated, string|int $id, string $recordName, string $columnName = "id"): void
+    {
+        if ($updated === false) {
+            $this->addError("Failed to update {$recordName} ({$columnName}: {$id}).");
+            // $this->addError("Failed to update {$recordName} with {$columnName} ($id).");
+        } else {
+            $this->addText("{$recordName} ({$columnName}: {$id}) updated successfully.");
+            // $this->addText("{$recordName} with {$columnName} {$id} updated.");
+        }
+    }
+    public function verifyInsertResult(bool $result, string|int $id, string $recordName, string $columnName = "id"): void
+    {
+        if ($result === false) {
+            $this->addError("Failed to insert {$recordName} ({$columnName}: {$id}).");
+            // $this->addError("Failed to insert {$recordName} with {$columnName} ($id).");
+        } else {
+            $this->addText("{$recordName} ({$columnName}: {$id}) inserted successfully.");
+            // $this->addText("{$recordName} with {$columnName} {$id} inserted.");
+        }
+    }
 }

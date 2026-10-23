@@ -35,7 +35,6 @@ class AdminsIndexController extends AbstractController
         $formText .= $this->buildAddRowMarkup($numb);
 
         $this->renderCard($formText);
-        $this->renderAddRowScript();
     }
     /**
      * Builds the editable table rows for each existing coordinator.
@@ -147,42 +146,11 @@ class AdminsIndexController extends AbstractController
                         </div>
                         <div class="form-group d-flex justify-content-between">
                             <button type="submit" class="btn btn-outline-primary">Save</button>
-                            <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row_v()'>New row</span>
                             <span> </span>
                         </div>
                     </form>
                 </div>
             </div>
-        HTML;
-    }
-
-    /**
-     * Renders the client-side script for dynamically adding new rows.
-     */
-    private function renderAddRowScript(): void
-    {
-        echo <<<'HTML'
-            <script type="text/javascript">
-                function add_row_v() {
-                    var ii = $('#full_tab >tr').length + 1;
-
-                    var e = `
-                        <tr>
-                            <td>
-                                <b>${ii}</b>
-                            </td>
-                            <td>
-                                <input class='form-control' name='rows[${ii}][is_new]' value='yes' type='hidden'/>
-                                <input class='form-control' name='rows[${ii}][is_active]' value='1' type='hidden'/>
-                                <input class='form-control td_user_input' name='rows[${ii}][username]'/>
-                            </td>
-                            <td>-</td>
-                        </tr>
-                    `;
-
-                    $('#full_tab').append(e);
-                }
-            </script>
         HTML;
     }
 }

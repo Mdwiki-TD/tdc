@@ -44,12 +44,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
         $qua = "DELETE FROM language_settings WHERE id = ?";
 
         $result = $this->db->executeQuery($qua, [$id]);
-
-        if ($result === false) {
-            $this->addError("Failed to delete language $langCode.");
-        } else {
-            $this->addText("language $langCode deleted.");
-        }
+        $this->verifyDeleteResult($result, $langCode, 'Language', 'code');
     }
 
     /**

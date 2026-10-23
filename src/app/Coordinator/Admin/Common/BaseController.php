@@ -123,16 +123,30 @@ class BaseController
     /**
      * Parses a checkbox-style value into a strict 0/1 int.
      */
-    protected function boolInt(mixed $value): int
+    protected function boolInt(mixed $value, int $default = 0): int
     {
         return filter_var(
             $value,
             FILTER_VALIDATE_INT,
             ['options' => ['min_range' => 0, 'max_range' => 1]]
-        ) ?: 0;
+        ) ?: $default;
     }
     protected function isChecked(mixed $value): string
     {
         return ($value == 1 || $value == "1") ? 'checked' : '';
+    }
+    protected function hasDifferences(array $dbData, array $postData): bool
+    {
+        foreach ($dbData as $key => $value) {
+            // set bad value to compare the empty values
+            $postValue = ($postData[$key] ?? '[]');
+            if ($postValue === "[]") {
+                continue;
+            }
+            if ($value != $postValue) {
+                return true;
+            }
+        }
+        return false;
     }
 }

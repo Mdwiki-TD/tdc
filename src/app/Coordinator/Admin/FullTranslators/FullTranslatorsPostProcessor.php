@@ -33,21 +33,15 @@ class FullTranslatorsPostProcessor extends AbstractPostHandler
 		foreach ($rows as $key => $table) {
 			// { "id": "1", "user": "" }
 			// { "id": "4", "user": "Dr3939", "del": "4" }
-			$uId = $table['id'] ?? '';
+			$id = $table['id'] ?? '';
 			$del = $table['del'] ?? '';
 			$user = $table['user'] ?? '';
 
-			if (!empty($del) && !empty($uId)) {
+			if ($del === $id) {
 				$qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
 
-				$result = $this->db->executeQuery($qua2, [$uId]);
-
-				if ($result === false) {
-					$this->addError("Failed to delete user $user.");
-					continue;
-				}
-
-				$this->addText("User $user deleted.");
+				$result = $this->db->executeQuery($qua2, [$id]);
+                $this->verifyDeleteResult($result, $id, 'User');
 				continue;
 			}
 
@@ -56,7 +50,7 @@ class FullTranslatorsPostProcessor extends AbstractPostHandler
 			$isActive = $table['is_active'] ?? '';
 			$activeOriginalValue = $table['active_orginal_value'] ?? '';
 
-			if ($isActive == $activeOriginalValue && !empty($uId)) {
+			if ($isActive == $activeOriginalValue && !empty($id)) {
 				continue;
 			}
 
@@ -76,7 +70,7 @@ class FullTranslatorsPostProcessor extends AbstractPostHandler
 				if ($result === false) {
 					$this->addError("Failed to add user $user.");
 				} else {
-					$this->addText((empty($uId)) ? "User $user Added." : "User $user Updated.");
+					$this->addText((empty($id)) ? "User $user Added." : "User $user Updated.");
 				}
 			}
 		}

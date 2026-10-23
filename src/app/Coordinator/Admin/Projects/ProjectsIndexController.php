@@ -32,7 +32,6 @@ class ProjectsIndexController extends AbstractController
         $formText .= $this->buildAddRowMarkup($numb);
 
         $this->renderCard($formText);
-        $this->renderAddRowScript();
 
     }
     /**
@@ -58,8 +57,12 @@ class ProjectsIndexController extends AbstractController
                     <td data-content='Project'>
                         <input class='form-control' name='rows[$numb][g_title]' value='$gtitle'/>
                     </td>
-                    <td data-content='Delete'>
-                        <input type='checkbox' name='rows[$numb][del]' value='$gid'/> <label> delete</label>
+                    <td data-content="delete">
+                        <div class='input-group alert alert-warning p-1 mb-1'>
+                            <div class="form-check form-switch form-inline">
+                                <input class="form-check-input" type="checkbox" name="rows[$numb][del]" value="$gid">
+                            </div>
+                        </div>
                     </td>
                 </tr>
             HTML;
@@ -120,40 +123,11 @@ class ProjectsIndexController extends AbstractController
                         </div>
                         <div class="form-group d-flex justify-content-between">
                             <button type="submit" class="btn btn-outline-primary">Save</button>
-                            <span role='button' id="add_row" class="btn btn-outline-primary" onclick='add_row()'>New row</span>
                             <span> </span>
                         </div>
                     </form>
                 </div>
             </div>
-        HTML;
-    }
-
-    /**
-     * Renders the client-side script for dynamically adding new rows.
-     */
-    private function renderAddRowScript(): void
-    {
-        echo <<<'HTML'
-            <script type="text/javascript">
-                function add_row() {
-                    var ii = $('#g_tab >tr').length + 1;
-
-                    var e = `
-                        <tr>
-                            <td>
-                                <b>${ii}</b>
-                            </td>
-                            <td>
-                                <input class='form-control' name='rows[${ii}][g_title]' value=''/>
-                            </td>
-                            <td>-</td>
-                        </tr>
-                    `;
-
-                    $('#g_tab').append(e);
-                }
-            </script>
         HTML;
     }
 }

@@ -11,17 +11,27 @@ use App\Coordinator\Admin\Common\AbstractPostHandler;
  */
 class UsersNotInprocessPostProcessor extends AbstractPostHandler
 {
-    protected bool $isPopUpPage = false;
+	protected bool $isPopUpPage = false;
 
 	private const DB_TABLE_NAME = 'users_no_inprocess';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+	}
 	public function process(array $post): void
 	{
 		$this->processRows($post['rows'] ?? []);
+	}
+	private function processNewRows(array $newRows): void
+	{
+		/*
+		if (isset($post['new'])) {
+			$this->processNewRows($post['new']);
+		}
+		*/
+		foreach ($newRows as $key => $table) {
+		}
 	}
 	/**
 	 * Processes each submitted user row: delete, add, or update.
@@ -31,35 +41,28 @@ class UsersNotInprocessPostProcessor extends AbstractPostHandler
 		foreach ($rows as $key => $table) {
 			// { "id": "1", "user": "" }
 			// { "id": "4", "user": "Dr3939", "del": "4" }
-			$uId = $table['id'] ?? '';
+			$id = $table['id'] ?? '';
 			$del = $table['del'] ?? '';
 			$user = $table['user'] ?? '';
 
-			if (!empty($del) && !empty($uId)) {
+			if ($del === $id) {
 				$qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
 
-				$result = $this->db->executeQuery($qua2, [$uId]);
-
-				if ($result === false) {
-					$this->addError("Failed to delete user $user.");
-					continue;
-				}
-
-				$this->addText("User $user deleted.");
+				$result = $this->db->executeQuery($qua2, [$id]);
+				$this->verifyDeleteResult($result, $id, 'User');
 				continue;
 			}
-			// $isNew = $table['is_new'] ?? '';
 
 			$user = trim($user);
 
 			$isActive = $table['is_active'] ?? '';
 			$activeOriginalValue = $table['active_orginal_value'] ?? '';
 
-			if ($isActive == $activeOriginalValue && !empty($uId)) {
+			if ($isActive == $activeOriginalValue && !empty($id)) {
 				continue;
 			}
 
-			if (!empty($user)) { // && empty($uId) && $isNew == 'yes'
+			if (!empty($user)) { // && empty($id) && $isNew == 'yes'
 				$tableName = self::DB_TABLE_NAME;
 				// $qua = "INSERT INTO $tableName (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $tableName WHERE user = ?)";
 
@@ -75,7 +78,7 @@ class UsersNotInprocessPostProcessor extends AbstractPostHandler
 				if ($result === false) {
 					$this->addError("Failed to add user $user.");
 				} else {
-					$this->addText((empty($uId)) ? "User $user Added." : "User $user Updated.");
+					$this->addText((empty($id)) ? "User $user Added." : "User $user Updated.");
 				}
 			}
 		}

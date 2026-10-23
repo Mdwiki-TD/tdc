@@ -6,10 +6,10 @@ use App\SQLorAPI\BaseTable;
 
 class CategoriesTable extends BaseTable
 {
-    private static array $categoriesCache = [];
-    private static array $campsToCatCache = [];
+    private static array $categoriesCache   = [];
+    private static array $campsToCatCache   = [];
     private static array $countMembersCache = [];
-    private static array $staticsCache = [];
+    private static array $staticsCache      = [];
 
     private static ?self $instance = null;
     public static function getInstance(): self
@@ -71,7 +71,7 @@ class CategoriesTable extends BaseTable
             $category = "RTT";
         }
 
-        $key = (string)$category;
+        $key = (string) $category;
 
         if (!empty(self::$countMembersCache[$key] ?? [])) {
             return self::$countMembersCache[$key];
@@ -175,7 +175,7 @@ class CategoriesTable extends BaseTable
             $category = "RTT";
         }
 
-        $key = (string)$category;
+        $key = (string) $category;
 
         if (!empty(self::$staticsCache[$key] ?? [])) {
             return self::$staticsCache[$key];
@@ -205,5 +205,12 @@ class CategoriesTable extends BaseTable
         self::$staticsCache[$key] = $uData;
 
         return self::$staticsCache[$key];
+    }
+
+    public function deleteCategory(string $id): bool
+    {
+        $qua2 = "DELETE FROM categories WHERE id = ?";
+        $deleted = $this->db->executeQuery($qua2, [$id]);
+        return $deleted;
     }
 }

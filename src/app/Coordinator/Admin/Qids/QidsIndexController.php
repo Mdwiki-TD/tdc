@@ -208,7 +208,7 @@ class QidsIndexController extends AbstractControllerNoPost
 						<th>Edit</th>
 					</tr>
 				</thead>
-				<tbody id="tab_logic">
+				<tbody>
 					$formRows
 				</tbody>
 			</table>
