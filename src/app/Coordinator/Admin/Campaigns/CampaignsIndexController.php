@@ -44,7 +44,7 @@ class CampaignsIndexController extends AbstractController
             $campaign  = $table['campaign'] ?? '';
             $depth     = $table['depth'] ?? '';
 
-            $checked = ($table['is_default'] == 1) ? 'checked' : '';
+            $checked = $this->isChecked($table['is_default']);
 
             $tableRows .= <<<HTML
                 <tr>

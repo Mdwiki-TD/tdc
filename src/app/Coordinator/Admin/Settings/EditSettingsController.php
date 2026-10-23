@@ -60,8 +60,8 @@ class EditSettingsController extends AbstractEditController
         $value = $this->boolInt($data['value'] ?? 0);
         $ignored = $this->boolInt($data['ignored'] ?? 0);
 
-        $enabledChecked = ($value == 1) ? 'checked' : '';
-        $ignoredChecked = ($ignored == 1) ? 'checked' : '';
+        $enabledChecked = $this->isChecked($value);
+        $ignoredChecked = $this->isChecked($ignored);
 
         return <<<HTML
             <form action='index.php?ty=edit_setting' method="POST">

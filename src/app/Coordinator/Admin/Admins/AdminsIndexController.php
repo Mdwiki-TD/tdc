@@ -52,7 +52,7 @@ class AdminsIndexController extends AbstractController
             $usere = $table['username'] ?? '';
             $isActive = $table['is_active'] ?? '';
 
-            $activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
+            $activeChecked = $this->isChecked($isActive);
 
             $formText .= <<<HTML
                 <tr>

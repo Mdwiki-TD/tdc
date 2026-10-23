@@ -46,7 +46,7 @@ class UsersNotInprocessIndexController extends AbstractController
             $usere = $table['user'] ?? '';
             $isActive = $table['is_active'] ?? '';
 
-            $activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
+            $activeChecked = $this->isChecked($isActive);
 
             $formText .= <<<HTML
                 <tr>

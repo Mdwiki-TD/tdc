@@ -131,4 +131,8 @@ class BaseController
             ['options' => ['min_range' => 0, 'max_range' => 1]]
         ) ?: 0;
     }
+    protected function isChecked(mixed $value): string
+    {
+        return ($value == 1 || $value == "1") ? 'checked' : '';
+    }
 }

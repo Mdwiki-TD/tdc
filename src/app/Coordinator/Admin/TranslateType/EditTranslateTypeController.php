@@ -20,10 +20,10 @@ class EditTranslateTypeController extends AbstractEditController
 
     public function __construct()
     {
-        $this->id    = $_GET['id'] ?? '';
+        $this->id = $_GET['id'] ?? '';
         $this->title = isset($_GET['title']) ? rawurldecode($_GET['title']) : '';
-        $this->lead  = $_GET['lead'] ?? '';
-        $this->full  = $_GET['full'] ?? '';
+        $this->lead = $_GET['lead'] ?? '';
+        $this->full = $_GET['full'] ?? '';
     }
 
     protected function createPostProcessor(): object
@@ -35,8 +35,8 @@ class EditTranslateTypeController extends AbstractEditController
      */
     private function buildFormHtml(string $title, string $lead, string $full, string $id): string
     {
-        $leadChecked = ($lead == 1 || $lead == "1") ? 'checked' : '';
-        $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
+        $leadChecked = $this->isChecked($lead);
+        $fullChecked = $this->isChecked($full);
 
         $title2 = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
 

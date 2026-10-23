@@ -21,7 +21,8 @@ class FullTranslatorsIndexController extends AbstractController
     {
         return new FullTranslatorsPostProcessor();
     }
-    public function renderFormCard(): void {
+    public function renderFormCard(): void
+    {
         $translators = (UsersTable::getInstance())->getFullTranslators();
 
         $formText = $this->buildTranslatorRows($translators);
@@ -42,11 +43,11 @@ class FullTranslatorsIndexController extends AbstractController
         foreach ($translators as $key => $table) {
             $numb++;
 
-            $userId   = $table['id'] ?? '';
-            $usere    = $table['user'] ?? '';
+            $userId = $table['id'] ?? '';
+            $usere = $table['user'] ?? '';
             $isActive = $table['is_active'] ?? '';
 
-            $activeChecked = ($isActive == 1 || $isActive == "1") ? 'checked' : '';
+            $activeChecked = $this->isChecked($isActive);
 
             $formText .= <<<HTML
                 <tr>
