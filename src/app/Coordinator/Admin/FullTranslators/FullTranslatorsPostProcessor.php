@@ -4,81 +4,98 @@
 namespace App\Coordinator\Admin\FullTranslators;
 
 use App\Coordinator\Admin\Common\AbstractPostHandler;
-
+use App\SQLorAPI\UsersTable;
 /**
  * Class FullTranslatorsPostProcessor
  * Handles add/update/delete of "full article translator" users.
  */
 class FullTranslatorsPostProcessor extends AbstractPostHandler
 {
-    protected bool $isPopUpPage = false;
+	protected bool $isPopUpPage = false;
 
 	private const DB_TABLE_NAME = 'full_translators';
+	private UsersTable $usersTable;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->usersTable = UsersTable::getInstance();
+	}
 
 	public function process(array $post): void
 	{
 		$this->processRows($post['rows'] ?? []);
+		if (isset($post['new'])) {
+			$this->processNewRows($post['new']);
+		}
 	}
-
-	/**
-	 * Processes each submitted user row: delete, add, or update.
-	 */
-	private function processRows(array $rows): void
+	private function processNewRows(array $newRows): void
 	{
-		foreach ($rows as $key => $table) {
+		foreach ($newRows as $key => $table) {
 			// { "id": "1", "user": "" }
-			// { "id": "4", "user": "Dr3939", "del": "4" }
-			$uId = $table['id'] ?? '';
-			$del = $table['del'] ?? '';
-			$user = $table['user'] ?? '';
+			$username = trim($table['user'] ?? '');
 
-			if (!empty($del) && !empty($uId)) {
-				$qua2 = "DELETE FROM " . self::DB_TABLE_NAME . " WHERE id = ?";
-
-				$result = $this->db->executeQuery($qua2, [$uId]);
-
-				if ($result === false) {
-					$this->addError("Failed to delete user $user.");
-					continue;
-				}
-
-				$this->addText("User $user deleted.");
+			if (empty($username)) {
+				$this->addWarning("Username is required.");
 				continue;
 			}
 
-			$user = trim($user);
+			$isActive = 1;
+			$tableName = self::DB_TABLE_NAME;
 
-			$isActive = $table['is_active'] ?? '';
-			$activeOriginalValue = $table['active_orginal_value'] ?? '';
-
-			if ($isActive == $activeOriginalValue && !empty($uId)) {
-				continue;
-			}
-
-			if (!empty($user)) {
-				// $qua = "INSERT INTO $tableName (user) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM $tableName WHERE user = ?)";
-				$tableName = self::DB_TABLE_NAME;
-
-				$qua = <<<SQL
+			$qua = <<<SQL
                     INSERT INTO $tableName (user, is_active)
                     VALUES (?, ?)
                     ON DUPLICATE KEY UPDATE
                         is_active = VALUES(is_active)
                 SQL;
 
-				$result = $this->db->executeQuery($qua, [$user, $isActive]);
+			$result = $this->db->executeQuery($qua, [$username, $isActive]);
+			$this->verifyInsertResult($result, $username, 'Username');
+		}
+	}
+	/**
+	 * Processes each submitted user row: delete, add, or update.
+	 */
+	private function processRows(array $rows): void
+	{
+		$records = $this->usersTable->getFullTranslators();
+		$recordsById = array_column($records, null, 'id');
 
-				if ($result === false) {
-					$this->addError("Failed to add user $user.");
-				} else {
-					$this->addText((empty($uId)) ? "User $user Added." : "User $user Updated.");
-				}
+		foreach ($rows as $key => $table) {
+			// { "id": "1", "user": "" }
+			// { "id": "4", "user": "Dr3939", "del": "4" }
+			$id = $table['id'] ?? '';
+			$del = $table['del'] ?? '';
+
+			if (empty($id)) {
+				continue;
 			}
+			$dbData = $recordsById[$id] ?? [];
+			if (empty($dbData)) {
+				$this->addWarning("User with id $id does not exist.");
+				continue;
+			}
+
+			if ($del === $id) {
+				$this->deleteRow($id, self::DB_TABLE_NAME, "User");
+				continue;
+			}
+			$username = $dbData['user'];
+
+			$isActive = $this->boolInt($table['is_active'] ?? 0);
+
+			if ($isActive == $dbData['is_active']) {
+				continue;
+			}
+
+			$tableName = self::DB_TABLE_NAME;
+
+			$qua = "UPDATE $tableName SET is_active = ? WHERE id = ?";
+
+			$result = $this->db->executeQuery($qua, [$isActive, $id]);
+
+			$this->verifyUpdateResult($result, $username, 'Username');
 		}
 	}
 }

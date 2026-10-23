@@ -4,7 +4,6 @@
 namespace App\Coordinator\Admin\Common;
 
 use App\CSRFManager;
-use App\Utils\Html2;
 use App\Coordinator\Admin\Common\BaseController;
 
 
@@ -18,50 +17,23 @@ use App\Coordinator\Admin\Common\BaseController;
  */
 abstract class AbstractPostHandler extends BaseController
 {
-    // Regular protected property with a default value
-    protected bool $isPopUpPage = false;
-
-    protected bool $returnToFormPage = false;
-    protected bool $csrfError        = false;
-
-    protected array $errors = [];
-    protected array $texts  = [];
-
-
     public function __construct()
     {
         parent::__construct();
     }
-    protected function addError(string $message): void
-    {
-        $this->errors[] = $message;
-    }
-
-    protected function addText(string $message): void
-    {
-        $this->texts[] = $message;
-    }
-
     /**
-     * Generates a close button HTML block.
+     * Subclasses implement their own delete/update/insert logic here,
+     * filling $this->errors / $this->texts as needed.
      */
-    public function getCloseButtonHtml(): string
+    abstract protected function process(array $post): void;
+
+    public function deleteRow(string $id, string $tableName, string $recordName = "User", string $columnName = "id"): void
     {
-        if (!$this->isPopUpPage)
-            return "";
+        $qua2 = "DELETE FROM {$tableName} WHERE {$columnName} = ?";
 
-        return <<<HTML
-            <div class="aligncenter">
-                <a class="btn btn-outline-primary" onclick="window.close()">Close</a>
-            </div>
-        HTML;
+        $result = $this->db->executeQuery($qua2, [$id]);
+        $this->verifyDeleteResult($result, $id, $recordName, $columnName);
     }
-
-    public function DisplayCsrfAlert(): void
-    {
-        echo "<div class='alert alert-danger' role='alert'>Invalid or Reused CSRF Token!</div>";
-    }
-
     /**
      * Verifies CSRF, then delegates to process() if valid.
      *
@@ -92,53 +64,34 @@ abstract class AbstractPostHandler extends BaseController
         return $this->result();
     }
 
-    /**
-     * Subclasses implement their own delete/update/insert logic here,
-     * filling $this->errors / $this->texts as needed.
-     */
-    abstract protected function process(array $post): void;
-
-    /**
-     * Parses a checkbox-style value into a strict 0/1 int.
-     */
-    protected function boolInt(mixed $value): int
+    public function verifyDeleteResult(bool $deleted, string|int $id, string $recordName, string $columnName = "id"): void
     {
-        return filter_var(
-            $value,
-            FILTER_VALIDATE_INT,
-            ['options' => ['min_range' => 0, 'max_range' => 1]]
-        ) ?: 0;
-    }
-
-    private function result(): array
-    {
-        return [
-            'success'   => !$this->csrfError && empty($this->errors),
-            'csrfError' => $this->csrfError,
-            'errors'    => $this->errors,
-            'texts'     => $this->texts,
-        ];
-    }
-    public function RenderIndexMesseges(array $result): void
-    {
-        echo Html2::div_alert($result['errors'], 'danger');
-
-        if ($result['csrfError']) {
-            $this->DisplayCsrfAlert();
-        }
-
-        echo Html2::div_alert($result['texts'], 'success');
-    }
-    public function RenderMesseges(array $result): void
-    {
-        $this->RenderIndexMesseges($result);
-
-        if (!$this->shouldShowForm()) {
-            echo $this->getCloseButtonHtml();
+        if ($deleted === false) {
+            $this->addError("Failed to delete {$recordName} ({$columnName}: {$id}).");
+            // $this->addError("Failed to delete {$recordName} with {$columnName} ($id).");
+        } else {
+            $this->addText("{$recordName} ({$columnName}: {$id}) deleted successfully.");
+            // $this->addText("{$recordName} with {$columnName} {$id} deleted.");
         }
     }
-    public function shouldShowForm(): bool
+    public function verifyUpdateResult(bool $updated, string|int $id, string $recordName, string $columnName = "id"): void
     {
-        return $this->returnToFormPage;
+        if ($updated === false) {
+            $this->addError("Failed to update {$recordName} ({$columnName}: {$id}).");
+            // $this->addError("Failed to update {$recordName} with {$columnName} ($id).");
+        } else {
+            $this->addText("{$recordName} ({$columnName}: {$id}) updated successfully.");
+            // $this->addText("{$recordName} with {$columnName} {$id} updated.");
+        }
+    }
+    public function verifyInsertResult(bool $result, string|int $id, string $recordName, string $columnName = "id"): void
+    {
+        if ($result === false) {
+            $this->addError("Failed to insert {$recordName} ({$columnName}: {$id}).");
+            // $this->addError("Failed to insert {$recordName} with {$columnName} ($id).");
+        } else {
+            $this->addText("{$recordName} ({$columnName}: {$id}) inserted successfully.");
+            // $this->addText("{$recordName} with {$columnName} {$id} inserted.");
+        }
     }
 }

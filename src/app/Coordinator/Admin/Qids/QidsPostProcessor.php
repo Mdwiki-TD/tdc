@@ -19,6 +19,7 @@ class QidsPostProcessor extends AbstractPostHandler
 
 	public function __construct(string $qidTable = 'qids')
 	{
+        parent::__construct();
 		$this->qidTable = $qidTable;
 
 		if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {

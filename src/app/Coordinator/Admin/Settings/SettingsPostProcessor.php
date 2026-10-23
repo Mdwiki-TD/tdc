@@ -3,6 +3,7 @@
 
 namespace App\Coordinator\Admin\Settings;
 
+use App\SQLorAPI\SettingsTable;
 use App\Coordinator\Admin\Common\AbstractPostHandler;
 
 /**
@@ -31,22 +32,37 @@ class SettingsPostProcessor extends AbstractPostHandler
      */
     private function processRows(array $rows): void
     {
+        $settings = SettingsTable::getInstance();
+
         foreach ($rows as $key => $table) {
             $id = $table['id'] ?? '';
             $value = $table['value'] ?? '';
-            $title = $table["title"] ?? '';
-            $displayed = $table["displayed"] ?? '';
-            $type = $table["type"] ?? '';
+
+            $data = $settings->getSettingsByid($id);
+            if (empty($data)) {
+                $this->addError("Invalid setting ID: $id.");
+                continue;
+            }
 
             // if (empty($title) || empty($displayed) || empty($type)) continue;
             // $re = update_settings($id, $title, $displayed, $value, $type);
             // Don't use empty() for value because it can be 0 or "0" which is valid,
             // but empty() would treat it as empty.
-            if (empty($id) || $value === "") {
+            if ($value === "") {
+                continue;
+            }
+            if ($value == $data['value']) {
+                // $this->addWarning("No changes made to setting ID: $id.");
                 continue;
             }
 
-            $re = $this->update_settings_value($id, $value);
+            $result = $this->update_settings_value($id, $value);
+
+			if ($result === false) {
+				$this->addError("Failed to update setting with id: $id.");
+			} else {
+				$this->addText("setting updated successfully, id: $id.");
+			}
         }
     }
 

@@ -159,8 +159,8 @@ class TranslateTypeIndexController extends AbstractControllerNoPost
 
         $mdTitle = HtmlUrls::make_mdwiki_title($title);
 
-        $leadChecked = ($lead == 1 || $lead == "1") ? 'checked' : '';
-        $fullChecked = ($full == 1 || $full == "1") ? 'checked' : '';
+        $leadChecked = $this->isChecked($lead);
+        $fullChecked = $this->isChecked($full);
 
         return <<<HTML
 			<tr>

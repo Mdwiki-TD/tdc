@@ -53,18 +53,18 @@ class Html
     {
         $options = "";
 
-        foreach ($tab as $dd) {
-            $se = ($cat === $dd) ? 'selected' : '';
+        foreach ($tab as $data) {
+            $se = ($cat === $data) ? 'selected' : '';
 
-            if (empty($dd)) continue;
+            if (empty($data)) continue;
 
-            $escaped = htmlspecialchars($dd, ENT_QUOTES, 'UTF-8');
+            $escaped = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
             $options .= "<option value='{$escaped}' {$se}>{$escaped}</option>";
         }
 
         $selLine = "";
         if (!empty($add)) {
-            $add2 = ($add === 'all') ? 'All' : $add;
+            $add2 = (strtolower($add) === 'all') ? 'All' : $add;
             $sel = ($cat === $add) ? "selected" : "";
             $escapedAdd = htmlspecialchars($add, ENT_QUOTES, 'UTF-8');
             $escapedAdd2 = htmlspecialchars($add2, ENT_QUOTES, 'UTF-8');

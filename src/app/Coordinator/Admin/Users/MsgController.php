@@ -21,7 +21,6 @@ use App\Coordinator\Helps\Sugust;
  */
 class MsgController extends AbstractControllerNoPost
 {
-    private string $globalUsername;
     private string $test;
     private string $title;
     private string $date;
@@ -32,7 +31,6 @@ class MsgController extends AbstractControllerNoPost
     public function __construct()
     {
         parent::__construct();
-        $this->globalUsername = CurrentUser::getInstance()->getUsername();
 
         $this->test = $_REQUEST['test'] ?? '';
         $this->title = $_GET['title'] ?? $_POST['title'] ?? '';
@@ -48,7 +46,7 @@ class MsgController extends AbstractControllerNoPost
     {
         $this->renderHeaderScripts();
 
-        $views = WikiApi::get_views($this->target, $this->lang, $this->date);
+        $views = WikiApi::getViews($this->target, $this->lang, $this->date);
 
         $sugustTab = Sugust::get_sugust($this->title, $this->lang);
         $sugust = $sugustTab['sugust'] ?? '';

@@ -13,31 +13,36 @@ use App\Coordinator\Admin\Common\AbstractPostHandler;
  */
 class ProjectsPostProcessor extends AbstractPostHandler
 {
-    protected bool $isPopUpPage = false;
+	protected bool $isPopUpPage = false;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-	public function process(array $post): void
+	public function __construct()
 	{
-        $this->processRows($post['rows'] ?? []);
+		parent::__construct();
 	}
 
-
-	private function insert_to_projects(string $gTitle, mixed $gId): bool
+	public function process(array $post): void
 	{
-		$query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
-		$params = [$gTitle, $gId];
+		$this->processRows($post['rows'] ?? []);
+		if (isset($post['new'])) {
+			$this->processNewRows($post['new']);
+		}
+	}
 
-		if ($gId == 0 || $gId == '0' || empty($gId)) {
+	private function processNewRows(array $newRows): void
+	{
+		foreach ($newRows as $key => $table) {
+			$gTitle = $table['g_title'] ?? '';
+			$gTitle = trim($gTitle);
+
+			if (empty($gTitle)) {
+				continue;
+			}
 			$query = "INSERT INTO projects (g_title) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM projects WHERE g_title = ?)";
 			$params = [$gTitle, $gTitle];
+
+			$result = $this->db->executeQuery($query, $params);
+			$this->verifyInsertResult($result, $gTitle, 'Project', 'title');
 		}
-
-		$result = $this->db->executeQuery($query, $params);
-
-		return $result;
 	}
 
 
@@ -47,15 +52,12 @@ class ProjectsPostProcessor extends AbstractPostHandler
 	private function processRows(array $rows): void
 	{
 		foreach ($rows as $key => $table) {
-			$gId  = $table['g_id'] ?? '';
-			$del  = $table['del'] ?? '';
+			$id = $table['g_id'] ?? '';
+			$del = $table['del'] ?? '';
 			$gTitle = $table['g_title'] ?? '';
 
-			if (!empty($del) && !empty($gId)) {
-				$qua2 = "DELETE FROM projects WHERE g_id = ?";
-				$this->db->executeQuery($qua2, [$gId]);
-
-				$this->addText("Project $gTitle deleted.");
+			if ($del === $id) {
+				$this->deleteRow($id, 'categories', "Campaign", 'g_id');
 				continue;
 			}
 
@@ -65,14 +67,10 @@ class ProjectsPostProcessor extends AbstractPostHandler
 				continue;
 			}
 
-			$this->insert_to_projects($gTitle, $gId);
-
-			if (empty($gId)) {
-				$this->addText("Project $gTitle Added.");
-			} else {
-				$this->addText("Project $gTitle Updated.");
-			}
+			$query = "UPDATE projects SET g_title = ? WHERE g_id = ?";
+			$params = [$gTitle, $id];
+			$updated = $this->db->executeQuery($query, $params);
+			$this->verifyUpdateResult($updated, $id, 'Project');
 		}
 	}
-
 }

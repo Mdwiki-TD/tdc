@@ -33,13 +33,13 @@ class FixItPostProcessor extends AbstractPostHandler
      */
     private function processFormData(array $post): void
     {
-        $overwrite = (int)($post['overwrite'] ?? "0") == 1;
-        $title     = $post['title'] ?? '';
-        $lang      = $post['lang'] ?? '';
+        $overwrite = (int) ($post['overwrite'] ?? "0") == 1;
+        $title = $post['title'] ?? '';
+        $lang = $post['lang'] ?? '';
         $newTarget = $post['new_target'] ?? '';
-        $newUser   = $post['new_user'] ?? '';
-        $pupdate   = $post['pupdate'] ?? '';
-        $id        = isset($post['id']) ? (int)$post['id'] : 0;
+        $newUser = $post['new_user'] ?? '';
+        $pupdate = $post['pupdate'] ?? '';
+        $id = isset($post['id']) ? (int) $post['id'] : 0;
 
         if ($id <= 0) {
             $this->addError("Invalid id supplied.");
@@ -53,8 +53,8 @@ class FixItPostProcessor extends AbstractPostHandler
         }
 
         $translateType = $pageData[0]['translate_type'] ?? '';
-        $cat   = $pageData[0]['cat'] ?? '';
-        $word  = $pageData[0]['word'] ?? '';
+        $cat = $pageData[0]['cat'] ?? '';
+        $word = $pageData[0]['word'] ?? '';
 
         $translateType = (!empty($translateType)) ? $translateType : 'lead';
 
@@ -85,12 +85,7 @@ class FixItPostProcessor extends AbstractPostHandler
             $this->addError("checkAfterAdd: Failed to add translations.");
         } else {
             $deleted = $this->deleteUserPage($id);
-
-            if ($deleted) {
-                $this->addText("Page with id:($id) deleted from pages_users.");
-            } else {
-                $this->addError("Failed to delete page with id:($id).");
-            }
+            $this->verifyDeleteResult($deleted, $id, 'User Page');
         }
     }
 

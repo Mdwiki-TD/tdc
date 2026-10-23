@@ -42,6 +42,9 @@ abstract class AbstractEditController extends AbstractController
 
     protected function renderFormCard(): void
     {
+        if (!$this->verifyRequest()) {
+            return;
+        }
         $this->beforeCard();
         $this->echoCard($this->getCardTitle(), $this->buildForm());
     }
@@ -49,6 +52,10 @@ abstract class AbstractEditController extends AbstractController
     /** Hook: e.g. fix_page prints a duplicate-page alert before the card. */
     protected function beforeCard(): void
     {
+    }
+    protected function verifyRequest(): bool
+    {
+        return true;
     }
 
     /**

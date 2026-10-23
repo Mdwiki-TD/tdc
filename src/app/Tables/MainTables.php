@@ -37,7 +37,7 @@ class MainTables
 	{
 		self::load();
 
-		if ($translateType === 'all') {
+		if (strtolower($translateType) === 'all') {
 			return self::$xAllRefsTable[$mdtitle] ?? 0;
 		}
 
@@ -54,7 +54,7 @@ class MainTables
 	{
 		self::load();
 
-		if ($translateType === 'all') {
+		if (strtolower($translateType) === 'all') {
 			return self::$xAllWordsTable[$mdtitle] ?? 0;
 		}
 
