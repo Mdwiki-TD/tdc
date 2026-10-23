@@ -49,7 +49,7 @@ class AdminsIndexController extends AbstractController
 
             $userId = $table['id'] ?? '';
             $usere = $table['username'] ?? '';
-            $isActive = $table['is_active'] ?? '';
+            $isActive = $this->boolInt($table['is_active'] ?? 0);
 
             $activeChecked = $this->isChecked($isActive);
 

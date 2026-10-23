@@ -70,7 +70,7 @@ class AdminsPostProcessor extends AbstractPostHandler
             }
             $username = $dbData['username'];
 
-            $isActive = $table['is_active'] ?? '';
+            $isActive = $this->boolInt($table['is_active'] ?? 0);
 
             if ($isActive == $dbData['is_active']) {
                 continue;

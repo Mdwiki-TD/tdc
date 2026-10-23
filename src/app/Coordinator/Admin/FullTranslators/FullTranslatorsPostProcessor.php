@@ -47,7 +47,7 @@ class FullTranslatorsPostProcessor extends AbstractPostHandler
 
 			$user = trim($user);
 
-			$isActive = $table['is_active'] ?? '';
+			$isActive = $this->boolInt($table['is_active'] ?? 0);
 			$activeOriginalValue = $table['active_orginal_value'] ?? '';
 
 			if ($isActive == $activeOriginalValue && !empty($id)) {

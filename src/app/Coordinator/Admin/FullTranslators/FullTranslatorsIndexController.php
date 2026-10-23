@@ -44,7 +44,7 @@ class FullTranslatorsIndexController extends AbstractController
 
             $userId = $table['id'] ?? '';
             $usere = $table['user'] ?? '';
-            $isActive = $table['is_active'] ?? '';
+            $isActive = $this->boolInt($table['is_active'] ?? 0);
 
             $activeChecked = $this->isChecked($isActive);
 
