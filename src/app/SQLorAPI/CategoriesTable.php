@@ -206,5 +206,4 @@ class CategoriesTable extends BaseTable
 
         return self::$staticsCache[$key];
     }
-
 }
