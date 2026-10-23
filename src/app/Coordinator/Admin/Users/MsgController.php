@@ -21,7 +21,6 @@ use App\Coordinator\Helps\Sugust;
  */
 class MsgController extends AbstractControllerNoPost
 {
-    private string $globalUsername;
     private string $test;
     private string $title;
     private string $date;
@@ -32,7 +31,6 @@ class MsgController extends AbstractControllerNoPost
     public function __construct()
     {
         parent::__construct();
-        $this->globalUsername = CurrentUser::getInstance()->getUsername();
 
         $this->test = $_REQUEST['test'] ?? '';
         $this->title = $_GET['title'] ?? $_POST['title'] ?? '';

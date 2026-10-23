@@ -15,13 +15,11 @@ use App\SQLorAPI\QidsTable;
  */
 class QidsIndexController extends AbstractControllerNoPost
 {
-	private CurrentUser $currentUser;
 	private string      $qidTable;
 	private string      $dis;
 
 	public function __construct()
 	{
-		$this->currentUser = CurrentUser::getInstance();
 
 		$this->qidTable = $_GET['qid_table'] ?? 'qids';
 		if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {

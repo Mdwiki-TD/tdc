@@ -19,12 +19,10 @@ use App\Coordinator\Helps\RecentHelps;
  */
 class PagesUsersToMainIndexController extends AbstractControllerNoPost
 {
-	// private CurrentUser $currentUser;
 	private string $lang;
 
 	public function __construct()
 	{
-		// $this->currentUser = CurrentUser::getInstance();
 		$this->lang = $_GET['lang'] ?? 'All';
 
 		if ($this->lang !== 'All' && !LangsTables::get_lang_title($this->lang)) {

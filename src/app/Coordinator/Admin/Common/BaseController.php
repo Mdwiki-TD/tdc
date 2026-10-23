@@ -10,8 +10,10 @@ use App\MdwikiSql\Database;
 
 class BaseController
 {
-    public Database $db;
-    protected bool  $csrfError = false;
+    public Database    $db;
+    public CurrentUser $currentUser;
+    public string      $globalUsername;
+    protected bool     $csrfError      = false;
 
     protected array $warnings = [];
     protected array $errors   = [];
@@ -25,6 +27,8 @@ class BaseController
     public function __construct()
     {
         $this->db = new Database();
+        $this->currentUser = CurrentUser::getInstance();
+        $this->globalUsername = $this->currentUser->getUsername();
     }
     public function result(): array
     {
@@ -55,7 +59,7 @@ class BaseController
     public function validateCoordinator(): bool
     {
         // Validate Coordinator user authorization
-        if (!CurrentUser::getInstance()->isCoordinator()) {
+        if (!$this->currentUser->isCoordinator()) {
             // return to home page
             error_log('User is not authorized');
             return false;
@@ -65,7 +69,7 @@ class BaseController
     public function validateAdmin(): bool
     {
         // Validate admin user authorization
-        if (!CurrentUser::getInstance()->isAdmin()) {
+        if (!$this->currentUser->isAdmin()) {
             // return to home page
             error_log('User is not authorized');
             return false;
@@ -82,7 +86,7 @@ class BaseController
     public function RenderIndexMesseges(array $result): void
     {
         echo Html2::div_alert($result['errors'], 'danger');
-        echo Html2::div_alert($result['warnings'], 'warning');
+        echo Html2::div_alert($result['warnings'] ?? [], 'warning');
 
         if ($result['csrfError']) {
             $this->DisplayCsrfAlert();

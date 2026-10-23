@@ -17,13 +17,12 @@ use App\Coordinator\Admin\Common\AbstractControllerNoPost;
 class LastCoordIndexController extends AbstractControllerNoPost
 {
 	private RecentTranslations $helper;
-	private string $lang;
-	private string $lastTable;
-	private string $globalUsername;
+	private string             $lang;
+	private string             $lastTable;
 
 	public function __construct()
 	{
-		$this->globalUsername = CurrentUser::getInstance()->getUsername();
+		parent::__construct();
 
 		$this->lang = $_GET['lang'] ?? 'All';
 		if (empty($this->lang)) {
@@ -97,14 +96,14 @@ class LastCoordIndexController extends AbstractControllerNoPost
 
 	public function CreateFixWikirefsUrl(array $tabg): string
 	{
-		$llang	= $tabg['lang'] ?? '';
-		$mdTitle  = trim($tabg['title'] ?? '');
-		$target   = trim($tabg['target'] ?? '');
+		$llang = $tabg['lang'] ?? '';
+		$mdTitle = trim($tabg['title'] ?? '');
+		$target = trim($tabg['target'] ?? '');
 
 		$mdwikiRevid = $tabg['mdwiki_revid'] ?? '';
 		$params = [
-			"title"		=> $target,
-			"lang"		 => $llang,
+			"title"        => $target,
+			"lang"         => $llang,
 			"sourcetitle"  => $mdTitle,
 			"mdwiki_revid" => $mdwikiRevid,
 		];
@@ -204,12 +203,12 @@ class LastCoordIndexController extends AbstractControllerNoPost
 	 */
 	public function createLastTableData(array $tabg, int $nnnn): string
 	{
-		$user	 = $tabg['user'] ?? '';
-		$llang	= $tabg['lang'] ?? '';
-		$mdTitle  = trim($tabg['title'] ?? '');
-		$target   = trim($tabg['target'] ?? '');
-		$pupdate  = $tabg['pupdate'] ?? '';
-		$addDate  = $tabg['add_date'] ?? '';
+		$user = $tabg['user'] ?? '';
+		$llang = $tabg['lang'] ?? '';
+		$mdTitle = trim($tabg['title'] ?? '');
+		$target = trim($tabg['target'] ?? '');
+		$pupdate = $tabg['pupdate'] ?? '';
+		$addDate = $tabg['add_date'] ?? '';
 		$campaign = $tabg['campaign'] ?? '';
 
 		$fixwikirefs = $this->CreateFixWikirefsUrl($tabg);
