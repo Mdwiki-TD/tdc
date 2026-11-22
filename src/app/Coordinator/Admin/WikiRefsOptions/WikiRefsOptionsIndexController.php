@@ -12,7 +12,7 @@ use App\Utils\HtmlUrls;
 /**
  * Class WikiRefsOptionsIndexController
  * Renders the wikirefs per-language options table (language_settings:
- * lang_code, move_dots, expend, add_en_lang), merging in any languages
+ * lang_code, move_dots, expand_infoboxes, add_en_lang), merging in any languages
  * that don't have a settings row yet with default (off) values.
  */
 class WikiRefsOptionsIndexController extends AbstractControllerNoPost
@@ -56,7 +56,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 			$lal = strtolower($tat);
 
 			if (!in_array($lal, $tabesCodes)) {
-				$tabes[] = ["lang_code" => $lal, "expend" => 0, "move_dots" => 0, "add_en_lang" => 0];
+				$tabes[] = ["lang_code" => $lal, "expand_infoboxes" => 0, "move_dots" => 0, "add_en_lang" => 0];
 			}
 		}
 
@@ -75,7 +75,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 	{
 		$id = $tabg["id"] ?? 0;
 		$lang = $tabg["lang_code"] ?? "";
-		$expend2 = ($tabg["expend"] == 1) ? "checked" : "";
+		$expandInfoboxes2 = ($tabg["expand_infoboxes"] == 1) ? "checked" : "";
 		$moveDots = ($tabg["move_dots"] == 1) ? "checked" : "";
 		$addEnLang = ($tabg["add_en_lang"] == 1) ? "checked" : "";
 
@@ -84,7 +84,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 		$editParams = [
 			"id"          => $id,
 			"lang_code"   => $lang,
-			"expend"      => $tabg["expend"],
+			"expand_infoboxes"      => $tabg["expand_infoboxes"],
 			"move_dots"   => $tabg["move_dots"],
 			"add_en_lang" => $tabg["add_en_lang"],
 		];
@@ -104,9 +104,9 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 						<input class="form-check-input" type="checkbox" name="rows[$numb][move_dots]" value="1" $moveDots disabled/>
 					</div>
 				</td>
-				<td data-content="Expend infobox" data-order="$expend2">
+				<td data-content="Expand infoboxes" data-order="$expandInfoboxes2">
 					<div class="form-check form-switch">
-						<input class="form-check-input" type="checkbox" name="rows[$numb][expend]" value="1" $expend2 disabled/>
+						<input class="form-check-input" type="checkbox" name="rows[$numb][expand_infoboxes]" value="1" $expandInfoboxes2 disabled/>
 					</div>
 				</td>
 				<td data-content="Add |language=en" data-order="$addEnLang">
@@ -137,7 +137,7 @@ class WikiRefsOptionsIndexController extends AbstractControllerNoPost
 							<th>#</th>
 							<th>Lang.</th>
 							<th>Move dots</th>
-							<th>Expand infobox</th>
+							<th>Expand infoboxes</th>
 							<th>add |language=en</th>
 							<th>Edit</th>
 						</tr>

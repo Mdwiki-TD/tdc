@@ -12,7 +12,7 @@ use App\Coordinator\Admin\Common\AbstractEditController;
  */
 class WikiRefsOptionsEditController extends AbstractEditController
 {
-    // private const FLAGS = ['move_dots', 'expend', 'add_en_lang'];
+    // private const FLAGS = ['move_dots', 'expand_infoboxes', 'add_en_lang'];
 
     protected function createPostProcessor(): object
     {
@@ -33,7 +33,7 @@ class WikiRefsOptionsEditController extends AbstractEditController
     {
         $id = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $langCode = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');
-        $expend = filter_var($_GET['expend'] ?? '', FILTER_VALIDATE_INT) ?: '';
+        $expand_infoboxes = filter_var($_GET['expand_infoboxes'] ?? '', FILTER_VALIDATE_INT) ?: '';
         $moveDots = filter_var($_GET['move_dots'] ?? '', FILTER_VALIDATE_INT) ?: '';
         $addEnLang = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
 
@@ -63,7 +63,7 @@ class WikiRefsOptionsEditController extends AbstractEditController
 
         $params = [
             'move_dots'   => $moveDots,
-            'expend'      => $expend,
+            'expand_infoboxes'      => $expand_infoboxes,
             'add_en_lang' => $addEnLang,
         ];
 

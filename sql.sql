@@ -130,7 +130,7 @@ CREATE TABLE language_settings (
         id int NOT NULL AUTO_INCREMENT,
         lang_code varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
         move_dots tinyint DEFAULT '0',
-        expend tinyint DEFAULT '0',
+        expand_infoboxes tinyint DEFAULT '0',
         add_en_lang tinyint DEFAULT '0',
         PRIMARY KEY (id),
         UNIQUE KEY lang_code (lang_code)

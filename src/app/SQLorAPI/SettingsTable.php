@@ -59,7 +59,7 @@ class SettingsTable extends BaseTable
     public function getLanguageSettings(): array
     {
 
-        // language_settings (lang_code, move_dots, expend, add_en_lang)
+        // language_settings (lang_code, move_dots, expand_infoboxes, add_en_lang)
         static $dataLangs = [];
 
         if (!empty($dataLangs))
