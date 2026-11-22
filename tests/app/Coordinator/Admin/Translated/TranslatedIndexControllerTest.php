@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 
+use App\Coordinator\Admin\Translated\TranslatedIndexController;
+
 #[CoversClass(TranslatedIndexController::class)]
 class TranslatedIndexControllerTest extends TestCase
 {

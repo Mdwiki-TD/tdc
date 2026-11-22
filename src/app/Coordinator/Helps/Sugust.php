@@ -25,9 +25,9 @@ class Sugust
 
         $itemsMissing = $items['missing'] ?? [];
 
-        $data = (InProcessTable::getInstance())->getLangInProcessByYear($lang);
+        $data1 = (InProcessTable::getInstance())->getLangInProcessByYear($lang);
 
-        $res = array_column($data, 'title');
+        $res = array_column($data1, 'title');
 
         $inprocess = array_intersect($res, $itemsMissing);
 
@@ -40,17 +40,17 @@ class Sugust
             return array('sugust' => '', 'time' => 0, 'error' => 'No suggestions available');
         }
 
-        $dd = [];
+        $data = [];
         foreach ($itemsMissing as $t) {
             $key = str_replace('_', ' ', $t);
-            $dd[$key] = MainTables::getViews($key);
+            $data[$key] = MainTables::getViews($key);
         }
 
-        arsort($dd);
+        arsort($data);
 
         // $sugust = array_rand($itemsMissing);
 
-        foreach ($dd as $v => $gt) {
+        foreach ($data as $v => $gt) {
             if ($v != $title) {
                 $sugust = $v;
                 break;

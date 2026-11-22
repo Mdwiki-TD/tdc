@@ -12,7 +12,7 @@ use App\Coordinator\Admin\Common\AbstractEditController;
  */
 class WikiRefsOptionsEditController extends AbstractEditController
 {
-    // private const FLAGS = ['move_dots', 'expend', 'add_en_lang'];
+    // private const FLAGS = ['move_dots', 'expand_infoboxes', 'add_en_lang'];
 
     protected function createPostProcessor(): object
     {
@@ -21,7 +21,7 @@ class WikiRefsOptionsEditController extends AbstractEditController
 
     protected function getCardTitle(): string
     {
-        $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
+        $id = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
         $headerTitle = (!empty($id)) ? 'Edit language settings' : 'Add language settings';
         return $headerTitle;
     }
@@ -31,11 +31,11 @@ class WikiRefsOptionsEditController extends AbstractEditController
      */
     protected function buildForm(): string
     {
-        $id         = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
-        $langCode   = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');
-        $expend     = filter_var($_GET['expend'] ?? '', FILTER_VALIDATE_INT) ?: '';
-        $moveDots   = filter_var($_GET['move_dots'] ?? '', FILTER_VALIDATE_INT) ?: '';
-        $addEnLang  = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
+        $id = htmlspecialchars($_GET['id'] ?? '', ENT_QUOTES, 'UTF-8');
+        $langCode = htmlspecialchars($_GET['lang_code'] ?? '', ENT_QUOTES, 'UTF-8');
+        $expand_infoboxes = filter_var($_GET['expand_infoboxes'] ?? '', FILTER_VALIDATE_INT) ?: '';
+        $moveDots = filter_var($_GET['move_dots'] ?? '', FILTER_VALIDATE_INT) ?: '';
+        $addEnLang = filter_var($_GET['add_en_lang'] ?? '', FILTER_VALIDATE_INT) ?: '';
 
         $idRow = <<<HTML
             <input class='form-control' value='$id' name='id' type='hidden'/>
@@ -43,7 +43,7 @@ class WikiRefsOptionsEditController extends AbstractEditController
 
         $deleteRow = <<<HTML
             <div class='col-6'>
-                <div class='input-group form-control mb-1 alert alert-warning p-2'>
+                <div class='input-group form-control alert alert-warning p-2 mb-1'>
                     <div class='input-group-prepend'>
                         <span class='me-3'>Delete?</span>
                     </div>
@@ -63,12 +63,12 @@ class WikiRefsOptionsEditController extends AbstractEditController
 
         $params = [
             'move_dots'   => $moveDots,
-            'expend'      => $expend,
+            'expand_infoboxes'      => $expand_infoboxes,
             'add_en_lang' => $addEnLang,
         ];
 
         foreach ($params as $key => $value) {
-            $checked = ($value == 1 || $value == "1") ? 'checked' : '';
+            $checked = $this->isChecked($value);
             $uRows .= <<<HTML
                 <div class='col-6'>
                     <div class='input-group form-control mb-3'>

@@ -6,6 +6,7 @@ namespace App\Coordinator\Admin\Settings;
 use App\SQLorAPI\SettingsTable;
 use App\Coordinator\Admin\Common\AbstractController;
 use App\Coordinator\Admin\Settings\SettingsPostProcessor;
+use App\Utils\HtmlUrls;
 /**
  * Class SettingsIndexController
  * Renders the editable site settings form. On POST, delegates to
@@ -39,14 +40,15 @@ class SettingsIndexController extends AbstractController
     private function buildSettingsTable(array $tabe): string
     {
         $nn = 0;
-        $tab = <<<HTML
+        $table = <<<HTML
             <table class='table table-striped compact table-mobile-responsive table-mobile-sided'>
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Key</th>
-                        <th>Option</th>
-                        <th>Value</th>
+                        <!-- <th>Key</th> -->
+                        <th>Setting</th>
+                        <th>Enabled</th>
+                        <th>Edit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,55 +62,45 @@ class SettingsIndexController extends AbstractController
             }
 
             $id = $v['id'] ?? '';
-            $title = $v['title'] ?? '';
+            // $title = $v['title'] ?? '';
             $displayed = $v['displayed'] ?? '';
-            $value = $v['value'] ?? '';
+            $value = $this->boolInt($v['value'] ?? 0);
 
             $nn++;
 
-            $type = $v['type'] ?? $v['Type'] ?? '';
+            $checked = $this->isChecked($value);
 
             $valueLine = <<<HTML
-                <input class='form-control' size='4' name='rows[$nn][value]' value='$value'/>
+                <div class='form-check form-switch'>
+                    <input type='hidden' name='rows[$nn][value]' value='0'>
+                    <input class='form-check-input' type='checkbox' name='rows[$nn][value]' value='1' $checked>
+                </div>
             HTML;
 
-            if ($type == 'check') {
-                $checked = ($value == 1 || $value == "1") ? 'checked' : '';
-                $valueLine = <<<HTML
-                    <div class='form-check form-switch'>
-                        <input type='hidden' name='rows[$nn][value]' value='0'>
-                        <input class='form-check-input' type='checkbox' name='rows[$nn][value]' value='1' $checked>
-                    </div>
-                HTML;
-            }
+            // Add link to EditSettingsController
+            // $editIcon = HtmlUrls::make_edit_icon_new('edit_setting', ['id' => $id], 'Edit');
+            $editUrl = "index.php?ty=edit_setting&id={$id}&nonav=1";
+            $escapedUrl = htmlspecialchars($editUrl, ENT_QUOTES, 'UTF-8');
+            $editIcon = <<<HTML
+                <a class='btn btn-outline-primary btn-sm' pup-target='{$escapedUrl}' onclick='pup_window_new(this)'>Edit</a>
+            HTML;
 
             $tr = <<<HTML
                 <tr>
                     <input name='rows[$nn][id]' value='$id' type="hidden"/>
-                    <td data-order='$nn' data-content='#'>
-                        $nn
-                    </td>
-                    <td data-content='Key'>
-                        $title
-                    </td>
-                    <td data-content='Option'>
-                        $displayed
-                        <!-- <input class='form-control' name='rows[$nn][title]' value="$title" type="hidden"/>
-                        <input class='form-control' name='rows[$nn][displayed]' value='$displayed' type="hidden"/> -->
-                    </td>
-                    <td data-content='Value'>
-                        $valueLine
-                        <!-- <input class='form-control' name='rows[$nn][type]' value='$type' type="hidden"/> -->
-                    </td>
+                    <td data-order='$nn' data-content='#'> $nn </td>
+                    <td data-content='Option'> $displayed </td>
+                    <td data-content='Value'> $valueLine </td>
+                    <td> $editIcon </td>
                 </tr>
             HTML;
 
-            $tab .= $tr;
+            $table .= $tr;
         }
 
         return <<<HTML
             <div class='form-group'>
-                    $tab
+                    $table
                     </tbody>
                 </table>
             </div>

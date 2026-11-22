@@ -20,6 +20,7 @@ class LastController extends AbstractControllerNoPost
 
 	public function __construct()
 	{
+        parent::__construct();
 		$this->lang = $_GET['lang'] ?? 'All';
 		if (empty($this->lang)) {
 			$this->lang = 'All';

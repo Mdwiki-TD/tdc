@@ -15,13 +15,12 @@ use App\SQLorAPI\QidsTable;
  */
 class QidsIndexController extends AbstractControllerNoPost
 {
-	private CurrentUser $currentUser;
-	private string $qidTable;
-	private string $dis;
+	private string      $qidTable;
+	private string      $dis;
 
 	public function __construct()
 	{
-		$this->currentUser = CurrentUser::getInstance();
+        parent::__construct();
 
 		$this->qidTable = $_GET['qid_table'] ?? 'qids';
 		if ($this->qidTable !== 'qids' && $this->qidTable !== 'qids_others') {
@@ -40,7 +39,7 @@ class QidsIndexController extends AbstractControllerNoPost
 	public function processRequest(): void
 	{
 		$qidsTitle = ($this->qidTable === 'qids') ? 'TD Qids' : 'Qids Others';
-		$dbService  = new QidsTable();
+		$dbService = new QidsTable();
 		$rows = ($this->qidTable === 'qids')
 			? $dbService->getQids($this->dis)
 			: $dbService->getQidsOthers($this->dis);
@@ -62,9 +61,9 @@ class QidsIndexController extends AbstractControllerNoPost
 		$formRows = '';
 
 		foreach ($rows as $key => $table) {
-			$id    = $table['id'] ?? '';
+			$id = $table['id'] ?? '';
 			$title = $table['title'] ?? '';
-			$qid   = $table['qid'] ?? '';
+			$qid = $table['qid'] ?? '';
 
 			if (!in_array($id, $done)) {
 				$done[] = $id;
@@ -74,9 +73,9 @@ class QidsIndexController extends AbstractControllerNoPost
 			}
 
 			if ($this->dis === 'duplicate') {
-				$id2    = $table['id2'] ?? '';
+				$id2 = $table['id2'] ?? '';
 				$title2 = $table['title2'] ?? '';
-				$qid2   = $table['qid2'] ?? '';
+				$qid2 = $table['qid2'] ?? '';
 
 				if (!in_array($id2, $done)) {
 					$done[] = $id2;
@@ -103,7 +102,7 @@ class QidsIndexController extends AbstractControllerNoPost
 		];
 
 		$editIcon = HtmlUrls::make_edit_icon_new('qids/edit_qid', $editParams);
-		$mdTitle  = HtmlUrls::make_mdwiki_title($title);
+		$mdTitle = HtmlUrls::make_mdwiki_title($title);
 
 		return <<<HTML
             <tr>
@@ -208,7 +207,7 @@ class QidsIndexController extends AbstractControllerNoPost
 						<th>Edit</th>
 					</tr>
 				</thead>
-				<tbody id="tab_logic">
+				<tbody>
 					$formRows
 				</tbody>
 			</table>

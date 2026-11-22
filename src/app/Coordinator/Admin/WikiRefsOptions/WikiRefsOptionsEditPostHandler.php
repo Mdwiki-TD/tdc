@@ -21,16 +21,16 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     protected function process(array $post): void
     {
         $langCode = trim($post['lang_code'] ?? '');
-        $expend = $this->boolInt($post['expend'] ?? 0);
+        $expand_infoboxes = $this->boolInt($post['expand_infoboxes'] ?? 0);
         $moveDots = $this->boolInt($post['move_dots'] ?? 0);
         $addEnLang = $this->boolInt($post['add_en_lang'] ?? 0);
 
         if (isset($post['delete'])) {
-            $this->deleteRow($post['delete'], $langCode);
+            $this->deleteLangRow($post['delete'], $langCode);
         } elseif (($post['id'] ?? '') != "") {
-            $this->updateRow($post['id'], $langCode, $expend, $moveDots, $addEnLang);
+            $this->updateRow($post['id'], $langCode, $expand_infoboxes, $moveDots, $addEnLang);
         } elseif (($post['new'] ?? '') != "") {
-            $this->insertRow($langCode, $expend, $moveDots, $addEnLang);
+            $this->insertRow($langCode, $expand_infoboxes, $moveDots, $addEnLang);
         } else {
             $this->addError("Id is empty.");
         }
@@ -39,17 +39,12 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     /**
      * Deletes a language_settings row.
      */
-    private function deleteRow(mixed $id, string $langCode): void
+    private function deleteLangRow(mixed $id, string $langCode): void
     {
         $qua = "DELETE FROM language_settings WHERE id = ?";
 
         $result = $this->db->executeQuery($qua, [$id]);
-
-        if ($result === false) {
-            $this->addError("Failed to delete language $langCode.");
-        } else {
-            $this->addText("language $langCode deleted.");
-        }
+        $this->verifyDeleteResult($result, $langCode, 'Language', 'code');
     }
 
     /**
@@ -58,20 +53,20 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
     private function updateRow(
         mixed $id,
         string $langCode,
-        int $expend,
+        int $expand_infoboxes,
         int $moveDots,
         int $addEnLang
     ): void {
         $qua = "UPDATE language_settings
             SET
                 lang_code = ?,
-                expend = ?,
+                expand_infoboxes = ?,
                 move_dots = ?,
                 add_en_lang = ?
             WHERE
                 id = ?
             ";
-        $params = [$langCode, $expend, $moveDots, $addEnLang, $id];
+        $params = [$langCode, $expand_infoboxes, $moveDots, $addEnLang, $id];
 
         $result = $this->db->executeQuery($qua, $params);
 
@@ -87,7 +82,7 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
      */
     private function insertRow(
         string $langCode,
-        int $expend,
+        int $expand_infoboxes,
         int $moveDots,
         int $addEnLang
     ): void {
@@ -96,8 +91,8 @@ class WikiRefsOptionsEditPostHandler extends AbstractPostHandler
             return;
         }
 
-        $qua = "INSERT INTO language_settings (lang_code, expend, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
-        $params = [$langCode, $expend, $moveDots, $addEnLang];
+        $qua = "INSERT INTO language_settings (lang_code, expand_infoboxes, move_dots, add_en_lang) VALUES (?, ?, ?, ?)";
+        $params = [$langCode, $expand_infoboxes, $moveDots, $addEnLang];
 
         $result = $this->db->executeQuery($qua, $params);
 

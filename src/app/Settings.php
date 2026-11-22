@@ -39,23 +39,25 @@ final class Settings
 
     public function __construct()
     {
-        $this->domain    = $_SERVER['SERVER_NAME'] ?? 'localhost';
+        $this->domain = $_SERVER['SERVER_NAME'] ?? 'localhost';
         $this->ServerUrl = $this->generateServerUrl();
         $this->userAgent = 'mdwiki MediaWiki OAuth Client/1.0';
-        $this->oauthUrl  = 'https://meta.wikimedia.org/w/index.php?title=Special:OAuth';
-        $this->apiUrl    = preg_replace('/index\.php.*/', 'api.php', $this->oauthUrl);
+        $this->oauthUrl = 'https://meta.wikimedia.org/w/index.php?title=Special:OAuth';
+        $this->apiUrl = preg_replace('/index\.php.*/', 'api.php', $this->oauthUrl);
 
-        $appEnv         = $this->envVar('APP_ENV');
-        $consumerKey    = $this->envVar('CONSUMER_KEY');
+        $appEnv = $this->envVar('APP_ENV');
+        $consumerKey = $this->envVar('CONSUMER_KEY');
         $consumerSecret = $this->envVar('CONSUMER_SECRET');
-        $cookieKey      = $this->envVar('COOKIE_KEY');
-        $cryptKey       = $this->envVar('CRYPTO_KEY');
+        $cookieKey = $this->envVar('COOKIE_KEY');
+        $cryptKey = $this->envVar('CRYPTO_KEY');
         $TablesPath = $this->envVar('TABLES_PATH');
 
-        if ($appEnv === 'production' && (
-            empty($consumerKey) || empty($consumerSecret) ||
-            empty($cookieKey)   || empty($cryptKey)
-        )) {
+        if (
+            $appEnv === 'production' && (
+                empty($consumerKey) || empty($consumerSecret) ||
+                empty($cookieKey) || empty($cryptKey)
+            )
+        ) {
             http_response_code(500);
             error_log('Required configuration directives not found in environment variables!');
             echo 'Required configuration directives not found';
@@ -64,26 +66,25 @@ final class Settings
             throw new \RuntimeException('Required configuration directives not found in environment variables!');
         }
 
-        $this->appEnv    = $appEnv;
-        $this->consumerKey    = $consumerKey;
+        $this->appEnv = $appEnv;
+        $this->consumerKey = $consumerKey;
         $this->consumerSecret = $consumerSecret;
-        $this->cookieKey      = $cookieKey  ? Key::loadFromAsciiSafeString($cookieKey)  : null;
-        $this->cryptKey       = $cryptKey ? Key::loadFromAsciiSafeString($cryptKey) : null;
+        $this->cookieKey = $cookieKey ? Key::loadFromAsciiSafeString($cookieKey) : null;
+        $this->cryptKey = $cryptKey ? Key::loadFromAsciiSafeString($cryptKey) : null;
 
         $this->TablesPath = $TablesPath;
     }
 
     // Prevent cloning and unserialization of the singleton instance
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     public function __wakeup(): void
     {
         throw new \RuntimeException('Cannot unserialize a singleton.');
     }
 
-    /**
-     *
-     */
     private function generateServerUrl(): string
     {
         /*
@@ -109,8 +110,7 @@ final class Settings
         // 4. Build the final absolute URI
         return $protocol . "://" . $host;
     }
-    /**
-     */
+
     public function isDevelopment(): bool
     {
         return $this->appEnv === "development";
@@ -129,7 +129,6 @@ final class Settings
     /**
      * Generates a dynamic Callback URL that works seamlessly on Windows (localhost)
      * and Linux (production) environments.
-     *
      * @param string $path The destination path (e.g., 'auth/callback')
      * @return string The absolute URL including protocol and host
      */
@@ -141,6 +140,7 @@ final class Settings
         // Build the final absolute URI
         return $this->ServerUrl . $path;
     }
+
     private function envVar(string $key): string
     {
         $value = getenv($key);
@@ -154,13 +154,14 @@ final class Settings
 
         return "";
     }
+
     /**
      * Allow reading private properties from outside the class.
      * Mimics the behaviour of readonly properties (PHP 8.1+).
      *
      * @return mixed
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         if (property_exists($this, $name)) {
             return $this->$name;
@@ -175,7 +176,7 @@ final class Settings
      *
      * @param mixed $value
      */
-    public function __set(string $name, $value): void
+    public function __set(string $name, mixed $value): void
     {
         throw new \RuntimeException("Settings are read-only. Cannot set: {$name}");
     }
@@ -192,13 +193,13 @@ final class Settings
 
         return self::$instance;
     }
+
     public function getKey(string $keyType = "cookie"): ?Key
     {
         return $keyType === "crypt"
             ? $this->cryptKey
             : $this->cookieKey;
     }
-
 
     public function decodeValue(string $value, ?Key $useKey): string
     {
@@ -212,6 +213,7 @@ final class Settings
             return "";
         }
     }
+
     public function encodeValue(string $value, ?Key $useKey): string
     {
         if ($useKey === null || trim($value) === "") {
@@ -224,6 +226,7 @@ final class Settings
             return "";
         }
     }
+
     public function OpenTablesPathFile(string $filePath): array
     {
         // remove right / from filePath
@@ -249,7 +252,8 @@ final class Settings
         }
 
         $len = count($result);
-        if (isset($result['list'])) $len = count($result['list']);
+        if (isset($result['list']))
+            $len = count($result['list']);
         Logger::debug("---- OpenTablesPathFile File: $filePath: Exists size: $len");
 
         return $result;

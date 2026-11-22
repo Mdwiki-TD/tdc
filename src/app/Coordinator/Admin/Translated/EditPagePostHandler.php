@@ -32,17 +32,14 @@ class EditPagePostHandler extends AbstractPostHandler
     {
         if (isset($post['delete'])) {
             $deleteId = (string) $post['delete'];
-            $result = $this->deletePage($deleteId, $this->table);
-            if ($result === false) {
-                $this->addError("Failed to delete page (id: {$deleteId}).");
-            } else {
-                $this->addText("Page (id: {$deleteId}) deleted successfully.");
-            }
+            $deleted = $this->deletePage($deleteId, $this->table);
+            $this->verifyDeleteResult($deleted, $deleteId, 'Page');
+
         } elseif (isset($post['edit'])) {
-            $title   = $post['title'] ?? '';
-            $target  = $post['target'] ?? '';
-            $lang    = $post['lang'] ?? '';
-            $user    = $post['user'] ?? '';
+            $title = $post['title'] ?? '';
+            $target = $post['target'] ?? '';
+            $lang = $post['lang'] ?? '';
+            $user = $post['user'] ?? '';
             $pupdate = $post['pupdate'] ?? '';
 
             $result = $this->editPage($this->id, $this->table, $title, $target, $lang, $user, $pupdate);

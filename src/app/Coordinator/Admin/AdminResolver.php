@@ -68,7 +68,10 @@ class AdminResolver
             "projects"              => "App\\Coordinator\\Admin\\Projects\\ProjectsIndexController",
             "qids"                  => "App\\Coordinator\\Admin\\Qids\\QidsIndexController",
             "reports"               => "App\\Coordinator\\Admin\\Reports\\ReportsIndexController",
+
             "settings"              => "App\\Coordinator\\Admin\\Settings\\SettingsIndexController",
+            "edit_setting"          => "App\\Coordinator\\Admin\\Settings\\EditSettingsController",
+
             "translate_type"        => "App\\Coordinator\\Admin\\TranslateType\\TranslateTypeIndexController",
             "tt"                    => "App\\Coordinator\\Admin\\TranslateType\\TranslateTypeIndexController",
             "translated"            => "App\\Coordinator\\Admin\\Translated\\TranslatedIndexController",

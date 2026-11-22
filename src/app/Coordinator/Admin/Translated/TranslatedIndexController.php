@@ -18,19 +18,17 @@ use App\Coordinator\Helps\RecentHelps;
  */
 class TranslatedIndexController extends AbstractControllerNoPost
 {
-	private CurrentUser $currentUser;
 	private string      $lang;
 	private string      $table;
 
 	public function __construct()
 	{
-		$this->currentUser = CurrentUser::getInstance();
+        parent::__construct();
 		$this->lang = $_GET['lang'] ?? 'All';
 		$cand = $_GET['table'] ?? 'pages';
 		$this->table = in_array($cand, ['pages', 'pages_users'], true) ? $cand : 'pages';
 
-		$globalUsername = $this->currentUser->getUsername();
-		if (!isset($_GET['table']) && $globalUsername === "Mr. Ibrahem") {
+		if (!isset($_GET['table']) && $this->globalUsername === "Mr. Ibrahem") {
 			$this->table = "pages_users";
 		}
 

@@ -15,12 +15,13 @@ class AddPostProcessor extends AbstractPostHandler
 {
 	protected bool $isPopUpPage = false;
 
-    private AddHelper $addHelper;
+	private AddHelper $addHelper;
 
-    public function __construct()
-    {
-        $this->addHelper = new AddHelper();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->addHelper = new AddHelper();
+	}
 
 	public function process(array $post): void
 	{
@@ -34,13 +35,13 @@ class AddPostProcessor extends AbstractPostHandler
 	{
 		foreach ($rows as $key => $table) {
 			$mdtitle = $table['mdtitle'] ?? '';
-			$cat     = rawurldecode($table['cat'] ?? '');
+			$cat = rawurldecode($table['cat'] ?? '');
 			$translateType = $table['translate_type'] ?? '';
-			$user    = rawurldecode($table['user'] ?? '');
-			$lang    = $table['lang'] ?? '';
-			$target  = $table['target'] ?? '';
+			$user = rawurldecode($table['user'] ?? '');
+			$lang = $table['lang'] ?? '';
+			$target = $table['target'] ?? '';
 			$pupdate = $table['pupdate'] ?? '';
-			$word    = $table['word'] ?? '';
+			$word = $table['word'] ?? '';
 
 			$translateType = (!empty($translateType)) ? $translateType : 'lead';
 
@@ -64,7 +65,7 @@ class AddPostProcessor extends AbstractPostHandler
 					$this->addText("Translations added successfully.");
 				}
 
-        		$result = $this->addHelper->checkAfterAdd($mdtitle, $lang, $user, $target);
+				$result = $this->addHelper->checkAfterAdd($mdtitle, $lang, $user, $target);
 
 				if ($result === false) {
 					$this->addError("checkAfterAdd: Failed to add translations.");

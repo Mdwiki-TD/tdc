@@ -6,7 +6,8 @@ class HtmlUrls
 {
     public static function make_mdwiki_href(?string $title): ?string
     {
-        if (empty($title)) return $title;
+        if (empty($title))
+            return $title;
 
         return "https://mdwiki.org/wiki/" . rawurlencode(str_replace(' ', '_', $title));
     }
@@ -30,7 +31,8 @@ class HtmlUrls
 
     public static function make_mdwiki_article_url_blank(?string $title, ?string $name = null): ?string
     {
-        if (empty($title)) return $title;
+        if (empty($title))
+            return $title;
 
         $displayName = $name !== null && $name !== '' ? $name : $title;
 
@@ -41,7 +43,8 @@ class HtmlUrls
 
     public static function make_mdwiki_cat_url(?string $category, ?string $name = null): ?string
     {
-        if (empty($category)) return $category;
+        if (empty($category))
+            return $category;
 
         $new_cat = str_replace('Category:', '', $category);
 
@@ -52,16 +55,21 @@ class HtmlUrls
         return "<a target='_blank' href='https://mdwiki.org/wiki/Category:$encoded_category'>$displayName</a>";
     }
 
-    public static function make_wikipedia_url_blank(mixed $target, string $lang, mixed $name = '', mixed $deleted = false): mixed
-    {
-        if (empty($target)) return $target;
+    public static function make_wikipedia_url_blank(
+        mixed $target,
+        string $lang,
+        mixed $name = '',
+        mixed $deleted = false
+    ): mixed {
+        if (empty($target))
+            return $target;
 
         $displayName = (!empty($name)) ? $name : $target;
         if (is_array($displayName)) {
             $displayName = implode(', ', $displayName);
         }
 
-        $targetStr = is_array($target) ? implode('_', $target) : (string)$target;
+        $targetStr = is_array($target) ? implode('_', $target) : (string) $target;
         $encodedTarget = rawurlencode(str_replace(' ', '_', $targetStr));
 
         $link = "<a target='_blank' href='https://$lang.wikipedia.org/wiki/$encodedTarget'>$displayName</a>";
@@ -75,7 +83,8 @@ class HtmlUrls
 
     public static function make_wikidata_url_blank(?string $qid, ?string $name = '', ?string $default = ''): ?string
     {
-        if (empty($qid)) return $default;
+        if (empty($qid))
+            return $default;
 
         $displayName = (!empty($name)) ? $name : $qid;
 
@@ -211,12 +220,12 @@ class HtmlUrls
         }
 
         $mailParams = [
-            'user' => $tab['user'] ?? '',
-            'lang' => $tab['lang'] ?? '',
+            'user'   => $tab['user'] ?? '',
+            'lang'   => $tab['lang'] ?? '',
             'target' => $tab['target'] ?? '',
-            'date' => $tab['pupdate'] ?? '',
-            'title' => $tab['title'] ?? '',
-            'nonav' => '1'
+            'date'   => $tab['pupdate'] ?? '',
+            'title'  => $tab['title'] ?? '',
+            'nonav'  => '1'
         ];
 
         $mailUrl = "index.php?ty=msg&" . http_build_query($mailParams, '', '&', PHP_QUERY_RFC3986);
